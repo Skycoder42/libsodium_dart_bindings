@@ -1,0 +1,24 @@
+name: libsodium_flutter_bindings_platform_interface
+description: A starting point for Dart libraries or applications.
+version: 1.0.0
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+  flutter: ">=2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  libsodium_dart_bindings: ^1.0.0
+  plugin_platform_interface: ^2.0.0
+
+dependency_overrides:
+  libsodium_dart_bindings:
+    path: "../libsodium_dart_bindings"
+
+dev_dependencies:
+  dart_pre_commit: ^2.2.0-nullsafety.2
+  flutter_test:
+    sdk: flutter
+  lint: ^1.5.3
+  mocktail: ^0.1.1

@@ -1,0 +1,40 @@
+name: libsodium_dart_bindings
+
+packages:
+  - packages/**
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dev_dependencies:
+  coverage: ^1.0.2
+  dart_pre_commit: ^2.2.0-nullsafety.2
+  lint: ^1.5.3
+  mocktail: ^0.1.1
+  test: ^1.16.8
+  tuple: ^2.0.0
+
+scripts:
+  get:
+    run: dart pub global run melos exec -- dart pub get
+    description: Run 'pub get' in all projects
+
+  upgrade:
+    run: dart pub global run melos exec -- dart pub upgrade
+    description: Run 'pub upgrade' in all projects
+
+  outdated:
+    run: dart pub global run melos exec -- dart pub outdated
+    description: Run 'pub outdated' in all projects
+
+  pre-commit:init:
+    run: bash -c "echo -e '#!/bin/sh\nexec dart pub global run melos run pre-commit:run' > .git/hooks/pre-commit && chmod a+x .git/hooks/pre-commit"
+    description: Setup pre commit hooks
+
+  pre-commit:run:
+    run: dart pub global run melos exec -c1 -- dart pub run --no-sound-null-safety dart_pre_commit -p --ansi
+    description: Run pre commit hooks in all projects
+
+  test:
+    run: dart pub global run melos exec -- dart test
+    description: Run tests in all projects
