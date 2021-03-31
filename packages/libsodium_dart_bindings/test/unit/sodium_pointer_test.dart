@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
-import 'package:libsodium_dart_bindings/libsodium_dart_bindings.dart';
+import 'package:libsodium_dart_bindings/src/ffi/bindings/sodium_pointer.dart';
+import 'package:libsodium_dart_bindings/src/ffi/bindings/sodium.ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 

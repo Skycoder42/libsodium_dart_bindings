@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:libsodium_dart_bindings/libsodium_dart_bindings.dart';
 import 'package:libsodium_flutter_bindings/libsodium_flutter_bindings.dart';
 
 void main() {
@@ -50,7 +51,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Text('Running on: $isFfi\n'),
         ),
       ),
     );

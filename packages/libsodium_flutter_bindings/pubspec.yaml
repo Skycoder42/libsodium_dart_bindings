@@ -10,6 +10,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  libsodium_dart_bindings: ^1.0.0
+  libsodium_flutter_bindings_platform_interface: ^1.0.0
+  libsodium_flutter_bindings_linux: ^1.0.0
+
+dependency_overrides:
+  libsodium_dart_bindings:
+    path: "../libsodium_dart_bindings"
+  libsodium_flutter_bindings_platform_interface:
+    path: "../libsodium_flutter_bindings_platform_interface"
+  libsodium_flutter_bindings_linux:
+    path: "../libsodium_flutter_bindings_linux"
 
 dev_dependencies:
   flutter_test:
@@ -19,4 +30,4 @@ flutter:
   plugin:
     platforms:
       linux:
-        default_package: url_laucher_linux
+        default_package: libsodium_flutter_bindings_linux

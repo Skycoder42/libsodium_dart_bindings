@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  libsodium_flutter_bindings_linux
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

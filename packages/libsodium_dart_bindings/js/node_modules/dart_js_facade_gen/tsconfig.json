@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "allowUnreachableCode": false,
+    "target": "ES2015",
+    "rootDir": "."
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "test/e2e"
+  ]
+}
