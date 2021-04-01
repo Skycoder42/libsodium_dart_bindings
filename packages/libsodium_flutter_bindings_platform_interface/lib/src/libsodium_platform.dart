@@ -15,5 +15,5 @@ abstract class LibsodiumPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<SodiumFFI> loadLibrary();
+  Future<Sodium> loadSodium();
 }

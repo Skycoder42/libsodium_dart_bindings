@@ -3,15 +3,15 @@ import 'dart:html';
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
-import 'package:libsodium_dart_bindings/src/api/crypto.dart';
-import 'package:libsodium_dart_bindings/src/js/api/crypto_js.dart';
+import 'package:libsodium_dart_bindings/src/api/sodium.dart';
+import 'package:libsodium_dart_bindings/src/js/api/sodium_js.dart';
 
 abstract class SodiumJSInit {
   const SodiumJSInit._();
 
   static late final Completer<void> _jsLoadedCompleter = Completer<void>();
 
-  static Future<Crypto> init() async {
+  static Future<Sodium> init() async {
     setProperty(
       window,
       'sodium',
@@ -20,7 +20,7 @@ abstract class SodiumJSInit {
       }),
     );
     await _jsLoadedCompleter.future;
-    return CrypoJS();
+    return SodiumJS();
   }
 
   static void sodiumOnLoaded(dynamic sodium) {

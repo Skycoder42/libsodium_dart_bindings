@@ -48,7 +48,7 @@ void main() {
     });
 
     test('alloc allocates memory for multiple elements', () {
-      final sut = SodiumPointer<Uint32>.alloc(mockSodium, 10);
+      final sut = SodiumPointer<Uint32>.alloc(mockSodium, count: 10);
       expect(sut.ptr, isNotNull);
 
       expect(sut.elementSize, sizeOf<Uint32>());
@@ -60,7 +60,7 @@ void main() {
 
     test('alloc asserts for a negative number of elements', () {
       expect(
-        () => SodiumPointer<Uint8>.alloc(mockSodium, -1),
+        () => SodiumPointer<Uint8>.alloc(mockSodium, count: -1),
         throwsA(isA<RangeError>()),
       );
     });

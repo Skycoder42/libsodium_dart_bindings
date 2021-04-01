@@ -6,9 +6,9 @@ import 'package:libsodium_dart_bindings_example/libsodium_dart_bindings_example.
 Future<void> main() async {
   final libsodium = DynamicLibrary.open('/usr/lib/libsodium.so');
 
-  final crypto = await SodiumFFIInit.init(libsodium);
+  final sodium = await SodiumFFIInit.init(libsodium);
 
-  final res = runSample(crypto);
+  final res = runSample(sodium);
 
   print('Hash-Result: $res');
 }
