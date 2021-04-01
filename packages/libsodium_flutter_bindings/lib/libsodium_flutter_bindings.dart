@@ -1,18 +1,3 @@
-// You have generated a new plugin project without
-// specifying the `--platforms` flag. A plugin project supports no platforms is generated.
-// To add platforms, run `flutter create -t plugin --platforms <platforms> .` under the same
-// directory. You can also find a detailed instruction on how to add platforms in the `pubspec.yaml` at https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
-
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-
-class LibsodiumFlutterBindings {
-  static const MethodChannel _channel =
-      const MethodChannel('libsodium_flutter_bindings');
-
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-}
+export 'package:libsodium_dart_bindings/libsodium_dart_bindings.dart'
+    hide SodiumFFIInit, SodiumJSInit; // ignore: undefined_hidden_name
+export 'src/sodium_init.dart';

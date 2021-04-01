@@ -1,18 +1,25 @@
 import 'dart:async';
+import 'dart:js';
 import 'dart:typed_data';
 
 import 'package:libsodium_dart_bindings/src/api/secure_key.dart';
-import 'package:libsodium_dart_bindings/src/js/bindings/node_modules/@types/libsodium-wrappers.dart';
 
 class SecureKeyJs implements SecureKey {
+  final JsObject sodium;
   final Uint8List _raw;
 
-  SecureKeyJs(this._raw);
+  SecureKeyJs(this.sodium, this._raw);
 
-  factory SecureKeyJs.alloc(int length) => SecureKeyJs(Uint8List(length));
+  factory SecureKeyJs.alloc(JsObject sodium, int length) =>
+      SecureKeyJs(sodium, Uint8List(length));
 
-  factory SecureKeyJs.random(int length) =>
-      SecureKeyJs(randombytes_buf(length, 'uint8array') as Uint8List);
+  factory SecureKeyJs.random(JsObject sodium, int length) => SecureKeyJs(
+        sodium,
+        sodium.callMethod('randombytes_buf', <dynamic>[
+          length,
+          'uint8array',
+        ]) as Uint8List,
+      );
 
   @override
   T runUnlockedSync<T>(
@@ -33,6 +40,6 @@ class SecureKeyJs implements SecureKey {
 
   @override
   void dispose() {
-    memzero(_raw);
+    sodium.callMethod('memzero', <dynamic>[_raw]);
   }
 }

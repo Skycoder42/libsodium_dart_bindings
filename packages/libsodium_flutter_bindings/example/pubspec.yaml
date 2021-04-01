@@ -1,6 +1,6 @@
 name: libsodium_flutter_bindings_example
 description: Demonstrates how to use the libsodium_flutter_bindings plugin.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -16,10 +16,14 @@ dependencies:
 dependency_overrides:
   libsodium_dart_bindings:
     path: ../../libsodium_dart_bindings
-  libsodium_flutter_bindings_platform_interface:
-    path: ../../libsodium_flutter_bindings_platform_interface
   libsodium_flutter_bindings_linux:
     path: ../../libsodium_flutter_bindings_linux
+  libsodium_flutter_bindings_platform_interface:
+    path: ../../libsodium_flutter_bindings_platform_interface
+  libsodium_flutter_bindings_web:
+    path: "../../libsodium_flutter_bindings_web"
+  libsodium_flutter_bindings_windows:
+    path: ../../libsodium_flutter_bindings_windows
 
 dev_dependencies:
   flutter_test:

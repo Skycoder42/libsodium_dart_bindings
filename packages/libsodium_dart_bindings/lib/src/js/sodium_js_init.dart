@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:html';
+import 'dart:js';
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
@@ -9,7 +10,8 @@ import 'package:libsodium_dart_bindings/src/js/api/sodium_js.dart';
 abstract class SodiumJSInit {
   const SodiumJSInit._();
 
-  static late final Completer<void> _jsLoadedCompleter = Completer<void>();
+  static late final Completer<JsObject> _jsLoadedCompleter =
+      Completer<JsObject>();
 
   static Future<Sodium> init() async {
     setProperty(
@@ -19,14 +21,15 @@ abstract class SodiumJSInit {
         'onload': allowInterop(sodiumOnLoaded),
       }),
     );
-    await _jsLoadedCompleter.future;
-    return SodiumJS();
+
+    print('load...');
+    return SodiumJS(await _jsLoadedCompleter.future);
   }
 
   static void sodiumOnLoaded(dynamic sodium) {
-    setProperty(window, 'sodiumReady', sodium);
+    print('loaded sodium');
     if (!_jsLoadedCompleter.isCompleted) {
-      _jsLoadedCompleter.complete();
+      _jsLoadedCompleter.complete(sodium as JsObject);
     }
   }
 }
