@@ -7,7 +7,7 @@ import '../../api/string_x.dart';
 import '../bindings/sodium.ffi.dart';
 import '../bindings/sodium_pointer.dart';
 import 'secure_key_ffi.dart';
-import 'sodium_ffi_exception.dart';
+import '../../api/sodium_exception.dart';
 
 extension CrypoPwhashAlgorithmFFI on CrypoPwhashAlgorithm {
   int toValue(SodiumFFI sodium) {
@@ -112,7 +112,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         ),
         writable: true,
       );
-      SodiumFFIException.checkSucceeded(result);
+      SodiumException.checkSucceededInt(result);
 
       return outKey;
     } catch (e) {
@@ -155,7 +155,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         opsLimit,
         memLimit,
       );
-      SodiumFFIException.checkSucceeded(result);
+      SodiumException.checkSucceededInt(result);
 
       return passwordHashPtr.asList().toDartString(zeroTerminated: true);
     } finally {
@@ -190,7 +190,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         passwordPtr.ptr,
         passwordPtr.count,
       );
-      SodiumFFIException.checkSucceeded(result);
+      SodiumException.checkSucceededInt(result);
     } finally {
       passwordPtr?.dispose();
       passwordHashPtr?.dispose();
@@ -228,7 +228,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         case 1:
           return true;
         default:
-          throw SodiumFFIException();
+          throw SodiumException();
       }
     } finally {
       passwordHashPtr?.dispose();

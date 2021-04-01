@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:libsodium_dart_bindings/src/api/pwhash.dart';
 import 'package:libsodium_dart_bindings/src/api/secure_key.dart';
+import 'package:libsodium_dart_bindings/src/api/sodium_exception.dart';
+import 'package:libsodium_dart_bindings/src/api/string_x.dart';
 import 'package:libsodium_dart_bindings/src/js/bindings/num_x.dart';
 import 'package:libsodium_dart_bindings/src/js/api/secure_key_js.dart';
 import 'package:libsodium_dart_bindings/src/js/bindings/node_modules/@types/libsodium-wrappers.dart';
@@ -56,6 +58,9 @@ class PwhashJs with PwHashValidations implements Pwhash {
   int get saltBytes => crypto_pwhash_SALTBYTES.toSafeInt();
 
   @override
+  int get strBytes => crypto_pwhash_STRBYTES.toSafeInt();
+
+  @override
   SecureKey call(
     int outLen,
     Int8List password,
@@ -78,7 +83,43 @@ class PwhashJs with PwHashValidations implements Pwhash {
       memLimit,
       alg.value,
       'uint8array',
-    ) as Uint8List;
-    return SecureKeyJs(result);
+    ) as Uint8List?;
+    return SecureKeyJs(SodiumException.checkSucceededObject(result));
+  }
+
+  @override
+  String str(
+    String password,
+    int opsLimit,
+    int memLimit,
+  ) {
+    validateOpsLimit(opsLimit);
+    validateMemLimit(memLimit);
+
+    final passwordBytes = Uint8List.view(password.toCharArray().buffer);
+    final result = crypto_pwhash_str(passwordBytes, opsLimit, memLimit);
+    return SodiumException.checkSucceededObject(result);
+  }
+
+  @override
+  void strVerify(
+    String password,
+    String passwordHash,
+  ) {
+    final passwordBytes = Uint8List.view(password.toCharArray().buffer);
+    final result = crypto_pwhash_str_verify(passwordHash, passwordBytes);
+    SodiumException.checkSucceededBool(result);
+  }
+
+  @override
+  bool strNeedsRehash(
+    String passwordHash,
+    int opsLimit,
+    int memLimit,
+  ) {
+    // TODO try implement anyways
+    throw UnsupportedError(
+      'crypto_pwhash_str_needs_rehash is not available in web',
+    );
   }
 }
