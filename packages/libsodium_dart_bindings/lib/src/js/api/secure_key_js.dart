@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:libsodium_dart_bindings/src/api/secure_key.dart';
-import 'package:libsodium_dart_bindings/src/js/node_modules/@types/libsodium-wrappers.dart';
+import 'package:libsodium_dart_bindings/src/js/bindings/node_modules/@types/libsodium-wrappers.dart';
 
 class SecureKeyJs implements SecureKey {
   final Uint8List _raw;
@@ -12,17 +12,24 @@ class SecureKeyJs implements SecureKey {
   factory SecureKeyJs.alloc(int length) => SecureKeyJs(Uint8List(length));
 
   factory SecureKeyJs.random(int length) =>
-      SecureKeyJs(randombytes_buf(length, 'Uint8Array') as Uint8List);
+      SecureKeyJs(randombytes_buf(length, 'uint8array') as Uint8List);
 
   @override
-  T runUnlockedSync<T>(SecureCallbackFn<T> callback) => callback(_raw);
-
-  @override
-  FutureOr<T> runUnlockedAsync<T>(SecureCallbackFn<FutureOr<T>> callback) =>
+  T runUnlockedSync<T>(
+    SecureCallbackFn<T> callback, {
+    bool writable = false,
+  }) =>
       callback(_raw);
 
   @override
-  Uint8List extractBytes() => _raw;
+  FutureOr<T> runUnlockedAsync<T>(
+    SecureCallbackFn<FutureOr<T>> callback, {
+    bool writable = false,
+  }) =>
+      callback(_raw);
+
+  @override
+  Uint8List extractBytes() => Uint8List.fromList(_raw);
 
   @override
   void dispose() {

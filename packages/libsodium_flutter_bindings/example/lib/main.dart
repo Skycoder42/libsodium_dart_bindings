@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $isFfi\n'),
+          child: Text('Running on: \n'),
         ),
       ),
     );

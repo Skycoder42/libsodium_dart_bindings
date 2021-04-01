@@ -1,4 +1,6 @@
+import 'package:libsodium_dart_bindings/src/api/randombytes.dart';
 import 'package:libsodium_dart_bindings/src/api/sodium_version.dart';
+import 'package:libsodium_dart_bindings/src/ffi/api/randombytes_ffi.dart';
 
 import '../../api/crypto.dart';
 import '../../api/pwhash.dart';
@@ -25,6 +27,9 @@ class CryptoFFI implements Crypto {
 
   @override
   SecureKey secureRandom(int length) => SecureKeyFFI.random(sodium, length);
+
+  @override
+  late final Randombytes randombytes = RandombytesFFI(sodium);
 
   @override
   late final Pwhash pwhash = PwhashFFI(sodium);

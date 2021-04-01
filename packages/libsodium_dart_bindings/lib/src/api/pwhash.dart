@@ -16,21 +16,23 @@ abstract class Pwhash {
   int get bytesMax;
 
   int get memLimitMin;
-  int get memLimitSensitive;
-  int get memLimitModerate;
-  int get memLimitMax;
   int get memLimitInteractive;
+  int get memLimitModerate;
+  int get memLimitSensitive;
+  int get memLimitMax;
 
   int get opsLimitMin;
-  int get opsLimitSensitive;
-  int get opsLimitModerate;
-  int get opsLimitMax;
   int get opsLimitInteractive;
+  int get opsLimitModerate;
+  int get opsLimitSensitive;
+  int get opsLimitMax;
 
   int get passwdMin;
   int get passwdMax;
 
   int get saltBytes;
+
+  int get strBytes;
 
   SecureKey call(
     int outLen,
@@ -40,6 +42,23 @@ abstract class Pwhash {
     int memLimit,
     CrypoPwhashAlgorithm alg,
   );
+
+  String str(
+    String password,
+    int opsLimit,
+    int memLimit,
+  );
+
+  void strVerify(
+    String password,
+    String passwordHash,
+  );
+
+  bool strNeedsRehash(
+    String passwordHash,
+    int opsLimit,
+    int memLimit,
+  );
 }
 
 @internal
@@ -48,6 +67,14 @@ mixin PwHashValidations implements Pwhash {
         outLen,
         bytesMin,
         bytesMax,
+        'outLen',
+      );
+
+  void validatepasswordHash(Int8List passwordHash) =>
+      RangeError.checkValueInInterval(
+        passwordHash.length,
+        strBytes,
+        strBytes,
         'outLen',
       );
 

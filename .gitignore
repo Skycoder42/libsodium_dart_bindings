@@ -13,3 +13,5 @@ build/
 doc/api/
 
 coverage
+
+*:Zone.Identifier

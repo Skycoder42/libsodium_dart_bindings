@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
@@ -22,26 +21,47 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
 
   SodiumPointer.raw(this.sodium, this.ptr, this.count);
 
-  factory SodiumPointer.alloc(SodiumFFI sodium, [int count = 1]) {
+  factory SodiumPointer.alloc(
+    SodiumFFI sodium, {
+    int count = 1,
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+    bool zeroMemory = false,
+  }) {
     RangeError.checkNotNegative(count, 'count', 'must not be negative');
 
     final elementSize = _StaticallyTypedSizeOf.staticSizeOf<T>();
+    late final SodiumPointer<T> ptr;
     if (count != 1) {
-      return SodiumPointer.raw(
+      ptr = SodiumPointer.raw(
         sodium,
         sodium.sodium_allocarray(count, elementSize).cast(),
         count,
       );
     } else {
-      return SodiumPointer.raw(
+      ptr = SodiumPointer.raw(
         sodium,
         sodium.sodium_malloc(elementSize).cast(),
         1,
       );
     }
+
+    try {
+      if (zeroMemory) {
+        ptr.zeroMemory();
+      }
+      ptr.memoryProtection = memoryProtection;
+      return ptr;
+    } catch (e) {
+      ptr.dispose();
+      rethrow;
+    }
   }
 
-  factory SodiumPointer.fromList(SodiumFFI sodium, List<num> list) {
+  factory SodiumPointer.fromList(
+    SodiumFFI sodium,
+    List<num> list, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) {
     final typeLen = _StaticallyTypedSizeOf.staticSizeOf<T>();
     final sodiumPtr = SodiumPointer.raw(
       sodium,
@@ -50,17 +70,7 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
     );
     try {
       sodiumPtr._asTypedIntListRaw().setAll(0, list);
-      return sodiumPtr;
-    } catch (e) {
-      sodiumPtr.dispose();
-      rethrow;
-    }
-  }
-
-  factory SodiumPointer.random(SodiumFFI sodium, int count) {
-    final sodiumPtr = SodiumPointer<T>.alloc(sodium, count);
-    try {
-      sodium.randombytes_buf(sodiumPtr.ptr.cast(), sodiumPtr.byteLength);
+      sodiumPtr.memoryProtection = memoryProtection;
       return sodiumPtr;
     } catch (e) {
       sodiumPtr.dispose();

@@ -19,14 +19,30 @@ class SecureKeyFFI implements SecureKey {
   }
 
   factory SecureKeyFFI.alloc(SodiumFFI sodium, int length) =>
-      SecureKeyFFI(SodiumPointer<Uint8>.alloc(sodium, length));
+      SecureKeyFFI(SodiumPointer<Uint8>.alloc(
+        sodium,
+        count: length,
+        zeroMemory: true,
+      ));
 
-  factory SecureKeyFFI.random(SodiumFFI sodium, int length) =>
-      SecureKeyFFI(SodiumPointer<Uint8>.random(sodium, length));
-
-  T runUnlockedRaw<T>(SecureFFICallbackFn<T> callback) {
+  factory SecureKeyFFI.random(SodiumFFI sodium, int length) {
+    final raw = SodiumPointer<Uint8>.alloc(sodium, count: length);
     try {
-      _raw.memoryProtection = MemoryProtection.readOnly;
+      sodium.randombytes_buf(raw.ptr.cast(), raw.byteLength);
+      return SecureKeyFFI(raw);
+    } catch (e) {
+      raw.dispose();
+      rethrow;
+    }
+  }
+
+  T runUnlockedRaw<T>(
+    SecureFFICallbackFn<T> callback, {
+    bool writable = false,
+  }) {
+    try {
+      _raw.memoryProtection =
+          writable ? MemoryProtection.readWrite : MemoryProtection.readOnly;
       return callback(_raw);
     } finally {
       _raw.memoryProtection = MemoryProtection.noAccess;
@@ -34,15 +50,23 @@ class SecureKeyFFI implements SecureKey {
   }
 
   @override
-  T runUnlockedSync<T>(SecureCallbackFn<T> callback) =>
-      runUnlockedRaw((pointer) => callback(pointer.asList()));
+  T runUnlockedSync<T>(
+    SecureCallbackFn<T> callback, {
+    bool writable = false,
+  }) =>
+      runUnlockedRaw(
+        (pointer) => callback(pointer.asList()),
+        writable: writable,
+      );
 
   @override
   FutureOr<T> runUnlockedAsync<T>(
-    SecureCallbackFn<FutureOr<T>> callback,
-  ) async {
+    SecureCallbackFn<FutureOr<T>> callback, {
+    bool writable = false,
+  }) async {
     try {
-      _raw.memoryProtection = MemoryProtection.readOnly;
+      _raw.memoryProtection =
+          writable ? MemoryProtection.readWrite : MemoryProtection.readOnly;
       return await callback(_raw.asList());
     } finally {
       _raw.memoryProtection = MemoryProtection.noAccess;
@@ -50,14 +74,7 @@ class SecureKeyFFI implements SecureKey {
   }
 
   @override
-  Uint8List extractBytes() {
-    try {
-      _raw.memoryProtection = MemoryProtection.readOnly;
-      return _raw.copyAsList();
-    } finally {
-      _raw.memoryProtection = MemoryProtection.noAccess;
-    }
-  }
+  Uint8List extractBytes() => runUnlockedRaw((pointer) => pointer.copyAsList());
 
   @override
   void dispose() {

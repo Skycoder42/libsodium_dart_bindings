@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import '../../api/pwhash.dart';
 import '../../api/secure_key.dart';
+import '../../api/string_x.dart';
 import '../bindings/sodium.ffi.dart';
 import '../bindings/sodium_pointer.dart';
 import 'secure_key_ffi.dart';
@@ -62,6 +63,9 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   int get saltBytes => sodium.crypto_pwhash_saltbytes();
 
   @override
+  int get strBytes => sodium.crypto_pwhash_strbytes();
+
+  @override
   SecureKey call(
     int outLen,
     Int8List password,
@@ -81,11 +85,17 @@ class PwhashFFI with PwHashValidations implements Pwhash {
     SecureKeyFFI? outKey;
 
     try {
-      passwordPtr = SodiumPointer.fromList(sodium, password)
-        ..memoryProtection = MemoryProtection.readOnly;
+      passwordPtr = SodiumPointer.fromList(
+        sodium,
+        password,
+        memoryProtection: MemoryProtection.readOnly,
+      );
 
-      saltPtr = SodiumPointer.fromList(sodium, salt)
-        ..memoryProtection = MemoryProtection.readOnly;
+      saltPtr = SodiumPointer.fromList(
+        sodium,
+        salt,
+        memoryProtection: MemoryProtection.readOnly,
+      );
 
       outKey = SecureKeyFFI.alloc(sodium, outLen);
 
@@ -100,6 +110,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
           memLimit,
           alg.toValue(sodium),
         ),
+        writable: true,
       );
       SodiumFFIException.checkSucceeded(result);
 
@@ -110,6 +121,117 @@ class PwhashFFI with PwHashValidations implements Pwhash {
     } finally {
       passwordPtr?.dispose();
       saltPtr?.dispose();
+    }
+  }
+
+  @override
+  String str(
+    String password,
+    int opsLimit,
+    int memLimit,
+  ) {
+    validateOpsLimit(opsLimit);
+    validateMemLimit(memLimit);
+
+    SodiumPointer<Int8>? passwordPtr;
+    SodiumPointer<Int8>? passwordHashPtr;
+
+    try {
+      passwordPtr = SodiumPointer.fromList(
+        sodium,
+        password.toCharArray(),
+        memoryProtection: MemoryProtection.readOnly,
+      );
+      passwordHashPtr = SodiumPointer<Int8>.alloc(
+        sodium,
+        count: strBytes,
+        zeroMemory: true,
+      );
+
+      final result = sodium.crypto_pwhash_str(
+        passwordHashPtr.ptr,
+        passwordPtr.ptr,
+        passwordPtr.count,
+        opsLimit,
+        memLimit,
+      );
+      SodiumFFIException.checkSucceeded(result);
+
+      return passwordHashPtr.asList().toDartString(zeroTerminated: true);
+    } finally {
+      passwordPtr?.dispose();
+      passwordHashPtr?.dispose();
+    }
+  }
+
+  @override
+  void strVerify(
+    String password,
+    String passwordHash,
+  ) {
+    SodiumPointer<Int8>? passwordPtr;
+    SodiumPointer<Int8>? passwordHashPtr;
+    try {
+      passwordPtr = SodiumPointer.fromList(
+        sodium,
+        password.toCharArray(),
+        memoryProtection: MemoryProtection.readOnly,
+      );
+      passwordHashPtr = SodiumPointer.fromList(
+        sodium,
+        passwordHash.toCharArray(
+          memoryWidth: strBytes,
+        ),
+        memoryProtection: MemoryProtection.readOnly,
+      );
+
+      final result = sodium.crypto_pwhash_str_verify(
+        passwordHashPtr.ptr,
+        passwordPtr.ptr,
+        passwordPtr.count,
+      );
+      SodiumFFIException.checkSucceeded(result);
+    } finally {
+      passwordPtr?.dispose();
+      passwordHashPtr?.dispose();
+    }
+  }
+
+  @override
+  bool strNeedsRehash(
+    String passwordHash,
+    int opsLimit,
+    int memLimit,
+  ) {
+    validateOpsLimit(opsLimit);
+    validateMemLimit(memLimit);
+
+    SodiumPointer<Int8>? passwordHashPtr;
+    try {
+      passwordHashPtr = SodiumPointer.fromList(
+        sodium,
+        passwordHash.toCharArray(
+          memoryWidth: strBytes,
+        ),
+        memoryProtection: MemoryProtection.readOnly,
+      );
+
+      final result = sodium.crypto_pwhash_str_needs_rehash(
+        passwordHashPtr.ptr,
+        opsLimit,
+        memLimit,
+      );
+
+      switch (result) {
+        case 0:
+          return false;
+        case 1:
+          return true;
+        default:
+          throw SodiumFFIException();
+      }
+    } finally {
+      passwordHashPtr?.dispose();
     }
   }
 }
