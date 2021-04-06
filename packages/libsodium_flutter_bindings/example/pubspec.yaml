@@ -9,13 +9,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  libsodium_dart_bindings: ^1.0.0
+  sodium: ^1.0.0
   libsodium_flutter_bindings:
     path: ../
 
 dependency_overrides:
-  libsodium_dart_bindings:
-    path: ../../libsodium_dart_bindings
+  sodium:
+    path: ../../sodium
   libsodium_flutter_bindings_linux:
     path: ../../libsodium_flutter_bindings_linux
   libsodium_flutter_bindings_platform_interface:

@@ -1,5 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:libsodium_dart_bindings/libsodium_dart_bindings.dart';
+import 'package:sodium/sodium.dart';
 
 abstract class LibsodiumPlatform extends PlatformInterface {
   static final Object _token = Object();

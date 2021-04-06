@@ -1,7 +1,8 @@
-name: libsodium_dart_bindings
+name: sodium
 
 packages:
-  - packages/**
+  # - packages/**
+  - packages/sodium
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

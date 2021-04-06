@@ -17,12 +17,12 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  libsodium_dart_bindings: ^1.0.0
+  sodium: ^1.0.0
   libsodium_flutter_bindings_platform_interface: ^1.0.0
 
 dependency_overrides:
-  libsodium_dart_bindings:
-    path: "../libsodium_dart_bindings"
+  sodium:
+    path: "../sodium"
   libsodium_flutter_bindings_platform_interface:
     path: "../libsodium_flutter_bindings_platform_interface"
 

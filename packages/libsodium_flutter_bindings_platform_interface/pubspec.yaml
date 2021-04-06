@@ -9,12 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  libsodium_dart_bindings: ^1.0.0
+  sodium: ^1.0.0
   plugin_platform_interface: ^2.0.0
 
 dependency_overrides:
-  libsodium_dart_bindings:
-    path: "../libsodium_dart_bindings"
+  sodium:
+    path: "../sodium"
 
 dev_dependencies:
   dart_pre_commit: ^2.2.0-nullsafety.2

@@ -1,0 +1,18 @@
+{
+  "name": "sodium_js",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "generate-bindings": "yarn dart_js_facade_gen --destination=../lib/src/js node_modules/@types/libsodium-wrappers/index.d.ts"
+  },
+  "dependencies": {
+    "libsodium-wrappers": "^0.7.9"
+  },
+  "devDependencies": {
+    "@types/libsodium-wrappers": "^0.7.9",
+    "dart_js_facade_gen": "^0.0.7",
+    "typescript": "^4.2.3"
+  }
+}
