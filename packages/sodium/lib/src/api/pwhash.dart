@@ -51,8 +51,8 @@ abstract class Pwhash {
   );
 
   void strVerify(
-    String password,
     String passwordHash,
+    String password,
   );
 
   bool strNeedsRehash(

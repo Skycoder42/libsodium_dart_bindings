@@ -9,9 +9,9 @@ abstract class Randombytes {
 
   int uniform(int upperBound);
 
-  Uint8List buf(int size);
+  Uint8List buf(int length);
 
-  Uint8List bufDeterministic(int size, Uint8List seed);
+  Uint8List bufDeterministic(int length, Uint8List seed);
 
   void close();
 

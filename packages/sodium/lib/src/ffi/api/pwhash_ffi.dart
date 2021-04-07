@@ -166,8 +166,8 @@ class PwhashFFI with PwHashValidations implements Pwhash {
 
   @override
   void strVerify(
-    String password,
     String passwordHash,
+    String password,
   ) {
     SodiumPointer<Int8>? passwordPtr;
     SodiumPointer<Int8>? passwordHashPtr;

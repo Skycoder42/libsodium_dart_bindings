@@ -33,14 +33,14 @@ jobs:
       - run: make -f ../../Makefile get
       # - run: make -f ../../Makefile build
       - run: make -f ../../Makefile analyze
-      - run: make -f ../../Makefile unit-test-coverage
-      - run: make -f ../../Makefile integration-tests
-      - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
-        with:
-          min_coverage: 95
-          exclude: |
-            **/*.ffi.dart 
-            **/*.js.dart 
+      # - run: make -f ../../Makefile unit-test-coverage
+      # - run: make -f ../../Makefile integration-tests
+      # - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+      #   with:
+      #     min_coverage: 95
+      #     exclude: |
+      #       **/*.ffi.dart 
+      #       **/*.js.dart 
       - run: make -f ../../Makefile publish-dry
 
   # release:

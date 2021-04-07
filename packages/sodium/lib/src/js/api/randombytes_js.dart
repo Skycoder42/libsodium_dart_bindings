@@ -1,42 +1,32 @@
-import 'dart:js';
 import 'dart:typed_data';
 
 import '../../api/randombytes.dart';
-import '../bindings/num_x.dart';
+import '../bindings/sodium.js.dart';
 
 class RandombytesJS implements Randombytes {
-  final JsObject sodium;
+  final LibSodiumJS sodium;
 
   RandombytesJS(this.sodium);
 
   @override
-  int get seedBytes => 32; // not exported from libsodium-wrappers
+  int get seedBytes => sodium.randombytes_seedbytes();
 
   @override
-  int random() => (sodium.callMethod('randombytes_random') as num).toSafeInt();
+  int random() => sodium.randombytes_random();
 
   @override
-  int uniform(int upperBound) => (sodium.callMethod(
-        'randombytes_random',
-        <dynamic>[upperBound],
-      ) as num)
-          .toSafeInt();
+  int uniform(int upperBound) => sodium.randombytes_uniform(upperBound);
 
   @override
-  Uint8List buf(int size) => sodium.callMethod(
-        'randombytes_buf',
-        <dynamic>[size, 'uint8array'],
-      ) as Uint8List;
+  Uint8List buf(int length) => sodium.randombytes_buf(length);
 
   @override
-  Uint8List bufDeterministic(int size, Uint8List seed) => sodium.callMethod(
-        'randombytes_buf_deterministic',
-        <dynamic>[size, seed, 'uint8array'],
-      ) as Uint8List;
+  Uint8List bufDeterministic(int length, Uint8List seed) =>
+      sodium.randombytes_buf_deterministic(length, seed);
 
   @override
-  void close() => sodium.callMethod('randombytes_close');
+  void close() => sodium.randombytes_close();
 
   @override
-  void stir() => sodium.callMethod('randombytes_stir');
+  void stir() => sodium.randombytes_stir();
 }

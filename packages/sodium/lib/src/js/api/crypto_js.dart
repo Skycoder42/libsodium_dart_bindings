@@ -1,15 +1,13 @@
-import 'dart:js';
-
 import '../../api/crypto.dart';
 import '../../api/pwhash.dart';
-
+import '../bindings/sodium.js.dart';
 import 'pwhash_js.dart';
 
 class CrypoJS implements Crypto {
-  final JsObject sodium;
+  final LibSodiumJS sodium;
 
   CrypoJS(this.sodium);
 
   @override
-  Pwhash get pwhash => PwhashJs(sodium);
+  late final Pwhash pwhash = PwhashJs(sodium);
 }
