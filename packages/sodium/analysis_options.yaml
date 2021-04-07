@@ -4,6 +4,7 @@ analyzer:
   exclude:
     - "**/*.ffi.dart"
     - "build/**"
+    - "example/web/**"
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false

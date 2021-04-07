@@ -2,7 +2,7 @@ name: sodium
 
 packages:
   # - packages/**
-  - packages/sodium
+  - packages/sodium/*
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -17,25 +17,49 @@ dev_dependencies:
 
 scripts:
   get:
-    run: dart pub global run melos exec -- dart pub get
+    run: dart pub global run melos exec -- make -f ../../Makefile get
     description: Run 'pub get' in all projects
 
   upgrade:
-    run: dart pub global run melos exec -- dart pub upgrade
+    run: dart pub global run melos exec -- make -f ../../Makefile upgrade
     description: Run 'pub upgrade' in all projects
 
+  analyze:
+    run: dart pub global run melos exec -- make -f ../../Makefile analyze
+    description: Run 'dart analyze' in all projects
+
   outdated:
-    run: dart pub global run melos exec -- dart pub outdated
+    run: dart pub global run melos exec -- make -f ../../Makefile outdated
     description: Run 'pub outdated' in all projects
+
+  build:
+    run: dart pub global run melos exec -- make -f ../../Makefile build
+    description: Run the build runner in all projects
+    select-package:
+      depends-on: build_runner
+
+  build:clean:
+    run: dart pub global run melos exec -- make -f ../../Makefile build-clean
+    description: Run the build runner in all projects, discarding the previous state
+    select-package:
+      depends-on: build_runner
+
+  test:
+    run: dart pub global run melos exec -- make -f ../../Makefile test
+    description: Run tests in all projects
+
+  verify:
+    run: dart pub global run melos exec -c1 -- make -f ../../Makefile verify
+    description: Verify all projects
 
   pre-commit:init:
     run: bash -c "echo -e '#!/bin/sh\nexec dart pub global run melos run pre-commit:run' > .git/hooks/pre-commit && chmod a+x .git/hooks/pre-commit"
     description: Setup pre commit hooks
 
-  pre-commit:run:
-    run: dart pub global run melos exec -c1 -- dart pub run --no-sound-null-safety dart_pre_commit -p --ansi
-    description: Run pre commit hooks in all projects
+  pre-commit:remove:
+    run: rm -f .git/hooks/pre-commit
+    description: Remove pre commit hooks
 
-  test:
-    run: dart pub global run melos exec -- dart test
-    description: Run tests in all projects
+  pre-commit:run:
+    run: dart pub global run melos exec -c1 -- dart pub run --no-sound-null-safety dart_pre_commit -oany -n -p --ansi
+    description: Run pre commit hooks in all projects

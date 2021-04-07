@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'dart:ffi';
 
 import 'package:sodium/sodium.dart';
