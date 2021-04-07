@@ -6,7 +6,8 @@ import 'dart:html';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:sodium/sodium.dart';
-import 'package:sodium_example/sodium_example.dart';
+// ignore: avoid_relative_lib_imports
+import '../lib/sodium_example.dart';
 
 import 'interop.dart';
 

@@ -2,7 +2,8 @@
 import 'dart:ffi';
 
 import 'package:sodium/sodium.dart';
-import 'package:sodium_example/sodium_example.dart';
+// ignore: avoid_relative_lib_imports
+import '../lib/sodium_example.dart';
 
 Future<void> main() async {
   final libsodium = DynamicLibrary.open('/usr/lib/libsodium.so');
