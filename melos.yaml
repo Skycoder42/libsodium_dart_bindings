@@ -48,6 +48,10 @@ scripts:
     run: dart pub global run melos exec -- make -f ../../Makefile test
     description: Run tests in all projects
 
+  test:coverage:open:
+    run: dart pub global run melos exec -- make -f ../../Makefile coverage-open
+    description: Run tests in all projects
+
   verify:
     run: dart pub global run melos exec -c1 -- make -f ../../Makefile verify
     description: Verify all projects

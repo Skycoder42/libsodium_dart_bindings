@@ -13,12 +13,11 @@ Uint8List runSample(Sodium sodium) {
   print('hashing...');
   final timer = Stopwatch()..start();
   final hashedPw = sodium.crypto.pwhash(
-    64,
-    pwChars,
-    salt,
-    sodium.crypto.pwhash.opsLimitInteractive,
-    sodium.crypto.pwhash.memLimitInteractive,
-    CrypoPwhashAlgorithm.defaultAlg,
+    outLen: 64,
+    password: pwChars,
+    salt: salt,
+    opsLimit: sodium.crypto.pwhash.opsLimitInteractive,
+    memLimit: sodium.crypto.pwhash.memLimitInteractive,
   );
   timer.stop();
   print('Done after ${timer.elapsed}');

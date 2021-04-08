@@ -1,0 +1,274 @@
+import 'dart:ffi';
+
+import 'package:ffi/ffi.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/ffi/api/secure_key_ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
+import 'package:test/test.dart';
+import 'package:tuple/tuple.dart';
+
+import '../../../test_data.dart';
+
+class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+
+class MockSodiumPointer extends Mock implements SodiumPointer<Uint8> {}
+
+void main() {
+  final mockSodium = MockSodiumFFI();
+  final mockSodiumPointer = MockSodiumPointer();
+
+  setUpAll(() {
+    registerFallbackValue<Pointer<Void>>(nullptr);
+  });
+
+  setUp(() {
+    reset(mockSodium);
+  });
+
+  group('construction', () {
+    test('raw locks and blocks access on construction', () {
+      SecureKeyFFI(mockSodiumPointer);
+
+      verify(() => mockSodiumPointer.locked = true);
+      verify(
+        () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+      );
+    });
+
+    test('alloc allocates new memory', () {
+      when(() => mockSodium.sodium_allocarray(any(), any()))
+          .thenReturn(nullptr);
+      when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
+
+      const length = 42;
+      SecureKeyFFI.alloc(mockSodium, length);
+
+      verify(() => mockSodium.sodium_allocarray(length, 1));
+    });
+
+    group('random', () {
+      setUp(() {
+        when(() => mockSodium.sodium_allocarray(any(), any()))
+            .thenReturn(nullptr);
+        when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
+      });
+
+      test('alloc allocates new memory', () {
+        const length = 42;
+        SecureKeyFFI.random(mockSodium, length);
+
+        verify(() => mockSodium.sodium_allocarray(length, 1));
+      });
+
+      test('fills buffer with random data', () {
+        const length = 10;
+        SecureKeyFFI.random(mockSodium, length);
+
+        verify(() => mockSodium.randombytes_buf(nullptr, length));
+      });
+
+      test('disposes allocated pointer if random fails', () {
+        when(() => mockSodium.randombytes_buf(any(), any()))
+            .thenThrow(Exception());
+
+        const length = 10;
+        expect(
+          () => SecureKeyFFI.random(mockSodium, length),
+          throwsA(isA<Exception>()),
+        );
+
+        verify(() => mockSodium.sodium_free(nullptr));
+      });
+    });
+  });
+
+  group('members', () {
+    const testList = [0, 1, 2, 3, 4];
+    late Pointer<Uint8> testPtr;
+
+    late SecureKeyFFI sut;
+
+    setUp(() {
+      testPtr = calloc<Uint8>(testList.length);
+      for (var i = 0; i < testList.length; ++i) {
+        testPtr.elementAt(i).value = testList[i];
+      }
+
+      when(() => mockSodiumPointer.count).thenReturn(testList.length);
+      when(() => mockSodiumPointer.ptr).thenReturn(testPtr);
+
+      sut = SecureKeyFFI(mockSodiumPointer);
+      clearInteractions(mockSodiumPointer);
+    });
+
+    tearDown(() {
+      calloc.free(testPtr);
+    });
+
+    group('runUnlockedRaw', () {
+      testData<Tuple2<bool, MemoryProtection>>(
+        'sets memory protection levels before running the callback',
+        const [
+          Tuple2(false, MemoryProtection.readOnly),
+          Tuple2(true, MemoryProtection.readWrite),
+        ],
+        (fixture) {
+          final res = sut.runUnlockedRaw(
+            (pointer) {
+              expect(pointer, mockSodiumPointer);
+              verify(() => mockSodiumPointer.memoryProtection = fixture.item2);
+              return true;
+            },
+            writable: fixture.item1,
+          );
+          expect(res, isTrue);
+        },
+      );
+
+      test('resets memory protection after callback', () {
+        final res = sut.runUnlockedRaw((pointer) {
+          verifyNever(
+            () =>
+                mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+          );
+          return true;
+        });
+
+        expect(res, isTrue);
+        verify(
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+        );
+      });
+
+      test('resets memory protection on exceptions', () {
+        expect(
+          () => sut.runUnlockedRaw((_) => throw Exception()),
+          throwsA(isA<Exception>()),
+        );
+        verifyInOrder([
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.readOnly,
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+        ]);
+      });
+    });
+
+    group('runUnlockedSync', () {
+      testData<Tuple2<bool, MemoryProtection>>(
+        'sets memory protection levels before running the callback',
+        const [
+          Tuple2(false, MemoryProtection.readOnly),
+          Tuple2(true, MemoryProtection.readWrite),
+        ],
+        (fixture) {
+          final res = sut.runUnlockedSync(
+            (data) {
+              expect(data, testList);
+              verify(() => mockSodiumPointer.memoryProtection = fixture.item2);
+              return true;
+            },
+            writable: fixture.item1,
+          );
+          expect(res, isTrue);
+        },
+      );
+
+      test('resets memory protection after callback', () {
+        final res = sut.runUnlockedSync((pointer) {
+          verifyNever(
+            () =>
+                mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+          );
+          return true;
+        });
+
+        expect(res, isTrue);
+        verify(
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+        );
+      });
+
+      test('resets memory protection on exceptions', () {
+        expect(
+          () => sut.runUnlockedSync((_) => throw Exception()),
+          throwsA(isA<Exception>()),
+        );
+        verifyInOrder([
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.readOnly,
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+        ]);
+      });
+    });
+
+    group('runUnlockedAsync', () {
+      testData<Tuple2<bool, MemoryProtection>>(
+        'sets memory protection levels before running the callback',
+        const [
+          Tuple2(false, MemoryProtection.readOnly),
+          Tuple2(true, MemoryProtection.readWrite),
+        ],
+        (fixture) async {
+          final res = await sut.runUnlockedAsync(
+            (data) {
+              expect(data, testList);
+              verify(() => mockSodiumPointer.memoryProtection = fixture.item2);
+              return true;
+            },
+            writable: fixture.item1,
+          );
+          expect(res, isTrue);
+        },
+      );
+
+      test('resets memory protection after callback', () async {
+        final res = await sut.runUnlockedAsync((pointer) async {
+          await Future<void>.delayed(const Duration(milliseconds: 200));
+          verifyNever(
+            () =>
+                mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+          );
+          return true;
+        });
+
+        expect(res, isTrue);
+        verify(
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+        );
+      });
+
+      test('resets memory protection on exceptions', () async {
+        await expectLater(
+          () => sut.runUnlockedAsync((_) => throw Exception()),
+          throwsA(isA<Exception>()),
+        );
+        verifyInOrder([
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.readOnly,
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+        ]);
+      });
+    });
+
+    group('extractBytes', () {
+      test('returns copy of bytes', () {
+        final bytes = sut.extractBytes();
+
+        expect(bytes, testList);
+      });
+
+      test('unlocks then relocks memory for extracting', () {
+        sut.extractBytes();
+
+        verifyInOrder([
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.readOnly,
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+        ]);
+      });
+    });
+
+    test('dispose disposes the pointer', () {
+      sut.dispose();
+
+      verify(() => mockSodiumPointer.dispose());
+    });
+  });
+}

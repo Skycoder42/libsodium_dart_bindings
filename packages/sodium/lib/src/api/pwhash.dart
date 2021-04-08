@@ -35,14 +35,14 @@ abstract class Pwhash {
 
   int get strBytes;
 
-  SecureKey call(
-    int outLen,
-    Int8List password,
-    Uint8List salt,
-    int opsLimit,
-    int memLimit,
-    CrypoPwhashAlgorithm alg,
-  );
+  SecureKey call({
+    required int outLen,
+    required Int8List password,
+    required Uint8List salt,
+    required int opsLimit,
+    required int memLimit,
+    CrypoPwhashAlgorithm alg = CrypoPwhashAlgorithm.defaultAlg,
+  });
 
   String str(
     String password,

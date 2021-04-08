@@ -1,7 +1,9 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:ffi/ffi.dart';
+import 'package:meta/meta.dart';
+import '../../api/sodium_exception.dart';
+import '../../api/string_x.dart';
 
 import 'libsodium.ffi.dart';
 
@@ -57,6 +59,7 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
     }
   }
 
+  @visibleForTesting
   factory SodiumPointer.fromList(
     LibSodiumFFI sodium,
     List<num> list, {
@@ -66,7 +69,7 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
     final sodiumPtr = SodiumPointer.raw(
       sodium,
       sodium.sodium_allocarray(list.length, typeLen).cast<T>(),
-      list.length * typeLen,
+      list.length,
     );
     try {
       sodiumPtr._asTypedIntListRaw().setAll(0, list);
@@ -89,11 +92,13 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
       return;
     }
 
+    late int result;
     if (locked) {
-      sodium.sodium_mlock(ptr.cast(), byteLength);
+      result = sodium.sodium_mlock(ptr.cast(), byteLength);
     } else {
-      sodium.sodium_munlock(ptr.cast(), byteLength);
+      result = sodium.sodium_munlock(ptr.cast(), byteLength);
     }
+    SodiumException.checkSucceededInt(result);
 
     _locked = locked;
   }
@@ -105,29 +110,27 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
       return;
     }
 
+    late int result;
     switch (memoryProtection) {
       case MemoryProtection.noAccess:
-        sodium.sodium_mprotect_noaccess(ptr.cast());
+        result = sodium.sodium_mprotect_noaccess(ptr.cast());
         break;
       case MemoryProtection.readOnly:
-        sodium.sodium_mprotect_readonly(ptr.cast());
+        result = sodium.sodium_mprotect_readonly(ptr.cast());
         break;
       case MemoryProtection.readWrite:
-        sodium.sodium_mprotect_readwrite(ptr.cast());
+        result = sodium.sodium_mprotect_readwrite(ptr.cast());
         break;
     }
+    SodiumException.checkSucceededInt(result);
+
     _memoryProtection = memoryProtection;
   }
 
   void zeroMemory() => sodium.sodium_memzero(ptr.cast(), byteLength);
 
   void dispose() {
-    try {
-      memoryProtection = MemoryProtection.readWrite;
-      zeroMemory();
-    } finally {
-      sodium.sodium_free(ptr.cast());
-    }
+    sodium.sodium_free(ptr.cast());
   }
 
   List<num> _asTypedIntListRaw() {
@@ -153,15 +156,13 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
       case Double:
         return (this as SodiumPointer<Double>).asList();
       default:
+        // coverage:ignore-start
         throw UnsupportedError(
           'Cannot create a SodiumPointer<$T> from a List<num>',
         );
+      // coverage:ignore-end
     }
   }
-}
-
-extension StringPtr on Pointer<Int8> {
-  String toDartString() => cast<Utf8>().toDartString();
 }
 
 extension Int8SodiumPtr on SodiumPointer<Int8> {
@@ -169,7 +170,8 @@ extension Int8SodiumPtr on SodiumPointer<Int8> {
 
   Int8List copyAsList() => Int8List.fromList(asList());
 
-  String toDartString() => ptr.toDartString();
+  String toDartString({bool zeroTerminated = false}) =>
+      asList().toDartString(zeroTerminated: zeroTerminated);
 }
 
 extension Int16SodiumPtr on SodiumPointer<Int16> {
@@ -224,6 +226,142 @@ extension DoubleSodiumPtr on SodiumPointer<Double> {
   Float64List asList() => ptr.asTypedList(count);
 
   Float64List copyAsList() => Float64List.fromList(asList());
+}
+
+extension SodiumString on String {
+  SodiumPointer<Int8> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    int? memoryWidth,
+    bool zeroTerminated = false,
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      toCharArray(
+        memoryWidth: memoryWidth,
+        zeroTerminated: zeroTerminated,
+      ).toSodiumPointer(
+        sodium,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension Int8SodiumList on Int8List {
+  SodiumPointer<Int8> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension Int16SodiumList on Int16List {
+  SodiumPointer<Int16> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension Int32SodiumList on Int32List {
+  SodiumPointer<Int32> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension Int64SodiumList on Int64List {
+  SodiumPointer<Int64> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension Uint8SodiumList on Uint8List {
+  SodiumPointer<Uint8> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension Uint16SodiumList on Uint16List {
+  SodiumPointer<Uint16> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension Uint32SodiumList on Uint32List {
+  SodiumPointer<Uint32> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension Uint64SodiumList on Uint64List {
+  SodiumPointer<Uint64> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension FloatSodiumList on Float32List {
+  SodiumPointer<Float> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
+}
+
+extension DoubleSodiumList on Float64List {
+  SodiumPointer<Double> toSodiumPointer(
+    LibSodiumFFI sodium, {
+    MemoryProtection memoryProtection = MemoryProtection.readWrite,
+  }) =>
+      SodiumPointer.fromList(
+        sodium,
+        this,
+        memoryProtection: memoryProtection,
+      );
 }
 
 abstract class _StaticallyTypedSizeOf {

@@ -22,7 +22,6 @@ class SecureKeyFFI implements SecureKey {
       SecureKeyFFI(SodiumPointer<Uint8>.alloc(
         sodium,
         count: length,
-        zeroMemory: true,
       ));
 
   factory SecureKeyFFI.random(LibSodiumFFI sodium, int length) {

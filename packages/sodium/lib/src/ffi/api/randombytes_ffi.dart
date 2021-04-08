@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import '../../api/randombytes.dart';
+import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/sodium_pointer.dart';
 
@@ -37,9 +38,8 @@ class RandombytesFFI implements Randombytes {
     SodiumPointer<Uint8>? seedPtr;
     SodiumPointer<Uint8>? resultPtr;
     try {
-      seedPtr = SodiumPointer.fromList(
+      seedPtr = seed.toSodiumPointer(
         sodium,
-        seed,
         memoryProtection: MemoryProtection.readOnly,
       );
       resultPtr = SodiumPointer.alloc(sodium, count: size);
@@ -56,7 +56,10 @@ class RandombytesFFI implements Randombytes {
   }
 
   @override
-  void close() => sodium.randombytes_close();
+  void close() {
+    final result = sodium.randombytes_close();
+    SodiumException.checkSucceededInt(result);
+  }
 
   @override
   void stir() => sodium.randombytes_stir();

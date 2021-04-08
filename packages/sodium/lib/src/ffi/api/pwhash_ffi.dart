@@ -9,19 +9,6 @@ import '../bindings/libsodium.ffi.dart';
 import '../bindings/sodium_pointer.dart';
 import 'secure_key_ffi.dart';
 
-extension CrypoPwhashAlgorithmFFI on CrypoPwhashAlgorithm {
-  int toValue(LibSodiumFFI sodium) {
-    switch (this) {
-      case CrypoPwhashAlgorithm.defaultAlg:
-        return sodium.crypto_pwhash_alg_default();
-      case CrypoPwhashAlgorithm.argon2i13:
-        return sodium.crypto_pwhash_alg_argon2i13();
-      case CrypoPwhashAlgorithm.argon2id13:
-        return sodium.crypto_pwhash_alg_argon2id13();
-    }
-  }
-}
-
 class PwhashFFI with PwHashValidations implements Pwhash {
   final LibSodiumFFI sodium;
 
@@ -35,24 +22,24 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   @override
   int get memLimitMin => sodium.crypto_pwhash_memlimit_min();
   @override
-  int get memLimitSensitive => sodium.crypto_pwhash_memlimit_sensitive();
+  int get memLimitInteractive => sodium.crypto_pwhash_memlimit_interactive();
   @override
   int get memLimitModerate => sodium.crypto_pwhash_memlimit_moderate();
   @override
-  int get memLimitMax => sodium.crypto_pwhash_memlimit_max();
+  int get memLimitSensitive => sodium.crypto_pwhash_memlimit_sensitive();
   @override
-  int get memLimitInteractive => sodium.crypto_pwhash_memlimit_interactive();
+  int get memLimitMax => sodium.crypto_pwhash_memlimit_max();
 
   @override
   int get opsLimitMin => sodium.crypto_pwhash_opslimit_min();
   @override
-  int get opsLimitSensitive => sodium.crypto_pwhash_opslimit_sensitive();
+  int get opsLimitInteractive => sodium.crypto_pwhash_opslimit_interactive();
   @override
   int get opsLimitModerate => sodium.crypto_pwhash_opslimit_moderate();
   @override
-  int get opsLimitMax => sodium.crypto_pwhash_opslimit_max();
+  int get opsLimitSensitive => sodium.crypto_pwhash_opslimit_sensitive();
   @override
-  int get opsLimitInteractive => sodium.crypto_pwhash_opslimit_interactive();
+  int get opsLimitMax => sodium.crypto_pwhash_opslimit_max();
 
   @override
   int get passwdMin => sodium.crypto_pwhash_passwd_min();
@@ -66,14 +53,14 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   int get strBytes => sodium.crypto_pwhash_strbytes();
 
   @override
-  SecureKey call(
-    int outLen,
-    Int8List password,
-    Uint8List salt,
-    int opsLimit,
-    int memLimit,
-    CrypoPwhashAlgorithm alg,
-  ) {
+  SecureKey call({
+    required int outLen,
+    required Int8List password,
+    required Uint8List salt,
+    required int opsLimit,
+    required int memLimit,
+    CrypoPwhashAlgorithm alg = CrypoPwhashAlgorithm.defaultAlg,
+  }) {
     validateOutLen(outLen);
     validatePassword(password);
     validateSalt(salt);
@@ -85,15 +72,13 @@ class PwhashFFI with PwHashValidations implements Pwhash {
     SecureKeyFFI? outKey;
 
     try {
-      passwordPtr = SodiumPointer.fromList(
+      passwordPtr = password.toSodiumPointer(
         sodium,
-        password,
         memoryProtection: MemoryProtection.readOnly,
       );
 
-      saltPtr = SodiumPointer.fromList(
+      saltPtr = salt.toSodiumPointer(
         sodium,
-        salt,
         memoryProtection: MemoryProtection.readOnly,
       );
 
@@ -137,9 +122,8 @@ class PwhashFFI with PwHashValidations implements Pwhash {
     SodiumPointer<Int8>? passwordHashPtr;
 
     try {
-      passwordPtr = SodiumPointer.fromList(
+      passwordPtr = password.toSodiumPointer(
         sodium,
-        password.toCharArray(),
         memoryProtection: MemoryProtection.readOnly,
       );
       passwordHashPtr = SodiumPointer<Int8>.alloc(
@@ -172,16 +156,13 @@ class PwhashFFI with PwHashValidations implements Pwhash {
     SodiumPointer<Int8>? passwordPtr;
     SodiumPointer<Int8>? passwordHashPtr;
     try {
-      passwordPtr = SodiumPointer.fromList(
+      passwordPtr = password.toSodiumPointer(
         sodium,
-        password.toCharArray(),
         memoryProtection: MemoryProtection.readOnly,
       );
-      passwordHashPtr = SodiumPointer.fromList(
+      passwordHashPtr = passwordHash.toSodiumPointer(
         sodium,
-        passwordHash.toCharArray(
-          memoryWidth: strBytes,
-        ),
+        memoryWidth: strBytes,
         memoryProtection: MemoryProtection.readOnly,
       );
 
@@ -208,11 +189,9 @@ class PwhashFFI with PwHashValidations implements Pwhash {
 
     SodiumPointer<Int8>? passwordHashPtr;
     try {
-      passwordHashPtr = SodiumPointer.fromList(
+      passwordHashPtr = passwordHash.toSodiumPointer(
         sodium,
-        passwordHash.toCharArray(
-          memoryWidth: strBytes,
-        ),
+        memoryWidth: strBytes,
         memoryProtection: MemoryProtection.readOnly,
       );
 
@@ -232,6 +211,19 @@ class PwhashFFI with PwHashValidations implements Pwhash {
       }
     } finally {
       passwordHashPtr?.dispose();
+    }
+  }
+}
+
+extension _CrypoPwhashAlgorithmFFI on CrypoPwhashAlgorithm {
+  int toValue(LibSodiumFFI sodium) {
+    switch (this) {
+      case CrypoPwhashAlgorithm.defaultAlg:
+        return sodium.crypto_pwhash_alg_default();
+      case CrypoPwhashAlgorithm.argon2i13:
+        return sodium.crypto_pwhash_alg_argon2i13();
+      case CrypoPwhashAlgorithm.argon2id13:
+        return sodium.crypto_pwhash_alg_argon2id13();
     }
   }
 }

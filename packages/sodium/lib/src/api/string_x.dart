@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 extension StringX on String {
-  Int8List toCharArray({int? memoryWidth}) {
+  Int8List toCharArray({int? memoryWidth, bool zeroTerminated = false}) {
     if (memoryWidth != null) {
       final encoded = utf8.encode(this);
       if (encoded.length > memoryWidth) {
@@ -17,6 +17,10 @@ extension StringX on String {
       return memory
         ..setAll(0, encoded)
         ..fillRange(encoded.length, memory.length, 0);
+    } else if (zeroTerminated) {
+      return Int8List.fromList(
+        utf8.encode(this).takeWhile((value) => value != 0).toList(),
+      );
     } else {
       return Int8List.fromList(utf8.encode(this));
     }
