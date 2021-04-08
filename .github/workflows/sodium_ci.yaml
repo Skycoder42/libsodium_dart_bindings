@@ -40,9 +40,7 @@ jobs:
       - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           min_coverage: 95
-          exclude: |
-            **/*.ffi.dart 
-            **/*.js.dart 
+          exclude: '**/*.ffi.dart **/*.js.dart'
       - run: make -f ../../Makefile publish-dry
 
   release:
