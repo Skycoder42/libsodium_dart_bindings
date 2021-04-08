@@ -39,8 +39,11 @@ jobs:
       # - run: make -f ../../Makefile integration-tests
       - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
+          path: packages/sodium/coverage/lcov.info
           min_coverage: 95
-          exclude: '**/*.ffi.dart **/*.js.dart'
+          exclude: |
+            **/*.ffi.dart 
+            **/*.js.dart 
       - run: make -f ../../Makefile publish-dry
 
   release:
