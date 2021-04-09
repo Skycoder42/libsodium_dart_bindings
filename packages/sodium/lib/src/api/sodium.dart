@@ -4,7 +4,7 @@ import 'secure_key.dart';
 import 'sodium_version.dart';
 
 abstract class Sodium {
-  const Sodium._();
+  const Sodium._(); // coverage:ignore-line
 
   SodiumVersion get version;
 

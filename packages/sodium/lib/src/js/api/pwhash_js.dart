@@ -96,11 +96,11 @@ class PwhashJs with PwHashValidations implements Pwhash {
   }
 
   @override
-  String str(
-    String password,
-    int opsLimit,
-    int memLimit,
-  ) {
+  String str({
+    required String password,
+    required int opsLimit,
+    required int memLimit,
+  }) {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
@@ -113,23 +113,21 @@ class PwhashJs with PwHashValidations implements Pwhash {
   }
 
   @override
-  void strVerify(
-    String passwordHash,
-    String password,
-  ) {
-    final result = sodium.crypto_pwhash_str_verify(
-      passwordHash,
-      password,
-    );
-    SodiumException.checkSucceededBool(result);
-  }
+  bool strVerify({
+    required String passwordHash,
+    required String password,
+  }) =>
+      sodium.crypto_pwhash_str_verify(
+        passwordHash,
+        password,
+      );
 
   @override
-  bool strNeedsRehash(
-    String passwordHash,
-    int opsLimit,
-    int memLimit,
-  ) =>
+  bool strNeedsRehash({
+    required String passwordHash,
+    required int opsLimit,
+    required int memLimit,
+  }) =>
       sodium.crypto_pwhash_str_needs_rehash(
         passwordHash,
         opsLimit,

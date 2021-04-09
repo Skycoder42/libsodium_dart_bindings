@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 abstract class Randombytes {
-  const Randombytes._();
+  const Randombytes._(); // coverage:ignore-line
 
   int get seedBytes;
 

@@ -8,6 +8,8 @@ import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
 
+import '../pointer_test_helpers.dart';
+
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 
 void main() {
@@ -18,19 +20,13 @@ void main() {
   late RandombytesFFI sut;
 
   setUpAll(() {
-    registerFallbackValue<Pointer<Void>>(nullptr);
-    registerFallbackValue<Pointer<Uint8>>(nullptr.cast());
+    registerPointers();
   });
 
   setUp(() {
     reset(mockSodium);
 
-    when(() => mockSodium.sodium_allocarray(any(), any())).thenAnswer(
-      (i) => calloc<Uint8>(
-        (i.positionalArguments[0] as int) * (i.positionalArguments[1] as int),
-      ).cast(),
-    );
-    when(() => mockSodium.sodium_mprotect_readonly(any())).thenReturn(0);
+    mockAllocArray(mockSodium);
 
     sut = RandombytesFFI(mockSodium);
   });
@@ -68,9 +64,16 @@ void main() {
 
   test('buf calls randombytes_buf', () {
     const length = 42;
+    final testData = List.generate(length, (index) => index);
+    when(() => mockSodium.randombytes_buf(any(), any())).thenAnswer(
+      (i) => fillPointer(
+        i.positionalArguments.first as Pointer<Void>,
+        testData,
+      ),
+    );
 
     final res = sut.buf(length);
-    expect(res.length, length);
+    expect(res, testData);
 
     verify(() => mockSodium.randombytes_buf(any(that: isNot(nullptr)), length));
   });
@@ -78,19 +81,27 @@ void main() {
   group('bufDeterministic', () {
     test('calls randombytes_buf_deterministic', () {
       const seedBytes = 10;
+      final seed = Uint8List(seedBytes);
       when(() => mockSodium.randombytes_seedbytes()).thenReturn(seedBytes);
 
       const length = 42;
-      final seed = Uint8List(seedBytes);
+      final testData = List.generate(length, (index) => index);
+      when(() => mockSodium.randombytes_buf_deterministic(any(), any(), any()))
+          .thenAnswer(
+        (i) => fillPointer(
+          i.positionalArguments.first as Pointer<Void>,
+          testData,
+        ),
+      );
 
       final res = sut.bufDeterministic(length, seed);
-      expect(res.length, length);
+      expect(res, testData);
 
       verify(
         () => mockSodium.randombytes_buf_deterministic(
           any(that: isNot(nullptr)),
           length,
-          any(that: isNot(nullptr)),
+          any(that: hasRawData<Uint8>(seed)),
         ),
       );
     });

@@ -110,11 +110,11 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   }
 
   @override
-  String str(
-    String password,
-    int opsLimit,
-    int memLimit,
-  ) {
+  String str({
+    required String password,
+    required int opsLimit,
+    required int memLimit,
+  }) {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
@@ -126,6 +126,8 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
+      validatePassword(passwordPtr.asList());
+
       passwordHashPtr = SodiumPointer<Int8>.alloc(
         sodium,
         count: strBytes,
@@ -149,10 +151,10 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   }
 
   @override
-  void strVerify(
-    String passwordHash,
-    String password,
-  ) {
+  bool strVerify({
+    required String passwordHash,
+    required String password,
+  }) {
     SodiumPointer<Int8>? passwordPtr;
     SodiumPointer<Int8>? passwordHashPtr;
     try {
@@ -160,18 +162,22 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
+      validatePassword(passwordPtr.asList());
+
       passwordHashPtr = passwordHash.toSodiumPointer(
         sodium,
         memoryWidth: strBytes,
         memoryProtection: MemoryProtection.readOnly,
       );
+      validatepasswordHash(passwordHashPtr.asList());
 
       final result = sodium.crypto_pwhash_str_verify(
         passwordHashPtr.ptr,
         passwordPtr.ptr,
         passwordPtr.count,
       );
-      SodiumException.checkSucceededInt(result);
+
+      return result == 0;
     } finally {
       passwordPtr?.dispose();
       passwordHashPtr?.dispose();
@@ -179,11 +185,11 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   }
 
   @override
-  bool strNeedsRehash(
-    String passwordHash,
-    int opsLimit,
-    int memLimit,
-  ) {
+  bool strNeedsRehash({
+    required String passwordHash,
+    required int opsLimit,
+    required int memLimit,
+  }) {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
@@ -194,6 +200,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         memoryWidth: strBytes,
         memoryProtection: MemoryProtection.readOnly,
       );
+      validatepasswordHash(passwordHashPtr.asList());
 
       final result = sodium.crypto_pwhash_str_needs_rehash(
         passwordHashPtr.ptr,

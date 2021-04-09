@@ -9,6 +9,7 @@ import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../test_data.dart';
+import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 
@@ -19,7 +20,7 @@ void main() {
   final mockSodiumPointer = MockSodiumPointer();
 
   setUpAll(() {
-    registerFallbackValue<Pointer<Void>>(nullptr);
+    registerPointers();
   });
 
   setUp(() {
@@ -27,6 +28,10 @@ void main() {
   });
 
   group('construction', () {
+    setUp(() {
+      mockAllocArray(mockSodium);
+    });
+
     test('raw locks and blocks access on construction', () {
       SecureKeyFFI(mockSodiumPointer);
 
@@ -37,10 +42,6 @@ void main() {
     });
 
     test('alloc allocates new memory', () {
-      when(() => mockSodium.sodium_allocarray(any(), any()))
-          .thenReturn(nullptr);
-      when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
-
       const length = 42;
       SecureKeyFFI.alloc(mockSodium, length);
 
@@ -48,12 +49,6 @@ void main() {
     });
 
     group('random', () {
-      setUp(() {
-        when(() => mockSodium.sodium_allocarray(any(), any()))
-            .thenReturn(nullptr);
-        when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
-      });
-
       test('alloc allocates new memory', () {
         const length = 42;
         SecureKeyFFI.random(mockSodium, length);
@@ -65,7 +60,12 @@ void main() {
         const length = 10;
         SecureKeyFFI.random(mockSodium, length);
 
-        verify(() => mockSodium.randombytes_buf(nullptr, length));
+        verify(
+          () => mockSodium.randombytes_buf(
+            any(that: isNot(nullptr)),
+            length,
+          ),
+        );
       });
 
       test('disposes allocated pointer if random fails', () {
@@ -78,7 +78,7 @@ void main() {
           throwsA(isA<Exception>()),
         );
 
-        verify(() => mockSodium.sodium_free(nullptr));
+        verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))));
       });
     });
   });
@@ -90,10 +90,7 @@ void main() {
     late SecureKeyFFI sut;
 
     setUp(() {
-      testPtr = calloc<Uint8>(testList.length);
-      for (var i = 0; i < testList.length; ++i) {
-        testPtr.elementAt(i).value = testList[i];
-      }
+      testPtr = testList.toPointer();
 
       when(() => mockSodiumPointer.count).thenReturn(testList.length);
       when(() => mockSodiumPointer.ptr).thenReturn(testPtr);
@@ -104,6 +101,10 @@ void main() {
 
     tearDown(() {
       calloc.free(testPtr);
+    });
+
+    test('length returns pointer length', () {
+      expect(sut.length, testList.length);
     });
 
     group('runUnlockedRaw', () {

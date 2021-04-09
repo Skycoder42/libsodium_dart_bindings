@@ -22,11 +22,12 @@ void main() {
 
   group('allocate', () {
     test('allocates secure memory', () {
-      const bytes = 42;
-      when(() => mockSodium.sodium_malloc(any())).thenReturn(nullptr);
+      const bytes = 10;
+      final testPtr = Pointer<Uint16>.fromAddress(42);
+      when(() => mockSodium.sodium_malloc(any())).thenReturn(testPtr.cast());
 
       final ptr = sut.allocate<Uint16>(bytes);
-      expect(ptr, nullptr);
+      expect(ptr, testPtr);
 
       verify(() => mockSodium.sodium_malloc(bytes));
     });
@@ -40,8 +41,9 @@ void main() {
   });
 
   test('free uses secure free', () {
-    sut.free(nullptr);
+    final testPtr = Pointer<Uint16>.fromAddress(111);
+    sut.free(testPtr);
 
-    verify(() => mockSodium.sodium_free(nullptr));
+    verify(() => mockSodium.sodium_free(testPtr.cast()));
   });
 }

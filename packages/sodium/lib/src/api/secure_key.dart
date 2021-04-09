@@ -4,6 +4,8 @@ import 'dart:typed_data';
 typedef SecureCallbackFn<T> = T Function(Uint8List data);
 
 abstract class SecureKey {
+  int get length;
+
   T runUnlockedSync<T>(
     SecureCallbackFn<T> callback, {
     bool writable = false,

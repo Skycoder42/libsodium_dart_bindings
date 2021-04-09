@@ -9,7 +9,8 @@ extension StringX on String {
         throw ArgumentError.value(
           memoryWidth,
           'memoryWidth',
-          'must be at least as long as the encoded string (${encoded.length})',
+          'must be at least as long as the encoded string '
+              '(${encoded.length} bytes)',
         );
       }
 

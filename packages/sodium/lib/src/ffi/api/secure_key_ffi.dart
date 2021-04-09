@@ -35,6 +35,9 @@ class SecureKeyFFI implements SecureKey {
     }
   }
 
+  @override
+  int get length => _raw.count;
+
   T runUnlockedRaw<T>(
     SecureFFICallbackFn<T> callback, {
     bool writable = false,

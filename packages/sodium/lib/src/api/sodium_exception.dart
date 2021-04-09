@@ -1,16 +1,9 @@
 class SodiumException implements Exception {
   static void checkSucceededInt(
-    int result, {
-    bool lax = false,
-  }) {
-    if (lax) {
-      if (result < 0) {
-        throw SodiumException();
-      }
-    } else {
-      if (result != 0) {
-        throw SodiumException();
-      }
+    int result,
+  ) {
+    if (result != 0) {
+      throw SodiumException();
     }
   }
 
@@ -28,6 +21,8 @@ class SodiumException implements Exception {
     return result;
   }
 
+  // coverage:ignore-start
   @override
-  String toString() => 'A libsodium crypto operation has failed';
+  String toString() => 'A low-level libsodium operation has failed';
+  // coverage:ignore-end
 }

@@ -19,6 +19,9 @@ class SecureKeyJs implements SecureKey {
       );
 
   @override
+  int get length => _raw.length;
+
+  @override
   T runUnlockedSync<T>(
     SecureCallbackFn<T> callback, {
     bool writable = false,

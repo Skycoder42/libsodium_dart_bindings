@@ -10,6 +10,7 @@ import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../test_data.dart';
+import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 
@@ -22,7 +23,7 @@ void main() {
   final mockSodium = MockSodiumFFI();
 
   setUpAll(() {
-    registerFallbackValue<Pointer<Void>>(nullptr);
+    registerPointers();
   });
 
   setUp(() {
@@ -33,7 +34,13 @@ void main() {
   });
 
   group('construction', () {
-    final mockPtr = Pointer<Uint16>.fromAddress(0);
+    final mockPtr = Pointer<Uint16>.fromAddress(666);
+
+    setUp(() {
+      when(() => mockSodium.sodium_malloc(any())).thenReturn(mockPtr.cast());
+      when(() => mockSodium.sodium_allocarray(any(), any()))
+          .thenReturn(mockPtr.cast());
+    });
 
     test('raw initializes members', () {
       final sut = SodiumPointer<Uint16>.raw(mockSodium, mockPtr, 4);
@@ -51,25 +58,25 @@ void main() {
 
     group('alloc', () {
       test('allocates memory for one element', () {
-        final sut = SodiumPointer<Uint32>.alloc(mockSodium);
-        expect(sut.ptr, isNotNull);
+        final sut = SodiumPointer<Uint16>.alloc(mockSodium);
+        expect(sut.ptr, mockPtr);
 
-        expect(sut.elementSize, sizeOf<Uint32>());
+        expect(sut.elementSize, sizeOf<Uint16>());
         expect(sut.count, 1);
-        expect(sut.byteLength, 4);
+        expect(sut.byteLength, sizeOf<Uint16>());
 
-        verify(() => mockSodium.sodium_malloc(4));
+        verify(() => mockSodium.sodium_malloc(sizeOf<Uint16>()));
       });
 
       test('allocates memory for multiple elements', () {
-        final sut = SodiumPointer<Uint32>.alloc(mockSodium, count: 10);
-        expect(sut.ptr, isNotNull);
+        final sut = SodiumPointer<Uint16>.alloc(mockSodium, count: 10);
+        expect(sut.ptr, mockPtr);
 
-        expect(sut.elementSize, sizeOf<Uint32>());
+        expect(sut.elementSize, sizeOf<Uint16>());
         expect(sut.count, 10);
-        expect(sut.byteLength, 40);
+        expect(sut.byteLength, 20);
 
-        verify(() => mockSodium.sodium_allocarray(10, 4));
+        verify(() => mockSodium.sodium_allocarray(10, sizeOf<Uint16>()));
       });
 
       test('asserts for a negative number of elements', () {
@@ -115,7 +122,7 @@ void main() {
           zeroMemory: true,
         );
 
-        verify(() => mockSodium.sodium_memzero(nullptr, sut.byteLength));
+        verify(() => mockSodium.sodium_memzero(mockPtr.cast(), sut.byteLength));
       });
 
       test('sets memory protection if enabled', () {
@@ -127,7 +134,7 @@ void main() {
           memoryProtection: MemoryProtection.readOnly,
         );
 
-        verify(() => mockSodium.sodium_mprotect_readonly(nullptr));
+        verify(() => mockSodium.sodium_mprotect_readonly(mockPtr.cast()));
       });
 
       test('sets memory protection after memory erase', () {
@@ -140,8 +147,8 @@ void main() {
         );
 
         verifyInOrder([
-          () => mockSodium.sodium_memzero(nullptr, 2),
-          () => mockSodium.sodium_mprotect_noaccess(nullptr),
+          () => mockSodium.sodium_memzero(mockPtr.cast(), 2),
+          () => mockSodium.sodium_mprotect_noaccess(mockPtr.cast()),
         ]);
       });
 
@@ -160,20 +167,15 @@ void main() {
 
         verifyInOrder([
           () => mockSodium.sodium_allocarray(10, 1),
-          () => mockSodium.sodium_mprotect_noaccess(nullptr),
-          () => mockSodium.sodium_free(nullptr),
+          () => mockSodium.sodium_mprotect_noaccess(mockPtr.cast()),
+          () => mockSodium.sodium_free(mockPtr.cast()),
         ]);
       });
     });
 
     group('fromList', () {
       setUp(() {
-        when(() => mockSodium.sodium_allocarray(any(), any())).thenAnswer(
-          (i) => calloc<Uint8>(
-            (i.positionalArguments[0] as int) *
-                (i.positionalArguments[1] as int),
-          ).cast(),
-        );
+        mockAllocArray(mockSodium);
       });
 
       test('allocates array for type and length', () {
@@ -187,17 +189,12 @@ void main() {
 
       test('copies list bytes to new array', () {
         const rawList = [1, 2, 3, 4, 5];
-        final sut = SodiumPointer<Uint16>.fromList(mockSodium, rawList);
+        final sut = SodiumPointer<Uint8>.fromList(mockSodium, rawList);
 
-        final rawPtr = sut.ptr;
-        for (var i = 0; i < rawList.length; ++i) {
-          expect(rawPtr.elementAt(i).value, rawList[i]);
-        }
+        expect(sut.ptr, hasRawData<Uint8>(rawList));
       });
 
       test('applies memory protection after coyping', () {
-        when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
-
         final sut = SodiumPointer<Uint16>.fromList(
           mockSodium,
           const <int>[1, 2, 3],
@@ -230,10 +227,10 @@ void main() {
   });
 
   group('members', () {
-    late SodiumPointer<Uint16> sut;
+    late SodiumPointer<Uint8> sut;
 
     setUp(() {
-      sut = SodiumPointer.raw(mockSodium, nullptr.cast(), 3);
+      sut = SodiumPointer.raw(mockSodium, Pointer.fromAddress(1234), 3);
     });
 
     group('locked', () {
@@ -397,12 +394,7 @@ void main() {
     const testData = [0x41, 0x42, 0, 0x43, 0x44];
 
     setUp(() {
-      when(() => mockSodium.sodium_mprotect_readonly(any())).thenReturn(0);
-      when(() => mockSodium.sodium_allocarray(any(), any())).thenAnswer(
-        (i) => calloc<Uint8>(
-          (i.positionalArguments[0] as int) * (i.positionalArguments[1] as int),
-        ).cast(),
-      );
+      mockAllocArray(mockSodium);
     });
 
     group('Int8', () {

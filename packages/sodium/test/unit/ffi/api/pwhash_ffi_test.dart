@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/pwhash.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
+import 'package:sodium/src/api/string_x.dart';
 import 'package:sodium/src/ffi/api/pwhash_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
@@ -245,11 +247,11 @@ void main() {
         verify(() => mockSodium.crypto_pwhash_alg_argon2id13());
         verify(
           () => mockSodium.crypto_pwhash(
-            any(),
+            any(that: isNot(nullptr)),
             5,
-            any(that: hasRawData(password)),
+            any(that: hasRawData<Int8>(password)),
             password.length,
-            any(that: hasRawData(salt)),
+            any(that: hasRawData<Uint8>(salt)),
             3,
             7,
             42,
@@ -289,6 +291,7 @@ void main() {
 
       test('returns secure key with result of correct length', () {
         when(() => mockSodium.crypto_pwhash_alg_default()).thenReturn(2);
+        const testData = [5, 4, 3, 2, 1];
         when(() => mockSodium.crypto_pwhash(
               any(),
               any(),
@@ -298,35 +301,353 @@ void main() {
               any(),
               any(),
               any(),
-            )).thenReturn(0);
+            )).thenAnswer((i) {
+          fillPointer(
+            i.positionalArguments.first as Pointer<Uint8>,
+            testData,
+          );
+          return 0;
+        });
 
-        const outLen = 5;
         final res = sut.call(
-          outLen: outLen,
+          outLen: testData.length,
           password: Int8List.fromList(const [1, 2, 3]),
           salt: Uint8List.fromList(const [0, 2, 4, 6, 8]),
           opsLimit: 3,
           memLimit: 7,
         );
+
+        expect(res.extractBytes(), testData);
         verify(() => mockSodium.crypto_pwhash_alg_default());
-        res.runUnlockedSync((data) {
-          expect(data.length, outLen);
-
-          final outData = List.generate(outLen, (index) => index);
-          data.setAll(0, outData);
-
-          verify(() => mockSodium.crypto_pwhash(
-                any(that: hasRawData(outData)),
-                outLen,
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                2,
-              ));
-        });
       });
+    });
+
+    group('str', () {
+      test('asserts if password is invalid', () {
+        expect(
+          () => sut.str(
+            password: 'x' * 20,
+            opsLimit: 0,
+            memLimit: 0,
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_passwd_min());
+        verify(() => mockSodium.crypto_pwhash_passwd_max());
+      });
+
+      test('asserts if opsLimit is invalid', () {
+        expect(
+          () => sut.str(
+            password: '',
+            opsLimit: 20,
+            memLimit: 0,
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_opslimit_min());
+        verify(() => mockSodium.crypto_pwhash_opslimit_max());
+      });
+
+      test('asserts if memLimit is invalid', () {
+        expect(
+          () => sut.str(
+            password: '',
+            opsLimit: 0,
+            memLimit: 20,
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_memlimit_min());
+        verify(() => mockSodium.crypto_pwhash_memlimit_max());
+      });
+
+      test('calls crypto_pwhash_str with correct arguments', () {
+        when(() => mockSodium.crypto_pwhash_str(
+              any(),
+              any(),
+              any(),
+              any(),
+              any(),
+            )).thenReturn(0);
+
+        const password = 'abc123';
+        sut.str(
+          password: password,
+          opsLimit: 5,
+          memLimit: 2,
+        );
+
+        verify(
+          () => mockSodium.crypto_pwhash_str(
+            any(that: hasRawData<Int8>(List.filled(5, 0))),
+            any(that: hasRawData<Int8>(password.toCharArray())),
+            password.length,
+            5,
+            2,
+          ),
+        );
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      });
+
+      test('throws if crypto_pwhash_str returns non zero result', () {
+        when(() => mockSodium.crypto_pwhash_str(
+              any(),
+              any(),
+              any(),
+              any(),
+              any(),
+            )).thenReturn(1);
+
+        expect(
+          () => sut.str(
+            password: 'abc123',
+            opsLimit: 5,
+            memLimit: 2,
+          ),
+          throwsA(isA<SodiumException>()),
+        );
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      });
+
+      test('returns password hash of full length', () {
+        const testHash = [0x41, 0x42, 0x44, 0x48, 0x50];
+        when(() => mockSodium.crypto_pwhash_str(
+              any(),
+              any(),
+              any(),
+              any(),
+              any(),
+            )).thenAnswer((i) {
+          fillPointer(
+            i.positionalArguments.first as Pointer<Int8>,
+            testHash,
+          );
+          return 0;
+        });
+
+        final result = sut.str(
+          password: 'abc123',
+          opsLimit: 5,
+          memLimit: 2,
+        );
+
+        expect(result, 'ABDHP');
+      });
+
+      test('returns password hash of shorter length', () {
+        const testHash = [0x41, 0x42, 0x43];
+        when(() => mockSodium.crypto_pwhash_str(
+              any(),
+              any(),
+              any(),
+              any(),
+              any(),
+            )).thenAnswer((i) {
+          fillPointer(
+            i.positionalArguments.first as Pointer<Int8>,
+            testHash,
+          );
+          return 0;
+        });
+
+        final result = sut.str(
+          password: 'abc123',
+          opsLimit: 5,
+          memLimit: 2,
+        );
+
+        expect(result, 'ABC');
+      });
+    });
+
+    group('strVerify', () {
+      test('asserts if passwordHash is invalid', () {
+        expect(
+          () => sut.strVerify(
+            passwordHash: 'x' * 20,
+            password: '',
+          ),
+          throwsA(isA<ArgumentError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_strbytes());
+      });
+
+      test('asserts if password is invalid', () {
+        expect(
+          () => sut.strVerify(
+            passwordHash: 'x' * 5,
+            password: 'x' * 20,
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_passwd_min());
+        verify(() => mockSodium.crypto_pwhash_passwd_max());
+      });
+
+      test('calls crypto_pwhash_str_verify with correct arguments', () {
+        when(() => mockSodium.crypto_pwhash_str_verify(
+              any(),
+              any(),
+              any(),
+            )).thenReturn(0);
+
+        const password = 'abc123';
+        const passwordHash = 'xy';
+        final result = sut.strVerify(
+          passwordHash: passwordHash,
+          password: password,
+        );
+
+        expect(result, isTrue);
+        verify(
+          () => mockSodium.crypto_pwhash_str_verify(
+            any(
+                that:
+                    hasRawData<Int8>(passwordHash.toCharArray(memoryWidth: 5))),
+            any(that: hasRawData<Int8>(password.toCharArray())),
+            password.length,
+          ),
+        );
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      });
+
+      test(
+        'returns false if crypto_pwhash_str_verify returns non zero result',
+        () {
+          when(() => mockSodium.crypto_pwhash_str_verify(
+                any(),
+                any(),
+                any(),
+              )).thenReturn(1);
+
+          final result = sut.strVerify(
+            password: 'abc123',
+            passwordHash: '12345',
+          );
+
+          expect(result, isFalse);
+          verify(() => mockSodium.sodium_free(any())).called(2);
+        },
+      );
+    });
+
+    group('strNeedsRehash', () {
+      test('asserts if passwordHash is invalid', () {
+        expect(
+          () => sut.strNeedsRehash(
+            passwordHash: 'x' * 20,
+            opsLimit: 0,
+            memLimit: 0,
+          ),
+          throwsA(isA<ArgumentError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_strbytes());
+      });
+
+      test('asserts if opsLimit is invalid', () {
+        expect(
+          () => sut.strNeedsRehash(
+            passwordHash: 'x' * 5,
+            opsLimit: 20,
+            memLimit: 0,
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_opslimit_min());
+        verify(() => mockSodium.crypto_pwhash_opslimit_max());
+      });
+
+      test('asserts if memLimit is invalid', () {
+        expect(
+          () => sut.strNeedsRehash(
+            passwordHash: 'x' * 5,
+            opsLimit: 0,
+            memLimit: 20,
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_memlimit_min());
+        verify(() => mockSodium.crypto_pwhash_memlimit_max());
+      });
+
+      test('calls crypto_pwhash_str_needs_rehash with correct arguments', () {
+        when(() => mockSodium.crypto_pwhash_str_needs_rehash(
+              any(),
+              any(),
+              any(),
+            )).thenReturn(0);
+
+        const passwordHash = 'wz_';
+        sut.strNeedsRehash(
+          passwordHash: passwordHash,
+          opsLimit: 9,
+          memLimit: 8,
+        );
+
+        verify(
+          () => mockSodium.crypto_pwhash_str_needs_rehash(
+            any(
+              that: hasRawData<Int8>(passwordHash.toCharArray(memoryWidth: 5)),
+            ),
+            9,
+            8,
+          ),
+        );
+        verify(() => mockSodium.sodium_free(any())).called(1);
+      });
+
+      testData<Tuple2<int, bool>>(
+        'maps return value to correct result',
+        const [
+          Tuple2(0, false),
+          Tuple2(1, true),
+        ],
+        (fixture) {
+          when(() => mockSodium.crypto_pwhash_str_needs_rehash(
+                any(),
+                any(),
+                any(),
+              )).thenReturn(fixture.item1);
+
+          final result = sut.strNeedsRehash(
+            passwordHash: 'hash',
+            opsLimit: 0,
+            memLimit: 0,
+          );
+
+          expect(result, fixture.item2);
+        },
+      );
+
+      test(
+        'throws if crypto_pwhash_str_needs_rehash returns invalid value',
+        () {
+          when(() => mockSodium.crypto_pwhash_str_needs_rehash(
+                any(),
+                any(),
+                any(),
+              )).thenReturn(-1);
+
+          expect(
+            () => sut.strNeedsRehash(
+              passwordHash: 'hash',
+              opsLimit: 0,
+              memLimit: 0,
+            ),
+            throwsA(isA<SodiumException>()),
+          );
+          verify(() => mockSodium.sodium_free(any())).called(1);
+        },
+      );
     });
   });
 }

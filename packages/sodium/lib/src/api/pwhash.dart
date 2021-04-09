@@ -11,7 +11,7 @@ enum CrypoPwhashAlgorithm {
 }
 
 abstract class Pwhash {
-  const Pwhash._();
+  const Pwhash._(); // coverage:ignore-line
 
   int get bytesMin;
   int get bytesMax;
@@ -44,22 +44,22 @@ abstract class Pwhash {
     CrypoPwhashAlgorithm alg = CrypoPwhashAlgorithm.defaultAlg,
   });
 
-  String str(
-    String password,
-    int opsLimit,
-    int memLimit,
-  );
+  String str({
+    required String password,
+    required int opsLimit,
+    required int memLimit,
+  });
 
-  void strVerify(
-    String passwordHash,
-    String password,
-  );
+  bool strVerify({
+    required String passwordHash,
+    required String password,
+  });
 
-  bool strNeedsRehash(
-    String passwordHash,
-    int opsLimit,
-    int memLimit,
-  );
+  bool strNeedsRehash({
+    required String passwordHash,
+    required int opsLimit,
+    required int memLimit,
+  });
 }
 
 @internal

@@ -23,26 +23,57 @@ void mockAllocArray(LibSodiumFFI mockSodium) {
   when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
 }
 
+void fillPointer<T extends NativeType>(Pointer<T> ptr, List<int> data) {
+  ptr.cast<Uint8>().asTypedList(data.length).setAll(0, data);
+}
+
+extension ListToPtrX on List<int> {
+  Pointer<Uint8> toPointer() {
+    final ptr = calloc<Uint8>(length);
+    ptr.asTypedList(length).setAll(0, this);
+    return ptr;
+  }
+}
+
 class HasRawDataMatcher<T extends NativeType> extends Matcher {
+  static const _stateKey = 'HasRawDataMatcher_state_key';
+
   final List<int> data;
 
   const HasRawDataMatcher(this.data);
 
   @override
   Description describe(Description description) =>
-      description.add('matches data');
+      description.add('Pointer<$T> that matches ').addDescriptionOf(data);
+
+  @override
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map matchState,
+    bool verbose,
+  ) {
+    if (matchState.containsKey(_stateKey)) {
+      return mismatchDescription.add(matchState[_stateKey].toString());
+    } else {
+      return mismatchDescription;
+    }
+  }
 
   @override
   bool matches(dynamic item, Map matchState) {
     expect(item, isA<Pointer<T>>());
-    final ptr = (item as Pointer<T>).cast<Uint8>();
 
+    final ptr = (item as Pointer<T>).cast<Uint8>();
     for (var i = 0; i < data.length; ++i) {
+      matchState[_stateKey] = 'has different value at index $i';
       expect(ptr.elementAt(i).value, data[i]);
+      matchState.remove(_stateKey);
     }
 
     return true;
   }
 }
 
-Matcher hasRawData(List<int> data) => HasRawDataMatcher(data);
+Matcher hasRawData<T extends NativeType>(List<int> data) =>
+    HasRawDataMatcher<T>(data);

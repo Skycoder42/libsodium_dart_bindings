@@ -1,7 +1,7 @@
 import 'pwhash.dart';
 
 abstract class Crypto {
-  const Crypto._();
+  const Crypto._(); // coverage:ignore-line
 
   Pwhash get pwhash;
 }

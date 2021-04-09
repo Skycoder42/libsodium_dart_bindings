@@ -1,7 +1,10 @@
 # sources
 LIB_FILES = $(shell find ./lib -type f -iname "*.dart")
 SRC_FILES = $(shell find ./lib/src -type f -iname "*.dart")
-UNIT_TEST_FILES = $(shell find ./test/unit -type f -iname "*.dart")
+API_UNIT_TEST_FILES = $(shell find ./test/unit/api -type f -iname "*.dart")
+FFI_UNIT_TEST_FILES = $(shell find ./test/unit/ffi -type f -iname "*.dart")
+JS_UNIT_TEST_FILES = $(shell find ./test/unit/js -type f -iname "*.dart")
+UNIT_TEST_FILES = $(API_UNIT_TEST_FILES) $(FFI_UNIT_TEST_FILES) $(JS_UNIT_TEST_FILES)
 INTEGRATION_TEST_FILES = $(shell find ./test/integration -type f -iname "*.dart")
 TEST_FILES = $(UNIT_TEST_FILES) $(INTEGRATION_TEST_FILES)
 
@@ -50,9 +53,9 @@ test: get
 	$(MAKE) -f $(MAKEFILE) integration-tests
 
 # coverage
-coverage/.generated: .packages $(SRC_FILES) $(UNIT_TEST_FILES)
+coverage/.generated: .packages $(SRC_FILES) $(API_UNIT_TEST_FILES) $(FFI_UNIT_TEST_FILES)
 	@rm -rf coverage
-	dart test --coverage=coverage test/unit
+	dart test --coverage=coverage test/unit/api test/unit/ffi
 	touch coverage/.generated
 
 coverage/lcov.info: coverage/.generated
