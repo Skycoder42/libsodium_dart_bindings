@@ -1,0 +1,29 @@
+PODS:
+  - FlutterMacOS (1.0.0)
+  - libsodium (1.0.12)
+  - libsodium_flutter_bindings_macos (0.0.1):
+    - FlutterMacOS
+    - libsodium
+
+DEPENDENCIES:
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - libsodium_flutter_bindings_macos (from `Flutter/ephemeral/.symlinks/plugins/libsodium_flutter_bindings_macos/macos`)
+
+SPEC REPOS:
+  trunk:
+    - libsodium
+
+EXTERNAL SOURCES:
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  libsodium_flutter_bindings_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/libsodium_flutter_bindings_macos/macos
+
+SPEC CHECKSUMS:
+  FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
+  libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
+  libsodium_flutter_bindings_macos: b2cf245765fb26b5a2662a0f3f33d880707317e5
+
+PODFILE CHECKSUM: 6eac6b3292e5142cfc23bdeb71848a40ec51c14c
+
+COCOAPODS: 1.10.1

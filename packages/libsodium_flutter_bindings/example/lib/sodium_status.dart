@@ -14,7 +14,7 @@ class SodiumStatus extends StatelessWidget {
           if (snapshot.hasData) {
             return Text('Loaded sodium. Version: ${snapshot.data!.version}');
           }
-          return Text('Loading sodium, please wait...');
+          return const Text('Loading sodium, please wait...');
         },
       );
 }

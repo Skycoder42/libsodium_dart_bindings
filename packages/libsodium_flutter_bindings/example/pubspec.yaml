@@ -18,6 +18,8 @@ dependency_overrides:
     path: ../../sodium
   libsodium_flutter_bindings_linux:
     path: ../../libsodium_flutter_bindings_linux
+  libsodium_flutter_bindings_macos:
+    path: ../../libsodium_flutter_bindings_macos
   libsodium_flutter_bindings_platform_interface:
     path: ../../libsodium_flutter_bindings_platform_interface
   libsodium_flutter_bindings_web:

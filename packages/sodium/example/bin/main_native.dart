@@ -6,7 +6,7 @@ import 'package:sodium/sodium.dart';
 import '../lib/sodium_example.dart';
 
 Future<void> main() async {
-  final libsodium = DynamicLibrary.open('/usr/lib/libsodium.so');
+  final libsodium = DynamicLibrary.open('/usr/local/Cellar/libsodium/1.0.18_1/lib/libsodium.dylib');
 
   final sodium = await SodiumFFIInit.init(libsodium);
 

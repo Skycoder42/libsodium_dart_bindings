@@ -1,8 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:libsodium_flutter_bindings_macos/libsodium_flutter_bindings_macos.dart';
 
-import 'package:libsodium_flutter_bindings_example/sample_app.dart';
+import 'sample_app.dart';
 
-Future<void> main() async {
-  runApp(SampleApp());
+void main() {
+  runApp(const SampleApp());
 }
