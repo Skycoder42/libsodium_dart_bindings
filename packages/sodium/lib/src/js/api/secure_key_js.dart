@@ -4,16 +4,16 @@ import 'dart:typed_data';
 import '../../api/secure_key.dart';
 import '../bindings/sodium.js.dart';
 
-class SecureKeyJs implements SecureKey {
+class SecureKeyJS implements SecureKey {
   final LibSodiumJS sodium;
   final Uint8List _raw;
 
-  SecureKeyJs(this.sodium, this._raw);
+  SecureKeyJS(this.sodium, this._raw);
 
-  factory SecureKeyJs.alloc(LibSodiumJS sodium, int length) =>
-      SecureKeyJs(sodium, Uint8List(length));
+  factory SecureKeyJS.alloc(LibSodiumJS sodium, int length) =>
+      SecureKeyJS(sodium, Uint8List(length));
 
-  factory SecureKeyJs.random(LibSodiumJS sodium, int length) => SecureKeyJs(
+  factory SecureKeyJS.random(LibSodiumJS sodium, int length) => SecureKeyJS(
         sodium,
         sodium.randombytes_buf(length),
       );

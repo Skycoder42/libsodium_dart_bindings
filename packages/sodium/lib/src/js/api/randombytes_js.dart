@@ -21,8 +21,10 @@ class RandombytesJS implements Randombytes {
   Uint8List buf(int length) => sodium.randombytes_buf(length);
 
   @override
-  Uint8List bufDeterministic(int length, Uint8List seed) =>
-      sodium.randombytes_buf_deterministic(length, seed);
+  Uint8List bufDeterministic(int length, Uint8List seed) {
+    RangeError.checkValueInInterval(seed.length, seedBytes, seedBytes, 'seed');
+    return sodium.randombytes_buf_deterministic(length, seed);
+  }
 
   @override
   void close() => sodium.randombytes_close();

@@ -2,12 +2,12 @@ import 'dart:typed_data';
 
 import '../../api/pwhash.dart';
 import '../../api/secure_key.dart';
-import '../../api/sodium_exception.dart';
+import '../../api/string_x.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
-extension CrypoPwhashAlgorithmJS on CrypoPwhashAlgorithm {
+extension _CrypoPwhashAlgorithmJS on CrypoPwhashAlgorithm {
   int getValue(LibSodiumJS sodium) {
     switch (this) {
       case CrypoPwhashAlgorithm.defaultAlg:
@@ -92,7 +92,7 @@ class PwhashJs with PwHashValidations implements Pwhash {
       memLimit,
       alg.getValue(sodium),
     );
-    return SecureKeyJs(sodium, SodiumException.checkSucceededObject(result));
+    return SecureKeyJS(sodium, result);
   }
 
   @override
@@ -101,15 +101,15 @@ class PwhashJs with PwHashValidations implements Pwhash {
     required int opsLimit,
     required int memLimit,
   }) {
+    validatePassword(password.toCharArray());
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    final result = sodium.crypto_pwhash_str(
+    return sodium.crypto_pwhash_str(
       password,
       opsLimit,
       memLimit,
     );
-    return SodiumException.checkSucceededObject(result);
   }
 
   @override

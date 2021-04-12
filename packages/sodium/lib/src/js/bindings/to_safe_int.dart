@@ -1,5 +1,13 @@
+@JS()
+library to_safe_int;
+
+import 'package:js/js.dart';
+
+@JS('Number.MAX_SAFE_INTEGER')
+external num _maxSafeInteger;
+
 extension ToSafeIntX on num {
-  static const maxSafeInteger = 9007199254740991;
+  static int get maxSafeInteger => _maxSafeInteger.toInt();
 
   int toSafeUInt() {
     if (this < 0) {

@@ -1,31 +1,25 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/sodium_exception.dart';
-import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/js/api/randombytes_js.dart';
+import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
-import '../pointer_test_helpers.dart';
-
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockLibSodiumJS extends Mock implements LibSodiumJS {}
 
 void main() {
-  final mockSodium = MockSodiumFFI();
+  final mockSodium = MockLibSodiumJS();
 
-  late RandombytesFFI sut;
+  late RandombytesJS sut;
 
   setUpAll(() {
-    registerPointers();
+    registerFallbackValue(Uint8List(0));
   });
 
   setUp(() {
     reset(mockSodium);
 
-    mockAllocArray(mockSodium);
-
-    sut = RandombytesFFI(mockSodium);
+    sut = RandombytesJS(mockSodium);
   });
 
   test('seedBytes returns randombytes_seedbytes', () {
@@ -62,17 +56,13 @@ void main() {
   test('buf calls randombytes_buf', () {
     const length = 42;
     final testData = List.generate(length, (index) => index);
-    when(() => mockSodium.randombytes_buf(any(), any())).thenAnswer(
-      (i) => fillPointer(
-        i.positionalArguments.first as Pointer<Void>,
-        testData,
-      ),
-    );
+    when(() => mockSodium.randombytes_buf(any()))
+        .thenReturn(Uint8List.fromList(testData));
 
     final res = sut.buf(length);
     expect(res, testData);
 
-    verify(() => mockSodium.randombytes_buf(any(that: isNot(nullptr)), length));
+    verify(() => mockSodium.randombytes_buf(length));
   });
 
   group('bufDeterministic', () {
@@ -83,24 +73,13 @@ void main() {
 
       const length = 42;
       final testData = List.generate(length, (index) => index);
-      when(() => mockSodium.randombytes_buf_deterministic(any(), any(), any()))
-          .thenAnswer(
-        (i) => fillPointer(
-          i.positionalArguments.first as Pointer<Void>,
-          testData,
-        ),
-      );
+      when(() => mockSodium.randombytes_buf_deterministic(any(), any()))
+          .thenReturn(Uint8List.fromList(testData));
 
       final res = sut.bufDeterministic(length, seed);
       expect(res, testData);
 
-      verify(
-        () => mockSodium.randombytes_buf_deterministic(
-          any(that: isNot(nullptr)),
-          length,
-          any(that: hasRawData<Uint8>(seed)),
-        ),
-      );
+      verify(() => mockSodium.randombytes_buf_deterministic(length, seed));
     });
 
     test('throws for invalid seed length', () {
@@ -116,22 +95,10 @@ void main() {
     });
   });
 
-  group('close', () {
-    test('calls randombytes_close', () {
-      when(() => mockSodium.randombytes_close()).thenReturn(0);
+  test('close calls randombytes_close', () {
+    sut.close();
 
-      sut.close();
-
-      verify(() => mockSodium.randombytes_close());
-    });
-
-    test('throws if randombytes_close fails', () {
-      when(() => mockSodium.randombytes_close()).thenReturn(1);
-
-      expect(() => sut.close(), throwsA(isA<SodiumException>()));
-
-      verify(() => mockSodium.randombytes_close());
-    });
+    verify(() => mockSodium.randombytes_close());
   });
 
   test('stir calls randombytes_stir', () {

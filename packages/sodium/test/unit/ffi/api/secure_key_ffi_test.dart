@@ -49,7 +49,7 @@ void main() {
     });
 
     group('random', () {
-      test('alloc allocates new memory', () {
+      test('allocates new memory', () {
         const length = 42;
         SecureKeyFFI.random(mockSodium, length);
 

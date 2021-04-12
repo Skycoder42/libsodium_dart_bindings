@@ -125,6 +125,7 @@ void main() {
     },
     fixtureToString: (fixture) => fixture.item3,
   );
+
   group('methods', () {
     setUp(() {
       mockAllocArray(mockSodium);

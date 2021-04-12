@@ -21,10 +21,10 @@ class SodiumJS implements Sodium {
       );
 
   @override
-  SecureKey secureAlloc(int length) => SecureKeyJs.alloc(sodium, length);
+  SecureKey secureAlloc(int length) => SecureKeyJS.alloc(sodium, length);
 
   @override
-  SecureKey secureRandom(int length) => SecureKeyJs.random(sodium, length);
+  SecureKey secureRandom(int length) => SecureKeyJS.random(sodium, length);
 
   @override
   late final Randombytes randombytes = RandombytesJS(sodium);
