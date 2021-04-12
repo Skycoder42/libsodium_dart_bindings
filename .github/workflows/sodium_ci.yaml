@@ -59,7 +59,8 @@ jobs:
           min_coverage: 95
           exclude: |
             **/*.ffi.dart 
-            **/*.js.dart 
+            **/*.js.dart
+      - run: make -f ../../Makefile publish-dry 
 
   release:
     runs-on: ubuntu-latest
