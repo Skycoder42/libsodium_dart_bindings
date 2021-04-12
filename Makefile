@@ -24,26 +24,20 @@ get-clean:
 upgrade: .packages
 	dart pub upgrade
 
-# build
-build: .packages
-	dart run build_runner build
-
-build-clean: upgrade
-	dart run build_runner build --delete-conflicting-outputs
-	
-watch: .packages
-	dart run build_runner watch
-	
-watch-clean: upgrade
-	dart run build_runner watch --delete-conflicting-outputs
-
 # analyze
 analyze: .packages
 	dart analyze --fatal-infos
 
 # test
+unit-tests-vm: get
+	dart test test/unit/api test/unit/ffi
+
+unit-tests-js: get
+	dart test -p chrome test/unit/api test/unit/js
+
 unit-tests: get
-	dart test test/unit
+	$(MAKE) -f $(MAKEFILE) unit-tests-vm
+	$(MAKE) -f $(MAKEFILE) unit-tests-js
 
 integration-tests: get
 	dart test test/integration
@@ -53,9 +47,16 @@ test: get
 	$(MAKE) -f $(MAKEFILE) integration-tests
 
 # coverage
-coverage/.generated: .packages $(SRC_FILES) $(API_UNIT_TEST_FILES) $(FFI_UNIT_TEST_FILES)
-	@rm -rf coverage
+coverage-vm: .packages
 	dart test --coverage=coverage test/unit/api test/unit/ffi
+
+coverage-js: .packages
+	dart test -p chrome --coverage=coverage test/unit/api test/unit/js
+
+coverage/.generated: .packages $(SRC_FILES) $(UNIT_TEST_FILES)
+	@rm -rf coverage
+	$(MAKE) -f $(MAKEFILE) coverage-vm
+	$(MAKE) -f $(MAKEFILE) coverage-js
 	touch coverage/.generated
 
 coverage/lcov.info: coverage/.generated
@@ -75,7 +76,19 @@ coverage/html/index.html: coverage/lcov_cleaned.info
 
 coverage: coverage/html/index.html
 
-unit-test-coverage: coverage/lcov.info
+unit-tests-vm-coverage:
+	@rm -rf coverage
+	$(MAKE) -f $(MAKEFILE) coverage-vm
+	touch coverage/.generated
+	$(MAKE) -f $(MAKEFILE) coverage/lcov.info
+
+unit-tests-js-coverage:
+	@rm -rf coverage
+	$(MAKE) -f $(MAKEFILE) coverage-js
+	touch coverage/.generated
+	$(MAKE) -f $(MAKEFILE) coverage/lcov.info
+
+unit-tests-coverage: coverage/.generated
 
 coverage-open: coverage/html/index.html
 	xdg-open coverage/html/index.html || start coverage/html/index.html
@@ -91,30 +104,17 @@ doc-open: doc
 	xdg-open doc/api/index.html || start doc/api/index.html
 
 # publish
-pre-publish:
-	rm lib/src/.gitignore
-
-post-publish:
-	echo '# Generated dart files' > lib/src/.gitignore
-	echo '*.freezed.dart' >> lib/src/.gitignore
-	echo '*.g.dart' >> lib/src/.gitignore
-
 publish-dry: .packages
-#	$(MAKE) -f $(MAKEFILE) pre-publish
 	dart pub publish --dry-run
-#	$(MAKE) -f $(MAKEFILE) post-publish
 
 publish: .packages
-#	$(MAKE) -f $(MAKEFILE) pre-publish
 	dart pub publish --force
-#	$(MAKE) -f $(MAKEFILE) post-publish
 
 # verify
 verify:
-# $(MAKE) -f $(MAKEFILE) build-clean
 	$(MAKE) -f $(MAKEFILE) get-clean
 	$(MAKE) -f $(MAKEFILE) analyze
-	$(MAKE) -f $(MAKEFILE) unit-test-coverage
+	$(MAKE) -f $(MAKEFILE) unit-tests-coverage
 # $(MAKE) -f $(MAKEFILE) integration-tests
 	$(MAKE) -f $(MAKEFILE) coverage-open
 	$(MAKE) -f $(MAKEFILE) doc-open
@@ -122,4 +122,4 @@ verify:
 
 
 
-.PHONY: build test coverage doc
+.PHONY: test coverage coverage-vm coverage-js doc

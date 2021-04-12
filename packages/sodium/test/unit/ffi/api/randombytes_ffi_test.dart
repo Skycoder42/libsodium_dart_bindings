@@ -1,7 +1,6 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
@@ -13,8 +12,6 @@ import '../pointer_test_helpers.dart';
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 
 void main() {
-  final nullptr = Pointer<Void>.fromAddress(0);
-
   final mockSodium = MockSodiumFFI();
 
   late RandombytesFFI sut;

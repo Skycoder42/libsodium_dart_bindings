@@ -8,8 +8,6 @@ import 'package:test/test.dart';
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 
 void main() {
-  final nullptr = Pointer<Void>.fromAddress(0);
-
   final mockSodium = MockSodiumFFI();
 
   late SodiumAllocator sut;

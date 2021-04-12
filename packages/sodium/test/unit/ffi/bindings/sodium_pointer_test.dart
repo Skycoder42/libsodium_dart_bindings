@@ -18,8 +18,6 @@ class MockSodiumPointer<T extends NativeType> extends Mock
     implements SodiumPointer<T> {}
 
 void main() {
-  final nullptr = Pointer<Void>.fromAddress(0);
-
   final mockSodium = MockSodiumFFI();
 
   setUpAll(() {

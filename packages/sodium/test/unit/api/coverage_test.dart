@@ -1,10 +1,10 @@
-import 'package:sodium/sodium.js.dart';
+import 'package:sodium/sodium.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('coverage', () {
-    test('sodium.js', () {
-      const LibSodiumJS? sodium = null;
+    test('sodium', () {
+      const Sodium? sodium = null;
       expect(sodium, isNull);
     });
   });

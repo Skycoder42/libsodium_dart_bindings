@@ -19,7 +19,7 @@ defaults:
     working-directory: packages/sodium
 
 jobs:
-  test:
+  test-vm:
     strategy:
       fail-fast: false
       matrix:
@@ -33,10 +33,9 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
       - run: make -f ../../Makefile get
-      # - run: make -f ../../Makefile build
       - run: make -f ../../Makefile analyze
-      - run: make -f ../../Makefile unit-test-coverage
-      # - run: make -f ../../Makefile integration-tests
+      - run: make -f ../../Makefile unit-tests-vm-coverage
+      # - run: make -f ../../Makefile integration-tests-vm
       - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: packages/sodium/coverage/lcov.info
@@ -46,10 +45,28 @@ jobs:
             **/*.js.dart 
       - run: make -f ../../Makefile publish-dry
 
+  test-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dart-lang/setup-dart@v1
+      - run: sudo apt-get install chromium-browser
+      - uses: actions/checkout@v2
+      - run: make -f ../../Makefile get
+      - run: make -f ../../Makefile unit-tests-js-coverage
+      # - run: make -f ../../Makefile integration-tests-js
+      - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        with:
+          path: packages/sodium/coverage/lcov.info
+          min_coverage: 95
+          exclude: |
+            **/*.ffi.dart 
+            **/*.js.dart 
+
   release:
     runs-on: ubuntu-latest
     needs:
-      - test
+      - test-vm
+      - test-js
     if: github.ref == 'refs/heads/master'
     outputs:
       update: ${{ steps.version.outputs.update }}
@@ -78,7 +95,6 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
       - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile build
       - name: store credentials
         run: |
           mkdir -p ~/.pub-cache
@@ -97,7 +113,6 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
       - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile build
       - run: make -f ../../Makefile doc
       - name: upload doc
         uses: peaceiris/actions-gh-pages@v3

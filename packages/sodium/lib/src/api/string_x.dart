@@ -3,27 +3,28 @@ import 'dart:typed_data';
 
 extension StringX on String {
   Int8List toCharArray({int? memoryWidth, bool zeroTerminated = false}) {
+    final List<int> chars;
+    if (zeroTerminated) {
+      chars = utf8.encode(this).takeWhile((value) => value != 0).toList();
+    } else {
+      chars = utf8.encode(this);
+    }
+
     if (memoryWidth != null) {
-      final encoded = utf8.encode(this);
-      if (encoded.length > memoryWidth) {
+      if (chars.length > memoryWidth) {
         throw ArgumentError.value(
           memoryWidth,
           'memoryWidth',
           'must be at least as long as the encoded string '
-              '(${encoded.length} bytes)',
+              '(${chars.length} bytes)',
         );
       }
 
-      final memory = Int8List(memoryWidth);
-      return memory
-        ..setAll(0, encoded)
-        ..fillRange(encoded.length, memory.length, 0);
-    } else if (zeroTerminated) {
-      return Int8List.fromList(
-        utf8.encode(this).takeWhile((value) => value != 0).toList(),
-      );
+      return Int8List(memoryWidth)
+        ..setAll(0, chars)
+        ..fillRange(chars.length, memoryWidth, 0);
     } else {
-      return Int8List.fromList(utf8.encode(this));
+      return Int8List.fromList(chars.toList());
     }
   }
 }

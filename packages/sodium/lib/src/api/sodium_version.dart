@@ -10,8 +10,15 @@ class SodiumVersion {
   String toString() => _versionString;
 
   @override
-  bool operator ==(covariant SodiumVersion other) =>
-      major == other.major && minor == other.minor;
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    } else if (other is SodiumVersion) {
+      return major == other.major && minor == other.minor;
+    } else {
+      return false;
+    }
+  }
 
   @override
   int get hashCode => runtimeType.hashCode ^ major.hashCode ^ minor.hashCode;
