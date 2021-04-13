@@ -1,0 +1,11 @@
+@JS()
+@anonymous
+class CryptoKX {
+  external Uint8List get sharedRx;
+  external Uint8List get sharedTx;
+
+  external factory CryptoKX({
+    required Uint8List sharedRx,
+    required Uint8List sharedTx,
+  });
+}

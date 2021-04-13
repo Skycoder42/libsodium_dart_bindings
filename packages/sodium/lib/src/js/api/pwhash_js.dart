@@ -11,11 +11,11 @@ extension _CrypoPwhashAlgorithmJS on CrypoPwhashAlgorithm {
   int getValue(LibSodiumJS sodium) {
     switch (this) {
       case CrypoPwhashAlgorithm.defaultAlg:
-        return sodium.crypto_pwhash_ALG_DEFAULT;
+        return sodium.crypto_pwhash_ALG_DEFAULT.toSafeInt();
       case CrypoPwhashAlgorithm.argon2i13:
-        return sodium.crypto_pwhash_ALG_ARGON2I13;
+        return sodium.crypto_pwhash_ALG_ARGON2I13.toSafeInt();
       case CrypoPwhashAlgorithm.argon2id13:
-        return sodium.crypto_pwhash_ALG_ARGON2ID13;
+        return sodium.crypto_pwhash_ALG_ARGON2ID13.toSafeInt();
     }
   }
 }
@@ -105,11 +105,12 @@ class PwhashJs with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    return sodium.crypto_pwhash_str(
-      password,
+    final result = sodium.crypto_pwhash_str(
+      password.toCharArray().unsignedView(),
       opsLimit,
       memLimit,
     );
+    return result.signedView().toDartString();
   }
 
   @override
@@ -119,7 +120,7 @@ class PwhashJs with PwHashValidations implements Pwhash {
   }) =>
       sodium.crypto_pwhash_str_verify(
         passwordHash,
-        password,
+        password.toCharArray().unsignedView(),
       );
 
   @override

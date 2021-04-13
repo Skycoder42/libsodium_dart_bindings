@@ -18,7 +18,7 @@ class SymbolsGenerator implements Generator {
     sink
       ..writeIntendent(intendent)
       ..writeSp('external')
-      ..writeSp(typeMappings[symbol.singleOutput.type])
+      ..writeSp(typeMappings[_getReturnType(symbol)])
       ..write(symbol.name)
       ..writeln('(');
 
@@ -34,5 +34,21 @@ class SymbolsGenerator implements Generator {
       ..writeIntendent(intendent)
       ..writeln(');')
       ..writeln();
+  }
+
+  String _getReturnType(Symbol symbol) {
+    if (symbol.returnValue == null) {
+      return 'void';
+    } else if (symbol.outputs.length == 1) {
+      return symbol.outputs.single.type;
+    } else if (symbol.outputs.isEmpty &&
+        (symbol.returnValue!.contains('===') ||
+            symbol.returnValue!.contains('!==') ||
+            symbol.returnValue == 'true' ||
+            symbol.returnValue == 'false')) {
+      return 'boolean';
+    } else {
+      return '${symbol.name}_result';
+    }
   }
 }

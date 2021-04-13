@@ -1,0 +1,11 @@
+@JS()
+@anonymous
+class CryptoBox {
+  external Uint8List get ciphertext;
+  external Uint8List get mac;
+
+  external factory CryptoBox({
+    required Uint8List ciphertext,
+    required Uint8List mac,
+  });
+}

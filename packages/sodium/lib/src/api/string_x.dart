@@ -37,4 +37,10 @@ extension Int8ListX on Int8List {
       return utf8.decode(this);
     }
   }
+
+  Uint8List unsignedView() => Uint8List.view(buffer);
+}
+
+extension Uint8ListX on Uint8List {
+  Int8List signedView() => Int8List.view(buffer);
 }

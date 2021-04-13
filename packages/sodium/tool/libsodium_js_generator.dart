@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:path/path.dart';
+
+import 'libsodium_js_generator/file_loader.dart';
 import 'libsodium_js_generator/generators/constants_generator.dart';
 import 'libsodium_js_generator/generators/library_generator.dart';
 import 'libsodium_js_generator/generators/symbols_generator.dart';
@@ -10,46 +13,53 @@ extension FileX on File {
   Future<dynamic> readAsJson() async => json.decode(await readAsString());
 }
 
-Future<void> main() async {
-  const typeMappings = TypeMappings();
-  const libraryGenerator = LibraryGenerator();
-  const constantsGenerator = ConstantsGenerator(typeMappings);
-  const symbolsGenerator = SymbolsGenerator(typeMappings);
+Future<void> main(List<String> args) async {
+  final wrapperDir = Directory(args[0]);
+  final fileLoader = FileLoader(wrapperDir);
 
-  final wrapperDir = Directory('/tmp/tmp.rQkeBNjDxI/libsodium.js/wrapper');
-  final outFile = File(
-    '/home/felix/repos/libsodium_dart_bindings/packages/sodium/lib/src/js/bindings/sodium.js.g.dart',
-  );
+  final typeMappings = TypeMappings();
+  const libraryGenerator = LibraryGenerator();
+  final constantsGenerator = ConstantsGenerator(typeMappings);
+  final symbolsGenerator = SymbolsGenerator(typeMappings);
+
+  final outFile = File(join(
+    FileLoader.scriptDir.path,
+    '..',
+    'lib',
+    'src',
+    'js',
+    'bindings',
+    'sodium.js.dart',
+  ));
   final outSink = outFile.openWrite();
 
   try {
-    libraryGenerator.writePre(outSink);
+    libraryGenerator.writeImports(outSink);
 
-    final constantsFile = File('${wrapperDir.path}/constants.json');
+    await typeMappings.writeTypeDefinitions(outSink);
+
+    libraryGenerator.writeClassPre(outSink);
+
     constantsGenerator.writeDefinitions(
-      await constantsFile.readAsJson(),
+      await fileLoader.loadFileJson('constants.json'),
       outSink,
       1,
     );
 
-    final symbolsDir = Directory('${wrapperDir.path}/symbols');
-    final symbolFiles = symbolsDir
-        .list()
-        .where((entry) => entry is File)
-        .cast<File>()
-        .where((entry) => entry.path.endsWith('.json'));
-    await for (final symbolFile in symbolFiles) {
-      print('processing symbol-file: ${symbolFile.path}');
-      symbolsGenerator.writeDefinitions(
-        await symbolFile.readAsJson(),
-        outSink,
-        1,
-      );
+    final symbolDataStream = fileLoader.loadFilesJson(
+      'symbols',
+      (file) => file.path.endsWith('.json'),
+    );
+    await for (final symbolData in symbolDataStream) {
+      symbolsGenerator.writeDefinitions(symbolData, outSink, 1);
     }
 
-    libraryGenerator.writePost(outSink);
-    await outSink.close();
+    libraryGenerator
+      ..writeExtraDefinitions(outSink, 1)
+      ..writeClassPost(outSink);
   } finally {
     await outSink.close();
   }
+
+  await Process.run('dart', ['format', '--fix', outFile.path]);
 }

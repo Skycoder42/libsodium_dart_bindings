@@ -3,22 +3,14 @@ import 'constant.dart';
 class Symbol extends Constant {
   final List<Constant> inputs;
   final List<Constant> outputs;
-
-  Constant get singleOutput {
-    if (outputs.isEmpty) {
-      return const Constant(name: 'Void', type: 'void');
-    } else if (outputs.length == 1) {
-      return outputs.single;
-    } else {
-      return const Constant(name: 'Never', type: 'never');
-    }
-  }
+  final String? returnValue;
 
   const Symbol({
     required String name,
     required String type,
     required this.inputs,
     required this.outputs,
+    this.returnValue,
   }) : super(name: name, type: type);
 
   Symbol.fromJson(Map<String, dynamic> json)
@@ -31,5 +23,6 @@ class Symbol extends Constant {
           outputs: Constant.fromJsonList(
             json['outputs'] as List<dynamic>?,
           ).toList(),
+          returnValue: json['return'] as String?,
         );
 }

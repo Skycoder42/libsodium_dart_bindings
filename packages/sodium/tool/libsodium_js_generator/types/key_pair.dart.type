@@ -1,0 +1,13 @@
+@JS()
+@anonymous
+class KeyPair {
+  external String get keyType;
+  external Uint8List get privateKey;
+  external Uint8List get publicKey;
+
+  external factory KeyPair({
+    required String keyType,
+    required Uint8List privateKey,
+    required Uint8List publicKey,
+  });
+}

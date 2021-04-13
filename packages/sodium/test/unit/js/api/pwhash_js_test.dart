@@ -323,18 +323,17 @@ void main() {
               any(),
               any(),
               any(),
-            )).thenReturn('');
+            )).thenReturn(Uint8List(0));
 
-        const password = 'abc123';
         sut.str(
-          password: password,
+          password: 'ABC',
           opsLimit: 5,
           memLimit: 2,
         );
 
         verify(
           () => mockSodium.crypto_pwhash_str(
-            password,
+            Uint8List.fromList(const [0x41, 0x42, 0x43]),
             5,
             2,
           ),
@@ -342,7 +341,7 @@ void main() {
       });
 
       test('returns password hash ', () {
-        const testHash = 'hash-str';
+        final testHash = Uint8List.fromList(const [0x41, 0x42, 0x43]);
         when(() => mockSodium.crypto_pwhash_str(
               any(),
               any(),
@@ -355,7 +354,7 @@ void main() {
           memLimit: 2,
         );
 
-        expect(result, testHash);
+        expect(result, 'ABC');
       });
     });
   });

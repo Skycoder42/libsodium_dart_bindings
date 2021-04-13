@@ -1,0 +1,6 @@
+@JS()
+@anonymous
+class %{className} {
+  @visibleForTesting
+  external factory %{className}();
+}
