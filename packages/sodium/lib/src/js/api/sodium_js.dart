@@ -39,5 +39,5 @@ class SodiumJS implements Sodium {
   late final Randombytes randombytes = RandombytesJS(sodium);
 
   @override
-  late final Crypto crypto = CrypoJS(sodium);
+  late final Crypto crypto = CryptoJS(sodium);
 }

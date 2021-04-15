@@ -169,7 +169,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         memoryWidth: strBytes,
         memoryProtection: MemoryProtection.readOnly,
       );
-      validatepasswordHash(passwordHashPtr.asList());
+      validatePasswordHash(passwordHashPtr.asList());
 
       final result = sodium.crypto_pwhash_str_verify(
         passwordHashPtr.ptr,
@@ -200,7 +200,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         memoryWidth: strBytes,
         memoryProtection: MemoryProtection.readOnly,
       );
-      validatepasswordHash(passwordHashPtr.asList());
+      validatePasswordHash(passwordHashPtr.asList());
 
       final result = sodium.crypto_pwhash_str_needs_rehash(
         passwordHashPtr.ptr,

@@ -66,4 +66,34 @@ void main() {
       expect(res, 'AB');
     });
   });
+
+  test('unsignedView returns a buffer view', () {
+    const testData = [1, 2, 3];
+
+    final sut = Int8List.fromList(testData);
+    final view = sut.unsignedView();
+
+    expect(view, testData);
+
+    sut[0] = 10;
+    expect(view[0], 10);
+
+    view[1] = 20;
+    expect(sut[1], 20);
+  });
+
+  test('signedView returns a buffer view', () {
+    const testData = [1, 2, 3];
+
+    final sut = Uint8List.fromList(testData);
+    final view = sut.signedView();
+
+    expect(view, testData);
+
+    sut[0] = 10;
+    expect(view[0], 10);
+
+    view[1] = 20;
+    expect(sut[1], 20);
+  });
 }

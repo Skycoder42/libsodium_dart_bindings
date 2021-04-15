@@ -101,12 +101,13 @@ class PwhashJs with PwHashValidations implements Pwhash {
     required int opsLimit,
     required int memLimit,
   }) {
-    validatePassword(password.toCharArray());
+    final passwordChars = password.toCharArray();
+    validatePassword(passwordChars);
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
     final result = sodium.crypto_pwhash_str(
-      password.toCharArray().unsignedView(),
+      passwordChars.unsignedView(),
       opsLimit,
       memLimit,
     );
@@ -117,21 +118,31 @@ class PwhashJs with PwHashValidations implements Pwhash {
   bool strVerify({
     required String passwordHash,
     required String password,
-  }) =>
-      sodium.crypto_pwhash_str_verify(
-        passwordHash,
-        password.toCharArray().unsignedView(),
-      );
+  }) {
+    final passwordChars = password.toCharArray();
+    validatePasswordHash(passwordHash.toCharArray());
+    validatePassword(passwordChars);
+
+    return sodium.crypto_pwhash_str_verify(
+      passwordHash,
+      passwordChars.unsignedView(),
+    );
+  }
 
   @override
   bool strNeedsRehash({
     required String passwordHash,
     required int opsLimit,
     required int memLimit,
-  }) =>
-      sodium.crypto_pwhash_str_needs_rehash(
-        passwordHash,
-        opsLimit,
-        memLimit,
-      );
+  }) {
+    validatePasswordHash(passwordHash.toCharArray());
+    validateOpsLimit(opsLimit);
+    validateMemLimit(memLimit);
+
+    return sodium.crypto_pwhash_str_needs_rehash(
+      passwordHash,
+      opsLimit,
+      memLimit,
+    );
+  }
 }

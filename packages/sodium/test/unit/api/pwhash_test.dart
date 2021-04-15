@@ -52,7 +52,7 @@ void main() {
 
         final exceptionMatcher = throwsA(isA<RangeError>());
         expect(
-          () => sutMock.validatepasswordHash(Int8List(fixture.item1)),
+          () => sutMock.validatePasswordHash(Int8List(fixture.item1)),
           fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
         verify(() => sutMock.strBytes);

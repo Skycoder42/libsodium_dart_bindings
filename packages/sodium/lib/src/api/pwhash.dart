@@ -71,7 +71,7 @@ mixin PwHashValidations implements Pwhash {
         'outLen',
       );
 
-  void validatepasswordHash(Int8List passwordHash) =>
+  void validatePasswordHash(Int8List passwordHash) =>
       RangeError.checkValueInInterval(
         passwordHash.length,
         strBytes,
