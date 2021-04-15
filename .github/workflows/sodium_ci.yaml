@@ -14,9 +14,9 @@ on:
       - "packages/sodium/**"
       - ".github/workflows/sodium_ci.yaml"
 
-# defaults:
-#   run:
-#     working-directory: packages/sodium
+defaults:
+  run:
+    working-directory: packages/sodium
 
 jobs:
   test:
@@ -48,19 +48,17 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - name: install libsodium
         if: matrix.platform == 'linux'
+        working-directory: .
         run: |
-          echo $PATH
-          ls -lsa
-          whoami
-          which sudo
-          which apt-get
           sudo apt-get -qq update
           sudo apt-get -qq install libsodium-dev
       - name: install libsodium
         if: matrix.platform == 'macos'
+        working-directory: .
         run: brew install libsodium
       - name: install minisign
         if: matrix.platform == 'windows'
+        working-directory: .
         run: choco install minisign -y 
       - uses: actions/checkout@v2
       - name: fetch libsodium
