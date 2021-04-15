@@ -48,13 +48,14 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - name: install libsodium
         if: matrix.platform == 'linux'
-        run: apt-get -qq updated && apt-get -qq install libsodium-dev
+        run: |
+          sudo apt-get -qq updated
+          sudo apt-get -qq install libsodium-dev
       - name: install libsodium
         if: matrix.platform == 'macos'
         run: brew install libsodium
       - uses: actions/checkout@v2
       - name: fetch libsodium
-        if: matrix.fetch == 'true'
         run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
         working-directory: .
       - run: make -f ../../Makefile get
