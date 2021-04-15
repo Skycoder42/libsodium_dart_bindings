@@ -39,8 +39,15 @@ unit-tests: get
 	$(MAKE) -f $(MAKEFILE) unit-tests-vm
 	$(MAKE) -f $(MAKEFILE) unit-tests-js
 
+integration-tests-vm: get
+	dart test test/integration/vm_test.dart
+
+integration-tests-js: get
+	dart test -p chrome test/integration/js_test.dart
+
 integration-tests: get
-	dart test test/integration
+	$(MAKE) -f $(MAKEFILE) integration-tests-vm
+	$(MAKE) -f $(MAKEFILE) integration-tests-js
 
 test: get
 	$(MAKE) -f $(MAKEFILE) unit-tests

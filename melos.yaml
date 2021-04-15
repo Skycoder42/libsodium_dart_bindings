@@ -24,6 +24,26 @@ scripts:
     run: dart pub global run melos exec -- make -f ../../Makefile upgrade
     description: Run 'pub upgrade' in all projects
 
+  libsodium:fetch:
+    run: dart run scripts/fetch_libsodium.dart
+    description: Downloads all required libsodium binaries
+
+  libsodium:fetch:linux:
+    run: dart run scripts/fetch_libsodium.dart linux arch
+    description: Downloads all required libsodium binaries (Linux only)
+
+  libsodium:fetch:windows:
+    run: dart run scripts/fetch_libsodium.dart windows
+    description: Downloads all required libsodium binaries (Windows only)
+
+  libsodium:fetch:macos:
+    run: dart run scripts/fetch_libsodium.dart macos
+    description: Downloads all required libsodium binaries (macOS only)
+
+  libsodium:fetch:web:
+    run: dart run scripts/fetch_libsodium.dart web
+    description: Downloads all required libsodium binaries (Web only)
+
   analyze:
     run: dart pub global run melos exec -- make -f ../../Makefile analyze
     description: Run 'dart analyze' in all projects
@@ -55,6 +75,10 @@ scripts:
   test:coverage:open:
     run: dart pub global run melos exec -- make -f ../../Makefile coverage-open
     description: Run tests in all projects
+
+  test:integration:
+    run: dart pub global run melos exec -- make -f ../../Makefile integration-tests
+    description: Run integration tests in all projects
 
   verify:
     run: dart pub global run melos exec -c1 -- make -f ../../Makefile verify

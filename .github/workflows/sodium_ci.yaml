@@ -19,23 +19,48 @@ defaults:
     working-directory: packages/sodium
 
 jobs:
-  test-vm:
+  test:
     strategy:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
+          - linux
+          - windows
+          - macos
+          - web
+
+        include:
+          - platform: linux
+            os: ubuntu-latest
+            system: vm
+          - platform: windows
+            os: windows-latest
+            system: vm
+          - platform: macos
+            os: macos-latest
+            system: vm
+          - platform: web
+            os: ubuntu-latest
+            system: js
 
     runs-on: ${{ matrix.os }}
     steps:
       - uses: dart-lang/setup-dart@v1
+      - name: install libsodium
+        if: matrix.platform == 'linux'
+        run: apt-get -qq updated && apt-get -qq install libsodium-dev
+      - name: install libsodium
+        if: matrix.platform == 'macos'
+        run: brew install libsodium
       - uses: actions/checkout@v2
+      - name: fetch libsodium
+        if: matrix.fetch == 'true'
+        run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
+        working-directory: .
       - run: make -f ../../Makefile get
       - run: make -f ../../Makefile analyze
-      - run: make -f ../../Makefile unit-tests-vm-coverage
-      # - run: make -f ../../Makefile integration-tests-vm
+      - run: make -f ../../Makefile unit-tests-${{ matrix.system }}-coverage
+      - run: make -f ../../Makefile integration-tests-${{ matrix.system }}
       - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: packages/sodium/coverage/lcov.info
@@ -45,28 +70,10 @@ jobs:
             **/*.js.dart 
       - run: make -f ../../Makefile publish-dry
 
-  test-js:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: dart-lang/setup-dart@v1
-      - uses: actions/checkout@v2
-      - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile unit-tests-js-coverage
-      # - run: make -f ../../Makefile integration-tests-js
-      - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
-        with:
-          path: packages/sodium/coverage/lcov.info
-          min_coverage: 95
-          exclude: |
-            **/*.ffi.dart 
-            **/*.js.dart
-      - run: make -f ../../Makefile publish-dry 
-
   release:
     runs-on: ubuntu-latest
     needs:
-      - test-vm
-      - test-js
+      - test
     if: github.ref == 'refs/heads/master'
     outputs:
       update: ${{ steps.version.outputs.update }}

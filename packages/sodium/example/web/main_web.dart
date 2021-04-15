@@ -6,8 +6,7 @@ import 'dart:html';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:sodium/sodium.dart';
-// ignore: avoid_relative_lib_imports
-import '../lib/sodium_example.dart';
+import 'package:sodium_example/sodium_example.dart';
 
 import 'interop.dart';
 
@@ -43,5 +42,12 @@ Future<dynamic> _initImpl() async {
   document.head!.append(script);
   print('> appended script');
 
-  return completer.future;
+  return completer.future.timeout(
+    const Duration(seconds: 5),
+    onTimeout: () => throw Exception(
+      'You must first download sodium.js from '
+      'https://github.com/jedisct1/libsodium.js/tree/master/dist/browsers '
+      'and place it in the web folder!',
+    ),
+  );
 }
