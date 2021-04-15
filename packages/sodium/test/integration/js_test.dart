@@ -10,8 +10,10 @@ import 'package:sodium/src/api/sodium.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:sodium/src/js/sodium_js_init.dart';
 
-import 'binaries/js/sodium.js.dart';
 import 'test_runner.dart';
+
+// ignore: directives_ordering
+import 'sodium.js.fake.dart' if (dart.library.js) 'binaries/js/sodium.js.dart';
 
 @JS()
 @anonymous
