@@ -9,6 +9,7 @@ void registerPointers() {
   registerFallbackValue<Pointer<Void>>(nullptr.cast());
   registerFallbackValue<Pointer<Uint8>>(nullptr.cast());
   registerFallbackValue<Pointer<Int8>>(nullptr.cast());
+  registerFallbackValue<Pointer<Uint64>>(nullptr.cast());
 }
 
 void mockAllocArray(LibSodiumFFI mockSodium) {
@@ -21,6 +22,14 @@ void mockAllocArray(LibSodiumFFI mockSodium) {
   when(() => mockSodium.sodium_mprotect_readwrite(any())).thenReturn(0);
   when(() => mockSodium.sodium_mprotect_readonly(any())).thenReturn(0);
   when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
+}
+
+void mockAlloc(LibSodiumFFI mockSodium, int value) {
+  assert(mockSodium is Mock);
+  when(() => mockSodium.sodium_malloc(any())).thenAnswer((i) {
+    final ptr = calloc<Uint8>()..value = value;
+    return ptr.cast();
+  });
 }
 
 void fillPointer<T extends NativeType>(Pointer<T> ptr, List<int> data) {

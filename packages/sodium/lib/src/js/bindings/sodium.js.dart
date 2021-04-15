@@ -1324,4 +1324,8 @@ class LibSodiumJS {
   external num randombytes_seedbytes();
 
   external void memzero(Uint8List bytes);
+
+  external Uint8List pad(Uint8List buf, num blocksize);
+
+  external Uint8List unpad(Uint8List buf, num blocksize);
 }

@@ -30,6 +30,10 @@ class LibraryGenerator {
       ..writeln('external num randombytes_seedbytes();')
       ..writeln()
       ..writeln('external void memzero(Uint8List bytes);')
+      ..writeln()
+      ..writeln('external Uint8List pad(Uint8List buf, num blocksize);')
+      ..writeln()
+      ..writeln('external Uint8List unpad(Uint8List buf, num blocksize);')
       ..writeln();
   }
 

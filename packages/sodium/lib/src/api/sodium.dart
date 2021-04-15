@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'crypto.dart';
 import 'randombytes.dart';
 import 'secure_key.dart';
@@ -7,6 +9,10 @@ abstract class Sodium {
   const Sodium._(); // coverage:ignore-line
 
   SodiumVersion get version;
+
+  Uint8List pad(Uint8List buf, int blocksize);
+
+  Uint8List unpad(Uint8List buf, int blocksize);
 
   SecureKey secureAlloc(int length);
 

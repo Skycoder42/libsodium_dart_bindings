@@ -1,7 +1,9 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
@@ -46,6 +48,139 @@ void main() {
     } finally {
       malloc.free(vStr);
     }
+  });
+
+  group('pad', () {
+    final testData = Uint8List.fromList(const [1, 2, 3, 4]);
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      mockAlloc(mockSodium, 4);
+      when(() => mockSodium.sodium_pad(any(), any(), any(), any(), any()))
+          .thenReturn(0);
+    });
+
+    test('allocs extended buffer with extra len', () {
+      const blocksize = 42;
+      sut.pad(testData, blocksize);
+
+      verify(() => mockSodium.sodium_allocarray(46, 1));
+    });
+
+    test('allocs result size buffer and zeros memory', () {
+      sut.pad(testData, 42);
+
+      verify(() => mockSodium.sodium_malloc(sizeOf<Uint64>()));
+      verify(
+        () => mockSodium.sodium_memzero(
+          any(that: isNot(nullptr)),
+          sizeOf<Uint64>(),
+        ),
+      );
+    });
+
+    test('calls sodium_pad on data', () {
+      const blocksize = 42;
+      sut.pad(testData, blocksize);
+
+      verify(
+        () => mockSodium.sodium_pad(
+          any(that: isNot(nullptr)),
+          any(that: hasRawData(testData)),
+          testData.length,
+          blocksize,
+          46,
+        ),
+      );
+    });
+
+    test('returns extended buffer with padded length', () {
+      const resultSize = 6;
+      mockAlloc(mockSodium, resultSize);
+
+      final res = sut.pad(testData, 3);
+
+      expect(res, hasLength(resultSize));
+      expect(Uint8List.view(res.buffer, 0, testData.length), testData);
+      verify(() => mockSodium.sodium_free(any())).called(2);
+    });
+
+    test('throws if sodium_pad fails', () {
+      when(() => mockSodium.sodium_pad(any(), any(), any(), any(), any()))
+          .thenReturn(1);
+
+      expect(() => sut.pad(testData, 10), throwsA(isA<SodiumException>()));
+
+      verify(() => mockSodium.sodium_free(any())).called(2);
+    });
+  });
+
+  group('unpad', () {
+    final testData = Uint8List.fromList(const [1, 2, 3, 4]);
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      mockAlloc(mockSodium, 4);
+      when(() => mockSodium.sodium_unpad(any(), any(), any(), any()))
+          .thenReturn(0);
+    });
+
+    test('allocs extended buffer with data len and read only', () {
+      const blocksize = 42;
+      sut.unpad(testData, blocksize);
+
+      verify(() => mockSodium.sodium_allocarray(testData.length, 1));
+      verify(
+        () => mockSodium.sodium_mprotect_readonly(
+          any(that: hasRawData(testData)),
+        ),
+      );
+    });
+
+    test('allocs result size buffer and zeros memory', () {
+      sut.unpad(testData, 42);
+
+      verify(() => mockSodium.sodium_malloc(sizeOf<Uint64>()));
+      verify(
+        () => mockSodium.sodium_memzero(
+          any(that: isNot(nullptr)),
+          sizeOf<Uint64>(),
+        ),
+      );
+    });
+
+    test('calls sodium_unpad on data', () {
+      const blocksize = 42;
+      sut.unpad(testData, blocksize);
+
+      verify(
+        () => mockSodium.sodium_unpad(
+          any(that: isNot(nullptr)),
+          any(that: hasRawData(testData)),
+          testData.length,
+          blocksize,
+        ),
+      );
+    });
+
+    test('returns shortened buffer with unpadded length', () {
+      const resultSize = 2;
+      mockAlloc(mockSodium, resultSize);
+
+      final res = sut.unpad(testData, 3);
+
+      expect(res, testData.sublist(0, resultSize));
+      verify(() => mockSodium.sodium_free(any())).called(2);
+    });
+
+    test('throws if sodium_unpad fails', () {
+      when(() => mockSodium.sodium_unpad(any(), any(), any(), any()))
+          .thenReturn(1);
+
+      expect(() => sut.unpad(testData, 10), throwsA(isA<SodiumException>()));
+
+      verify(() => mockSodium.sodium_free(any())).called(2);
+    });
   });
 
   test('secureAlloc creates SecureKey instance', () {
