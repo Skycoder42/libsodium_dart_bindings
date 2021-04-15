@@ -14,9 +14,9 @@ on:
       - "packages/sodium/**"
       - ".github/workflows/sodium_ci.yaml"
 
-defaults:
-  run:
-    working-directory: packages/sodium
+# defaults:
+#   run:
+#     working-directory: packages/sodium
 
 jobs:
   test:
