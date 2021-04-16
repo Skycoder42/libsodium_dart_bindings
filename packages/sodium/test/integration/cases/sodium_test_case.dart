@@ -19,14 +19,28 @@ class SodiumTestCase extends TestCase {
       expect(version.minor, greaterThanOrEqualTo(3));
     });
 
-    testData<Tuple2<int, int>>('pad adds expected padding', const [],
-        (fixture) {
-      const blockSize = 16;
-      final inBuf = Uint8List(fixture.item1);
+    testData<Tuple2<int, int>>(
+      'pad adds expected padding and unpad removes it',
+      const [
+        Tuple2(14, 16),
+        Tuple2(15, 16),
+        Tuple2(16, 32),
+        Tuple2(17, 32),
+        Tuple2(18, 32),
+      ],
+      (fixture) {
+        const blockSize = 16;
+        final baseBuf = Uint8List(fixture.item1);
 
-      final res = sodium.pad(inBuf, blockSize);
+        final paddedBuf = sodium.pad(baseBuf, blockSize);
 
-      expect(res, hasLength(fixture.item2));
-    });
+        expect(paddedBuf, hasLength(fixture.item2));
+        expect(paddedBuf.sublist(0, baseBuf.length), baseBuf);
+
+        final unpaddedBuf = sodium.unpad(paddedBuf, blockSize);
+
+        expect(unpaddedBuf, baseBuf);
+      },
+    );
   }
 }
