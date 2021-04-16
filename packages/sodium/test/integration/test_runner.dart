@@ -17,6 +17,11 @@ abstract class TestRunner {
     setUpAll(() async {
       final sodium = await loadSodium();
 
+      // ignore: avoid_print
+      print(
+        'Running integration tests with libsodium version: ${sodium.version}',
+      );
+
       for (final testCase in testCases) {
         testCase.sodium = sodium;
       }

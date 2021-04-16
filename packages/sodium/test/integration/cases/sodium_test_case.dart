@@ -11,9 +11,6 @@ class SodiumTestCase extends TestCase {
     test('reports correct version', () {
       final version = sodium.version;
 
-      // ignore: avoid_print
-      print('Running integration tests with libsodium version: $version');
-
       expect(version.major, 10);
       expect(version.minor, greaterThanOrEqualTo(3));
     });
