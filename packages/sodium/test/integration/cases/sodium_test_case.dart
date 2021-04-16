@@ -42,5 +42,35 @@ class SodiumTestCase extends TestCase {
         expect(unpaddedBuf, baseBuf);
       },
     );
+
+    group('SecureKey', () {
+      test('secureAlloc create secure key of correct size', () {
+        const length = 42;
+        final secureKey = sodium.secureAlloc(length);
+        try {
+          expect(secureKey, hasLength(length));
+          expect(secureKey.extractBytes(), hasLength(length));
+        } finally {
+          secureKey.dispose();
+        }
+      });
+
+      test('secureRandom create secure key of correct size with random data',
+          () {
+        const length = 42;
+        final secureKey1 = sodium.secureRandom(length);
+        final secureKey2 = sodium.secureRandom(length);
+        try {
+          expect(secureKey1, hasLength(length));
+          expect(secureKey2, hasLength(length));
+          expect(secureKey1.extractBytes(), hasLength(length));
+          expect(secureKey2.extractBytes(), hasLength(length));
+          expect(secureKey1.extractBytes(), isNot(secureKey2.extractBytes()));
+        } finally {
+          secureKey1.dispose();
+          secureKey2.dispose();
+        }
+      });
+    });
   }
 }

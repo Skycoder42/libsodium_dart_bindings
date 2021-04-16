@@ -20,11 +20,12 @@ class VmTestRunner extends TestRunner {
           .split('\n')
           .map((e) => e.split('=>').map((e) => e.trim()).toList())
           .where((e) => e.length == 2)
+          .where((e) => e[0].contains('x86-64'))
           .map((e) => MapEntry(
                 e[0].split(' ').first,
                 e[1],
               ))
-          .where((e) => e.key == 'libsodium.so')
+          .where((e) => e.key.contains('libsodium.so'))
           .map((e) => e.value)
           .first;
     } else if (Platform.isWindows) {
