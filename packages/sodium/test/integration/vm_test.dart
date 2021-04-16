@@ -13,7 +13,9 @@ class VmTestRunner extends TestRunner {
     String libSodiumPath;
     if (Platform.isLinux) {
       final ldConfigRes = await Process.run('ldconfig', const ['-p']);
+      printOnFailure('stderr: ${ldConfigRes.stderr}');
       expect(ldConfigRes.exitCode, 0);
+      printOnFailure('stderr: ${ldConfigRes.stdout}');
       libSodiumPath = (ldConfigRes.stdout as String)
           .split('\n')
           .map((e) => e.split('=>').map((e) => e.trim()).toList())
@@ -26,11 +28,9 @@ class VmTestRunner extends TestRunner {
           .map((e) => e.value)
           .first;
     } else if (Platform.isWindows) {
-      final scriptDir = File.fromUri(Platform.script).parent;
-      printOnFailure('scriptDir detected as: $scriptDir');
-      printOnFailure('pwd detected as: ${Directory.current}');
-      libSodiumPath =
-          scriptDir.uri.resolve('binaries/win/libsodium.dll').toFilePath();
+      libSodiumPath = Directory.current.uri
+          .resolve('test/integration/binaries/win/libsodium.dll')
+          .toFilePath();
     } else if (Platform.isMacOS) {
       final libDir = Directory('/usr/local/Cellar/libsodium');
       final subDirs = await libDir
