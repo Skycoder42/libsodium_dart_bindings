@@ -2,14 +2,18 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/secure_key.dart';
 
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/sodium_pointer.dart';
 
+@internal
 typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<Uint8> pointer);
 
-class SecureKeyFFI implements SecureKey {
+@internal
+class SecureKeyFFI with SecureKeyEquality implements SecureKey {
   final SodiumPointer<Uint8> _raw;
 
   SecureKeyFFI(this._raw) {

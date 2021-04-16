@@ -20,3 +20,35 @@ abstract class SecureKey {
 
   void dispose();
 }
+
+mixin SecureKeyEquality implements SecureKey {
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    } else if (other is! SecureKey) {
+      return false;
+    } else {
+      return runUnlockedSync(
+        (thisData) => other.runUnlockedSync(
+          (otherData) {
+            if (thisData.length != otherData.length) {
+              return false;
+            }
+            for (var i = 0; i < thisData.length; ++i) {
+              if (thisData[i] != otherData[i]) {
+                return false;
+              }
+            }
+            return true;
+          },
+        ),
+      );
+    }
+  }
+
+  // coverage:ignore-start
+  @override
+  int get hashCode => runUnlockedSync((data) => data.hashCode);
+  // coverage:ignore-end
+}

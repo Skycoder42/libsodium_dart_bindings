@@ -1,11 +1,14 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/randombytes.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/sodium_pointer.dart';
 
+@internal
 class RandombytesFFI implements Randombytes {
   final LibSodiumFFI sodium;
 

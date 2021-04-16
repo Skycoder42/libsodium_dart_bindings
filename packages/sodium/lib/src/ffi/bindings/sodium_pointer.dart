@@ -29,7 +29,7 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
     bool zeroMemory = false,
   }) {
-    RangeError.checkNotNegative(count, 'count', 'must not be negative');
+    RangeError.checkNotNegative(count, 'count');
 
     final elementSize = _StaticallyTypedSizeOf.staticSizeOf<T>();
     late final SodiumPointer<T> ptr;

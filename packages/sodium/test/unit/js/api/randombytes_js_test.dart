@@ -22,14 +22,11 @@ void main() {
     sut = RandombytesJS(mockSodium);
   });
 
-  test('seedBytes returns randombytes_seedbytes', () {
-    const bytes = 42;
-    when(() => mockSodium.randombytes_seedbytes()).thenReturn(bytes);
+  test('seedBytes returns 32', () {
+    const bytes = 32;
 
     final res = sut.seedBytes;
     expect(res, bytes);
-
-    verify(() => mockSodium.randombytes_seedbytes());
   });
 
   test('random calls randombytes_random', () {
@@ -67,9 +64,8 @@ void main() {
 
   group('bufDeterministic', () {
     test('calls randombytes_buf_deterministic', () {
-      const seedBytes = 10;
+      const seedBytes = 32;
       final seed = Uint8List(seedBytes);
-      when(() => mockSodium.randombytes_seedbytes()).thenReturn(seedBytes);
 
       const length = 42;
       final testData = List.generate(length, (index) => index);
@@ -83,9 +79,6 @@ void main() {
     });
 
     test('throws for invalid seed length', () {
-      const seedBytes = 10;
-      when(() => mockSodium.randombytes_seedbytes()).thenReturn(seedBytes);
-
       final seed = Uint8List(1);
 
       expect(

@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - test
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     outputs:
       update: ${{ steps.version.outputs.update }}
       tag_name: ${{ steps.version.outputs.tag_name }}

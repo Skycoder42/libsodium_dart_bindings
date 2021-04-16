@@ -7,40 +7,47 @@ void main() {
     expect(ToSafeIntX.maxSafeInteger, value);
   });
 
-  group('toSafeInt', () {
+  group('toSafeUInt32', () {
     test('returns value below max', () {
       const num value = 42;
-      final res = value.toSafeInt();
+      final res = value.toSafeUInt32();
 
       expect(res, value);
     });
 
-    test('returns maxSafeInteger above max', () {
-      final num value = ToSafeIntX.maxSafeInteger + 1;
-      final res = value.toSafeInt();
+    test('returns uint32Max above max', () {
+      final num value = ToSafeIntX.uint32Max + 1;
+      final res = value.toSafeUInt32();
 
-      expect(res, ToSafeIntX.maxSafeInteger);
+      expect(res, ToSafeIntX.uint32Max);
+    });
+
+    test('returns maxSafeInteger for values below 0', () {
+      const num value = -1;
+      final res = value.toSafeUInt32();
+
+      expect(res, ToSafeIntX.uint32Max);
     });
   });
 
-  group('toSafeUInt', () {
+  group('toSafeUInt64', () {
     test('returns value below max', () {
       const num value = 42;
-      final res = value.toSafeUInt();
+      final res = value.toSafeUInt64();
 
       expect(res, value);
     });
 
     test('returns maxSafeInteger above max', () {
       final num value = ToSafeIntX.maxSafeInteger + 1;
-      final res = value.toSafeUInt();
+      final res = value.toSafeUInt64();
 
       expect(res, ToSafeIntX.maxSafeInteger);
     });
 
     test('returns maxSafeInteger for values below 0', () {
       const num value = -1;
-      final res = value.toSafeUInt();
+      final res = value.toSafeUInt64();
 
       expect(res, ToSafeIntX.maxSafeInteger);
     });

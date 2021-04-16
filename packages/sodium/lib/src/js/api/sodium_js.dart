@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/crypto.dart';
 import '../../api/randombytes.dart';
 import '../../api/secure_key.dart';
@@ -11,6 +13,7 @@ import 'crypto_js.dart';
 import 'randombytes_js.dart';
 import 'secure_key_js.dart';
 
+@internal
 class SodiumJS implements Sodium {
   final LibSodiumJS sodium;
 
@@ -18,8 +21,8 @@ class SodiumJS implements Sodium {
 
   @override
   SodiumVersion get version => SodiumVersion(
-        sodium.SODIUM_LIBRARY_VERSION_MAJOR.toSafeInt(),
-        sodium.SODIUM_LIBRARY_VERSION_MINOR.toSafeInt(),
+        sodium.SODIUM_LIBRARY_VERSION_MAJOR.toSafeUInt32(),
+        sodium.SODIUM_LIBRARY_VERSION_MINOR.toSafeUInt32(),
         sodium.sodium_version_string(),
       );
 

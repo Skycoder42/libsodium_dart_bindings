@@ -41,7 +41,7 @@ void main() {
     );
 
     testData<Tuple2<int, bool>>(
-      'validatepasswordHash asserts if value is not in range',
+      'validatePasswordHash asserts if value is not in range',
       const [
         Tuple2(5, false),
         Tuple2(4, true),
@@ -53,6 +53,29 @@ void main() {
         final exceptionMatcher = throwsA(isA<RangeError>());
         expect(
           () => sutMock.validatePasswordHash(Int8List(fixture.item1)),
+          fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+        );
+        verify(() => sutMock.strBytes);
+      },
+    );
+
+    testData<Tuple2<int, bool>>(
+      'validatePasswordHashStr asserts if value is not in range',
+      const [
+        Tuple2(3, false),
+        Tuple2(5, false),
+        Tuple2(1, false),
+        Tuple2(0, true),
+        Tuple2(6, true),
+      ],
+      (fixture) {
+        when(() => sutMock.strBytes).thenReturn(5);
+
+        final exceptionMatcher = throwsA(isA<RangeError>());
+        expect(
+          () => sutMock.validatePasswordHashStr(
+            'x' * fixture.item1,
+          ),
           fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
         verify(() => sutMock.strBytes);

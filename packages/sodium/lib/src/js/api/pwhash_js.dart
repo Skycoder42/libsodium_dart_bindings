@@ -1,4 +1,7 @@
+import 'dart:math';
 import 'dart:typed_data';
+
+import 'package:meta/meta.dart';
 
 import '../../api/pwhash.dart';
 import '../../api/secure_key.dart';
@@ -7,67 +10,72 @@ import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
-extension _CrypoPwhashAlgorithmJS on CrypoPwhashAlgorithm {
+@visibleForTesting
+extension CrypoPwhashAlgorithmJS on CrypoPwhashAlgorithm {
   int getValue(LibSodiumJS sodium) {
     switch (this) {
       case CrypoPwhashAlgorithm.defaultAlg:
-        return sodium.crypto_pwhash_ALG_DEFAULT.toSafeInt();
+        return sodium.crypto_pwhash_ALG_DEFAULT.toSafeUInt32();
       case CrypoPwhashAlgorithm.argon2i13:
-        return sodium.crypto_pwhash_ALG_ARGON2I13.toSafeInt();
+        return sodium.crypto_pwhash_ALG_ARGON2I13.toSafeUInt32();
       case CrypoPwhashAlgorithm.argon2id13:
-        return sodium.crypto_pwhash_ALG_ARGON2ID13.toSafeInt();
+        return sodium.crypto_pwhash_ALG_ARGON2ID13.toSafeUInt32();
     }
   }
 }
 
+@internal
 class PwhashJs with PwHashValidations implements Pwhash {
   final LibSodiumJS sodium;
 
   PwhashJs(this.sodium);
 
   @override
-  int get bytesMin => sodium.crypto_pwhash_BYTES_MIN.toSafeUInt();
+  int get bytesMin => sodium.crypto_pwhash_BYTES_MIN.toSafeUInt32();
   @override
-  int get bytesMax => sodium.crypto_pwhash_BYTES_MAX.toSafeUInt();
+  int get bytesMax => sodium.crypto_pwhash_BYTES_MAX.toSafeUInt32();
 
   @override
-  int get memLimitMin => sodium.crypto_pwhash_MEMLIMIT_MIN.toSafeUInt();
-  @override
-  int get memLimitSensitive =>
-      sodium.crypto_pwhash_MEMLIMIT_SENSITIVE.toSafeUInt();
-  @override
-  int get memLimitModerate =>
-      sodium.crypto_pwhash_MEMLIMIT_MODERATE.toSafeUInt();
-  @override
-  int get memLimitMax => sodium.crypto_pwhash_MEMLIMIT_MAX.toSafeUInt();
+  int get memLimitMin => sodium.crypto_pwhash_MEMLIMIT_MIN.toSafeUInt64();
   @override
   int get memLimitInteractive =>
-      sodium.crypto_pwhash_MEMLIMIT_INTERACTIVE.toSafeUInt();
+      sodium.crypto_pwhash_MEMLIMIT_INTERACTIVE.toSafeUInt64();
+  @override
+  int get memLimitModerate =>
+      sodium.crypto_pwhash_MEMLIMIT_MODERATE.toSafeUInt64();
+  @override
+  int get memLimitSensitive =>
+      sodium.crypto_pwhash_MEMLIMIT_SENSITIVE.toSafeUInt64();
+  @override
+  int get memLimitMax => min(
+        sodium.crypto_pwhash_MEMLIMIT_MAX.toSafeUInt64(),
+        4398046510080, // as -1 is returned, the actual max is not right
+      );
 
   @override
-  int get opsLimitMin => sodium.crypto_pwhash_OPSLIMIT_MIN.toSafeUInt();
-  @override
-  int get opsLimitSensitive =>
-      sodium.crypto_pwhash_OPSLIMIT_SENSITIVE.toSafeUInt();
-  @override
-  int get opsLimitModerate =>
-      sodium.crypto_pwhash_OPSLIMIT_MODERATE.toSafeUInt();
-  @override
-  int get opsLimitMax => sodium.crypto_pwhash_OPSLIMIT_MAX.toSafeUInt();
+  int get opsLimitMin => sodium.crypto_pwhash_OPSLIMIT_MIN.toSafeUInt32();
   @override
   int get opsLimitInteractive =>
-      sodium.crypto_pwhash_OPSLIMIT_INTERACTIVE.toSafeUInt();
+      sodium.crypto_pwhash_OPSLIMIT_INTERACTIVE.toSafeUInt32();
+  @override
+  int get opsLimitModerate =>
+      sodium.crypto_pwhash_OPSLIMIT_MODERATE.toSafeUInt32();
+  @override
+  int get opsLimitSensitive =>
+      sodium.crypto_pwhash_OPSLIMIT_SENSITIVE.toSafeUInt32();
+  @override
+  int get opsLimitMax => sodium.crypto_pwhash_OPSLIMIT_MAX.toSafeUInt32();
 
   @override
-  int get passwdMin => sodium.crypto_pwhash_PASSWD_MIN.toSafeUInt();
+  int get passwdMin => sodium.crypto_pwhash_PASSWD_MIN.toSafeUInt32();
   @override
-  int get passwdMax => sodium.crypto_pwhash_PASSWD_MAX.toSafeUInt();
+  int get passwdMax => sodium.crypto_pwhash_PASSWD_MAX.toSafeUInt32();
 
   @override
-  int get saltBytes => sodium.crypto_pwhash_SALTBYTES.toSafeUInt();
+  int get saltBytes => sodium.crypto_pwhash_SALTBYTES.toSafeUInt32();
 
   @override
-  int get strBytes => sodium.crypto_pwhash_STRBYTES.toSafeUInt();
+  int get strBytes => sodium.crypto_pwhash_STRBYTES.toSafeUInt32();
 
   @override
   SecureKey call({
@@ -120,7 +128,7 @@ class PwhashJs with PwHashValidations implements Pwhash {
     required String password,
   }) {
     final passwordChars = password.toCharArray();
-    validatePasswordHash(passwordHash.toCharArray());
+    validatePasswordHashStr(passwordHash);
     validatePassword(passwordChars);
 
     return sodium.crypto_pwhash_str_verify(
@@ -135,7 +143,7 @@ class PwhashJs with PwHashValidations implements Pwhash {
     required int opsLimit,
     required int memLimit,
   }) {
-    validatePasswordHash(passwordHash.toCharArray());
+    validatePasswordHashStr(passwordHash);
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 

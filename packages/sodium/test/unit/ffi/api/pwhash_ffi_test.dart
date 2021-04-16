@@ -113,6 +113,21 @@ void main() {
         () => sut.strBytes,
         'strBytes',
       ),
+      Tuple3(
+        () => mockSodium.crypto_pwhash_alg_default(),
+        () => CrypoPwhashAlgorithm.defaultAlg.toValue(mockSodium),
+        'CrypoPwhashAlgorithm.defaultAlg',
+      ),
+      Tuple3(
+        () => mockSodium.crypto_pwhash_alg_argon2i13(),
+        () => CrypoPwhashAlgorithm.argon2i13.toValue(mockSodium),
+        'CrypoPwhashAlgorithm.argon2i13',
+      ),
+      Tuple3(
+        () => mockSodium.crypto_pwhash_alg_argon2id13(),
+        () => CrypoPwhashAlgorithm.argon2id13.toValue(mockSodium),
+        'CrypoPwhashAlgorithm.argon2id13',
+      ),
     ],
     (fixture) {
       const value = 10;

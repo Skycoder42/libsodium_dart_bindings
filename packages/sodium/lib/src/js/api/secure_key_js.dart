@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/secure_key.dart';
 import '../bindings/sodium.js.dart';
 
-class SecureKeyJS implements SecureKey {
+@internal
+class SecureKeyJS with SecureKeyEquality implements SecureKey {
   final LibSodiumJS sodium;
   final Uint8List _raw;
 

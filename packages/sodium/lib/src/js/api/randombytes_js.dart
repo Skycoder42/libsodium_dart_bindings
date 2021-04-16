@@ -1,27 +1,27 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/randombytes.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 
+@internal
 class RandombytesJS implements Randombytes {
   final LibSodiumJS sodium;
 
   RandombytesJS(this.sodium);
 
+  // Not exported in JS library
   @override
-  int get seedBytes {
-    // TODO WORKAROUND for missing definitions
-    final result = (sodium as dynamic).randombytes_seedbytes() as num;
-    return result.toSafeInt();
-  }
+  int get seedBytes => 32;
 
   @override
-  int random() => sodium.randombytes_random().toSafeInt();
+  int random() => sodium.randombytes_random().toSafeUInt32();
 
   @override
   int uniform(int upperBound) =>
-      sodium.randombytes_uniform(upperBound).toSafeInt();
+      sodium.randombytes_uniform(upperBound).toSafeUInt32();
 
   @override
   Uint8List buf(int length) => sodium.randombytes_buf(length);

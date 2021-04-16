@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
+import 'package:meta/meta.dart';
 
 import '../../api/crypto.dart';
 import '../../api/randombytes.dart';
@@ -15,6 +16,7 @@ import 'crypto_ffi.dart';
 import 'randombytes_ffi.dart';
 import 'secure_key_ffi.dart';
 
+@internal
 class SodiumFFI implements Sodium {
   final LibSodiumFFI sodium;
 

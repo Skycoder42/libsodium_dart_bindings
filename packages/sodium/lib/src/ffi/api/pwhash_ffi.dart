@@ -1,6 +1,8 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/pwhash.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
@@ -9,6 +11,7 @@ import '../bindings/libsodium.ffi.dart';
 import '../bindings/sodium_pointer.dart';
 import 'secure_key_ffi.dart';
 
+@internal
 class PwhashFFI with PwHashValidations implements Pwhash {
   final LibSodiumFFI sodium;
 
@@ -222,7 +225,8 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   }
 }
 
-extension _CrypoPwhashAlgorithmFFI on CrypoPwhashAlgorithm {
+@visibleForTesting
+extension CrypoPwhashAlgorithmFFI on CrypoPwhashAlgorithm {
   int toValue(LibSodiumFFI sodium) {
     switch (this) {
       case CrypoPwhashAlgorithm.defaultAlg:
