@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:sodium/src/api/randombytes.dart';
-import 'package:sodium/src/api/sodium.dart';
 import 'package:test/test.dart';
 
 import '../test_case.dart';

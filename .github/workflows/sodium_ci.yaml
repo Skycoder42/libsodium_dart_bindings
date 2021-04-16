@@ -62,6 +62,7 @@ jobs:
         run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
         working-directory: .
       - run: make -f ../../Makefile get
+      - run: make -f ../../Makefile build
       - run: make -f ../../Makefile analyze
       - run: make -f ../../Makefile unit-tests-${{ matrix.system }}-coverage
       - run: make -f ../../Makefile integration-tests-${{ matrix.system }}
@@ -106,6 +107,7 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
       - run: make -f ../../Makefile get
+      - run: make -f ../../Makefile build
       - name: store credentials
         run: |
           mkdir -p ~/.pub-cache
@@ -124,6 +126,7 @@ jobs:
       - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
       - run: make -f ../../Makefile get
+      - run: make -f ../../Makefile build
       - run: make -f ../../Makefile doc
       - name: upload doc
         uses: peaceiris/actions-gh-pages@v3

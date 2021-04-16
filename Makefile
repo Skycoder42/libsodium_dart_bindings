@@ -24,11 +24,24 @@ get-clean:
 upgrade: .packages
 	dart pub upgrade
 
+# build
+build: .packages
+	dart run build_runner build
+
+build-clean: upgrade
+	dart run build_runner build --delete-conflicting-outputs
+	
+watch: .packages
+	dart run build_runner watch
+	
+watch-clean: upgrade
+	dart run build_runner watch --delete-conflicting-outputs
+
 # analyze
 analyze: .packages
 	dart analyze --fatal-infos
 
-# test
+# unit-tests
 unit-tests-vm: get
 	dart test test/unit/api test/unit/ffi
 
@@ -39,6 +52,7 @@ unit-tests: get
 	$(MAKE) -f $(MAKEFILE) unit-tests-vm
 	$(MAKE) -f $(MAKEFILE) unit-tests-js
 
+# integration-tests
 integration-tests-vm: get
 	dart test test/integration/vm_test.dart
 
@@ -111,22 +125,34 @@ doc-open: doc
 	xdg-open doc/api/index.html || start doc/api/index.html
 
 # publish
+pre-publish:
+	rm lib/src/.gitignore
+
+post-publish:
+	echo '# Generated dart files' > lib/src/.gitignore
+	echo '*.freezed.dart' >> lib/src/.gitignore
+	echo '*.g.dart' >> lib/src/.gitignore
+
 publish-dry: .packages
+	$(MAKE) -f $(MAKEFILE) pre-publish
 	dart pub publish --dry-run
+	$(MAKE) -f $(MAKEFILE) post-publish
 
 publish: .packages
+	$(MAKE) -f $(MAKEFILE) pre-publish
 	dart pub publish --force
+	$(MAKE) -f $(MAKEFILE) post-publish
 
 # verify
 verify:
-	$(MAKE) -f $(MAKEFILE) get-clean
+	$(MAKE) -f $(MAKEFILE) build-clean
 	$(MAKE) -f $(MAKEFILE) analyze
 	$(MAKE) -f $(MAKEFILE) unit-tests-coverage
-# $(MAKE) -f $(MAKEFILE) integration-tests
+	$(MAKE) -f $(MAKEFILE) integration-tests
 	$(MAKE) -f $(MAKEFILE) coverage-open
 	$(MAKE) -f $(MAKEFILE) doc-open
 	$(MAKE) -f $(MAKEFILE) publish-dry
 
 
 
-.PHONY: test coverage coverage-vm coverage-js doc
+.PHONY: build test coverage coverage-vm coverage-js doc

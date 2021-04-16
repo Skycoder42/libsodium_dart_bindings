@@ -16,7 +16,7 @@ void main() {
     });
 
     test('returns uint32Max above max', () {
-      final num value = ToSafeIntX.uint32Max + 1;
+      const num value = ToSafeIntX.uint32Max + 1;
       final res = value.toSafeUInt32();
 
       expect(res, ToSafeIntX.uint32Max);
