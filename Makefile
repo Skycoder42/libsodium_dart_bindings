@@ -89,6 +89,7 @@ coverage/lcov.info: coverage/.generated
 
 coverage/lcov_cleaned.info: coverage/lcov.info
 	lcov --remove coverage/lcov.info -output-file coverage/lcov_cleaned.info \
+            '**/*.freezed.dart' \
             '**/*.ffi.dart' \
             '**/*.js.dart'
 

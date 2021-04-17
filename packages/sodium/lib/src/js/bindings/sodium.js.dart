@@ -1052,7 +1052,7 @@ class LibSodiumJS {
     num keyLength,
   );
 
-  external Uint8List crypto_pwhash_scryptsalsa208sha256_str(
+  external String crypto_pwhash_scryptsalsa208sha256_str(
     Uint8List password,
     num opsLimit,
     num memLimit,
@@ -1063,7 +1063,7 @@ class LibSodiumJS {
     Uint8List password,
   );
 
-  external Uint8List crypto_pwhash_str(
+  external String crypto_pwhash_str(
     Uint8List password,
     num opsLimit,
     num memLimit,

@@ -34,6 +34,8 @@ class RandombytesTestCase extends TestCase {
       const length = 32;
       final buf1 = sut.buf(length);
       final buf2 = sut.buf(length);
+      printOnFailure('buf1: $buf1');
+      printOnFailure('buf2: $buf2');
 
       expect(buf1, hasLength(length));
       expect(buf2, hasLength(length));
@@ -51,6 +53,8 @@ class RandombytesTestCase extends TestCase {
         const length = 32;
         final buf1 = sut.bufDeterministic(length, seed1);
         final buf2 = sut.bufDeterministic(length, seed2);
+        printOnFailure('buf1: $buf1');
+        printOnFailure('buf2: $buf2');
 
         expect(buf1, hasLength(length));
         expect(buf2, hasLength(length));
@@ -64,6 +68,8 @@ class RandombytesTestCase extends TestCase {
         const length = 32;
         final buf1 = sut.bufDeterministic(length, seed);
         final buf2 = sut.bufDeterministic(length, seed);
+        printOnFailure('buf1: $buf1');
+        printOnFailure('buf2: $buf2');
 
         expect(buf1, hasLength(length));
         expect(buf2, hasLength(length));

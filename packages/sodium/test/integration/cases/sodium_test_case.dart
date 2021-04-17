@@ -36,11 +36,13 @@ class SodiumTestCase extends TestCase {
         final baseBuf = Uint8List(fixture.item1);
 
         final paddedBuf = sut.pad(baseBuf, blockSize);
+        printOnFailure('Padded buf: $paddedBuf');
 
         expect(paddedBuf, hasLength(fixture.item2));
         expect(paddedBuf.sublist(0, baseBuf.length), baseBuf);
 
         final unpaddedBuf = sut.unpad(paddedBuf, blockSize);
+        printOnFailure('Padded buf: $unpaddedBuf');
 
         expect(unpaddedBuf, baseBuf);
       },

@@ -343,7 +343,7 @@ void main() {
               any(),
               any(),
               any(),
-            )).thenReturn(Uint8List(0));
+            )).thenReturn('');
 
         sut.str(
           password: 'ABC',
@@ -361,12 +361,12 @@ void main() {
       });
 
       test('returns password hash ', () {
-        final testHash = Uint8List.fromList(const [0x41, 0x42, 0x43]);
+        const testHashStr = 'ABC';
         when(() => mockSodium.crypto_pwhash_str(
               any(),
               any(),
               any(),
-            )).thenReturn(testHash);
+            )).thenReturn(testHashStr);
 
         final result = sut.str(
           password: 'abc123',

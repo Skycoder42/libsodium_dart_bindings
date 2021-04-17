@@ -80,6 +80,14 @@ scripts:
     run: dart pub global run melos exec -- make -f ../../Makefile integration-tests
     description: Run integration tests in all projects
 
+  test:integration:vm:
+    run: dart pub global run melos exec -- make -f ../../Makefile integration-tests-vm
+    description: Run integration tests in all projects (VM only)
+
+  test:integration:js:
+    run: dart pub global run melos exec -- make -f ../../Makefile integration-tests-js
+    description: Run integration tests in all projects (JS only)
+
   verify:
     run: dart pub global run melos exec -c1 -- make -f ../../Makefile verify
     description: Verify all projects

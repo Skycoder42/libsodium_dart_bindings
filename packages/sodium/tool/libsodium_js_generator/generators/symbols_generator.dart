@@ -39,6 +39,8 @@ class SymbolsGenerator implements Generator {
   String _getReturnType(Symbol symbol) {
     if (symbol.returnValue == null) {
       return 'void';
+    } else if (symbol.returnValue!.startsWith('libsodium.UTF8ToString')) {
+      return 'string';
     } else if (symbol.outputs.length == 1) {
       return symbol.outputs.single.type;
     } else if (symbol.outputs.isEmpty &&

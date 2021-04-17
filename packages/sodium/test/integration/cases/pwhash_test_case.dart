@@ -56,6 +56,8 @@ class PwhashTestCase extends TestCase {
           memLimit: sut.memLimitMin,
           opsLimit: sut.opsLimitMin,
         );
+        printOnFailure('pwHash1: $pwHash1');
+        printOnFailure('pwHash2: $pwHash2');
 
         expect(pwHash1, hasLength(outLen));
         expect(pwHash2, hasLength(outLen));
@@ -81,6 +83,8 @@ class PwhashTestCase extends TestCase {
           memLimit: sut.memLimitMin,
           opsLimit: sut.opsLimitMin,
         );
+        printOnFailure('pwHash1: $pwHash1');
+        printOnFailure('pwHash2: $pwHash2');
 
         expect(pwHash1, hasLength(outLen));
         expect(pwHash2, hasLength(outLen));
@@ -96,6 +100,7 @@ class PwhashTestCase extends TestCase {
           memLimit: sut.memLimitMin,
           opsLimit: sut.opsLimitMin,
         );
+        printOnFailure('pwHash: $pwHash');
 
         expect(pwHash, hasLength(lessThanOrEqualTo(sut.strBytes)));
 
@@ -113,6 +118,7 @@ class PwhashTestCase extends TestCase {
           memLimit: sut.memLimitMin,
           opsLimit: sut.opsLimitMin,
         );
+        printOnFailure('pwHash: $pwHash');
 
         expect(pwHash, hasLength(lessThanOrEqualTo(sut.strBytes)));
 
@@ -132,6 +138,7 @@ class PwhashTestCase extends TestCase {
           memLimit: sut.memLimitMin,
           opsLimit: sut.opsLimitMin,
         );
+        printOnFailure('pwHash: $pwHash');
 
         final needsRehash = sut.strNeedsRehash(
           passwordHash: pwHash,
@@ -148,6 +155,7 @@ class PwhashTestCase extends TestCase {
           memLimit: sut.memLimitMin,
           opsLimit: sut.opsLimitMin,
         );
+        printOnFailure('pwHash: $pwHash');
 
         final needsRehash = sut.strNeedsRehash(
           passwordHash: pwHash,

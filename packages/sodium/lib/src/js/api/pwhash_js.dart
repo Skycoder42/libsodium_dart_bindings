@@ -119,7 +119,7 @@ class PwhashJs with PwHashValidations implements Pwhash {
       opsLimit,
       memLimit,
     );
-    return result.signedView().toDartString();
+    return result;
   }
 
   @override
