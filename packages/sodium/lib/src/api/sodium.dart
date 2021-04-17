@@ -18,6 +18,8 @@ abstract class Sodium {
 
   SecureKey secureRandom(int length);
 
+  // TODO add copyFrom
+
   Randombytes get randombytes;
 
   Crypto get crypto;

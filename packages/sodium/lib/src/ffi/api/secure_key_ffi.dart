@@ -87,3 +87,4 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKey {
     _raw.dispose();
   }
 }
+git

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:sodium/src/api/secure_key.dart';
 
 part 'secret_box.freezed.dart';
 
@@ -21,31 +22,31 @@ abstract class SecretBox {
 
   // crypto_secretbox_primitive
 
-  Uint8List keygen();
+  SecureKey keygen();
 
   Uint8List easy({
     required Uint8List message,
     required Uint8List nonce,
-    required Uint8List key,
+    required SecureKey key,
   });
 
   Uint8List openEasy({
     required Uint8List ciphertext,
     required Uint8List nonce,
-    required Uint8List key,
+    required SecureKey key,
   });
 
   DetachedSecretBoxResult detached({
     required Uint8List message,
     required Uint8List nonce,
-    required Uint8List key,
+    required SecureKey key,
   });
 
   Uint8List openDetached({
     required Uint8List ciphertext,
     required Uint8List mac,
     required Uint8List nonce,
-    required Uint8List key,
+    required SecureKey key,
   });
 }
 
@@ -58,7 +59,7 @@ mixin SecretBoxValidations implements SecretBox {
         'nonce',
       );
 
-  void validateKey(Uint8List key) => RangeError.checkValueInInterval(
+  void validateKey(SecureKey key) => RangeError.checkValueInInterval(
         key.length,
         keyBytes,
         keyBytes,
