@@ -192,31 +192,6 @@ void main() {
         expect(sut.ptr, hasRawData<Uint8>(rawList));
       });
 
-      test('allocates additional space if requested', () {
-        const count = 5;
-        const rawList = [1, 2, 3];
-        final sut = SodiumPointer<Uint16>.fromList(
-          mockSodium,
-          rawList,
-          count: count,
-        );
-        expect(sut.count, count);
-        expect(sut.elementSize, 2);
-
-        verify(() => mockSodium.sodium_allocarray(count, 2));
-      });
-
-      test('throws if requested count is less then list size', () {
-        expect(
-          () => SodiumPointer<Uint16>.fromList(
-            mockSodium,
-            const [1, 2, 3],
-            count: 2,
-          ),
-          throwsA(isA<ArgumentError>()),
-        );
-      });
-
       test('applies memory protection after coyping', () {
         final sut = SodiumPointer<Uint16>.fromList(
           mockSodium,
@@ -489,15 +464,6 @@ void main() {
         }
       });
 
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Int8List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
-      });
-
       test('copies string to pointer', () {
         const string = 'AB\x00CD';
 
@@ -598,15 +564,6 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
       });
-
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Int16List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
-      });
     });
 
     group('Int32', () {
@@ -664,15 +621,6 @@ void main() {
         for (var i = 0; i < testData.length; ++i) {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
-      });
-
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Int32List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
       });
     });
 
@@ -732,15 +680,6 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
       });
-
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Int64List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
-      });
     });
 
     group('Uint8', () {
@@ -798,15 +737,6 @@ void main() {
         for (var i = 0; i < testData.length; ++i) {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
-      });
-
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Uint8List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
       });
     });
 
@@ -866,15 +796,6 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
       });
-
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Uint16List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
-      });
     });
 
     group('Uint32', () {
@@ -933,15 +854,6 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
       });
-
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Uint32List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
-      });
     });
 
     group('Uint64', () {
@@ -999,15 +911,6 @@ void main() {
         for (var i = 0; i < testData.length; ++i) {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
-      });
-
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Uint64List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
       });
     });
 
@@ -1071,17 +974,6 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
       });
-
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Float32List.fromList(
-          testData.map((e) => e.toDouble()).toList(),
-        );
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
-      });
     });
 
     group('Double', () {
@@ -1143,17 +1035,6 @@ void main() {
         for (var i = 0; i < testData.length; ++i) {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
-      });
-
-      test('copies list to pointer with custom count', () {
-        const count = 10;
-        final typedTestData = Float64List.fromList(
-          testData.map((e) => e.toDouble()).toList(),
-        );
-
-        final ptr = typedTestData.toSodiumPointer(mockSodium, count: count);
-
-        expect(ptr.count, count);
       });
     });
   });

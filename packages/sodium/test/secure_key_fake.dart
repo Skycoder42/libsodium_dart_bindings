@@ -10,6 +10,9 @@ class SecureKeyFake extends Fake with SecureKeyEquality implements SecureKey {
   SecureKeyFake(List<int> data) : data = Uint8List.fromList(data);
 
   @override
+  int get length => data.length;
+
+  @override
   T runUnlockedSync<T>(SecureCallbackFn<T> callback, {bool writable = false}) =>
       callback(data);
 }
