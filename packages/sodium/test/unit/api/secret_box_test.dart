@@ -5,6 +5,7 @@ import 'package:sodium/src/api/secret_box.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../secure_key_fake.dart';
 import '../../test_data.dart';
 
 class MockSecretBox extends Mock
@@ -50,7 +51,7 @@ void main() {
 
         final exceptionMatcher = throwsA(isA<RangeError>());
         expect(
-          () => sutMock.validateKey(Uint8List(fixture.item1)),
+          () => sutMock.validateKey(SecureKeyFake(Uint8List(fixture.item1))),
           fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
         verify(() => sutMock.keyBytes);

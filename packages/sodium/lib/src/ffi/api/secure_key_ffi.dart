@@ -87,4 +87,17 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKey {
     _raw.dispose();
   }
 }
-git
+
+extension SecureKeySafeCastX on SecureKey {
+  SecureKeyFFI safeCast([String name = 'key']) {
+    if (this is SecureKeyFFI) {
+      return this as SecureKeyFFI;
+    } else {
+      throw ArgumentError.value(
+        this,
+        name,
+        'is not a SecureKey created by Sodium',
+      );
+    }
+  }
+}

@@ -3,6 +3,7 @@ import 'package:test/test.dart';
 
 import 'cases/pwhash_test_case.dart';
 import 'cases/randombytes_test_case.dart';
+import 'cases/secret_box_test_case.dart';
 import 'cases/sodium_test_case.dart';
 import 'test_case.dart';
 
@@ -10,6 +11,7 @@ abstract class TestRunner {
   Iterable<TestCase> createTestCases() => [
         SodiumTestCase(),
         RandombytesTestCase(),
+        SecretBoxTestCase(),
         PwhashTestCase(),
       ];
 
