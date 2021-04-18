@@ -19,18 +19,21 @@ class SecretBoxTestCase extends TestCase {
           Uint8List.fromList(List.generate(32, (index) => index * 2));
       final nonce = sodium.randombytes.buf(sut.nonceBytes);
 
+      // ignore: avoid_print
       print(message);
       final ciphertext = sut.easy(
         message: message,
         nonce: nonce,
         key: key,
       );
+      // ignore: avoid_print
       print(ciphertext);
       final restored = sut.openEasy(
         ciphertext: ciphertext,
         nonce: nonce,
         key: key,
       );
+      // ignore: avoid_print
       print(restored);
     });
   }
