@@ -17,11 +17,15 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
   final LibSodiumFFI sodium;
   final Pointer<T> ptr;
   final int count;
+  final bool _isView;
 
-  bool _locked = true;
-  MemoryProtection _memoryProtection = MemoryProtection.readWrite;
+  bool _locked;
+  MemoryProtection _memoryProtection;
 
-  SodiumPointer.raw(this.sodium, this.ptr, this.count);
+  SodiumPointer.raw(this.sodium, this.ptr, this.count)
+      : _isView = false,
+        _locked = true,
+        _memoryProtection = MemoryProtection.readWrite;
 
   factory SodiumPointer.alloc(
     LibSodiumFFI sodium, {
@@ -63,18 +67,9 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
   factory SodiumPointer.fromList(
     LibSodiumFFI sodium,
     List<num> list, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) {
-    if (count != null && count < list.length) {
-      throw ArgumentError.value(
-        count,
-        'count',
-        'must be at least list.length (${list.length})',
-      );
-    }
-
-    count ??= list.length;
+    final count = list.length;
     final typeLen = _StaticallyTypedSizeOf.staticSizeOf<T>();
     final sodiumPtr = SodiumPointer.raw(
       sodium,
@@ -90,6 +85,14 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
       rethrow;
     }
   }
+
+  SodiumPointer._view(
+    this.sodium,
+    this.ptr,
+    this.count,
+    this._locked,
+    this._memoryProtection,
+  ) : _isView = true;
 
   int get elementSize => _StaticallyTypedSizeOf.staticSizeOf<T>();
 
@@ -139,7 +142,29 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
 
   void zeroMemory() => sodium.sodium_memzero(ptr.cast(), byteLength);
 
+  SodiumPointer<T> viewAt(int offset) => SodiumPointer._view(
+        sodium,
+        _elementAtRaw(offset),
+        count - offset,
+        _locked,
+        _memoryProtection,
+      );
+
+  void fill(List<num> data, {int offset = 0}) {
+    if (data.length + offset > count) {
+      throw ArgumentError(
+        'data and offset are to long. '
+        'Can at most write $count elements, '
+        'but requested offset=$offset + data=${data.length}',
+      );
+    }
+    _asTypedIntListRaw().setAll(offset, data);
+  }
+
   void dispose() {
+    if (_isView) {
+      return;
+    }
     sodium.sodium_free(ptr.cast());
   }
 
@@ -169,6 +194,47 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
         // coverage:ignore-start
         throw UnsupportedError(
           'Cannot create a SodiumPointer<$T> from a List<num>',
+        );
+      // coverage:ignore-end
+    }
+  }
+
+  Pointer<T> _elementAtRaw(int offset) {
+    switch (T) {
+      case Int8:
+        return (this as SodiumPointer<Int8>).ptr.elementAt(offset)
+            as Pointer<T>;
+      case Int16:
+        return (this as SodiumPointer<Int16>).ptr.elementAt(offset)
+            as Pointer<T>;
+      case Int32:
+        return (this as SodiumPointer<Int32>).ptr.elementAt(offset)
+            as Pointer<T>;
+      case Int64:
+        return (this as SodiumPointer<Int64>).ptr.elementAt(offset)
+            as Pointer<T>;
+      case Uint8:
+        return (this as SodiumPointer<Uint8>).ptr.elementAt(offset)
+            as Pointer<T>;
+      case Uint16:
+        return (this as SodiumPointer<Uint16>).ptr.elementAt(offset)
+            as Pointer<T>;
+      case Uint32:
+        return (this as SodiumPointer<Uint32>).ptr.elementAt(offset)
+            as Pointer<T>;
+      case Uint64:
+        return (this as SodiumPointer<Uint64>).ptr.elementAt(offset)
+            as Pointer<T>;
+      case Float:
+        return (this as SodiumPointer<Float>).ptr.elementAt(offset)
+            as Pointer<T>;
+      case Double:
+        return (this as SodiumPointer<Double>).ptr.elementAt(offset)
+            as Pointer<T>;
+      default:
+        // coverage:ignore-start
+        throw UnsupportedError(
+          'Cannot get offset for a SodiumPointer<$T>',
         );
       // coverage:ignore-end
     }
@@ -257,13 +323,11 @@ extension SodiumString on String {
 extension Int8SodiumList on Int8List {
   SodiumPointer<Int8> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }
@@ -271,13 +335,11 @@ extension Int8SodiumList on Int8List {
 extension Int16SodiumList on Int16List {
   SodiumPointer<Int16> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }
@@ -285,13 +347,11 @@ extension Int16SodiumList on Int16List {
 extension Int32SodiumList on Int32List {
   SodiumPointer<Int32> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }
@@ -299,13 +359,11 @@ extension Int32SodiumList on Int32List {
 extension Int64SodiumList on Int64List {
   SodiumPointer<Int64> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }
@@ -313,13 +371,11 @@ extension Int64SodiumList on Int64List {
 extension Uint8SodiumList on Uint8List {
   SodiumPointer<Uint8> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }
@@ -327,13 +383,11 @@ extension Uint8SodiumList on Uint8List {
 extension Uint16SodiumList on Uint16List {
   SodiumPointer<Uint16> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }
@@ -341,13 +395,11 @@ extension Uint16SodiumList on Uint16List {
 extension Uint32SodiumList on Uint32List {
   SodiumPointer<Uint32> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }
@@ -355,13 +407,11 @@ extension Uint32SodiumList on Uint32List {
 extension Uint64SodiumList on Uint64List {
   SodiumPointer<Uint64> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }
@@ -369,13 +419,11 @@ extension Uint64SodiumList on Uint64List {
 extension FloatSodiumList on Float32List {
   SodiumPointer<Float> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }
@@ -383,13 +431,11 @@ extension FloatSodiumList on Float32List {
 extension DoubleSodiumList on Float64List {
   SodiumPointer<Double> toSodiumPointer(
     LibSodiumFFI sodium, {
-    int? count,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) =>
       SodiumPointer.fromList(
         sodium,
         this,
-        count: count,
         memoryProtection: memoryProtection,
       );
 }

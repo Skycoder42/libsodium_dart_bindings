@@ -35,7 +35,7 @@ class SodiumFFI implements Sodium {
     SodiumPointer<Uint8>? extendedBuffer;
     SodiumPointer<Uint64>? paddedLength;
     try {
-      extendedBuffer = buf.toSodiumPointer(sodium, count: maxLen);
+      extendedBuffer = SodiumPointer.alloc(sodium, count: maxLen)..fill(buf);
       paddedLength = SodiumPointer.alloc(sodium, zeroMemory: true);
       final result = sodium.sodium_pad(
         paddedLength.ptr,

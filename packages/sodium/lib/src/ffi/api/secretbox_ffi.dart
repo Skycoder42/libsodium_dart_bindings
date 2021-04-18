@@ -53,8 +53,9 @@ class SecretBoxFII with SecretBoxValidations implements SecretBox {
       dataPtr = SodiumPointer.alloc(
         sodium,
         count: message.length + macBytes,
-        zeroMemory: true,
-      )..asList().setAll(macBytes, message);
+      )
+        ..fill(List<int>.filled(macBytes, 0))
+        ..fill(message, offset: macBytes);
       noncePtr = nonce.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
@@ -103,11 +104,7 @@ class SecretBoxFII with SecretBoxValidations implements SecretBox {
             ),
           );
       SodiumException.checkSucceededInt(result);
-      return Uint8List.fromList(
-        dataPtr.ptr
-            .elementAt(macBytes)
-            .asTypedList(ciphertext.length - macBytes),
-      );
+      return dataPtr.viewAt(macBytes).copyAsList();
     } finally {
       dataPtr?.dispose();
       noncePtr?.dispose();
