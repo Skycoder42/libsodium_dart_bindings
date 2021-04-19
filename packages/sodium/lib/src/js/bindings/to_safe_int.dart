@@ -7,7 +7,7 @@ import 'package:js/js.dart';
 external num _maxSafeInteger;
 
 extension ToSafeIntX on num {
-  static const uint32Max = 4294967295;
+  static const uint32Max = 0xFFFFFFFF;
 
   static int get maxSafeInteger => _maxSafeInteger.toInt();
 

@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import '../../api/randombytes.dart';
+import '../../api/validations.dart';
+import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 
@@ -17,24 +19,36 @@ class RandombytesJS implements Randombytes {
   int get seedBytes => 32;
 
   @override
-  int random() => sodium.randombytes_random().toSafeUInt32();
+  int random() => JsError.wrap(
+        () => sodium.randombytes_random().toSafeUInt32(),
+      );
 
   @override
-  int uniform(int upperBound) =>
-      sodium.randombytes_uniform(upperBound).toSafeUInt32();
+  int uniform(int upperBound) => JsError.wrap(
+        () => sodium.randombytes_uniform(upperBound).toSafeUInt32(),
+      );
 
   @override
-  Uint8List buf(int length) => sodium.randombytes_buf(length);
+  Uint8List buf(int length) => JsError.wrap(
+        () => sodium.randombytes_buf(length),
+      );
 
   @override
   Uint8List bufDeterministic(int length, Uint8List seed) {
-    RangeError.checkValueInInterval(seed.length, seedBytes, seedBytes, 'seed');
-    return sodium.randombytes_buf_deterministic(length, seed);
+    Validations.checkIsSame(seed.length, seedBytes, 'seed');
+
+    return JsError.wrap(
+      () => sodium.randombytes_buf_deterministic(length, seed),
+    );
   }
 
   @override
-  void close() => sodium.randombytes_close();
+  void close() => JsError.wrap(
+        () => sodium.randombytes_close(),
+      );
 
   @override
-  void stir() => sodium.randombytes_stir();
+  void stir() => JsError.wrap(
+        () => sodium.randombytes_stir(),
+      );
 }

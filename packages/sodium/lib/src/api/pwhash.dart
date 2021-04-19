@@ -3,8 +3,9 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import 'secure_key.dart';
+import 'validations.dart';
 
-enum CrypoPwhashAlgorithm {
+enum CryptoPwhashAlgorithm {
   defaultAlg,
   argon2i13,
   argon2id13,
@@ -41,7 +42,7 @@ abstract class Pwhash {
     required Uint8List salt,
     required int opsLimit,
     required int memLimit,
-    CrypoPwhashAlgorithm alg = CrypoPwhashAlgorithm.defaultAlg,
+    CryptoPwhashAlgorithm alg = CryptoPwhashAlgorithm.defaultAlg,
   });
 
   String str({
@@ -64,51 +65,47 @@ abstract class Pwhash {
 
 @internal
 mixin PwHashValidations implements Pwhash {
-  void validateOutLen(int outLen) => RangeError.checkValueInInterval(
+  void validateOutLen(int outLen) => Validations.checkInRange(
         outLen,
         bytesMin,
         bytesMax,
         'outLen',
       );
 
-  void validatePasswordHash(Int8List passwordHash) =>
-      RangeError.checkValueInInterval(
+  void validatePasswordHash(Int8List passwordHash) => Validations.checkIsSame(
         passwordHash.length,
-        strBytes,
         strBytes,
         'passwordHash',
       );
 
-  void validatePasswordHashStr(String passwordHash) =>
-      RangeError.checkValueInInterval(
+  void validatePasswordHashStr(String passwordHash) => Validations.checkInRange(
         passwordHash.length,
         1,
         strBytes,
         'passwordHash',
       );
 
-  void validatePassword(Int8List password) => RangeError.checkValueInInterval(
+  void validatePassword(Int8List password) => Validations.checkInRange(
         password.length,
         passwdMin,
         passwdMax,
         'password',
       );
 
-  void validateSalt(Uint8List salt) => RangeError.checkValueInInterval(
+  void validateSalt(Uint8List salt) => Validations.checkIsSame(
         salt.length,
-        saltBytes,
         saltBytes,
         'salt',
       );
 
-  void validateOpsLimit(int opsLimit) => RangeError.checkValueInInterval(
+  void validateOpsLimit(int opsLimit) => Validations.checkInRange(
         opsLimit,
         opsLimitMin,
         opsLimitMax,
         'opsLimit',
       );
 
-  void validateMemLimit(int memLimit) => RangeError.checkValueInInterval(
+  void validateMemLimit(int memLimit) => Validations.checkInRange(
         memLimit,
         memLimitMin,
         memLimitMax,

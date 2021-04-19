@@ -6,29 +6,30 @@ import 'package:meta/meta.dart';
 import '../../api/pwhash.dart';
 import '../../api/secure_key.dart';
 import '../../api/string_x.dart';
+import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
 @visibleForTesting
-extension CrypoPwhashAlgorithmJS on CrypoPwhashAlgorithm {
+extension CrypoPwhashAlgorithmJS on CryptoPwhashAlgorithm {
   int getValue(LibSodiumJS sodium) {
     switch (this) {
-      case CrypoPwhashAlgorithm.defaultAlg:
+      case CryptoPwhashAlgorithm.defaultAlg:
         return sodium.crypto_pwhash_ALG_DEFAULT.toSafeUInt32();
-      case CrypoPwhashAlgorithm.argon2i13:
+      case CryptoPwhashAlgorithm.argon2i13:
         return sodium.crypto_pwhash_ALG_ARGON2I13.toSafeUInt32();
-      case CrypoPwhashAlgorithm.argon2id13:
+      case CryptoPwhashAlgorithm.argon2id13:
         return sodium.crypto_pwhash_ALG_ARGON2ID13.toSafeUInt32();
     }
   }
 }
 
 @internal
-class PwhashJs with PwHashValidations implements Pwhash {
+class PwhashJS with PwHashValidations implements Pwhash {
   final LibSodiumJS sodium;
 
-  PwhashJs(this.sodium);
+  PwhashJS(this.sodium);
 
   @override
   int get bytesMin => sodium.crypto_pwhash_BYTES_MIN.toSafeUInt32();
@@ -84,7 +85,7 @@ class PwhashJs with PwHashValidations implements Pwhash {
     required Uint8List salt,
     required int opsLimit,
     required int memLimit,
-    CrypoPwhashAlgorithm alg = CrypoPwhashAlgorithm.defaultAlg,
+    CryptoPwhashAlgorithm alg = CryptoPwhashAlgorithm.defaultAlg,
   }) {
     validateOutLen(outLen);
     validatePassword(password);
@@ -92,13 +93,15 @@ class PwhashJs with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    final result = sodium.crypto_pwhash(
-      outLen,
-      Uint8List.view(password.buffer),
-      salt,
-      opsLimit,
-      memLimit,
-      alg.getValue(sodium),
+    final result = JsError.wrap(
+      () => sodium.crypto_pwhash(
+        outLen,
+        Uint8List.view(password.buffer),
+        salt,
+        opsLimit,
+        memLimit,
+        alg.getValue(sodium),
+      ),
     );
     return SecureKeyJS(sodium, result);
   }
@@ -114,10 +117,12 @@ class PwhashJs with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    final result = sodium.crypto_pwhash_str(
-      passwordChars.unsignedView(),
-      opsLimit,
-      memLimit,
+    final result = JsError.wrap(
+      () => sodium.crypto_pwhash_str(
+        passwordChars.unsignedView(),
+        opsLimit,
+        memLimit,
+      ),
     );
     return result;
   }
@@ -131,9 +136,11 @@ class PwhashJs with PwHashValidations implements Pwhash {
     validatePasswordHashStr(passwordHash);
     validatePassword(passwordChars);
 
-    return sodium.crypto_pwhash_str_verify(
-      passwordHash,
-      passwordChars.unsignedView(),
+    return JsError.wrap(
+      () => sodium.crypto_pwhash_str_verify(
+        passwordHash,
+        passwordChars.unsignedView(),
+      ),
     );
   }
 
@@ -147,10 +154,12 @@ class PwhashJs with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    return sodium.crypto_pwhash_str_needs_rehash(
-      passwordHash,
-      opsLimit,
-      memLimit,
+    return JsError.wrap(
+      () => sodium.crypto_pwhash_str_needs_rehash(
+        passwordHash,
+        opsLimit,
+        memLimit,
+      ),
     );
   }
 }

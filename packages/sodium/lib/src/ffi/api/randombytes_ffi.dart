@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 
 import '../../api/randombytes.dart';
 import '../../api/sodium_exception.dart';
+import '../../api/validations.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/sodium_pointer.dart';
 
@@ -36,7 +37,7 @@ class RandombytesFFI implements Randombytes {
 
   @override
   Uint8List bufDeterministic(int size, Uint8List seed) {
-    RangeError.checkValueInInterval(seed.length, seedBytes, seedBytes, 'seed');
+    Validations.checkIsSame(seed.length, seedBytes, 'seed');
 
     SodiumPointer<Uint8>? seedPtr;
     SodiumPointer<Uint8>? resultPtr;

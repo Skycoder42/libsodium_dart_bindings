@@ -1,14 +1,16 @@
 import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:sodium/src/api/secure_key.dart';
+
+import 'secure_key.dart';
+import 'validations.dart';
 
 part 'secret_box.freezed.dart';
 
 @freezed
 class DetachedSecretBoxResult with _$DetachedSecretBoxResult {
   const factory DetachedSecretBoxResult({
-    required Uint8List cipher,
+    required Uint8List cipherText,
     required Uint8List mac,
   }) = _DetachedSecretBoxResult;
 }
@@ -31,7 +33,7 @@ abstract class SecretBox {
   });
 
   Uint8List openEasy({
-    required Uint8List ciphertext,
+    required Uint8List cipherText,
     required Uint8List nonce,
     required SecureKey key,
   });
@@ -43,7 +45,7 @@ abstract class SecretBox {
   });
 
   Uint8List openDetached({
-    required Uint8List ciphertext,
+    required Uint8List cipherText,
     required Uint8List mac,
     required Uint8List nonce,
     required SecureKey key,
@@ -52,24 +54,27 @@ abstract class SecretBox {
 
 @internal
 mixin SecretBoxValidations implements SecretBox {
-  void validateNonce(Uint8List nonce) => RangeError.checkValueInInterval(
+  void validateNonce(Uint8List nonce) => Validations.checkIsSame(
         nonce.length,
-        nonceBytes,
         nonceBytes,
         'nonce',
       );
 
-  void validateKey(SecureKey key) => RangeError.checkValueInInterval(
+  void validateKey(SecureKey key) => Validations.checkIsSame(
         key.length,
-        keyBytes,
         keyBytes,
         'key',
       );
 
-  void validateMac(Uint8List mac) => RangeError.checkValueInInterval(
+  void validateMac(Uint8List mac) => Validations.checkIsSame(
         mac.length,
         macBytes,
-        macBytes,
         'mac',
+      );
+
+  void validateEasyCipherText(Uint8List cipherText) => Validations.checkAtLeast(
+        cipherText.length,
+        macBytes,
+        'cipherText',
       );
 }

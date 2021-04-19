@@ -2,7 +2,9 @@ import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/pwhash.dart';
+import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/pwhash_js.dart';
+import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
@@ -14,7 +16,7 @@ class MockLibSodiumJS extends Mock implements LibSodiumJS {}
 void main() {
   final mockSodium = MockLibSodiumJS();
 
-  late PwhashJs sut;
+  late PwhashJS sut;
 
   setUpAll(() {
     registerFallbackValue(Uint8List(0));
@@ -23,7 +25,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = PwhashJs(mockSodium);
+    sut = PwhashJS(mockSodium);
   });
 
   testData<Tuple3<num Function(), int Function(), String>>(
@@ -111,22 +113,22 @@ void main() {
       ),
       Tuple3(
         () => mockSodium.crypto_pwhash_ALG_DEFAULT,
-        () => CrypoPwhashAlgorithm.defaultAlg.getValue(mockSodium),
+        () => CryptoPwhashAlgorithm.defaultAlg.getValue(mockSodium),
         'CrypoPwhashAlgorithm.defaultAlg',
       ),
       Tuple3(
         () => mockSodium.crypto_pwhash_ALG_DEFAULT,
-        () => CrypoPwhashAlgorithm.defaultAlg.getValue(mockSodium),
+        () => CryptoPwhashAlgorithm.defaultAlg.getValue(mockSodium),
         'CrypoPwhashAlgorithm.defaultAlg',
       ),
       Tuple3(
         () => mockSodium.crypto_pwhash_ALG_ARGON2I13,
-        () => CrypoPwhashAlgorithm.argon2i13.getValue(mockSodium),
+        () => CryptoPwhashAlgorithm.argon2i13.getValue(mockSodium),
         'CrypoPwhashAlgorithm.argon2i13',
       ),
       Tuple3(
         () => mockSodium.crypto_pwhash_ALG_ARGON2ID13,
-        () => CrypoPwhashAlgorithm.argon2id13.getValue(mockSodium),
+        () => CryptoPwhashAlgorithm.argon2id13.getValue(mockSodium),
         'CrypoPwhashAlgorithm.argon2id13',
       ),
     ],
@@ -255,7 +257,7 @@ void main() {
           salt: salt,
           opsLimit: 3,
           memLimit: 7,
-          alg: CrypoPwhashAlgorithm.argon2id13,
+          alg: CryptoPwhashAlgorithm.argon2id13,
         );
 
         verify(() => mockSodium.crypto_pwhash_ALG_ARGON2ID13);
@@ -292,6 +294,30 @@ void main() {
 
         expect(res.extractBytes(), testData);
         verify(() => mockSodium.crypto_pwhash_ALG_DEFAULT);
+      });
+
+      test('throws SodiumException on JsError', () {
+        when(() => mockSodium.crypto_pwhash_ALG_ARGON2I13).thenReturn(3);
+        when(() => mockSodium.crypto_pwhash(
+              any(),
+              any(),
+              any(),
+              any(),
+              any(),
+              any(),
+            )).thenThrow(JsError());
+
+        expect(
+          () => sut.call(
+            outLen: 5,
+            password: Int8List.fromList(const [1, 2, 3]),
+            salt: Uint8List.fromList(const [0, 2, 4, 6, 8]),
+            opsLimit: 5,
+            memLimit: 5,
+            alg: CryptoPwhashAlgorithm.argon2i13,
+          ),
+          throwsA(isA<SodiumException>()),
+        );
       });
     });
 
@@ -376,6 +402,23 @@ void main() {
 
         expect(result, 'ABC');
       });
+
+      test('throws SodiumException on JsError', () {
+        when(() => mockSodium.crypto_pwhash_str(
+              any(),
+              any(),
+              any(),
+            )).thenThrow(JsError());
+
+        expect(
+          () => sut.str(
+            password: 'abc123',
+            opsLimit: 5,
+            memLimit: 2,
+          ),
+          throwsA(isA<SodiumException>()),
+        );
+      });
     });
 
     group('strVerify', () {
@@ -423,6 +466,21 @@ void main() {
             passwordHash,
             Uint8List.fromList(const [0x41, 0x42, 0x43]),
           ),
+        );
+      });
+
+      test('throws SodiumException on JsError', () {
+        when(() => mockSodium.crypto_pwhash_str_verify(
+              any(),
+              any(),
+            )).thenThrow(JsError());
+
+        expect(
+          () => sut.strVerify(
+            password: 'abc123',
+            passwordHash: 'xyz89',
+          ),
+          throwsA(isA<SodiumException>()),
         );
       });
     });
@@ -490,6 +548,23 @@ void main() {
             9,
             8,
           ),
+        );
+      });
+
+      test('throws SodiumException on JsError', () {
+        when(() => mockSodium.crypto_pwhash_str_needs_rehash(
+              any(),
+              any(),
+              any(),
+            )).thenThrow(JsError());
+
+        expect(
+          () => sut.strNeedsRehash(
+            passwordHash: 'xyz89',
+            opsLimit: 9,
+            memLimit: 8,
+          ),
+          throwsA(isA<SodiumException>()),
         );
       });
     });

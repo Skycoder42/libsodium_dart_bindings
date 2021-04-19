@@ -1,4 +1,8 @@
 class SodiumException implements Exception {
+  final String? originalMessage;
+
+  SodiumException([this.originalMessage]);
+
   static void checkSucceededInt(
     int result,
   ) {

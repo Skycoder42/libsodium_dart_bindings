@@ -7,6 +7,7 @@ import '../../api/randombytes.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium.dart';
 import '../../api/sodium_version.dart';
+import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'crypto_js.dart';
@@ -23,14 +24,18 @@ class SodiumJS implements Sodium {
   SodiumVersion get version => SodiumVersion(
         sodium.SODIUM_LIBRARY_VERSION_MAJOR.toSafeUInt32(),
         sodium.SODIUM_LIBRARY_VERSION_MINOR.toSafeUInt32(),
-        sodium.sodium_version_string(),
+        JsError.wrap(() => sodium.sodium_version_string()),
       );
 
   @override
-  Uint8List pad(Uint8List buf, int blocksize) => sodium.pad(buf, blocksize);
+  Uint8List pad(Uint8List buf, int blocksize) => JsError.wrap(
+        () => sodium.pad(buf, blocksize),
+      );
 
   @override
-  Uint8List unpad(Uint8List buf, int blocksize) => sodium.unpad(buf, blocksize);
+  Uint8List unpad(Uint8List buf, int blocksize) => JsError.wrap(
+        () => sodium.unpad(buf, blocksize),
+      );
 
   @override
   SecureKey secureAlloc(int length) => SecureKeyJS.alloc(sodium, length);

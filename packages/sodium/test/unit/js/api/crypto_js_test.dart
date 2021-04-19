@@ -20,7 +20,7 @@ void main() {
   test('pwhash returns PwhashJS instance', () {
     expect(
       sut.pwhash,
-      isA<PwhashJs>().having(
+      isA<PwhashJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

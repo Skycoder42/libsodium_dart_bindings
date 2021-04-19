@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import '../../api/secure_key.dart';
+import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 
 @internal
@@ -18,7 +19,7 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
 
   factory SecureKeyJS.random(LibSodiumJS sodium, int length) => SecureKeyJS(
         sodium,
-        sodium.randombytes_buf(length),
+        JsError.wrap(() => sodium.randombytes_buf(length)),
       );
 
   @override
@@ -43,6 +44,6 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
 
   @override
   void dispose() {
-    sodium.memzero(_raw);
+    JsError.wrap(() => sodium.memzero(_raw));
   }
 }

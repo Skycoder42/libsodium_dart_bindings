@@ -76,5 +76,24 @@ void main() {
         verify(() => sutMock.macBytes);
       },
     );
+
+    testData<Tuple2<int, bool>>(
+      'validateEasyCipherText asserts if value is not in range',
+      const [
+        Tuple2(5, false),
+        Tuple2(6, false),
+        Tuple2(4, true),
+      ],
+      (fixture) {
+        when(() => sutMock.macBytes).thenReturn(5);
+
+        final exceptionMatcher = throwsA(isA<RangeError>());
+        expect(
+          () => sutMock.validateEasyCipherText(Uint8List(fixture.item1)),
+          fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+        );
+        verify(() => sutMock.macBytes);
+      },
+    );
   });
 }

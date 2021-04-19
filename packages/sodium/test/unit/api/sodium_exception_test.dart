@@ -5,6 +5,12 @@ import 'package:tuple/tuple.dart';
 import '../../test_data.dart';
 
 void main() {
+  test('can hold original message', () {
+    const message = 'msg';
+    final sut = SodiumException(message);
+    expect(sut.originalMessage, message);
+  });
+
   testData<Tuple2<int, bool>>(
     'checkSucceededInt asserts for non zero values',
     const [

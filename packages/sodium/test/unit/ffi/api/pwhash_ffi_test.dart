@@ -115,17 +115,17 @@ void main() {
       ),
       Tuple3(
         () => mockSodium.crypto_pwhash_alg_default(),
-        () => CrypoPwhashAlgorithm.defaultAlg.toValue(mockSodium),
+        () => CryptoPwhashAlgorithm.defaultAlg.toValue(mockSodium),
         'CrypoPwhashAlgorithm.defaultAlg',
       ),
       Tuple3(
         () => mockSodium.crypto_pwhash_alg_argon2i13(),
-        () => CrypoPwhashAlgorithm.argon2i13.toValue(mockSodium),
+        () => CryptoPwhashAlgorithm.argon2i13.toValue(mockSodium),
         'CrypoPwhashAlgorithm.argon2i13',
       ),
       Tuple3(
         () => mockSodium.crypto_pwhash_alg_argon2id13(),
-        () => CrypoPwhashAlgorithm.argon2id13.toValue(mockSodium),
+        () => CryptoPwhashAlgorithm.argon2id13.toValue(mockSodium),
         'CrypoPwhashAlgorithm.argon2id13',
       ),
     ],
@@ -257,7 +257,7 @@ void main() {
           salt: Uint8List.fromList(salt),
           opsLimit: 3,
           memLimit: 7,
-          alg: CrypoPwhashAlgorithm.argon2id13,
+          alg: CryptoPwhashAlgorithm.argon2id13,
         );
 
         verify(() => mockSodium.crypto_pwhash_alg_argon2id13());
@@ -296,7 +296,7 @@ void main() {
             salt: Uint8List.fromList(const [0, 2, 4, 6, 8]),
             opsLimit: 3,
             memLimit: 7,
-            alg: CrypoPwhashAlgorithm.argon2i13,
+            alg: CryptoPwhashAlgorithm.argon2i13,
           ),
           throwsA(isA<SodiumException>()),
         );

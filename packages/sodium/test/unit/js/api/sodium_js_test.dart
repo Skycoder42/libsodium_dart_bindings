@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
 import 'package:sodium/src/js/api/randombytes_js.dart';
 import 'package:sodium/src/js/api/sodium_js.dart';
+import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
@@ -24,47 +26,79 @@ void main() {
     sut = SodiumJS(mockSodium);
   });
 
-  test('version returns correct library version', () {
-    const vStr = 'version';
-    when(() => mockSodium.SODIUM_LIBRARY_VERSION_MAJOR).thenReturn(1);
-    when(() => mockSodium.SODIUM_LIBRARY_VERSION_MINOR).thenReturn(2);
-    when(() => mockSodium.sodium_version_string()).thenReturn(vStr);
+  group('version', () {
+    test('returns correct library version', () {
+      const vStr = 'version';
+      when(() => mockSodium.SODIUM_LIBRARY_VERSION_MAJOR).thenReturn(1);
+      when(() => mockSodium.SODIUM_LIBRARY_VERSION_MINOR).thenReturn(2);
+      when(() => mockSodium.sodium_version_string()).thenReturn(vStr);
 
-    final version = sut.version;
+      final version = sut.version;
 
-    expect(version.major, 1);
-    expect(version.minor, 2);
-    expect(version.toString(), 'version');
+      expect(version.major, 1);
+      expect(version.minor, 2);
+      expect(version.toString(), 'version');
 
-    verify(() => mockSodium.SODIUM_LIBRARY_VERSION_MAJOR);
-    verify(() => mockSodium.SODIUM_LIBRARY_VERSION_MINOR);
-    verify(() => mockSodium.sodium_version_string());
+      verify(() => mockSodium.SODIUM_LIBRARY_VERSION_MAJOR);
+      verify(() => mockSodium.SODIUM_LIBRARY_VERSION_MINOR);
+      verify(() => mockSodium.sodium_version_string());
+    });
+
+    test('throws SodiumException on JsError', () {
+      when(() => mockSodium.SODIUM_LIBRARY_VERSION_MAJOR).thenReturn(1);
+      when(() => mockSodium.SODIUM_LIBRARY_VERSION_MINOR).thenReturn(2);
+      when(() => mockSodium.sodium_version_string()).thenThrow(JsError());
+
+      expect(() => sut.version, throwsA(isA<SodiumException>()));
+    });
   });
 
-  test('pad', () {
-    final inBuf = Uint8List.fromList(const [1, 2, 3]);
-    final outBuf = Uint8List.fromList(const [1, 2, 3, 4, 5]);
-    const blocksize = 10;
+  group('pad', () {
+    test('calls pad', () {
+      final inBuf = Uint8List.fromList(const [1, 2, 3]);
+      final outBuf = Uint8List.fromList(const [1, 2, 3, 4, 5]);
+      const blocksize = 10;
 
-    when(() => mockSodium.pad(any(), any())).thenReturn(outBuf);
+      when(() => mockSodium.pad(any(), any())).thenReturn(outBuf);
 
-    final res = sut.pad(inBuf, blocksize);
+      final res = sut.pad(inBuf, blocksize);
 
-    expect(res, outBuf);
-    verify(() => mockSodium.pad(inBuf, blocksize));
+      expect(res, outBuf);
+      verify(() => mockSodium.pad(inBuf, blocksize));
+    });
+
+    test('throws SodiumException on JsError', () {
+      when(() => mockSodium.pad(any(), any())).thenThrow(JsError());
+
+      expect(
+        () => sut.pad(Uint8List(0), 10),
+        throwsA(isA<SodiumException>()),
+      );
+    });
   });
 
-  test('unpad', () {
-    final inBuf = Uint8List.fromList(const [1, 2, 3, 4, 5]);
-    final outBuf = Uint8List.fromList(const [1, 2, 3]);
-    const blocksize = 10;
+  group('unpad', () {
+    test('calls unpad', () {
+      final inBuf = Uint8List.fromList(const [1, 2, 3, 4, 5]);
+      final outBuf = Uint8List.fromList(const [1, 2, 3]);
+      const blocksize = 10;
 
-    when(() => mockSodium.unpad(any(), any())).thenReturn(outBuf);
+      when(() => mockSodium.unpad(any(), any())).thenReturn(outBuf);
 
-    final res = sut.unpad(inBuf, blocksize);
+      final res = sut.unpad(inBuf, blocksize);
 
-    expect(res, outBuf);
-    verify(() => mockSodium.unpad(inBuf, blocksize));
+      expect(res, outBuf);
+      verify(() => mockSodium.unpad(inBuf, blocksize));
+    });
+
+    test('throws SodiumException on JsError', () {
+      when(() => mockSodium.unpad(any(), any())).thenThrow(JsError());
+
+      expect(
+        () => sut.unpad(Uint8List(0), 10),
+        throwsA(isA<SodiumException>()),
+      );
+    });
   });
 
   test('secureAlloc creates SecureKey instance', () {

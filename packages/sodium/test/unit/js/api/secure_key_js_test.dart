@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/secure_key_js.dart';
+import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
@@ -32,15 +34,26 @@ void main() {
       expect(sut.extractBytes().length, length);
     });
 
-    group('random fills buffer with random data', () {
-      const length = 10;
+    group('random', () {
+      test('fills buffer with random data', () {
+        const length = 10;
 
-      when(() => mockSodium.randombytes_buf(any()))
-          .thenReturn(Uint8List(length));
+        when(() => mockSodium.randombytes_buf(any()))
+            .thenReturn(Uint8List(length));
 
-      SecureKeyJS.random(mockSodium, length);
+        SecureKeyJS.random(mockSodium, length);
 
-      verify(() => mockSodium.randombytes_buf(length));
+        verify(() => mockSodium.randombytes_buf(length));
+      });
+
+      test('throws SodiumException on JsError', () {
+        when(() => mockSodium.randombytes_buf(any())).thenThrow(JsError());
+
+        expect(
+          () => SecureKeyJS.random(mockSodium, 10),
+          throwsA(isA<SodiumException>()),
+        );
+      });
     });
   });
 
@@ -79,10 +92,21 @@ void main() {
       expect(bytes, testList);
     });
 
-    test('dispose clears the memory', () {
-      sut.dispose();
+    group('dispose', () {
+      test('clears the memory', () {
+        sut.dispose();
 
-      verify(() => mockSodium.memzero(testList));
+        verify(() => mockSodium.memzero(testList));
+      });
+
+      test('throws SodiumException on JsError', () {
+        when(() => mockSodium.memzero(any())).thenThrow(JsError());
+
+        expect(
+          () => sut.dispose(),
+          throwsA(isA<SodiumException>()),
+        );
+      });
     });
   });
 }

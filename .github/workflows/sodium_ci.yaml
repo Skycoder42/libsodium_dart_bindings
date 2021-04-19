@@ -71,6 +71,7 @@ jobs:
           path: packages/sodium/coverage/lcov.info
           min_coverage: 95
           exclude: |
+            **/*.freezed.dart 
             **/*.ffi.dart 
             **/*.js.dart 
       - run: make -f ../../Makefile publish-dry

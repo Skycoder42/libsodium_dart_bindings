@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/randombytes_js.dart';
+import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
@@ -29,37 +31,61 @@ void main() {
     expect(res, bytes);
   });
 
-  test('random calls randombytes_random', () {
-    const value = 42;
-    when(() => mockSodium.randombytes_random()).thenReturn(value);
+  group('random', () {
+    test('calls randombytes_random', () {
+      const value = 42;
+      when(() => mockSodium.randombytes_random()).thenReturn(value);
 
-    final res = sut.random();
-    expect(res, value);
+      final res = sut.random();
+      expect(res, value);
 
-    verify(() => mockSodium.randombytes_random());
+      verify(() => mockSodium.randombytes_random());
+    });
+
+    test('throws SodiumException on JsError', () {
+      when(() => mockSodium.randombytes_random()).thenThrow(JsError());
+
+      expect(() => sut.random(), throwsA(isA<SodiumException>()));
+    });
   });
 
-  test('uniform calls randombytes_uniform', () {
-    const value = 42;
-    when(() => mockSodium.randombytes_uniform(any())).thenReturn(value);
+  group('uniform', () {
+    test('calls randombytes_uniform', () {
+      const value = 42;
+      when(() => mockSodium.randombytes_uniform(any())).thenReturn(value);
 
-    const upperBound = 100;
-    final res = sut.uniform(upperBound);
-    expect(res, value);
+      const upperBound = 100;
+      final res = sut.uniform(upperBound);
+      expect(res, value);
 
-    verify(() => mockSodium.randombytes_uniform(upperBound));
+      verify(() => mockSodium.randombytes_uniform(upperBound));
+    });
+
+    test('throws SodiumException on JsError', () {
+      when(() => mockSodium.randombytes_uniform(any())).thenThrow(JsError());
+
+      expect(() => sut.uniform(10), throwsA(isA<SodiumException>()));
+    });
   });
 
-  test('buf calls randombytes_buf', () {
-    const length = 42;
-    final testData = List.generate(length, (index) => index);
-    when(() => mockSodium.randombytes_buf(any()))
-        .thenReturn(Uint8List.fromList(testData));
+  group('buf', () {
+    test('calls randombytes_buf', () {
+      const length = 42;
+      final testData = List.generate(length, (index) => index);
+      when(() => mockSodium.randombytes_buf(any()))
+          .thenReturn(Uint8List.fromList(testData));
 
-    final res = sut.buf(length);
-    expect(res, testData);
+      final res = sut.buf(length);
+      expect(res, testData);
 
-    verify(() => mockSodium.randombytes_buf(length));
+      verify(() => mockSodium.randombytes_buf(length));
+    });
+
+    test('throws SodiumException on JsError', () {
+      when(() => mockSodium.randombytes_buf(any())).thenThrow(JsError());
+
+      expect(() => sut.buf(10), throwsA(isA<SodiumException>()));
+    });
   });
 
   group('bufDeterministic', () {
@@ -86,17 +112,43 @@ void main() {
         throwsA(isA<RangeError>()),
       );
     });
+
+    test('throws SodiumException on JsError', () {
+      when(() => mockSodium.randombytes_buf_deterministic(any(), any()))
+          .thenThrow(JsError());
+
+      expect(
+        () => sut.bufDeterministic(10, Uint8List(32)),
+        throwsA(isA<SodiumException>()),
+      );
+    });
   });
 
-  test('close calls randombytes_close', () {
-    sut.close();
+  group('close', () {
+    test('calls randombytes_close', () {
+      sut.close();
 
-    verify(() => mockSodium.randombytes_close());
+      verify(() => mockSodium.randombytes_close());
+    });
+
+    test('throws SodiumException on JsError', () {
+      when(() => mockSodium.randombytes_close()).thenThrow(JsError());
+
+      expect(() => sut.close(), throwsA(isA<SodiumException>()));
+    });
   });
 
-  test('stir calls randombytes_stir', () {
-    sut.stir();
+  group('stir', () {
+    test('stir calls randombytes_stir', () {
+      sut.stir();
 
-    verify(() => mockSodium.randombytes_stir());
+      verify(() => mockSodium.randombytes_stir());
+    });
+
+    test('throws SodiumException on JsError', () {
+      when(() => mockSodium.randombytes_stir()).thenThrow(JsError());
+
+      expect(() => sut.stir(), throwsA(isA<SodiumException>()));
+    });
   });
 }

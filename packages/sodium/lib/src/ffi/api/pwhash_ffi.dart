@@ -62,7 +62,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
     required Uint8List salt,
     required int opsLimit,
     required int memLimit,
-    CrypoPwhashAlgorithm alg = CrypoPwhashAlgorithm.defaultAlg,
+    CryptoPwhashAlgorithm alg = CryptoPwhashAlgorithm.defaultAlg,
   }) {
     validateOutLen(outLen);
     validatePassword(password);
@@ -226,14 +226,14 @@ class PwhashFFI with PwHashValidations implements Pwhash {
 }
 
 @visibleForTesting
-extension CrypoPwhashAlgorithmFFI on CrypoPwhashAlgorithm {
+extension CryptoPwhashAlgorithmFFI on CryptoPwhashAlgorithm {
   int toValue(LibSodiumFFI sodium) {
     switch (this) {
-      case CrypoPwhashAlgorithm.defaultAlg:
+      case CryptoPwhashAlgorithm.defaultAlg:
         return sodium.crypto_pwhash_alg_default();
-      case CrypoPwhashAlgorithm.argon2i13:
+      case CryptoPwhashAlgorithm.argon2i13:
         return sodium.crypto_pwhash_alg_argon2i13();
-      case CrypoPwhashAlgorithm.argon2id13:
+      case CryptoPwhashAlgorithm.argon2id13:
         return sodium.crypto_pwhash_alg_argon2id13();
     }
   }
