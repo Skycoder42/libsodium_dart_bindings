@@ -5,15 +5,15 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import '../../api/secure_key.dart';
-
 import '../bindings/libsodium.ffi.dart';
+import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_pointer.dart';
 
 @internal
 typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<Uint8> pointer);
 
 @internal
-class SecureKeyFFI with SecureKeyEquality implements SecureKey {
+class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   final SodiumPointer<Uint8> _raw;
 
   SecureKeyFFI(this._raw) {
@@ -42,7 +42,8 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKey {
   @override
   int get length => _raw.count;
 
-  T runUnlockedRaw<T>(
+  @override
+  T runUnlockedNative<T>(
     SecureFFICallbackFn<T> callback, {
     bool writable = false,
   }) {
@@ -60,7 +61,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKey {
     SecureCallbackFn<T> callback, {
     bool writable = false,
   }) =>
-      runUnlockedRaw(
+      runUnlockedNative(
         (pointer) => callback(pointer.asList()),
         writable: writable,
       );
@@ -80,24 +81,11 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKey {
   }
 
   @override
-  Uint8List extractBytes() => runUnlockedRaw((pointer) => pointer.copyAsList());
+  Uint8List extractBytes() =>
+      runUnlockedNative((pointer) => pointer.copyAsList());
 
   @override
   void dispose() {
     _raw.dispose();
-  }
-}
-
-extension SecureKeySafeCastX on SecureKey {
-  SecureKeyFFI safeCast([String name = 'key']) {
-    if (this is SecureKeyFFI) {
-      return this as SecureKeyFFI;
-    } else {
-      throw ArgumentError.value(
-        this,
-        name,
-        'is not a SecureKey created by Sodium',
-      );
-    }
   }
 }

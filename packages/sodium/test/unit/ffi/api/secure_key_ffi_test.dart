@@ -115,7 +115,7 @@ void main() {
           Tuple2(true, MemoryProtection.readWrite),
         ],
         (fixture) {
-          final res = sut.runUnlockedRaw(
+          final res = sut.runUnlockedNative(
             (pointer) {
               expect(pointer, mockSodiumPointer);
               verify(() => mockSodiumPointer.memoryProtection = fixture.item2);
@@ -128,7 +128,7 @@ void main() {
       );
 
       test('resets memory protection after callback', () {
-        final res = sut.runUnlockedRaw((pointer) {
+        final res = sut.runUnlockedNative((pointer) {
           verifyNever(
             () =>
                 mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
@@ -144,7 +144,7 @@ void main() {
 
       test('resets memory protection on exceptions', () {
         expect(
-          () => sut.runUnlockedRaw((_) => throw Exception()),
+          () => sut.runUnlockedNative((_) => throw Exception()),
           throwsA(isA<Exception>()),
         );
         verifyInOrder([

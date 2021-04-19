@@ -6,7 +6,9 @@ import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
+import 'package:tuple/tuple.dart';
 
+import '../../../test_constants_mapping.dart';
 import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
@@ -28,15 +30,13 @@ void main() {
     sut = RandombytesFFI(mockSodium);
   });
 
-  test('seedBytes returns randombytes_seedbytes', () {
-    const bytes = 42;
-    when(() => mockSodium.randombytes_seedbytes()).thenReturn(bytes);
-
-    final res = sut.seedBytes;
-    expect(res, bytes);
-
-    verify(() => mockSodium.randombytes_seedbytes());
-  });
+  testConstantsMapping([
+    Tuple3(
+      () => mockSodium.randombytes_seedbytes(),
+      () => sut.seedBytes,
+      'seedBytes',
+    ),
+  ]);
 
   test('random calls randombytes_random', () {
     const value = 42;

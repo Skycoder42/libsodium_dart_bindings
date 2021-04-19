@@ -86,7 +86,7 @@ void main() {
       verify(
         () => mockSodium.sodium_pad(
           any(that: isNot(nullptr)),
-          any(that: hasRawData(testData)),
+          any(that: hasRawData<Uint8>(testData)),
           testData.length,
           blocksize,
           46,
@@ -132,7 +132,7 @@ void main() {
       verify(() => mockSodium.sodium_allocarray(testData.length, 1));
       verify(
         () => mockSodium.sodium_mprotect_readonly(
-          any(that: hasRawData(testData)),
+          any(that: hasRawData<Uint8>(testData)),
         ),
       );
     });
@@ -156,7 +156,7 @@ void main() {
       verify(
         () => mockSodium.sodium_unpad(
           any(that: isNot(nullptr)),
-          any(that: hasRawData(testData)),
+          any(that: hasRawData<Uint8>(testData)),
           testData.length,
           blocksize,
         ),

@@ -9,6 +9,8 @@ class SecureKeyFake extends Fake with SecureKeyEquality implements SecureKey {
 
   SecureKeyFake(List<int> data) : data = Uint8List.fromList(data);
 
+  SecureKeyFake.empty(int length) : data = Uint8List(length);
+
   @override
   int get length => data.length;
 

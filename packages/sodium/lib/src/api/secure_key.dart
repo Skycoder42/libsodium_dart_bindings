@@ -4,6 +4,8 @@ import 'dart:typed_data';
 typedef SecureCallbackFn<T> = T Function(Uint8List data);
 
 abstract class SecureKey {
+  const SecureKey._(); // coverage:ignore-line
+
   int get length;
 
   T runUnlockedSync<T>(

@@ -87,7 +87,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
 
       outKey = SecureKeyFFI.alloc(sodium, outLen);
 
-      final result = outKey.runUnlockedRaw(
+      final result = outKey.runUnlockedNative(
         (pointer) => sodium.crypto_pwhash(
           pointer.ptr,
           pointer.count,
