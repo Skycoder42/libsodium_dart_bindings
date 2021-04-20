@@ -7,7 +7,7 @@ import 'sodium_pointer.dart';
 typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<Uint8> pointer);
 
 abstract class SecureKeyNative implements SecureKey {
-  const SecureKeyNative._();
+  const SecureKeyNative._(); // coverage:ignore-line
 
   T runUnlockedNative<T>(
     SecureFFICallbackFn<T> callback, {

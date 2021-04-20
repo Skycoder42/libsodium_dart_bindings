@@ -142,13 +142,31 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
 
   void zeroMemory() => sodium.sodium_memzero(ptr.cast(), byteLength);
 
-  SodiumPointer<T> viewAt(int offset) => SodiumPointer._view(
-        sodium,
-        _elementAtRaw(offset),
-        count - offset,
-        _locked,
-        _memoryProtection,
+  SodiumPointer<T> viewAt(int offset, [int? length]) {
+    if (offset > count) {
+      throw ArgumentError.value(
+        offset,
+        'offset',
+        'cannot be bigger than count ($count)',
       );
+    }
+
+    if (length != null && length > count - offset) {
+      throw ArgumentError.value(
+        length,
+        'length',
+        'cannot be bigger than count - offset (${count - offset})',
+      );
+    }
+
+    return SodiumPointer._view(
+      sodium,
+      _elementAtRaw(offset),
+      length ?? count - offset,
+      _locked,
+      _memoryProtection,
+    );
+  }
 
   void fill(List<num> data, {int offset = 0}) {
     if (data.length + offset > count) {

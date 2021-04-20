@@ -6,6 +6,7 @@ analyzer:
     - "**/*.freezed.dart"
     - "build/**"
     - "example/web/**"
+    - "test/integration/js_test.dart"
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false

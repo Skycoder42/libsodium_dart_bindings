@@ -1,18 +1,21 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:sodium/src/api/secure_key.dart';
-import 'package:sodium/src/api/sodium_exception.dart';
-import 'package:sodium/src/ffi/api/secure_key_ffi.dart';
-import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
+import 'package:meta/meta.dart';
 
 import '../../api/secret_box.dart';
+import '../../api/secure_key.dart';
+import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
+import '../bindings/secure_key_native.dart';
+import '../bindings/sodium_pointer.dart';
+import 'secure_key_ffi.dart';
 
-class SecretBoxFII with SecretBoxValidations implements SecretBox {
+@internal
+class SecretBoxFFI with SecretBoxValidations implements SecretBox {
   final LibSodiumFFI sodium;
 
-  SecretBoxFII(this.sodium);
+  SecretBoxFFI(this.sodium);
 
   @override
   int get keyBytes => sodium.crypto_secretbox_keybytes();
@@ -27,11 +30,11 @@ class SecretBoxFII with SecretBoxValidations implements SecretBox {
   SecureKey keygen() {
     final key = SecureKeyFFI.alloc(sodium, keyBytes);
     try {
-      key.runUnlockedRaw(
-        (pointer) => sodium.crypto_secretbox_keygen(pointer.ptr),
-        writable: true,
-      );
-      return key;
+      return key
+        ..runUnlockedNative(
+          (pointer) => sodium.crypto_secretbox_keygen(pointer.ptr),
+          writable: true,
+        );
     } catch (e) {
       key.dispose();
       rethrow;
@@ -60,15 +63,16 @@ class SecretBoxFII with SecretBoxValidations implements SecretBox {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      final result = key.safeCast().runUnlockedRaw(
-            (keyPtr) => sodium.crypto_secretbox_easy(
-              dataPtr!.ptr,
-              dataPtr.ptr.elementAt(macBytes),
-              message.length,
-              noncePtr!.ptr,
-              keyPtr.ptr,
-            ),
-          );
+      final result = key.runUnlockedNative(
+        sodium,
+        (keyPtr) => sodium.crypto_secretbox_easy(
+          dataPtr!.ptr,
+          dataPtr.ptr.elementAt(macBytes),
+          message.length,
+          noncePtr!.ptr,
+          keyPtr.ptr,
+        ),
+      );
       SodiumException.checkSucceededInt(result);
       return dataPtr.copyAsList();
     } finally {
@@ -79,30 +83,32 @@ class SecretBoxFII with SecretBoxValidations implements SecretBox {
 
   @override
   Uint8List openEasy({
-    required Uint8List ciphertext,
+    required Uint8List cipherText,
     required Uint8List nonce,
     required SecureKey key,
   }) {
+    validateEasyCipherText(cipherText);
     validateNonce(nonce);
     validateKey(key);
 
     SodiumPointer<Uint8>? dataPtr;
     SodiumPointer<Uint8>? noncePtr;
     try {
-      dataPtr = ciphertext.toSodiumPointer(sodium);
+      dataPtr = cipherText.toSodiumPointer(sodium);
       noncePtr = nonce.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      final result = key.safeCast().runUnlockedRaw(
-            (keyPtr) => sodium.crypto_secretbox_open_easy(
-              dataPtr!.ptr.elementAt(macBytes),
-              dataPtr.ptr,
-              dataPtr.count,
-              noncePtr!.ptr,
-              keyPtr.ptr,
-            ),
-          );
+      final result = key.runUnlockedNative(
+        sodium,
+        (keyPtr) => sodium.crypto_secretbox_open_easy(
+          dataPtr!.ptr.elementAt(macBytes),
+          dataPtr.ptr,
+          dataPtr.count,
+          noncePtr!.ptr,
+          keyPtr.ptr,
+        ),
+      );
       SodiumException.checkSucceededInt(result);
       return dataPtr.viewAt(macBytes).copyAsList();
     } finally {
@@ -120,49 +126,44 @@ class SecretBoxFII with SecretBoxValidations implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? messagePtr;
+    SodiumPointer<Uint8>? dataPtr;
     SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? cipherPtr;
     SodiumPointer<Uint8>? macPtr;
     try {
-      messagePtr = message.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      dataPtr = message.toSodiumPointer(sodium);
       noncePtr = nonce.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      cipherPtr = SodiumPointer.alloc(sodium, count: messagePtr.count);
       macPtr = SodiumPointer.alloc(sodium, count: macBytes);
 
-      final result = key.safeCast().runUnlockedRaw(
-            (keyPtr) => sodium.crypto_secretbox_detached(
-              cipherPtr!.ptr,
-              macPtr!.ptr,
-              messagePtr!.ptr,
-              messagePtr.count,
-              noncePtr!.ptr,
-              keyPtr.ptr,
-            ),
-          );
+      final result = key.runUnlockedNative(
+        sodium,
+        (keyPtr) => sodium.crypto_secretbox_detached(
+          dataPtr!.ptr,
+          macPtr!.ptr,
+          dataPtr.ptr,
+          dataPtr.count,
+          noncePtr!.ptr,
+          keyPtr.ptr,
+        ),
+      );
       SodiumException.checkSucceededInt(result);
 
       return DetachedSecretBoxResult(
-        cipher: cipherPtr.copyAsList(),
+        cipherText: dataPtr.copyAsList(),
         mac: macPtr.copyAsList(),
       );
     } finally {
-      messagePtr?.dispose();
+      dataPtr?.dispose();
       noncePtr?.dispose();
-      cipherPtr?.dispose();
       macPtr?.dispose();
     }
   }
 
   @override
   Uint8List openDetached({
-    required Uint8List ciphertext,
+    required Uint8List cipherText,
     required Uint8List mac,
     required Uint8List nonce,
     required SecureKey key,
@@ -171,15 +172,11 @@ class SecretBoxFII with SecretBoxValidations implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? cipherPtr;
+    SodiumPointer<Uint8>? dataPtr;
     SodiumPointer<Uint8>? macPtr;
     SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? messagePtr;
     try {
-      cipherPtr = ciphertext.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      dataPtr = cipherText.toSodiumPointer(sodium);
       macPtr = mac.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
@@ -188,26 +185,25 @@ class SecretBoxFII with SecretBoxValidations implements SecretBox {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      messagePtr = SodiumPointer.alloc(sodium, count: cipherPtr.count);
 
-      final result = key.safeCast().runUnlockedRaw(
-            (keyPtr) => sodium.crypto_secretbox_open_detached(
-              messagePtr!.ptr,
-              cipherPtr!.ptr,
-              macPtr!.ptr,
-              cipherPtr.count,
-              noncePtr!.ptr,
-              keyPtr.ptr,
-            ),
-          );
+      final result = key.runUnlockedNative(
+        sodium,
+        (keyPtr) => sodium.crypto_secretbox_open_detached(
+          dataPtr!.ptr,
+          dataPtr.ptr,
+          macPtr!.ptr,
+          dataPtr.count,
+          noncePtr!.ptr,
+          keyPtr.ptr,
+        ),
+      );
       SodiumException.checkSucceededInt(result);
 
-      return messagePtr.copyAsList();
+      return dataPtr.copyAsList();
     } finally {
-      cipherPtr?.dispose();
+      dataPtr?.dispose();
       macPtr?.dispose();
       noncePtr?.dispose();
-      messagePtr?.dispose();
     }
   }
 }

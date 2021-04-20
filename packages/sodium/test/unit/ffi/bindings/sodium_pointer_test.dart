@@ -381,6 +381,100 @@ void main() {
       verify(() => mockSodium.sodium_memzero(sut.ptr.cast(), sut.byteLength));
     });
 
+    group('viewAt', () {
+      test('throws if offset exceeds count', () {
+        expect(
+          () => sut.viewAt(10),
+          throwsA(isA<ArgumentError>().having((e) => e.name, 'name', 'offset')),
+        );
+      });
+
+      test('throws if length exceeds count', () {
+        expect(
+          () => sut.viewAt(0, 10),
+          throwsA(isA<ArgumentError>().having((e) => e.name, 'name', 'length')),
+        );
+      });
+
+      test('throws if offset + length exceeds count', () {
+        expect(
+          () => sut.viewAt(1, 3),
+          throwsA(isA<ArgumentError>().having((e) => e.name, 'name', 'length')),
+        );
+      });
+
+      testData<Tuple4<int, int?, int, int>>(
+        'returns expected view address and length',
+        const [
+          Tuple4(0, null, 1234, 3),
+          Tuple4(1, null, 1235, 2),
+          Tuple4(2, null, 1236, 1),
+          Tuple4(3, null, 1237, 0),
+          Tuple4(0, 2, 1234, 2),
+          Tuple4(1, 1, 1235, 1),
+        ],
+        (fixture) {
+          final view = sut.viewAt(fixture.item1, fixture.item2);
+
+          expect(view.ptr, Pointer.fromAddress(fixture.item3));
+          expect(view.count, fixture.item4);
+        },
+      );
+
+      test('dispose does not free views', () {
+        sut
+          ..viewAt(0)
+          ..dispose();
+
+        verifyNever(() => mockSodium.sodium_free(sut.ptr.cast()));
+      });
+    });
+
+    group('fill', () {
+      test('throws if offset exceeds count', () {
+        expect(
+          () => sut.fill([], offset: 10),
+          throwsA(isA<ArgumentError>()),
+        );
+      });
+
+      test('throws if length exceeds count', () {
+        expect(
+          () => sut.fill(List.filled(10, 0)),
+          throwsA(isA<ArgumentError>()),
+        );
+      });
+
+      test('throws if offset + length exceeds count', () {
+        expect(
+          () => sut.fill(List.filled(3, 0), offset: 1),
+          throwsA(isA<ArgumentError>()),
+        );
+      });
+
+      testData<Tuple3<List<int>, int, List<int>>>(
+        'fills correct parts of memory',
+        const [
+          Tuple3([], 3, [1, 2, 3, 4, 5]),
+          Tuple3([7, 8, 9], 0, [7, 8, 9, 4, 5]),
+          Tuple3([7, 8], 2, [1, 2, 7, 8, 5]),
+          Tuple3([9], 4, [1, 2, 3, 4, 9]),
+          Tuple3([6, 7, 8, 9, 0], 0, [6, 7, 8, 9, 0]),
+        ],
+        (fixture) {
+          const testData = [1, 2, 3, 4, 5];
+          final ptr = calloc<Uint8>(testData.length);
+          fillPointer(ptr, testData);
+          final sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
+
+          // ignore: cascade_invocations
+          sut.fill(fixture.item1, offset: fixture.item2);
+
+          expect(sut.asList(), fixture.item3);
+        },
+      );
+    });
+
     test('dispose frees the pointer', () {
       sut.dispose();
 
@@ -506,6 +600,25 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, 0);
         }
       });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <int>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
+      });
     });
 
     group('Int16', () {
@@ -563,6 +676,25 @@ void main() {
         for (var i = 0; i < testData.length; ++i) {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
+      });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <int>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
       });
     });
 
@@ -622,6 +754,25 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
       });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <int>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
+      });
     });
 
     group('Int64', () {
@@ -679,6 +830,25 @@ void main() {
         for (var i = 0; i < testData.length; ++i) {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
+      });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <int>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
       });
     });
 
@@ -738,6 +908,25 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
       });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <int>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
+      });
     });
 
     group('Uint16', () {
@@ -795,6 +984,25 @@ void main() {
         for (var i = 0; i < testData.length; ++i) {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
+      });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <int>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
       });
     });
 
@@ -854,6 +1062,25 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
       });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <int>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
+      });
     });
 
     group('Uint64', () {
@@ -911,6 +1138,25 @@ void main() {
         for (var i = 0; i < testData.length; ++i) {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
+      });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <int>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
       });
     });
 
@@ -974,6 +1220,25 @@ void main() {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
       });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <double>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
+      });
     });
 
     group('Double', () {
@@ -1035,6 +1300,25 @@ void main() {
         for (var i = 0; i < testData.length; ++i) {
           expect(ptr.ptr.elementAt(i).value, testData[i]);
         }
+      });
+
+      test('viewAt uses offset correctly', () {
+        final view = sut.viewAt(2, 2);
+
+        expect(view.count, 2);
+        for (var i = 0; i < 2; ++i) {
+          expect(view.ptr.elementAt(i).value, testData[i + 2]);
+        }
+      });
+
+      test('fill fills correct bytes', () {
+        sut.fill(const <double>[1, 2, 3], offset: 1);
+
+        expect(sut.ptr.elementAt(0).value, testData[0]);
+        for (var i = 1; i < 4; ++i) {
+          expect(sut.ptr.elementAt(i).value, i);
+        }
+        expect(sut.ptr.elementAt(4).value, testData[4]);
       });
     });
   });

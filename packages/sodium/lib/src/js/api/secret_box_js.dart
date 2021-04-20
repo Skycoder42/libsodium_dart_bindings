@@ -1,0 +1,118 @@
+import 'dart:typed_data';
+
+import '../../api/secret_box.dart';
+import '../../api/secure_key.dart';
+import '../bindings/js_error.dart';
+import '../bindings/sodium.js.dart' hide SecretBox;
+import '../bindings/to_safe_int.dart';
+import 'secure_key_js.dart';
+
+class SecretBoxJS with SecretBoxValidations implements SecretBox {
+  final LibSodiumJS sodium;
+
+  SecretBoxJS(this.sodium);
+
+  @override
+  int get keyBytes => sodium.crypto_secretbox_KEYBYTES.toSafeUInt32();
+
+  @override
+  int get macBytes => sodium.crypto_secretbox_MACBYTES.toSafeUInt32();
+
+  @override
+  int get nonceBytes => sodium.crypto_secretbox_NONCEBYTES.toSafeUInt32();
+
+  @override
+  SecureKey keygen() => SecureKeyJS(
+        sodium,
+        JsError.wrap(() => sodium.crypto_secretbox_keygen()),
+      );
+
+  @override
+  Uint8List easy({
+    required Uint8List message,
+    required Uint8List nonce,
+    required SecureKey key,
+  }) {
+    validateNonce(nonce);
+    validateKey(key);
+
+    return JsError.wrap(
+      () => key.runUnlockedSync(
+        (keyData) => sodium.crypto_secretbox_easy(
+          message,
+          nonce,
+          keyData,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Uint8List openEasy({
+    required Uint8List cipherText,
+    required Uint8List nonce,
+    required SecureKey key,
+  }) {
+    validateEasyCipherText(cipherText);
+    validateNonce(nonce);
+    validateKey(key);
+
+    return JsError.wrap(
+      () => key.runUnlockedSync(
+        (keyData) => sodium.crypto_secretbox_open_easy(
+          cipherText,
+          nonce,
+          keyData,
+        ),
+      ),
+    );
+  }
+
+  @override
+  DetachedSecretBoxResult detached({
+    required Uint8List message,
+    required Uint8List nonce,
+    required SecureKey key,
+  }) {
+    validateNonce(nonce);
+    validateKey(key);
+
+    final cipher = JsError.wrap(
+      () => key.runUnlockedSync(
+        (keyData) => sodium.crypto_secretbox_detached(
+          message,
+          nonce,
+          keyData,
+        ),
+      ),
+    );
+
+    return DetachedSecretBoxResult(
+      cipherText: cipher.cipher,
+      mac: cipher.mac,
+    );
+  }
+
+  @override
+  Uint8List openDetached({
+    required Uint8List cipherText,
+    required Uint8List mac,
+    required Uint8List nonce,
+    required SecureKey key,
+  }) {
+    validateMac(mac);
+    validateNonce(nonce);
+    validateKey(key);
+
+    return JsError.wrap(
+      () => key.runUnlockedSync(
+        (keyData) => sodium.crypto_secretbox_open_detached(
+          cipherText,
+          mac,
+          nonce,
+          keyData,
+        ),
+      ),
+    );
+  }
+}

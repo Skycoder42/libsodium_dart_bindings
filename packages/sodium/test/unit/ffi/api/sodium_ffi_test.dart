@@ -132,7 +132,7 @@ void main() {
       verify(() => mockSodium.sodium_allocarray(testData.length, 1));
       verify(
         () => mockSodium.sodium_mprotect_readonly(
-          any(that: hasRawData<Uint8>(testData)),
+          any(that: hasRawData(testData)),
         ),
       );
     });

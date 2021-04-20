@@ -7,9 +7,9 @@ import 'test_data.dart';
 
 @isTestGroup
 void testConstantsMapping(
-  List<Tuple3<int Function(), int Function(), String>> data,
+  List<Tuple3<num Function(), int Function(), String>> data,
 ) =>
-    testData<Tuple3<int Function(), int Function(), String>>(
+    testData<Tuple3<num Function(), int Function(), String>>(
       'maps integer constants correctly',
       data,
       (fixture) {

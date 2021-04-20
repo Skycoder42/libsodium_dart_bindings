@@ -71,16 +71,21 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
 
   @override
   bool matches(dynamic item, Map matchState) {
-    expect(item, isA<Pointer<T>>());
+    try {
+      expect(item, isA<Pointer<T>>());
 
-    final ptr = (item as Pointer<T>).cast<Uint8>();
-    for (var i = 0; i < data.length; ++i) {
-      matchState[_stateKey] = 'has different value at index $i';
-      expect(ptr.elementAt(i).value, data[i]);
-      matchState.remove(_stateKey);
+      final ptr = (item as Pointer<T>).cast<Uint8>();
+      for (var i = 0; i < data.length; ++i) {
+        matchState[_stateKey] = 'has different value at index $i';
+        expect(ptr.elementAt(i).value, data[i]);
+        matchState.remove(_stateKey);
+      }
+
+      return true;
+    } catch (e) {
+      printOnFailure('HasRawDataMatcher failed with: $e');
+      return false;
     }
-
-    return true;
   }
 }
 

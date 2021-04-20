@@ -6,9 +6,8 @@ import 'dart:html';
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
-import 'package:sodium/src/api/sodium.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
-import 'package:sodium/src/js/sodium_js_init.dart';
+import 'package:sodium/sodium.dart';
+import 'package:sodium/sodium.js.dart';
 
 import 'test_runner.dart';
 

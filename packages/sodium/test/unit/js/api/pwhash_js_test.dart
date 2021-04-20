@@ -9,7 +9,7 @@ import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../../test_data.dart';
+import '../../../test_constants_mapping.dart';
 
 class MockLibSodiumJS extends Mock implements LibSodiumJS {}
 
@@ -28,121 +28,108 @@ void main() {
     sut = PwhashJS(mockSodium);
   });
 
-  testData<Tuple3<num Function(), int Function(), String>>(
-    'maps integer constants correctly',
-    [
-      Tuple3(
-        () => mockSodium.crypto_pwhash_BYTES_MIN,
-        () => sut.bytesMin,
-        'bytesMin',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_BYTES_MAX,
-        () => sut.bytesMax,
-        'bytesMax',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_MEMLIMIT_MIN,
-        () => sut.memLimitMin,
-        'memLimitMin',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_MEMLIMIT_INTERACTIVE,
-        () => sut.memLimitInteractive,
-        'memLimitInteractive',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_MEMLIMIT_MODERATE,
-        () => sut.memLimitModerate,
-        'memLimitModerate',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_MEMLIMIT_SENSITIVE,
-        () => sut.memLimitSensitive,
-        'memLimitSensitive',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_MEMLIMIT_MAX,
-        () => sut.memLimitMax,
-        'memLimitMax',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_OPSLIMIT_MIN,
-        () => sut.opsLimitMin,
-        'opsLimitMin',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_OPSLIMIT_INTERACTIVE,
-        () => sut.opsLimitInteractive,
-        'opsLimitInteractive',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_OPSLIMIT_MODERATE,
-        () => sut.opsLimitModerate,
-        'opsLimitModerate',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_OPSLIMIT_SENSITIVE,
-        () => sut.opsLimitSensitive,
-        'opsLimitSensitive',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_OPSLIMIT_MAX,
-        () => sut.opsLimitMax,
-        'opsLimitMax',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_PASSWD_MIN,
-        () => sut.passwdMin,
-        'passwdMin',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_PASSWD_MAX,
-        () => sut.passwdMax,
-        'passwdMax',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_SALTBYTES,
-        () => sut.saltBytes,
-        'saltBytes',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_STRBYTES,
-        () => sut.strBytes,
-        'strBytes',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_ALG_DEFAULT,
-        () => CryptoPwhashAlgorithm.defaultAlg.getValue(mockSodium),
-        'CrypoPwhashAlgorithm.defaultAlg',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_ALG_DEFAULT,
-        () => CryptoPwhashAlgorithm.defaultAlg.getValue(mockSodium),
-        'CrypoPwhashAlgorithm.defaultAlg',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_ALG_ARGON2I13,
-        () => CryptoPwhashAlgorithm.argon2i13.getValue(mockSodium),
-        'CrypoPwhashAlgorithm.argon2i13',
-      ),
-      Tuple3(
-        () => mockSodium.crypto_pwhash_ALG_ARGON2ID13,
-        () => CryptoPwhashAlgorithm.argon2id13.getValue(mockSodium),
-        'CrypoPwhashAlgorithm.argon2id13',
-      ),
-    ],
-    (fixture) {
-      const value = 10;
-      when(fixture.item1).thenReturn(value);
-
-      final res = fixture.item2();
-
-      expect(res, value);
-      verify(fixture.item1);
-    },
-    fixtureToString: (fixture) => fixture.item3,
-  );
+  testConstantsMapping([
+    Tuple3(
+      () => mockSodium.crypto_pwhash_BYTES_MIN,
+      () => sut.bytesMin,
+      'bytesMin',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_BYTES_MAX,
+      () => sut.bytesMax,
+      'bytesMax',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_MEMLIMIT_MIN,
+      () => sut.memLimitMin,
+      'memLimitMin',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_MEMLIMIT_INTERACTIVE,
+      () => sut.memLimitInteractive,
+      'memLimitInteractive',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_MEMLIMIT_MODERATE,
+      () => sut.memLimitModerate,
+      'memLimitModerate',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_MEMLIMIT_SENSITIVE,
+      () => sut.memLimitSensitive,
+      'memLimitSensitive',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_MEMLIMIT_MAX,
+      () => sut.memLimitMax,
+      'memLimitMax',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_OPSLIMIT_MIN,
+      () => sut.opsLimitMin,
+      'opsLimitMin',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_OPSLIMIT_INTERACTIVE,
+      () => sut.opsLimitInteractive,
+      'opsLimitInteractive',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_OPSLIMIT_MODERATE,
+      () => sut.opsLimitModerate,
+      'opsLimitModerate',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_OPSLIMIT_SENSITIVE,
+      () => sut.opsLimitSensitive,
+      'opsLimitSensitive',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_OPSLIMIT_MAX,
+      () => sut.opsLimitMax,
+      'opsLimitMax',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_PASSWD_MIN,
+      () => sut.passwdMin,
+      'passwdMin',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_PASSWD_MAX,
+      () => sut.passwdMax,
+      'passwdMax',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_SALTBYTES,
+      () => sut.saltBytes,
+      'saltBytes',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_STRBYTES,
+      () => sut.strBytes,
+      'strBytes',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_ALG_DEFAULT,
+      () => CryptoPwhashAlgorithm.defaultAlg.getValue(mockSodium),
+      'CrypoPwhashAlgorithm.defaultAlg',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_ALG_DEFAULT,
+      () => CryptoPwhashAlgorithm.defaultAlg.getValue(mockSodium),
+      'CrypoPwhashAlgorithm.defaultAlg',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_ALG_ARGON2I13,
+      () => CryptoPwhashAlgorithm.argon2i13.getValue(mockSodium),
+      'CrypoPwhashAlgorithm.argon2i13',
+    ),
+    Tuple3(
+      () => mockSodium.crypto_pwhash_ALG_ARGON2ID13,
+      () => CryptoPwhashAlgorithm.argon2id13.getValue(mockSodium),
+      'CrypoPwhashAlgorithm.argon2id13',
+    ),
+  ]);
 
   group('methods', () {
     setUp(() {

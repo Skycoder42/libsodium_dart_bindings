@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 @internal
 abstract class Validations {
-  const Validations._();
+  const Validations._(); // coverage:ignore-line
 
   static void checkInRange(
     int value,

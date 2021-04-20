@@ -5,7 +5,7 @@ import '../../api/pwhash.dart';
 import '../../api/secret_box.dart';
 import '../bindings/libsodium.ffi.dart';
 import 'pwhash_ffi.dart';
-import 'secretbox_ffi.dart';
+import 'secret_box_ffi.dart';
 
 @internal
 class CryptoFFI implements Crypto {
@@ -14,7 +14,7 @@ class CryptoFFI implements Crypto {
   CryptoFFI(this.sodium);
 
   @override
-  late final SecretBox secretBox = SecretBoxFII(sodium);
+  late final SecretBox secretBox = SecretBoxFFI(sodium);
 
   @override
   late final Pwhash pwhash = PwhashFFI(sodium);
