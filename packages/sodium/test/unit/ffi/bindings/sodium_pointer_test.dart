@@ -422,9 +422,7 @@ void main() {
       );
 
       test('dispose does not free views', () {
-        sut
-          ..viewAt(0)
-          ..dispose();
+        sut.viewAt(0).dispose();
 
         verifyNever(() => mockSodium.sodium_free(sut.ptr.cast()));
       });
