@@ -2,6 +2,7 @@ export 'src/api/crypto.dart';
 export 'src/api/pwhash.dart' hide PwHashValidations;
 export 'src/api/randombytes.dart';
 export 'src/api/secret_box.dart' hide SecretBoxValidations;
+export 'src/api/secret_stream.dart' hide SecretStreamValidations;
 export 'src/api/secure_key.dart';
 export 'src/api/sodium.dart';
 export 'src/api/sodium_exception.dart';

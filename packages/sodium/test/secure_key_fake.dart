@@ -17,4 +17,10 @@ class SecureKeyFake extends Fake with SecureKeyEquality implements SecureKey {
   @override
   T runUnlockedSync<T>(SecureCallbackFn<T> callback, {bool writable = false}) =>
       callback(data);
+
+  @override
+  SecureKey copy() => this;
+
+  @override
+  void dispose() {}
 }

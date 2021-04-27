@@ -27,6 +27,15 @@ class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
         _locked = true,
         _memoryProtection = MemoryProtection.readWrite;
 
+  SodiumPointer.nullptr(
+    LibSodiumFFI sodium, {
+    int count = 1,
+  }) : this.raw(
+          sodium,
+          nullptr.cast(),
+          count,
+        );
+
   factory SodiumPointer.alloc(
     LibSodiumFFI sodium, {
     int count = 1,

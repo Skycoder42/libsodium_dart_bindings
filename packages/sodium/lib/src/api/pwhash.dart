@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import 'helpers/validations.dart';
 import 'secure_key.dart';
-import 'validations.dart';
 
 enum CryptoPwhashAlgorithm {
   defaultAlg,

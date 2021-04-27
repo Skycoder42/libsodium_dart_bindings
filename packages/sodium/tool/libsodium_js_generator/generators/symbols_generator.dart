@@ -37,6 +37,11 @@ class SymbolsGenerator implements Generator {
   }
 
   String _getReturnType(Symbol symbol) {
+    final fallbackName = '${symbol.name}_result';
+    if (typeMappings.isForced(fallbackName)) {
+      return fallbackName;
+    }
+
     if (symbol.returnValue == null) {
       return 'void';
     } else if (symbol.returnValue!.startsWith('libsodium.UTF8ToString')) {
@@ -50,7 +55,7 @@ class SymbolsGenerator implements Generator {
             symbol.returnValue == 'false')) {
       return 'boolean';
     } else {
-      return '${symbol.name}_result';
+      return fallbackName;
     }
   }
 }

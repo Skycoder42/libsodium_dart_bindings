@@ -7,8 +7,9 @@ import 'file_loader.dart';
 class TypeInfo {
   final String dartType;
   final String? template;
+  final bool force;
 
-  const TypeInfo(this.dartType, {this.template});
+  const TypeInfo(this.dartType, {this.template, this.force = false});
 }
 
 class TypeMappings {
@@ -50,7 +51,11 @@ class TypeMappings {
     'crypto_kx_server_session_keys_result': TypeInfo('CryptoKX'),
     'crypto_secretbox_detached_result': TypeInfo('SecretBox'),
     'crypto_secretstream_xchacha20poly1305_init_push_result': TypeInfo(
-      'CryptoInitPush',
+      'SecretStreamInitPush',
+    ),
+    'crypto_secretstream_xchacha20poly1305_pull_result': TypeInfo(
+      'dynamic',
+      force: true,
     ),
     'crypto_sign_keypair_result': TypeInfo('KeyPair'),
     'crypto_sign_seed_keypair_result': TypeInfo('KeyPair'),
@@ -65,13 +70,9 @@ class TypeMappings {
     'sign_state_address': TypeInfo('SignState'),
     'onetimeauth_state': TypeInfo('OnetimeauthState', template: 'opaque_type'),
     'onetimeauth_state_address': TypeInfo('OnetimeauthState'),
-    'secretstream_xchacha20poly1305_state': TypeInfo(
-      'SecretstreamXchacha20poly1305State',
-      template: 'opaque_type',
-    ),
-    'secretstream_xchacha20poly1305_state_address': TypeInfo(
-      'SecretstreamXchacha20poly1305State',
-    ),
+    // num states
+    'secretstream_xchacha20poly1305_state': TypeInfo('num'),
+    'secretstream_xchacha20poly1305_state_address': TypeInfo('num'),
     // hidden types
     'randombytes_implementation': TypeInfo('Never'),
     'randombytes_set_implementation_result': TypeInfo('Never'),
@@ -97,6 +98,8 @@ class TypeMappings {
       return mappedType.dartType;
     }
   }
+
+  bool isForced(String type) => _mappings[type]?.force ?? false;
 
   Future<void> writeTypeDefinitions(StringSink sink) async {
     final typeFiles = await fileLoader.listFilesSorted(

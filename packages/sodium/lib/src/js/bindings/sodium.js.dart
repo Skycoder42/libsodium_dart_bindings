@@ -22,18 +22,6 @@ class CryptoBox {
 
 @JS()
 @anonymous
-class CryptoInitPush {
-  external SecretstreamXchacha20poly1305State get state;
-  external Uint8List get header;
-
-  external factory CryptoInitPush({
-    required SecretstreamXchacha20poly1305State state,
-    required Uint8List header,
-  });
-}
-
-@JS()
-@anonymous
 class CryptoKX {
   external Uint8List get sharedRx;
   external Uint8List get sharedTx;
@@ -72,6 +60,30 @@ class SecretBox {
 
 @JS()
 @anonymous
+class SecretStreamInitPush {
+  external num get state;
+  external Uint8List get header;
+
+  external factory SecretStreamInitPush({
+    required num state,
+    required Uint8List header,
+  });
+}
+
+@JS()
+@anonymous
+class SecretStreamPull {
+  external Uint8List get message;
+  external num get tag;
+
+  external factory SecretStreamPull({
+    required Uint8List message,
+    required num tag,
+  });
+}
+
+@JS()
+@anonymous
 class GenerichashState {
   @visibleForTesting
   external factory GenerichashState();
@@ -103,13 +115,6 @@ class SignState {
 class OnetimeauthState {
   @visibleForTesting
   external factory OnetimeauthState();
-}
-
-@JS()
-@anonymous
-class SecretstreamXchacha20poly1305State {
-  @visibleForTesting
-  external factory SecretstreamXchacha20poly1305State();
 }
 
 @JS()
@@ -1143,33 +1148,32 @@ class LibSodiumJS {
     Uint8List key,
   );
 
-  external SecretstreamXchacha20poly1305State
-      crypto_secretstream_xchacha20poly1305_init_pull(
+  external num crypto_secretstream_xchacha20poly1305_init_pull(
     Uint8List header,
     Uint8List key,
   );
 
-  external CryptoInitPush crypto_secretstream_xchacha20poly1305_init_push(
+  external SecretStreamInitPush crypto_secretstream_xchacha20poly1305_init_push(
     Uint8List key,
   );
 
   external Uint8List crypto_secretstream_xchacha20poly1305_keygen();
 
-  external Uint8List crypto_secretstream_xchacha20poly1305_pull(
-    SecretstreamXchacha20poly1305State state_address,
+  external dynamic crypto_secretstream_xchacha20poly1305_pull(
+    num state_address,
     Uint8List cipher,
     Uint8List? ad,
   );
 
   external Uint8List crypto_secretstream_xchacha20poly1305_push(
-    SecretstreamXchacha20poly1305State state_address,
+    num state_address,
     Uint8List message_chunk,
     Uint8List? ad,
     num tag,
   );
 
   external bool crypto_secretstream_xchacha20poly1305_rekey(
-    SecretstreamXchacha20poly1305State state_address,
+    num state_address,
   );
 
   external Uint8List crypto_shorthash(

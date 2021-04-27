@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import '../../api/helpers/validations.dart';
 import '../../api/randombytes.dart';
 import '../../api/sodium_exception.dart';
-import '../../api/validations.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/sodium_pointer.dart';
 

@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import '../../api/helpers/validations.dart';
 import '../../api/randombytes.dart';
-import '../../api/validations.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';

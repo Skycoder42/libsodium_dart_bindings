@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'helpers/validations.dart';
 import 'secure_key.dart';
-import 'validations.dart';
 
 part 'secret_box.freezed.dart';
 
@@ -22,7 +22,7 @@ abstract class SecretBox {
   int get macBytes;
   int get nonceBytes;
 
-  // crypto_secretbox_primitive
+  // TODO crypto_secretbox_primitive
 
   SecureKey keygen();
 

@@ -43,6 +43,9 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
   Uint8List extractBytes() => Uint8List.fromList(_raw);
 
   @override
+  SecureKey copy() => SecureKeyJS(sodium, Uint8List.fromList(_raw));
+
+  @override
   void dispose() {
     JsError.wrap(() => sodium.memzero(_raw));
   }

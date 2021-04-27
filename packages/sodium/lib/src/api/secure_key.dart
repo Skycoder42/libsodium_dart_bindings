@@ -20,6 +20,8 @@ abstract class SecureKey {
 
   Uint8List extractBytes();
 
+  SecureKey copy();
+
   void dispose();
 }
 

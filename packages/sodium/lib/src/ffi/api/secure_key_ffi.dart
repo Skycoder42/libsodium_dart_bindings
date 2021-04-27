@@ -85,6 +85,23 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
       runUnlockedNative((pointer) => pointer.copyAsList());
 
   @override
+  SecureKey copy() {
+    final keyCopy = SecureKeyFFI.alloc(_raw.sodium, length);
+    try {
+      runUnlockedNative(
+        (originalPointer) => keyCopy.runUnlockedNative(
+          (copyPointer) => copyPointer.fill(originalPointer.asList()),
+          writable: true,
+        ),
+      );
+      return keyCopy;
+    } catch (e) {
+      keyCopy.dispose();
+      rethrow;
+    }
+  }
+
+  @override
   void dispose() {
     _raw.dispose();
   }

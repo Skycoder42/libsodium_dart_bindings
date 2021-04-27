@@ -1,8 +1,8 @@
-import 'package:sodium/src/api/validations.dart';
+import 'package:sodium/src/api/helpers/validations.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../test_data.dart';
+import '../../../test_data.dart';
 
 void main() {
   testData<Tuple4<int, int, int, bool>>(
