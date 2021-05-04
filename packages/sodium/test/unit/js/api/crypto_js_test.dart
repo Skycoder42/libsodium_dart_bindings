@@ -2,6 +2,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
 import 'package:sodium/src/js/api/pwhash_js.dart';
 import 'package:sodium/src/js/api/secret_box_js.dart';
+import 'package:sodium/src/js/api/secret_stream_js.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
@@ -22,6 +23,17 @@ void main() {
     expect(
       sut.secretBox,
       isA<SecretBoxJS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('secretStream returns SecretStreamJS instance', () {
+    expect(
+      sut.secretStream,
+      isA<SecretStreamJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

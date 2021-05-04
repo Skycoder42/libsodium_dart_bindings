@@ -49,6 +49,7 @@ class SecretStreamTestCase extends TestCase {
 
       final cipherEvents = await cipherStream.toList();
       printOnFailure(cipherEvents.toString());
+      expect(cipherEvents, hasLength(plainEvents.length + 2));
 
       final restoredStream = sut.pull(
         cipherStream: Stream.fromIterable(cipherEvents),
@@ -88,6 +89,7 @@ class SecretStreamTestCase extends TestCase {
 
         final cipherEvents = await cipherStream.toList();
         printOnFailure(cipherEvents.toString());
+        expect(cipherEvents, hasLength(plainEvents.length + 1));
 
         final restoredStream = sut.pullEx(
           cipherStream: Stream.fromIterable(cipherEvents),

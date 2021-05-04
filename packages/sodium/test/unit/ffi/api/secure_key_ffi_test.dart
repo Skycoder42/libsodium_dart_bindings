@@ -254,6 +254,12 @@ void main() {
         final bytes = sut.extractBytes();
 
         expect(bytes, testList);
+
+        final replaceList = testList.map((e) => e + 1).toList();
+        testPtr.asTypedList(replaceList.length).setAll(0, replaceList);
+
+        expect(bytes, testList);
+        expect(sut.extractBytes(), replaceList);
       });
 
       test('unlocks then relocks memory for extracting', () {
@@ -263,6 +269,36 @@ void main() {
           () => mockSodiumPointer.memoryProtection = MemoryProtection.readOnly,
           () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
         ]);
+      });
+    });
+
+    group('copy', () {
+      setUp(() {
+        mockAllocArray(mockSodium);
+        when(() => mockSodiumPointer.sodium).thenReturn(mockSodium);
+      });
+
+      test('copy copies key data to newly created key', () {
+        sut.copy();
+
+        verifyInOrder([
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.readOnly,
+          () => mockSodium.sodium_allocarray(testList.length, 1),
+          () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
+          () => mockSodiumPointer.memoryProtection = MemoryProtection.noAccess,
+        ]);
+      });
+
+      test('returns independent data copy', () {
+        final res = sut.copy();
+
+        expect(res.extractBytes(), testList);
+
+        final replaceList = testList.map((e) => e + 1).toList();
+        testPtr.asTypedList(replaceList.length).setAll(0, replaceList);
+
+        expect(sut.extractBytes(), replaceList);
+        expect(res.extractBytes(), testList);
       });
     });
 

@@ -21,8 +21,11 @@ mixin SecretStreamBase implements SecretStream {
   }
 
   @override
-  StreamTransformer<Uint8List, Uint8List> createPull(SecureKey key) {
-    final transformer = createPullEx(key, requireFinalized: false);
+  StreamTransformer<Uint8List, Uint8List> createPull(
+    SecureKey key, {
+    bool requireFinalized = true,
+  }) {
+    final transformer = createPullEx(key, requireFinalized: requireFinalized);
     return StreamTransformer.fromBind(
       (stream) => stream
           .map((message) => SecretStreamCipherMessage(message))

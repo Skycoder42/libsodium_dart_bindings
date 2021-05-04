@@ -10,7 +10,7 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
-import 'secret_stream_message_tag_x.dart';
+import 'secret_stream_message_tag_ffix.dart';
 
 @internal
 class SecretStreamPullTransformerSinkFFI
@@ -114,7 +114,7 @@ class SecretStreamPullTransformerSinkFFI
       return SecretStreamPlainMessage(
         messagePtr.copyAsList(messageLenPtr.ptr.value),
         additionalData: event.additionalData,
-        tag: SecretStreamMessageTagX.fromValue(sodium, tagPtr.ptr.value),
+        tag: SecretStreamMessageTagFFIX.fromValue(sodium, tagPtr.ptr.value),
       );
     } finally {
       cipherPtr?.dispose();

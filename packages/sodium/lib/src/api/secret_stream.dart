@@ -18,9 +18,11 @@ enum SecretStreamMessageTag {
 class StreamClosedEarlyException implements Exception {
   StreamClosedEarlyException();
 
+  // coverage:ignore-start
   @override
   String toString() =>
       'cipher stream was closed before the final push message was received';
+  // coverage:ignore-end
 }
 
 class InvalidHeaderException implements Exception {
@@ -29,10 +31,12 @@ class InvalidHeaderException implements Exception {
 
   InvalidHeaderException(this.expectedBytes, this.actualBytes);
 
+  // coverage:ignore-start
   @override
   String toString() =>
       'Expected secretstream header with $expectedBytes bytes, '
       'but received $actualBytes bytes';
+  // coverage:ignore-end
 }
 
 @freezed
@@ -85,7 +89,10 @@ abstract class SecretStream {
 
   StreamTransformer<Uint8List, Uint8List> createPush(SecureKey key);
 
-  StreamTransformer<Uint8List, Uint8List> createPull(SecureKey key);
+  StreamTransformer<Uint8List, Uint8List> createPull(
+    SecureKey key, {
+    bool requireFinalized = true,
+  });
 
   SecretExStream<SecretStreamCipherMessage> pushEx({
     required Stream<SecretStreamPlainMessage> messageStream,
@@ -101,7 +108,10 @@ abstract class SecretStream {
       createPushEx(SecureKey key);
 
   SecretExStreamTransformer<SecretStreamCipherMessage, SecretStreamPlainMessage>
-      createPullEx(SecureKey key, {bool requireFinalized = true});
+      createPullEx(
+    SecureKey key, {
+    bool requireFinalized = true,
+  });
 }
 
 @internal

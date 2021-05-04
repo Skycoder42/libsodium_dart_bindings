@@ -39,14 +39,18 @@ class SecretStreamJS
   SecretExStreamTransformer<SecretStreamPlainMessage, SecretStreamCipherMessage>
       createPushEx(
     SecureKey key,
-  ) =>
-          SecretStreamPushTransformerJS(sodium, key);
+  ) {
+    validateKey(key);
+    return SecretStreamPushTransformerJS(sodium, key);
+  }
 
   @override
   SecretExStreamTransformer<SecretStreamCipherMessage, SecretStreamPlainMessage>
       createPullEx(
     SecureKey key, {
     bool requireFinalized = true,
-  }) =>
-          SecretStreamPullTransformerJS(sodium, key, requireFinalized);
+  }) {
+    validateKey(key);
+    return SecretStreamPullTransformerJS(sodium, key, requireFinalized);
+  }
 }

@@ -58,12 +58,12 @@ void main() {
   });
 
   group('members', () {
-    final testList = Uint8List.fromList(const [0, 1, 2, 3, 4]);
+    const testList = [0, 1, 2, 3, 4];
 
     late SecureKeyJS sut;
 
     setUp(() {
-      sut = SecureKeyJS(mockSodium, testList);
+      sut = SecureKeyJS(mockSodium, Uint8List.fromList(testList));
     });
 
     test('length returns pointer length', () {
@@ -90,13 +90,28 @@ void main() {
       final bytes = sut.extractBytes();
 
       expect(bytes, testList);
+
+      sut.runUnlockedSync((data) => data[0] = data[0 + 1]);
+
+      expect(bytes, testList);
+    });
+
+    test('copy returns independent copy of bytes', () {
+      final keyCopy = sut.copy();
+
+      expect(keyCopy.extractBytes(), testList);
+
+      sut.runUnlockedSync((data) => data[0] = data[0 + 1]);
+
+      expect(keyCopy.extractBytes(), testList);
+      expect(sut.extractBytes(), isNot(testList));
     });
 
     group('dispose', () {
       test('clears the memory', () {
         sut.dispose();
 
-        verify(() => mockSodium.memzero(testList));
+        verify(() => mockSodium.memzero(Uint8List.fromList(testList)));
       });
 
       test('throws SodiumException on JsError', () {

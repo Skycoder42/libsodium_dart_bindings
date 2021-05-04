@@ -6,7 +6,7 @@ import '../../../../api/secret_stream.dart';
 import '../../../../api/secure_key.dart';
 import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
-import 'secret_stream_message_tag_x.dart';
+import 'secret_stream_message_tag_jsx.dart';
 
 @internal
 class SecretStreamPushTransformerSinkJS
@@ -27,12 +27,13 @@ class SecretStreamPushTransformerSinkJS
 
     return InitPushResult(
       header: initResult.header,
-      state: initResult.state as num,
+      state: initResult.state,
     );
   }
 
   @override
   void rekey(num cryptoState) => JsError.wrap(
+        // always returns true, ignore result
         () => sodium.crypto_secretstream_xchacha20poly1305_rekey(cryptoState),
       );
 

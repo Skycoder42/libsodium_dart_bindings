@@ -9,7 +9,7 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 import '../../../bindings/to_safe_int.dart';
-import 'secret_stream_message_tag_x.dart';
+import 'secret_stream_message_tag_jsx.dart';
 
 class SecretStreamPullTransformerSinkJS
     extends SecretStreamPullTransformerSink<num> {
@@ -41,6 +41,7 @@ class SecretStreamPullTransformerSinkJS
 
   @override
   void rekey(num cryptoState) => JsError.wrap(
+        // ignore result, as it is always true
         () => sodium.crypto_secretstream_xchacha20poly1305_rekey(cryptoState),
       );
 
@@ -64,7 +65,7 @@ class SecretStreamPullTransformerSinkJS
       return SecretStreamPlainMessage(
         pullResult.message,
         additionalData: event.additionalData,
-        tag: SecretStreamMessageTagX.fromValue(
+        tag: SecretStreamMessageTagJSX.fromValue(
           sodium,
           pullResult.tag.toSafeUInt32(),
         ),

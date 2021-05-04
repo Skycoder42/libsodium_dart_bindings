@@ -110,7 +110,7 @@ unit-tests-js-coverage:
 	touch coverage/.generated
 	$(MAKE) -f $(MAKEFILE) coverage/lcov.info
 
-unit-tests-coverage: coverage/.generated
+unit-tests-coverage: coverage/lcov.info
 
 coverage-open: coverage/html/index.html
 	xdg-open coverage/html/index.html || start coverage/html/index.html

@@ -27,7 +27,7 @@ void mockAllocArray(LibSodiumFFI mockSodium) {
 void mockAlloc(LibSodiumFFI mockSodium, int value) {
   assert(mockSodium is Mock);
   when(() => mockSodium.sodium_malloc(any())).thenAnswer((i) {
-    final ptr = calloc<Uint8>()..value = value;
+    final ptr = calloc<Uint64>()..value = value;
     return ptr.cast();
   });
 }

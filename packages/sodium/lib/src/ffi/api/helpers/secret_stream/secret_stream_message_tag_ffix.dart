@@ -4,7 +4,7 @@ import '../../../../api/secret_stream.dart';
 import '../../../bindings/libsodium.ffi.dart';
 
 @internal
-extension SecretStreamMessageTagX on SecretStreamMessageTag {
+extension SecretStreamMessageTagFFIX on SecretStreamMessageTag {
   int getValue(LibSodiumFFI sodium) {
     switch (this) {
       case SecretStreamMessageTag.message:

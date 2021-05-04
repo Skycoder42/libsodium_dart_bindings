@@ -10,7 +10,7 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
-import 'secret_stream_message_tag_x.dart';
+import 'secret_stream_message_tag_ffix.dart';
 
 @internal
 class SecretStreamPushTransformerSinkFFI
@@ -20,6 +20,7 @@ class SecretStreamPushTransformerSinkFFI
   SecretStreamPushTransformerSinkFFI(this.sodium);
 
   @override
+  @protected
   InitPushResult<SodiumPointer<Uint8>> initialize(SecureKey key) {
     SodiumPointer<Uint8>? statePtr;
     SodiumPointer<Uint8>? headerPtr;
@@ -56,12 +57,14 @@ class SecretStreamPushTransformerSinkFFI
   }
 
   @override
+  @protected
   void rekey(SodiumPointer<Uint8> cryptoState) =>
       sodium.crypto_secretstream_xchacha20poly1305_rekey(
         cryptoState.ptr.cast(),
       );
 
   @override
+  @protected
   SecretStreamCipherMessage encryptMessage(
     SodiumPointer<Uint8> cryptoState,
     SecretStreamPlainMessage event,
@@ -114,6 +117,7 @@ class SecretStreamPushTransformerSinkFFI
   }
 
   @override
+  @protected
   void disposeState(SodiumPointer<Uint8> cryptoState) => cryptoState.dispose();
 }
 

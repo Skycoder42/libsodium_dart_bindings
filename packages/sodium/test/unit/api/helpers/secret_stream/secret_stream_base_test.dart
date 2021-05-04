@@ -217,7 +217,7 @@ void main() {
 
     expect(res, emitsInOrder(resultData));
 
-    verify(() => sutMock.createPullEx(key, requireFinalized: false));
+    verify(() => sutMock.createPullEx(key));
     verify(
       () => mockPullTransformer.bind(
         any(that: emitsInOrder(cipherDataEx)),

@@ -5,7 +5,7 @@ import '../../../bindings/sodium.js.dart';
 import '../../../bindings/to_safe_int.dart';
 
 @internal
-extension SecretStreamMessageTagX on SecretStreamMessageTag {
+extension SecretStreamMessageTagJSX on SecretStreamMessageTag {
   int getValue(LibSodiumJS sodium) {
     switch (this) {
       case SecretStreamMessageTag.message:
