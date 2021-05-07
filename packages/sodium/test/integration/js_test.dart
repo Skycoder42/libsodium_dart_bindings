@@ -16,10 +16,12 @@ import 'sodium.js.fake.dart' if (dart.library.js) 'binaries/js/sodium.js.dart';
 
 @JS()
 @anonymous
-class SodiumInit {
+class SodiumBrowserInit {
   external void Function(dynamic sodium) get onload;
 
-  external factory SodiumInit({void Function(LibSodiumJS sodium) onload});
+  external factory SodiumBrowserInit({
+    void Function(LibSodiumJS sodium) onload,
+  });
 }
 
 class JsTestRunner extends TestRunner {
@@ -30,7 +32,7 @@ class JsTestRunner extends TestRunner {
     setProperty(
       window,
       'sodium',
-      SodiumInit(
+      SodiumBrowserInit(
         onload: allowInterop(completer.complete),
       ),
     );
@@ -38,7 +40,7 @@ class JsTestRunner extends TestRunner {
     final script = ScriptElement()..text = sodiumJsSrc;
     document.head!.append(script);
 
-    return SodiumJSInit.init(await completer.future);
+    return SodiumInit.init(await completer.future);
   }
 }
 
