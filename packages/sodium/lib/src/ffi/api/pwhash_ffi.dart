@@ -8,6 +8,7 @@ import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../../api/string_x.dart';
 import '../bindings/libsodium.ffi.dart';
+import '../bindings/memory_protection.dart';
 import '../bindings/sodium_pointer.dart';
 import 'secure_key_ffi.dart';
 

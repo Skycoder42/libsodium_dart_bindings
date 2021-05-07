@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 import '../../api/secure_key.dart';
 import '../bindings/libsodium.ffi.dart';
+import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_pointer.dart';
 

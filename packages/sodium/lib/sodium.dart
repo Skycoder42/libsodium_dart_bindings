@@ -3,10 +3,11 @@ export 'src/api/pwhash.dart' hide PwHashValidations;
 export 'src/api/randombytes.dart';
 export 'src/api/secret_box.dart' hide SecretBoxValidations;
 export 'src/api/secret_stream.dart' hide SecretStreamValidations;
-export 'src/api/secure_key.dart';
+export 'src/api/secure_key.dart' hide SecureKeyEquality;
 export 'src/api/sodium.dart';
 export 'src/api/sodium_exception.dart';
 export 'src/api/sodium_version.dart';
 export 'src/api/string_x.dart';
-export 'src/ffi/sodium_ffi_init.dart'
+export 'src/sodium_init_fallback.dart'
+    if (dart.library.ffi) 'src/ffi/sodium_ffi_init.dart'
     if (dart.library.js) 'src/js/sodium_js_init.dart';

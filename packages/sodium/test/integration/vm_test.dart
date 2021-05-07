@@ -52,7 +52,7 @@ class VmTestRunner extends TestRunner {
     // ignore: avoid_print
     print('Found libsodium at: $libSodiumPath');
     final dylib = DynamicLibrary.open(libSodiumPath);
-    return SodiumFFIInit.init(dylib);
+    return SodiumInit.init(dylib);
   }
 }
 

@@ -1,7 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+/// Extensions on [String]
 extension StringX on String {
+  /// Converts this string to a UTF8 encoded byte array (a [Int8List]).
+  ///
+  /// Uses [utf8] for the encoding. If [memoryWidth] is specified, the resulting
+  /// byte array will have exactly [memoryWidth] bytes. If this string fits
+  /// exactly into this array, that will be the result. If it is shorter, the
+  /// remaining bytes will be filled with 0. If it is bigger, an [ArgumentError]
+  /// gets thrown.
+  ///
+  /// By default, this whole string gets converted, even if it contains zeros in
+  /// the middle of it. If [zeroTerminated] is set to true, this method stops
+  /// encoding this string as soon as the first 0 is reached and the rest of the
+  /// string gets dropped.
   Int8List toCharArray({int? memoryWidth, bool zeroTerminated = false}) {
     final List<int> chars;
     if (zeroTerminated) {
@@ -21,7 +34,7 @@ extension StringX on String {
       }
 
       return Int8List(memoryWidth)
-        ..setAll(0, chars)
+        ..setRange(0, chars.length, chars)
         ..fillRange(chars.length, memoryWidth, 0);
     } else {
       return Int8List.fromList(chars.toList());
@@ -29,7 +42,14 @@ extension StringX on String {
   }
 }
 
+/// Extensions on [Int8List]
 extension Int8ListX on Int8List {
+  /// Converts this UTF8 encoded byte array to a dart [String].
+  ///
+  /// Uses [utf8] for the decoding. By default, the whole byte array is decoded
+  /// and returned as string. If [zeroTerminated] is set to true, the decoder
+  /// stops at the first 0 byte and only that part of the byte array is returned
+  /// as a string.
   String toDartString({bool zeroTerminated = false}) {
     if (zeroTerminated) {
       return utf8.decode(takeWhile((value) => value != 0).toList());
@@ -38,9 +58,16 @@ extension Int8ListX on Int8List {
     }
   }
 
+  /// Casts this signed byte array to an unsigned [Uint8List].
+  ///
+  /// The returned list referres the the same underlying data.
   Uint8List unsignedView() => Uint8List.view(buffer);
 }
 
+/// Extensions on [Uint8List]
 extension Uint8ListX on Uint8List {
+  /// Casts this unsigned byte array to a signed [Int8List].
+  ///
+  /// The returned list referres the the same underlying data.
   Int8List signedView() => Int8List.view(buffer);
 }

@@ -4,6 +4,7 @@ import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/secure_key_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/memory_protection.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';

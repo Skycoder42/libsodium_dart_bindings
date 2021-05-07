@@ -1,8 +1,18 @@
+import 'package:meta/meta.dart';
+
+/// Exception that is thrown if a lowlevel libsodium operation fails.
 class SodiumException implements Exception {
+  /// The original error message, if one existed.
+  ///
+  /// This is always null for the dart vm, but might contain more details when
+  /// using JS. You should not rely on this to provide anything meaningful, it
+  /// simply exists for completness.
   final String? originalMessage;
 
+  /// Default constructor.
   SodiumException([this.originalMessage]);
 
+  @internal
   static void checkSucceededInt(
     int result,
   ) {
@@ -11,6 +21,7 @@ class SodiumException implements Exception {
     }
   }
 
+  @internal
   // ignore: avoid_positional_boolean_parameters
   static void checkSucceededBool(bool result) {
     if (!result) {
@@ -18,6 +29,7 @@ class SodiumException implements Exception {
     }
   }
 
+  @internal
   static T checkSucceededObject<T extends Object>(T? result) {
     if (result == null) {
       throw SodiumException();

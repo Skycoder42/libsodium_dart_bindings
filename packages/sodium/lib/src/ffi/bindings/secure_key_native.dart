@@ -1,11 +1,18 @@
 import 'dart:ffi';
 
+import 'package:meta/meta.dart';
+
 import '../../api/secure_key.dart';
 import 'libsodium.ffi.dart';
+import 'memory_protection.dart';
 import 'sodium_pointer.dart';
 
+/// @nodoc
+@internal
 typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<Uint8> pointer);
 
+/// @nodoc
+@internal
 abstract class SecureKeyNative implements SecureKey {
   const SecureKeyNative._(); // coverage:ignore-line
 
@@ -15,6 +22,8 @@ abstract class SecureKeyNative implements SecureKey {
   });
 }
 
+/// @nodoc
+@internal
 extension SecureKeySafeCastX on SecureKey {
   T runUnlockedNative<T>(
     LibSodiumFFI sodium,
@@ -47,7 +56,7 @@ extension SecureKeySafeCastX on SecureKey {
           try {
             final result = callback(ptr);
             if (writable) {
-              data.setAll(0, ptr.asList());
+              data.setRange(0, data.length, ptr.asList());
             }
             return result;
           } finally {

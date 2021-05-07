@@ -1,0 +1,7 @@
+dartdoc:
+  nodoc:
+    - "*.freezed.dart"
+    - "lib/src/ffi/api/**"
+    - "lib/src/ffi/bindings/*.ffi.dart"
+    - "lib/src/js/api/**"
+    - "lib/src/js/bindings/*.js.dart"

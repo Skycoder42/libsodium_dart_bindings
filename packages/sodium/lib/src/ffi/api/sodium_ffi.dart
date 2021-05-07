@@ -11,6 +11,7 @@ import '../../api/sodium.dart';
 import '../../api/sodium_exception.dart';
 import '../../api/sodium_version.dart';
 import '../bindings/libsodium.ffi.dart';
+import '../bindings/memory_protection.dart';
 import '../bindings/sodium_pointer.dart';
 import 'crypto_ffi.dart';
 import 'randombytes_ffi.dart';

@@ -13,7 +13,7 @@ import 'interop.dart';
 Future<void> main() async {
   print('init...');
   final libsodium = await _initImpl();
-  final Sodium sodium = await SodiumJSInit.init(libsodium);
+  final Sodium sodium = await SodiumInit.init(libsodium);
 
   final res = runSample(sodium);
 
@@ -28,7 +28,7 @@ Future<dynamic> _initImpl() async {
   setProperty(
     window,
     'sodium',
-    SodiumInit(
+    SodiumBrowserInit(
       onload: allowInterop(completer.complete),
     ),
   );

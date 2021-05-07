@@ -6,8 +6,8 @@ import 'package:sodium/sodium.js.dart';
 
 @JS()
 @anonymous
-class SodiumInit {
+class SodiumBrowserInit {
   external void Function(dynamic sodium) get onload;
 
-  external factory SodiumInit({void Function(dynamic sodium) onload});
+  external factory SodiumBrowserInit({void Function(dynamic sodium) onload});
 }
