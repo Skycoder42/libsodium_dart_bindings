@@ -89,14 +89,16 @@ jobs:
       - uses: actions/checkout@v2
       - uses: Skycoder42/action-dart-release@v1
         id: version
+        with:
+          src_dir: packages/sodium
       - name: Create Release
         if: steps.version.outputs.update == 'true'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.version.outputs.tag_name }}
-          release_name: ${{ steps.version.outputs.release_name }}
+          tag_name: sodium/v${{ steps.version.outputs.tag_name }}
+          release_name: sodium - ${{ steps.version.outputs.release_name }}
           body_path: ${{ steps.version.outputs.body_path }}
 
   deploy:
@@ -133,5 +135,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: doc/api
+          publish_dir: packages/sodium/doc/api
           commit_message: Updated documentation to v${{ needs.release.outputs.tag_name }}
