@@ -6,7 +6,9 @@ import 'dart:html';
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
+// dart_pre_commit:ignore-library-import
 import 'package:sodium/sodium.dart';
+// dart_pre_commit:ignore-library-import
 import 'package:sodium/sodium.js.dart';
 
 import 'test_runner.dart';
