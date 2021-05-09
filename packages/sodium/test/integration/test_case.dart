@@ -1,4 +1,5 @@
-import 'package:sodium/src/api/sodium.dart';
+// dart_pre_commit:ignore-library-import
+import 'package:sodium/sodium.dart';
 
 abstract class TestCase {
   late Sodium sodium;

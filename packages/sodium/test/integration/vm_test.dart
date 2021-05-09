@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
+// dart_pre_commit:ignore-library-import
 import 'package:sodium/sodium.dart';
 import 'package:test/test.dart';
 

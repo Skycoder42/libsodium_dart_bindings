@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:sodium/src/api/sodium.dart';
+// dart_pre_commit:ignore-library-import
+import 'package:sodium/sodium.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 

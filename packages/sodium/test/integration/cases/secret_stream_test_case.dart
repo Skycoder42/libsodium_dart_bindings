@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:sodium/src/api/secret_stream.dart';
-import 'package:sodium/src/api/sodium_exception.dart';
+// dart_pre_commit:ignore-library-import
+import 'package:sodium/sodium.dart';
 import 'package:test/test.dart';
 
 import '../test_case.dart';
