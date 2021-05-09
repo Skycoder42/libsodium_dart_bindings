@@ -64,6 +64,7 @@ class SecretBoxFFI with SecretBoxValidations implements SecretBox {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
+
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_secretbox_easy(
@@ -75,6 +76,7 @@ class SecretBoxFFI with SecretBoxValidations implements SecretBox {
         ),
       );
       SodiumException.checkSucceededInt(result);
+
       return dataPtr.copyAsList();
     } finally {
       dataPtr?.dispose();
@@ -100,6 +102,7 @@ class SecretBoxFFI with SecretBoxValidations implements SecretBox {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
+
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_secretbox_open_easy(
@@ -111,6 +114,7 @@ class SecretBoxFFI with SecretBoxValidations implements SecretBox {
         ),
       );
       SodiumException.checkSucceededInt(result);
+
       return dataPtr.viewAt(macBytes).copyAsList();
     } finally {
       dataPtr?.dispose();

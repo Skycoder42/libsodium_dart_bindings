@@ -19,7 +19,7 @@ dependencies.
   + [Example for the dart VM](#example-for-the-dart-vm)
   + [Example in the browser](#example-in-the-browser)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+<small><i><a href='https://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 ## Features
 - Provides a simple to use dart API for accessing libsodium
