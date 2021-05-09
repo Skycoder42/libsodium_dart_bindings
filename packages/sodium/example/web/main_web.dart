@@ -36,6 +36,7 @@ Future<dynamic> _initImpl() async {
 
   final script = ScriptElement();
   script
+    ..type = 'text/javascript'
     ..async = true
     // ignore: unsafe_html
     ..src = 'sodium.js';

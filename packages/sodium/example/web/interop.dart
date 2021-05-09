@@ -2,7 +2,6 @@
 library interop;
 
 import 'package:js/js.dart';
-import 'package:sodium/sodium.js.dart';
 
 @JS()
 @anonymous

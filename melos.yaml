@@ -28,17 +28,9 @@ scripts:
     run: dart run scripts/fetch_libsodium.dart
     description: Downloads all required libsodium binaries
 
-  libsodium:fetch:linux:
-    run: dart run scripts/fetch_libsodium.dart linux arch
-    description: Downloads all required libsodium binaries (Linux only)
-
   libsodium:fetch:windows:
     run: dart run scripts/fetch_libsodium.dart windows
     description: Downloads all required libsodium binaries (Windows only)
-
-  libsodium:fetch:macos:
-    run: dart run scripts/fetch_libsodium.dart macos
-    description: Downloads all required libsodium binaries (macOS only)
 
   libsodium:fetch:web:
     run: dart run scripts/fetch_libsodium.dart web
