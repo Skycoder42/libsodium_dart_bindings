@@ -101,5 +101,5 @@ scripts:
     description: Remove pre commit hooks
 
   pre-commit:run:
-    run: dart pub global run melos exec -c1 -- dart pub run --no-sound-null-safety dart_pre_commit -oany -n -p --ansi
+    run: dart pub global run melos exec -c1 -- dart run dart_pre_commit -t -oany -p --ansi
     description: Run pre commit hooks in all projects
