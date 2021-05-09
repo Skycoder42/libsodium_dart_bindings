@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../../api/auth.dart';
 import '../../api/crypto.dart';
 import '../../api/pwhash.dart';
 import '../../api/secret_box.dart';
@@ -23,4 +24,8 @@ class CryptoJS implements Crypto {
 
   @override
   late final Pwhash pwhash = PwhashJS(sodium);
+
+  @override
+  // TODO: implement auth
+  Auth get auth => throw UnimplementedError();
 }

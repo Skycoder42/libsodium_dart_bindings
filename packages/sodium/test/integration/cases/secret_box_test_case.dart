@@ -20,7 +20,7 @@ class SecretBoxTestCase extends TestCase {
       expect(sut.nonceBytes, 24, reason: 'nonceBytes');
     });
 
-    test('keygen generates different correct length key', () {
+    test('keygen generates different correct length keys', () {
       final key1 = sut.keygen();
       final key2 = sut.keygen();
 

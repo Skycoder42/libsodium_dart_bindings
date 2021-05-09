@@ -1,3 +1,4 @@
+export 'src/api/auth.dart' hide AuthValidations;
 export 'src/api/crypto.dart';
 export 'src/api/pwhash.dart' hide PwHashValidations;
 export 'src/api/randombytes.dart';

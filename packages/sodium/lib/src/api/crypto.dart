@@ -1,3 +1,4 @@
+import 'auth.dart';
 import 'pwhash.dart';
 import 'secret_box.dart';
 import 'secret_stream.dart';
@@ -15,6 +16,11 @@ abstract class Crypto {
   ///
   /// This provides all APIs that start with `crypto_secretstream`.
   SecretStream get secretStream;
+
+  /// An instance of [Auth].
+  ///
+  /// This provides all APIs that start with `crypto_auth`.
+  Auth get auth;
 
   /// An instance of [Pwhash].
   ///
