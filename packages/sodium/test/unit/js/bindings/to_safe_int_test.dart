@@ -15,18 +15,18 @@ void main() {
       expect(res, value);
     });
 
-    test('returns uint32Max above max', () {
-      const num value = ToSafeIntX.uint32Max + 1;
+    test('returns uint32SafeMax above max', () {
+      const num value = ToSafeIntX.uint32SafeMax + 1;
       final res = value.toSafeUInt32();
 
-      expect(res, ToSafeIntX.uint32Max);
+      expect(res, ToSafeIntX.uint32SafeMax);
     });
 
     test('returns maxSafeInteger for values below 0', () {
       const num value = -1;
       final res = value.toSafeUInt32();
 
-      expect(res, ToSafeIntX.uint32Max);
+      expect(res, ToSafeIntX.uint32SafeMax);
     });
   });
 
