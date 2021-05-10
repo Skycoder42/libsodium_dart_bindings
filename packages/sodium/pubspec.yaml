@@ -1,6 +1,6 @@
 name: sodium
 description: Dart bindings for libsodium, for the Dart-VM and for the Web
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:

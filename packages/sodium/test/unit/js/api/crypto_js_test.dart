@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/js/api/auth_js.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
 import 'package:sodium/src/js/api/pwhash_js.dart';
 import 'package:sodium/src/js/api/secret_box_js.dart';
@@ -34,6 +35,17 @@ void main() {
     expect(
       sut.secretStream,
       isA<SecretStreamJS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('auth returns AuthJS instance', () {
+    expect(
+      sut.auth,
+      isA<AuthJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

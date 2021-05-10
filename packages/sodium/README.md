@@ -41,9 +41,9 @@ API based on libsodium version: *1.0.18*
  padding             | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/padding
  memory              | ✔️ | ⚠️ | https://libsodium.gitbook.io/doc/memory_management
  randombytes         | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/generating_random_data
- secretbox           | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox
- secretstream        | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream
- crypto_auth         | ❌ | ❌ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication
+ crypto_secretbox    | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox
+ crypto_secretstream | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream
+ crypto_auth         | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication
  crypto_box          | ❌ | ❌ | https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption
  crypto_sign         | ❌ | ❌ | https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures
  crypto_box_seal     | ❌ | ❌ | https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes

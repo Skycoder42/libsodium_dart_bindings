@@ -85,11 +85,11 @@ class AuthFFI with AuthValidations implements Auth {
     SodiumPointer<Uint8>? messagePtr;
     SodiumPointer<Uint8>? tagPtr;
     try {
-      messagePtr = message.toSodiumPointer(
+      tagPtr = tag.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      tagPtr = tag.toSodiumPointer(
+      messagePtr = message.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );

@@ -72,9 +72,13 @@ scripts:
     run: dart pub global run melos exec -- make -f ../../Makefile unit-tests-js
     description: Run unit tests in all projects (JS only)
 
+  test:coverage:
+    run: dart pub global run melos exec -- make -f ../../Makefile coverage
+    description: Run test coverage in all projects
+
   test:coverage:open:
     run: dart pub global run melos exec -- make -f ../../Makefile coverage-open
-    description: Run tests in all projects
+    description: Run test coverage in all projects and open the results in the browser
 
   test:integration:
     run: dart pub global run melos exec -- make -f ../../Makefile integration-tests
