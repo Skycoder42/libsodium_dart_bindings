@@ -22,13 +22,15 @@ abstract class Sodium {
   /// See https://libsodium.gitbook.io/doc/padding#usage
   Uint8List unpad(Uint8List buf, int blocksize);
 
-  /// Allocates new memory for a [SecureKey].
+  /// Allocates new memory for a [SecureKey] of [length] bytes.
   SecureKey secureAlloc(int length);
 
-  /// Allocates new memory for a [SecureKey] and fills it with random data.
+  /// Allocates new memory for a [SecureKey] and fills it with [length] bytes of
+  /// random data.
   SecureKey secureRandom(int length);
 
-  // TODO add copyFrom
+  /// Allocates new memory for a [SecureKey] and copies the data from [data].
+  SecureKey secureCopy(Uint8List data);
 
   /// An instance of [Randombytes].
   ///

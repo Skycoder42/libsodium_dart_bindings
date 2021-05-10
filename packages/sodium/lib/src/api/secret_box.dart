@@ -39,8 +39,6 @@ abstract class SecretBox {
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#constants.
   int get nonceBytes;
 
-  // TODO crypto_secretbox_primitive
-
   /// Provides crypto_secretbox_keygen.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#detached-mode.

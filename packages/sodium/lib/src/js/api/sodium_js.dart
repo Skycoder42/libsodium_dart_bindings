@@ -44,6 +44,12 @@ class SodiumJS implements Sodium {
   SecureKey secureRandom(int length) => SecureKeyJS.random(sodium, length);
 
   @override
+  SecureKey secureCopy(Uint8List data) => SecureKeyJS(
+        sodium,
+        Uint8List.fromList(data), // force copy the data
+      );
+
+  @override
   late final Randombytes randombytes = RandombytesJS(sodium);
 
   @override

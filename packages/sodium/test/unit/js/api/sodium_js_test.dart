@@ -119,6 +119,13 @@ void main() {
     verify(() => mockSodium.randombytes_buf(length));
   });
 
+  test('secureCopy creates SecureKey instance with copied data', () {
+    final data = Uint8List.fromList(List.generate(15, (index) => index));
+    final res = sut.secureCopy(data);
+
+    expect(res.extractBytes(), data);
+  });
+
   test('randombytes returns RandombytesJS instance', () {
     expect(
       sut.randombytes,

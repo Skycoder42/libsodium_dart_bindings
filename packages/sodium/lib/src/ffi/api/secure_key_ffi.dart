@@ -27,6 +27,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
       SecureKeyFFI(SodiumPointer<Uint8>.alloc(
         sodium,
         count: length,
+        memoryProtection: MemoryProtection.noAccess,
       ));
 
   factory SecureKeyFFI.random(LibSodiumFFI sodium, int length) {
@@ -88,7 +89,10 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   @override
   SecureKey copy() => runUnlockedNative(
         (originalPointer) => SecureKeyFFI(
-          originalPointer.asList().toSodiumPointer(_raw.sodium),
+          originalPointer.asList().toSodiumPointer(
+                _raw.sodium,
+                memoryProtection: MemoryProtection.noAccess,
+              ),
         ),
       );
 

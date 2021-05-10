@@ -203,6 +203,15 @@ void main() {
     verify(() => mockSodium.randombytes_buf(any(that: isNot(nullptr)), length));
   });
 
+  test('secureCopy creates SecureKey instance with copied data', () {
+    mockAllocArray(mockSodium);
+
+    final data = Uint8List.fromList(List.generate(15, (index) => index));
+    final res = sut.secureCopy(data);
+
+    expect(res.extractBytes(), data);
+  });
+
   test('randombytes returns RandombytesFFI instance', () {
     expect(
       sut.randombytes,

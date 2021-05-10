@@ -84,6 +84,14 @@ class SodiumFFI implements Sodium {
   SecureKey secureRandom(int length) => SecureKeyFFI.random(sodium, length);
 
   @override
+  SecureKey secureCopy(Uint8List data) => SecureKeyFFI(
+        data.toSodiumPointer(
+          sodium,
+          memoryProtection: MemoryProtection.noAccess,
+        ),
+      );
+
+  @override
   late final Randombytes randombytes = RandombytesFFI(sodium);
 
   @override
