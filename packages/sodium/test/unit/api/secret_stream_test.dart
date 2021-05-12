@@ -1,10 +1,8 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/secret_stream.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../secure_key_fake.dart';
-import '../../test_data.dart';
 import '../../test_validator.dart';
 
 class MockSecretStream extends Mock
