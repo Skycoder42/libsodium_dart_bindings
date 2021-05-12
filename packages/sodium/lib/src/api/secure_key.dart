@@ -3,6 +3,8 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import 'sodium.dart';
+
 /// A callback function to operate on an unlocked key.
 typedef SecureCallbackFn<T> = T Function(Uint8List data);
 
@@ -12,9 +14,6 @@ typedef SecureCallbackFn<T> = T Function(Uint8List data);
 /// keys in memory. The key tries to protect the memory from unallowed access
 /// and only allows reading and writing in scoped callbacks. See
 /// [runUnlockedSync] and [runUnlockedAsync].
-///
-/// **Note:** To create a new secure key, use [Sodium.secureAlloc] or
-/// [Sodium.secureRandom].
 ///
 /// In the dart VM, it uses native C memory and applies security features of
 /// libsodium to protect it. The applied mechanisms are:
@@ -28,9 +27,35 @@ typedef SecureCallbackFn<T> = T Function(Uint8List data);
 /// key is disposed. There are no other security measures that can be applied in
 /// a JavaScript context.
 ///
+/// **Note:** To create a new secure key, you can either use the factory
+/// constructors, which require an instance of [Sodium], or you directly use the
+/// methods [Sodium.secureAlloc], [Sodium.secureRandom] or [Sodium.secureCopy],
+/// which do the same thing as the factory constructors. In fact, they are the
+/// actual implementation. The factory constructors simply exist for
+/// convenience.
+///
 /// See https://libsodium.gitbook.io/doc/memory_management
 abstract class SecureKey {
-  const SecureKey._(); // coverage:ignore-line
+  /// Allocates a new [SecureKey] of [length] bytes.
+  ///
+  /// Convenience factory constructor that redirects to [Sodium.secureAlloc] and
+  /// calls it with [length] on [sodium].
+  factory SecureKey(Sodium sodium, int length) => sodium.secureAlloc(length);
+
+  /// Allocates new memory for a [SecureKey] and copies the data from [data].
+  ///
+  /// Convenience factory constructor that redirects to [Sodium.secureCopy] and
+  /// calls it with [data] on [sodium].
+  factory SecureKey.fromList(Sodium sodium, Uint8List data) =>
+      sodium.secureCopy(data);
+
+  /// Allocates new memory for a [SecureKey] and fills it with [length] bytes of
+  /// random data.
+  ///
+  /// Convenience factory constructor that redirects to [Sodium.secureRandom]
+  /// and calls it with [length] on [sodium].
+  factory SecureKey.random(Sodium sodium, int length) =>
+      sodium.secureRandom(length);
 
   /// Returns the length of the key in bytes, without unlocking it.
   int get length;
@@ -97,13 +122,12 @@ mixin SecureKeyEquality implements SecureKey {
       return true;
     } else if (other is! SecureKey) {
       return false;
+    } else if (length != other.length) {
+      return false;
     } else {
       return runUnlockedSync(
         (thisData) => other.runUnlockedSync(
           (otherData) {
-            if (thisData.length != otherData.length) {
-              return false;
-            }
             for (var i = 0; i < thisData.length; ++i) {
               if (thisData[i] != otherData[i]) {
                 return false;
