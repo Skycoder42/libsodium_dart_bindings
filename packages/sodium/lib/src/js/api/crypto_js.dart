@@ -1,14 +1,15 @@
 import 'package:meta/meta.dart';
-import 'package:sodium/src/api/box.dart';
-import 'package:sodium/src/js/api/box_js.dart';
 
 import '../../api/auth.dart';
+import '../../api/box.dart';
 import '../../api/crypto.dart';
 import '../../api/pwhash.dart';
 import '../../api/secret_box.dart';
 import '../../api/secret_stream.dart';
+import '../../api/sign.dart';
 import '../bindings/sodium.js.dart' hide SecretBox;
 import 'auth_js.dart';
+import 'box_js.dart';
 import 'pwhash_js.dart';
 import 'secret_box_js.dart';
 import 'secret_stream_js.dart';
@@ -33,4 +34,8 @@ class CryptoJS implements Crypto {
 
   @override
   late final Pwhash pwhash = PwhashJS(sodium);
+
+  @override
+  // TODO: implement sign
+  Sign get sign => throw UnimplementedError();
 }

@@ -73,7 +73,7 @@ class SecretStreamPushTransformerSinkFFI
     SodiumPointer<Uint8>? messagePtr;
     SodiumPointer<Uint8>? adPtr;
     SodiumPointer<Uint8>? cipherPtr;
-    SodiumPointer<Uint64>? cipherLenPtr;
+    SodiumPointer<Uint64>? cipherLenPtr; // TODO remove
     try {
       messagePtr = event.message.toSodiumPointer(
         sodium,

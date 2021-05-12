@@ -1,9 +1,9 @@
-import 'package:sodium/src/api/box.dart';
-
 import 'auth.dart';
+import 'box.dart';
 import 'pwhash.dart';
 import 'secret_box.dart';
 import 'secret_stream.dart';
+import 'sign.dart';
 
 /// A meta class that provides access to all libsodium crypto APIs.
 abstract class Crypto {
@@ -28,6 +28,11 @@ abstract class Crypto {
   ///
   /// This provides all APIs that start with `crypto_box`.
   Box get box;
+
+  /// An instance of [Sign].
+  ///
+  /// This provides all APIs that start with `crypto_sign`.
+  Sign get sign;
 
   /// An instance of [Pwhash].
   ///

@@ -1,14 +1,15 @@
 import 'package:meta/meta.dart';
-import 'package:sodium/src/api/box.dart';
-import 'package:sodium/src/ffi/api/box_ffi.dart';
 
 import '../../api/auth.dart';
+import '../../api/box.dart';
 import '../../api/crypto.dart';
 import '../../api/pwhash.dart';
 import '../../api/secret_box.dart';
 import '../../api/secret_stream.dart';
+import '../../api/sign.dart';
 import '../bindings/libsodium.ffi.dart';
 import 'auth_ffi.dart';
+import 'box_ffi.dart';
 import 'pwhash_ffi.dart';
 import 'secret_box_ffi.dart';
 import 'secret_stream_ffi.dart';
@@ -33,4 +34,8 @@ class CryptoFFI implements Crypto {
 
   @override
   late final Pwhash pwhash = PwhashFFI(sodium);
+
+  @override
+  // TODO: implement sign
+  Sign get sign => throw UnimplementedError();
 }
