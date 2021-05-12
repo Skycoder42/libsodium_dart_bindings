@@ -109,7 +109,7 @@ class SecretBoxTestCase extends TestCase {
           key: key,
         );
 
-        printOnFailure('cipherText: $cipher');
+        printOnFailure('cipher: $cipher');
 
         final restored = sut.openDetached(
           cipherText: cipher.cipherText,

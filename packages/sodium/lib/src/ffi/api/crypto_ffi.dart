@@ -1,4 +1,6 @@
 import 'package:meta/meta.dart';
+import 'package:sodium/src/api/box.dart';
+import 'package:sodium/src/ffi/api/box_ffi.dart';
 
 import '../../api/auth.dart';
 import '../../api/crypto.dart';
@@ -25,6 +27,9 @@ class CryptoFFI implements Crypto {
 
   @override
   late final Auth auth = AuthFFI(sodium);
+
+  @override
+  late final Box box = BoxFFI(sodium);
 
   @override
   late final Pwhash pwhash = PwhashFFI(sodium);

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/secret_box.dart' hide SecretBox;
+import 'package:sodium/src/api/detached_cipher_result.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/secret_box_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
@@ -374,7 +374,7 @@ void main() {
 
         expect(
           result,
-          DetachedSecretBoxResult(
+          DetachedCipherResult(
             cipherText: Uint8List.fromList(cipherText),
             mac: Uint8List.fromList(mac),
           ),

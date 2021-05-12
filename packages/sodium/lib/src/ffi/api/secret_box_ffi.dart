@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import '../../api/detached_cipher_result.dart';
 import '../../api/secret_box.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
@@ -69,7 +70,7 @@ class SecretBoxFFI with SecretBoxValidations implements SecretBox {
         sodium,
         (keyPtr) => sodium.crypto_secretbox_easy(
           dataPtr!.ptr,
-          dataPtr.ptr.elementAt(macBytes),
+          dataPtr.viewAt(macBytes).ptr,
           message.length,
           noncePtr!.ptr,
           keyPtr.ptr,
@@ -106,7 +107,7 @@ class SecretBoxFFI with SecretBoxValidations implements SecretBox {
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_secretbox_open_easy(
-          dataPtr!.ptr.elementAt(macBytes),
+          dataPtr!.viewAt(macBytes).ptr,
           dataPtr.ptr,
           dataPtr.count,
           noncePtr!.ptr,
@@ -123,7 +124,7 @@ class SecretBoxFFI with SecretBoxValidations implements SecretBox {
   }
 
   @override
-  DetachedSecretBoxResult detached({
+  DetachedCipherResult detached({
     required Uint8List message,
     required Uint8List nonce,
     required SecureKey key,
@@ -155,7 +156,7 @@ class SecretBoxFFI with SecretBoxValidations implements SecretBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return DetachedSecretBoxResult(
+      return DetachedCipherResult(
         cipherText: dataPtr.copyAsList(),
         mac: macPtr.copyAsList(),
       );

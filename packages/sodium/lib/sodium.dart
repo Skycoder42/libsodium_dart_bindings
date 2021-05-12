@@ -1,5 +1,8 @@
 export 'src/api/auth.dart' hide AuthValidations;
+export 'src/api/box.dart' hide BoxValidations;
 export 'src/api/crypto.dart';
+export 'src/api/detached_cipher_result.dart';
+export 'src/api/key_pair.dart';
 export 'src/api/pwhash.dart' hide PwHashValidations;
 export 'src/api/randombytes.dart';
 export 'src/api/secret_box.dart' hide SecretBoxValidations;

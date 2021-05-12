@@ -1,3 +1,5 @@
+import 'package:sodium/src/api/box.dart';
+
 import 'auth.dart';
 import 'pwhash.dart';
 import 'secret_box.dart';
@@ -21,6 +23,11 @@ abstract class Crypto {
   ///
   /// This provides all APIs that start with `crypto_auth`.
   Auth get auth;
+
+  /// An instance of [Box].
+  ///
+  /// This provides all APIs that start with `crypto_box`.
+  Box get box;
 
   /// An instance of [Pwhash].
   ///

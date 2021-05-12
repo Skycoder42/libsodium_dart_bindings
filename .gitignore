@@ -1,6 +1,8 @@
 # Files and directories created by pub
+.DS_Store
 .dart_tool/
 .packages
+.pub/
 
 # Omit commiting pubspec.lock for library packages:
 # https://dart.dev/guides/libraries/private-files#pubspeclock

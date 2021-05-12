@@ -3,6 +3,7 @@ import 'package:sodium/sodium.dart';
 import 'package:test/test.dart';
 
 import 'cases/auth_test_case.dart';
+import 'cases/box_test_case.dart';
 import 'cases/pwhash_test_case.dart';
 import 'cases/randombytes_test_case.dart';
 import 'cases/secret_box_test_case.dart';
@@ -17,6 +18,7 @@ abstract class TestRunner {
         SecretBoxTestCase(),
         SecretStreamTestCase(),
         AuthTestCase(),
+        BoxTestCase(),
         PwhashTestCase(),
       ];
 

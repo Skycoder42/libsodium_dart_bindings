@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/secret_box.dart';
+import 'package:sodium/src/api/detached_cipher_result.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/secret_box_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
@@ -249,7 +249,7 @@ void main() {
         verify(() => mockSodium.crypto_secretbox_keybytes());
       });
 
-      test('calls crypto_secretbox_easy with correct arguments', () {
+      test('calls crypto_secretbox_open_easy with correct arguments', () {
         when(
           () => mockSodium.crypto_secretbox_open_easy(
             any(),
@@ -430,7 +430,7 @@ void main() {
 
         expect(
           result,
-          DetachedSecretBoxResult(
+          DetachedCipherResult(
             cipherText: Uint8List.fromList(cipherText),
             mac: Uint8List.fromList(mac),
           ),
@@ -507,7 +507,7 @@ void main() {
         verify(() => mockSodium.crypto_secretbox_keybytes());
       });
 
-      test('calls crypto_secretbox_detached with correct arguments', () {
+      test('calls crypto_secretbox_open_detached with correct arguments', () {
         when(
           () => mockSodium.crypto_secretbox_open_detached(
             any(),

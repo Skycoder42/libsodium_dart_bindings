@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../../api/detached_cipher_result.dart';
 import '../../api/secret_box.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
@@ -69,7 +70,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
   }
 
   @override
-  DetachedSecretBoxResult detached({
+  DetachedCipherResult detached({
     required Uint8List message,
     required Uint8List nonce,
     required SecureKey key,
@@ -87,7 +88,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
       ),
     );
 
-    return DetachedSecretBoxResult(
+    return DetachedCipherResult(
       cipherText: cipher.cipher,
       mac: cipher.mac,
     );

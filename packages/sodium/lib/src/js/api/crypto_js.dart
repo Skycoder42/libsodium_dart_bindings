@@ -1,4 +1,6 @@
 import 'package:meta/meta.dart';
+import 'package:sodium/src/api/box.dart';
+import 'package:sodium/src/js/api/box_js.dart';
 
 import '../../api/auth.dart';
 import '../../api/crypto.dart';
@@ -25,6 +27,9 @@ class CryptoJS implements Crypto {
 
   @override
   late final Auth auth = AuthJS(sodium);
+
+  @override
+  late final Box box = BoxJS(sodium);
 
   @override
   late final Pwhash pwhash = PwhashJS(sodium);

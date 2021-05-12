@@ -1,5 +1,6 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/auth_ffi.dart';
+import 'package:sodium/src/ffi/api/box_ffi.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
 import 'package:sodium/src/ffi/api/pwhash_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_box_ffi.dart';
@@ -46,6 +47,17 @@ void main() {
     expect(
       sut.auth,
       isA<AuthFFI>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('box returns BoxFFI instance', () {
+    expect(
+      sut.box,
+      isA<BoxFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

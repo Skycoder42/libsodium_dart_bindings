@@ -1,20 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:meta/meta.dart';
 
+import 'detached_cipher_result.dart';
 import 'helpers/validations.dart';
 import 'secure_key.dart';
-
-part 'secret_box.freezed.dart';
-
-/// Result container for [SecretBox.detached]
-@freezed
-class DetachedSecretBoxResult with _$DetachedSecretBoxResult {
-  const factory DetachedSecretBoxResult({
-    required Uint8List cipherText,
-    required Uint8List mac,
-  }) = _DetachedSecretBoxResult;
-}
 
 /// A meta class that provides access to all libsodium secretbox APIs.
 ///
@@ -65,7 +55,7 @@ abstract class SecretBox {
   /// Provides crypto_secretbox_detached.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#detached-mode.
-  DetachedSecretBoxResult detached({
+  DetachedCipherResult detached({
     required Uint8List message,
     required Uint8List nonce,
     required SecureKey key,
