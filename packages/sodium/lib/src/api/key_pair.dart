@@ -13,10 +13,10 @@ part 'key_pair.freezed.dart';
 class KeyPair with _$KeyPair {
   /// Default constructor.
   const factory KeyPair({
-    /// The secret key of the key pair
+    /// The secret key of the key pair.
     required SecureKey secretKey,
 
-    /// The public key of the key pair
+    /// The public key of the key pair.
     required Uint8List publicKey,
   }) = _KeyPair;
 }

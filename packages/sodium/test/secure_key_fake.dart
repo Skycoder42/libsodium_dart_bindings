@@ -22,5 +22,8 @@ class SecureKeyFake extends Fake with SecureKeyEquality implements SecureKey {
   SecureKey copy() => this;
 
   @override
+  Uint8List extractBytes() => data;
+
+  @override
   void dispose() {}
 }

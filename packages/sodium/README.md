@@ -49,15 +49,15 @@ API based on libsodium version: *1.0.18*
  crypto_secretstream | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream
  crypto_auth         | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication
  crypto_box          | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption
- crypto_sign         | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures
+ crypto_sign         | ✔️ | 🚧 | https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures
  crypto_box_seal     | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes
  crypto_generichash  | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/hashing/generic_hashing
  crypto_shorthash    | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/hashing/short-input_hashing
  crypto_pwhash       | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/password_hashing/default_phf
  crypto_kdf          | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/key_derivation
  crypto_kx           | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/key_exchange
- crypto_scalarmult   | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication
  crypto_onetimeauth  | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/advanced/poly1305
+ crypto_scalarmult   | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication
  crypto_aead         | ❔  | ❔  | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead
  crypto_hash_sha     | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/sha-2_hash_function
  crypto_auth_hmacsha | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/hmac-sha2

@@ -16,6 +16,7 @@ mixin SignConsumerFFIMixin<T extends Object>
   final _signatureCompleter = Completer<T>();
   late final SodiumPointer<Uint8> _state;
 
+  @protected
   Future<T> get result => _signatureCompleter.future;
 
   @protected
@@ -42,7 +43,7 @@ mixin SignConsumerFFIMixin<T extends Object>
   Future<void> addStream(Stream<Uint8List> stream) {
     _ensureNotCompleted();
 
-    return stream.listen((event) {
+    return stream.map((event) {
       SodiumPointer<Uint8>? messagePtr;
       try {
         messagePtr = event.toSodiumPointer(
@@ -56,12 +57,10 @@ mixin SignConsumerFFIMixin<T extends Object>
           messagePtr.count,
         );
         SodiumException.checkSucceededInt(result);
-
-        // TODO handle catch?
       } finally {
         messagePtr?.dispose();
       }
-    }).asFuture();
+    }).drain<void>();
   }
 
   @override
@@ -71,8 +70,8 @@ mixin SignConsumerFFIMixin<T extends Object>
     try {
       final result = finalize(_state);
       _signatureCompleter.complete(result);
-    } catch (e) {
-      _signatureCompleter.completeError(e);
+    } catch (e, s) {
+      _signatureCompleter.completeError(e, s);
     } finally {
       _state.dispose();
     }

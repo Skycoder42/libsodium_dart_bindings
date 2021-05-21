@@ -5,6 +5,7 @@ import 'package:sodium/src/ffi/api/crypto_ffi.dart';
 import 'package:sodium/src/ffi/api/pwhash_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_box_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_stream_ffi.dart';
+import 'package:sodium/src/ffi/api/sign_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
 
@@ -58,6 +59,17 @@ void main() {
     expect(
       sut.box,
       isA<BoxFFI>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('sign returns SignFFI instance', () {
+    expect(
+      sut.sign,
+      isA<SignFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

@@ -13,6 +13,7 @@ import 'box_js.dart';
 import 'pwhash_js.dart';
 import 'secret_box_js.dart';
 import 'secret_stream_js.dart';
+import 'sign_js.dart';
 
 @internal
 class CryptoJS implements Crypto {
@@ -33,9 +34,8 @@ class CryptoJS implements Crypto {
   late final Box box = BoxJS(sodium);
 
   @override
-  late final Pwhash pwhash = PwhashJS(sodium);
+  late final Sign sign = SignJS(sodium);
 
   @override
-  // TODO: implement sign
-  Sign get sign => throw UnimplementedError();
+  late final Pwhash pwhash = PwhashJS(sodium);
 }

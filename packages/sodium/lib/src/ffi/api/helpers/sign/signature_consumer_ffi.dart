@@ -16,17 +16,17 @@ class SignatureConsumerFFI
   @override
   final LibSodiumFFI sodium;
 
-  late final SecureKey _secretKey;
+  late final SecureKey secretKey;
 
-  SignatureConsumerFFI.init({
+  SignatureConsumerFFI({
     required this.sodium,
     required SecureKey secretKey,
   }) {
-    _secretKey = secretKey.copy();
+    this.secretKey = secretKey.copy();
     try {
       initState();
     } catch (e) {
-      _secretKey.dispose();
+      this.secretKey.dispose();
       rethrow;
     }
   }
@@ -43,7 +43,7 @@ class SignatureConsumerFFI
     );
 
     try {
-      final result = _secretKey.runUnlockedNative(
+      final result = secretKey.runUnlockedNative(
         sodium,
         (secretKeyPtr) => sodium.crypto_sign_final_create(
           state.ptr.cast(),

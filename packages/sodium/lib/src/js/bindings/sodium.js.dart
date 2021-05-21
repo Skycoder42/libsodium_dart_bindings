@@ -105,13 +105,6 @@ class HashSha512State {
 
 @JS()
 @anonymous
-class SignState {
-  @visibleForTesting
-  external factory SignState();
-}
-
-@JS()
-@anonymous
 class OnetimeauthState {
   @visibleForTesting
   external factory OnetimeauthState();
@@ -1215,17 +1208,17 @@ class LibSodiumJS {
   );
 
   external Uint8List crypto_sign_final_create(
-    SignState state_address,
+    num state_address,
     Uint8List privateKey,
   );
 
   external bool crypto_sign_final_verify(
-    SignState state_address,
+    num state_address,
     Uint8List signature,
     Uint8List publicKey,
   );
 
-  external SignState crypto_sign_init();
+  external num crypto_sign_init();
 
   external KeyPair crypto_sign_keypair();
 
@@ -1239,7 +1232,7 @@ class LibSodiumJS {
   );
 
   external void crypto_sign_update(
-    SignState state_address,
+    num state_address,
     Uint8List message_chunk,
   );
 

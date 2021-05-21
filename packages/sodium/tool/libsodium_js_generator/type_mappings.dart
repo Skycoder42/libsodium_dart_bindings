@@ -66,13 +66,13 @@ class TypeMappings {
     'hash_sha256_state_address': TypeInfo('HashSha256State'),
     'hash_sha512_state': TypeInfo('HashSha512State', template: 'opaque_type'),
     'hash_sha512_state_address': TypeInfo('HashSha512State'),
-    'sign_state': TypeInfo('SignState', template: 'opaque_type'),
-    'sign_state_address': TypeInfo('SignState'),
     'onetimeauth_state': TypeInfo('OnetimeauthState', template: 'opaque_type'),
     'onetimeauth_state_address': TypeInfo('OnetimeauthState'),
     // num states
     'secretstream_xchacha20poly1305_state': TypeInfo('num'),
     'secretstream_xchacha20poly1305_state_address': TypeInfo('num'),
+    'sign_state': TypeInfo('num'),
+    'sign_state_address': TypeInfo('num'),
     // hidden types
     'randombytes_implementation': TypeInfo('Never'),
     'randombytes_set_implementation_result': TypeInfo('Never'),

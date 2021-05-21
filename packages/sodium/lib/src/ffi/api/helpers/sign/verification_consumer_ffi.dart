@@ -14,15 +14,14 @@ class VerificationConsumerFFI
   @override
   final LibSodiumFFI sodium;
 
-  final Uint8List _signature;
-  final Uint8List _publicKey;
+  final Uint8List signature;
+  final Uint8List publicKey;
 
   VerificationConsumerFFI({
     required this.sodium,
-    required Uint8List signature,
-    required Uint8List publicKey,
-  })  : _signature = signature,
-        _publicKey = publicKey {
+    required this.signature,
+    required this.publicKey,
+  }) {
     initState();
   }
 
@@ -35,11 +34,11 @@ class VerificationConsumerFFI
     SodiumPointer<Uint8>? publicKeyPtr;
 
     try {
-      signaturePtr = _signature.toSodiumPointer(
+      signaturePtr = signature.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      publicKeyPtr = _publicKey.toSodiumPointer(
+      publicKeyPtr = publicKey.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );

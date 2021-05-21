@@ -22,7 +22,7 @@ class BoxTestCase extends TestCase {
       expect(sut.seedBytes, 32, reason: 'seedBytes');
     });
 
-    test('keygen generates different correct length keys', () {
+    test('keyPair generates different correct length keys', () {
       final key1 = sut.keyPair();
       final key2 = sut.keyPair();
 
@@ -31,10 +31,10 @@ class BoxTestCase extends TestCase {
       printOnFailure('key2.secretKey: ${key2.secretKey.extractBytes()}');
       printOnFailure('key2.publicKey: ${key2.publicKey}');
 
-      expect(key1.secretKey, hasLength(32));
-      expect(key1.publicKey, hasLength(32));
-      expect(key2.secretKey, hasLength(32));
-      expect(key2.publicKey, hasLength(32));
+      expect(key1.secretKey, hasLength(sut.secretKeyBytes));
+      expect(key1.publicKey, hasLength(sut.publicKeyBytes));
+      expect(key2.secretKey, hasLength(sut.secretKeyBytes));
+      expect(key2.publicKey, hasLength(sut.publicKeyBytes));
 
       expect(key1.secretKey, isNot(key2.secretKey));
       expect(key1.publicKey, isNot(key2.publicKey));
@@ -56,10 +56,10 @@ class BoxTestCase extends TestCase {
         printOnFailure('key2.secretKey: ${key2.secretKey.extractBytes()}');
         printOnFailure('key2.publicKey: ${key2.publicKey}');
 
-        expect(key1.secretKey, hasLength(32));
-        expect(key1.publicKey, hasLength(32));
-        expect(key2.secretKey, hasLength(32));
-        expect(key2.publicKey, hasLength(32));
+        expect(key1.secretKey, hasLength(sut.secretKeyBytes));
+        expect(key1.publicKey, hasLength(sut.publicKeyBytes));
+        expect(key2.secretKey, hasLength(sut.secretKeyBytes));
+        expect(key2.publicKey, hasLength(sut.publicKeyBytes));
 
         expect(key1.secretKey, isNot(key2.secretKey));
         expect(key1.publicKey, isNot(key2.publicKey));
@@ -78,10 +78,10 @@ class BoxTestCase extends TestCase {
         printOnFailure('key2.secretKey: ${key2.secretKey.extractBytes()}');
         printOnFailure('key2.publicKey: ${key2.publicKey}');
 
-        expect(key1.secretKey, hasLength(32));
-        expect(key1.publicKey, hasLength(32));
-        expect(key2.secretKey, hasLength(32));
-        expect(key2.publicKey, hasLength(32));
+        expect(key1.secretKey, hasLength(sut.secretKeyBytes));
+        expect(key1.publicKey, hasLength(sut.publicKeyBytes));
+        expect(key2.secretKey, hasLength(sut.secretKeyBytes));
+        expect(key2.publicKey, hasLength(sut.publicKeyBytes));
 
         expect(key1.secretKey, key2.secretKey);
         expect(key1.publicKey, key2.publicKey);

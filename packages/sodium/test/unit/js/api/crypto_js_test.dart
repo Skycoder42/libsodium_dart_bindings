@@ -5,6 +5,7 @@ import 'package:sodium/src/js/api/crypto_js.dart';
 import 'package:sodium/src/js/api/pwhash_js.dart';
 import 'package:sodium/src/js/api/secret_box_js.dart';
 import 'package:sodium/src/js/api/secret_stream_js.dart';
+import 'package:sodium/src/js/api/sign_js.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
@@ -58,6 +59,17 @@ void main() {
     expect(
       sut.box,
       isA<BoxJS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('sign returns SignJS instance', () {
+    expect(
+      sut.sign,
+      isA<SignJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

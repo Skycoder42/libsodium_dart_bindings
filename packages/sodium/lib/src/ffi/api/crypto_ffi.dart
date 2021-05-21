@@ -13,6 +13,7 @@ import 'box_ffi.dart';
 import 'pwhash_ffi.dart';
 import 'secret_box_ffi.dart';
 import 'secret_stream_ffi.dart';
+import 'sign_ffi.dart';
 
 @internal
 class CryptoFFI implements Crypto {
@@ -33,9 +34,8 @@ class CryptoFFI implements Crypto {
   late final Box box = BoxFFI(sodium);
 
   @override
-  late final Pwhash pwhash = PwhashFFI(sodium);
+  late final Sign sign = SignFFI(sodium);
 
   @override
-  // TODO: implement sign
-  Sign get sign => throw UnimplementedError();
+  late final Pwhash pwhash = PwhashFFI(sodium);
 }

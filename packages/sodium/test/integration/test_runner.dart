@@ -8,6 +8,7 @@ import 'cases/pwhash_test_case.dart';
 import 'cases/randombytes_test_case.dart';
 import 'cases/secret_box_test_case.dart';
 import 'cases/secret_stream_test_case.dart';
+import 'cases/sign_test_case.dart';
 import 'cases/sodium_test_case.dart';
 import 'test_case.dart';
 
@@ -19,6 +20,7 @@ abstract class TestRunner {
         SecretStreamTestCase(),
         AuthTestCase(),
         BoxTestCase(),
+        SignTestCase(),
         PwhashTestCase(),
       ];
 

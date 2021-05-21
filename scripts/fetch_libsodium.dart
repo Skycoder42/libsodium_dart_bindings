@@ -15,7 +15,7 @@ Future<void> main(List<String> arguments) async {
   );
   await versionFile.assertExists();
 
-  final jsonData = json.decode(await versionFile.readAsString());
+  final dynamic jsonData = json.decode(await versionFile.readAsString());
   final ffiVersion = jsonData['ffi'] as String;
   final jsVersion = jsonData['js'] as String;
 
@@ -156,6 +156,7 @@ Stream<List<int>> _streamSubProcess(
     arguments,
     workingDirectory: pwd?.path,
   );
+  // ignore: unawaited_futures
   stderr.addStream(result.stderr);
   yield* result.stdout;
   final exitCode = await result.exitCode;
@@ -190,7 +191,7 @@ extension HttpClientX on HttpClient {
       await response.pipe(outSink);
       return outFile;
     } catch (e) {
-      outSink.close();
+      await outSink.close();
       rethrow;
     }
   }
