@@ -9656,9 +9656,15 @@ class LibSodiumFFI {
 
 class max_align_t extends ffi.Opaque {}
 
-class __fsid_t extends ffi.Opaque {}
+class __fsid_t extends ffi.Struct {
+  @ffi.Array.multi([2])
+  external ffi.Array<ffi.Int32> __val;
+}
 
-class crypto_aead_aes256gcm_state extends ffi.Opaque {}
+class crypto_aead_aes256gcm_state extends ffi.Struct {
+  @ffi.Array.multi([512])
+  external ffi.Array<ffi.Uint8> opaque;
+}
 
 class div_t extends ffi.Struct {
   @ffi.Int32()
@@ -9684,7 +9690,10 @@ class lldiv_t extends ffi.Struct {
   external int rem;
 }
 
-class __sigset_t extends ffi.Opaque {}
+class __sigset_t extends ffi.Struct {
+  @ffi.Array.multi([16])
+  external ffi.Array<ffi.Uint64> __val;
+}
 
 class timeval extends ffi.Struct {
   @ffi.Int64()
@@ -9702,7 +9711,10 @@ class timespec extends ffi.Struct {
   external int tv_nsec;
 }
 
-class fd_set extends ffi.Opaque {}
+class fd_set extends ffi.Struct {
+  @ffi.Array.multi([16])
+  external ffi.Array<ffi.Int64> __fds_bits;
+}
 
 class __pthread_list_t extends ffi.Struct {
   external ffi.Pointer<__pthread_list_t> __prev;
@@ -9739,9 +9751,60 @@ class __pthread_mutex_s extends ffi.Struct {
   external __pthread_list_t __list;
 }
 
-class __pthread_rwlock_arch_t extends ffi.Opaque {}
+class __pthread_rwlock_arch_t extends ffi.Struct {
+  @ffi.Uint32()
+  external int __readers;
 
-class __pthread_cond_s extends ffi.Opaque {}
+  @ffi.Uint32()
+  external int __writers;
+
+  @ffi.Uint32()
+  external int __wrphase_futex;
+
+  @ffi.Uint32()
+  external int __writers_futex;
+
+  @ffi.Uint32()
+  external int __pad3;
+
+  @ffi.Uint32()
+  external int __pad4;
+
+  @ffi.Int32()
+  external int __cur_writer;
+
+  @ffi.Int32()
+  external int __shared;
+
+  @ffi.Int8()
+  external int __rwelision;
+
+  @ffi.Array.multi([7])
+  external ffi.Array<ffi.Uint8> __pad1;
+
+  @ffi.Uint64()
+  external int __pad2;
+
+  @ffi.Uint32()
+  external int __flags;
+}
+
+class __pthread_cond_s extends ffi.Struct {
+  @ffi.Array.multi([2])
+  external ffi.Array<ffi.Uint32> __g_refs;
+
+  @ffi.Array.multi([2])
+  external ffi.Array<ffi.Uint32> __g_size;
+
+  @ffi.Uint32()
+  external int __g1_orig_size;
+
+  @ffi.Uint32()
+  external int __wrefs;
+
+  @ffi.Array.multi([2])
+  external ffi.Array<ffi.Uint32> __g_signals;
+}
 
 class __once_flag extends ffi.Struct {
   @ffi.Int32()
@@ -9767,17 +9830,61 @@ class random_data extends ffi.Struct {
   external ffi.Pointer<ffi.Int32> end_ptr;
 }
 
-class drand48_data extends ffi.Opaque {}
+class drand48_data extends ffi.Struct {
+  @ffi.Array.multi([3])
+  external ffi.Array<ffi.Uint16> __x;
 
-class crypto_hash_sha512_state extends ffi.Opaque {}
+  @ffi.Array.multi([3])
+  external ffi.Array<ffi.Uint16> __old_x;
 
-class crypto_auth_hmacsha512_state extends ffi.Opaque {}
+  @ffi.Uint16()
+  external int __c;
 
-class crypto_hash_sha256_state extends ffi.Opaque {}
+  @ffi.Uint16()
+  external int __init;
 
-class crypto_auth_hmacsha256_state extends ffi.Opaque {}
+  @ffi.Uint64()
+  external int __a;
+}
 
-class crypto_generichash_blake2b_state extends ffi.Opaque {}
+class crypto_hash_sha512_state extends ffi.Struct {
+  @ffi.Array.multi([8])
+  external ffi.Array<ffi.Uint64> state;
+
+  @ffi.Array.multi([2])
+  external ffi.Array<ffi.Uint64> count;
+
+  @ffi.Array.multi([128])
+  external ffi.Array<ffi.Uint8> buf;
+}
+
+class crypto_auth_hmacsha512_state extends ffi.Struct {
+  external crypto_hash_sha512_state ictx;
+
+  external crypto_hash_sha512_state octx;
+}
+
+class crypto_hash_sha256_state extends ffi.Struct {
+  @ffi.Array.multi([8])
+  external ffi.Array<ffi.Uint32> state;
+
+  @ffi.Uint64()
+  external int count;
+
+  @ffi.Array.multi([64])
+  external ffi.Array<ffi.Uint8> buf;
+}
+
+class crypto_auth_hmacsha256_state extends ffi.Struct {
+  external crypto_hash_sha256_state ictx;
+
+  external crypto_hash_sha256_state octx;
+}
+
+class crypto_generichash_blake2b_state extends ffi.Struct {
+  @ffi.Array.multi([384])
+  external ffi.Array<ffi.Uint8> opaque;
+}
 
 class __mbstate_t extends ffi.Opaque {}
 
@@ -9791,13 +9898,96 @@ class _IO_codecvt extends ffi.Opaque {}
 
 class _IO_wide_data extends ffi.Opaque {}
 
-class _IO_FILE extends ffi.Opaque {}
+class _IO_FILE extends ffi.Struct {
+  @ffi.Int32()
+  external int _flags;
 
-class crypto_onetimeauth_poly1305_state extends ffi.Opaque {}
+  external ffi.Pointer<ffi.Int8> _IO_read_ptr;
 
-class crypto_secretstream_xchacha20poly1305_state extends ffi.Opaque {}
+  external ffi.Pointer<ffi.Int8> _IO_read_end;
 
-class crypto_sign_ed25519ph_state extends ffi.Opaque {}
+  external ffi.Pointer<ffi.Int8> _IO_read_base;
+
+  external ffi.Pointer<ffi.Int8> _IO_write_base;
+
+  external ffi.Pointer<ffi.Int8> _IO_write_ptr;
+
+  external ffi.Pointer<ffi.Int8> _IO_write_end;
+
+  external ffi.Pointer<ffi.Int8> _IO_buf_base;
+
+  external ffi.Pointer<ffi.Int8> _IO_buf_end;
+
+  external ffi.Pointer<ffi.Int8> _IO_save_base;
+
+  external ffi.Pointer<ffi.Int8> _IO_backup_base;
+
+  external ffi.Pointer<ffi.Int8> _IO_save_end;
+
+  external ffi.Pointer<_IO_marker> _markers;
+
+  external ffi.Pointer<_IO_FILE> _chain;
+
+  @ffi.Int32()
+  external int _fileno;
+
+  @ffi.Int32()
+  external int _flags2;
+
+  @ffi.Int64()
+  external int _old_offset;
+
+  @ffi.Uint16()
+  external int _cur_column;
+
+  @ffi.Int8()
+  external int _vtable_offset;
+
+  @ffi.Array.multi([1])
+  external ffi.Array<ffi.Int8> _shortbuf;
+
+  external ffi.Pointer<ffi.Void> _lock;
+
+  @ffi.Int64()
+  external int _offset;
+
+  external ffi.Pointer<_IO_codecvt> _codecvt;
+
+  external ffi.Pointer<_IO_wide_data> _wide_data;
+
+  external ffi.Pointer<_IO_FILE> _freeres_list;
+
+  external ffi.Pointer<ffi.Void> _freeres_buf;
+
+  @ffi.Uint64()
+  external int __pad5;
+
+  @ffi.Int32()
+  external int _mode;
+
+  @ffi.Array.multi([20])
+  external ffi.Array<ffi.Int8> _unused2;
+}
+
+class crypto_onetimeauth_poly1305_state extends ffi.Struct {
+  @ffi.Array.multi([256])
+  external ffi.Array<ffi.Uint8> opaque;
+}
+
+class crypto_secretstream_xchacha20poly1305_state extends ffi.Struct {
+  @ffi.Array.multi([32])
+  external ffi.Array<ffi.Uint8> k;
+
+  @ffi.Array.multi([12])
+  external ffi.Array<ffi.Uint8> nonce;
+
+  @ffi.Array.multi([8])
+  external ffi.Array<ffi.Uint8> _pad;
+}
+
+class crypto_sign_ed25519ph_state extends ffi.Struct {
+  external crypto_hash_sha512_state hs;
+}
 
 class randombytes_implementation extends ffi.Struct {
   external ffi.Pointer<ffi.NativeFunction<_typedefC_2>> implementation_name;

@@ -49,7 +49,7 @@ API based on libsodium version: *1.0.18*
  crypto_secretstream | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream
  crypto_auth         | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication
  crypto_box          | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption
- crypto_sign         | ✔️ | 🚧 | https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures
+ crypto_sign         | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures
  crypto_box_seal     | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes
  crypto_generichash  | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/hashing/generic_hashing
  crypto_shorthash    | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/hashing/short-input_hashing
