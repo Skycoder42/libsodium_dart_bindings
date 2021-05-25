@@ -36,6 +36,9 @@ class BoxFFI with BoxValidations implements Box {
   int get seedBytes => sodium.crypto_box_seedbytes();
 
   @override
+  int get sealBytes => sodium.crypto_box_sealbytes();
+
+  @override
   KeyPair keyPair() {
     SecureKeyFFI? secretKey;
     SodiumPointer<Uint8>? publicKeyPtr;
@@ -301,6 +304,80 @@ class BoxFFI with BoxValidations implements Box {
       dataPtr?.dispose();
       macPtr?.dispose();
       noncePtr?.dispose();
+      publicKeyPtr?.dispose();
+    }
+  }
+
+  @override
+  Uint8List seal({
+    required Uint8List message,
+    required Uint8List recipientPublicKey,
+  }) {
+    validatePublicKey(recipientPublicKey);
+
+    SodiumPointer<Uint8>? dataPtr;
+    SodiumPointer<Uint8>? publicKeyPtr;
+    try {
+      dataPtr = SodiumPointer.alloc(
+        sodium,
+        count: message.length + sealBytes,
+      )
+        ..fill(List<int>.filled(sealBytes, 0))
+        ..fill(message, offset: sealBytes);
+      publicKeyPtr = recipientPublicKey.toSodiumPointer(
+        sodium,
+        memoryProtection: MemoryProtection.readOnly,
+      );
+
+      final result = sodium.crypto_box_seal(
+        dataPtr.ptr,
+        dataPtr.viewAt(sealBytes).ptr,
+        message.length,
+        publicKeyPtr.ptr,
+      );
+      SodiumException.checkSucceededInt(result);
+
+      return dataPtr.copyAsList();
+    } finally {
+      dataPtr?.dispose();
+      publicKeyPtr?.dispose();
+    }
+  }
+
+  @override
+  Uint8List sealOpen({
+    required Uint8List cipherText,
+    required Uint8List recipientPublicKey,
+    required SecureKey recipientSecretKey,
+  }) {
+    validateSealCipherText(cipherText);
+    validatePublicKey(recipientPublicKey);
+    validateSecretKey(recipientSecretKey);
+
+    SodiumPointer<Uint8>? dataPtr;
+    SodiumPointer<Uint8>? publicKeyPtr;
+    try {
+      dataPtr = cipherText.toSodiumPointer(sodium);
+      publicKeyPtr = recipientPublicKey.toSodiumPointer(
+        sodium,
+        memoryProtection: MemoryProtection.readOnly,
+      );
+
+      final result = recipientSecretKey.runUnlockedNative(
+        sodium,
+        (secretKeyPtr) => sodium.crypto_box_seal_open(
+          dataPtr!.viewAt(sealBytes).ptr,
+          dataPtr.ptr,
+          dataPtr.count,
+          publicKeyPtr!.ptr,
+          secretKeyPtr.ptr,
+        ),
+      );
+      SodiumException.checkSucceededInt(result);
+
+      return dataPtr.viewAt(sealBytes).copyAsList();
+    } finally {
+      dataPtr?.dispose();
       publicKeyPtr?.dispose();
     }
   }

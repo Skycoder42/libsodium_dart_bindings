@@ -10,7 +10,8 @@ import 'secure_key.dart';
 /// A meta class that provides access to all libsodium box APIs.
 ///
 /// This class provides the dart interface for the crypto operations documented
-/// in https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption.
+/// in https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption
+/// and https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Box {
   const Box._(); // coverage:ignore-line
@@ -39,6 +40,11 @@ abstract class Box {
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#constants
   int get seedBytes;
+
+  /// Provides crypto_box_SEALBYTES.
+  ///
+  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes#constants
+  int get sealBytes;
 
   /// Provides crypto_box_keypair.
   ///
@@ -90,6 +96,23 @@ abstract class Box {
     required Uint8List senderPublicKey,
     required SecureKey recipientSecretKey,
   });
+
+  /// Provides crypto_box_seal.
+  ///
+  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes#usage
+  Uint8List seal({
+    required Uint8List message,
+    required Uint8List recipientPublicKey,
+  });
+
+  /// Provides crypto_box_seal_open.
+  ///
+  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes#usage
+  Uint8List sealOpen({
+    required Uint8List cipherText,
+    required Uint8List recipientPublicKey,
+    required SecureKey recipientSecretKey,
+  });
 }
 
 @internal
@@ -127,6 +150,12 @@ mixin BoxValidations implements Box {
   void validateEasyCipherText(Uint8List cipherText) => Validations.checkAtLeast(
         cipherText.length,
         macBytes,
+        'cipherText',
+      );
+
+  void validateSealCipherText(Uint8List cipherText) => Validations.checkAtLeast(
+        cipherText.length,
+        sealBytes,
         'cipherText',
       );
 }

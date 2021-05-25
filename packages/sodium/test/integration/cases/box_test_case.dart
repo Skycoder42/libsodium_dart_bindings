@@ -20,6 +20,7 @@ class BoxTestCase extends TestCase {
       expect(sut.macBytes, 16, reason: 'macBytes');
       expect(sut.nonceBytes, 24, reason: 'nonceBytes');
       expect(sut.seedBytes, 32, reason: 'seedBytes');
+      expect(sut.sealBytes, 48, reason: 'sealBytes');
     });
 
     test('keyPair generates different correct length keys', () {
@@ -239,6 +240,64 @@ class BoxTestCase extends TestCase {
             mac: cipher.mac,
             nonce: nonce,
             senderPublicKey: senderKey.publicKey,
+            recipientSecretKey: recipientKey.secretKey,
+          ),
+          throwsA(isA<SodiumException>()),
+        );
+      });
+    });
+
+    group('seal', () {
+      test('can encrypt and decrypt data', () {
+        final recipientKey = sut.keyPair();
+        final message = Uint8List.fromList(
+          List.generate(32, (index) => index * 2),
+        );
+
+        printOnFailure(
+          'recipientKey.secretKey: ${recipientKey.secretKey.extractBytes()}',
+        );
+        printOnFailure('recipientKey.publicKey: ${recipientKey.publicKey}');
+        printOnFailure('message: $message');
+
+        final cipherText = sut.seal(
+          message: message,
+          recipientPublicKey: recipientKey.publicKey,
+        );
+
+        printOnFailure('cipherText: $cipherText');
+
+        final restored = sut.sealOpen(
+          cipherText: cipherText,
+          recipientPublicKey: recipientKey.publicKey,
+          recipientSecretKey: recipientKey.secretKey,
+        );
+
+        printOnFailure('restored: $restored');
+
+        expect(restored, message);
+      });
+
+      test('fails if data is invalid', () {
+        final recipientKey = sut.keyPair();
+
+        printOnFailure(
+          'recipientKey.secretKey: ${recipientKey.secretKey.extractBytes()}',
+        );
+        printOnFailure('recipientKey.publicKey: ${recipientKey.publicKey}');
+
+        final cipherText = sut.seal(
+          message: Uint8List.fromList(const [1, 2, 3]),
+          recipientPublicKey: recipientKey.publicKey,
+        );
+
+        printOnFailure('cipherText: $cipherText');
+        cipherText[0] = cipherText[0] ^ 0xFF;
+
+        expect(
+          () => sut.sealOpen(
+            cipherText: cipherText,
+            recipientPublicKey: recipientKey.publicKey,
             recipientSecretKey: recipientKey.secretKey,
           ),
           throwsA(isA<SodiumException>()),

@@ -52,5 +52,11 @@ void main() {
       source: () => sutMock.macBytes,
       sut: (value) => sutMock.validateEasyCipherText(Uint8List(value)),
     );
+
+    testCheckAtLeast(
+      'validateSealCipherText',
+      source: () => sutMock.sealBytes,
+      sut: (value) => sutMock.validateSealCipherText(Uint8List(value)),
+    );
   });
 }

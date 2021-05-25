@@ -30,6 +30,9 @@ class BoxJS with BoxValidations implements Box {
   int get seedBytes => sodium.crypto_box_SEEDBYTES.toSafeUInt32();
 
   @override
+  int get sealBytes => sodium.crypto_box_SEALBYTES.toSafeUInt32();
+
+  @override
   KeyPair keyPair() {
     final keyPair = JsError.wrap(() => sodium.crypto_box_keypair());
 
@@ -150,6 +153,42 @@ class BoxJS with BoxValidations implements Box {
           mac,
           nonce,
           senderPublicKey,
+          secretKeyData,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Uint8List seal({
+    required Uint8List message,
+    required Uint8List recipientPublicKey,
+  }) {
+    validatePublicKey(recipientPublicKey);
+
+    return JsError.wrap(
+      () => sodium.crypto_box_seal(
+        message,
+        recipientPublicKey,
+      ),
+    );
+  }
+
+  @override
+  Uint8List sealOpen({
+    required Uint8List cipherText,
+    required Uint8List recipientPublicKey,
+    required SecureKey recipientSecretKey,
+  }) {
+    validateSealCipherText(cipherText);
+    validatePublicKey(recipientPublicKey);
+    validateSecretKey(recipientSecretKey);
+
+    return JsError.wrap(
+      () => recipientSecretKey.runUnlockedSync(
+        (secretKeyData) => sodium.crypto_box_seal_open(
+          cipherText,
+          recipientPublicKey,
           secretKeyData,
         ),
       ),

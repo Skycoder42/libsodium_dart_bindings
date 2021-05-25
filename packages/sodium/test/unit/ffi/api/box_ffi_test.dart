@@ -58,6 +58,11 @@ void main() {
       () => sut.seedBytes,
       'seedBytes',
     ),
+    Tuple3(
+      () => mockSodium.crypto_box_sealbytes(),
+      () => sut.sealBytes,
+      'sealBytes',
+    ),
   ]);
 
   group('methods', () {
@@ -67,6 +72,7 @@ void main() {
       when(() => mockSodium.crypto_box_macbytes()).thenReturn(5);
       when(() => mockSodium.crypto_box_noncebytes()).thenReturn(5);
       when(() => mockSodium.crypto_box_seedbytes()).thenReturn(5);
+      when(() => mockSodium.crypto_box_sealbytes()).thenReturn(5);
     });
 
     group('keypair', () {
@@ -358,7 +364,7 @@ void main() {
         verify(() => mockSodium.crypto_box_noncebytes());
       });
 
-      test('asserts if recipientPublicKey is invalid', () {
+      test('asserts if senderPublicKey is invalid', () {
         expect(
           () => sut.openEasy(
             cipherText: Uint8List(20),
@@ -372,7 +378,7 @@ void main() {
         verify(() => mockSodium.crypto_box_publickeybytes());
       });
 
-      test('asserts if senderSecretKey is invalid', () {
+      test('asserts if recipientSecretKey is invalid', () {
         expect(
           () => sut.openEasy(
             cipherText: Uint8List(20),
@@ -670,7 +676,7 @@ void main() {
         verify(() => mockSodium.crypto_box_noncebytes());
       });
 
-      test('asserts if recipientPublicKey is invalid', () {
+      test('asserts if senderPublicKey is invalid', () {
         expect(
           () => sut.openDetached(
             cipherText: Uint8List(10),
@@ -685,7 +691,7 @@ void main() {
         verify(() => mockSodium.crypto_box_publickeybytes());
       });
 
-      test('asserts if senderSecretKey is invalid', () {
+      test('asserts if recipientSecretKey is invalid', () {
         expect(
           () => sut.openDetached(
             cipherText: Uint8List(10),
@@ -807,6 +813,225 @@ void main() {
         );
 
         verify(() => mockSodium.sodium_free(any())).called(5);
+      });
+    });
+
+    group('seal', () {
+      test('asserts if recipientPublicKey is invalid', () {
+        expect(
+          () => sut.seal(
+            message: Uint8List(20),
+            recipientPublicKey: Uint8List(10),
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_box_publickeybytes());
+      });
+
+      test('calls crypto_box_seal with correct arguments', () {
+        when(
+          () => mockSodium.crypto_box_seal(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
+
+        final message = List.generate(20, (index) => index * 2);
+        final recipientPublicKey = List.generate(5, (index) => 20 + index);
+        final seal = List.filled(5, 0);
+
+        sut.seal(
+          message: Uint8List.fromList(message),
+          recipientPublicKey: Uint8List.fromList(recipientPublicKey),
+        );
+
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(recipientPublicKey)),
+              ),
+          () => mockSodium.crypto_box_seal(
+                any(that: hasRawData<Uint8>(seal + message)),
+                any(that: hasRawData<Uint8>(message)),
+                message.length,
+                any(that: hasRawData<Uint8>(recipientPublicKey)),
+              ),
+        ]);
+      });
+
+      test('returns sealed data', () {
+        final cipher = List.generate(25, (index) => 100 - index);
+        when(
+          () => mockSodium.crypto_box_seal(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenAnswer((i) {
+          fillPointer(i.positionalArguments.first as Pointer<Uint8>, cipher);
+          return 0;
+        });
+
+        final result = sut.seal(
+          message: Uint8List(20),
+          recipientPublicKey: Uint8List(5),
+        );
+
+        expect(result, cipher);
+
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      });
+
+      test('throws exception on failure', () {
+        when(
+          () => mockSodium.crypto_box_seal(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(1);
+
+        expect(
+          () => sut.seal(
+            message: Uint8List(10),
+            recipientPublicKey: Uint8List(5),
+          ),
+          throwsA(isA<SodiumException>()),
+        );
+
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      });
+    });
+
+    group('sealOpen', () {
+      test('asserts if cipherText is invalid', () {
+        expect(
+          () => sut.sealOpen(
+            cipherText: Uint8List(3),
+            recipientPublicKey: Uint8List(5),
+            recipientSecretKey: SecureKeyFake.empty(5),
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_box_sealbytes());
+      });
+
+      test('asserts if recipientPublicKey is invalid', () {
+        expect(
+          () => sut.sealOpen(
+            cipherText: Uint8List(20),
+            recipientPublicKey: Uint8List(10),
+            recipientSecretKey: SecureKeyFake.empty(5),
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_box_publickeybytes());
+      });
+
+      test('asserts if recipientSecretKey is invalid', () {
+        expect(
+          () => sut.sealOpen(
+            cipherText: Uint8List(20),
+            recipientPublicKey: Uint8List(5),
+            recipientSecretKey: SecureKeyFake.empty(10),
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_box_secretkeybytes());
+      });
+
+      test('calls crypto_box_seal_open with correct arguments', () {
+        when(
+          () => mockSodium.crypto_box_seal_open(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
+
+        final cipherText = List.generate(20, (index) => index * 2);
+        final recipientPublicKey = List.generate(5, (index) => 20 + index);
+        final recipientSecretKey = List.generate(5, (index) => 30 + index);
+
+        sut.sealOpen(
+          cipherText: Uint8List.fromList(cipherText),
+          recipientPublicKey: Uint8List.fromList(recipientPublicKey),
+          recipientSecretKey: SecureKeyFake(recipientSecretKey),
+        );
+
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(recipientPublicKey)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(recipientSecretKey)),
+              ),
+          () => mockSodium.crypto_box_seal_open(
+                any(that: hasRawData<Uint8>(cipherText.sublist(5))),
+                any(that: hasRawData<Uint8>(cipherText)),
+                cipherText.length,
+                any(that: hasRawData<Uint8>(recipientPublicKey)),
+                any(that: hasRawData<Uint8>(recipientSecretKey)),
+              ),
+        ]);
+      });
+
+      test('returns decrypted data', () {
+        final message = List.generate(8, (index) => index * 5);
+        when(
+          () => mockSodium.crypto_box_seal_open(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenAnswer((i) {
+          fillPointer(i.positionalArguments.first as Pointer<Uint8>, message);
+          return 0;
+        });
+
+        final result = sut.sealOpen(
+          cipherText: Uint8List(13),
+          recipientPublicKey: Uint8List(5),
+          recipientSecretKey: SecureKeyFake.empty(5),
+        );
+
+        expect(result, message);
+
+        verify(() => mockSodium.sodium_free(any())).called(3);
+      });
+
+      test('throws exception on failure', () {
+        when(
+          () => mockSodium.crypto_box_seal_open(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(1);
+
+        expect(
+          () => sut.sealOpen(
+            cipherText: Uint8List(13),
+            recipientPublicKey: Uint8List(5),
+            recipientSecretKey: SecureKeyFake.empty(5),
+          ),
+          throwsA(isA<SodiumException>()),
+        );
+
+        verify(() => mockSodium.sodium_free(any())).called(3);
       });
     });
   });
