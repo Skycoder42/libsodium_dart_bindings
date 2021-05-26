@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/helpers/sign/signature_consumer_ffi.dart';
 import 'package:sodium/src/ffi/api/helpers/sign/verification_consumer_ffi.dart';
@@ -12,6 +13,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
+import '../keygen_test_helpers.dart';
 import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
@@ -66,123 +68,22 @@ void main() {
       when(() => mockSodium.crypto_sign_statebytes()).thenReturn(5);
     });
 
-    group('keypair', () {
-      test('calls crypto_box_keypair on both allocated keys', () {
-        when(() => mockSodium.crypto_sign_keypair(any(), any())).thenReturn(0);
+    testKeypair(
+      mockSodium: mockSodium,
+      runKeypair: () => sut.keyPair(),
+      secretKeyBytesNative: mockSodium.crypto_sign_secretkeybytes,
+      publicKeyBytesNative: mockSodium.crypto_sign_publickeybytes,
+      keypairNative: mockSodium.crypto_sign_keypair,
+    );
 
-        sut.keyPair();
-
-        verifyInOrder([
-          () => mockSodium.crypto_sign_secretkeybytes(),
-          () => mockSodium.sodium_allocarray(5, 1),
-          () => mockSodium.crypto_sign_publickeybytes(),
-          () => mockSodium.sodium_allocarray(5, 1),
-          () => mockSodium.sodium_mprotect_readwrite(any(that: isNot(nullptr))),
-          () => mockSodium.crypto_sign_keypair(
-                any(that: isNot(nullptr)),
-                any(that: isNot(nullptr)),
-              ),
-          () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
-        ]);
-      });
-
-      test('returns generated key', () {
-        final testPublic = List.generate(5, (index) => 10 - index);
-        final testSecret = List.generate(5, (index) => index);
-        when(() => mockSodium.crypto_sign_keypair(any(), any()))
-            .thenAnswer((i) {
-          fillPointer(i.positionalArguments[0] as Pointer<Uint8>, testPublic);
-          fillPointer(i.positionalArguments[1] as Pointer<Uint8>, testSecret);
-          return 0;
-        });
-
-        final res = sut.keyPair();
-
-        expect(res.publicKey, testPublic);
-        expect(res.secretKey.extractBytes(), testSecret);
-
-        verify(() => mockSodium.sodium_free(any(that: hasRawData(testPublic))));
-      });
-
-      test('disposes allocated key on error', () {
-        when(() => mockSodium.crypto_sign_keypair(any(), any())).thenReturn(1);
-
-        expect(() => sut.keyPair(), throwsA(isA<Exception>()));
-
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(2);
-      });
-    });
-
-    group('seedKeypair', () {
-      test('asserts if seed is invalid', () {
-        expect(
-          () => sut.seedKeyPair(SecureKeyFake.empty(10)),
-          throwsA(isA<RangeError>()),
-        );
-
-        verify(() => mockSodium.crypto_sign_seedbytes());
-      });
-
-      test('calls crypto_box_seed_keypair on the keys with the seed', () {
-        when(() => mockSodium.crypto_sign_seed_keypair(any(), any(), any()))
-            .thenReturn(0);
-
-        final seed = List.generate(5, (index) => 3 * index);
-        sut.seedKeyPair(SecureKeyFake(seed));
-
-        verifyInOrder([
-          () => mockSodium.crypto_sign_secretkeybytes(),
-          () => mockSodium.sodium_allocarray(5, 1),
-          () => mockSodium.crypto_sign_publickeybytes(),
-          () => mockSodium.sodium_allocarray(5, 1),
-          () => mockSodium.sodium_mprotect_readwrite(
-                any(that: isNot(hasRawData(seed))),
-              ),
-          () => mockSodium.crypto_sign_seed_keypair(
-                any(that: isNot(nullptr)),
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(seed)),
-              ),
-          () => mockSodium.sodium_mprotect_noaccess(
-                any(that: isNot(hasRawData(seed))),
-              ),
-        ]);
-      });
-
-      test('returns generated key', () {
-        final testPublic = List.generate(5, (index) => 10 - index);
-        final testSecret = List.generate(5, (index) => index);
-        when(() => mockSodium.crypto_sign_seed_keypair(any(), any(), any()))
-            .thenAnswer((i) {
-          fillPointer(i.positionalArguments[0] as Pointer<Uint8>, testPublic);
-          fillPointer(i.positionalArguments[1] as Pointer<Uint8>, testSecret);
-          return 0;
-        });
-
-        final res = sut.seedKeyPair(SecureKeyFake.empty(5));
-
-        expect(res.publicKey, testPublic);
-        expect(res.secretKey.extractBytes(), testSecret);
-
-        verify(() => mockSodium.sodium_free(any(that: hasRawData(testPublic))));
-      });
-
-      test('disposes allocated key on error', () {
-        when(() => mockSodium.crypto_sign_seed_keypair(any(), any(), any()))
-            .thenReturn(1);
-
-        expect(
-          () => sut.seedKeyPair(SecureKeyFake.empty(5)),
-          throwsA(isA<Exception>()),
-        );
-
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(3);
-      });
-    });
+    testSeedKeypair(
+      mockSodium: mockSodium,
+      runSeedKeypair: (SecureKey seed) => sut.seedKeyPair(seed),
+      seedBytesNative: mockSodium.crypto_sign_seedbytes,
+      secretKeyBytesNative: mockSodium.crypto_sign_secretkeybytes,
+      publicKeyBytesNative: mockSodium.crypto_sign_publickeybytes,
+      seedKeypairNative: mockSodium.crypto_sign_seed_keypair,
+    );
 
     group('call', () {
       test('asserts if secretKey is invalid', () {

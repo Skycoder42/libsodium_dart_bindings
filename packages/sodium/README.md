@@ -57,8 +57,8 @@ API based on libsodium version: *1.0.18*
  crypto_kdf          | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/key_derivation
  crypto_kx           | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/key_exchange
  crypto_onetimeauth  | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/advanced/poly1305
+ crypto_aead         | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead
  crypto_scalarmult   | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication
- crypto_aead         | ❔  | ❔  | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead
  crypto_hash_sha     | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/sha-2_hash_function
  crypto_auth_hmacsha | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/hmac-sha2
 

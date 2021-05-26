@@ -11,6 +11,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
+import '../keygen_test_helpers.dart';
 
 class MockLibSodiumJS extends Mock implements LibSodiumJS {}
 
@@ -54,32 +55,11 @@ void main() {
       when(() => mockSodium.crypto_secretbox_NONCEBYTES).thenReturn(5);
     });
 
-    group('keygen', () {
-      test('calls crypto_secretbox_keygen on generated key', () {
-        when(() => mockSodium.crypto_secretbox_keygen())
-            .thenReturn(Uint8List(0));
-
-        sut.keygen();
-
-        verify(() => mockSodium.crypto_secretbox_keygen());
-      });
-
-      test('returns generated key', () {
-        final testData = List.generate(5, (index) => index);
-        when(() => mockSodium.crypto_secretbox_keygen())
-            .thenReturn(Uint8List.fromList(testData));
-
-        final res = sut.keygen();
-
-        expect(res.extractBytes(), testData);
-      });
-
-      test('throws SodiumException on JsError', () {
-        when(() => mockSodium.crypto_secretbox_keygen()).thenThrow(JsError());
-
-        expect(() => sut.keygen(), throwsA(isA<SodiumException>()));
-      });
-    });
+    testKeygen(
+      mockSodium: mockSodium,
+      runKeygen: () => sut.keygen(),
+      keygenNative: mockSodium.crypto_secretbox_keygen,
+    );
 
     group('easy', () {
       test('asserts if nonce is invalid', () {

@@ -4,13 +4,13 @@ import '../../api/helpers/secret_stream/secret_stream_base.dart';
 import '../../api/secret_stream.dart';
 import '../../api/secure_key.dart';
 import '../bindings/libsodium.ffi.dart';
+import 'helpers/keygen_mixin.dart';
 import 'helpers/secret_stream/secret_stream_pull_transformer_ffi.dart';
 import 'helpers/secret_stream/secret_stream_push_transformer_ffi.dart';
-import 'secure_key_ffi.dart';
 
 @internal
 class SecretStreamFFI
-    with SecretStreamBase, SecretStreamValidations
+    with SecretStreamBase, SecretStreamValidations, KeygenMixin
     implements SecretStream {
   final LibSodiumFFI sodium;
 
@@ -27,21 +27,11 @@ class SecretStreamFFI
   int get keyBytes => sodium.crypto_secretstream_xchacha20poly1305_keybytes();
 
   @override
-  SecureKey keygen() {
-    final key = SecureKeyFFI.alloc(sodium, keyBytes);
-    try {
-      return key
-        ..runUnlockedNative(
-          (pointer) => sodium.crypto_secretstream_xchacha20poly1305_keygen(
-            pointer.ptr,
-          ),
-          writable: true,
-        );
-    } catch (e) {
-      key.dispose();
-      rethrow;
-    }
-  }
+  SecureKey keygen() => keygenImpl(
+        sodium: sodium,
+        keyBytes: keyBytes,
+        implementation: sodium.crypto_secretstream_xchacha20poly1305_keygen,
+      );
 
   @override
   SecretExStreamTransformer<SecretStreamPlainMessage, SecretStreamCipherMessage>

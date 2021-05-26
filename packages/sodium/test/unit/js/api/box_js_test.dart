@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/detached_cipher_result.dart';
+import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/box_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
@@ -11,6 +12,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
+import '../keygen_test_helpers.dart';
 
 class MockLibSodiumJS extends Mock implements LibSodiumJS {}
 
@@ -72,93 +74,18 @@ void main() {
       when(() => mockSodium.crypto_box_SEALBYTES).thenReturn(5);
     });
 
-    group('keypair', () {
-      test('calls crypto_box_keypair to allocate keys', () {
-        when(() => mockSodium.crypto_box_keypair()).thenReturn(KeyPair(
-          keyType: '',
-          publicKey: Uint8List(0),
-          privateKey: Uint8List(0),
-        ));
+    testKeypair(
+      mockSodium: mockSodium,
+      runKeypair: () => sut.keyPair(),
+      keypairNative: mockSodium.crypto_box_keypair,
+    );
 
-        sut.keyPair();
-
-        verify(() => mockSodium.crypto_box_keypair());
-      });
-
-      test('returns generated key', () {
-        final testPublic = List.generate(5, (index) => 10 - index);
-        final testSecret = List.generate(5, (index) => index);
-        when(() => mockSodium.crypto_box_keypair()).thenReturn(KeyPair(
-          keyType: '',
-          publicKey: Uint8List.fromList(testPublic),
-          privateKey: Uint8List.fromList(testSecret),
-        ));
-
-        final res = sut.keyPair();
-
-        expect(res.publicKey, testPublic);
-        expect(res.secretKey.extractBytes(), testSecret);
-      });
-
-      test('disposes allocated key on error', () {
-        when(() => mockSodium.crypto_box_keypair()).thenThrow(JsError());
-
-        expect(() => sut.keyPair(), throwsA(isA<Exception>()));
-      });
-    });
-
-    group('seedKeypair', () {
-      test('asserts if seed is invalid', () {
-        expect(
-          () => sut.seedKeyPair(SecureKeyFake.empty(10)),
-          throwsA(isA<RangeError>()),
-        );
-
-        verify(() => mockSodium.crypto_box_SEEDBYTES);
-      });
-
-      test('calls crypto_box_seed_keypair on the keys with the seed', () {
-        when(() => mockSodium.crypto_box_seed_keypair(any()))
-            .thenReturn(KeyPair(
-          keyType: '',
-          publicKey: Uint8List(0),
-          privateKey: Uint8List(0),
-        ));
-
-        final seed = List.generate(5, (index) => 3 * index);
-        sut.seedKeyPair(SecureKeyFake(seed));
-
-        verify(
-          () => mockSodium.crypto_box_seed_keypair(Uint8List.fromList(seed)),
-        );
-      });
-
-      test('returns generated key', () {
-        final testPublic = List.generate(5, (index) => 10 - index);
-        final testSecret = List.generate(5, (index) => index);
-        when(() => mockSodium.crypto_box_seed_keypair(any()))
-            .thenReturn(KeyPair(
-          keyType: '',
-          publicKey: Uint8List.fromList(testPublic),
-          privateKey: Uint8List.fromList(testSecret),
-        ));
-
-        final res = sut.seedKeyPair(SecureKeyFake.empty(5));
-
-        expect(res.publicKey, testPublic);
-        expect(res.secretKey.extractBytes(), testSecret);
-      });
-
-      test('disposes allocated key on error', () {
-        when(() => mockSodium.crypto_box_seed_keypair(any()))
-            .thenThrow(JsError());
-
-        expect(
-          () => sut.seedKeyPair(SecureKeyFake.empty(5)),
-          throwsA(isA<Exception>()),
-        );
-      });
-    });
+    testSeedKeypair(
+      mockSodium: mockSodium,
+      runSeedKeypair: (SecureKey seed) => sut.seedKeyPair(seed),
+      seedBytesNative: () => mockSodium.crypto_box_SEEDBYTES,
+      seedKeypairNative: mockSodium.crypto_box_seed_keypair,
+    );
 
     group('easy', () {
       test('asserts if nonce is invalid', () {

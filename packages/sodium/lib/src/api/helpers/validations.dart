@@ -17,7 +17,7 @@ abstract class Validations {
       throw RangeError.value(
         value,
         name,
-        'is not allows. The only allowed value is $expected',
+        'Only allowed value is $expected, but was',
       );
     }
   }
@@ -27,7 +27,7 @@ abstract class Validations {
       throw RangeError.value(
         value,
         name,
-        'must be at least $minValue',
+        'Must be at least $minValue, but was',
       );
     }
   }

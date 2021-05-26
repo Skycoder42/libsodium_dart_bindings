@@ -11,10 +11,10 @@ import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_pointer.dart';
-import 'secure_key_ffi.dart';
+import 'helpers/keygen_mixin.dart';
 
 @internal
-class SecretBoxFFI with SecretBoxValidations implements SecretBox {
+class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
   final LibSodiumFFI sodium;
 
   SecretBoxFFI(this.sodium);
@@ -29,19 +29,11 @@ class SecretBoxFFI with SecretBoxValidations implements SecretBox {
   int get nonceBytes => sodium.crypto_secretbox_noncebytes();
 
   @override
-  SecureKey keygen() {
-    final key = SecureKeyFFI.alloc(sodium, keyBytes);
-    try {
-      return key
-        ..runUnlockedNative(
-          (pointer) => sodium.crypto_secretbox_keygen(pointer.ptr),
-          writable: true,
-        );
-    } catch (e) {
-      key.dispose();
-      rethrow;
-    }
-  }
+  SecureKey keygen() => keygenImpl(
+        sodium: sodium,
+        keyBytes: keyBytes,
+        implementation: sodium.crypto_secretbox_keygen,
+      );
 
   @override
   Uint8List easy({

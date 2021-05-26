@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import '../../api/helpers/secret_stream/secret_stream_base.dart';
 import '../../api/secret_stream.dart';
 import '../../api/secure_key.dart';
+import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'helpers/secret_stream/secret_stream_pull_transformer_js.dart';
@@ -32,7 +33,9 @@ class SecretStreamJS
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        sodium.crypto_secretstream_xchacha20poly1305_keygen(),
+        JsError.wrap(
+          () => sodium.crypto_secretstream_xchacha20poly1305_keygen(),
+        ),
       );
 
   @override

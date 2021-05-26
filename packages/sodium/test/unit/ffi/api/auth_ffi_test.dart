@@ -10,6 +10,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
+import '../keygen_test_helpers.dart';
 import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
@@ -50,40 +51,12 @@ void main() {
       when(() => mockSodium.crypto_auth_keybytes()).thenReturn(5);
     });
 
-    group('keygen', () {
-      test('calls crypto_auth_keygen on generated key', () {
-        const len = 5;
-
-        sut.keygen();
-
-        verifyInOrder([
-          () => mockSodium.crypto_auth_keybytes(),
-          () => mockSodium.sodium_allocarray(len, 1),
-          () => mockSodium.sodium_mprotect_readwrite(any(that: isNot(nullptr))),
-          () => mockSodium.crypto_auth_keygen(any(that: isNot(nullptr))),
-          () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
-        ]);
-      });
-
-      test('returns generated key', () {
-        final testData = List.generate(5, (index) => index);
-        when(() => mockSodium.crypto_auth_keygen(any())).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer<Uint8>, testData);
-        });
-
-        final res = sut.keygen();
-
-        expect(res.extractBytes(), testData);
-      });
-
-      test('disposes allocated key on error', () {
-        when(() => mockSodium.crypto_auth_keygen(any())).thenThrow(Exception());
-
-        expect(() => sut.keygen(), throwsA(isA<Exception>()));
-
-        verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))));
-      });
-    });
+    testKeygen(
+      mockSodium: mockSodium,
+      runKeygen: () => sut.keygen(),
+      keyBytesNative: mockSodium.crypto_auth_keybytes,
+      keygenNative: mockSodium.crypto_auth_keygen,
+    );
 
     group('call', () {
       test('asserts if key is invalid', () {

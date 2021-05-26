@@ -10,6 +10,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
+import '../keygen_test_helpers.dart';
 
 class MockLibSodiumJS extends Mock implements LibSodiumJS {}
 
@@ -52,26 +53,11 @@ void main() {
           .thenReturn(5);
     });
 
-    group('keygen', () {
-      test('calls keygen on generated key', () {
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_keygen())
-            .thenReturn(Uint8List(0));
-
-        sut.keygen();
-
-        verify(() => mockSodium.crypto_secretstream_xchacha20poly1305_keygen());
-      });
-
-      test('returns generated key', () {
-        final testData = List.generate(5, (index) => index);
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_keygen())
-            .thenReturn(Uint8List.fromList(testData));
-
-        final res = sut.keygen();
-
-        expect(res.extractBytes(), testData);
-      });
-    });
+    testKeygen(
+      mockSodium: mockSodium,
+      runKeygen: () => sut.keygen(),
+      keygenNative: mockSodium.crypto_secretstream_xchacha20poly1305_keygen,
+    );
 
     group('createPushEx', () {
       test('asserts if key is invalid', () {

@@ -12,10 +12,10 @@ import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_pointer.dart';
-import 'secure_key_ffi.dart';
+import 'helpers/keygen_mixin.dart';
 
 @internal
-class BoxFFI with BoxValidations implements Box {
+class BoxFFI with BoxValidations, KeygenMixin implements Box {
   final LibSodiumFFI sodium;
 
   BoxFFI(this.sodium);
@@ -39,67 +39,23 @@ class BoxFFI with BoxValidations implements Box {
   int get sealBytes => sodium.crypto_box_sealbytes();
 
   @override
-  KeyPair keyPair() {
-    SecureKeyFFI? secretKey;
-    SodiumPointer<Uint8>? publicKeyPtr;
-    try {
-      secretKey = SecureKeyFFI.alloc(sodium, secretKeyBytes);
-      publicKeyPtr = SodiumPointer.alloc(sodium, count: publicKeyBytes);
-
-      final result = secretKey.runUnlockedNative(
-        (secretKeyPtr) => sodium.crypto_box_keypair(
-          publicKeyPtr!.ptr,
-          secretKeyPtr.ptr,
-        ),
-        writable: true,
+  KeyPair keyPair() => keyPairImpl(
+        sodium: sodium,
+        secretKeyBytes: secretKeyBytes,
+        publicKeyBytes: publicKeyBytes,
+        implementation: sodium.crypto_box_keypair,
       );
-      SodiumException.checkSucceededInt(result);
-
-      return KeyPair(
-        secretKey: secretKey,
-        publicKey: publicKeyPtr.copyAsList(),
-      );
-    } catch (e) {
-      secretKey?.dispose();
-      rethrow;
-    } finally {
-      publicKeyPtr?.dispose();
-    }
-  }
 
   @override
   KeyPair seedKeyPair(SecureKey seed) {
     validateSeed(seed);
-
-    SecureKeyFFI? secretKey;
-    SodiumPointer<Uint8>? publicKeyPtr;
-    try {
-      secretKey = SecureKeyFFI.alloc(sodium, secretKeyBytes);
-      publicKeyPtr = SodiumPointer.alloc(sodium, count: publicKeyBytes);
-
-      final result = secretKey.runUnlockedNative(
-        (secretKeyPtr) => seed.runUnlockedNative(
-          sodium,
-          (seedPtr) => sodium.crypto_box_seed_keypair(
-            publicKeyPtr!.ptr,
-            secretKeyPtr.ptr,
-            seedPtr.ptr,
-          ),
-        ),
-        writable: true,
-      );
-      SodiumException.checkSucceededInt(result);
-
-      return KeyPair(
-        secretKey: secretKey,
-        publicKey: publicKeyPtr.copyAsList(),
-      );
-    } catch (e) {
-      secretKey?.dispose();
-      rethrow;
-    } finally {
-      publicKeyPtr?.dispose();
-    }
+    return seedKeyPairImpl(
+      sodium: sodium,
+      seed: seed,
+      secretKeyBytes: secretKeyBytes,
+      publicKeyBytes: publicKeyBytes,
+      implementation: sodium.crypto_box_seed_keypair,
+    );
   }
 
   @override

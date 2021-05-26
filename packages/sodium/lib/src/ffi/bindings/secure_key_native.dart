@@ -9,7 +9,13 @@ import 'sodium_pointer.dart';
 
 /// @nodoc
 @internal
-typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<Uint8> pointer);
+typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<Uint8> keyPtr);
+
+/// @nodoc
+@internal
+typedef SecureFFINullableCallbackFn<T> = T Function(
+  SodiumPointer<Uint8>? keyPtr,
+);
 
 /// @nodoc
 @internal
@@ -65,4 +71,14 @@ extension SecureKeySafeCastX on SecureKey {
         },
         writable: writable,
       );
+}
+
+/// @nodoc
+@internal
+extension SecureKeyNullableSafeCastX on SecureKey? {
+  T runMaybeUnlockedNative<T>(
+    LibSodiumFFI sodium,
+    SecureFFINullableCallbackFn<T> callback,
+  ) =>
+      this != null ? this!.runUnlockedNative(sodium, callback) : callback(null);
 }

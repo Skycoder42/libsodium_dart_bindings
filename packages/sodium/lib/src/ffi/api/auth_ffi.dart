@@ -10,10 +10,10 @@ import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_pointer.dart';
-import 'secure_key_ffi.dart';
+import 'helpers/keygen_mixin.dart';
 
 @internal
-class AuthFFI with AuthValidations implements Auth {
+class AuthFFI with AuthValidations, KeygenMixin implements Auth {
   final LibSodiumFFI sodium;
 
   AuthFFI(this.sodium);
@@ -25,19 +25,11 @@ class AuthFFI with AuthValidations implements Auth {
   int get keyBytes => sodium.crypto_auth_keybytes();
 
   @override
-  SecureKey keygen() {
-    final key = SecureKeyFFI.alloc(sodium, keyBytes);
-    try {
-      return key
-        ..runUnlockedNative(
-          (pointer) => sodium.crypto_auth_keygen(pointer.ptr),
-          writable: true,
-        );
-    } catch (e) {
-      key.dispose();
-      rethrow;
-    }
-  }
+  SecureKey keygen() => keygenImpl(
+        sodium: sodium,
+        keyBytes: keyBytes,
+        implementation: sodium.crypto_auth_keygen,
+      );
 
   @override
   Uint8List call({
