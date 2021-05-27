@@ -11,6 +11,7 @@ import '../bindings/sodium.js.dart' hide KeyPair;
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+@internal
 class PrecalculatedBoxJS implements PrecalculatedBox {
   final BoxJS box;
   final SecureKeyJS sharedKey;

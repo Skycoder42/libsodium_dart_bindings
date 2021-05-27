@@ -1,10 +1,13 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../../../api/sign.dart';
 import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 import 'sign_consumer_js_mixin.dart';
 
+@internal
 class VerificationConsumerJS
     with SignConsumerJSMixin<bool>
     implements VerificationConsumer {

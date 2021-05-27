@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 
+@internal
 mixin SignConsumerJSMixin<T extends Object>
     implements StreamConsumer<Uint8List> {
   LibSodiumJS get sodium;

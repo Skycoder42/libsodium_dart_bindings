@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/generic_hash.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
@@ -9,6 +11,7 @@ import '../bindings/to_safe_int.dart';
 import 'helpers/generic_hash/generic_hash_consumer_js.dart';
 import 'secure_key_js.dart';
 
+@internal
 class GenericHashJS with GenericHashValidations implements GenericHash {
   final LibSodiumJS sodium;
 

@@ -11,6 +11,7 @@ import '../../../bindings/sodium.js.dart';
 import '../../../bindings/to_safe_int.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
+@internal
 class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
     SecretstreamXchacha20poly1305State> {
   final LibSodiumJS sodium;

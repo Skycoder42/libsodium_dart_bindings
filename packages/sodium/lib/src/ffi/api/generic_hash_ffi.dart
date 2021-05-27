@@ -1,6 +1,8 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/generic_hash.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
@@ -11,6 +13,7 @@ import '../bindings/sodium_pointer.dart';
 import 'helpers/generic_hash/generic_hash_consumer_ffi.dart';
 import 'helpers/keygen_mixin.dart';
 
+@internal
 class GenericHashFFI
     with GenericHashValidations, KeygenMixin
     implements GenericHash {

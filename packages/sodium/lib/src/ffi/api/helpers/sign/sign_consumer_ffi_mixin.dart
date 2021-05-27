@@ -9,6 +9,7 @@ import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/memory_protection.dart';
 import '../../../bindings/sodium_pointer.dart';
 
+@internal
 mixin SignConsumerFFIMixin<T extends Object>
     implements StreamConsumer<Uint8List> {
   LibSodiumFFI get sodium;

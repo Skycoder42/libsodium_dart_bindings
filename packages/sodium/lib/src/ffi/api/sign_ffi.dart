@@ -1,6 +1,8 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/key_pair.dart';
 import '../../api/secure_key.dart';
 import '../../api/sign.dart';
@@ -13,6 +15,7 @@ import 'helpers/keygen_mixin.dart';
 import 'helpers/sign/signature_consumer_ffi.dart';
 import 'helpers/sign/verification_consumer_ffi.dart';
 
+@internal
 class SignFFI with SignValidations, KeygenMixin implements Sign {
   final LibSodiumFFI sodium;
 

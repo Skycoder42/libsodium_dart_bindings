@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../../../api/generic_hash.dart';
 import '../../../../api/secure_key.dart';
 import '../../../bindings/js_error.dart';
 import '../../../bindings/secure_key_nullable_x.dart';
 import '../../../bindings/sodium.js.dart';
 
+@internal
 class GenericHashConsumerJS implements GenericHashConsumer {
   final LibSodiumJS sodium;
   final int outLen;

@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/detached_cipher_result.dart';
 import '../../api/secret_box.dart';
 import '../../api/secure_key.dart';
@@ -8,6 +10,7 @@ import '../bindings/sodium.js.dart' hide SecretBox;
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+@internal
 class SecretBoxJS with SecretBoxValidations implements SecretBox {
   final LibSodiumJS sodium;
 

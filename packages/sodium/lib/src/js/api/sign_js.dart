@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/key_pair.dart';
 import '../../api/secure_key.dart';
 import '../../api/sign.dart';
@@ -10,6 +12,7 @@ import 'helpers/sign/signature_consumer_js.dart';
 import 'helpers/sign/verification_consumer_js.dart';
 import 'secure_key_js.dart';
 
+@internal
 class SignJS with SignValidations implements Sign {
   final LibSodiumJS sodium;
 
