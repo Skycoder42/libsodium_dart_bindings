@@ -2,6 +2,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/auth_ffi.dart';
 import 'package:sodium/src/ffi/api/box_ffi.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
+import 'package:sodium/src/ffi/api/generic_hash_ffi.dart';
 import 'package:sodium/src/ffi/api/pwhash_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_box_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_stream_ffi.dart';
@@ -70,6 +71,17 @@ void main() {
     expect(
       sut.sign,
       isA<SignFFI>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('genericHash returns GenericHashFFI instance', () {
+    expect(
+      sut.genericHash,
+      isA<GenericHashFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

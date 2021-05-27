@@ -26,8 +26,8 @@ class AuthTestCase extends TestCase {
       printOnFailure('key1: ${key1.extractBytes()}');
       printOnFailure('key2: ${key2.extractBytes()}');
 
-      expect(key1, hasLength(32));
-      expect(key2, hasLength(32));
+      expect(key1, hasLength(sut.keyBytes));
+      expect(key2, hasLength(sut.keyBytes));
 
       expect(key1, isNot(key2));
     });

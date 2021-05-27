@@ -97,6 +97,12 @@ void addStreamTests({
         () => sut.addStream(Stream.value(Uint8List.fromList(message))),
         throwsA(isA<SodiumException>()),
       );
+
+      verify(
+        () => mockSodium.sodium_free(
+          any(that: hasRawData(message)),
+        ),
+      );
     });
 
     test('throws StateError when adding a stream after completition', () async {
