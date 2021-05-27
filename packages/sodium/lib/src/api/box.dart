@@ -7,6 +7,60 @@ import 'helpers/validations.dart';
 import 'key_pair.dart';
 import 'secure_key.dart';
 
+/// A meta class that provides access to all libsodium box APIs working with
+/// precalculated key.
+///
+/// This class is a view on a [Box] that internally uses the *_afternm methods
+/// instead of normal encryption methods, as those are faster when en/decrypting
+/// multiple messages with the same partner. To create such a box, use
+/// [Box.precalculate] with the corresponding keys.
+///
+/// This class provides the dart interface for the crypto operations documented
+/// in https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface.
+/// Please refer to that documentation for more details about these APIs.
+abstract class PrecalculatedBox {
+  const PrecalculatedBox._(); // coverage:ignore-line
+
+  /// Provides crypto_box_easy_afternm.
+  ///
+  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface
+  Uint8List easy({
+    required Uint8List message,
+    required Uint8List nonce,
+  });
+
+  /// Provides crypto_box_open_easy_afternm.
+  ///
+  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface
+  Uint8List openEasy({
+    required Uint8List cipherText,
+    required Uint8List nonce,
+  });
+
+  /// Provides crypto_box_detached_afternm.
+  ///
+  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface
+  DetachedCipherResult detached({
+    required Uint8List message,
+    required Uint8List nonce,
+  });
+
+  /// Provides crypto_box_open_detached_afternm.
+  ///
+  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface
+  Uint8List openDetached({
+    required Uint8List cipherText,
+    required Uint8List mac,
+    required Uint8List nonce,
+  });
+
+  /// Disposes the internally used shared key.
+  ///
+  /// This is the key that was created from [Box.precalculate] via
+  /// crypto_box_beforenm.
+  void dispose();
+}
+
 /// A meta class that provides access to all libsodium box APIs.
 ///
 /// This class provides the dart interface for the crypto operations documented
@@ -62,8 +116,8 @@ abstract class Box {
   Uint8List easy({
     required Uint8List message,
     required Uint8List nonce,
-    required Uint8List recipientPublicKey,
-    required SecureKey senderSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   });
 
   /// Provides crypto_box_open_easy.
@@ -72,8 +126,8 @@ abstract class Box {
   Uint8List openEasy({
     required Uint8List cipherText,
     required Uint8List nonce,
-    required Uint8List senderPublicKey,
-    required SecureKey recipientSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   });
 
   /// Provides crypto_box_detached.
@@ -82,8 +136,8 @@ abstract class Box {
   DetachedCipherResult detached({
     required Uint8List message,
     required Uint8List nonce,
-    required Uint8List recipientPublicKey,
-    required SecureKey senderSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   });
 
   /// Provides crypto_box_open_detached.
@@ -93,8 +147,19 @@ abstract class Box {
     required Uint8List cipherText,
     required Uint8List mac,
     required Uint8List nonce,
-    required Uint8List senderPublicKey,
-    required SecureKey recipientSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
+  });
+
+  /// Provides crypto_box_beforenm.
+  ///
+  /// To work with the precalculated shared key, use the methods defined on the
+  /// returned [PrecalculatedBox].
+  ///
+  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface
+  PrecalculatedBox precalculate({
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   });
 
   /// Provides crypto_box_seal.
@@ -102,7 +167,7 @@ abstract class Box {
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes#usage
   Uint8List seal({
     required Uint8List message,
-    required Uint8List recipientPublicKey,
+    required Uint8List publicKey,
   });
 
   /// Provides crypto_box_seal_open.
@@ -110,8 +175,8 @@ abstract class Box {
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes#usage
   Uint8List sealOpen({
     required Uint8List cipherText,
-    required Uint8List recipientPublicKey,
-    required SecureKey recipientSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   });
 }
 

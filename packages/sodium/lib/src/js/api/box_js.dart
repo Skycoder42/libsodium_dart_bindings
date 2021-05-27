@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../api/box.dart';
 import '../../api/detached_cipher_result.dart';
 import '../../api/key_pair.dart';
@@ -9,6 +11,83 @@ import '../bindings/sodium.js.dart' hide KeyPair;
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+class PrecalculatedBoxJS implements PrecalculatedBox {
+  final BoxJS box;
+  final SecureKeyJS sharedKey;
+
+  PrecalculatedBoxJS(this.box, this.sharedKey);
+
+  @override
+  Uint8List easy({
+    required Uint8List message,
+    required Uint8List nonce,
+  }) {
+    box.validateNonce(nonce);
+
+    return JsError.wrap(
+      () => sharedKey.runUnlockedSync(
+        (sharedKeyData) => box.sodium.crypto_box_easy_afternm(
+          message,
+          nonce,
+          sharedKeyData,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Uint8List openEasy({
+    required Uint8List cipherText,
+    required Uint8List nonce,
+  }) {
+    box
+      ..validateEasyCipherText(cipherText)
+      ..validateNonce(nonce);
+
+    return JsError.wrap(
+      () => sharedKey.runUnlockedSync(
+        (sharedKeyData) => box.sodium.crypto_box_open_easy_afternm(
+          cipherText,
+          nonce,
+          sharedKeyData,
+        ),
+      ),
+    );
+  }
+
+  @override
+  DetachedCipherResult detached({
+    required Uint8List message,
+    required Uint8List nonce,
+  }) {
+    // Simulate detached, as it is not exposed from JS
+    final easyCipher = easy(
+      message: message,
+      nonce: nonce,
+    );
+    return DetachedCipherResult(
+      cipherText: easyCipher.sublist(box.macBytes),
+      mac: easyCipher.sublist(0, box.macBytes),
+    );
+  }
+
+  @override
+  Uint8List openDetached({
+    required Uint8List cipherText,
+    required Uint8List mac,
+    required Uint8List nonce,
+  }) =>
+      // Simulate detached, as it is not exposed from JS
+      openEasy(
+        cipherText: Uint8List.fromList(mac + cipherText),
+        nonce: nonce,
+      );
+
+  @override
+  void dispose() => sharedKey.dispose();
+}
+
+@internal
 class BoxJS with BoxValidations implements Box {
   final LibSodiumJS sodium;
 
@@ -62,19 +141,19 @@ class BoxJS with BoxValidations implements Box {
   Uint8List easy({
     required Uint8List message,
     required Uint8List nonce,
-    required Uint8List recipientPublicKey,
-    required SecureKey senderSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   }) {
     validateNonce(nonce);
-    validatePublicKey(recipientPublicKey);
-    validateSecretKey(senderSecretKey);
+    validatePublicKey(publicKey);
+    validateSecretKey(secretKey);
 
     return JsError.wrap(
-      () => senderSecretKey.runUnlockedSync(
+      () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_easy(
           message,
           nonce,
-          recipientPublicKey,
+          publicKey,
           secretKeyData,
         ),
       ),
@@ -85,20 +164,20 @@ class BoxJS with BoxValidations implements Box {
   Uint8List openEasy({
     required Uint8List cipherText,
     required Uint8List nonce,
-    required Uint8List senderPublicKey,
-    required SecureKey recipientSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   }) {
     validateEasyCipherText(cipherText);
     validateNonce(nonce);
-    validatePublicKey(senderPublicKey);
-    validateSecretKey(recipientSecretKey);
+    validatePublicKey(publicKey);
+    validateSecretKey(secretKey);
 
     return JsError.wrap(
-      () => recipientSecretKey.runUnlockedSync(
+      () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_open_easy(
           cipherText,
           nonce,
-          senderPublicKey,
+          publicKey,
           secretKeyData,
         ),
       ),
@@ -109,19 +188,19 @@ class BoxJS with BoxValidations implements Box {
   DetachedCipherResult detached({
     required Uint8List message,
     required Uint8List nonce,
-    required Uint8List recipientPublicKey,
-    required SecureKey senderSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   }) {
     validateNonce(nonce);
-    validatePublicKey(recipientPublicKey);
-    validateSecretKey(senderSecretKey);
+    validatePublicKey(publicKey);
+    validateSecretKey(secretKey);
 
     final cipher = JsError.wrap(
-      () => senderSecretKey.runUnlockedSync(
+      () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_detached(
           message,
           nonce,
-          recipientPublicKey,
+          publicKey,
           secretKeyData,
         ),
       ),
@@ -138,22 +217,46 @@ class BoxJS with BoxValidations implements Box {
     required Uint8List cipherText,
     required Uint8List mac,
     required Uint8List nonce,
-    required Uint8List senderPublicKey,
-    required SecureKey recipientSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   }) {
     validateMac(mac);
     validateNonce(nonce);
-    validatePublicKey(senderPublicKey);
-    validateSecretKey(recipientSecretKey);
+    validatePublicKey(publicKey);
+    validateSecretKey(secretKey);
 
     return JsError.wrap(
-      () => recipientSecretKey.runUnlockedSync(
+      () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_open_detached(
           cipherText,
           mac,
           nonce,
-          senderPublicKey,
+          publicKey,
           secretKeyData,
+        ),
+      ),
+    );
+  }
+
+  @override
+  PrecalculatedBox precalculate({
+    required Uint8List publicKey,
+    required SecureKey secretKey,
+  }) {
+    validatePublicKey(publicKey);
+    validateSecretKey(secretKey);
+
+    return PrecalculatedBoxJS(
+      this,
+      SecureKeyJS(
+        sodium,
+        JsError.wrap(
+          () => secretKey.runUnlockedSync(
+            (secretKeyData) => sodium.crypto_box_beforenm(
+              publicKey,
+              secretKeyData,
+            ),
+          ),
         ),
       ),
     );
@@ -162,14 +265,14 @@ class BoxJS with BoxValidations implements Box {
   @override
   Uint8List seal({
     required Uint8List message,
-    required Uint8List recipientPublicKey,
+    required Uint8List publicKey,
   }) {
-    validatePublicKey(recipientPublicKey);
+    validatePublicKey(publicKey);
 
     return JsError.wrap(
       () => sodium.crypto_box_seal(
         message,
-        recipientPublicKey,
+        publicKey,
       ),
     );
   }
@@ -177,18 +280,18 @@ class BoxJS with BoxValidations implements Box {
   @override
   Uint8List sealOpen({
     required Uint8List cipherText,
-    required Uint8List recipientPublicKey,
-    required SecureKey recipientSecretKey,
+    required Uint8List publicKey,
+    required SecureKey secretKey,
   }) {
     validateSealCipherText(cipherText);
-    validatePublicKey(recipientPublicKey);
-    validateSecretKey(recipientSecretKey);
+    validatePublicKey(publicKey);
+    validateSecretKey(secretKey);
 
     return JsError.wrap(
-      () => recipientSecretKey.runUnlockedSync(
+      () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_seal_open(
           cipherText,
-          recipientPublicKey,
+          publicKey,
           secretKeyData,
         ),
       ),

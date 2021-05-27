@@ -112,8 +112,8 @@ class BoxTestCase extends TestCase {
         final cipherText = sut.easy(
           message: message,
           nonce: nonce,
-          recipientPublicKey: recipientKey.publicKey,
-          senderSecretKey: senderKey.secretKey,
+          publicKey: recipientKey.publicKey,
+          secretKey: senderKey.secretKey,
         );
 
         printOnFailure('cipherText: $cipherText');
@@ -121,8 +121,8 @@ class BoxTestCase extends TestCase {
         final restored = sut.openEasy(
           cipherText: cipherText,
           nonce: nonce,
-          senderPublicKey: senderKey.publicKey,
-          recipientSecretKey: recipientKey.secretKey,
+          publicKey: senderKey.publicKey,
+          secretKey: recipientKey.secretKey,
         );
 
         printOnFailure('restored: $restored');
@@ -148,8 +148,8 @@ class BoxTestCase extends TestCase {
         final cipherText = sut.easy(
           message: Uint8List.fromList(const [1, 2, 3]),
           nonce: nonce,
-          recipientPublicKey: recipientKey.publicKey,
-          senderSecretKey: senderKey.secretKey,
+          publicKey: recipientKey.publicKey,
+          secretKey: senderKey.secretKey,
         );
 
         printOnFailure('cipherText: $cipherText');
@@ -159,8 +159,8 @@ class BoxTestCase extends TestCase {
           () => sut.openEasy(
             cipherText: cipherText,
             nonce: nonce,
-            senderPublicKey: senderKey.publicKey,
-            recipientSecretKey: recipientKey.secretKey,
+            publicKey: senderKey.publicKey,
+            secretKey: recipientKey.secretKey,
           ),
           throwsA(isA<SodiumException>()),
         );
@@ -190,8 +190,8 @@ class BoxTestCase extends TestCase {
         final cipher = sut.detached(
           message: message,
           nonce: nonce,
-          recipientPublicKey: recipientKey.publicKey,
-          senderSecretKey: senderKey.secretKey,
+          publicKey: recipientKey.publicKey,
+          secretKey: senderKey.secretKey,
         );
 
         printOnFailure('cipher: $cipher');
@@ -200,8 +200,8 @@ class BoxTestCase extends TestCase {
           cipherText: cipher.cipherText,
           mac: cipher.mac,
           nonce: nonce,
-          senderPublicKey: senderKey.publicKey,
-          recipientSecretKey: recipientKey.secretKey,
+          publicKey: senderKey.publicKey,
+          secretKey: recipientKey.secretKey,
         );
 
         printOnFailure('restored: $restored');
@@ -227,8 +227,8 @@ class BoxTestCase extends TestCase {
         final cipher = sut.detached(
           message: Uint8List.fromList(const [1, 2, 3]),
           nonce: nonce,
-          recipientPublicKey: recipientKey.publicKey,
-          senderSecretKey: senderKey.secretKey,
+          publicKey: recipientKey.publicKey,
+          secretKey: senderKey.secretKey,
         );
 
         printOnFailure('cipher: $cipher');
@@ -239,11 +239,141 @@ class BoxTestCase extends TestCase {
             cipherText: cipher.cipherText,
             mac: cipher.mac,
             nonce: nonce,
-            senderPublicKey: senderKey.publicKey,
-            recipientSecretKey: recipientKey.secretKey,
+            publicKey: senderKey.publicKey,
+            secretKey: recipientKey.secretKey,
           ),
           throwsA(isA<SodiumException>()),
         );
+      });
+    });
+
+    group('precalculate', () {
+      late PrecalculatedBox senderPreBox;
+      late PrecalculatedBox recipientPreBox;
+
+      setUp(() {
+        final senderKey = sut.keyPair();
+        final recipientKey = sut.keyPair();
+
+        printOnFailure(
+          'senderKey.secretKey: ${senderKey.secretKey.extractBytes()}',
+        );
+        printOnFailure('senderKey.publicKey: ${senderKey.publicKey}');
+        printOnFailure(
+          'recipientKey.secretKey: ${recipientKey.secretKey.extractBytes()}',
+        );
+        printOnFailure('recipientKey.publicKey: ${recipientKey.publicKey}');
+
+        senderPreBox = sut.precalculate(
+          publicKey: recipientKey.publicKey,
+          secretKey: senderKey.secretKey,
+        );
+        recipientPreBox = sut.precalculate(
+          publicKey: senderKey.publicKey,
+          secretKey: recipientKey.secretKey,
+        );
+      });
+
+      group('easy', () {
+        test('can encrypt and decrypt data', () {
+          final nonce = sodium.randombytes.buf(sut.nonceBytes);
+          final message = Uint8List.fromList(
+            List.generate(32, (index) => index * 2),
+          );
+
+          printOnFailure('nonce: $nonce');
+          printOnFailure('message: $message');
+
+          final cipherText = senderPreBox.easy(
+            message: message,
+            nonce: nonce,
+          );
+
+          printOnFailure('cipherText: $cipherText');
+
+          final restored = recipientPreBox.openEasy(
+            cipherText: cipherText,
+            nonce: nonce,
+          );
+
+          printOnFailure('restored: $restored');
+
+          expect(restored, message);
+        });
+
+        test('fails if data is invalid', () {
+          final nonce = sodium.randombytes.buf(sut.nonceBytes);
+
+          printOnFailure('nonce: $nonce');
+
+          final cipherText = senderPreBox.easy(
+            message: Uint8List.fromList(const [1, 2, 3]),
+            nonce: nonce,
+          );
+
+          printOnFailure('cipherText: $cipherText');
+          cipherText[0] = cipherText[0] ^ 0xFF;
+
+          expect(
+            () => recipientPreBox.openEasy(
+              cipherText: cipherText,
+              nonce: nonce,
+            ),
+            throwsA(isA<SodiumException>()),
+          );
+        });
+      });
+
+      group('detached', () {
+        test('can encrypt and decrypt data', () {
+          final nonce = sodium.randombytes.buf(sut.nonceBytes);
+          final message = Uint8List.fromList(
+            List.generate(32, (index) => index * 2),
+          );
+
+          printOnFailure('nonce: $nonce');
+          printOnFailure('message: $message');
+
+          final cipher = senderPreBox.detached(
+            message: message,
+            nonce: nonce,
+          );
+
+          printOnFailure('cipher: $cipher');
+
+          final restored = recipientPreBox.openDetached(
+            cipherText: cipher.cipherText,
+            mac: cipher.mac,
+            nonce: nonce,
+          );
+
+          printOnFailure('restored: $restored');
+
+          expect(restored, message);
+        });
+
+        test('fails if data is invalid', () {
+          final nonce = sodium.randombytes.buf(sut.nonceBytes);
+
+          printOnFailure('nonce: $nonce');
+
+          final cipher = senderPreBox.detached(
+            message: Uint8List.fromList(const [1, 2, 3]),
+            nonce: nonce,
+          );
+
+          printOnFailure('cipher: $cipher');
+          cipher.mac[0] = cipher.mac[0] ^ 0xFF;
+
+          expect(
+            () => recipientPreBox.openDetached(
+              cipherText: cipher.cipherText,
+              mac: cipher.mac,
+              nonce: nonce,
+            ),
+            throwsA(isA<SodiumException>()),
+          );
+        });
       });
     });
 
@@ -262,15 +392,15 @@ class BoxTestCase extends TestCase {
 
         final cipherText = sut.seal(
           message: message,
-          recipientPublicKey: recipientKey.publicKey,
+          publicKey: recipientKey.publicKey,
         );
 
         printOnFailure('cipherText: $cipherText');
 
         final restored = sut.sealOpen(
           cipherText: cipherText,
-          recipientPublicKey: recipientKey.publicKey,
-          recipientSecretKey: recipientKey.secretKey,
+          publicKey: recipientKey.publicKey,
+          secretKey: recipientKey.secretKey,
         );
 
         printOnFailure('restored: $restored');
@@ -288,7 +418,7 @@ class BoxTestCase extends TestCase {
 
         final cipherText = sut.seal(
           message: Uint8List.fromList(const [1, 2, 3]),
-          recipientPublicKey: recipientKey.publicKey,
+          publicKey: recipientKey.publicKey,
         );
 
         printOnFailure('cipherText: $cipherText');
@@ -297,8 +427,8 @@ class BoxTestCase extends TestCase {
         expect(
           () => sut.sealOpen(
             cipherText: cipherText,
-            recipientPublicKey: recipientKey.publicKey,
-            recipientSecretKey: recipientKey.secretKey,
+            publicKey: recipientKey.publicKey,
+            secretKey: recipientKey.secretKey,
           ),
           throwsA(isA<SodiumException>()),
         );
