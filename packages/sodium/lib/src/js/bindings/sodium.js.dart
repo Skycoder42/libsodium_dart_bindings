@@ -6,7 +6,18 @@ library sodium.js;
 import 'dart:typed_data';
 
 import 'package:js/js.dart';
-import 'package:meta/meta.dart';
+
+typedef SecretstreamXchacha20poly1305State = num;
+
+typedef SignState = num;
+
+typedef GenerichashState = num;
+
+typedef HashSha256State = num;
+
+typedef HashSha512State = num;
+
+typedef OnetimeauthState = num;
 
 @JS()
 @anonymous
@@ -80,34 +91,6 @@ class SecretStreamPull {
     required Uint8List message,
     required num tag,
   });
-}
-
-@JS()
-@anonymous
-class GenerichashState {
-  @visibleForTesting
-  external factory GenerichashState();
-}
-
-@JS()
-@anonymous
-class HashSha256State {
-  @visibleForTesting
-  external factory HashSha256State();
-}
-
-@JS()
-@anonymous
-class HashSha512State {
-  @visibleForTesting
-  external factory HashSha512State();
-}
-
-@JS()
-@anonymous
-class OnetimeauthState {
-  @visibleForTesting
-  external factory OnetimeauthState();
 }
 
 @JS()
@@ -1141,7 +1124,8 @@ class LibSodiumJS {
     Uint8List key,
   );
 
-  external num crypto_secretstream_xchacha20poly1305_init_pull(
+  external SecretstreamXchacha20poly1305State
+      crypto_secretstream_xchacha20poly1305_init_pull(
     Uint8List header,
     Uint8List key,
   );
@@ -1153,20 +1137,20 @@ class LibSodiumJS {
   external Uint8List crypto_secretstream_xchacha20poly1305_keygen();
 
   external dynamic crypto_secretstream_xchacha20poly1305_pull(
-    num state_address,
+    SecretstreamXchacha20poly1305State state_address,
     Uint8List cipher,
     Uint8List? ad,
   );
 
   external Uint8List crypto_secretstream_xchacha20poly1305_push(
-    num state_address,
+    SecretstreamXchacha20poly1305State state_address,
     Uint8List message_chunk,
     Uint8List? ad,
     num tag,
   );
 
   external bool crypto_secretstream_xchacha20poly1305_rekey(
-    num state_address,
+    SecretstreamXchacha20poly1305State state_address,
   );
 
   external Uint8List crypto_shorthash(
@@ -1208,17 +1192,17 @@ class LibSodiumJS {
   );
 
   external Uint8List crypto_sign_final_create(
-    num state_address,
+    SignState state_address,
     Uint8List privateKey,
   );
 
   external bool crypto_sign_final_verify(
-    num state_address,
+    SignState state_address,
     Uint8List signature,
     Uint8List publicKey,
   );
 
-  external num crypto_sign_init();
+  external SignState crypto_sign_init();
 
   external KeyPair crypto_sign_keypair();
 
@@ -1232,7 +1216,7 @@ class LibSodiumJS {
   );
 
   external void crypto_sign_update(
-    num state_address,
+    SignState state_address,
     Uint8List message_chunk,
   );
 

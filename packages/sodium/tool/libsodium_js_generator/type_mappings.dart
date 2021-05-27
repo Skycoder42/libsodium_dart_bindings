@@ -6,15 +6,17 @@ import 'file_loader.dart';
 
 class TypeInfo {
   final String dartType;
-  final String? template;
+  final String? typeDef;
   final bool force;
 
-  const TypeInfo(this.dartType, {this.template, this.force = false});
+  const TypeInfo(
+    this.dartType, {
+    this.typeDef,
+    this.force = false,
+  });
 }
 
 class TypeMappings {
-  static const _classNameParam = '%{className}';
-
   static const _mappings = <String, TypeInfo>{
     // simple types
     'void': TypeInfo('void'),
@@ -59,20 +61,23 @@ class TypeMappings {
     ),
     'crypto_sign_keypair_result': TypeInfo('KeyPair'),
     'crypto_sign_seed_keypair_result': TypeInfo('KeyPair'),
-    // opaque types (states)
-    'generichash_state': TypeInfo('GenerichashState', template: 'opaque_type'),
+    // state typedefs
+    'secretstream_xchacha20poly1305_state': TypeInfo(
+      'SecretstreamXchacha20poly1305State',
+      typeDef: 'num',
+    ),
+    'secretstream_xchacha20poly1305_state_address':
+        TypeInfo('SecretstreamXchacha20poly1305State'),
+    'sign_state': TypeInfo('SignState', typeDef: 'num'),
+    'sign_state_address': TypeInfo('SignState'),
+    'generichash_state': TypeInfo('GenerichashState', typeDef: 'num'),
     'generichash_state_address': TypeInfo('GenerichashState'),
-    'hash_sha256_state': TypeInfo('HashSha256State', template: 'opaque_type'),
+    'hash_sha256_state': TypeInfo('HashSha256State', typeDef: 'num'),
     'hash_sha256_state_address': TypeInfo('HashSha256State'),
-    'hash_sha512_state': TypeInfo('HashSha512State', template: 'opaque_type'),
+    'hash_sha512_state': TypeInfo('HashSha512State', typeDef: 'num'),
     'hash_sha512_state_address': TypeInfo('HashSha512State'),
-    'onetimeauth_state': TypeInfo('OnetimeauthState', template: 'opaque_type'),
+    'onetimeauth_state': TypeInfo('OnetimeauthState', typeDef: 'num'),
     'onetimeauth_state_address': TypeInfo('OnetimeauthState'),
-    // num states
-    'secretstream_xchacha20poly1305_state': TypeInfo('num'),
-    'secretstream_xchacha20poly1305_state_address': TypeInfo('num'),
-    'sign_state': TypeInfo('num'),
-    'sign_state_address': TypeInfo('num'),
     // hidden types
     'randombytes_implementation': TypeInfo('Never'),
     'randombytes_set_implementation_result': TypeInfo('Never'),
@@ -102,23 +107,18 @@ class TypeMappings {
   bool isForced(String type) => _mappings[type]?.force ?? false;
 
   Future<void> writeTypeDefinitions(StringSink sink) async {
+    for (final info in _mappings.values) {
+      if (info.typeDef != null) {
+        sink.writeln('typedef ${info.dartType} = ${info.typeDef};\n');
+      }
+    }
+
     final typeFiles = await fileLoader.listFilesSorted(
       '.',
       (file) => file.path.endsWith('.dart.type'),
     );
-
     for (final typeFile in typeFiles) {
       sink.writeln(await typeFile.readAsString());
-    }
-
-    for (final info in _mappings.values) {
-      if (info.template != null) {
-        final templateStr = await fileLoader.loadFile(
-          '${info.template}.dart.template',
-        );
-        final outStr = templateStr.replaceAll(_classNameParam, info.dartType);
-        sink.writeln(outStr);
-      }
     }
   }
 }

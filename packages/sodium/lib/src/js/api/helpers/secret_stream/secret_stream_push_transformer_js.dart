@@ -9,14 +9,14 @@ import '../../../bindings/sodium.js.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
 @internal
-class SecretStreamPushTransformerSinkJS
-    extends SecretStreamPushTransformerSink<num> {
+class SecretStreamPushTransformerSinkJS extends SecretStreamPushTransformerSink<
+    SecretstreamXchacha20poly1305State> {
   final LibSodiumJS sodium;
 
   SecretStreamPushTransformerSinkJS(this.sodium);
 
   @override
-  InitPushResult<num> initialize(SecureKey key) {
+  InitPushResult<SecretstreamXchacha20poly1305State> initialize(SecureKey key) {
     final initResult = JsError.wrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_secretstream_xchacha20poly1305_init_push(
@@ -32,14 +32,14 @@ class SecretStreamPushTransformerSinkJS
   }
 
   @override
-  void rekey(num cryptoState) => JsError.wrap(
+  void rekey(SecretstreamXchacha20poly1305State cryptoState) => JsError.wrap(
         // always returns true, ignore result
         () => sodium.crypto_secretstream_xchacha20poly1305_rekey(cryptoState),
       );
 
   @override
   SecretStreamCipherMessage encryptMessage(
-    num cryptoState,
+    SecretstreamXchacha20poly1305State cryptoState,
     SecretStreamPlainMessage event,
   ) {
     final cipherText = JsError.wrap(
@@ -58,16 +58,17 @@ class SecretStreamPushTransformerSinkJS
   }
 
   @override
-  void disposeState(num cryptoState) {}
+  void disposeState(SecretstreamXchacha20poly1305State cryptoState) {}
 }
 
 @internal
-class SecretStreamPushTransformerJS extends SecretStreamPushTransformer<num> {
+class SecretStreamPushTransformerJS
+    extends SecretStreamPushTransformer<SecretstreamXchacha20poly1305State> {
   final LibSodiumJS sodium;
 
   const SecretStreamPushTransformerJS(this.sodium, SecureKey key) : super(key);
 
   @override
-  SecretStreamPushTransformerSink<num> createSink() =>
-      SecretStreamPushTransformerSinkJS(sodium);
+  SecretStreamPushTransformerSink<SecretstreamXchacha20poly1305State>
+      createSink() => SecretStreamPushTransformerSinkJS(sodium);
 }

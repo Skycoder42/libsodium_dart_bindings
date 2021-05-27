@@ -11,13 +11,13 @@ mixin SignConsumerJSMixin<T extends Object>
   LibSodiumJS get sodium;
 
   final _signatureCompleter = Completer<T>();
-  late final num _state;
+  late final SignState _state;
 
   @protected
   Future<T> get result => _signatureCompleter.future;
 
   @protected
-  T finalize(num state);
+  T finalize(SignState state);
 
   @protected
   void initState() {

@@ -11,8 +11,8 @@ import '../../../bindings/sodium.js.dart';
 import '../../../bindings/to_safe_int.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
-class SecretStreamPullTransformerSinkJS
-    extends SecretStreamPullTransformerSink<num> {
+class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
+    SecretstreamXchacha20poly1305State> {
   final LibSodiumJS sodium;
 
   SecretStreamPullTransformerSinkJS(
@@ -26,7 +26,7 @@ class SecretStreamPullTransformerSinkJS
       sodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES.toSafeUInt32();
 
   @override
-  num initialize(
+  SecretstreamXchacha20poly1305State initialize(
     SecureKey key,
     Uint8List header,
   ) =>
@@ -40,14 +40,14 @@ class SecretStreamPullTransformerSinkJS
       );
 
   @override
-  void rekey(num cryptoState) => JsError.wrap(
+  void rekey(SecretstreamXchacha20poly1305State cryptoState) => JsError.wrap(
         // ignore result, as it is always true
         () => sodium.crypto_secretstream_xchacha20poly1305_rekey(cryptoState),
       );
 
   @override
   SecretStreamPlainMessage decryptMessage(
-    num cryptoState,
+    SecretstreamXchacha20poly1305State cryptoState,
     SecretStreamCipherMessage event,
   ) {
     final dynamic pullResult = JsError.wrap<dynamic>(
@@ -76,11 +76,12 @@ class SecretStreamPullTransformerSinkJS
   }
 
   @override
-  void disposeState(num cryptoState) {}
+  void disposeState(SecretstreamXchacha20poly1305State cryptoState) {}
 }
 
 @internal
-class SecretStreamPullTransformerJS extends SecretStreamPullTransformer<num> {
+class SecretStreamPullTransformerJS
+    extends SecretStreamPullTransformer<SecretstreamXchacha20poly1305State> {
   final LibSodiumJS sodium;
 
   const SecretStreamPullTransformerJS(
@@ -91,6 +92,7 @@ class SecretStreamPullTransformerJS extends SecretStreamPullTransformer<num> {
   ) : super(key, requireFinalized);
 
   @override
-  SecretStreamPullTransformerSink<num> createSink(bool requireFinalized) =>
-      SecretStreamPullTransformerSinkJS(sodium, requireFinalized);
+  SecretStreamPullTransformerSink<SecretstreamXchacha20poly1305State>
+      createSink(bool requireFinalized) =>
+          SecretStreamPullTransformerSinkJS(sodium, requireFinalized);
 }

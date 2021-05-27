@@ -13,7 +13,6 @@ class LibraryGenerator {
       ..writeln("import 'dart:typed_data';")
       ..writeln()
       ..writeln("import 'package:js/js.dart';")
-      ..writeln("import 'package:meta/meta.dart';")
       ..writeln();
   }
 
