@@ -6,6 +6,7 @@ import 'package:sodium/src/ffi/api/generic_hash_ffi.dart';
 import 'package:sodium/src/ffi/api/pwhash_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_box_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_stream_ffi.dart';
+import 'package:sodium/src/ffi/api/short_hash_ffi.dart';
 import 'package:sodium/src/ffi/api/sign_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
@@ -82,6 +83,17 @@ void main() {
     expect(
       sut.genericHash,
       isA<GenericHashFFI>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('shortHash returns ShortHashFFI instance', () {
+    expect(
+      sut.shortHash,
+      isA<ShortHashFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

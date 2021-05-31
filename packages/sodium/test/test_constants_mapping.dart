@@ -10,7 +10,7 @@ void testConstantsMapping(
   List<Tuple3<num Function(), int Function(), String>> data,
 ) =>
     testData<Tuple3<num Function(), int Function(), String>>(
-      'maps integer constants correctly',
+      'maps integer constant correctly:',
       data,
       (fixture) {
         const value = 10;

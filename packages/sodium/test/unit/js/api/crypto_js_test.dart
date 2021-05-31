@@ -6,6 +6,7 @@ import 'package:sodium/src/js/api/generic_hash_js.dart';
 import 'package:sodium/src/js/api/pwhash_js.dart';
 import 'package:sodium/src/js/api/secret_box_js.dart';
 import 'package:sodium/src/js/api/secret_stream_js.dart';
+import 'package:sodium/src/js/api/short_hash_js.dart';
 import 'package:sodium/src/js/api/sign_js.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
@@ -82,6 +83,17 @@ void main() {
     expect(
       sut.genericHash,
       isA<GenericHashJS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('shortHash returns ShortHashJS instance', () {
+    expect(
+      sut.shortHash,
+      isA<ShortHashJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

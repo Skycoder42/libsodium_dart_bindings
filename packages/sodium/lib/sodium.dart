@@ -9,6 +9,7 @@ export 'src/api/randombytes.dart';
 export 'src/api/secret_box.dart' hide SecretBoxValidations;
 export 'src/api/secret_stream.dart' hide SecretStreamValidations;
 export 'src/api/secure_key.dart' hide SecureKeyEquality;
+export 'src/api/short_hash.dart' hide ShortHashValidations;
 export 'src/api/sign.dart' hide SignValidations;
 export 'src/api/sodium.dart';
 export 'src/api/sodium_exception.dart';

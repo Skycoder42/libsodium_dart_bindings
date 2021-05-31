@@ -1,4 +1,6 @@
 import 'package:meta/meta.dart';
+import 'package:sodium/src/api/short_hash.dart';
+import 'package:sodium/src/ffi/api/short_hash_ffi.dart';
 
 import '../../api/auth.dart';
 import '../../api/box.dart';
@@ -40,6 +42,9 @@ class CryptoFFI implements Crypto {
 
   @override
   late final GenericHash genericHash = GenericHashFFI(sodium);
+
+  @override
+  late final ShortHash shortHash = ShortHashFFI(sodium);
 
   @override
   late final Pwhash pwhash = PwhashFFI(sodium);

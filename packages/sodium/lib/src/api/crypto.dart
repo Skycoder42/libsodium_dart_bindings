@@ -1,3 +1,5 @@
+import 'package:sodium/src/api/short_hash.dart';
+
 import 'auth.dart';
 import 'box.dart';
 import 'generic_hash.dart';
@@ -39,6 +41,11 @@ abstract class Crypto {
   ///
   /// This provides all APIs that start with `crypto_generichash`.
   GenericHash get genericHash;
+
+  /// An instance of [ShortHash].
+  ///
+  /// This provides all APIs that start with `crypto_shorthash`.
+  ShortHash get shortHash;
 
   /// An instance of [Pwhash].
   ///
