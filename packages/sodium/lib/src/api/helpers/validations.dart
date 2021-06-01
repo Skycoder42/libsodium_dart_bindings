@@ -31,4 +31,15 @@ abstract class Validations {
       );
     }
   }
+
+  static void checkAtMost(int value, int maxValue, String name) {
+    if (value > maxValue) {
+      throw RangeError.value(
+        value,
+        name,
+        'Must be at most $maxValue, but was',
+      );
+    }
+    checkAtLeast(value, 0, name);
+  }
 }

@@ -6,6 +6,7 @@ import 'cases/aead_test_case.dart';
 import 'cases/auth_test_case.dart';
 import 'cases/box_test_case.dart';
 import 'cases/generic_hash_test_case.dart';
+import 'cases/kdf_test_case.dart';
 import 'cases/pwhash_test_case.dart';
 import 'cases/randombytes_test_case.dart';
 import 'cases/secret_box_test_case.dart';
@@ -28,6 +29,7 @@ abstract class TestRunner {
         GenericHashTestCase(),
         ShortHashTestCase(),
         PwhashTestCase(),
+        KdfTestCase(),
       ];
 
   Future<Sodium> loadSodium();

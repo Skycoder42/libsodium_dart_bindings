@@ -55,7 +55,7 @@ API based on libsodium version: *1.0.18*
  crypto_generichash  | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/hashing/generic_hashing
  crypto_shorthash    | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/hashing/short-input_hashing
  crypto_pwhash       | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/password_hashing/default_phf
- crypto_kdf          | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/key_derivation
+ crypto_kdf          | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/key_derivation
  crypto_kx           | 🚧 | 🚧 | https://libsodium.gitbook.io/doc/key_exchange
  crypto_onetimeauth  | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/poly1305
  crypto_scalarmult   | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication

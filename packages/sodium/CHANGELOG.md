@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.2] - 2021-06-01
 ### Added
-- New libsodium API: crypto_aead
-  - Only crypto_aead_xchacha20poly1305_ietf has been implemented for now
+- New libsodium API: 
+  - crypto_aead
+    - Only crypto_aead_xchacha20poly1305_ietf has been implemented for now
+  - crypto_kdf
 ### Fixed
 - Improve secretstream API usage
 
