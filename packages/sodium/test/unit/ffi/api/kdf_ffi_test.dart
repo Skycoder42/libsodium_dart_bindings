@@ -1,5 +1,4 @@
 import 'dart:ffi';
-import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
