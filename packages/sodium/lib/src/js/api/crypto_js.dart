@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../../api/aead.dart';
 import '../../api/auth.dart';
 import '../../api/box.dart';
 import '../../api/crypto.dart';
@@ -10,6 +11,7 @@ import '../../api/secret_stream.dart';
 import '../../api/short_hash.dart';
 import '../../api/sign.dart';
 import '../bindings/sodium.js.dart' hide SecretBox;
+import 'aead_js.dart';
 import 'auth_js.dart';
 import 'box_js.dart';
 import 'generic_hash_js.dart';
@@ -30,6 +32,9 @@ class CryptoJS implements Crypto {
 
   @override
   late final SecretStream secretStream = SecretStreamJS(sodium);
+
+  @override
+  late final Aead aead = AeadJS(sodium);
 
   @override
   late final Auth auth = AuthJS(sodium);

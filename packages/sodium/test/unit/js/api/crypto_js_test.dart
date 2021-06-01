@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/js/api/aead_js.dart';
 import 'package:sodium/src/js/api/auth_js.dart';
 import 'package:sodium/src/js/api/box_js.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
@@ -39,6 +40,17 @@ void main() {
     expect(
       sut.secretStream,
       isA<SecretStreamJS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('aead returns AeadJS instance', () {
+    expect(
+      sut.aead,
+      isA<AeadJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

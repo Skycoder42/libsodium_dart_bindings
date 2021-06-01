@@ -73,7 +73,6 @@ class SecretStreamPushTransformerSinkFFI
     SodiumPointer<Uint8>? messagePtr;
     SodiumPointer<Uint8>? adPtr;
     SodiumPointer<Uint8>? cipherPtr;
-    SodiumPointer<Uint64>? cipherLenPtr; // TODO remove
     try {
       messagePtr = event.message.toSodiumPointer(
         sodium,
@@ -88,15 +87,11 @@ class SecretStreamPushTransformerSinkFFI
         count: messagePtr.count +
             sodium.crypto_secretstream_xchacha20poly1305_abytes(),
       );
-      cipherLenPtr = SodiumPointer.alloc(
-        sodium,
-        zeroMemory: true,
-      );
 
       final result = sodium.crypto_secretstream_xchacha20poly1305_push(
         cryptoState.ptr.cast(),
         cipherPtr.ptr,
-        cipherLenPtr.ptr,
+        nullptr,
         messagePtr.ptr,
         messagePtr.count,
         adPtr?.ptr ?? nullptr.cast(),
@@ -106,14 +101,13 @@ class SecretStreamPushTransformerSinkFFI
       SodiumException.checkSucceededInt(result);
 
       return SecretStreamCipherMessage(
-        cipherPtr.copyAsList(cipherLenPtr.ptr.value),
+        cipherPtr.copyAsList(),
         additionalData: event.additionalData,
       );
     } finally {
       messagePtr?.dispose();
       adPtr?.dispose();
       cipherPtr?.dispose();
-      cipherLenPtr?.dispose();
     }
   }
 

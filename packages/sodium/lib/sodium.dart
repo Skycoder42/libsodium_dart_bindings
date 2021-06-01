@@ -1,3 +1,4 @@
+export 'src/api/aead.dart' hide AeadValidations;
 export 'src/api/auth.dart' hide AuthValidations;
 export 'src/api/box.dart' hide BoxValidations;
 export 'src/api/crypto.dart';

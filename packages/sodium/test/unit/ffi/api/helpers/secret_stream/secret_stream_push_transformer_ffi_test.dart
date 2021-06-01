@@ -160,14 +160,10 @@ void main() {
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
-          () => mockSodium.sodium_memzero(
-                any(that: isNot(nullptr)),
-                sizeOf<Uint64>(),
-              ),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
                 state.ptr.cast(),
                 any(that: isNot(nullptr)),
-                any(that: predicate((Pointer<Uint64> p) => p.value == 0)),
+                any(that: equals(nullptr)),
                 any(that: hasRawData<Uint8>(messageData)),
                 messageData.length,
                 any(that: hasRawData<Uint8>(additionalData)),
@@ -199,14 +195,10 @@ void main() {
 
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
-          () => mockSodium.sodium_memzero(
-                any(that: isNot(nullptr)),
-                sizeOf<Uint64>(),
-              ),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
                 state.ptr.cast(),
                 any(that: isNot(nullptr)),
-                any(that: predicate((Pointer<Uint64> p) => p.value == 0)),
+                any(that: equals(nullptr)),
                 any(that: hasRawData<Uint8>(messageData)),
                 messageData.length,
                 nullptr.cast(),
@@ -229,8 +221,6 @@ void main() {
               any(),
             )).thenAnswer((i) {
           fillPointer(i.positionalArguments[1] as Pointer, cipherData);
-          (i.positionalArguments[2] as Pointer<Uint64>).value =
-              cipherData.length;
           return 0;
         });
 
@@ -245,35 +235,6 @@ void main() {
 
         expect(result.message, cipherData);
         expect(result.additionalData, additionalData);
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(4);
-      });
-
-      test('returns encrypted cipher message with less bytes', () {
-        final cipherData = List.generate(8, (index) => index * 2);
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenAnswer((i) {
-          fillPointer(i.positionalArguments[1] as Pointer, cipherData);
-          (i.positionalArguments[2] as Pointer<Uint64>).value = 2;
-          return 0;
-        });
-
-        final result = sut.encryptMessage(
-          SodiumPointer.alloc(mockSodium),
-          SecretStreamPlainMessage(Uint8List(5)),
-        );
-
-        expect(result.message, cipherData.sublist(0, 2));
-        expect(result.additionalData, isNull);
         verify(
           () => mockSodium.sodium_free(any(that: isNot(nullptr))),
         ).called(3);
@@ -303,7 +264,7 @@ void main() {
         );
         verify(
           () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(4);
+        ).called(3);
       });
     });
 

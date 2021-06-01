@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/ffi/api/aead_ffi.dart';
 import 'package:sodium/src/ffi/api/auth_ffi.dart';
 import 'package:sodium/src/ffi/api/box_ffi.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
@@ -39,6 +40,17 @@ void main() {
     expect(
       sut.secretStream,
       isA<SecretStreamFFI>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('aead returns AeadFFI instance', () {
+    expect(
+      sut.aead,
+      isA<AeadFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,
