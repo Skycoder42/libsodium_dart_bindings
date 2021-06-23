@@ -49,11 +49,11 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
-      - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile analyze
-      - run: make -f ../../Makefile publish-dry
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter pub publish --dry-run
 
   release:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
       update: ${{ steps.version.outputs.update }}
       tag_name: ${{ steps.version.outputs.tag_name }}
     steps:
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
       - uses: Skycoder42/action-dart-release@v1
         id: version
@@ -86,15 +86,14 @@ jobs:
       - release
     if: needs.release.outputs.update == 'true'
     steps:
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
-      - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile build
+      - run: flutter pub get
       - name: store credentials
         run: |
           mkdir -p ~/.pub-cache
           echo '${{ secrets.PUB_DEV_CREDENTIALS }}' > ~/.pub-cache/credentials.json
-      - run: make -f ../../Makefile publish
+      - run: flutter pub publish
       - name: clean up credentials
         if: always()
         run: shred -fzvu ~/.pub-cache/credentials.json
@@ -105,11 +104,10 @@ jobs:
       - release
     if: needs.release.outputs.update == 'true'
     steps:
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
-      - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile build
-      - run: make -f ../../Makefile doc
+      - run: flutter pub get
+      - run: dartdoc
       - name: upload doc
         uses: peaceiris/actions-gh-pages@v3
         with:
