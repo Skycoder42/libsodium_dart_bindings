@@ -1,10 +1,11 @@
 name: sodium_libs_platform_interface
 description: flutter libraries for sodium
 version: 0.1.0
+homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
-  sdk: '>=2.13.0 <3.0.0'
-  flutter: '>=2.0.0'
+  sdk: ">=2.13.0 <3.0.0"
+  flutter: ">=2.0.0"
 
 dependencies:
   flutter:
@@ -14,7 +15,7 @@ dependencies:
 
 dev_dependencies:
   dart_pre_commit: ^2.3.1
-  flutter_test: 
+  flutter_test:
     sdk: flutter
   lint: ^1.5.3
   mocktail: ^0.1.4

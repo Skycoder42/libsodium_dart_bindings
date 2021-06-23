@@ -1,14 +1,13 @@
 name: sodium
 
 packages:
-  # - packages/**
   - packages/sodium/*
   - packages/sodium_libs/*
   - packages/sodium_libs_platform_interface/*
   - packages/sodium_libs_windows/*
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.13.0 <3.0.0"
 
 dev_dependencies:
   coverage: ^1.0.2
