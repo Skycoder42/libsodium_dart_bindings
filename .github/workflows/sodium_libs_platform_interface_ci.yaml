@@ -51,7 +51,7 @@ jobs:
     steps:
       - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
-      - uses: ../steps/dependency_clean
+      - uses: ./.github/actions/dependency_clean
         with:
           package: ${{ env.PACKAGE_NAME }}
       - run: flutter pub get

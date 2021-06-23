@@ -10,4 +10,6 @@ runs:
   using: "composite"
   steps:
     - run: dart pub global activate multipack
+      shell: bash
     - run: dart pub global run multipack pubspec clean --only=${{ inputs.package }}
+      shell: bash
