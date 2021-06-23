@@ -1,10 +1,10 @@
 name: sodium
 description: Dart bindings for libsodium, for the Dart-VM and for the Web
-version: 0.2.3
+version: 0.2.4
 homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
-  sdk: '>=2.13.0 <3.0.0'
+  sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
   ffi: ^1.1.2
@@ -25,14 +25,14 @@ dev_dependencies:
   tuple: ^2.0.0
 
 ffigen:
-  output: 'lib/src/ffi/bindings/libsodium.ffi.dart'
+  output: "lib/src/ffi/bindings/libsodium.ffi.dart"
   name: LibSodiumFFI
-  description: 'Bindings of libsodium'
+  description: "Bindings of libsodium"
   headers:
     entry-points:
-      - '/usr/include/sodium.h'
+      - "/usr/include/sodium.h"
   compiler-opts:
-    - '-I/usr/lib/clang/11.1.0/include/'
+    - "-I/usr/lib/clang/11.1.0/include/"
   functions:
     include:
       - sodium.*
