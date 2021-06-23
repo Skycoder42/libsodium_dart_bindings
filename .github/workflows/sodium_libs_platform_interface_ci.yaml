@@ -9,14 +9,14 @@ on:
     branches:
       - "*"
     paths:
-      - "packages/${{ env.PACKAGE_NAME }}/**"
-      - ".github/workflows/${{ env.PACKAGE_NAME }}_ci.yaml"
+      - "packages/sodium_libs_platform_interface/**"
+      - ".github/workflows/sodium_libs_platform_interface_ci.yaml"
   pull_request:
     branches:
       - "*"
     paths:
-      - "packages/${{ env.PACKAGE_NAME }}/**"
-      - ".github/workflows/${{ env.PACKAGE_NAME }}_ci.yaml"
+      - "packages/sodium_libs_platform_interface/**"
+      - ".github/workflows/sodium_libs_platform_interface_ci.yaml"
 
 defaults:
   run:
