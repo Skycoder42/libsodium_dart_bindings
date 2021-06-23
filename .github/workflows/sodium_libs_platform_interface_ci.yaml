@@ -20,7 +20,7 @@ on:
 
 defaults:
   run:
-    working-directory: packages/${{ env.PACKAGE_NAME }}
+    working-directory: packages/sodium_libs_platform_interface
 
 jobs:
   test:
