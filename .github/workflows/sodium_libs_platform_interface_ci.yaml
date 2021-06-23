@@ -99,7 +99,7 @@ jobs:
         run: |
           mkdir -p ~/.pub-cache
           echo '${{ secrets.PUB_DEV_CREDENTIALS }}' > ~/.pub-cache/credentials.json
-      - run: flutter pub publish
+      - run: flutter pub publish --force
       - name: clean up credentials
         if: always()
         run: shred -fzvu ~/.pub-cache/credentials.json
