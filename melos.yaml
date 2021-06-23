@@ -3,7 +3,9 @@ name: sodium
 packages:
   # - packages/**
   - packages/sodium/*
+  - packages/sodium_libs/*
   - packages/sodium_libs_platform_interface/*
+  - packages/sodium_libs_windows/*
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -92,7 +94,7 @@ scripts:
   test:integration:js:
     run: dart pub global run melos exec -- make -f ../../Makefile integration-tests-js
     description: Run integration tests in all projects (JS only)
-  
+
   doc:
     run: dart pub global run melos exec -- make -f ../../Makefile doc
     description: Create API-documentation in all projects
@@ -110,5 +112,5 @@ scripts:
     description: Remove pre commit hooks
 
   pre-commit:run:
-    run: dart pub global run melos exec -c1 -- dart run dart_pre_commit -t -oany -p --ansi
+    run: dart pub global run melos exec -c1 -- dart run dart_pre_commit -t -p --ansi
     description: Run pre commit hooks in all projects

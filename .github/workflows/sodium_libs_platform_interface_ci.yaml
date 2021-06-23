@@ -1,22 +1,25 @@
-name: Continous Integration for package sodium
+name: Continous Integration for package sodium_libs_platform_interface
+
+env:
+  PACKAGE_NAME: sodium_libs_platform_interface
 
 on:
   push:
     branches:
       - "*"
     paths:
-      - "packages/sodium/**"
-      - ".github/workflows/sodium_ci.yaml"
+      - "packages/${{ env.PACKAGE_NAME }}/**"
+      - ".github/workflows/${{ env.PACKAGE_NAME }}_ci.yaml"
   pull_request:
     branches:
       - "*"
     paths:
-      - "packages/sodium/**"
-      - ".github/workflows/sodium_ci.yaml"
+      - "packages/${{ env.PACKAGE_NAME }}/**"
+      - ".github/workflows/${{ env.PACKAGE_NAME }}_ci.yaml"
 
 defaults:
   run:
-    working-directory: packages/sodium
+    working-directory: packages/${{ env.PACKAGE_NAME }}
 
 jobs:
   test:
@@ -47,33 +50,8 @@ jobs:
     steps:
       - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
-      - name: install libsodium (linux)
-        if: matrix.platform == 'linux'
-        run: |
-          sudo apt-get -qq update
-          sudo apt-get -qq install libsodium-dev
-      - name: install libsodium (macos)
-        if: matrix.platform == 'macos'
-        run: brew install libsodium
-      - name: install minisign (windows)
-        if: matrix.platform == 'windows'
-        run: choco install minisign -y
-      - name: fetch libsodium
-        run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
-        working-directory: .
       - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile build
       - run: make -f ../../Makefile analyze
-      - run: make -f ../../Makefile unit-tests-${{ matrix.system }}-coverage
-      - run: make -f ../../Makefile integration-tests-${{ matrix.system }}
-      - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
-        with:
-          path: packages/sodium/coverage/lcov.info
-          min_coverage: 95
-          exclude: |
-            **/*.freezed.dart 
-            **/*.ffi.dart 
-            **/*.js.dart
       - run: make -f ../../Makefile publish-dry
 
   release:
@@ -90,15 +68,15 @@ jobs:
       - uses: Skycoder42/action-dart-release@v1
         id: version
         with:
-          src_dir: packages/sodium
+          src_dir: packages/${{ env.PACKAGE_NAME }}
       - name: Create Release
         if: steps.version.outputs.update == 'true'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: sodium/v${{ steps.version.outputs.tag_name }}
-          release_name: sodium - ${{ steps.version.outputs.release_name }}
+          tag_name: ${{ env.PACKAGE_NAME }}/v${{ steps.version.outputs.tag_name }}
+          release_name: ${{ env.PACKAGE_NAME }} - ${{ steps.version.outputs.release_name }}
           body_path: ${{ steps.version.outputs.body_path }}
 
   deploy:
@@ -135,6 +113,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: packages/sodium/doc/api
+          publish_dir: packages/${{ env.PACKAGE_NAME }}/doc/api
           commit_message: Updated documentation to v${{ needs.release.outputs.tag_name }}
-          destination_dir: sodium
+          destination_dir: ${{ env.PACKAGE_NAME }}
