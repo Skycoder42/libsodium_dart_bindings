@@ -1,0 +1,13 @@
+name: dependency_clean
+description: Removes all dependency overrides from the target package
+
+inputs:
+  package:
+    description: "The package to clean"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - run: dart pub global activate multipack
+    - run: dart pub global run multipack pubspec clean --only=${{ inputs.package }}
