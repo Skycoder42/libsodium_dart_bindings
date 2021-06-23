@@ -1,16 +1,28 @@
 name: sodium_libs_example
-publish_to: none
 description: Demonstrates how to use the sodium_libs plugin.
-environment: 
-  sdk: '>=2.12.0 <3.0.0'
-dependencies: 
-  cupertino_icons: ^1.0.2
-  flutter: 
+publish_to: none
+
+environment:
+  sdk: ">=2.13.0 <3.0.0"
+  flutter: ">=2.0.0"
+
+dependencies:
+  flutter:
     sdk: flutter
-  sodium_libs: 
+  sodium_libs:
     path: ../
-dev_dependencies: 
-  flutter_test: 
+
+dev_dependencies:
+  flutter_test:
     sdk: flutter
-flutter: 
+
+dependency_overrides:
+  sodium:
+    path: "../../sodium"
+  sodium_libs_platform_interface:
+    path: "../../sodium_libs_platform_interface"
+  sodium_libs_windows:
+    path: "../../sodium_libs_windows"
+
+flutter:
   uses-material-design: true

@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:sodium_libs/sodium_libs.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  _MyAppState createState() => _MyAppState();
-}
+  Widget build(BuildContext context) => MaterialApp(
+        title: 'sodium_libs example app',
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('sodium_libs example app'),
+          ),
+          body: Center(
+            child: FutureBuilder<Sodium>(
+              future: SodiumInit.init(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(
+                    'Loaded libsodium with version ${snapshot.data!.version}',
+                  );
+                }
 
-class _MyAppState extends State<MyApp> {
-  final _platformVersion = 'Unknown';
+                if (snapshot.hasError) {
+                  return Text(
+                    'Failed to load libsodium with error: ${snapshot.error}',
+                    style: const TextStyle(color: Colors.red),
+                  );
+                }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
+                return const CircularProgressIndicator();
+              },
+            ),
+          ),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
-      ),
-    );
-  }
+      );
 }
