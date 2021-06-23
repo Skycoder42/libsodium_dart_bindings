@@ -6,6 +6,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static const resultTextKey = Key('resultText');
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: 'sodium_libs example app',
@@ -20,12 +22,14 @@ class MyApp extends StatelessWidget {
                 if (snapshot.hasData) {
                   return Text(
                     'Loaded libsodium with version ${snapshot.data!.version}',
+                    key: resultTextKey,
                   );
                 }
 
                 if (snapshot.hasError) {
                   return Text(
                     'Failed to load libsodium with error: ${snapshot.error}',
+                    key: resultTextKey,
                     style: const TextStyle(color: Colors.red),
                   );
                 }
