@@ -6,6 +6,7 @@ export 'src/api/detached_cipher_result.dart';
 export 'src/api/generic_hash.dart' hide GenericHashValidations;
 export 'src/api/kdf.dart' hide KdfValidations;
 export 'src/api/key_pair.dart';
+export 'src/api/kx.dart' hide KxValidations;
 export 'src/api/pwhash.dart' hide PwHashValidations;
 export 'src/api/randombytes.dart';
 export 'src/api/secret_box.dart' hide SecretBoxValidations;

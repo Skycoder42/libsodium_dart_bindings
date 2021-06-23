@@ -59,6 +59,33 @@ void testCheckAtLeast(
     );
 
 @isTestGroup
+void testCheckAtMost(
+  String name, {
+  required int Function() source,
+  required void Function(int value) sut,
+}) =>
+    testData<Tuple2<int, bool>>(
+      '$name asserts if value is not as expected',
+      const [
+        Tuple2(5, false),
+        Tuple2(4, false),
+        Tuple2(0, false),
+        Tuple2(6, true),
+      ],
+      (fixture) {
+        when(source).thenReturn(5);
+
+        final exceptionMatcher = throwsA(isA<RangeError>());
+        expect(
+          () => sut(fixture.item1),
+          fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+        );
+
+        verify(source);
+      },
+    );
+
+@isTestGroup
 void testCheckInRange(
   String name, {
   required int Function() minSource,

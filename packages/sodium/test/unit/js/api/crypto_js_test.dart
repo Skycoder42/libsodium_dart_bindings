@@ -5,6 +5,7 @@ import 'package:sodium/src/js/api/box_js.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
 import 'package:sodium/src/js/api/generic_hash_js.dart';
 import 'package:sodium/src/js/api/kdf_js.dart';
+import 'package:sodium/src/js/api/kx_js.dart';
 import 'package:sodium/src/js/api/pwhash_js.dart';
 import 'package:sodium/src/js/api/secret_box_js.dart';
 import 'package:sodium/src/js/api/secret_stream_js.dart';
@@ -129,6 +130,17 @@ void main() {
     expect(
       sut.kdf,
       isA<KdfJS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('kx returns KxJS instance', () {
+    expect(
+      sut.kx,
+      isA<KxJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

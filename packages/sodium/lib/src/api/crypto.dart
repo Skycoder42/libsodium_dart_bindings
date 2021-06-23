@@ -3,6 +3,7 @@ import 'auth.dart';
 import 'box.dart';
 import 'generic_hash.dart';
 import 'kdf.dart';
+import 'kx.dart';
 import 'pwhash.dart';
 import 'secret_box.dart';
 import 'secret_stream.dart';
@@ -62,4 +63,9 @@ abstract class Crypto {
   ///
   /// This provides all APIs that start with `crypto_kdf`.
   Kdf get kdf;
+
+  /// An instance of [Kx].
+  ///
+  /// This provides all APIs that start with `crypto_kx`.
+  Kx get kx;
 }
