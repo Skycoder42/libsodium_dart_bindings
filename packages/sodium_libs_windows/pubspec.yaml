@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sodium: ^1.0.0
-  sodium_libs_platform_interface: ^1.0.0
+  sodium: ^0.2.4
+  sodium_libs_platform_interface: ^0.1.0
 
 dev_dependencies:
   dart_pre_commit: ^2.3.1

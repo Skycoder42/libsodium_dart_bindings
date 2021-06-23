@@ -19,7 +19,9 @@ dev_dependencies:
 
 scripts:
   get:
-    run: dart pub global run melos exec -- make -f ../../Makefile get
+    run: >-
+      dart pub global run melos exec --no-flutter -- dart pub get && 
+      dart pub global run melos exec --flutter -- flutter pub get
     description: Run 'pub get' in all projects
 
   upgrade:
@@ -47,16 +49,12 @@ scripts:
     description: Run 'pub outdated' in all projects
 
   build:
-    run: dart pub global run melos exec -- make -f ../../Makefile build
+    run: dart pub global run melos exec --depends-on=build_runner -- make -f ../../Makefile build
     description: Run the build runner in all projects
-    select-package:
-      depends-on: build_runner
 
   build:clean:
-    run: dart pub global run melos exec -- make -f ../../Makefile build-clean
+    run: dart pub global run melos exec --depends-on=build_runner -- make -f ../../Makefile build-clean
     description: Run the build runner in all projects, discarding the previous state
-    select-package:
-      depends-on: build_runner
 
   test:
     run: dart pub global run melos exec -- make -f ../../Makefile test

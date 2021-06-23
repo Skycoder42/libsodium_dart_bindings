@@ -1,7 +1,7 @@
-name: Continous Integration for package sodium_libs_platform_interface
+name: Continous Integration for package sodium_libs_windows
 
 env:
-  PACKAGE_NAME: sodium_libs_platform_interface
+  PACKAGE_NAME: sodium_libs_windows
 
 on:
   workflow_dispatch:
@@ -9,41 +9,22 @@ on:
     branches:
       - "*"
     paths:
-      - "packages/sodium_libs_platform_interface/**"
-      - ".github/workflows/sodium_libs_platform_interface_ci.yaml"
+      - "packages/sodium_libs_windows/**"
+      - ".github/workflows/sodium_libs_windows_ci.yaml"
   pull_request:
     branches:
       - "*"
     paths:
-      - "packages/sodium_libs_platform_interface/**"
-      - ".github/workflows/sodium_libs_platform_interface_ci.yaml"
+      - "packages/sodium_libs_windows/**"
+      - ".github/workflows/sodium_libs_windows_ci.yaml"
 
 defaults:
   run:
-    working-directory: packages/sodium_libs_platform_interface
+    working-directory: packages/sodium_libs_windows
 
 jobs:
   test:
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux
-          - windows
-          - macos
-          - web
-
-        include:
-          - platform: linux
-            os: ubuntu-latest
-          - platform: windows
-            os: windows-latest
-          - platform: macos
-            os: macos-latest
-          - platform: web
-            os: ubuntu-latest
-
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     steps:
       - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
