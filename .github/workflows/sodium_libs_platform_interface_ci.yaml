@@ -4,6 +4,7 @@ env:
   PACKAGE_NAME: sodium_libs_platform_interface
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "*"
