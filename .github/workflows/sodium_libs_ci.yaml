@@ -34,8 +34,10 @@ jobs:
         include:
           - platform: linux
             os: ubuntu-latest
+            drive: false
           - platform: windows
             os: windows-latest
+            drive: true
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -60,6 +62,7 @@ jobs:
       - run: flutter build ${{ matrix.platform }} --release
         working-directory: packages/sodium_libs/example
       - run: flutter drive --target=test_driver/app.dart -d ${{ matrix.platform }}
+        if: matrix.drive == 'true'
         working-directory: packages/sodium_libs/example
   # release:
   #   runs-on: ubuntu-latest
