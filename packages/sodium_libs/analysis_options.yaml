@@ -21,3 +21,4 @@ linter:
     prefer_expression_function_bodies: true
     prefer_single_quotes: true
     unawaited_futures: true
+    sort_pub_dependencies: false

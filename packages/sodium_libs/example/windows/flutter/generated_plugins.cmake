@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  sodium_libs_windows
+  sodium_libs
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

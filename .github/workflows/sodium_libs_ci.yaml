@@ -1,7 +1,7 @@
-name: Continous Integration for package sodium_libs_windows
+name: Continous Integration for package sodium_libs
 
 env:
-  PACKAGE_NAME: sodium_libs_windows
+  PACKAGE_NAME: sodium_libs
 
 on:
   workflow_dispatch:
@@ -9,31 +9,43 @@ on:
     branches:
       - "*"
     paths:
-      - "packages/sodium_libs_windows/**"
-      - ".github/workflows/sodium_libs_windows_ci.yaml"
+      - "packages/sodium_libs/**"
+      - ".github/workflows/sodium_libs_ci.yaml"
   pull_request:
     branches:
       - "*"
     paths:
-      - "packages/sodium_libs_windows/**"
-      - ".github/workflows/sodium_libs_windows_ci.yaml"
+      - "packages/sodium_libs/**"
+      - ".github/workflows/sodium_libs_ci.yaml"
 
 defaults:
   run:
-    working-directory: packages/sodium_libs_windows
+    working-directory: packages/sodium_libs
 
 jobs:
   test:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - windows
+
+        include:
+          - platform: windows
+            os: windows-latest
+
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
       - uses: ./.github/actions/dependency_clean
         with:
-          package: ${{ env.PACKAGE_NAME }}
+          package: ${{ env.PACKAGE_NAME }},${{ env.PACKAGE_NAME }}_example
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter pub publish --dry-run
+      - run: flutter drive --target=test_driver/app.dart -d ${{ matrix.platform }}
+        working-directory: packages/sodium_libs/example
 
   release:
     runs-on: ubuntu-latest

@@ -28,7 +28,7 @@ string(JSON LIBSODIUM_VERSION
 
 # This value is used when generating builds using this plugin, so it must
 # not be changed
-set(PLUGIN_NAME "sodium_libs_windows_plugin")
+set(PLUGIN_NAME "sodium_libs_plugin")
 
 add_library(${PLUGIN_NAME} SHARED
   "sodium_libs_windows_plugin.cpp"
@@ -78,7 +78,7 @@ if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}")
 endif()
 
 # List of absolute paths to libraries that should be bundled with the plugin
-set(sodium_libs_windows_bundled_libraries
+set(sodium_libs_bundled_libraries
   "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}/${LIBSODIUM_ARCH}/${LIBSODIUM_CONFIG}/${LIBSODIUM_VS_VERSION}/dynamic/libsodium.dll"
   PARENT_SCOPE
 )

@@ -9,27 +9,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sodium: ^1.0.0
-  sodium_libs_platform_interface: ^1.0.0
-  sodium_libs_windows: ^1.0.0
+  meta: ^1.3.0
+  platform_info: ^3.1.0
+  plugin_platform_interface: ^2.0.0
+  sodium: ^0.2.4
 
 dev_dependencies:
-  dart_pre_commit: ^2.3.1
   flutter_test:
     sdk: flutter
+  dart_pre_commit: ^2.3.1
   lint: ^1.5.3
   mocktail: ^0.1.4
 
 dependency_overrides:
   sodium:
     path: "../sodium"
-  sodium_libs_platform_interface:
-    path: "../sodium_libs_platform_interface"
-  sodium_libs_windows:
-    path: "../sodium_libs_windows"
 
 flutter:
   plugin:
     platforms:
       windows:
-        default_package: sodium_libs_windows
+        pluginClass: SodiumLibsWindowsPlugin

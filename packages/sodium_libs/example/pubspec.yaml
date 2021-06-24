@@ -22,10 +22,6 @@ dev_dependencies:
 dependency_overrides:
   sodium:
     path: "../../sodium"
-  sodium_libs_platform_interface:
-    path: "../../sodium_libs_platform_interface"
-  sodium_libs_windows:
-    path: "../../sodium_libs_windows"
 
 flutter:
   uses-material-design: true

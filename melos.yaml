@@ -3,8 +3,6 @@ name: sodium
 packages:
   - packages/sodium/*
   - packages/sodium_libs/*
-  - packages/sodium_libs_platform_interface/*
-  - packages/sodium_libs_windows/*
 
 environment:
   sdk: ">=2.13.0 <3.0.0"

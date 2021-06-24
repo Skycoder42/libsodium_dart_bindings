@@ -1,4 +1,4 @@
-#include "include/sodium_libs_windows/sodium_libs_windows_plugin.h"
+#include "include/sodium_libs/sodium_libs_windows_plugin.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>

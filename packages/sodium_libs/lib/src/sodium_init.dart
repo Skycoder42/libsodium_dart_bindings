@@ -1,14 +1,28 @@
 import 'package:flutter/widgets.dart';
+import 'package:platform_info/platform_info.dart';
 import 'package:sodium/sodium.dart' as sodium;
-import 'package:sodium_libs/src/dart_plugin_stub.dart';
-import 'package:sodium_libs_platform_interface/sodium_libs_platform_interface.dart';
+
+import 'platforms/sodium_windows.dart';
+import 'sodium_platform.dart';
 
 abstract class SodiumInit {
   const SodiumInit._(); // coverage:ignore-line
 
+  static void registerPlugins() {
+    if (SodiumPlatform.isRegistered) {
+      return;
+    }
+
+    platform.when(
+      io: () => platform.when(
+        windows: () => SodiumPlatform.instance = SodiumWindows(),
+      ),
+    );
+  }
+
   static Future<sodium.Sodium> init() {
     WidgetsFlutterBinding.ensureInitialized();
-    registerDartPlugins();
+    registerPlugins();
     return SodiumPlatform.instance.loadSodium();
   }
 }
