@@ -39,6 +39,9 @@ jobs:
       - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
       - run: flutter config --enable-${{ matrix.platform }}-desktop
+      - name: install minisign (windows)
+        if: matrix.platform == 'windows'
+        run: choco install minisign -y
       - uses: ./.github/actions/dependency_clean
         with:
           package: ${{ env.PACKAGE_NAME }},${{ env.PACKAGE_NAME }}_example
