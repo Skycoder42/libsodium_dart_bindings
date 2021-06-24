@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-set(PROJECT_NAME "sodium_libs_windows")
+set(PROJECT_NAME "sodium_libs")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -31,7 +31,7 @@ string(JSON LIBSODIUM_VERSION
 set(PLUGIN_NAME "sodium_libs_plugin")
 
 add_library(${PLUGIN_NAME} SHARED
-  "sodium_libs_windows_plugin.cpp"
+  "sodium_libs_plugin.cpp"
 )
 apply_standard_settings(${PLUGIN_NAME})
 set_target_properties(${PLUGIN_NAME} PROPERTIES

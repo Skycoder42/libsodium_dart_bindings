@@ -1,4 +1,4 @@
-#include "include/sodium_libs/sodium_libs_windows_plugin.h"
+#include "include/sodium_libs/sodium_libs_plugin.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>
@@ -10,22 +10,22 @@
 namespace
 {
 
-  class SodiumLibsWindowsPlugin : public flutter::Plugin
+  class SodiumLibsPlugin : public flutter::Plugin
   {
   public:
     static void RegisterWithRegistrar(flutter::PluginRegistrarWindows *registrar)
     {
-      auto plugin = std::make_unique<SodiumLibsWindowsPlugin>();
+      auto plugin = std::make_unique<SodiumLibsPlugin>();
       registrar->AddPlugin(std::move(plugin));
     }
   };
 
 } // namespace
 
-void SodiumLibsWindowsPluginRegisterWithRegistrar(
+void SodiumLibsPluginRegisterWithRegistrar(
     FlutterDesktopPluginRegistrarRef registrar)
 {
-  SodiumLibsWindowsPlugin::RegisterWithRegistrar(
+  SodiumLibsPlugin::RegisterWithRegistrar(
       flutter::PluginRegistrarManager::GetInstance()
           ->GetRegistrar<flutter::PluginRegistrarWindows>(registrar));
 }
