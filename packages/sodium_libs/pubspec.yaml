@@ -29,5 +29,7 @@ dependency_overrides:
 flutter:
   plugin:
     platforms:
+      linux:
+        pluginClass: SodiumLibsPlugin
       windows:
         pluginClass: SodiumLibsPlugin

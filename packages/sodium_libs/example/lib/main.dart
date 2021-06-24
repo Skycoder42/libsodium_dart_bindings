@@ -22,6 +22,10 @@ class MyApp extends StatelessWidget {
               future: SodiumInit.init(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  // ignore: avoid_print
+                  print(
+                    'Loaded libsodium with version ${snapshot.data!.version}',
+                  );
                   return Text(
                     'Loaded libsodium with version ${snapshot.data!.version}',
                     key: resultTextKey,

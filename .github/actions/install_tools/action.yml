@@ -1,0 +1,25 @@
+name: install_tools
+description: Installs tools and libraries required for working with libsodium
+
+inputs:
+  platform:
+    description: "The platform to install tools for"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: install libsodium (linux)
+      if: inputs.platform == 'linux'
+      shell: bash
+      run: |
+        sudo apt-get -qq update
+        sudo apt-get -qq install libsodium-dev
+    - name: install libsodium (macos)
+      if: inputs.platform == 'macos'
+      shell: bash
+      run: brew install libsodium
+    - name: install minisign (windows)
+      if: inputs.platform == 'windows'
+      shell: bash
+      run: choco install minisign -y

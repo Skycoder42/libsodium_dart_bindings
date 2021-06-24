@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
-set(PROJECT_NAME "libsodium_flutter_bindings_linux")
+set(PROJECT_NAME "sodium_libs")
 project(${PROJECT_NAME} LANGUAGES CXX)
+
+# This value is used when generating builds using this plugin, so it must
+# not be changed
+set(PLUGIN_NAME "sodium_libs_plugin")
 
 find_package(PkgConfig)
 pkg_check_modules(SODIUM REQUIRED IMPORTED_TARGET libsodium)
 
-# This value is used when generating builds using this plugin, so it must
-# not be changed
-set(PLUGIN_NAME "libsodium_flutter_bindings_linux_plugin")
-
 add_library(${PLUGIN_NAME} SHARED
-  "libsodium_flutter_bindings_linux_plugin.cc"
+  "sodium_libs_plugin.cc"
 )
 apply_standard_settings(${PLUGIN_NAME})
 set_target_properties(${PLUGIN_NAME} PROPERTIES
@@ -23,7 +23,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::SODIUM)
 
 # List of absolute paths to libraries that should be bundled with the plugin
-set(libsodium_flutter_bindings_linux_bundled_libraries
+set(sodium_libs_bundled_libraries
   ""
   PARENT_SCOPE
 )

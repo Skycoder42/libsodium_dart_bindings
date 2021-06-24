@@ -51,17 +51,9 @@ jobs:
     steps:
       - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
-      - name: install libsodium (linux)
-        if: matrix.platform == 'linux'
-        run: |
-          sudo apt-get -qq update
-          sudo apt-get -qq install libsodium-dev
-      - name: install libsodium (macos)
-        if: matrix.platform == 'macos'
-        run: brew install libsodium
-      - name: install minisign (windows)
-        if: matrix.platform == 'windows'
-        run: choco install minisign -y
+      - uses: ./.github/actions/install_tools
+        with:
+          platform: ${{ matrix.platform }}
       - name: fetch libsodium
         run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
         working-directory: .

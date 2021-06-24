@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:sodium/sodium.dart' as sodium;
 
+import 'platforms/sodium_linux.dart';
 import 'platforms/sodium_windows.dart';
 import 'sodium_platform.dart';
 
@@ -15,6 +16,7 @@ abstract class SodiumInit {
 
     platform.when(
       io: () => platform.when(
+        linux: () => SodiumPlatform.instance = SodiumLinux(),
         windows: () => SodiumPlatform.instance = SodiumWindows(),
       ),
     );
