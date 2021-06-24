@@ -1,6 +1,7 @@
 name: sodium_libs
 version: 0.1.0
 description: flutter libraries for sodium
+homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
