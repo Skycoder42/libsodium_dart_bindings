@@ -42,14 +42,15 @@ jobs:
       - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
       - run: flutter config --enable-${{ matrix.platform }}-desktop
-      - name: install libsodium (linux)
+      - name: install libsodium + ninja (linux)
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get -qq update
-          sudo apt-get -qq install libsodium-dev
+          sudo apt-get -qq install libsodium-dev ninja-build
       - name: install minisign (windows)
         if: matrix.platform == 'windows'
         run: choco install minisign -y
+      - run: flutter doctor -v
       - uses: ./.github/actions/dependency_clean
         with:
           package: ${{ env.PACKAGE_NAME }},${{ env.PACKAGE_NAME }}_example
