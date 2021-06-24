@@ -37,6 +37,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: subosito/flutter-action@v1
+      - run: flutter config --enable-${{ matrix.platform }}-desktop
       - uses: actions/checkout@v2
       - uses: ./.github/actions/dependency_clean
         with:
@@ -44,6 +45,8 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter pub publish --dry-run
+      - run: flutter build ${{ matrix.platform }} --release
+        working-directory: packages/sodium_libs/example
       - run: flutter drive --target=test_driver/app.dart -d ${{ matrix.platform }}
         working-directory: packages/sodium_libs/example
   # release:
