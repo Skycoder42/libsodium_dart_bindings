@@ -3,6 +3,7 @@ include: package:lint/analysis_options_package.yaml
 analyzer:
   exclude:
     - "build/**"
+    - "**/generated_plugin_registrant.dart"
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false

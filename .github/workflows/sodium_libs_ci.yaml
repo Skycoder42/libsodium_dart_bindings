@@ -30,19 +30,19 @@ jobs:
         platform:
           - linux
           - windows
+          - web
 
         include:
           - platform: linux
             os: ubuntu-latest
-            drive: false
             desktop: true
           - platform: windows
             os: windows-latest
-            drive: true
+            drive: windows
             desktop: true
           - platform: web
-            os: ubuntu-latest
-            drive: false
+            os: windows-latest
+            drive: web-server --release --browser-name=chrome
             desktop: false
 
     runs-on: ${{ matrix.os }}
@@ -59,6 +59,8 @@ jobs:
       - name: install minisign (windows)
         if: matrix.platform == 'windows'
         run: choco install minisign -y
+      - uses: nanasess/setup-chromedriver@master
+        if: matrix.platform == 'web'
       - run: flutter doctor -v
       - uses: ./.github/actions/dependency_clean
         with:
@@ -68,8 +70,10 @@ jobs:
       - run: flutter pub publish --dry-run
       - run: flutter build ${{ matrix.platform }} --release
         working-directory: packages/sodium_libs/example
-      - run: flutter drive --target=test_driver/app.dart -d ${{ matrix.platform }}
-        if: matrix.drive == 'true'
+      - run: chromedriver --port=4444 &
+        if: matrix.platform == 'web'
+      - run: flutter drive --target=test_driver/app.dart -d ${{ matrix.drive }}
+        if: matrix.drive != ''
         working-directory: packages/sodium_libs/example
   # release:
   #   runs-on: ubuntu-latest
