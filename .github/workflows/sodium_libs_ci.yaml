@@ -36,22 +36,23 @@ jobs:
           - platform: linux
             os: ubuntu-latest
             desktop: true
+            drive: linux
           - platform: windows
             os: windows-latest
-            drive: windows
             desktop: true
+            drive: windows
           - platform: web
             os: windows-latest
             drive: chrome --release --browser-name=chrome
-            desktop: false
             drive-prelude: chromedriver --port=4444 &
 
     runs-on: ${{ matrix.os }}
     steps:
       - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
-      - run: flutter config --enable-${{ matrix.platform }}-desktop
+      - name: enable experimental platforms
         if: matrix.desktop
+        run: flutter config --enable-${{ matrix.platform }}-desktop
       - name: install libsodium + ninja + GTK (linux)
         if: matrix.platform == 'linux'
         run: |
@@ -60,8 +61,9 @@ jobs:
       - name: install minisign (windows)
         if: matrix.platform == 'windows'
         run: choco install minisign -y
-      - uses: nanasess/setup-chromedriver@master
+      - name: install ChromeDriver (web)
         if: matrix.platform == 'web'
+        uses: nanasess/setup-chromedriver@master
       - run: flutter doctor -v
       - uses: ./.github/actions/dependency_clean
         with:
@@ -71,10 +73,11 @@ jobs:
       - run: flutter pub publish --dry-run
       - run: flutter build ${{ matrix.platform }} --release
         working-directory: packages/sodium_libs/example
-      - run: |
+      - name: run driver tests
+        if: matrix.drive != ''
+        run: |
           ${{ matrix.drive-prelude }}
           flutter drive --target=test_driver/app.dart -d ${{ matrix.drive }}
-        if: matrix.drive != ''
         working-directory: packages/sodium_libs/example
   # release:
   #   runs-on: ubuntu-latest
