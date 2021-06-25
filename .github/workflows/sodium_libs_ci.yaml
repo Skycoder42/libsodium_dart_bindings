@@ -72,7 +72,7 @@ jobs:
       - run: flutter build ${{ matrix.platform }} --release
         working-directory: packages/sodium_libs/example
       - run: |
-          ${{ drive-prelude }}
+          ${{ matrix.drive-prelude }}
           flutter drive --target=test_driver/app.dart -d ${{ matrix.drive }}
         if: matrix.drive != ''
         working-directory: packages/sodium_libs/example
