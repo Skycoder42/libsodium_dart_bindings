@@ -42,7 +42,7 @@ jobs:
             desktop: true
           - platform: web
             os: windows-latest
-            drive: web-server --release --browser-name=chrome
+            drive: chrome --release --browser-name=chrome
             desktop: false
 
     runs-on: ${{ matrix.os }}
@@ -50,7 +50,7 @@ jobs:
       - uses: subosito/flutter-action@v1
       - uses: actions/checkout@v2
       - run: flutter config --enable-${{ matrix.platform }}-desktop
-        if: matrix.desktop == 'true'
+        if: matrix.desktop
       - name: install libsodium + ninja + GTK (linux)
         if: matrix.platform == 'linux'
         run: |
