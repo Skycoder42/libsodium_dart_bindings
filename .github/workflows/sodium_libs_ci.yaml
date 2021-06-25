@@ -44,6 +44,7 @@ jobs:
             os: windows-latest
             drive: chrome --release --browser-name=chrome
             desktop: false
+            drive-prelude: chromedriver --port=4444 &
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -70,9 +71,9 @@ jobs:
       - run: flutter pub publish --dry-run
       - run: flutter build ${{ matrix.platform }} --release
         working-directory: packages/sodium_libs/example
-      - run: chromedriver --port=4444 &
-        if: matrix.platform == 'web'
-      - run: flutter drive --target=test_driver/app.dart -d ${{ matrix.drive }}
+      - run: |
+          ${{ drive-prelude }}
+          flutter drive --target=test_driver/app.dart -d ${{ matrix.drive }}
         if: matrix.drive != ''
         working-directory: packages/sodium_libs/example
   # release:
