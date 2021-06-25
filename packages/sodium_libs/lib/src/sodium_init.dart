@@ -1,25 +1,18 @@
 import 'package:flutter/widgets.dart';
-import 'package:platform_info/platform_info.dart';
 import 'package:sodium/sodium.dart' as sodium;
 
-import 'platforms/sodium_linux.dart';
-import 'platforms/sodium_windows.dart';
+import 'platforms/stub_platforms.dart'
+    if (dart.library.ffi) 'platforms/io_platforms.dart'
+    if (dart.library.js) 'platforms/js_platforms.dart';
 import 'sodium_platform.dart';
 
 abstract class SodiumInit {
   const SodiumInit._(); // coverage:ignore-line
 
   static void registerPlugins() {
-    if (SodiumPlatform.isRegistered) {
-      return;
+    if (!SodiumPlatform.isRegistered) {
+      Platforms.registerPlatformPlugin();
     }
-
-    platform.when(
-      io: () => platform.when(
-        linux: () => SodiumPlatform.instance = SodiumLinux(),
-        windows: () => SodiumPlatform.instance = SodiumWindows(),
-      ),
-    );
   }
 
   static Future<sodium.Sodium> init() {

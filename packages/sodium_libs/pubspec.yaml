@@ -10,8 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  js: ^0.6.3
   meta: ^1.3.0
-  platform_info: ^3.1.0
   plugin_platform_interface: ^2.0.0
   sodium: ^0.2.4
 
@@ -27,9 +29,14 @@ dependency_overrides:
     path: "../sodium"
 
 flutter:
+  assets:
+    - assets/web/sodium.js
   plugin:
     platforms:
       linux:
         pluginClass: SodiumLibsPlugin
       windows:
         pluginClass: SodiumLibsPlugin
+      web:
+        fileName: src/platforms/sodium_web.dart
+        pluginClass: SodiumWeb
