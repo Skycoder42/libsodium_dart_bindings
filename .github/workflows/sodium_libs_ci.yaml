@@ -78,7 +78,10 @@ jobs:
         if: matrix.drive != ''
         run: >-
           ${{ matrix.drive-prelude }} 
-          flutter drive --target=test_driver/app.dart -d ${{ matrix.drive }}
+          flutter drive 
+            --driver=test_driver/integration_test.dart 
+            --target=integration_test/app_test.dart 
+            -d ${{ matrix.drive }}
         working-directory: packages/sodium_libs/example
   # release:
   #   runs-on: ubuntu-latest

@@ -13,12 +13,13 @@ dependencies:
     path: ../
 
 dev_dependencies:
-  flutter_driver:
+  integration_test:
     sdk: flutter
   flutter_test:
     sdk: flutter
+  flutter_driver:
+    sdk: flutter
   lint: ^1.5.3
-  test: ^1.16.8
 
 dependency_overrides:
   sodium:
