@@ -26,6 +26,7 @@
 .pub/
 build/
 coverage/
+generated_plugin_registrant.*
 
 # Omit commiting pubspec.lock for library packages:
 # https://dart.dev/guides/libraries/private-files#pubspeclock
