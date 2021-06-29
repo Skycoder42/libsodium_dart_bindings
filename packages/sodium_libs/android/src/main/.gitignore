@@ -1,0 +1,2 @@
+# ignore jni binaries by default - file is remove before releasing
+jniLibs

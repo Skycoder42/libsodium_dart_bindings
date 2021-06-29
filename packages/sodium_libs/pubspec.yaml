@@ -33,6 +33,9 @@ flutter:
     - assets/web/sodium.js
   plugin:
     platforms:
+      android:
+        package: de.skycoder42.sodium_libs
+        pluginClass: SodiumLibsPlugin
       linux:
         pluginClass: SodiumLibsPlugin
       windows:

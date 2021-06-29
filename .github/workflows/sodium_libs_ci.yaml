@@ -31,21 +31,28 @@ jobs:
           - linux
           - windows
           - web
+          - android
 
         include:
           - platform: linux
             os: ubuntu-latest
+            build: linux
             desktop: true
             drive: linux
             drive-prelude: xvfb-run --auto-servernum
           - platform: windows
             os: windows-latest
+            build: windows
             desktop: true
             drive: windows
           - platform: web
             os: windows-latest
+            build: web
             drive: chrome --release --browser-name=chrome
             drive-prelude: chromedriver --port=4444 & ;
+          - platform: android
+            os: ubuntu-latest
+            build: apk
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -65,6 +72,9 @@ jobs:
       - name: install ChromeDriver (web)
         if: matrix.platform == 'web'
         uses: nanasess/setup-chromedriver@master
+      - name: fetch libsodium (android)
+        if: matrix.platform == 'android'
+        run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
       - run: flutter doctor -v
       - uses: ./.github/actions/dependency_clean
         with:
@@ -72,7 +82,7 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter pub publish --dry-run
-      - run: flutter build ${{ matrix.platform }} --release
+      - run: flutter build ${{ matrix.build }} --release
         working-directory: packages/sodium_libs/example
       - name: run driver tests
         if: matrix.drive != ''

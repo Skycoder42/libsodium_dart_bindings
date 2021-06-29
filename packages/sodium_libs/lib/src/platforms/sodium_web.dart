@@ -7,6 +7,7 @@ import 'dart:html';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
+import 'package:meta/meta.dart';
 import 'package:sodium/sodium.dart';
 
 import '../sodium_platform.dart';
@@ -19,6 +20,7 @@ class _SodiumBrowserInit {
   external factory _SodiumBrowserInit({void Function(dynamic sodium) onload});
 }
 
+@internal
 class SodiumWeb extends SodiumPlatform {
   static void registerWith([Registrar? registrar]) {
     SodiumPlatform.instance = SodiumWeb();
