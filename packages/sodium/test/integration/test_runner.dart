@@ -1,4 +1,5 @@
 // dart_pre_commit:ignore-library-import
+import 'package:meta/meta.dart';
 import 'package:sodium/sodium.dart';
 import 'package:test/test.dart';
 
@@ -18,6 +19,8 @@ import 'cases/sodium_test_case.dart';
 import 'test_case.dart';
 
 abstract class TestRunner {
+  late final Sodium _sodium;
+
   Iterable<TestCase> createTestCases() => [
         SodiumTestCase(),
         RandombytesTestCase(),
@@ -34,21 +37,24 @@ abstract class TestRunner {
         KxTestCase(),
       ];
 
+  @protected
   Future<Sodium> loadSodium();
+
+  Sodium get sodium => _sodium;
 
   void setupTests() {
     final testCases = createTestCases().toList();
 
     setUpAll(() async {
-      final sodium = await loadSodium();
+      _sodium = await loadSodium();
 
       // ignore: avoid_print
       print(
-        'Running integration tests with libsodium version: ${sodium.version}',
+        'Running integration tests with libsodium version: ${_sodium.version}',
       );
 
       for (final testCase in testCases) {
-        testCase.sodium = sodium;
+        testCase.sodium = _sodium;
       }
     });
 

@@ -45,7 +45,10 @@ Future<void> main(List<String> rawArgs) async {
 
     if (testModes.contains(_modeUnit)) {
       if (coverage) {
-        await Directory('coverage').delete(recursive: true);
+        final coverageDir = Directory('coverage');
+        if (await coverageDir.exists()) {
+          await Directory('coverage').delete(recursive: true);
+        }
       }
 
       if (testPlatforms.contains(_platformVm)) {

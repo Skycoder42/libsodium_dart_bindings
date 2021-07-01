@@ -8,7 +8,12 @@ void main() {
 class MyApp extends StatelessWidget {
   static const resultTextKey = Key('resultText');
 
-  const MyApp({Key? key}) : super(key: key);
+  final Sodium? preInitSodium;
+
+  const MyApp({
+    Key? key,
+    this.preInitSodium,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -19,7 +24,9 @@ class MyApp extends StatelessWidget {
           ),
           body: Center(
             child: FutureBuilder<Sodium>(
-              future: SodiumInit.init(),
+              future: preInitSodium != null
+                  ? Future.value(preInitSodium)
+                  : SodiumInit.init(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   // ignore: avoid_print

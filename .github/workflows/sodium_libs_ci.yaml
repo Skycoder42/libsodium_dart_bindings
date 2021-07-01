@@ -74,6 +74,12 @@ jobs:
       - name: install ChromeDriver (web)
         if: matrix.platform == 'web'
         uses: nanasess/setup-chromedriver@master
+      - name: install minisign (android)
+        if: matrix.platform == 'android'
+        run: |
+          sudo add-apt-repository -y ppa:dysfunctionalprogramming/minisign
+          sudo apt-get -qq update
+          sudo apt-get -qq install minisign
       - name: restore prebuilt binaries (android)
         id: cache-libsodium-bins
         uses: actions/cache@v2
