@@ -72,9 +72,16 @@ jobs:
       - name: install ChromeDriver (web)
         if: matrix.platform == 'web'
         uses: nanasess/setup-chromedriver@master
+      - name: restore prebuilt binaries (android)
+        id: cache-libsodium-bins
+        uses: actions/cache@v2
+        with:
+          path: packages/sodium_libs/android/src/main/jniLibs
+          key: libsodium-${{ matrix.platform }}-${{ hashFiles('libsodium_version.json') }}
       - name: fetch libsodium (android)
-        if: matrix.platform == 'android'
+        if: matrix.platform == 'android' && steps.cache-libsodium-bins.outputs.cache-hit != 'true'
         run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
+        working-directory: .
       - run: flutter doctor -v
       - uses: ./.github/actions/dependency_clean
         with:
