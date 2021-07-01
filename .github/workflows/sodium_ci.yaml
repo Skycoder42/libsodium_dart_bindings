@@ -65,11 +65,11 @@ jobs:
       - name: fetch libsodium
         run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
         working-directory: .
-      - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile build
-      - run: make -f ../../Makefile analyze
-      - run: make -f ../../Makefile unit-tests-${{ matrix.system }}-coverage
-      - run: make -f ../../Makefile integration-tests-${{ matrix.system }}
+      - run: dart pub get
+      - run: dart run build_runner build
+      - run: dart analyze --fatal-infos
+      - run: dart run tool/test_runner.dart -munit -c -p${{ matrix.system }}
+      - run: dart run tool/test_runner.dart -mintegration -p${{ matrix.system }}
       - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: packages/${{ env.PACKAGE_NAME }}/coverage/lcov.info
@@ -78,7 +78,7 @@ jobs:
             **/*.freezed.dart 
             **/*.ffi.dart 
             **/*.js.dart
-      - run: make -f ../../Makefile publish-dry
+      - run: dart run tool/publish.dart --dry-run
 
   release:
     runs-on: ubuntu-latest
@@ -113,13 +113,13 @@ jobs:
     steps:
       - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
-      - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile build
+      - run: dart pub get
+      - run: dart run build_runner build
       - name: store credentials
         run: |
           mkdir -p ~/.pub-cache
           echo '${{ secrets.PUB_DEV_CREDENTIALS }}' > ~/.pub-cache/credentials.json
-      - run: make -f ../../Makefile publish
+      - run: dart run tool/publish.dart --force
       - name: clean up credentials
         if: always()
         run: shred -fzvu ~/.pub-cache/credentials.json
@@ -132,9 +132,9 @@ jobs:
     steps:
       - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
-      - run: make -f ../../Makefile get
-      - run: make -f ../../Makefile build
-      - run: make -f ../../Makefile doc
+      - run: dart pub get
+      - run: dart run build_runner build
+      - run: dartdoc --show-progress
       - name: upload doc
         uses: peaceiris/actions-gh-pages@v3
         with:

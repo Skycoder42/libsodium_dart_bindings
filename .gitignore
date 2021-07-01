@@ -32,9 +32,6 @@ generated_plugin_registrant.*
 # https://dart.dev/guides/libraries/private-files#pubspeclock
 pubspec.lock
 
-# Web related
-lib/generated_plugin_registrant.dart
-
 *:Zone.Identifier
 
 # Symbolication related

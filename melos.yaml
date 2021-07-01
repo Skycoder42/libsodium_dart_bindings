@@ -23,83 +23,48 @@ scripts:
     description: Run 'pub get' in all projects
 
   upgrade:
-    run: dart pub global run melos exec -- make -f ../../Makefile upgrade
+    run: >-
+      dart pub global run melos exec --no-flutter -- dart pub upgrade && 
+      dart pub global run melos exec --flutter -- flutter pub upgrade
     description: Run 'pub upgrade' in all projects
 
-  libsodium:fetch:
-    run: dart run scripts/fetch_libsodium.dart
-    description: Downloads all required libsodium binaries
-
-  libsodium:fetch:windows:
-    run: dart run scripts/fetch_libsodium.dart windows
-    description: Downloads all required libsodium binaries (Windows only)
-
-  libsodium:fetch:web:
-    run: dart run scripts/fetch_libsodium.dart web
-    description: Downloads all required libsodium binaries (Web only)
-
   analyze:
-    run: dart pub global run melos exec -- make -f ../../Makefile analyze
-    description: Run 'dart analyze' in all projects
+    run: >-
+      dart pub global run melos exec --no-flutter -- dart analyze --fatal-infos && 
+      dart pub global run melos exec --flutter -- flutter analyze
+    description: Run 'analyze' in all projects
 
   outdated:
-    run: dart pub global run melos exec -- make -f ../../Makefile outdated
+    run: >-
+      dart pub global run melos exec --no-flutter -- dart pub outdated && 
+      dart pub global run melos exec --flutter -- flutter pub outdated
     description: Run 'pub outdated' in all projects
 
   build:
-    run: dart pub global run melos exec --depends-on=build_runner -- make -f ../../Makefile build
+    run: >-
+      dart pub global run melos exec --depends-on=build_runner --no-flutter 
+      -- dart run build_runner build && 
+      dart pub global run melos exec --depends-on=build_runner --flutter 
+      -- flutter pub run build_runner build
     description: Run the build runner in all projects
 
   build:clean:
-    run: dart pub global run melos exec --depends-on=build_runner -- make -f ../../Makefile build-clean
+    run: >-
+      dart pub global run melos exec --depends-on=build_runner --no-flutter 
+      -- dart run build_runner build --delete-conflicting-outputs && 
+      dart pub global run melos exec --depends-on=build_runner --flutter 
+      -- flutter pub run build_runner build --delete-conflicting-outputs
     description: Run the build runner in all projects, discarding the previous state
 
-  test:
-    run: dart pub global run melos exec -- make -f ../../Makefile test
-    description: Run all tests in all projects
-
-  test:unit:
-    run: dart pub global run melos exec -- make -f ../../Makefile unit-tests
-    description: Run unit tests in all projects
-
-  test:unit:vm:
-    run: dart pub global run melos exec -- make -f ../../Makefile unit-tests-vm
-    description: Run unit tests in all projects (VM only)
-
-  test:unit:js:
-    run: dart pub global run melos exec -- make -f ../../Makefile unit-tests-js
-    description: Run unit tests in all projects (JS only)
-
-  test:coverage:
-    run: dart pub global run melos exec -- make -f ../../Makefile coverage
-    description: Run test coverage in all projects
-
-  test:coverage:open:
-    run: dart pub global run melos exec -- make -f ../../Makefile coverage-open
-    description: Run test coverage in all projects and open the results in the browser
-
-  test:integration:
-    run: dart pub global run melos exec -- make -f ../../Makefile integration-tests
-    description: Run integration tests in all projects
-
-  test:integration:vm:
-    run: dart pub global run melos exec -- make -f ../../Makefile integration-tests-vm
-    description: Run integration tests in all projects (VM only)
-
-  test:integration:js:
-    run: dart pub global run melos exec -- make -f ../../Makefile integration-tests-js
-    description: Run integration tests in all projects (JS only)
-
   doc:
-    run: dart pub global run melos exec -- make -f ../../Makefile doc
+    run: dart pub global run melos exec -- dartdoc --show-progress
     description: Create API-documentation in all projects
 
-  verify:
-    run: dart pub global run melos exec -c1 -- make -f ../../Makefile verify
-    description: Verify all projects
-
   pre-commit:init:
-    run: bash -c "echo -e '#!/bin/sh\nexec dart pub global run melos run pre-commit:run' > .git/hooks/pre-commit && chmod a+x .git/hooks/pre-commit"
+    run: >-
+      bash -c "echo -e 
+      '#!/bin/sh\nexec dart pub global run melos run pre-commit:run' 
+      > .git/hooks/pre-commit && chmod a+x .git/hooks/pre-commit"
     description: Setup pre commit hooks
 
   pre-commit:remove:

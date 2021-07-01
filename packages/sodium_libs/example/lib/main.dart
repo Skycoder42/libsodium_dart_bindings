@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
                   return Text(
                     'Failed to load libsodium with error: ${snapshot.error}',
                     key: resultTextKey,
-                    style: const TextStyle(color: Colors.red),
+                    style: TextStyle(color: Colors.red.shade900),
                   );
                 }
 
