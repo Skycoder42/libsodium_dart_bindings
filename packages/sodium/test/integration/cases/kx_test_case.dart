@@ -1,10 +1,12 @@
 // dart_pre_commit:ignore-library-import
 import 'package:sodium/sodium.dart';
-import 'package:test/test.dart';
 
 import '../test_case.dart';
+import '../test_runner.dart';
 
 class KxTestCase extends TestCase {
+  KxTestCase(TestRunner runner) : super(runner);
+
   @override
   String get name => 'kx';
 

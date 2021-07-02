@@ -2,13 +2,15 @@ import 'dart:typed_data';
 
 // dart_pre_commit:ignore-library-import
 import 'package:sodium/sodium.dart';
-import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../test_data.dart';
 import '../test_case.dart';
+import '../test_runner.dart';
 
 class SodiumTestCase extends TestCase {
+  SodiumTestCase(TestRunner runner) : super(runner);
+
   @override
   String get name => 'sodium';
 

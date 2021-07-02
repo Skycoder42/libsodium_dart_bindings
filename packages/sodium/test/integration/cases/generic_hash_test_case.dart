@@ -2,11 +2,13 @@ import 'dart:typed_data';
 
 // dart_pre_commit:ignore-library-import
 import 'package:sodium/sodium.dart';
-import 'package:test/test.dart';
 
 import '../test_case.dart';
+import '../test_runner.dart';
 
 class GenericHashTestCase extends TestCase {
+  GenericHashTestCase(TestRunner runner) : super(runner);
+
   @override
   String get name => 'generichash';
 
