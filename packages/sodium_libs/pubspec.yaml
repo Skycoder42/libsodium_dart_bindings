@@ -40,6 +40,8 @@ flutter:
         pluginClass: SodiumLibsPlugin
       windows:
         pluginClass: SodiumLibsPlugin
+      macos:
+        pluginClass: SodiumLibsPlugin
       web:
         fileName: src/platforms/sodium_web.dart
         pluginClass: SodiumWeb

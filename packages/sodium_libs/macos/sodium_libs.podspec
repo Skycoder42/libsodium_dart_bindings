@@ -1,24 +1,23 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint libsodium_flutter_bindings_macos.podspec` to validate before publishing.
+# Run `pod lib lint sodium_libs.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'libsodium_flutter_bindings_macos'
-  s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.name             = 'sodium_libs'
+  s.version          = '0.1.0'
+  s.summary          = 'flutter libraries for sodium (macOS).'
   s.description      = <<-DESC
-A new flutter plugin project.
+flutter libraries for sodium (macOS).
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/Skycoder42/libsodium_dart_bindings'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Skycoder42' => 'kycoder42@users.noreply.github.com' }
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.dependency 'FlutterMacOS'
+  s.dependency 'Sodium'
 
   s.platform = :osx, '10.11'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
-
-  s.dependency 'libsodium'
 end

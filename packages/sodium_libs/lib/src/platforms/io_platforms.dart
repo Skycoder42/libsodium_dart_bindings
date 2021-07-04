@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:sodium_libs/src/platforms/sodium_macos.dart';
+
 import '../sodium_platform.dart';
 import 'sodium_android.dart';
 import 'sodium_linux.dart';
@@ -15,6 +17,8 @@ abstract class Platforms {
       SodiumPlatform.instance = SodiumLinux();
     } else if (Platform.isWindows) {
       SodiumPlatform.instance = SodiumWindows();
+    } else if (Platform.isMacOS) {
+      SodiumPlatform.instance = SodiumMacos();
     }
   }
 }

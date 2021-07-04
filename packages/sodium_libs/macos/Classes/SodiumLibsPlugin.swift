@@ -1,10 +1,10 @@
 import Cocoa
 import FlutterMacOS
 
-public class LibsodiumFlutterBindingsMacosPlugin: NSObject, FlutterPlugin {
+public class SodiumLibsPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "libsodium_flutter_bindings_macos", binaryMessenger: registrar.messenger)
-    let instance = LibsodiumFlutterBindingsMacosPlugin()
+    let channel = FlutterMethodChannel(name: "sodium_libs", binaryMessenger: registrar.messenger)
+    let instance = SodiumLibsPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

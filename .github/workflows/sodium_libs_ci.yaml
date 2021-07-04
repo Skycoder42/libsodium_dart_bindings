@@ -30,6 +30,7 @@ jobs:
         platform:
           - linux
           - windows
+          - macos
           - web
           - android
 
@@ -45,6 +46,11 @@ jobs:
             build: windows
             desktop: true
             drive: windows
+          - platform: macos
+            os: macos-latest
+            build: macos
+            desktop: true
+            drive: macos
           - platform: web
             os: windows-latest
             build: web
@@ -71,6 +77,9 @@ jobs:
       - name: install minisign (windows)
         if: matrix.platform == 'windows'
         run: choco install minisign -y
+      - name: install libsodium (macos)
+        if: matrix.platform == 'macos'
+        run: brew install libsodium
       - name: install ChromeDriver (web)
         if: matrix.platform == 'web'
         uses: nanasess/setup-chromedriver@master
@@ -98,8 +107,8 @@ jobs:
       # Build and test
       - run: flutter pub get
       - run: flutter analyze
-      - run: dart run tool/publish.dart --dry-run
       - run: flutter build ${{ matrix.build }} --release
+      - run: dart run tool/publish.dart --dry-run
         working-directory: packages/sodium_libs/example
       - name: run integration tests (vm)
         if: matrix.drive != '' && matrix.platform != 'web'
