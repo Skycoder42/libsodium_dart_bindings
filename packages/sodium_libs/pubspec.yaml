@@ -36,6 +36,8 @@ flutter:
       android:
         package: de.skycoder42.sodium_libs
         pluginClass: SodiumLibsPlugin
+      ios:
+        pluginClass: SodiumLibsPlugin
       linux:
         pluginClass: SodiumLibsPlugin
       windows:

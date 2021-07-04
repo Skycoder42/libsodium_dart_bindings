@@ -33,6 +33,7 @@ jobs:
           - macos
           - web
           - android
+          - ios
 
         include:
           - platform: linux
@@ -59,6 +60,9 @@ jobs:
           - platform: android
             os: ubuntu-latest
             build: apk
+          - platform: ios
+            os: macos-latest
+            build: ios --no-codesign
 
     runs-on: ${{ matrix.os }}
     steps:
