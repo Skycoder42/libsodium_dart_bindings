@@ -112,8 +112,8 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter build ${{ matrix.build }} --release
-      - run: dart run tool/publish.dart --dry-run
         working-directory: packages/sodium_libs/example
+      - run: dart run tool/publish.dart --dry-run
       - name: run integration tests (vm)
         if: matrix.drive != '' && matrix.platform != 'web'
         run: >-
