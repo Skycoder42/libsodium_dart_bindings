@@ -8,4 +8,8 @@ import '../sodium_platform.dart';
 class SodiumLinux extends SodiumPlatform {
   @override
   Future<Sodium> loadSodium() => SodiumInit.init(DynamicLibrary.process());
+
+  @override
+  String get updateHint =>
+      'Please update your distribution to get the latest available version.';
 }

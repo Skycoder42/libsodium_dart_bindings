@@ -28,9 +28,10 @@ dependency_overrides:
   sodium:
     path: "../sodium"
 
+executables:
+  update_web: update_web
+
 flutter:
-  assets:
-    - assets/web/sodium.js
   plugin:
     platforms:
       android:

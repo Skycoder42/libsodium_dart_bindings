@@ -42,9 +42,13 @@ class SodiumWeb extends SodiumPlatform {
       ..type = 'text/javascript'
       ..async = true
       // ignore: unsafe_html
-      ..src = 'assets/packages/sodium_libs/assets/web/sodium.js';
+      ..src = 'sodium.js';
     document.head!.append(script);
 
     return SodiumInit.init(await completer.future);
   }
+
+  @override
+  String get updateHint =>
+      'Please run `flutter pub run sodium_libs:update_web` again.';
 }

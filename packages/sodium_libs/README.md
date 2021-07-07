@@ -29,9 +29,12 @@ system specific tools for some platforms:
 ### Linux
 You have to install [libsodium](https://github.com/jedisct1/libsodium) on your
 system. How you do this depends on your distribution:
-- Arch/Manjaro: `sudo pacman -S libsodium`
-- Ubuntu/Debian: `sudo apt install libsodium-dev`
+- Arch/Manjaro: `[sudo] pacman -S libsodium`
+- Ubuntu/Debian: `[sudo] apt install libsodium-dev`
 - ...
+
+When bundeling the application for release, remember to also include the
+`libsodium.so` into the deployment package.
 
 ### Windows
 Since the plugin downloads the binaries at build time, it needs 
@@ -44,7 +47,14 @@ choco install minisign
 ```
 
 ### Web
-TODO
+The web setup differs slightly from the others. Instead of just installing some
+system library, you need to add 
+[`sodium.js`](https://github.com/jedisct1/libsodium.js) to each project. You can
+do this automatically by running the following command in every new project.
+
+```.sh
+flutter pub run sodium_libs:update_web
+```
 
 ## Usage
 The API can be consumed in the excact same way as the `sodium` package. The only
