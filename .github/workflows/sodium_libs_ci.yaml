@@ -95,6 +95,7 @@ jobs:
           sudo apt-get -qq install minisign
       - name: restore prebuilt binaries (android)
         id: cache-libsodium-bins
+        if: matrix.platform == 'android'
         uses: actions/cache@v2
         with:
           path: packages/sodium_libs/android/src/main/jniLibs
