@@ -87,10 +87,6 @@ jobs:
       - name: install ChromeDriver (web)
         if: matrix.platform == 'web'
         uses: nanasess/setup-chromedriver@master
-      - name: fetch sodium.js (web)
-        if: matrix.platform == 'web'
-        run: flutter pub run sodium_libs:update_web
-        working-directory: packages/sodium_libs/example
       - name: install minisign (android)
         if: matrix.platform == 'android'
         run: |
@@ -116,6 +112,10 @@ jobs:
       # Build and test
       - run: flutter pub get
       - run: flutter analyze
+      - name: fetch sodium.js (web)
+        if: matrix.platform == 'web'
+        run: flutter pub run sodium_libs:update_web
+        working-directory: packages/sodium_libs/example
       - run: flutter build ${{ matrix.build }} --release
         working-directory: packages/sodium_libs/example
       - run: dart run tool/publish.dart --dry-run
