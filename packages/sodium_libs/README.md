@@ -6,6 +6,16 @@ Flutter Companion-Package to [sodium](https://pub.dev/packages/sodium) that
 provides the low-level libsodium binaries for easy use.
 
 ## Table of contents
+- [Features](#features)
+- [Installation](#installation)
+  * [Platform requirements](#platform-requirements)
+    + [Linux](#linux)
+    + [Windows](#windows)
+    + [Web](#web)
+- [Usage](#usage)
+- [Documentation](#documentation)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 ## Features
 - Extends [sodium](https://pub.dev/packages/sodium) for Flutter with binaries
@@ -26,7 +36,7 @@ Simply add `sodium_libs` to your `pubspec.yaml` and run `pub get` (or
 In addition to installing the package, you will also have to install operating
 system specific tools for some platforms:
 
-### Linux
+#### Linux
 You have to install [libsodium](https://github.com/jedisct1/libsodium) on your
 system. How you do this depends on your distribution:
 - Arch/Manjaro: `[sudo] pacman -S libsodium`
@@ -36,7 +46,7 @@ system. How you do this depends on your distribution:
 When bundeling the application for release, remember to also include the
 `libsodium.so` into the deployment package.
 
-### Windows
+#### Windows
 Since the plugin downloads the binaries at build time, it needs 
 [minisign](https://jedisct1.github.io/minisign/) to validate their integrity.
 The easiest way to install minisign is via 
@@ -46,7 +56,7 @@ The easiest way to install minisign is via
 choco install minisign
 ```
 
-### Web
+#### Web
 The web setup differs slightly from the others. Instead of just installing some
 system library, you need to add 
 [`sodium.js`](https://github.com/jedisct1/libsodium.js) to each project. You can

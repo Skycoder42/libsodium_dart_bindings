@@ -173,23 +173,24 @@ jobs:
       - uses: ./.github/actions/dependency_clean
         with:
           package: ${{ env.PACKAGE_NAME }}
-      - name: restore prebuilt binaries (android)
+      - name: restore cached prebuilt binaries (android)
         id: cache-libsodium-bins
-        if: matrix.platform == 'android'
         uses: actions/cache@v2
         with:
           path: packages/sodium_libs/android/src/main/jniLibs
-          key: libsodium-${{ matrix.platform }}-${{ hashFiles('libsodium_version.json') }}
-      - name: check cache was restored (android)
-        if: matrix.platform == 'android' && steps.cache-libsodium-bins.outputs.cache-hit != 'true'
+          key: libsodium-android-${{ hashFiles('libsodium_version.json') }}
+      - name: check cache was restored
+        if: steps.cache-libsodium-bins.outputs.cache-hit != 'true'
         run: |
-          echo 'Failed to restore android binaries from cache!'
+          echo '::error::Failed to restore binaries from cache!'
           exit 1
       - run: flutter pub get
       - name: store credentials
         run: |
           mkdir -p ~/.pub-cache
           echo '${{ secrets.PUB_DEV_CREDENTIALS }}' > ~/.pub-cache/credentials.json
+          file ~/.pub-cache/credentials.json
+          du -sh melos.yaml
       - run: dart run tool/publish.dart --force
       - name: clean up credentials
         if: always()
