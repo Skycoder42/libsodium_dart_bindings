@@ -57,13 +57,23 @@ API based on libsodium version: *1.0.18*
  crypto_pwhash       | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/password_hashing/default_phf
  crypto_kdf          | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/key_derivation
  crypto_kx           | ✔️ | ✔️ | https://libsodium.gitbook.io/doc/key_exchange
+
+**Note:** Memory Management in JS is limited to overwriting the memory with 0. 
+All other Memory-APIs are only available in the VM.
+
+#### Considered for the future
+The following APIs I considered adding, but since they all appear below the
+"Advanced" Tab in the documentation, I decided against it for now. However, I
+have collected some here that I consider implementing in the future. If you need
+one of these or some other advanced API, please create an Issue and I will add
+it as soon as possible.
+
+ libsodium API       | VM  | JS | Documentation
+---------------------|-----|----|---------------
  crypto_onetimeauth  | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/poly1305
  crypto_scalarmult   | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication
  crypto_hash_sha     | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/sha-2_hash_function
  crypto_auth_hmacsha | ❔  | ❔  | https://libsodium.gitbook.io/doc/advanced/hmac-sha2
-
-**Note:** Memory Management in JS is limited to overwriting the memory with 0. 
-All other Memory-APIs are only available in the VM.
 
 ## Installation
 Simply add `sodium` to your `pubspec.yaml` and run `pub get` (or `flutter pub get`).
@@ -76,8 +86,12 @@ libsodium into dart, the second one about using the API.
 How you load the library depends on whether you are running in the dart VM or
 as transpiled JS code.
 
-**Note:** For flutter users, there is a another library in the making that will
-completely automate this part.
+**Note:** For flutter users, you should use the
+[sodium_libs](https://pub.dev/packages/sodium_libs) package, as it provides 
+embedded (or compile time added) binaries for every flutter platform. This way
+you can simply use the library without thinking about this part. You can check
+the documentation of `sodium_libs` to add it to your project and then continue
+at [Using the API](#using-the-api).
 
 #### VM - loading the dynamic library
 In the dart VM, `dart:ffi` is used as backend to load and interact with the
@@ -103,7 +117,10 @@ for your platform and then pass the correct path. If you are linking statically,
 you can use `DynamicLibrary.process()` (except on windows) instead of the path.
 
 However, here are some tips on how to get the library for some platforms and
-how to load it there:
+how to load it there. For flutter users, you can simply add
+[sodium_libs](https://pub.dev/packages/sodium_libs) to your project, which takes
+care of this for you.
+
 - **Linux**: Install `libsodium` via your system package manager. Then, you can load
 the `libsodium.so` from where the package manager put it.
 - **Windows**: Download the correct binary from 
@@ -112,8 +129,12 @@ you placed the library.
 - **macOS**: Use homebrew and run `brew install libsodium` - then locate the binary
 in the Cellar. It is typically something like 
 `/usr/local/Cellar/libsodium/<version>/lib/libsodium.dylib`.
-- **Android**: Coming soon...
-- **iOS**: Coming soon...
+- **Android**: Clone the official sources and run the correct build script
+located at https://github.com/jedisct1/libsodium/tree/master/dist-build. The
+build will produce an `.so` file you can add to your `main/src/jniLibs` folder.
+- **iOS**: Simply add the [swift-sodium](https://github.com/jedisct1/swift-sodium)
+package to your project. It will statically link your app with the library. You
+can use `DynamicLibrary.process()` to access the symbols.
 
 #### Transpiled JavaScript - loading the JavaScript code.
 The correct setup depends on your JavaScript environment (i.e. browser, nodejs,
@@ -132,7 +153,9 @@ final sodium = await SodiumInit.init(sodiumJS);
 The complex part is how to load the library into dart. Generally, you can refer
 to https://github.com/jedisct1/libsodium.js/#installation on how to load the
 library into your JS environment. However, since we are running JavaScript code,
-the setup is a little more complex.
+the setup is a little more complex. For flutter users, you can simply add
+[sodium_libs](https://pub.dev/packages/sodium_libs) to your project, which takes
+care of this for you.
 
 The only platform I have tried so far is the browser. However, similar 
 approches should work for all JS environments that you can run transpiled dart
@@ -238,7 +261,8 @@ can either create such keys via the `*_keygen` methods, or directly via
 of them after you are done with a key, as otherwise they will leak memory.
 
 ## Documentation
-The documentation is available at https://pub.dev/documentation/sodium/latest/. A full example can be found at https://pub.dev/packages/sodium/example.
+The documentation is available at https://pub.dev/documentation/sodium/latest/. 
+A full example can be found at https://pub.dev/packages/sodium/example.
 
 The example runs both in the VM and on the web. To use it, see below.
 
