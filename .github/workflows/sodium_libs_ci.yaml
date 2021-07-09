@@ -190,7 +190,7 @@ jobs:
           mkdir -p ~/.pub-cache
           echo '${{ secrets.PUB_DEV_CREDENTIALS }}' > ~/.pub-cache/credentials.json
           file ~/.pub-cache/credentials.json
-          du -sh melos.yaml
+          du -sh ~/.pub-cache/credentials.json
       - run: dart run tool/publish.dart --force
       - name: clean up credentials
         if: always()
