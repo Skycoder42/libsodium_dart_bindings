@@ -24,7 +24,9 @@ Future<void> main(List<String> arguments) async {
   }
 
   final versionFile = File.fromUri(
-    Directory.current.uri.resolve('libsodium_version.json'),
+    Directory.current.uri.resolve(
+      'packages/sodium_libs/libsodium_version.json',
+    ),
   );
   final version = SodiumVersion.fromJson(
     json.decode(await versionFile.readAsString()),

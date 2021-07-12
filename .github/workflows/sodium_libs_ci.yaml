@@ -99,7 +99,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: packages/sodium_libs/android/src/main/jniLibs
-          key: libsodium-${{ matrix.platform }}-${{ hashFiles('libsodium_version.json') }}
+          key: libsodium-${{ matrix.platform }}-${{ hashFiles('packages/sodium_libs/libsodium_version.json') }}
       - name: fetch libsodium (android)
         if: matrix.platform == 'android' && steps.cache-libsodium-bins.outputs.cache-hit != 'true'
         run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
@@ -178,7 +178,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: packages/sodium_libs/android/src/main/jniLibs
-          key: libsodium-android-${{ hashFiles('libsodium_version.json') }}
+          key: libsodium-android-${{ hashFiles('packages/sodium_libs/libsodium_version.json') }}
       - name: check cache was restored
         if: steps.cache-libsodium-bins.outputs.cache-hit != 'true'
         run: |

@@ -21,7 +21,7 @@ Future<void> main(List<String> arguments) async {
   stdout.writeln('> Loading sodium.js version info');
   final scriptDir = File.fromUri(Platform.script).parent;
   final versionInfo = File.fromUri(
-    scriptDir.uri.resolve('../../../libsodium_version.json'),
+    scriptDir.uri.resolve('../libsodium_version.json'),
   );
   if (!await versionInfo.exists()) {
     stderr.writeln('Failed to find version info at path: ${versionInfo.path}');
