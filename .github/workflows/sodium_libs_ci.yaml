@@ -168,7 +168,7 @@ jobs:
       - release
     if: needs.release.outputs.update == 'true'
     steps:
-      - uses: subosito/flutter-action@v1
+      - uses: dart-lang/setup-dart@v1
       - uses: actions/checkout@v2
       - uses: ./.github/actions/dependency_clean
         with:
@@ -184,7 +184,7 @@ jobs:
         run: |
           echo '::error::Failed to restore binaries from cache!'
           exit 1
-      - run: flutter pub get
+      - run: dart pub get
       - name: store credentials
         run: |
           mkdir -p ~/.pub-cache
