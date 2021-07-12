@@ -5,6 +5,7 @@ import 'run.dart';
 Future<void> publish(
   List<String> args, {
   List<String> clearFiles = const [],
+  bool flutter = false,
 }) async {
   const pubIgnorePath = '.pubignore';
 
@@ -17,7 +18,10 @@ Future<void> publish(
       await run('git', ['rm', clearFile]);
     }
 
-    await run('dart', ['pub', 'publish', ...args]);
+    await run(
+      flutter ? 'flutter' : 'dart',
+      ['pub', 'publish', ...args],
+    );
   } on ChildErrorException catch (e) {
     exitCode = e.exitCode;
   } finally {
