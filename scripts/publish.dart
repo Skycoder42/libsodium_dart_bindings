@@ -21,6 +21,7 @@ Future<void> publish(
     await run(
       flutter ? 'flutter' : 'dart',
       ['pub', 'publish', ...args],
+      runInShell: flutter && Platform.isWindows,
     );
   } on ChildErrorException catch (e) {
     exitCode = e.exitCode;
