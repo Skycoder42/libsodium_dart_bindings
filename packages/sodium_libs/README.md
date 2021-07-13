@@ -2,7 +2,7 @@
 [![Continous Integration for package sodium_libs](https://github.com/Skycoder42/libsodium_dart_bindings/actions/workflows/sodium_libs_ci.yaml/badge.svg)](https://github.com/Skycoder42/libsodium_dart_bindings/actions/workflows/sodium_libs_ci.yaml)
 [![Pub Version](https://img.shields.io/pub/v/sodium_libs)](https://pub.dev/packages/sodium_libs)
 
-Flutter Companion-Package to [sodium](https://pub.dev/packages/sodium) that
+Flutter companion package to [sodium](https://pub.dev/packages/sodium) that
 provides the low-level libsodium binaries for easy use.
 
 ## Table of contents
@@ -15,7 +15,7 @@ provides the low-level libsodium binaries for easy use.
 - [Usage](#usage)
 - [Documentation](#documentation)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+<small><i><a href='https://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 ## Features
 - Extends [sodium](https://pub.dev/packages/sodium) for Flutter with binaries
