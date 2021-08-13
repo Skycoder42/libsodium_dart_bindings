@@ -12,15 +12,16 @@ extension SecureKeySplit on SecureKey {
   /// when using the dart VM.
   List<SecureKey> split(Sodium sodium, List<int> lengths) => runUnlockedSync(
         (originalKeyData) {
-          final lenthsSum = lengths.reduce((value, element) => value + element);
-          RangeError.checkValidRange(
-            0,
-            lenthsSum,
-            originalKeyData.length,
-          );
+          var sum = 0;
+          final originalLength = originalKeyData.length;
+          RangeError.checkValueInInterval(lengths.length, 1, originalLength);
+          for (final length in lengths) {
+            RangeError.checkValueInInterval(length, 1, originalLength);
+            RangeError.checkValidRange(sum, sum + length, originalLength);
+            sum += length;
+          }
 
           final keys = <SecureKey>[];
-
           try {
             var start = 0;
             for (final length in lengths) {
