@@ -1,4 +1,5 @@
-import 'package:sodium/sodium.dart';
+import 'secure_key.dart';
+import 'sodium.dart';
 
 extension SecureKeySplit on SecureKey {
   /// Creates multiple secure keys of different [lengths] from a single key.
