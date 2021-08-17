@@ -27,7 +27,7 @@ class SodiumWeb extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium() async {
+  Future<Sodium> loadSodium({bool initNative = true}) async {
     final completer = Completer<dynamic>();
 
     setProperty(
@@ -45,7 +45,10 @@ class SodiumWeb extends SodiumPlatform {
       ..src = 'sodium.js';
     document.head!.append(script);
 
-    return SodiumInit.init(await completer.future);
+    return SodiumInit.init(
+      await completer.future,
+      initNative: initNative,
+    );
   }
 
   @override

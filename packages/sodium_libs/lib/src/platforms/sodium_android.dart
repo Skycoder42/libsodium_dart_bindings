@@ -7,6 +7,8 @@ import '../sodium_platform.dart';
 @internal
 class SodiumAndroid extends SodiumPlatform {
   @override
-  Future<Sodium> loadSodium() =>
-      SodiumInit.init(DynamicLibrary.open('libsodium.so'));
+  Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
+        DynamicLibrary.open('libsodium.so'),
+        initNative: initNative,
+      );
 }

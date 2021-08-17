@@ -7,7 +7,10 @@ import '../sodium_platform.dart';
 @internal
 class SodiumLinux extends SodiumPlatform {
   @override
-  Future<Sodium> loadSodium() => SodiumInit.init(DynamicLibrary.process());
+  Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
+        DynamicLibrary.process(),
+        initNative: initNative,
+      );
 
   @override
   String get updateHint =>

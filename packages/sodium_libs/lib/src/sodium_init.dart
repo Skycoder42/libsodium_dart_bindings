@@ -47,13 +47,18 @@ abstract class SodiumInit {
   ///
   /// **Note:** Calling this method multiple times will always return the same
   /// instance.
-  static Future<sodium.Sodium> init() => _instanceLock.synchronized(() async {
+  static Future<sodium.Sodium> init({
+    bool initNative = true,
+  }) =>
+      _instanceLock.synchronized(() async {
         if (_instance != null) {
           return _instance!;
         }
         WidgetsFlutterBinding.ensureInitialized();
         ensurePlatformRegistered();
-        _instance = await SodiumPlatform.instance.loadSodium();
+        _instance = await SodiumPlatform.instance.loadSodium(
+          initNative: initNative,
+        );
         if (!kReleaseMode) {
           if (_instance!.version < _expectedVersion) {
             // ignore: avoid_print

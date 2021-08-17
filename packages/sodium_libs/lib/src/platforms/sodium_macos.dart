@@ -29,6 +29,10 @@ class _SodiumMacos implements Sodium {
   SecureKey secureRandom(int length) => _sodium.secureRandom(length);
 
   @override
+  SecureKey secureHandle(dynamic nativeHandle) =>
+      _sodium.secureHandle(nativeHandle);
+
+  @override
   Uint8List unpad(Uint8List buf, int blocksize) =>
       _sodium.unpad(buf, blocksize);
 
@@ -39,6 +43,8 @@ class _SodiumMacos implements Sodium {
 @internal
 class SodiumMacos extends SodiumPlatform {
   @override
-  Future<Sodium> loadSodium() => SodiumInit.init(DynamicLibrary.process())
-      .then((sodium) => _SodiumMacos(sodium));
+  Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
+        DynamicLibrary.process(),
+        initNative: initNative,
+      ).then((sodium) => _SodiumMacos(sodium));
 }

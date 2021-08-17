@@ -7,8 +7,10 @@ import '../sodium_platform.dart';
 @internal
 class SodiumWindows extends SodiumPlatform {
   @override
-  Future<Sodium> loadSodium() =>
-      SodiumInit.init(DynamicLibrary.open('libsodium.dll'));
+  Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
+        DynamicLibrary.open('libsodium.dll'),
+        initNative: initNative,
+      );
 
   @override
   String get updateHint => 'Please run `flutter clean` and rebuild the project '

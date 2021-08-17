@@ -39,7 +39,7 @@ abstract class SodiumPlatform extends PlatformInterface {
   ///
   /// Check out the sodium package documentation for details on how to obtain
   /// a native instance on each platform.
-  Future<Sodium> loadSodium();
+  Future<Sodium> loadSodium({bool initNative = true});
 
   /// A hint for the user if an outdated version of libsodium is detected.
   ///
