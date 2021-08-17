@@ -8,6 +8,9 @@ import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 
 @internal
+typedef SecureKeyJSNativeHandle = Uint8List;
+
+@internal
 class SecureKeyJS with SecureKeyEquality implements SecureKey {
   final LibSodiumJS sodium;
   final Uint8List _raw;
@@ -49,4 +52,7 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
   void dispose() {
     JsError.wrap(() => sodium.memzero(_raw));
   }
+
+  @override
+  SecureKeyJSNativeHandle get nativeHandle => _raw;
 }

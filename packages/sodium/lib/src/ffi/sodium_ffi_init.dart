@@ -19,8 +19,15 @@ abstract class SodiumInit {
   /// The [libsodium] parameter must be a loaded
   /// `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on your platform. Please
   /// refer to the README for more details on loading the library.
-  static Future<Sodium> init(DynamicLibrary libsodium) =>
-      initFromSodiumFFI(LibSodiumFFI(libsodium));
+  ///
+  /// By default, the native library automatically get initialized. If you do
+  /// not want to initialize it, set [initNative] to false. This can be useful
+  /// if you need multiple instances of [Sodium].
+  static Future<Sodium> init(
+    DynamicLibrary libsodium, {
+    bool initNative = true,
+  }) =>
+      initFromSodiumFFI(LibSodiumFFI(libsodium), initNative: initNative);
   // coverage:ignore-end
 
   /// Creates a [Sodium] instance for the loaded libsodium as [LibSodiumFFI].
@@ -32,9 +39,18 @@ abstract class SodiumInit {
   /// Please note that [LibSodiumFFI] is not documented, as it is an auto
   /// generated binding, which simply mimics the C interface in dart, as
   /// required by [dart:ffi].
-  static Future<Sodium> initFromSodiumFFI(LibSodiumFFI sodium) {
-    final result = sodium.sodium_init();
-    SodiumException.checkSucceededInt(result);
+  ///
+  /// By default, the native library automatically get initialized. If you do
+  /// not want to initialize it, set [initNative] to false. This can be useful
+  /// if you need multiple instances of [Sodium].
+  static Future<Sodium> initFromSodiumFFI(
+    LibSodiumFFI sodium, {
+    bool initNative = true,
+  }) {
+    if (initNative) {
+      final result = sodium.sodium_init();
+      SodiumException.checkSucceededInt(result);
+    }
     return Future.value(SodiumFFI(sodium));
   }
 }

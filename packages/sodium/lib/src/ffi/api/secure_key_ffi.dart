@@ -14,6 +14,9 @@ import '../bindings/sodium_pointer.dart';
 typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<Uint8> pointer);
 
 @internal
+typedef SecureKeyFFINativeHandle = List<int>;
+
+@internal
 class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   final SodiumPointer<Uint8> _raw;
 
@@ -100,4 +103,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   void dispose() {
     _raw.dispose();
   }
+
+  @override
+  SecureKeyFFINativeHandle get nativeHandle => [_raw.ptr.address, _raw.count];
 }

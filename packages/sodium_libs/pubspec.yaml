@@ -22,7 +22,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   dart_pre_commit: ^2.3.1
-  lint: ^1.5.3
+  lint: ^1.6.0
   mocktail: ^0.1.4
 
 dependency_overrides:

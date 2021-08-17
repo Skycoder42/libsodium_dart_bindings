@@ -92,6 +92,25 @@ class SodiumFFI implements Sodium {
       );
 
   @override
+  SecureKey secureHandle(covariant SecureKeyFFINativeHandle nativeHandle) {
+    if (nativeHandle.length != 2) {
+      throw ArgumentError.value(
+        nativeHandle,
+        'nativeHandle',
+        'Must be two integers',
+      );
+    }
+
+    return SecureKeyFFI(
+      SodiumPointer.raw(
+        sodium,
+        Pointer.fromAddress(nativeHandle[0]),
+        nativeHandle[1],
+      ),
+    );
+  }
+
+  @override
   late final Randombytes randombytes = RandombytesFFI(sodium);
 
   @override
