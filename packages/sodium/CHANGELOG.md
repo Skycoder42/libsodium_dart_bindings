@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2021-08-17
+### Added
+- `SecureKey.split` extension that allows to split one key into multiple (#2)
+- `SecureKey.nativeHandle` and `SecureKey.fromNativeHandle` to allow passing
+secure keys across isolate boundaries
+- `SodiumInit.init` can now be called with `initNative: false` to disable
+initialization of the native library, in case it has already been initialized
+
 ## [1.0.0] - 2021-07-08
 ### Changed
 - Update dependencies
@@ -20,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.2] - 2021-06-01
 ### Added
-- New libsodium API: 
+- New libsodium API:
   - crypto_aead
     - Only crypto_aead_xchacha20poly1305_ietf has been implemented for now
   - crypto_kdf
