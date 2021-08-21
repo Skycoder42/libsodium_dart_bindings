@@ -22,6 +22,16 @@ class SodiumException implements Exception {
   }
 
   @internal
+  static void checkSucceededInitInt(
+    int result,
+  ) {
+    // Result will be 0 if first init and 1 if second and so on.
+    if (result != 0 && result != 1) {
+      throw SodiumException();
+    }
+  }
+
+  @internal
   // ignore: avoid_positional_boolean_parameters
   static void checkSucceededBool(bool result) {
     if (!result) {
