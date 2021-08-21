@@ -22,7 +22,7 @@ abstract class SodiumInit {
   static Future<Sodium> init(
     DynamicLibrary libsodium, {
     @Deprecated('initNative is no longer required and will be ignored. '
-        'Initializing sodium multiple times is ok.')
+        'Initializing native sodium multiple times is ok.')
         bool initNative = true,
   }) =>
       initFromSodiumFFI(LibSodiumFFI(libsodium));
@@ -40,7 +40,7 @@ abstract class SodiumInit {
   static Future<Sodium> initFromSodiumFFI(
     LibSodiumFFI sodium, {
     @Deprecated('initNative is no longer required and will be ignored. '
-        'Initializing sodium multiple times is ok.')
+        'Initializing native sodium multiple times is ok.')
         bool initNative = true,
   }) {
     final result = sodium.sodium_init();

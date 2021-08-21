@@ -16,7 +16,7 @@ abstract class SodiumInit {
   static Future<Sodium> init(
           dynamic libsodium,
           {@Deprecated('initNative is no longer required and will be ignored. '
-              'Initializing sodium multiple times is ok.')
+              'Initializing native sodium multiple times is ok.')
               bool initNative = true}) =>
       throw UnsupportedError(
         'The current platform does support neither dart:ffi nor dart:js',
