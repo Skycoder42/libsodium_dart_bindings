@@ -15,8 +15,7 @@ abstract class SodiumInit {
   /// refer to the README for more details on loading the library.
   static Future<Sodium> init(
     dynamic libsodium, {
-    @Deprecated('initNative is no longer required and will be ignored. '
-        'Initializing native sodium multiple times is ok.')
+    @Deprecated('initNative is no longer required and will be ignored.')
         bool initNative = true,
   }) =>
       throw UnsupportedError(
