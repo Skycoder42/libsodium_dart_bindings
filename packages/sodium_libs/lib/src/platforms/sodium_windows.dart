@@ -9,7 +9,6 @@ class SodiumWindows extends SodiumPlatform {
   @override
   Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
         DynamicLibrary.open('libsodium.dll'),
-        initNative: initNative,
       );
 
   @override
