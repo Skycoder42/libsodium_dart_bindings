@@ -9,7 +9,6 @@ class SodiumLinux extends SodiumPlatform {
   @override
   Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
         DynamicLibrary.process(),
-        initNative: initNative,
       );
 
   @override

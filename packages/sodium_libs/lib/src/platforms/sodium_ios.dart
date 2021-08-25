@@ -45,6 +45,5 @@ class SodiumIos extends SodiumPlatform {
   @override
   Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
         DynamicLibrary.process(),
-        initNative: initNative,
       ).then((sodium) => _SodiumIos(sodium));
 }

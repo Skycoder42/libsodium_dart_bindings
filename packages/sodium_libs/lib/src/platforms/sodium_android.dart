@@ -9,6 +9,5 @@ class SodiumAndroid extends SodiumPlatform {
   @override
   Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
         DynamicLibrary.open('libsodium.so'),
-        initNative: initNative,
       );
 }

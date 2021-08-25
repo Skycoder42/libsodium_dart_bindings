@@ -45,10 +45,7 @@ class SodiumWeb extends SodiumPlatform {
       ..src = 'sodium.js';
     document.head!.append(script);
 
-    return SodiumInit.init(
-      await completer.future,
-      initNative: initNative,
-    );
+    return SodiumInit.init(await completer.future);
   }
 
   @override

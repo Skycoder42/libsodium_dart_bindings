@@ -17,6 +17,7 @@ import 'cases/secret_box_test_case.dart';
 import 'cases/secret_stream_test_case.dart';
 import 'cases/short_hash_test_case.dart';
 import 'cases/sign_test_case.dart';
+import 'cases/sodium_init_test_case.dart';
 import 'cases/sodium_test_case.dart';
 import 'test_case.dart';
 
@@ -28,6 +29,7 @@ abstract class TestRunner {
 
   Iterable<TestCase> createTestCases() => [
         SodiumTestCase(this),
+        SodiumInitTestCase(this),
         RandombytesTestCase(this),
         SecretBoxTestCase(this),
         SecretStreamTestCase(this),
@@ -43,6 +45,7 @@ abstract class TestRunner {
       ];
 
   @protected
+  @visibleForTesting
   Future<Sodium> loadSodium();
 
   Sodium get sodium => _sodium;

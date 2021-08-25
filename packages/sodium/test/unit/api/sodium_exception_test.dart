@@ -28,6 +28,23 @@ void main() {
     },
   );
 
+  testData<Tuple2<int, bool>>(
+    'checkSucceededInitInt asserts for non zero and non one values',
+    const [
+      Tuple2(0, false),
+      Tuple2(1, false),
+      Tuple2(-1, true),
+      Tuple2(666, true),
+    ],
+    (fixture) {
+      final exceptionMatcher = throwsA(isA<SodiumException>());
+      expect(
+        () => SodiumException.checkSucceededInitInt(fixture.item1),
+        fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+      );
+    },
+  );
+
   testData<Tuple2<bool, bool>>(
     'checkSucceededBool asserts for false value',
     const [

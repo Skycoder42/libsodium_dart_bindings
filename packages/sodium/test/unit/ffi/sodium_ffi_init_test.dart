@@ -23,7 +23,7 @@ void main() {
   });
 
   test('throws if sodium_init fails', () {
-    when(() => mockSodium.sodium_init()).thenReturn(1);
+    when(() => mockSodium.sodium_init()).thenReturn(-1);
 
     expect(
       () => SodiumInit.initFromSodiumFFI(mockSodium),

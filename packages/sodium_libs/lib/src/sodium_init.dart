@@ -48,7 +48,8 @@ abstract class SodiumInit {
   /// **Note:** Calling this method multiple times will always return the same
   /// instance.
   static Future<sodium.Sodium> init({
-    bool initNative = true,
+    @Deprecated('initNative is no longer required and will be ignored.')
+        bool initNative = true,
   }) =>
       _instanceLock.synchronized(() async {
         if (_instance != null) {
@@ -56,9 +57,7 @@ abstract class SodiumInit {
         }
         WidgetsFlutterBinding.ensureInitialized();
         ensurePlatformRegistered();
-        _instance = await SodiumPlatform.instance.loadSodium(
-          initNative: initNative,
-        );
+        _instance = await SodiumPlatform.instance.loadSodium();
         if (!kReleaseMode) {
           if (_instance!.version < _expectedVersion) {
             // ignore: avoid_print
