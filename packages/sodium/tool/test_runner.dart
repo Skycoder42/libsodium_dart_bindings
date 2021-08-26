@@ -82,20 +82,19 @@ Future<void> main(List<String> rawArgs) async {
           '--report-on=lib',
         ]);
 
-        await run(
-          'lcov',
-          const [
-            '--remove',
-            'coverage/lcov.info',
-            '--output-file',
-            'coverage/lcov_cleaned.info',
-            '**/*.freezed.dart',
-            '**/*.ffi.dart',
-            '**/*.js.dart',
-          ],
-        );
-
         if (openCoverage) {
+          await run(
+            'lcov',
+            const [
+              '--remove',
+              'coverage/lcov.info',
+              '--output-file',
+              'coverage/lcov_cleaned.info',
+              '**/*.freezed.dart',
+              '**/*.ffi.dart',
+              '**/*.js.dart',
+            ],
+          );
           await run(
             'genhtml',
             [
