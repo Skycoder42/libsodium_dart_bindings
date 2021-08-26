@@ -12,7 +12,6 @@ longer requires the `initNative` parameter for consecutive invocations (#3)
 - The `initNative` parameter of `SodiumInit.init` has been deprecated as it no
 longer has any effect (#3)
 
-
 ## [1.1.0] - 2021-08-17
 ### Added
 - `SecureKey.split` extension that allows to split one key into multiple (#2)

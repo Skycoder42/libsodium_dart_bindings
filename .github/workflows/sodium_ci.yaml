@@ -73,12 +73,8 @@ jobs:
       - run: dart run tool/test_runner.dart -mintegration -p${{ matrix.system }}
       - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
-          path: packages/${{ env.PACKAGE_NAME }}/coverage/lcov.info
+          path: packages/${{ env.PACKAGE_NAME }}/coverage/lcov_cleaned.info
           min_coverage: 95
-          exclude: |
-            **/*.freezed.dart
-            **/*.ffi.dart
-            **/*.js.dart
       - run: dart run tool/publish.dart --dry-run
 
   release:
