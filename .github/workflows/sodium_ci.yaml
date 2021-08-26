@@ -68,6 +68,7 @@ jobs:
       - run: dart pub get
       - run: dart run build_runner build
       - run: dart analyze --fatal-infos
+      - run: dart format -onone --set-exit-if-changed .
       - run: dart run tool/test_runner.dart -munit -c -p${{ matrix.system }}
       - run: dart run tool/test_runner.dart -mintegration -p${{ matrix.system }}
       - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
@@ -75,8 +76,8 @@ jobs:
           path: packages/${{ env.PACKAGE_NAME }}/coverage/lcov.info
           min_coverage: 95
           exclude: |
-            **/*.freezed.dart 
-            **/*.ffi.dart 
+            **/*.freezed.dart
+            **/*.ffi.dart
             **/*.js.dart
       - run: dart run tool/publish.dart --dry-run
 

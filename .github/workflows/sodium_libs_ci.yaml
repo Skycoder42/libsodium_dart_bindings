@@ -112,6 +112,7 @@ jobs:
       # Build and test
       - run: flutter pub get
       - run: flutter analyze
+      - run: flutter format -n --set-exit-if-changed .
       - name: fetch sodium.js (web)
         if: matrix.platform == 'web'
         run: flutter pub run sodium_libs:update_web
@@ -122,16 +123,16 @@ jobs:
       - name: run integration tests (vm)
         if: matrix.drive != '' && matrix.platform != 'web'
         run: >-
-          ${{ matrix.drive-prelude }} 
+          ${{ matrix.drive-prelude }}
           flutter test -d ${{ matrix.drive }} integration_test
         working-directory: packages/sodium_libs/example
       - name: run integration tests (web)
         if: matrix.drive != '' && matrix.platform == 'web'
         run: >-
-          ${{ matrix.drive-prelude }} 
-          flutter drive 
-          --driver=test_driver/integration_test.dart 
-          --target=integration_test/app_test.dart 
+          ${{ matrix.drive-prelude }}
+          flutter drive
+          --driver=test_driver/integration_test.dart
+          --target=integration_test/app_test.dart
           -d ${{ matrix.drive }}
           --release
           --browser-name=${{ matrix.drive }}
