@@ -9,6 +9,8 @@ import 'package:test/test.dart';
 import 'test_runner.dart';
 
 class VmTestRunner extends TestRunner {
+  VmTestRunner() : super(isSumoTest: true);
+
   @override
   Future<Sodium> loadSodium() async {
     String libSodiumPath;

@@ -20,7 +20,7 @@ abstract class TestCase {
 
   @isTestGroup
   @protected
-  TestFn get group => _runner.group;
+  GroupFn get group => _runner.group;
 
   String get name;
 

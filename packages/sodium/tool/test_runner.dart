@@ -25,6 +25,7 @@ Future<void> main(List<String> rawArgs) async {
     )
     ..addFlag('coverage', abbr: 'c')
     ..addFlag('open-coverage', abbr: 'o')
+    ..addFlag('sumo')
     ..addFlag(
       'help',
       abbr: 'h',
@@ -126,11 +127,15 @@ Future<void> main(List<String> rawArgs) async {
         await _runDart(const ['test', 'test/integration/vm_test.dart']);
       }
       if (testPlatforms.contains(_platformJs)) {
-        await _runDart(const [
+        final sumo = args['sumo'] as bool;
+        await _runDart([
           'test',
           '-p',
           'chrome',
-          'test/integration/js_test.dart',
+          if (sumo)
+            'test/integration/js_test_sumo.dart'
+          else
+            'test/integration/js_test.dart',
         ]);
       }
     }

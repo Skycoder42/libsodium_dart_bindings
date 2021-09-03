@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+const sumoArg = '--sumo';
+
 Future<void> main(List<String> arguments) async {
+  final isSumo = arguments.contains(sumoArg);
   final targetDir = Directory(
     arguments.firstWhere(
-      (_) => true,
+      (arg) => arg != sumoArg,
       orElse: () => 'web',
     ),
   );
@@ -52,7 +55,9 @@ Future<void> main(List<String> arguments) async {
 
     stdout.writeln('> Copying sodium.js to ${targetDir.path}');
     final sodiumJsFile = File.fromUri(
-      tmpDir.uri.resolve('dist/browsers/sodium.js'),
+      tmpDir.uri.resolve(
+        'dist/${isSumo ? 'browsers-sumo' : 'browsers'}/sodium.js',
+      ),
     );
     if (!await sodiumJsFile.exists()) {
       stderr.writeln('Broken git repository - unable to find sodium.js');

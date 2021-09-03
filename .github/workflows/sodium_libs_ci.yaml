@@ -115,7 +115,7 @@ jobs:
       - run: flutter format -n --set-exit-if-changed .
       - name: fetch sodium.js (web)
         if: matrix.platform == 'web'
-        run: flutter pub run sodium_libs:update_web
+        run: flutter pub run sodium_libs:update_web --sumo
         working-directory: packages/sodium_libs/example
       - run: flutter build ${{ matrix.build }} --release
         working-directory: packages/sodium_libs/example

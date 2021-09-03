@@ -17,7 +17,7 @@ Future<void> main(List<String> arguments) async {
     fetchTargets.add(FetchWindows());
   }
   if (targetPlatform == null || targetPlatform == 'web') {
-    fetchTargets.add(FetchWeb());
+    fetchTargets.add(FetchWeb(sumo: arguments.contains('--sumo')));
   }
   if (targetPlatform == null || targetPlatform == 'android') {
     fetchTargets.add(FetchAndroid());

@@ -32,6 +32,7 @@ jobs:
           - windows
           - macos
           - web
+          - web_sumo
 
         include:
           - platform: linux
@@ -46,6 +47,10 @@ jobs:
           - platform: web
             os: ubuntu-latest
             system: js
+          - platform: web_sumo
+            os: ubuntu-latest
+            system: js
+            sumoArgs: --sumo
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -63,14 +68,14 @@ jobs:
         if: matrix.platform == 'windows'
         run: choco install minisign -y
       - name: fetch libsodium
-        run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
+        run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }} ${{ matrix.sumoArgs }}
         working-directory: .
       - run: dart pub get
       - run: dart run build_runner build
       - run: dart analyze --fatal-infos
       - run: dart format -onone --set-exit-if-changed .
       - run: dart run tool/test_runner.dart -munit -c -p${{ matrix.system }}
-      - run: dart run tool/test_runner.dart -mintegration -p${{ matrix.system }}
+      - run: dart run tool/test_runner.dart -mintegration -p${{ matrix.system }} ${{ matrix.sumoArgs }}
       - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: packages/${{ env.PACKAGE_NAME }}/coverage/lcov.info

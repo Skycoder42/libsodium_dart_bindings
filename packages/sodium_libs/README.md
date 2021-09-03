@@ -29,7 +29,7 @@ platform and provides them to [sodium](https://pub.dev/packages/sodium). Check
 the documentation of that package for more details about the actual APIs.
 
 ## Installation
-Simply add `sodium_libs` to your `pubspec.yaml` and run `pub get` (or 
+Simply add `sodium_libs` to your `pubspec.yaml` and run `pub get` (or
 `flutter pub get`).
 
 ### Platform requirements
@@ -47,9 +47,9 @@ When bundeling the application for release, remember to also include the
 `libsodium.so` into the deployment package.
 
 #### Windows
-Since the plugin downloads the binaries at build time, it needs 
+Since the plugin downloads the binaries at build time, it needs
 [minisign](https://jedisct1.github.io/minisign/) to validate their integrity.
-The easiest way to install minisign is via 
+The easiest way to install minisign is via
 [Chocolatey](https://chocolatey.org/install):
 
 ```.ps1
@@ -58,13 +58,18 @@ choco install minisign
 
 #### Web
 The web setup differs slightly from the others. Instead of just installing some
-system library, you need to add 
+system library, you need to add
 [`sodium.js`](https://github.com/jedisct1/libsodium.js) to each project. You can
 do this automatically by running the following command in every new project.
 
 ```.sh
-flutter pub run sodium_libs:update_web
+flutter pub run sodium_libs:update_web [--sumo]
 ```
+
+The sumo parameter is optional. If specified, the Sumo-Variant of sodium.js will
+be downloaded. It is bigger in size, but contains all APIs. With the non-sumo
+version, some parts of the library will not work. All affected APIs are marked
+with a hint in the documentation.
 
 ## Usage
 The API can be consumed in the excact same way as the `sodium` package. The only
@@ -79,6 +84,6 @@ final sodium = await SodiumInit.init();
 ```
 
 ## Documentation
-The documentation is available at 
-https://pub.dev/documentation/sodium_libs/latest/. A full example can be found 
+The documentation is available at
+https://pub.dev/documentation/sodium_libs/latest/. A full example can be found
 at https://pub.dev/packages/sodium_libs/example.

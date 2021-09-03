@@ -10,6 +10,8 @@ import 'package:sodium_libs_example/main.dart' show MyApp;
 import '../../../sodium/test/integration/test_runner.dart';
 
 class FlutterTestRunner extends TestRunner {
+  FlutterTestRunner() : super(isSumoTest: true);
+
   @override
   Future<Sodium> loadSodium() => SodiumInit.init();
 
@@ -17,10 +19,15 @@ class FlutterTestRunner extends TestRunner {
   SetupFn get setUpAll => ft.setUpAll;
 
   @override
-  TestFn get group => ft.group;
+  GroupFn get group => ft.group;
 
   @override
-  TestFn get test => (description, body) => ft.testWidgets(
+  void test(
+    String description,
+    dynamic Function() body, {
+    bool isSumo = false,
+  }) =>
+      ft.testWidgets(
         description,
         (tester) async => body(),
       );

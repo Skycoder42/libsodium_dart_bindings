@@ -22,10 +22,21 @@ import 'cases/sodium_test_case.dart';
 import 'test_case.dart';
 
 typedef SetupFn = void Function(dynamic Function() body);
-typedef TestFn = void Function(String description, dynamic Function() body);
+typedef GroupFn = void Function(String description, dynamic Function() body);
+typedef TestFn = void Function(
+  String description,
+  dynamic Function() body, {
+  bool isSumo,
+});
 
 abstract class TestRunner {
   late final Sodium _sodium;
+
+  final bool isSumoTest;
+
+  TestRunner({
+    required this.isSumoTest,
+  });
 
   Iterable<TestCase> createTestCases() => [
         SodiumTestCase(this),
@@ -54,10 +65,21 @@ abstract class TestRunner {
   late SetupFn setUpAll = t.setUpAll;
 
   @visibleForOverriding
-  late TestFn test = t.test;
+  void test(
+    String description,
+    dynamic Function() body, {
+    bool isSumo = false,
+  }) =>
+      t.test(
+        description,
+        body,
+        skip: !isSumoTest && isSumo
+            ? 'This test only works with the sodium.js sumo variant'
+            : null,
+      );
 
   @visibleForOverriding
-  late TestFn group = t.group;
+  late GroupFn group = t.group;
 
   void setupTests() {
     final testCases = createTestCases().toList();

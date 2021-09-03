@@ -6,6 +6,10 @@ import 'fetch.dart';
 class FetchWeb with FetchCommon implements Fetch {
   static const defaultOutDir = 'packages/sodium/test/integration/binaries/js';
 
+  final bool sumo;
+
+  FetchWeb({required this.sumo});
+
   @override
   Future<void> call({
     required SodiumVersion version,
@@ -28,7 +32,9 @@ class FetchWeb with FetchCommon implements Fetch {
       );
 
       final sodiumJsFile = File.fromUri(
-        tmpDir.uri.resolve('dist/browsers/sodium.js'),
+        tmpDir.uri.resolve(
+          'dist/${sumo ? 'browsers-sumo' : 'browsers'}/sodium.js',
+        ),
       );
       await sodiumJsFile.assertExists();
 
