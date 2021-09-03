@@ -27,8 +27,7 @@ Future<void> main(List<String> arguments) async {
   }
 
   if (targetPlatform != null && fetchTargets.isEmpty) {
-    stderr.writeln('Unsupported platform: $targetPlatform');
-    exitCode = 1;
+    stderr.writeln('WARNING: Unsupported platform: $targetPlatform');
     return;
   }
 
