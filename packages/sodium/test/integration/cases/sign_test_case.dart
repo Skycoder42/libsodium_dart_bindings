@@ -275,5 +275,20 @@ class SignTestCase extends TestCase {
         expect(valid, isFalse);
       });
     });
+
+    test(
+      'Can extract seed and public key from secret key',
+      () {
+        final seed = sodium.secureRandom(sut.seedBytes);
+        final keyPair = sut.seedKeyPair(seed);
+
+        final restoredSeed = sut.skToSeed(keyPair.secretKey);
+        expect(restoredSeed, seed);
+
+        final restoredPk = sut.skToPk(keyPair.secretKey);
+        expect(restoredPk, keyPair.publicKey);
+      },
+      isSumo: true,
+    );
   }
 }

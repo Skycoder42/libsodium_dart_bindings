@@ -14,6 +14,7 @@ import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 import 'helpers/sign/signature_consumer_ffi.dart';
 import 'helpers/sign/verification_consumer_ffi.dart';
+import 'secure_key_ffi.dart';
 
 @internal
 class SignFFI with SignValidations, KeygenMixin implements Sign {
@@ -227,5 +228,51 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       signature: signature,
       publicKey: publicKey,
     );
+  }
+
+  @override
+  SecureKey skToSeed(SecureKey secretKey) {
+    validateSecretKey(secretKey);
+
+    final seed = SecureKeyFFI.alloc(sodium, seedBytes);
+    try {
+      final result = seed.runUnlockedNative(
+        (seedPtr) => secretKey.runUnlockedNative(
+          sodium,
+          (secretKeyPtr) => sodium.crypto_sign_ed25519_sk_to_seed(
+            seedPtr.ptr,
+            secretKeyPtr.ptr,
+          ),
+        ),
+        writable: true,
+      );
+      SodiumException.checkSucceededInt(result);
+
+      return seed;
+    } catch (e) {
+      seed.dispose();
+      rethrow;
+    }
+  }
+
+  @override
+  Uint8List skToPk(SecureKey secretKey) {
+    validateSecretKey(secretKey);
+
+    final publicKey = SodiumPointer<Uint8>.alloc(sodium, count: publicKeyBytes);
+    try {
+      final result = secretKey.runUnlockedNative(
+        sodium,
+        (secretKeyPtr) => sodium.crypto_sign_ed25519_sk_to_pk(
+          publicKey.ptr,
+          secretKeyPtr.ptr,
+        ),
+      );
+      SodiumException.checkSucceededInt(result);
+
+      return publicKey.copyAsList();
+    } finally {
+      publicKey.dispose();
+    }
   }
 }

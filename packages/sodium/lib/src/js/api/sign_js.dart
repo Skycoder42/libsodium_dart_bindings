@@ -141,4 +141,29 @@ class SignJS with SignValidations implements Sign {
       publicKey: publicKey,
     );
   }
+
+  @override
+  SecureKey skToSeed(SecureKey secretKey) {
+    validateSecretKey(secretKey);
+
+    return JsError.wrap(
+      () => secretKey.runUnlockedSync(
+        (secretKeyData) => SecureKeyJS(
+          sodium,
+          sodium.crypto_sign_ed25519_sk_to_seed(secretKeyData),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Uint8List skToPk(SecureKey secretKey) {
+    validateSecretKey(secretKey);
+
+    return JsError.wrap(
+      () => secretKey.runUnlockedSync(
+        (secretKeyData) => sodium.crypto_sign_ed25519_sk_to_pk(secretKeyData),
+      ),
+    );
+  }
 }
