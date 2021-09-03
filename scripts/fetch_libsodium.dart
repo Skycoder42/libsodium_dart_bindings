@@ -17,10 +17,19 @@ Future<void> main(List<String> arguments) async {
     fetchTargets.add(FetchWindows());
   }
   if (targetPlatform == null || targetPlatform == 'web') {
-    fetchTargets.add(FetchWeb(sumo: arguments.contains('--sumo')));
+    fetchTargets.add(FetchWeb(sumo: false));
+  }
+  if (targetPlatform == null || targetPlatform == 'web-sumo') {
+    fetchTargets.add(FetchWeb(sumo: true));
   }
   if (targetPlatform == null || targetPlatform == 'android') {
     fetchTargets.add(FetchAndroid());
+  }
+
+  if (targetPlatform != null && fetchTargets.isEmpty) {
+    stderr.writeln('Unsupported platform: $targetPlatform');
+    exitCode = 1;
+    return;
   }
 
   final versionFile = File.fromUri(
