@@ -28,8 +28,27 @@ class AdvancedScalarMultFFI
 
   @override
   Uint8List base({required SecureKey secretKey}) {
-    // TODO: implement base
-    throw UnimplementedError();
+    validateSecretKey(secretKey);
+    SodiumPointer<Uint8>? outPtr;
+    try {
+      outPtr = SodiumPointer.alloc(
+        sodium,
+        count: bytes,
+      );
+
+      final result = secretKey.runUnlockedNative(
+        sodium,
+        (secretKeyPtr) => sodium.crypto_scalarmult_base(
+          outPtr!.ptr,
+          secretKeyPtr.ptr,
+        ),
+      );
+      SodiumException.checkSucceededInt(result);
+
+      return outPtr.copyAsList();
+    } finally {
+      outPtr?.dispose();
+    }
   }
 
   @override

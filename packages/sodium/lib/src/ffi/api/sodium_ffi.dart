@@ -114,5 +114,6 @@ class SodiumFFI implements Sodium {
   late final Randombytes randombytes = RandombytesFFI(sodium);
 
   @override
-  late final Crypto crypto = CryptoFFI(sodium);
+  Crypto get crypto => _crypto;
+  late final Crypto _crypto = CryptoFFI(sodium);
 }
