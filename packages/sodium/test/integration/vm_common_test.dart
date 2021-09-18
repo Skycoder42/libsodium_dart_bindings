@@ -3,16 +3,16 @@ import 'dart:ffi';
 import 'dart:io';
 
 // dart_pre_commit:ignore-library-import
-import 'package:sodium/sodium.dart';
 import 'package:test/test.dart';
 
 import 'test_runner.dart';
 
-class VmTestRunner extends TestRunner {
-  VmTestRunner() : super(isSumoTest: true);
+abstract class VmCommonTestRunner extends TestRunner {
+  VmCommonTestRunner({
+    required bool isSumoTest,
+  }) : super(isSumoTest: isSumoTest);
 
-  @override
-  Future<Sodium> loadSodium() async {
+  Future<DynamicLibrary> loadSodiumDylib() async {
     String libSodiumPath;
     if (Platform.isLinux) {
       final ldConfigRes = await Process.run('ldconfig', const ['-p']);
@@ -56,11 +56,6 @@ class VmTestRunner extends TestRunner {
     expect(File(libSodiumPath).existsSync(), isTrue);
     // ignore: avoid_print
     print('Found libsodium at: $libSodiumPath');
-    final dylib = DynamicLibrary.open(libSodiumPath);
-    return SodiumInit.init(dylib);
+    return DynamicLibrary.open(libSodiumPath);
   }
-}
-
-void main() {
-  VmTestRunner().setupTests();
 }
