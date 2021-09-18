@@ -62,7 +62,7 @@ class AdvancedScalarMultFFI
     SecureKeyFFI? sharedSecret;
     SodiumPointer<Uint8>? publicPtr;
     try {
-      sharedSecret = SecureKeyFFI.alloc(sodium, bytes);
+      sharedSecret = SecureKeyFFI.alloc(sodium, scalarBytes);
       publicPtr = otherPublicKey.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
@@ -77,6 +77,7 @@ class AdvancedScalarMultFFI
             publicPtr!.ptr,
           ),
         ),
+        writable: true,
       );
       SodiumException.checkSucceededInt(result);
 

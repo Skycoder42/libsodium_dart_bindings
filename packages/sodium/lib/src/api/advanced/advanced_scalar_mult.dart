@@ -30,7 +30,8 @@ abstract class AdvancedScalarMult {
     required SecureKey secretKey,
   });
 
-  /// Provides crypto_scalarmult.
+  /// Provides crypto_scalarmult. Please read the warnings at the link below to
+  /// undestand how easily this can be misused.
   ///
   /// See https://libsodium.gitbook.io/doc/advanced/scalar_multiplication#usage
   SecureKey call({
