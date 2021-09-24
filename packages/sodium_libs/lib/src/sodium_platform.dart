@@ -49,7 +49,6 @@ abstract class SodiumPlatform extends PlatformInterface {
   /// If your implementation requires some user action to update the embedded
   /// native libsodium implementation, you can override this getter to tell
   /// the user what they need to do to update it.
-  @visibleForOverriding
   String get updateHint => 'Please file an issue at '
       'https://github.com/Skycoder42/libsodium_dart_bindings/issues.';
 }
