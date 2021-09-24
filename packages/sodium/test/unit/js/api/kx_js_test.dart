@@ -121,10 +121,12 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(CryptoKX(
-          sharedRx: Uint8List(0),
-          sharedTx: Uint8List(0),
-        ));
+        ).thenReturn(
+          CryptoKX(
+            sharedRx: Uint8List(0),
+            sharedTx: Uint8List(0),
+          ),
+        );
 
         final clientPublicKey = List.generate(5, (index) => index);
         final clientSecretKey = List.generate(5, (index) => index + 50);
@@ -154,10 +156,12 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(CryptoKX(
-          sharedRx: Uint8List.fromList(rx),
-          sharedTx: Uint8List.fromList(tx),
-        ));
+        ).thenReturn(
+          CryptoKX(
+            sharedRx: Uint8List.fromList(rx),
+            sharedTx: Uint8List.fromList(tx),
+          ),
+        );
 
         final result = sut.clientSessionKeys(
           clientPublicKey: Uint8List(5),
@@ -236,10 +240,12 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(CryptoKX(
-          sharedRx: Uint8List(0),
-          sharedTx: Uint8List(0),
-        ));
+        ).thenReturn(
+          CryptoKX(
+            sharedRx: Uint8List(0),
+            sharedTx: Uint8List(0),
+          ),
+        );
 
         final serverPublicKey = List.generate(5, (index) => index);
         final serverSecretKey = List.generate(5, (index) => index + 50);
@@ -269,10 +275,12 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(CryptoKX(
-          sharedRx: Uint8List.fromList(rx),
-          sharedTx: Uint8List.fromList(tx),
-        ));
+        ).thenReturn(
+          CryptoKX(
+            sharedRx: Uint8List.fromList(rx),
+            sharedTx: Uint8List.fromList(tx),
+          ),
+        );
 
         final result = sut.serverSessionKeys(
           serverPublicKey: Uint8List(5),

@@ -144,9 +144,11 @@ mixin GenericHashValidations implements GenericHash {
     SecureKey? key,
   }) =>
       messages
-          .pipe(createConsumer(
-            outLen: outLen,
-            key: key,
-          ))
+          .pipe(
+            createConsumer(
+              outLen: outLen,
+              key: key,
+            ),
+          )
           .then((dynamic value) => value as Uint8List);
 }

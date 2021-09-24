@@ -390,10 +390,12 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(CryptoBox(
-            ciphertext: Uint8List(0),
-            mac: Uint8List(0),
-          ));
+          ).thenReturn(
+            CryptoBox(
+              ciphertext: Uint8List(0),
+              mac: Uint8List(0),
+            ),
+          );
 
           final message = List.generate(20, (index) => index * 2);
           final nonce = List.generate(5, (index) => 10 + index);
@@ -427,10 +429,12 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(CryptoBox(
-            ciphertext: Uint8List.fromList(cipherText),
-            mac: Uint8List.fromList(mac),
-          ));
+          ).thenReturn(
+            CryptoBox(
+              ciphertext: Uint8List.fromList(cipherText),
+              mac: Uint8List.fromList(mac),
+            ),
+          );
 
           final result = sut.detached(
             message: Uint8List(10),

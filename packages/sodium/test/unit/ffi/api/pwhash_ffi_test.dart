@@ -226,16 +226,18 @@ void main() {
 
       test('calls crypto_pwhash with correct arguments', () {
         when(() => mockSodium.crypto_pwhash_alg_argon2id13()).thenReturn(42);
-        when(() => mockSodium.crypto_pwhash(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(0);
+        when(
+          () => mockSodium.crypto_pwhash(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
 
         const password = [1, 2, 3];
         const salt = [0, 2, 4, 6, 8];
@@ -266,16 +268,18 @@ void main() {
 
       test('throws if crypto_pwhash returns non zero result', () {
         when(() => mockSodium.crypto_pwhash_alg_argon2i13()).thenReturn(0);
-        when(() => mockSodium.crypto_pwhash(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(1);
+        when(
+          () => mockSodium.crypto_pwhash(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(1);
 
         expect(
           () => sut.call(
@@ -296,16 +300,18 @@ void main() {
       test('returns secure key with result of correct length', () {
         when(() => mockSodium.crypto_pwhash_alg_default()).thenReturn(2);
         const testData = [5, 4, 3, 2, 1];
-        when(() => mockSodium.crypto_pwhash(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenAnswer((i) {
+        when(
+          () => mockSodium.crypto_pwhash(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenAnswer((i) {
           fillPointer(
             i.positionalArguments.first as Pointer<Uint8>,
             testData,
@@ -370,13 +376,15 @@ void main() {
       });
 
       test('calls crypto_pwhash_str with correct arguments', () {
-        when(() => mockSodium.crypto_pwhash_str(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(0);
+        when(
+          () => mockSodium.crypto_pwhash_str(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
 
         const password = 'abc123';
         sut.str(
@@ -398,13 +406,15 @@ void main() {
       });
 
       test('throws if crypto_pwhash_str returns non zero result', () {
-        when(() => mockSodium.crypto_pwhash_str(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(1);
+        when(
+          () => mockSodium.crypto_pwhash_str(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(1);
 
         expect(
           () => sut.str(
@@ -419,13 +429,15 @@ void main() {
 
       test('returns password hash of full length', () {
         const testHash = [0x41, 0x42, 0x44, 0x48, 0x50];
-        when(() => mockSodium.crypto_pwhash_str(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenAnswer((i) {
+        when(
+          () => mockSodium.crypto_pwhash_str(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenAnswer((i) {
           fillPointer(
             i.positionalArguments.first as Pointer<Int8>,
             testHash,
@@ -444,13 +456,15 @@ void main() {
 
       test('returns password hash of shorter length', () {
         const testHash = [0x41, 0x42, 0x43];
-        when(() => mockSodium.crypto_pwhash_str(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenAnswer((i) {
+        when(
+          () => mockSodium.crypto_pwhash_str(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenAnswer((i) {
           fillPointer(
             i.positionalArguments.first as Pointer<Int8>,
             testHash,
@@ -495,11 +509,13 @@ void main() {
       });
 
       test('calls crypto_pwhash_str_verify with correct arguments', () {
-        when(() => mockSodium.crypto_pwhash_str_verify(
-              any(),
-              any(),
-              any(),
-            )).thenReturn(0);
+        when(
+          () => mockSodium.crypto_pwhash_str_verify(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
 
         const password = 'abc123';
         const passwordHash = 'xy';
@@ -512,8 +528,8 @@ void main() {
         verify(
           () => mockSodium.crypto_pwhash_str_verify(
             any(
-                that:
-                    hasRawData<Int8>(passwordHash.toCharArray(memoryWidth: 5))),
+              that: hasRawData<Int8>(passwordHash.toCharArray(memoryWidth: 5)),
+            ),
             any(that: hasRawData<Int8>(password.toCharArray())),
             password.length,
           ),
@@ -524,11 +540,13 @@ void main() {
       test(
         'returns false if crypto_pwhash_str_verify returns non zero result',
         () {
-          when(() => mockSodium.crypto_pwhash_str_verify(
-                any(),
-                any(),
-                any(),
-              )).thenReturn(1);
+          when(
+            () => mockSodium.crypto_pwhash_str_verify(
+              any(),
+              any(),
+              any(),
+            ),
+          ).thenReturn(1);
 
           final result = sut.strVerify(
             password: 'abc123',
@@ -584,11 +602,13 @@ void main() {
       });
 
       test('calls crypto_pwhash_str_needs_rehash with correct arguments', () {
-        when(() => mockSodium.crypto_pwhash_str_needs_rehash(
-              any(),
-              any(),
-              any(),
-            )).thenReturn(0);
+        when(
+          () => mockSodium.crypto_pwhash_str_needs_rehash(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
 
         const passwordHash = 'wz_';
         sut.strNeedsRehash(
@@ -616,11 +636,13 @@ void main() {
           Tuple2(1, true),
         ],
         (fixture) {
-          when(() => mockSodium.crypto_pwhash_str_needs_rehash(
-                any(),
-                any(),
-                any(),
-              )).thenReturn(fixture.item1);
+          when(
+            () => mockSodium.crypto_pwhash_str_needs_rehash(
+              any(),
+              any(),
+              any(),
+            ),
+          ).thenReturn(fixture.item1);
 
           final result = sut.strNeedsRehash(
             passwordHash: 'hash',
@@ -635,11 +657,13 @@ void main() {
       test(
         'throws if crypto_pwhash_str_needs_rehash returns invalid value',
         () {
-          when(() => mockSodium.crypto_pwhash_str_needs_rehash(
-                any(),
-                any(),
-                any(),
-              )).thenReturn(-1);
+          when(
+            () => mockSodium.crypto_pwhash_str_needs_rehash(
+              any(),
+              any(),
+              any(),
+            ),
+          ).thenReturn(-1);
 
           expect(
             () => sut.strNeedsRehash(

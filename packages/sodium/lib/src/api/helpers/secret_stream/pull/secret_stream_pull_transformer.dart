@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../../sodium.dart';
 import '../../../secret_stream.dart';
 import '../../../secure_key.dart';
 import 'secret_pull_stream.dart';
@@ -222,7 +221,8 @@ abstract class SecretStreamPullTransformer<TState extends Object>
 
   @override
   SecretExStream<SecretStreamPlainMessage> bind(
-      Stream<SecretStreamCipherMessage> stream) {
+    Stream<SecretStreamCipherMessage> stream,
+  ) {
     // ignore: close_sinks
     final transformerSink = createSink(requireFinalized);
     final baseStream = Stream<SecretStreamPlainMessage>.eventTransformed(

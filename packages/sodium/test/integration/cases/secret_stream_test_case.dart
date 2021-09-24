@@ -128,13 +128,17 @@ class SecretStreamTestCase extends TestCase {
 
         expect(restoredStream, emitsInOrder(plainEvents));
 
-        controller..add(plainEvents[0])..add(plainEvents[1]);
+        controller
+          ..add(plainEvents[0])
+          ..add(plainEvents[1]);
         await Future<void>.delayed(const Duration(milliseconds: 100));
 
         cipherStream.rekey();
         restoredStream.rekey();
 
-        controller..add(plainEvents[2])..add(plainEvents[3]);
+        controller
+          ..add(plainEvents[2])
+          ..add(plainEvents[3]);
         await controller.close();
       });
 
@@ -164,9 +168,13 @@ class SecretStreamTestCase extends TestCase {
 
         expect(restoredStream, emitsError(isA<SodiumException>()));
 
-        controller..add(plainEvents[0])..add(plainEvents[1]);
+        controller
+          ..add(plainEvents[0])
+          ..add(plainEvents[1]);
         cipherStream.rekey();
-        controller..add(plainEvents[2])..add(plainEvents[3]);
+        controller
+          ..add(plainEvents[2])
+          ..add(plainEvents[3]);
         await controller.close();
       });
     });

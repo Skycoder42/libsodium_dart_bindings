@@ -51,10 +51,12 @@ void main() {
         List.generate(5, (index) => 100 + index),
       );
 
-      when(() => sutMock.createConsumer(
-            outLen: any(named: 'outLen'),
-            key: any(named: 'key'),
-          )).thenReturn(mockConsumer);
+      when(
+        () => sutMock.createConsumer(
+          outLen: any(named: 'outLen'),
+          key: any(named: 'key'),
+        ),
+      ).thenReturn(mockConsumer);
       when<dynamic>(() => mockConsumer.addStream(any()))
           .thenAnswer((i) async {});
       when(() => mockConsumer.close()).thenAnswer((i) async => hash);

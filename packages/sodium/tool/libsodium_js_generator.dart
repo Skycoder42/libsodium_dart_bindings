@@ -22,15 +22,17 @@ Future<void> main(List<String> args) async {
   final constantsGenerator = ConstantsGenerator(typeMappings);
   final symbolsGenerator = SymbolsGenerator(typeMappings);
 
-  final outFile = File(join(
-    FileLoader.scriptDir.path,
-    '..',
-    'lib',
-    'src',
-    'js',
-    'bindings',
-    'sodium.js.dart',
-  ));
+  final outFile = File(
+    join(
+      FileLoader.scriptDir.path,
+      '..',
+      'lib',
+      'src',
+      'js',
+      'bindings',
+      'sodium.js.dart',
+    ),
+  );
   final outSink = outFile.openWrite();
 
   try {

@@ -80,10 +80,12 @@ void main() {
       reset(mockSink);
       reset(mockSut);
 
-      when(() => mockSut.initialize(any())).thenReturn(InitPushResult(
-        header: Uint8List(0),
-        state: state,
-      ));
+      when(() => mockSut.initialize(any())).thenReturn(
+        InitPushResult(
+          header: Uint8List(0),
+          state: state,
+        ),
+      );
       when(() => mockSut.encryptMessage(any(), any()))
           .thenReturn(SecretStreamCipherMessage(Uint8List(0)));
 
@@ -233,10 +235,12 @@ void main() {
         });
 
         test('moves to finalized state for final push messages', () {
-          sut.add(SecretStreamPlainMessage(
-            Uint8List(0),
-            tag: SecretStreamMessageTag.finalPush,
-          ));
+          sut.add(
+            SecretStreamPlainMessage(
+              Uint8List(0),
+              tag: SecretStreamMessageTag.finalPush,
+            ),
+          );
 
           verify(() => mockSut.disposeState(state));
 
@@ -331,10 +335,12 @@ void main() {
       setUp(() {
         sut
           ..init(mockSink, key)
-          ..add(SecretStreamPlainMessage(
-            Uint8List(0),
-            tag: SecretStreamMessageTag.finalPush,
-          ));
+          ..add(
+            SecretStreamPlainMessage(
+              Uint8List(0),
+              tag: SecretStreamMessageTag.finalPush,
+            ),
+          );
 
         verifyNever(() => mockSink.addError(any(), any()));
         clearInteractions(mockSut);
@@ -465,9 +471,11 @@ void main() {
 
         expect(
           res,
-          emitsInOrder(data.map<SecretStreamCipherMessage>(
-            (e) => SecretStreamCipherMessage(e.message),
-          )),
+          emitsInOrder(
+            data.map<SecretStreamCipherMessage>(
+              (e) => SecretStreamCipherMessage(e.message),
+            ),
+          ),
         );
         verify(() => mockSink.init(any(), key));
       });

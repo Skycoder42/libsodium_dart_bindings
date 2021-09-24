@@ -18,11 +18,13 @@ void main() {
       expect(
         // ignore: only_throw_errors
         () => JsError.wrap(() => throw JsError(message)),
-        throwsA(isA<SodiumException>().having(
-          (e) => e.originalMessage,
-          'originalMessage',
-          message,
-        )),
+        throwsA(
+          isA<SodiumException>().having(
+            (e) => e.originalMessage,
+            'originalMessage',
+            message,
+          ),
+        ),
       );
     });
   });

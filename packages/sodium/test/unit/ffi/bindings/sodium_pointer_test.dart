@@ -248,7 +248,8 @@ void main() {
           expect(sut.locked, isFalse);
 
           verify(
-              () => mockSodium.sodium_munlock(sut.ptr.cast(), sut.byteLength));
+            () => mockSodium.sodium_munlock(sut.ptr.cast(), sut.byteLength),
+          );
         });
 
         test('throws and keeps old state if unlocking fails', () {
@@ -258,7 +259,8 @@ void main() {
           expect(sut.locked, isTrue);
 
           verify(
-              () => mockSodium.sodium_munlock(sut.ptr.cast(), sut.byteLength));
+            () => mockSodium.sodium_munlock(sut.ptr.cast(), sut.byteLength),
+          );
         });
       });
 

@@ -69,10 +69,12 @@ void main() {
     sutMock = SecretStreamMock();
 
     when(() => sutMock.createPushEx(any())).thenReturn(mockPushTransformer);
-    when(() => sutMock.createPullEx(
-          any(),
-          requireFinalized: any(named: 'requireFinalized'),
-        )).thenReturn(mockPullTransformer);
+    when(
+      () => sutMock.createPullEx(
+        any(),
+        requireFinalized: any(named: 'requireFinalized'),
+      ),
+    ).thenReturn(mockPullTransformer);
   });
 
   test('pushEx binds to transformer created by createPushEx', () {

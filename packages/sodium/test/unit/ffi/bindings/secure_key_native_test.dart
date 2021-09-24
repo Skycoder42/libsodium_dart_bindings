@@ -51,10 +51,14 @@ void main() {
       });
 
       final SecureKey sut = sutMock;
-      final result = sut.runUnlockedNative(mockSodium, (pointer) {
-        expect(pointer, mockPtr);
-        return 42;
-      }, writable: true);
+      final result = sut.runUnlockedNative(
+        mockSodium,
+        (pointer) {
+          expect(pointer, mockPtr);
+          return 42;
+        },
+        writable: true,
+      );
       expect(result, 42);
 
       verify(() => sutMock.runUnlockedNative(any(), writable: true));
@@ -91,12 +95,16 @@ void main() {
           final testData = List.generate(20, (index) => index);
           mockRun(Uint8List.fromList(testData));
 
-          final result = sutMock.runUnlockedNative(mockSodium, (pointer) {
-            expect(pointer.count, testData.length);
-            expect(pointer.ptr, hasRawData<Uint8>(testData));
-            expect(pointer.memoryProtection, fixture.item2);
-            return true;
-          }, writable: fixture.item1);
+          final result = sutMock.runUnlockedNative(
+            mockSodium,
+            (pointer) {
+              expect(pointer.count, testData.length);
+              expect(pointer.ptr, hasRawData<Uint8>(testData));
+              expect(pointer.memoryProtection, fixture.item2);
+              return true;
+            },
+            writable: fixture.item1,
+          );
           expect(result, isTrue);
 
           verifyInOrder([
@@ -113,10 +121,14 @@ void main() {
         );
         mockRun(testData);
 
-        final result = sutMock.runUnlockedNative(mockSodium, (pointer) {
-          pointer.asList().setAll(0, resultData);
-          return true;
-        }, writable: true);
+        final result = sutMock.runUnlockedNative(
+          mockSodium,
+          (pointer) {
+            pointer.asList().setAll(0, resultData);
+            return true;
+          },
+          writable: true,
+        );
         expect(result, isTrue);
 
         expect(testData, resultData);

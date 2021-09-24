@@ -54,11 +54,13 @@ void testKeypair({
       assert(mockSodium is Mock);
 
       test('calls native implementation to allocate keys', () {
-        when(keypairNative).thenReturn(KeyPair(
-          keyType: '',
-          publicKey: Uint8List(0),
-          privateKey: Uint8List(0),
-        ));
+        when(keypairNative).thenReturn(
+          KeyPair(
+            keyType: '',
+            publicKey: Uint8List(0),
+            privateKey: Uint8List(0),
+          ),
+        );
 
         runKeypair();
 
@@ -68,11 +70,13 @@ void testKeypair({
       test('returns generated key', () {
         final testPublic = List.generate(15, (index) => 15 - index);
         final testSecret = List.generate(5, (index) => index);
-        when(keypairNative).thenReturn(KeyPair(
-          keyType: '',
-          publicKey: Uint8List.fromList(testPublic),
-          privateKey: Uint8List.fromList(testSecret),
-        ));
+        when(keypairNative).thenReturn(
+          KeyPair(
+            keyType: '',
+            publicKey: Uint8List.fromList(testPublic),
+            privateKey: Uint8List.fromList(testSecret),
+          ),
+        );
 
         final res = runKeypair();
 
@@ -113,11 +117,13 @@ void testSeedKeypair({
       });
 
       test('calls crypto_box_seed_keypair on the keys with the seed', () {
-        when(() => seedKeypairNative(any())).thenReturn(KeyPair(
-          keyType: '',
-          publicKey: Uint8List(0),
-          privateKey: Uint8List(0),
-        ));
+        when(() => seedKeypairNative(any())).thenReturn(
+          KeyPair(
+            keyType: '',
+            publicKey: Uint8List(0),
+            privateKey: Uint8List(0),
+          ),
+        );
 
         final seed = List.generate(seedLen, (index) => 3 * index);
         runSeedKeypair(SecureKeyFake(seed));
@@ -130,11 +136,13 @@ void testSeedKeypair({
       test('returns generated key', () {
         final testPublic = List.generate(15, (index) => 15 - index);
         final testSecret = List.generate(5, (index) => index);
-        when(() => seedKeypairNative(any())).thenReturn(KeyPair(
-          keyType: '',
-          publicKey: Uint8List.fromList(testPublic),
-          privateKey: Uint8List.fromList(testSecret),
-        ));
+        when(() => seedKeypairNative(any())).thenReturn(
+          KeyPair(
+            keyType: '',
+            publicKey: Uint8List.fromList(testPublic),
+            privateKey: Uint8List.fromList(testSecret),
+          ),
+        );
 
         final res = runSeedKeypair(SecureKeyFake.empty(seedLen));
 

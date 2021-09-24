@@ -263,9 +263,11 @@ mixin SignValidations implements Sign {
     required Uint8List publicKey,
   }) =>
       messages
-          .pipe(createVerifyConsumer(
-            signature: signature,
-            publicKey: publicKey,
-          ))
+          .pipe(
+            createVerifyConsumer(
+              signature: signature,
+              publicKey: publicKey,
+            ),
+          )
           .then((dynamic value) => value as bool);
 }

@@ -85,11 +85,14 @@ class SodiumTestCase extends TestCase {
         final secureKey = sut.secureAlloc(testData.length);
         try {
           // write data
-          final resLen = secureKey.runUnlockedSync((data) {
-            expect(data, hasLength(testData.length));
-            data.setAll(0, testData);
-            return data.length;
-          }, writable: true);
+          final resLen = secureKey.runUnlockedSync(
+            (data) {
+              expect(data, hasLength(testData.length));
+              data.setAll(0, testData);
+              return data.length;
+            },
+            writable: true,
+          );
 
           expect(resLen, testData.length);
           expect(secureKey.extractBytes(), testData);
@@ -108,11 +111,14 @@ class SodiumTestCase extends TestCase {
         final secureKey = sut.secureAlloc(testData.length);
         try {
           // write data
-          final resLen = await secureKey.runUnlockedAsync((data) {
-            expect(data, hasLength(testData.length));
-            data.setAll(0, testData);
-            return data.length;
-          }, writable: true);
+          final resLen = await secureKey.runUnlockedAsync(
+            (data) {
+              expect(data, hasLength(testData.length));
+              data.setAll(0, testData);
+              return data.length;
+            },
+            writable: true,
+          );
 
           expect(resLen, testData.length);
           expect(secureKey.extractBytes(), testData);

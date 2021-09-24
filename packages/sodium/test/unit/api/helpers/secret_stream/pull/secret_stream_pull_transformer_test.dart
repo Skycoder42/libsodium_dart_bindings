@@ -366,11 +366,12 @@ void main() {
 
     group('finalized', () {
       setUp(() {
-        when(() => mockSut.decryptMessage(any(), any()))
-            .thenReturn(SecretStreamPlainMessage(
-          Uint8List(0),
-          tag: SecretStreamMessageTag.finalPush,
-        ));
+        when(() => mockSut.decryptMessage(any(), any())).thenReturn(
+          SecretStreamPlainMessage(
+            Uint8List(0),
+            tag: SecretStreamMessageTag.finalPush,
+          ),
+        );
 
         sut
           ..init(mockSink, key)
@@ -507,9 +508,11 @@ void main() {
 
         expect(
           res,
-          emitsInOrder(data.map<SecretStreamPlainMessage>(
-            (e) => SecretStreamPlainMessage(e.message),
-          )),
+          emitsInOrder(
+            data.map<SecretStreamPlainMessage>(
+              (e) => SecretStreamPlainMessage(e.message),
+            ),
+          ),
         );
         verify(() => mockSink.init(any(), key));
       });

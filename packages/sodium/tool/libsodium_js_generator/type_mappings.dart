@@ -83,13 +83,15 @@ class TypeMappings {
     'randombytes_set_implementation_result': TypeInfo('Never'),
   };
 
-  late final fileLoader = FileLoader(Directory(
-    join(
-      FileLoader.scriptDir.path,
-      'libsodium_js_generator',
-      'types',
+  late final fileLoader = FileLoader(
+    Directory(
+      join(
+        FileLoader.scriptDir.path,
+        'libsodium_js_generator',
+        'types',
+      ),
     ),
-  ));
+  );
 
   TypeMappings();
 

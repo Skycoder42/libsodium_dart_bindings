@@ -79,21 +79,25 @@ void main() {
       createSut: () => sut,
       state: stateAddress,
       setUpVerify: () {
-        when(() => mockSodium.crypto_sign_final_verify(
-              any(),
-              any(),
-              any(),
-            )).thenReturn(true);
+        when(
+          () => mockSodium.crypto_sign_final_verify(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(true);
       },
     );
 
     group('close', () {
       test('calls crypto_sign_final_verify with correct arguments', () async {
-        when(() => mockSodium.crypto_sign_final_verify(
-              any(),
-              any(),
-              any(),
-            )).thenReturn(true);
+        when(
+          () => mockSodium.crypto_sign_final_verify(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(true);
 
         await sut.close();
 
@@ -107,11 +111,13 @@ void main() {
       });
 
       test('returns validation result', () async {
-        when(() => mockSodium.crypto_sign_final_verify(
-              any(),
-              any(),
-              any(),
-            )).thenReturn(true);
+        when(
+          () => mockSodium.crypto_sign_final_verify(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(true);
 
         final result = await sut.close();
 
@@ -119,11 +125,13 @@ void main() {
       });
 
       test('throws exception if validation throws', () async {
-        when(() => mockSodium.crypto_sign_final_verify(
-              any(),
-              any(),
-              any(),
-            )).thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_sign_final_verify(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         await expectLater(
           () => sut.close(),
@@ -132,11 +140,13 @@ void main() {
       });
 
       test('throws state error if close is called a second time', () async {
-        when(() => mockSodium.crypto_sign_final_verify(
-              any(),
-              any(),
-              any(),
-            )).thenReturn(true);
+        when(
+          () => mockSodium.crypto_sign_final_verify(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(true);
 
         await sut.close();
 
@@ -147,11 +157,13 @@ void main() {
       });
 
       test('returns same future as signatureValid', () async {
-        when(() => mockSodium.crypto_sign_final_verify(
-              any(),
-              any(),
-              any(),
-            )).thenReturn(false);
+        when(
+          () => mockSodium.crypto_sign_final_verify(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(false);
 
         final signature = sut.signatureValid;
 

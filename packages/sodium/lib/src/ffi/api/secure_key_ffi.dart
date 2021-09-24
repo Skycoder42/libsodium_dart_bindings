@@ -26,12 +26,13 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
       ..memoryProtection = MemoryProtection.noAccess;
   }
 
-  factory SecureKeyFFI.alloc(LibSodiumFFI sodium, int length) =>
-      SecureKeyFFI(SodiumPointer<Uint8>.alloc(
-        sodium,
-        count: length,
-        memoryProtection: MemoryProtection.noAccess,
-      ));
+  factory SecureKeyFFI.alloc(LibSodiumFFI sodium, int length) => SecureKeyFFI(
+        SodiumPointer<Uint8>.alloc(
+          sodium,
+          count: length,
+          memoryProtection: MemoryProtection.noAccess,
+        ),
+      );
 
   factory SecureKeyFFI.random(LibSodiumFFI sodium, int length) {
     final raw = SodiumPointer<Uint8>.alloc(sodium, count: length);

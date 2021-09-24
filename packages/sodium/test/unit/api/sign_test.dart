@@ -70,9 +70,11 @@ void main() {
         List.generate(5, (index) => 100 + index),
       );
 
-      when(() => sutMock.createConsumer(
-            secretKey: any(named: 'secretKey'),
-          )).thenReturn(mockConsumer);
+      when(
+        () => sutMock.createConsumer(
+          secretKey: any(named: 'secretKey'),
+        ),
+      ).thenReturn(mockConsumer);
       when<dynamic>(() => mockConsumer.addStream(any()))
           .thenAnswer((i) async {});
       when(() => mockConsumer.close()).thenAnswer((i) async => signature);
@@ -101,10 +103,12 @@ void main() {
         List.generate(5, (index) => 100 + index),
       );
 
-      when(() => sutMock.createVerifyConsumer(
-            publicKey: any(named: 'publicKey'),
-            signature: any(named: 'signature'),
-          )).thenReturn(mockConsumer);
+      when(
+        () => sutMock.createVerifyConsumer(
+          publicKey: any(named: 'publicKey'),
+          signature: any(named: 'signature'),
+        ),
+      ).thenReturn(mockConsumer);
       when<dynamic>(() => mockConsumer.addStream(any()))
           .thenAnswer((i) async {});
       when(() => mockConsumer.close()).thenAnswer((i) async => true);

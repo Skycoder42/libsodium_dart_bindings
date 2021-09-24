@@ -46,10 +46,12 @@ void main() {
 
     group('initialize', () {
       test('calls init_pull with correct arguments', () {
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
-              any(),
-              any(),
-            )).thenReturn(0);
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
 
         final keyData = List.generate(7, (index) => index * 4);
         final headerData = List.generate(10, (index) => index + 1);
@@ -69,10 +71,12 @@ void main() {
 
       test('returns init_pull result state', () {
         const state = 111;
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
-              any(),
-              any(),
-            )).thenReturn(state);
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
+            any(),
+            any(),
+          ),
+        ).thenReturn(state);
 
         final result = sut.initialize(SecureKeyFake.empty(0), Uint8List(0));
 
@@ -80,10 +84,12 @@ void main() {
       });
 
       test('throws SodiumException if init_pull fails', () {
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
-              any(),
-              any(),
-            )).thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
+            any(),
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.initialize(SecureKeyFake.empty(0), Uint8List(0)),
@@ -94,9 +100,9 @@ void main() {
 
     group('rekey', () {
       test('calls rekey with passed state', () {
-        when(() =>
-                mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()))
-            .thenReturn(true);
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()),
+        ).thenReturn(true);
 
         const state = 23;
 
@@ -108,9 +114,9 @@ void main() {
       });
 
       test('throws SodiumException on JsError', () {
-        when(() =>
-                mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()))
-            .thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.rekey(1),
@@ -133,11 +139,12 @@ void main() {
 
       test('calls pull with correct arguments', () {
         when<dynamic>(
-            () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                  any(),
-                  any(),
-                  any(),
-                )).thenReturn(pullResult);
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(pullResult);
 
         final cipherData = List.generate(20, (index) => index + 10);
         final additionalData = List.generate(5, (index) => index * index);
@@ -162,11 +169,12 @@ void main() {
 
       test('calls pull without additional data if not set', () {
         when<dynamic>(
-            () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                  any(),
-                  any(),
-                  any(),
-                )).thenReturn(pullResult);
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(pullResult);
 
         final cipherData = List.generate(20, (index) => index + 10);
         const state = 17;
@@ -191,14 +199,17 @@ void main() {
         when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH)
             .thenReturn(tagValue);
         when<dynamic>(
-            () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                  any(),
-                  any(),
-                  any(),
-                )).thenReturn(SecretStreamPull(
-          message: Uint8List.fromList(plainData),
-          tag: tagValue,
-        ));
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(
+          SecretStreamPull(
+            message: Uint8List.fromList(plainData),
+            tag: tagValue,
+          ),
+        );
 
         const state = 44;
         final additionalData = List.generate(5, (index) => index * index);
@@ -218,14 +229,17 @@ void main() {
       test('returns decrypted plain message without additional data', () {
         final plainData = List.generate(13, (index) => index + 1);
         when<dynamic>(
-            () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                  any(),
-                  any(),
-                  any(),
-                )).thenReturn(SecretStreamPull(
-          message: Uint8List.fromList(plainData),
-          tag: 0,
-        ));
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(
+          SecretStreamPull(
+            message: Uint8List.fromList(plainData),
+            tag: 0,
+          ),
+        );
 
         const state = 44;
         final result = sut.decryptMessage(
@@ -240,11 +254,12 @@ void main() {
 
       test('throws SodiumException if pull fails', () {
         when<dynamic>(
-            () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                  any(),
-                  any(),
-                  any(),
-                )).thenThrow(JsError());
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.decryptMessage(
@@ -257,11 +272,12 @@ void main() {
 
       test('throws SodiumException if pull returns false', () {
         when<dynamic>(
-            () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                  any(),
-                  any(),
-                  any(),
-                )).thenReturn(false);
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(false);
 
         expect(
           () => sut.decryptMessage(
@@ -274,11 +290,12 @@ void main() {
 
       test('throws AssertionError if pull returns true', () {
         when<dynamic>(
-            () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                  any(),
-                  any(),
-                  any(),
-                )).thenReturn(true);
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(true);
 
         expect(
           () => sut.decryptMessage(
@@ -291,11 +308,12 @@ void main() {
 
       test('throws TypeError if pull returns unexpected value', () {
         when<dynamic>(
-            () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                  any(),
-                  any(),
-                  any(),
-                )).thenReturn(42);
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(42);
 
         expect(
           () => sut.decryptMessage(

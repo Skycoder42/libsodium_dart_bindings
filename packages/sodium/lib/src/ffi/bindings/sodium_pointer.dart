@@ -11,7 +11,7 @@ import 'memory_protection.dart';
 /// A C-Pointer wrapper that uses the memory utilities of libsodium.
 ///
 /// See https://libsodium.gitbook.io/doc/memory_management
-class SodiumPointer<T extends NativeType> with _StaticallyTypedSizeOf {
+class SodiumPointer<T extends NativeType> {
   /// libsodium bindings used to access the C API
   final LibSodiumFFI sodium;
 
@@ -811,6 +811,8 @@ extension DoubleSodiumList on Float64List {
 }
 
 abstract class _StaticallyTypedSizeOf {
+  const _StaticallyTypedSizeOf._();
+
   static int staticSizeOf<T>() {
     switch (T) {
       case Int8:

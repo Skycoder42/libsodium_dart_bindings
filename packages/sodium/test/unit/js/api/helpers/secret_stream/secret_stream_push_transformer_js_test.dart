@@ -44,9 +44,11 @@ void main() {
 
       test('calls init_push with correct arguments', () {
         final keyData = List.generate(7, (index) => index * 3);
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
-              any(),
-            )).thenReturn(fakeResult);
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
+            any(),
+          ),
+        ).thenReturn(fakeResult);
 
         sut.initialize(SecureKeyFake(keyData));
 
@@ -60,12 +62,16 @@ void main() {
       test('returns init push result with state and header', () {
         const state = 42;
         final headerData = List.generate(10, (index) => 15 + index);
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
-              any(),
-            )).thenReturn(SecretStreamInitPush(
-          state: state,
-          header: Uint8List.fromList(headerData),
-        ));
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
+            any(),
+          ),
+        ).thenReturn(
+          SecretStreamInitPush(
+            state: state,
+            header: Uint8List.fromList(headerData),
+          ),
+        );
 
         final res = sut.initialize(SecureKeyFake.empty(0));
 
@@ -74,9 +80,11 @@ void main() {
       });
 
       test('throws SodiumException if init_push fails', () {
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
-              any(),
-            )).thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.initialize(SecureKeyFake.empty(0)),
@@ -87,9 +95,9 @@ void main() {
 
     group('rekey', () {
       test('calls rekey with passed state', () {
-        when(() =>
-                mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()))
-            .thenReturn(true);
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()),
+        ).thenReturn(true);
 
         const state = 23;
 
@@ -101,9 +109,9 @@ void main() {
       });
 
       test('throws SodiumException on JsError', () {
-        when(() =>
-                mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()))
-            .thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.rekey(1),
@@ -122,12 +130,14 @@ void main() {
       test('calls push with correct arguments', () {
         when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH)
             .thenReturn(42);
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(Uint8List(0));
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List(0));
 
         final messageData = List.generate(20, (index) => index + 10);
         final additionalData = List.generate(5, (index) => index * index);
@@ -154,12 +164,14 @@ void main() {
       });
 
       test('calls push without additional data if not set', () {
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(Uint8List(0));
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List(0));
 
         final messageData = List.generate(20, (index) => index + 10);
         const state = 13;
@@ -181,12 +193,14 @@ void main() {
 
       test('returns encrypted cipher message', () {
         final cipherData = List.generate(8, (index) => index * 2);
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(Uint8List.fromList(cipherData));
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List.fromList(cipherData));
 
         final additionalData = List.generate(10, (index) => index * index);
         final result = sut.encryptMessage(
@@ -203,12 +217,14 @@ void main() {
 
       test('returns encrypted cipher message without extra data', () {
         final cipherData = List.generate(8, (index) => index * 2);
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(Uint8List.fromList(cipherData));
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List.fromList(cipherData));
 
         final result = sut.encryptMessage(
           0,
@@ -220,12 +236,14 @@ void main() {
       });
 
       test('throws SodiumException if push fails', () {
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.encryptMessage(

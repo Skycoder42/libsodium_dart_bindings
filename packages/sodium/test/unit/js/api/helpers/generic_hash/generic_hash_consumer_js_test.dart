@@ -29,10 +29,12 @@ void main() {
 
   group('constructor', () {
     test('initializes hash state', () {
-      when(() => mockSodium.crypto_generichash_init(
-            any(),
-            any(),
-          )).thenReturn(state);
+      when(
+        () => mockSodium.crypto_generichash_init(
+          any(),
+          any(),
+        ),
+      ).thenReturn(state);
 
       GenericHashConsumerJS(
         sodium: mockSodium,
@@ -48,10 +50,12 @@ void main() {
     });
 
     test('initializes hash state with key', () {
-      when(() => mockSodium.crypto_generichash_init(
-            any(),
-            any(),
-          )).thenReturn(state);
+      when(
+        () => mockSodium.crypto_generichash_init(
+          any(),
+          any(),
+        ),
+      ).thenReturn(state);
 
       final key = List.generate(15, (index) => index + 5);
 
@@ -70,10 +74,12 @@ void main() {
     });
 
     test('throws SodiumException on error', () {
-      when(() => mockSodium.crypto_generichash_init(
-            any(),
-            any(),
-          )).thenThrow(JsError());
+      when(
+        () => mockSodium.crypto_generichash_init(
+          any(),
+          any(),
+        ),
+      ).thenThrow(JsError());
 
       expect(
         () => GenericHashConsumerJS(
@@ -89,10 +95,12 @@ void main() {
     late GenericHashConsumerJS sut;
 
     setUp(() {
-      when(() => mockSodium.crypto_generichash_init(
-            any(),
-            any(),
-          )).thenReturn(state);
+      when(
+        () => mockSodium.crypto_generichash_init(
+          any(),
+          any(),
+        ),
+      ).thenReturn(state);
 
       sut = GenericHashConsumerJS(
         sodium: mockSodium,
@@ -144,10 +152,12 @@ void main() {
 
     group('close', () {
       test('calls crypto_generichash_final with correct arguments', () async {
-        when(() => mockSodium.crypto_generichash_final(
-              any(),
-              any(),
-            )).thenReturn(Uint8List(0));
+        when(
+          () => mockSodium.crypto_generichash_final(
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List(0));
 
         await sut.close();
 
@@ -162,10 +172,12 @@ void main() {
       test('returns hash on success', () async {
         final hash = List.generate(outLen, (index) => index * 12);
 
-        when(() => mockSodium.crypto_generichash_final(
-              any(),
-              any(),
-            )).thenReturn(Uint8List.fromList(hash));
+        when(
+          () => mockSodium.crypto_generichash_final(
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List.fromList(hash));
 
         final result = await sut.close();
 
@@ -173,10 +185,12 @@ void main() {
       });
 
       test('throws exception if hashing fails', () async {
-        when(() => mockSodium.crypto_generichash_final(
-              any(),
-              any(),
-            )).thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_generichash_final(
+            any(),
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         await expectLater(
           () => sut.close(),
@@ -185,10 +199,12 @@ void main() {
       });
 
       test('throws state error if close is called a second time', () async {
-        when(() => mockSodium.crypto_generichash_final(
-              any(),
-              any(),
-            )).thenReturn(Uint8List(0));
+        when(
+          () => mockSodium.crypto_generichash_final(
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List(0));
 
         await sut.close();
 
@@ -199,10 +215,12 @@ void main() {
       });
 
       test('returns same future as hash', () async {
-        when(() => mockSodium.crypto_generichash_final(
-              any(),
-              any(),
-            )).thenReturn(Uint8List(0));
+        when(
+          () => mockSodium.crypto_generichash_final(
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List(0));
 
         final hash = sut.hash;
         final closed = sut.close();

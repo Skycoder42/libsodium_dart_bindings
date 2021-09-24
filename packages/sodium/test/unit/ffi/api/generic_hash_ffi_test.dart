@@ -290,12 +290,14 @@ void main() {
       test('returns GenericHashConsumerFFI with defaults', () {
         const outLen = 55;
         when(() => mockSodium.crypto_generichash_bytes()).thenReturn(outLen);
-        when(() => mockSodium.crypto_generichash_init(
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(0);
+        when(
+          () => mockSodium.crypto_generichash_init(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
 
         final result = sut.createConsumer();
 
@@ -312,12 +314,14 @@ void main() {
       });
 
       test('returns GenericHashConsumerFFI with key', () {
-        when(() => mockSodium.crypto_generichash_init(
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(0);
+        when(
+          () => mockSodium.crypto_generichash_init(
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
 
         const outLen = 5;
         final secretKey = List.generate(5, (index) => index * index);

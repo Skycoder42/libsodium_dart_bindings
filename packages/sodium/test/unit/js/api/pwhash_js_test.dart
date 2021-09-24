@@ -227,14 +227,16 @@ void main() {
 
       test('calls crypto_pwhash with correct arguments', () {
         when(() => mockSodium.crypto_pwhash_ALG_ARGON2ID13).thenReturn(42);
-        when(() => mockSodium.crypto_pwhash(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(Uint8List(0));
+        when(
+          () => mockSodium.crypto_pwhash(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List(0));
 
         const password = [1, 2, 3];
         final salt = Uint8List.fromList(const [0, 2, 4, 6, 8]);
@@ -263,14 +265,16 @@ void main() {
       test('returns secure key with result of correct length', () {
         when(() => mockSodium.crypto_pwhash_ALG_DEFAULT).thenReturn(2);
         final testData = Uint8List.fromList(const [5, 4, 3, 2, 1]);
-        when(() => mockSodium.crypto_pwhash(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenReturn(testData);
+        when(
+          () => mockSodium.crypto_pwhash(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(testData);
         final res = sut.call(
           outLen: testData.length,
           password: Int8List.fromList(const [1, 2, 3]),
@@ -285,14 +289,16 @@ void main() {
 
       test('throws SodiumException on JsError', () {
         when(() => mockSodium.crypto_pwhash_ALG_ARGON2I13).thenReturn(3);
-        when(() => mockSodium.crypto_pwhash(
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-              any(),
-            )).thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_pwhash(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.call(
@@ -352,11 +358,13 @@ void main() {
       });
 
       test('calls crypto_pwhash_str with correct arguments', () {
-        when(() => mockSodium.crypto_pwhash_str(
-              any(),
-              any(),
-              any(),
-            )).thenReturn('');
+        when(
+          () => mockSodium.crypto_pwhash_str(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn('');
 
         sut.str(
           password: 'ABC',
@@ -375,11 +383,13 @@ void main() {
 
       test('returns password hash ', () {
         const testHashStr = 'ABC';
-        when(() => mockSodium.crypto_pwhash_str(
-              any(),
-              any(),
-              any(),
-            )).thenReturn(testHashStr);
+        when(
+          () => mockSodium.crypto_pwhash_str(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(testHashStr);
 
         final result = sut.str(
           password: 'abc123',
@@ -391,11 +401,13 @@ void main() {
       });
 
       test('throws SodiumException on JsError', () {
-        when(() => mockSodium.crypto_pwhash_str(
-              any(),
-              any(),
-              any(),
-            )).thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_pwhash_str(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.str(
@@ -457,10 +469,12 @@ void main() {
       });
 
       test('throws SodiumException on JsError', () {
-        when(() => mockSodium.crypto_pwhash_str_verify(
-              any(),
-              any(),
-            )).thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_pwhash_str_verify(
+            any(),
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.strVerify(
@@ -539,11 +553,13 @@ void main() {
       });
 
       test('throws SodiumException on JsError', () {
-        when(() => mockSodium.crypto_pwhash_str_needs_rehash(
-              any(),
-              any(),
-              any(),
-            )).thenThrow(JsError());
+        when(
+          () => mockSodium.crypto_pwhash_str_needs_rehash(
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenThrow(JsError());
 
         expect(
           () => sut.strNeedsRehash(

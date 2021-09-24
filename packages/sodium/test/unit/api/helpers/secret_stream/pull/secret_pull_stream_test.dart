@@ -29,12 +29,14 @@ void main() {
 
   test('listen forwards listen to stream', () {
     final fakeSub = FakeStreamSubscription();
-    when(() => mockStream.listen(
-          any(),
-          onDone: any(named: 'onDone'),
-          onError: any(named: 'onError'),
-          cancelOnError: any(named: 'cancelOnError'),
-        )).thenReturn(fakeSub);
+    when(
+      () => mockStream.listen(
+        any(),
+        onDone: any(named: 'onDone'),
+        onError: any(named: 'onError'),
+        cancelOnError: any(named: 'cancelOnError'),
+      ),
+    ).thenReturn(fakeSub);
 
     void onEvent(SecretStreamPlainMessage event) {}
     void onDone() {}
