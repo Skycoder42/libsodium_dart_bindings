@@ -1,9 +1,7 @@
 import 'dart:ffi';
 
-import '../api/advanced/advanced_sodium.dart';
 import '../api/sodium.dart';
 import '../api/sodium_exception.dart';
-import 'api/advanced/advanced_sodium_ffi.dart';
 import 'api/sodium_ffi.dart';
 import 'bindings/libsodium.ffi.dart';
 

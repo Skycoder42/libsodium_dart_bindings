@@ -174,8 +174,8 @@ void main() {
           ),
         ).thenReturn(0);
 
-        final secretKey = List.generate(5, (index) => index + 5);
-        final otherPublicKey = List.generate(5, (index) => index + 10);
+        final secretKey = List.generate(5, (index) => index);
+        final otherPublicKey = List.generate(5, (index) => index + 5);
 
         sut.call(
           secretKey: SecureKeyFake(secretKey),
@@ -254,12 +254,10 @@ void main() {
         ).thenReturn(1);
 
         expect(
-          () {
-            return sut.call(
-              secretKey: SecureKeyFake.empty(5),
-              otherPublicKey: Uint8List.fromList(Uint8List(5)),
-            );
-          },
+          () => sut.call(
+            secretKey: SecureKeyFake.empty(5),
+            otherPublicKey: Uint8List.fromList(Uint8List(5)),
+          ),
           throwsA(isA<SodiumException>()),
         );
 

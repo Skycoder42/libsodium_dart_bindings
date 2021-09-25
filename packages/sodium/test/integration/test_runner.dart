@@ -41,22 +41,22 @@ abstract class TestRunner {
 
   @protected
   Iterable<TestCase> createTestCases() => [
-          SodiumTestCase(this),
-          SodiumInitTestCase(this),
-          RandombytesTestCase(this),
-          SecretBoxTestCase(this),
-          SecretStreamTestCase(this),
-          AeadTestCase(this),
-          AuthTestCase(this),
-          BoxTestCase(this),
-          SignTestCase(this),
-          GenericHashTestCase(this),
-          ShortHashTestCase(this),
-          PwhashTestCase(this),
-          KdfTestCase(this),
-          KxTestCase(this),
-          if (isSumoTest) AdvancedScalarMultTestCase(this),
-        ];
+        SodiumTestCase(this),
+        SodiumInitTestCase(this),
+        RandombytesTestCase(this),
+        SecretBoxTestCase(this),
+        SecretStreamTestCase(this),
+        AeadTestCase(this),
+        AuthTestCase(this),
+        BoxTestCase(this),
+        SignTestCase(this),
+        GenericHashTestCase(this),
+        ShortHashTestCase(this),
+        PwhashTestCase(this),
+        KdfTestCase(this),
+        KxTestCase(this),
+        if (isSumoTest) AdvancedScalarMultTestCase(this),
+      ];
 
   @protected
   @visibleForTesting
