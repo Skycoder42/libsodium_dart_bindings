@@ -109,17 +109,18 @@ jobs:
       - uses: ./.github/actions/dependency_clean
         with:
           package: ${{ env.PACKAGE_NAME }},${{ env.PACKAGE_NAME }}_example
-      # Build and test
+      # Build and verify
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter format -n --set-exit-if-changed .
+      - run: dart run tool/publish.dart --dry-run
+      # Run integration tests on example app
       - name: fetch sodium.js (web)
         if: matrix.platform == 'web'
         run: flutter pub run sodium_libs:update_web --sumo
         working-directory: packages/sodium_libs/example
       - run: flutter build ${{ matrix.build }} --release
         working-directory: packages/sodium_libs/example
-      - run: dart run tool/publish.dart --dry-run
       - name: run integration tests (vm)
         if: matrix.drive != '' && matrix.platform != 'web'
         run: >-
