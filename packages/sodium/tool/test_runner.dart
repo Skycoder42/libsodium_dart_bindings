@@ -124,7 +124,8 @@ Future<void> main(List<String> rawArgs) async {
 
     if (testModes.contains(_modeIntegration)) {
       if (testPlatforms.contains(_platformVm)) {
-        await _runDart(const ['test', 'test/integration/vm_test.dart']);
+        await _runDart(const ['test', 'test/integration/vm_test_standard.dart']);
+        await _runDart(const ['test', 'test/integration/vm_test_sumo.dart']);
       }
       if (testPlatforms.contains(_platformJs)) {
         final sumo = args['sumo'] as bool;
@@ -135,7 +136,7 @@ Future<void> main(List<String> rawArgs) async {
           if (sumo)
             'test/integration/js_test_sumo.dart'
           else
-            'test/integration/js_test.dart',
+            'test/integration/js_test_standard.dart',
         ]);
       }
     }

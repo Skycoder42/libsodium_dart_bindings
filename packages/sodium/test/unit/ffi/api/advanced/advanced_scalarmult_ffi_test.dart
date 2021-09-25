@@ -174,8 +174,8 @@ void main() {
           ),
         ).thenReturn(0);
 
-        final secretKey = List.generate(5, (index) => index);
-        final otherPublicKey = List.generate(5, (index) => index + 5);
+        final secretKey = List.generate(5, (index) => index + 5);
+        final otherPublicKey = List.generate(5, (index) => index + 10);
 
         sut.call(
           secretKey: SecureKeyFake(secretKey),
@@ -185,7 +185,7 @@ void main() {
         verifyInOrder([
           () => mockSodium.crypto_scalarmult_scalarbytes(),
           () => mockSodium.crypto_scalarmult_bytes(),
-          () => mockSodium.crypto_scalarmult_bytes(),
+          () => mockSodium.crypto_scalarmult_scalarbytes(),
           () => mockSodium.sodium_allocarray(5, 1),
           () => mockSodium.sodium_mprotect_noaccess(
                 any(that: isNot(nullptr)),
@@ -194,12 +194,12 @@ void main() {
           () => mockSodium.sodium_mprotect_readonly(
                 any(that: isNot(nullptr)),
               ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData<Uint8>(otherPublicKey)),
+          () => mockSodium.sodium_mprotect_readwrite(
+                any(that: isNot(nullptr)),
               ),
           () => mockSodium.sodium_allocarray(5, 1),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(secretKey)),
+                any(that: isNot(nullptr)),
               ),
           () => mockSodium.crypto_scalarmult(
                 any(that: isNot(nullptr)),
@@ -207,13 +207,13 @@ void main() {
                 any(that: hasRawData<Uint8>(otherPublicKey)),
               ),
           () => mockSodium.sodium_free(
-                any(that: hasRawData<Uint8>(secretKey)),
+                any(that: isNot(nullptr)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(
                 any(that: isNot(nullptr)),
               ),
           () => mockSodium.sodium_free(
-                any(that: hasRawData<Uint8>(otherPublicKey)),
+                any(that: isNot(nullptr)),
               ),
         ]);
         verifyNoMoreInteractions(mockSodium);
