@@ -40,11 +40,7 @@ abstract class TestRunner {
   });
 
   @protected
-  Iterable<TestCase> createTestCases() => isSumoTest
-      ? [
-          AdvancedScalarMultTestCase(this),
-        ]
-      : [
+  Iterable<TestCase> createTestCases() => [
           SodiumTestCase(this),
           SodiumInitTestCase(this),
           RandombytesTestCase(this),
@@ -59,6 +55,7 @@ abstract class TestRunner {
           PwhashTestCase(this),
           KdfTestCase(this),
           KxTestCase(this),
+          if (isSumoTest) AdvancedScalarMultTestCase(this),
         ];
 
   @protected

@@ -8,6 +8,6 @@ class AdvancedSodiumFFI extends SodiumFFI implements AdvancedSodium {
   AdvancedSodiumFFI(LibSodiumFFI sodium) : super(sodium);
 
   @override
-  AdvancedCrypto get crypto => _crypto;
-  late final AdvancedCrypto _crypto = AdvancedCryptoFFI(sodium);
+  AdvancedCrypto get crypto => _advancedCrypto;
+  late final AdvancedCrypto _advancedCrypto = AdvancedCryptoFFI(sodium);
 }

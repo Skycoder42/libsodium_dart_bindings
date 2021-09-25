@@ -47,19 +47,4 @@ abstract class SodiumInit {
     SodiumException.checkSucceededInitInt(result);
     return Future.value(SodiumFFI(sodium));
   }
-
-  // coverage:ignore-start
-  /// Creates an [AdvancedSodium] instance for the loaded libsodium with
-  /// both standard and advanced features available.
-  ///
-  /// The [libsodium] parameter must be a loaded
-  /// `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on your platform. Please
-  /// refer to the README for more details on loading the library.
-  static Future<AdvancedSodium> initSumo(DynamicLibrary libsodium) {
-    final sodium = LibSodiumFFI(libsodium);
-    final result = sodium.sodium_init();
-    SodiumException.checkSucceededInitInt(result);
-    return Future.value(AdvancedSodiumFFI(sodium));
-  }
-  // coverage:ignore-end
 }

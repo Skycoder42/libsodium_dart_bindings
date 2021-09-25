@@ -3,10 +3,10 @@ import 'dart:async';
 // dart_pre_commit:ignore-library-import
 import 'package:sodium/sodium.sumo.dart';
 
-import 'vm_common_test.dart';
+import 'vm_test_common.dart';
 
-class VmAdvancedTestRunner extends VmCommonTestRunner {
-  VmAdvancedTestRunner() : super(isSumoTest: true);
+class VmTestSumoRunner extends VmTestCommonRunner {
+  VmTestSumoRunner() : super(isSumoTest: true);
 
   @override
   Future<AdvancedSodium> loadSodium() async {
@@ -16,5 +16,5 @@ class VmAdvancedTestRunner extends VmCommonTestRunner {
 }
 
 void main() {
-  VmAdvancedTestRunner().setupTests();
+  VmTestSumoRunner().setupTests();
 }

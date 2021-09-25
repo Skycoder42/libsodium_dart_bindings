@@ -3,15 +3,17 @@ import 'dart:ffi';
 import 'dart:io';
 
 // dart_pre_commit:ignore-library-import
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 import 'test_runner.dart';
 
-abstract class VmCommonTestRunner extends TestRunner {
-  VmCommonTestRunner({
+abstract class VmTestCommonRunner extends TestRunner {
+  VmTestCommonRunner({
     required bool isSumoTest,
   }) : super(isSumoTest: isSumoTest);
 
+  @protected
   Future<DynamicLibrary> loadSodiumDylib() async {
     String libSodiumPath;
     if (Platform.isLinux) {
