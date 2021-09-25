@@ -4,8 +4,8 @@ import 'advanced_scalar_mult.dart';
 abstract class AdvancedCrypto implements Crypto {
   const AdvancedCrypto._(); // coverage:ignore-line
 
-  // @override
-  // AdvancedSecretStream get secretStream;
-
+  /// An instance of [AdvancedScalarMult].
+  ///
+  /// This provides all APIs that start with `crypto_scalarmult`.
   AdvancedScalarMult get scalarMult;
 }

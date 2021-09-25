@@ -175,7 +175,7 @@ void main() {
         ).thenReturn(0);
 
         final secretKey = List.generate(5, (index) => index);
-        final otherPublicKey = List.generate(5, (index) => index);
+        final otherPublicKey = List.generate(5, (index) => index + 5);
 
         sut.call(
           secretKey: SecureKeyFake(secretKey),
@@ -195,7 +195,7 @@ void main() {
                 any(that: isNot(nullptr)),
               ),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: isNot(nullptr)),
+                any(that: hasRawData<Uint8>(otherPublicKey)),
               ),
           () => mockSodium.sodium_allocarray(5, 1),
           () => mockSodium.sodium_mprotect_readonly(
@@ -204,16 +204,16 @@ void main() {
           () => mockSodium.crypto_scalarmult(
                 any(that: isNot(nullptr)),
                 any(that: hasRawData<Uint8>(secretKey)),
-                any(that: isNot(nullptr)),
+                any(that: hasRawData<Uint8>(otherPublicKey)),
               ),
           () => mockSodium.sodium_free(
-                any(that: isNot(nullptr)),
+                any(that: hasRawData<Uint8>(secretKey)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(
                 any(that: isNot(nullptr)),
               ),
           () => mockSodium.sodium_free(
-                any(that: isNot(nullptr)),
+                any(that: hasRawData<Uint8>(otherPublicKey)),
               ),
         ]);
         verifyNoMoreInteractions(mockSodium);
@@ -232,10 +232,9 @@ void main() {
           return 0;
         });
 
-        final otherPublicKey = List.generate(5, (index) => index);
         final result = sut.call(
           secretKey: SecureKeyFake.empty(5),
-          otherPublicKey: Uint8List.fromList(otherPublicKey),
+          otherPublicKey: Uint8List.fromList(Uint8List(5)),
         );
 
         expect(result, SecureKeyFake(sharedSecret));
@@ -256,10 +255,9 @@ void main() {
 
         expect(
           () {
-            final otherPublicKey = List.generate(5, (index) => index);
             return sut.call(
               secretKey: SecureKeyFake.empty(5),
-              otherPublicKey: Uint8List.fromList(otherPublicKey),
+              otherPublicKey: Uint8List.fromList(Uint8List(5)),
             );
           },
           throwsA(isA<SodiumException>()),

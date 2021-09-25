@@ -5,10 +5,10 @@ import 'package:meta/meta.dart';
 import '../helpers/validations.dart';
 import '../secure_key.dart';
 
-/// A meta class that provides access to all libsodium generichash APIs.
+/// A meta class that provides access to all libsodium scalarmult APIs.
 ///
 /// This class provides the dart interface for the crypto operations documented
-/// in https://libsodium.gitbook.io/doc/hashing/generic_hashing.
+/// in https://doc.libsodium.org/advanced/scalar_multiplication.
 /// Please refer to that documentation for more details about these APIs.
 abstract class AdvancedScalarMult {
   const AdvancedScalarMult._(); // coverage:ignore-line
@@ -30,8 +30,10 @@ abstract class AdvancedScalarMult {
     required SecureKey secretKey,
   });
 
-  /// Provides crypto_scalarmult. Please read the warnings at the link below to
-  /// undestand how easily this can be misused.
+  /// Provides crypto_scalarmult.
+  ///
+  /// **Important:** Please read the warnings at the link below to undestand how
+  /// easily this can be misused.
   ///
   /// See https://libsodium.gitbook.io/doc/advanced/scalar_multiplication#usage
   SecureKey call({
