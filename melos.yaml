@@ -72,5 +72,5 @@ scripts:
     description: Remove pre commit hooks
 
   pre-commit:run:
-    run: dart pub global run melos exec -c1 -- dart run dart_pre_commit -t -p --ansi
+    run: dart pub global run melos exec -c1 -- dart run dart_pre_commit -t -p
     description: Run pre commit hooks in all projects

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Set minimum required dart SDK version to 2.14
 - Updated dependencies
+- Upgraded dart ffi language bindings
 ### Fixed
 - Fix formatting and linter issues with the newer dart SDK & dependencies
 
