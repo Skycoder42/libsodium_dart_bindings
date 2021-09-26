@@ -5,6 +5,7 @@ import 'run.dart';
 Future<void> publish(
   List<String> args, {
   List<String> clearFiles = const [],
+  List<String> rmFiles = const [],
   bool flutter = false,
 }) async {
   const pubIgnorePath = '.pubignore';
@@ -16,6 +17,14 @@ Future<void> publish(
     pubIgnore = await rootGitIgnore.copy(pubIgnorePath);
     for (final clearFile in clearFiles) {
       await run('git', ['rm', clearFile]);
+    }
+
+    for (final rmFile in rmFiles) {
+      final file = File(rmFile);
+      if (await file.exists()) {
+        print('rm $file');
+        await file.delete();
+      }
     }
 
     await run(
