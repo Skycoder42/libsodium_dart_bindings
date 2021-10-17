@@ -38,12 +38,15 @@ jobs:
           - platform: linux
             os: ubuntu-latest
             system: vm
+            integrationTestArgs: --sumo
           - platform: windows
             os: windows-latest
             system: vm
+            integrationTestArgs: --sumo
           - platform: macos
             os: macos-latest
             system: vm
+            integrationTestArgs: --sumo
           - platform: web
             os: ubuntu-latest
             system: js

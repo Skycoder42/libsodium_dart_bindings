@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:sodium/sodium.dart';
 import 'package:test/test.dart' as t;
 
+import 'cases/advanced/advanced_scalarmult_case.dart';
 import 'cases/aead_test_case.dart';
 import 'cases/auth_test_case.dart';
 import 'cases/box_test_case.dart';
@@ -38,6 +39,7 @@ abstract class TestRunner {
     required this.isSumoTest,
   });
 
+  @protected
   Iterable<TestCase> createTestCases() => [
         SodiumTestCase(this),
         SodiumInitTestCase(this),
@@ -53,6 +55,7 @@ abstract class TestRunner {
         PwhashTestCase(this),
         KdfTestCase(this),
         KxTestCase(this),
+        if (isSumoTest) AdvancedScalarMultTestCase(this),
       ];
 
   @protected

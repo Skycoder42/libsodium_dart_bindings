@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 // dart_pre_commit:ignore-library-import
 import 'package:sodium/sodium.dart';
+import 'package:sodium/sodium.sumo.dart';
 
 import 'test_runner.dart';
 
@@ -27,4 +28,11 @@ abstract class TestCase {
   String get name;
 
   void setupTests();
+}
+
+abstract class AdvancedTestCase extends TestCase {
+  AdvancedTestCase(TestRunner runner) : super(runner);
+
+  @override
+  AdvancedSodium get sodium => _runner.sodium as AdvancedSodium;
 }
