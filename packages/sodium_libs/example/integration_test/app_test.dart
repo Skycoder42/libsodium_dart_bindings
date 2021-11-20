@@ -9,8 +9,14 @@ import 'package:sodium_libs_example/main.dart' show MyApp;
 
 import '../../../sodium/test/integration/test_runner.dart';
 
+import 'arch_detection_fallback.dart'
+    if (dart.library.ffi) 'arch_detection_ffi.dart' as arch;
+
 class FlutterTestRunner extends TestRunner {
   FlutterTestRunner() : super(isSumoTest: true);
+
+  @override
+  bool get is32Bit => arch.is32Bit;
 
   @override
   Future<Sodium> loadSodium() => SodiumInit.init();

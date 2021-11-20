@@ -21,7 +21,8 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   @override
   int get bytesMin => sodium.crypto_pwhash_bytes_min();
   @override
-  int get bytesMax => sodium.crypto_pwhash_bytes_max();
+  int get bytesMax =>
+      sodium.crypto_pwhash_bytes_max().toUnsigned(sizeOf<IntPtr>() * 8);
 
   @override
   int get memLimitMin => sodium.crypto_pwhash_memlimit_min();
@@ -32,7 +33,8 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   @override
   int get memLimitSensitive => sodium.crypto_pwhash_memlimit_sensitive();
   @override
-  int get memLimitMax => sodium.crypto_pwhash_memlimit_max();
+  int get memLimitMax =>
+      sodium.crypto_pwhash_memlimit_max().toUnsigned(sizeOf<IntPtr>() * 8);
 
   @override
   int get opsLimitMin => sodium.crypto_pwhash_opslimit_min();
@@ -43,12 +45,14 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   @override
   int get opsLimitSensitive => sodium.crypto_pwhash_opslimit_sensitive();
   @override
-  int get opsLimitMax => sodium.crypto_pwhash_opslimit_max();
+  int get opsLimitMax =>
+      sodium.crypto_pwhash_opslimit_max().toUnsigned(sizeOf<IntPtr>() * 8);
 
   @override
   int get passwdMin => sodium.crypto_pwhash_passwd_min();
   @override
-  int get passwdMax => sodium.crypto_pwhash_passwd_max();
+  int get passwdMax =>
+      sodium.crypto_pwhash_passwd_max().toUnsigned(sizeOf<IntPtr>() * 8);
 
   @override
   int get saltBytes => sodium.crypto_pwhash_saltbytes();

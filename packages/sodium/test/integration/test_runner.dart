@@ -34,6 +34,8 @@ abstract class TestRunner {
 
   final bool isSumoTest;
 
+  bool get is32Bit => false;
+
   TestRunner({
     required this.isSumoTest,
   });
@@ -50,7 +52,7 @@ abstract class TestRunner {
         SignTestCase(this),
         GenericHashTestCase(this),
         ShortHashTestCase(this),
-        PwhashTestCase(this),
+        PwhashTestCase(this, is32Bit: is32Bit),
         KdfTestCase(this),
         KxTestCase(this),
       ];
@@ -89,7 +91,8 @@ abstract class TestRunner {
 
       // ignore: avoid_print
       print(
-        'Running integration tests with libsodium version: ${_sodium.version}',
+        'Running integration tests with libsodium version: ${_sodium.version} '
+        '(${is32Bit ? '32 bit' : '64 bit'})',
       );
     });
 

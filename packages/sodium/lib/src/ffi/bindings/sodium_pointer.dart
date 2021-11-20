@@ -835,6 +835,8 @@ abstract class _StaticallyTypedSizeOf {
         return sizeOf<Float>();
       case Double:
         return sizeOf<Double>();
+      case IntPtr:
+        return sizeOf<IntPtr>();
       default:
         throw UnsupportedError(
           'Cannot create a SodiumPointer for $T. T must be a primitive type',

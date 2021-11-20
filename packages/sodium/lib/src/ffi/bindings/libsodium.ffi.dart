@@ -10599,7 +10599,7 @@ class __fsid_t extends ffi.Struct {
   external ffi.Array<ffi.Int32> __val;
 }
 
-typedef size_t = ffi.Uint64;
+typedef size_t = ffi.IntPtr;
 
 class crypto_aead_aes256gcm_state_ extends ffi.Struct {
   @ffi.Array.multi([512])

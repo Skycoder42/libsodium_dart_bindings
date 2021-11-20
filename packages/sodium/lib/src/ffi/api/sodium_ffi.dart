@@ -34,7 +34,7 @@ class SodiumFFI implements Sodium {
   Uint8List pad(Uint8List buf, int blocksize) {
     final maxLen = buf.length + blocksize;
     SodiumPointer<Uint8>? extendedBuffer;
-    SodiumPointer<Uint64>? paddedLength;
+    SodiumPointer<size_t>? paddedLength;
     try {
       extendedBuffer = SodiumPointer.alloc(sodium, count: maxLen)..fill(buf);
       paddedLength = SodiumPointer.alloc(sodium, zeroMemory: true);
@@ -56,7 +56,7 @@ class SodiumFFI implements Sodium {
   @override
   Uint8List unpad(Uint8List buf, int blocksize) {
     SodiumPointer<Uint8>? extendedBuffer;
-    SodiumPointer<Uint64>? unpaddedLength;
+    SodiumPointer<size_t>? unpaddedLength;
     try {
       extendedBuffer = buf.toSodiumPointer(
         sodium,

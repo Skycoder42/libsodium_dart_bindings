@@ -7,7 +7,9 @@ import '../test_case.dart';
 import '../test_runner.dart';
 
 class PwhashTestCase extends TestCase {
-  PwhashTestCase(TestRunner runner) : super(runner);
+  final bool is32Bit;
+
+  PwhashTestCase(TestRunner runner, {this.is32Bit = false}) : super(runner);
 
   @override
   String get name => 'pwhash';
@@ -24,7 +26,11 @@ class PwhashTestCase extends TestCase {
       expect(sut.memLimitInteractive, 67108864, reason: 'memLimitInteractive');
       expect(sut.memLimitModerate, 268435456, reason: 'memLimitModerate');
       expect(sut.memLimitSensitive, 1073741824, reason: 'memLimitSensitive');
-      expect(sut.memLimitMax, 4398046510080, reason: 'memLimitMax');
+      expect(
+        sut.memLimitMax,
+        is32Bit ? 2147483648 : 4398046510080,
+        reason: 'memLimitMax',
+      );
 
       expect(sut.opsLimitMin, 1, reason: 'opsLimitMin');
       expect(sut.opsLimitInteractive, 2, reason: 'opsLimitInteractive');
