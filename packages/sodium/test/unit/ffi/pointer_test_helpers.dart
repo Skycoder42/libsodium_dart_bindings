@@ -6,10 +6,7 @@ import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
 
 void registerPointers() {
-  registerFallbackValue<Pointer<Void>>(nullptr.cast());
-  registerFallbackValue<Pointer<Uint8>>(nullptr.cast());
-  registerFallbackValue<Pointer<Int8>>(nullptr.cast());
-  registerFallbackValue<Pointer<Uint64>>(nullptr.cast());
+  registerFallbackValue(nullptr);
 }
 
 void mockAllocArray(LibSodiumFFI mockSodium) {

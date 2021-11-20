@@ -23,7 +23,7 @@ void main() {
 
   setUpAll(() {
     registerPointers();
-    registerFallbackValue<Pointer<crypto_generichash_blake2b_state>>(nullptr);
+    registerFallbackValue(nullptr);
   });
 
   setUp(() {

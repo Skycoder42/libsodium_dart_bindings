@@ -7,7 +7,6 @@ import 'package:sodium/src/api/helpers/secret_stream/push/secret_push_stream.dar
 import 'package:sodium/src/api/helpers/secret_stream/push/secret_stream_push_transformer.dart';
 import 'package:sodium/src/api/helpers/secret_stream/secret_stream_base.dart';
 import 'package:sodium/src/api/secret_stream.dart';
-import 'package:sodium/src/api/secure_key.dart';
 import 'package:test/test.dart';
 
 import '../../../../secure_key_fake.dart';
@@ -34,13 +33,9 @@ void main() {
   late SecretStreamMock sutMock;
 
   setUpAll(() {
-    registerFallbackValue<Stream<SecretStreamPlainMessage>>(
-      const Stream.empty(),
-    );
-    registerFallbackValue<Stream<SecretStreamCipherMessage>>(
-      const Stream.empty(),
-    );
-    registerFallbackValue<SecureKey>(SecureKeyFake.empty(0));
+    registerFallbackValue(const Stream<SecretStreamPlainMessage>.empty());
+    registerFallbackValue(const Stream<SecretStreamCipherMessage>.empty());
+    registerFallbackValue(SecureKeyFake.empty(0));
   });
 
   void mockPush(Iterable<SecretStreamCipherMessage> data) =>

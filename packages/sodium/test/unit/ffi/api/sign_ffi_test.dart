@@ -25,7 +25,7 @@ void main() {
 
   setUpAll(() {
     registerPointers();
-    registerFallbackValue<Pointer<crypto_sign_ed25519ph_state>>(nullptr);
+    registerFallbackValue(nullptr);
   });
 
   setUp(() {

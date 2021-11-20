@@ -26,8 +26,8 @@ void main() {
 
   setUpAll(() {
     registerPointers();
-    registerFallbackValue<Object? Function(SodiumPointer<Uint8>)>((_) => null);
-    registerFallbackValue<Object? Function(Uint8List)>((_) => null);
+    registerFallbackValue((SodiumPointer<Uint8> _) => null);
+    registerFallbackValue((Uint8List _) => null);
   });
 
   setUp(() {

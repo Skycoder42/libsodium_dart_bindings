@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sign.dart';
 import 'package:test/test.dart';
 
@@ -17,7 +16,7 @@ class MockVerificationConsumer extends Mock implements VerificationConsumer {}
 
 void main() {
   setUpAll(() {
-    registerFallbackValue<SecureKey>(SecureKeyFake.empty(0));
+    registerFallbackValue(SecureKeyFake.empty(0));
     registerFallbackValue(const Stream<Uint8List>.empty());
     registerFallbackValue(Uint8List(0));
   });

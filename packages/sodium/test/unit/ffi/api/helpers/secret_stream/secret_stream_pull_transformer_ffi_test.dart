@@ -23,9 +23,7 @@ void main() {
 
   setUpAll(() {
     registerPointers();
-    registerFallbackValue<Pointer<crypto_secretstream_xchacha20poly1305_state>>(
-      nullptr.cast(),
-    );
+    registerFallbackValue(nullptr);
   });
 
   setUp(() {

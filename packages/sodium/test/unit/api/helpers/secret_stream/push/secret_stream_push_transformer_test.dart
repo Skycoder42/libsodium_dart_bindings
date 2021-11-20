@@ -64,16 +64,10 @@ void main() {
     late SutSecretStreamPushTransformerSink sut;
 
     setUpAll(() {
-      registerFallbackValue<SecureKey>(SecureKeyFake.empty(0));
-      registerFallbackValue<SecretStreamCipherMessage>(
-        SecretStreamCipherMessage(Uint8List(0)),
-      );
-      registerFallbackValue<SecretStreamPlainMessage>(
-        SecretStreamPlainMessage(Uint8List(0)),
-      );
-      registerFallbackValue<EventSink<SecretStreamCipherMessage>>(
-        MockEventSink(),
-      );
+      registerFallbackValue(SecureKeyFake.empty(0));
+      registerFallbackValue(SecretStreamCipherMessage(Uint8List(0)));
+      registerFallbackValue(SecretStreamPlainMessage(Uint8List(0)));
+      registerFallbackValue(MockEventSink());
     });
 
     setUp(() {
