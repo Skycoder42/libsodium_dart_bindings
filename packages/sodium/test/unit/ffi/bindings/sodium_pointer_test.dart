@@ -109,7 +109,7 @@ void main() {
 
       test('throws for unsupported pointer types', () {
         expect(
-          () => SodiumPointer<IntPtr>.alloc(mockSodium),
+          () => SodiumPointer<Void>.alloc(mockSodium),
           throwsA(isA<UnsupportedError>()),
         );
       });
