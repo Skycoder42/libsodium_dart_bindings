@@ -10,6 +10,7 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
+import '../../../bindings/size_t_extension.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'secret_stream_message_tag_ffix.dart';
 
@@ -29,11 +30,14 @@ class SecretStreamPushTransformerSinkFFI
       statePtr = SodiumPointer<Uint8>.alloc(
         sodium,
         zeroMemory: true,
-        count: sodium.crypto_secretstream_xchacha20poly1305_statebytes(),
+        count:
+            sodium.crypto_secretstream_xchacha20poly1305_statebytes().toSizeT(),
       );
       headerPtr = SodiumPointer<Uint8>.alloc(
         sodium,
-        count: sodium.crypto_secretstream_xchacha20poly1305_headerbytes(),
+        count: sodium
+            .crypto_secretstream_xchacha20poly1305_headerbytes()
+            .toSizeT(),
       );
       final result = key.runUnlockedNative(
         sodium,
@@ -85,7 +89,7 @@ class SecretStreamPushTransformerSinkFFI
       cipherPtr = SodiumPointer.alloc(
         sodium,
         count: messagePtr.count +
-            sodium.crypto_secretstream_xchacha20poly1305_abytes(),
+            sodium.crypto_secretstream_xchacha20poly1305_abytes().toSizeT(),
       );
 
       final result = sodium.crypto_secretstream_xchacha20poly1305_push(

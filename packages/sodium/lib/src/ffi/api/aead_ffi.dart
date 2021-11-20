@@ -10,6 +10,7 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 
@@ -20,13 +21,16 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
   AeadFFI(this.sodium);
 
   @override
-  int get keyBytes => sodium.crypto_aead_xchacha20poly1305_ietf_keybytes();
+  int get keyBytes =>
+      sodium.crypto_aead_xchacha20poly1305_ietf_keybytes().toSizeT();
 
   @override
-  int get nonceBytes => sodium.crypto_aead_xchacha20poly1305_ietf_npubbytes();
+  int get nonceBytes =>
+      sodium.crypto_aead_xchacha20poly1305_ietf_npubbytes().toSizeT();
 
   @override
-  int get aBytes => sodium.crypto_aead_xchacha20poly1305_ietf_abytes();
+  int get aBytes =>
+      sodium.crypto_aead_xchacha20poly1305_ietf_abytes().toSizeT();
 
   @override
   SecureKey keygen() => keygenImpl(

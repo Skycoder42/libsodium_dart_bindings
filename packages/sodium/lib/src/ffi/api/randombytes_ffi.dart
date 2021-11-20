@@ -8,6 +8,7 @@ import '../../api/randombytes.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 
 @internal
@@ -17,7 +18,7 @@ class RandombytesFFI implements Randombytes {
   RandombytesFFI(this.sodium);
 
   @override
-  int get seedBytes => sodium.randombytes_seedbytes();
+  int get seedBytes => sodium.randombytes_seedbytes().toSizeT();
 
   @override
   int random() => sodium.randombytes_random();

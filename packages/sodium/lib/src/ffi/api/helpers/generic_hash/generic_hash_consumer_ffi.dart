@@ -10,6 +10,7 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
+import '../../../bindings/size_t_extension.dart';
 import '../../../bindings/sodium_pointer.dart';
 
 @internal
@@ -30,7 +31,7 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
   }) {
     _state = SodiumPointer.alloc(
       sodium,
-      count: sodium.crypto_generichash_statebytes(),
+      count: sodium.crypto_generichash_statebytes().toSizeT(),
       zeroMemory: true,
     );
 

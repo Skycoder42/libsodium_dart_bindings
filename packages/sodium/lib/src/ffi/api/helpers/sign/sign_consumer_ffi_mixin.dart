@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/memory_protection.dart';
+import '../../../bindings/size_t_extension.dart';
 import '../../../bindings/sodium_pointer.dart';
 
 @internal
@@ -27,7 +28,7 @@ mixin SignConsumerFFIMixin<T extends Object>
   void initState() {
     _state = SodiumPointer.alloc(
       sodium,
-      count: sodium.crypto_sign_statebytes(),
+      count: sodium.crypto_sign_statebytes().toSizeT(),
       zeroMemory: true,
     );
 

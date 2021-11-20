@@ -10,6 +10,7 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 import 'helpers/sign/signature_consumer_ffi.dart';
@@ -23,16 +24,16 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
   SignFFI(this.sodium);
 
   @override
-  int get publicKeyBytes => sodium.crypto_sign_publickeybytes();
+  int get publicKeyBytes => sodium.crypto_sign_publickeybytes().toSizeT();
 
   @override
-  int get secretKeyBytes => sodium.crypto_sign_secretkeybytes();
+  int get secretKeyBytes => sodium.crypto_sign_secretkeybytes().toSizeT();
 
   @override
-  int get bytes => sodium.crypto_sign_bytes();
+  int get bytes => sodium.crypto_sign_bytes().toSizeT();
 
   @override
-  int get seedBytes => sodium.crypto_sign_seedbytes();
+  int get seedBytes => sodium.crypto_sign_seedbytes().toSizeT();
 
   @override
   KeyPair keyPair() => keyPairImpl(

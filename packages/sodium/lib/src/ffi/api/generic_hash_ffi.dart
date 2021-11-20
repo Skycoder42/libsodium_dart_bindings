@@ -9,6 +9,7 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/generic_hash/generic_hash_consumer_ffi.dart';
 import 'helpers/keygen_mixin.dart';
@@ -22,22 +23,22 @@ class GenericHashFFI
   GenericHashFFI(this.sodium);
 
   @override
-  int get bytes => sodium.crypto_generichash_bytes();
+  int get bytes => sodium.crypto_generichash_bytes().toSizeT();
 
   @override
-  int get bytesMin => sodium.crypto_generichash_bytes_min();
+  int get bytesMin => sodium.crypto_generichash_bytes_min().toSizeT();
 
   @override
-  int get bytesMax => sodium.crypto_generichash_bytes_max();
+  int get bytesMax => sodium.crypto_generichash_bytes_max().toSizeT();
 
   @override
-  int get keyBytes => sodium.crypto_generichash_keybytes();
+  int get keyBytes => sodium.crypto_generichash_keybytes().toSizeT();
 
   @override
-  int get keyBytesMin => sodium.crypto_generichash_keybytes_min();
+  int get keyBytesMin => sodium.crypto_generichash_keybytes_min().toSizeT();
 
   @override
-  int get keyBytesMax => sodium.crypto_generichash_keybytes_max();
+  int get keyBytesMax => sodium.crypto_generichash_keybytes_max().toSizeT();
 
   @override
   SecureKey keygen() => keygenImpl(

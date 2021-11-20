@@ -10,6 +10,7 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 
@@ -20,13 +21,13 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
   SecretBoxFFI(this.sodium);
 
   @override
-  int get keyBytes => sodium.crypto_secretbox_keybytes();
+  int get keyBytes => sodium.crypto_secretbox_keybytes().toSizeT();
 
   @override
-  int get macBytes => sodium.crypto_secretbox_macbytes();
+  int get macBytes => sodium.crypto_secretbox_macbytes().toSizeT();
 
   @override
-  int get nonceBytes => sodium.crypto_secretbox_noncebytes();
+  int get nonceBytes => sodium.crypto_secretbox_noncebytes().toSizeT();
 
   @override
   SecureKey keygen() => keygenImpl(

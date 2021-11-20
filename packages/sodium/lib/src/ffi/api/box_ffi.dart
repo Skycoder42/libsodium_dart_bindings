@@ -11,6 +11,7 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 import 'secure_key_ffi.dart';
@@ -193,22 +194,22 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
   BoxFFI(this.sodium);
 
   @override
-  int get publicKeyBytes => sodium.crypto_box_publickeybytes();
+  int get publicKeyBytes => sodium.crypto_box_publickeybytes().toSizeT();
 
   @override
-  int get secretKeyBytes => sodium.crypto_box_secretkeybytes();
+  int get secretKeyBytes => sodium.crypto_box_secretkeybytes().toSizeT();
 
   @override
-  int get macBytes => sodium.crypto_box_macbytes();
+  int get macBytes => sodium.crypto_box_macbytes().toSizeT();
 
   @override
-  int get nonceBytes => sodium.crypto_box_noncebytes();
+  int get nonceBytes => sodium.crypto_box_noncebytes().toSizeT();
 
   @override
-  int get seedBytes => sodium.crypto_box_seedbytes();
+  int get seedBytes => sodium.crypto_box_seedbytes().toSizeT();
 
   @override
-  int get sealBytes => sodium.crypto_box_sealbytes();
+  int get sealBytes => sodium.crypto_box_sealbytes().toSizeT();
 
   @override
   KeyPair keyPair() => keyPairImpl(
@@ -451,7 +452,10 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      sharedKey = SecureKeyFFI.alloc(sodium, sodium.crypto_box_beforenmbytes());
+      sharedKey = SecureKeyFFI.alloc(
+        sodium,
+        sodium.crypto_box_beforenmbytes().toSizeT(),
+      );
 
       final result = sharedKey.runUnlockedNative(
         (sharedKeyPtr) => secretKey.runUnlockedNative(

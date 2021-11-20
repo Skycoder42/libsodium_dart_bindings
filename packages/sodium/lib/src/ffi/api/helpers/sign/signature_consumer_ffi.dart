@@ -9,6 +9,7 @@ import '../../../../api/sign.dart';
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/secure_key_native.dart';
+import '../../../bindings/size_t_extension.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'sign_consumer_ffi_mixin.dart';
 
@@ -41,7 +42,7 @@ class SignatureConsumerFFI
   Uint8List finalize(SodiumPointer<Uint8> state) {
     final signaturePtr = SodiumPointer<Uint8>.alloc(
       sodium,
-      count: sodium.crypto_sign_bytes(),
+      count: sodium.crypto_sign_bytes().toSizeT(),
       zeroMemory: true,
     );
 

@@ -8,6 +8,7 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 import 'secure_key_ffi.dart';
@@ -19,16 +20,16 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
   KdfFFI(this.sodium);
 
   @override
-  int get bytesMin => sodium.crypto_kdf_bytes_min();
+  int get bytesMin => sodium.crypto_kdf_bytes_min().toSizeT();
 
   @override
-  int get bytesMax => sodium.crypto_kdf_bytes_max();
+  int get bytesMax => sodium.crypto_kdf_bytes_max().toSizeT();
 
   @override
-  int get contextBytes => sodium.crypto_kdf_contextbytes();
+  int get contextBytes => sodium.crypto_kdf_contextbytes().toSizeT();
 
   @override
-  int get keyBytes => sodium.crypto_kdf_keybytes();
+  int get keyBytes => sodium.crypto_kdf_keybytes().toSizeT();
 
   @override
   SecureKey keygen() => keygenImpl(

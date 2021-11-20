@@ -9,6 +9,7 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 
@@ -19,10 +20,10 @@ class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
   ShortHashFFI(this.sodium);
 
   @override
-  int get bytes => sodium.crypto_shorthash_bytes();
+  int get bytes => sodium.crypto_shorthash_bytes().toSizeT();
 
   @override
-  int get keyBytes => sodium.crypto_shorthash_keybytes();
+  int get keyBytes => sodium.crypto_shorthash_keybytes().toSizeT();
 
   @override
   SecureKey keygen() => keygenImpl(

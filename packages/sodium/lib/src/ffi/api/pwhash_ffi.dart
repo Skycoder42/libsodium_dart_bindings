@@ -9,6 +9,7 @@ import '../../api/sodium_exception.dart';
 import '../../api/string_x.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'secure_key_ffi.dart';
 
@@ -21,44 +22,46 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   @override
   int get bytesMin => sodium.crypto_pwhash_bytes_min();
   @override
-  int get bytesMax =>
-      sodium.crypto_pwhash_bytes_max().toUnsigned(sizeOf<IntPtr>() * 8);
+  int get bytesMax => sodium.crypto_pwhash_bytes_max().toSizeT();
 
   @override
-  int get memLimitMin => sodium.crypto_pwhash_memlimit_min();
+  int get memLimitMin => sodium.crypto_pwhash_memlimit_min().toSizeT();
   @override
-  int get memLimitInteractive => sodium.crypto_pwhash_memlimit_interactive();
+  int get memLimitInteractive =>
+      sodium.crypto_pwhash_memlimit_interactive().toSizeT();
   @override
-  int get memLimitModerate => sodium.crypto_pwhash_memlimit_moderate();
+  int get memLimitModerate =>
+      sodium.crypto_pwhash_memlimit_moderate().toSizeT();
   @override
-  int get memLimitSensitive => sodium.crypto_pwhash_memlimit_sensitive();
+  int get memLimitSensitive =>
+      sodium.crypto_pwhash_memlimit_sensitive().toSizeT();
   @override
-  int get memLimitMax =>
-      sodium.crypto_pwhash_memlimit_max().toUnsigned(sizeOf<IntPtr>() * 8);
+  int get memLimitMax => sodium.crypto_pwhash_memlimit_max().toSizeT();
 
   @override
-  int get opsLimitMin => sodium.crypto_pwhash_opslimit_min();
+  int get opsLimitMin => sodium.crypto_pwhash_opslimit_min().toSizeT();
   @override
-  int get opsLimitInteractive => sodium.crypto_pwhash_opslimit_interactive();
+  int get opsLimitInteractive =>
+      sodium.crypto_pwhash_opslimit_interactive().toSizeT();
   @override
-  int get opsLimitModerate => sodium.crypto_pwhash_opslimit_moderate();
+  int get opsLimitModerate =>
+      sodium.crypto_pwhash_opslimit_moderate().toSizeT();
   @override
-  int get opsLimitSensitive => sodium.crypto_pwhash_opslimit_sensitive();
+  int get opsLimitSensitive =>
+      sodium.crypto_pwhash_opslimit_sensitive().toSizeT();
   @override
-  int get opsLimitMax =>
-      sodium.crypto_pwhash_opslimit_max().toUnsigned(sizeOf<IntPtr>() * 8);
+  int get opsLimitMax => sodium.crypto_pwhash_opslimit_max().toSizeT();
 
   @override
-  int get passwdMin => sodium.crypto_pwhash_passwd_min();
+  int get passwdMin => sodium.crypto_pwhash_passwd_min().toSizeT();
   @override
-  int get passwdMax =>
-      sodium.crypto_pwhash_passwd_max().toUnsigned(sizeOf<IntPtr>() * 8);
+  int get passwdMax => sodium.crypto_pwhash_passwd_max().toSizeT();
 
   @override
-  int get saltBytes => sodium.crypto_pwhash_saltbytes();
+  int get saltBytes => sodium.crypto_pwhash_saltbytes().toSizeT();
 
   @override
-  int get strBytes => sodium.crypto_pwhash_strbytes();
+  int get strBytes => sodium.crypto_pwhash_strbytes().toSizeT();
 
   @override
   SecureKey call({

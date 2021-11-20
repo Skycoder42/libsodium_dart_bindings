@@ -10,6 +10,7 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
+import '../../../bindings/size_t_extension.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'secret_stream_message_tag_ffix.dart';
 
@@ -26,7 +27,7 @@ class SecretStreamPullTransformerSinkFFI
 
   @override
   int get headerBytes =>
-      sodium.crypto_secretstream_xchacha20poly1305_headerbytes();
+      sodium.crypto_secretstream_xchacha20poly1305_headerbytes().toSizeT();
 
   @override
   SodiumPointer<Uint8> initialize(SecureKey key, Uint8List header) {
@@ -35,7 +36,8 @@ class SecretStreamPullTransformerSinkFFI
     try {
       statePtr = SodiumPointer.alloc(
         sodium,
-        count: sodium.crypto_secretstream_xchacha20poly1305_statebytes(),
+        count:
+            sodium.crypto_secretstream_xchacha20poly1305_statebytes().toSizeT(),
         zeroMemory: true,
       );
       headerPtr = header.toSodiumPointer(
@@ -89,7 +91,7 @@ class SecretStreamPullTransformerSinkFFI
       messagePtr = SodiumPointer.alloc(
         sodium,
         count: cipherPtr.count -
-            sodium.crypto_secretstream_xchacha20poly1305_abytes(),
+            sodium.crypto_secretstream_xchacha20poly1305_abytes().toSizeT(),
       );
       tagPtr = SodiumPointer.alloc(
         sodium,

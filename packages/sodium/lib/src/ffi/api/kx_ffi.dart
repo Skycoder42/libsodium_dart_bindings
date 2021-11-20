@@ -10,6 +10,7 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 import 'secure_key_ffi.dart';
@@ -21,16 +22,16 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
   KxFFI(this.sodium);
 
   @override
-  int get publicKeyBytes => sodium.crypto_kx_publickeybytes();
+  int get publicKeyBytes => sodium.crypto_kx_publickeybytes().toSizeT();
 
   @override
-  int get secretKeyBytes => sodium.crypto_kx_secretkeybytes();
+  int get secretKeyBytes => sodium.crypto_kx_secretkeybytes().toSizeT();
 
   @override
-  int get seedBytes => sodium.crypto_kx_seedbytes();
+  int get seedBytes => sodium.crypto_kx_seedbytes().toSizeT();
 
   @override
-  int get sessionKeyBytes => sodium.crypto_kx_sessionkeybytes();
+  int get sessionKeyBytes => sodium.crypto_kx_sessionkeybytes().toSizeT();
 
   @override
   KeyPair keyPair() => keyPairImpl(
