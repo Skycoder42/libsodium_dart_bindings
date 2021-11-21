@@ -22,7 +22,7 @@ Future<void> publish(
     for (final rmFile in rmFiles) {
       final fse = await _fseFromPath(rmFile);
       print('rm $fse');
-      await fse?.delete();
+      await fse?.delete(recursive: true);
     }
 
     await run(
