@@ -7,6 +7,7 @@ import '../../api/string_x.dart';
 
 import 'libsodium.ffi.dart';
 import 'memory_protection.dart';
+import 'size_t_extension.dart';
 
 /// A C-Pointer wrapper that uses the memory utilities of libsodium.
 ///
@@ -62,13 +63,15 @@ class SodiumPointer<T extends NativeType> {
     if (count != 1) {
       ptr = SodiumPointer.raw(
         sodium,
-        sodium.sodium_allocarray(count, elementSize).cast(),
+        sodium
+            .sodium_allocarray(count.toIntPtr(), elementSize.toIntPtr())
+            .cast(),
         count,
       );
     } else {
       ptr = SodiumPointer.raw(
         sodium,
-        sodium.sodium_malloc(elementSize).cast(),
+        sodium.sodium_malloc(elementSize.toIntPtr()).cast(),
         1,
       );
     }
@@ -95,7 +98,7 @@ class SodiumPointer<T extends NativeType> {
     final typeLen = _StaticallyTypedSizeOf.staticSizeOf<T>();
     final sodiumPtr = SodiumPointer.raw(
       sodium,
-      sodium.sodium_allocarray(count, typeLen).cast<T>(),
+      sodium.sodium_allocarray(count.toIntPtr(), typeLen.toIntPtr()).cast<T>(),
       count,
     );
     try {
@@ -140,9 +143,9 @@ class SodiumPointer<T extends NativeType> {
 
     int result;
     if (locked) {
-      result = sodium.sodium_mlock(ptr.cast(), byteLength);
+      result = sodium.sodium_mlock(ptr.cast(), byteLength.toIntPtr());
     } else {
-      result = sodium.sodium_munlock(ptr.cast(), byteLength);
+      result = sodium.sodium_munlock(ptr.cast(), byteLength.toIntPtr());
     }
     SodiumException.checkSucceededInt(result);
 
@@ -184,7 +187,7 @@ class SodiumPointer<T extends NativeType> {
   /// Provides sodium_memzero
   ///
   /// See https://libsodium.gitbook.io/doc/memory_management#zeroing-memory
-  void zeroMemory() => sodium.sodium_memzero(ptr.cast(), byteLength);
+  void zeroMemory() => sodium.sodium_memzero(ptr.cast(), byteLength.toIntPtr());
 
   /// Returns a view of a subset of the memory the pointer is pointing to.
   ///

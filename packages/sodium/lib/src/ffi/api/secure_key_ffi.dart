@@ -8,6 +8,7 @@ import '../../api/secure_key.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 
 @internal
@@ -37,7 +38,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   factory SecureKeyFFI.random(LibSodiumFFI sodium, int length) {
     final raw = SodiumPointer<Uint8>.alloc(sodium, count: length);
     try {
-      sodium.randombytes_buf(raw.ptr.cast(), raw.byteLength);
+      sodium.randombytes_buf(raw.ptr.cast(), raw.byteLength.toIntPtr());
       return SecureKeyFFI(raw);
     } catch (e) {
       raw.dispose();
