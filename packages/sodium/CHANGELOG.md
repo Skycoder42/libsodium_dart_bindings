@@ -5,7 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased]
+## [Unreleased - MINOR]
+## Added
+- Support for 32bit architectures by generalizing the native FFI bindings (#7)
 ### Changed
 - Set minimum required dart SDK version to 2.14
 - Updated dependencies
