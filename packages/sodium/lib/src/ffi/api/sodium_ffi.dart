@@ -12,6 +12,7 @@ import '../../api/sodium_exception.dart';
 import '../../api/sodium_version.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
+import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'crypto_ffi.dart';
 import 'randombytes_ffi.dart';
@@ -41,9 +42,9 @@ class SodiumFFI implements Sodium {
       final result = sodium.sodium_pad(
         paddedLength.ptr,
         extendedBuffer.ptr,
-        buf.length,
-        blocksize,
-        maxLen,
+        buf.length.toIntPtr(),
+        blocksize.toIntPtr(),
+        maxLen.toIntPtr(),
       );
       SodiumException.checkSucceededInt(result);
       return extendedBuffer.copyAsList(paddedLength.ptr.value);
@@ -66,8 +67,8 @@ class SodiumFFI implements Sodium {
       final result = sodium.sodium_unpad(
         unpaddedLength.ptr,
         extendedBuffer.ptr,
-        extendedBuffer.count,
-        blocksize,
+        extendedBuffer.count.toIntPtr(),
+        blocksize.toIntPtr(),
       );
       SodiumException.checkSucceededInt(result);
       return extendedBuffer.copyAsList(unpaddedLength.ptr.value);

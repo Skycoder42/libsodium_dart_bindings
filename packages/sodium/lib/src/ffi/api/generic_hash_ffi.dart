@@ -76,11 +76,11 @@ class GenericHashFFI
         sodium,
         (keyPtr) => sodium.crypto_generichash(
           outPtr!.ptr,
-          outPtr.count,
+          outPtr.count.toIntPtr(),
           inPtr!.ptr,
           inPtr.count,
           keyPtr?.ptr ?? nullptr,
-          keyPtr?.count ?? 0,
+          keyPtr?.count.toIntPtr() ?? 0,
         ),
       );
       SodiumException.checkSucceededInt(result);

@@ -103,7 +103,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
           passwordPtr.count,
           saltPtr!.ptr,
           opsLimit,
-          memLimit,
+          memLimit.toIntPtr(),
           alg.toValue(sodium),
         ),
         writable: true,
@@ -150,7 +150,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         passwordPtr.ptr,
         passwordPtr.count,
         opsLimit,
-        memLimit,
+        memLimit.toIntPtr(),
       );
       SodiumException.checkSucceededInt(result);
 
@@ -216,7 +216,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
       final result = sodium.crypto_pwhash_str_needs_rehash(
         passwordHashPtr.ptr,
         opsLimit,
-        memLimit,
+        memLimit.toIntPtr(),
       );
 
       switch (result) {

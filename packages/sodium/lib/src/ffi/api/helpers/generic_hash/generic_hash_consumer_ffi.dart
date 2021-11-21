@@ -41,8 +41,8 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
         (keyPtr) => sodium.crypto_generichash_init(
           _state.ptr.cast(),
           keyPtr?.ptr ?? nullptr,
-          keyPtr?.count ?? 0,
-          outLen,
+          keyPtr?.count.toIntPtr() ?? 0,
+          outLen.toIntPtr(),
         ),
       );
       SodiumException.checkSucceededInt(result);
@@ -91,7 +91,7 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
       final result = sodium.crypto_generichash_final(
         _state.ptr.cast(),
         outPtr.ptr,
-        outPtr.count,
+        outPtr.count.toIntPtr(),
       );
       SodiumException.checkSucceededInt(result);
 

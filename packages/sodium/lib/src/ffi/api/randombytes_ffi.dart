@@ -30,7 +30,7 @@ class RandombytesFFI implements Randombytes {
   Uint8List buf(int size) {
     final ptr = SodiumPointer<Uint8>.alloc(sodium, count: size);
     try {
-      sodium.randombytes_buf(ptr.ptr.cast(), ptr.byteLength);
+      sodium.randombytes_buf(ptr.ptr.cast(), ptr.byteLength.toIntPtr());
       return ptr.copyAsList();
     } finally {
       ptr.dispose();
@@ -51,7 +51,7 @@ class RandombytesFFI implements Randombytes {
       resultPtr = SodiumPointer.alloc(sodium, count: size);
       sodium.randombytes_buf_deterministic(
         resultPtr.ptr.cast(),
-        resultPtr.byteLength,
+        resultPtr.byteLength.toIntPtr(),
         seedPtr.ptr,
       );
       return resultPtr.copyAsList();

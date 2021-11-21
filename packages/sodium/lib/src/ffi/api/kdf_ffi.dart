@@ -64,7 +64,7 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
           sodium,
           (masterKeyPtr) => sodium.crypto_kdf_derive_from_key(
             subKeyPtr.ptr,
-            subKeyPtr.count,
+            subKeyPtr.count.toIntPtr(),
             subkeyId,
             contextPtr!.ptr,
             masterKeyPtr.ptr,
