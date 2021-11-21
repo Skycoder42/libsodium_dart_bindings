@@ -20,11 +20,9 @@ Future<void> publish(
     }
 
     for (final rmFile in rmFiles) {
-      final file = File(rmFile);
-      if (await file.exists()) {
-        print('rm $file');
-        await file.delete();
-      }
+      final fse = await _fseFromPath(rmFile);
+      print('rm $fse');
+      await fse?.delete();
     }
 
     await run(
@@ -39,5 +37,20 @@ Future<void> publish(
     for (final clearFile in clearFiles) {
       await run('git', ['checkout', 'HEAD', clearFile]);
     }
+  }
+}
+
+Future<FileSystemEntity?> _fseFromPath(String path) async {
+  switch (await FileSystemEntity.type(path)) {
+    case FileSystemEntityType.file:
+      return File(path);
+    case FileSystemEntityType.directory:
+      return Directory(path);
+    case FileSystemEntityType.link:
+      return Link(path);
+    case FileSystemEntityType.notFound:
+      return null;
+    default:
+      throw StateError('Unreachable code was reached');
   }
 }
