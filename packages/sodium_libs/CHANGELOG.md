@@ -4,13 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+
+## [Unreleased - MINOR]
 ### Added
 - Added support for the Sumo-Version of sodium.js (#4)
 ### Changed
+- Set minimum required dart SDK version to 2.14
+- Updated dependencies
+- TODO updated sodium
 ### Deprecated
 ### Removed
 ### Fixed
+- Fix formatting and linter issues with the newer dart SDK & dependencies
 ### Security
 
 ## [1.1.1] - 2021-08-26
