@@ -5,4 +5,6 @@ extension SizeT on int {
   static final sizeTBits = sizeOf<IntPtr>() * bitsPerByte;
 
   int toSizeT() => toUnsigned(sizeTBits);
+
+  int toIntPtr() => toSigned(sizeTBits);
 }
