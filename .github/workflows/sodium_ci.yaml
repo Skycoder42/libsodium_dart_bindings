@@ -28,75 +28,20 @@ jobs:
     with:
       workingDirectory: packages/sodium
       buildRunner: true
+      publishExclude: lib/src/.gitignore
       unitTestPaths: test/unit
       coverageExclude: >-
         **/*.freezed.dart
         **/*.ffi.dart
         **/*.js.dart
-      publishExclude: lib/src/.gitignore
-
-  # test:
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       platform:
-  #         - linux
-  #         - windows
-  #         - macos
-  #         - web
-  #         - web-sumo
-
-  #       include:
-  #         - platform: linux
-  #           os: ubuntu-latest
-  #           system: vm
-  #         - platform: windows
-  #           os: windows-latest
-  #           system: vm
-  #         - platform: macos
-  #           os: macos-latest
-  #           system: vm
-  #         - platform: web
-  #           os: ubuntu-latest
-  #           system: js
-  #         - platform: web-sumo
-  #           os: ubuntu-latest
-  #           system: js
-  #           integrationTestArgs: --sumo
-
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: dart-lang/setup-dart@v1
-  #     - uses: actions/checkout@v2
-  #     - name: install libsodium (linux)
-  #       if: matrix.platform == 'linux'
-  #       run: |
-  #         sudo apt-get -qq update
-  #         sudo apt-get -qq install libsodium-dev
-  #     - name: install libsodium (macos)
-  #       if: matrix.platform == 'macos'
-  #       run: brew install libsodium
-  #     - name: install minisign (windows)
-  #       if: matrix.platform == 'windows'
-  #       run: choco install minisign -y
-  #     - name: fetch libsodium
-  #       run: dart run scripts/fetch_libsodium.dart ${{ matrix.platform }}
-  #       working-directory: .
-  #     - run: dart pub get
-  #     - run: dart run build_runner build
-  #     - run: dart analyze --fatal-infos
-  #     - run: dart format -onone --set-exit-if-changed .
-  #     - run: dart run tool/test_runner.dart -munit -c -p${{ matrix.system }}
-  #     - run: dart run tool/test_runner.dart -mintegration -p${{ matrix.system }} ${{ matrix.integrationTestArgs }}
-  #     - uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
-  #       with:
-  #         path: packages/${{ env.PACKAGE_NAME }}/coverage/lcov.info
-  #         min_coverage: 95
-  #         exclude: >-
-  #           **/*.freezed.dart
-  #           **/*.ffi.dart
-  #           **/*.js.dart
-  #     - run: dart run tool/publish.dart --dry-run
+      integrationTestPaths: test/integration
+      integrationTestSetup: >-
+        {
+          "linux": "sudo apt-get -qq install libsodium-dev",
+          "windows": "choco install minisign -y && cd ../.. && dart run scripts/fetch_libsodium.dart windows",
+          "macos": "brew install libsodium",
+          "web": "cd ../.. && dart run scripts/fetch_libsodium.dart web"
+        }
 
   # release:
   #   runs-on: ubuntu-latest
