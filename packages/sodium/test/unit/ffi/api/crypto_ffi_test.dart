@@ -1,3 +1,5 @@
+@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/aead_ffi.dart';
 import 'package:sodium/src/ffi/api/auth_ffi.dart';

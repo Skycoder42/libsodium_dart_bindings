@@ -28,6 +28,11 @@ jobs:
     with:
       workingDirectory: packages/sodium
       buildRunner: true
+      unitTestPaths: test/unit
+      coverageExclude: >-
+        **/*.freezed.dart
+        **/*.ffi.dart
+        **/*.js.dart
       publishExclude: lib/src/.gitignore
 
   # test:

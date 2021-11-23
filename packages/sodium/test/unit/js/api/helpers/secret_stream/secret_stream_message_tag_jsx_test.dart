@@ -1,3 +1,5 @@
+@OnPlatform(<String, dynamic>{'!js': Skip('Requires dart:js')})
+
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/secret_stream.dart';
 import 'package:sodium/src/js/api/helpers/secret_stream/secret_stream_message_tag_jsx.dart';

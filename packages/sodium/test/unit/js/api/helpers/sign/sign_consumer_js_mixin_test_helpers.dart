@@ -1,3 +1,5 @@
+@OnPlatform(<String, dynamic>{'!js': Skip('Requires dart:js')})
+
 import 'dart:async';
 import 'dart:typed_data';
 

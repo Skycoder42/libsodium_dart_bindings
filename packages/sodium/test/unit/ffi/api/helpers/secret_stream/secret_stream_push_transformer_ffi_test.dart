@@ -1,4 +1,6 @@
+@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
 // ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:ffi';
 import 'dart:typed_data';
 

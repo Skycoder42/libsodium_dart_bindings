@@ -1,3 +1,6 @@
+@OnPlatform(<String, dynamic>{'!js': Skip('Requires dart:js')})
+
+// dart_pre_commit:ignore-library-import
 import 'package:sodium/sodium.js.dart';
 import 'package:test/test.dart';
 

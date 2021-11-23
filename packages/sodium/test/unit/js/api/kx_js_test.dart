@@ -1,3 +1,5 @@
+@OnPlatform(<String, dynamic>{'!js': Skip('Requires dart:js')})
+
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';

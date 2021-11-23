@@ -1,3 +1,5 @@
+@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';

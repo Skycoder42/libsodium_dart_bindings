@@ -1,3 +1,5 @@
+@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+
 import 'dart:ffi';
 import 'dart:typed_data';
 

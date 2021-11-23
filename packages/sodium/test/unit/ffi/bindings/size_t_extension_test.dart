@@ -1,3 +1,5 @@
+@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+
 import 'dart:ffi';
 
 import 'package:sodium/src/ffi/bindings/size_t_extension.dart';

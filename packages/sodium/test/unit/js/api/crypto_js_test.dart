@@ -1,3 +1,5 @@
+@OnPlatform(<String, dynamic>{'!js': Skip('Requires dart:js')})
+
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/aead_js.dart';
 import 'package:sodium/src/js/api/auth_js.dart';
