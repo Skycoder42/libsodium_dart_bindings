@@ -1,17 +1,40 @@
 import 'dart:io';
 
+import 'package:args/args.dart';
+
 import '../../../scripts/fetch_libsodium/common.dart';
 import '../../../scripts/fetch_libsodium/fetch.dart';
 
-Future<void> main() async {
+Future<void> main(List<String> rawArgs) async {
+  final parser = ArgParser(allowTrailingOptions: false)
+    ..addOption(
+      'version-file',
+      abbr: 'v',
+      defaultsTo: _FetchWeb.defaultVersionPath,
+    )
+    ..addOption(
+      'out-dir',
+      abbr: 'o',
+      defaultsTo: _FetchWeb.defaultOutDir,
+    )
+    ..addFlag('help', abbr: 'h', negatable: false);
+
+  final args = parser.parse(rawArgs);
+  if (args['help'] as bool) {
+    stdout.writeln(parser.usage);
+    return;
+  }
+
   const fetch = _FetchWeb();
-  final version = await fetch.readVersion(
-    '../sodium_libs/libsodium_version.json',
+  final version = await fetch.readVersion(args['version-file'] as String);
+  await fetch(
+    version: version,
+    outDir: args['out-dir'] as String,
   );
-  await fetch(version: version);
 }
 
 class _FetchWeb with FetchCommon implements Fetch {
+  static const defaultVersionPath = '../sodium_libs/libsodium_version.json';
   static const defaultOutDir = 'test/integration/binaries/js';
 
   const _FetchWeb();

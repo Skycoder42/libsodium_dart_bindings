@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'fetch_libsodium/android.dart';
 import 'fetch_libsodium/fetch.dart';
-import 'fetch_libsodium/windows.dart';
 
 Future<void> main(List<String> arguments) async {
   String? targetPlatform;
@@ -12,9 +11,6 @@ Future<void> main(List<String> arguments) async {
   }
 
   final fetchTargets = <Fetch>[];
-  if (targetPlatform == null || targetPlatform == 'windows') {
-    fetchTargets.add(FetchWindows());
-  }
   if (targetPlatform == null || targetPlatform == 'android') {
     fetchTargets.add(FetchAndroid());
   }
