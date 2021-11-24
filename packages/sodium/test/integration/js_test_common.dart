@@ -13,9 +13,6 @@ import 'package:sodium/sodium.js.dart';
 
 import 'test_runner.dart';
 
-// ignore: directives_ordering
-import 'sodium.js.fake.dart' if (dart.library.js) 'binaries/js/sodium.js.dart';
-
 @JS()
 @anonymous
 class SodiumBrowserInit {
@@ -27,7 +24,12 @@ class SodiumBrowserInit {
 }
 
 class JsTestRunner extends TestRunner {
-  JsTestRunner({required bool isSumoTest}) : super(isSumoTest: isSumoTest);
+  final String sodiumJsSrc;
+
+  JsTestRunner({
+    required this.sodiumJsSrc,
+    required bool isSumoTest,
+  }) : super(isSumoTest: isSumoTest);
 
   @override
   Future<Sodium> loadSodium() async {

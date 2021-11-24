@@ -1,8 +1,20 @@
+import 'dart:convert';
 import 'dart:io';
+
+import 'fetch.dart';
 
 mixin FetchCommon {
   static const libsodiumSigningKey =
       'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3';
+
+  Future<SodiumVersion> readVersion(String path) async {
+    final versionFile = File.fromUri(
+      Directory.current.uri.resolve(path),
+    );
+    return SodiumVersion.fromJson(
+      json.decode(await versionFile.readAsString()) as Map<String, dynamic>,
+    );
+  }
 
   Future<Directory> downloadRelease(
     String version, {
