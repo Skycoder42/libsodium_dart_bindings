@@ -38,9 +38,9 @@ jobs:
       integrationTestSetup: >-
         {
           "linux": "sudo apt-get -qq install libsodium-dev",
-          "windows": "choco install minisign -y && cd ../.. && dart run scripts/fetch_libsodium.dart windows",
+          "windows": "choco install minisign -y && cd ../.. && pwd && dart run scripts/fetch_libsodium.dart windows",
           "macos": "brew install libsodium",
-          "web": "cd ../.. && dart run scripts/fetch_libsodium.dart web"
+          "web": "cd ../.. && pwd && dart run scripts/fetch_libsodium.dart web"
         }
 
   # release:
