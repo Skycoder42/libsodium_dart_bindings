@@ -23,7 +23,8 @@ defaults:
     working-directory: packages/sodium
 
 jobs:
-  dart_ci:
+  ci:
+    name: Contintues Integration
     uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
     with:
       workingDirectory: packages/sodium
@@ -42,6 +43,20 @@ jobs:
           "macos": "brew install libsodium",
           "web": "dart run tool/setup_web_integration_tests.dart"
         }
+
+  cd:
+    name: Contintues Deployment
+    uses: Skycoder42/dart_test_tools/.github/workflows/publish.yml@main
+    needs:
+      - ci
+    with:
+      workingDirectory: packages/sodium
+      buildRunner: true
+      releaseRef: refs/heads/workflow_call_test
+      tagPrefix: sodium/v
+      publishExclude: lib/src/.gitignore
+    secrets:
+      PUB_DEV_CREDENTIALS: ${{ secrets.PUB_DEV_CREDENTIALS }}
 
   # release:
   #   runs-on: ubuntu-latest
