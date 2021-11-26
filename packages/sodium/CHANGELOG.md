@@ -5,13 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased - MINOR]
+## [1.2.0] - 2021-11-26
 ## Added
 - Support for 32bit architectures by generalizing the native FFI bindings (#7)
 ### Changed
 - Set minimum required dart SDK version to 2.14
 - Updated dependencies
 - Upgraded dart ffi language bindings
+- Use new callable workflows for workflow simplification
 ### Fixed
 - Fix formatting and linter issues with the newer dart SDK & dependencies
 
