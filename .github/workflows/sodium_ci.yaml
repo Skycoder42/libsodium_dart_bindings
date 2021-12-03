@@ -28,9 +28,9 @@ jobs:
       publishExclude: lib/src/.gitignore
       unitTestPaths: test/unit
       coverageExclude: >-
-        **/*.freezed.dart
-        **/*.ffi.dart
-        **/*.js.dart
+        "**/*.freezed.dart"
+        "**/*.ffi.dart"
+        "**/*.js.dart"
       integrationTestPaths: test/integration
       integrationTestSetup: >-
         {
