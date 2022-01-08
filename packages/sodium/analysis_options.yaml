@@ -25,3 +25,5 @@ linter:
     prefer_expression_function_bodies: true
     prefer_single_quotes: true
     unawaited_futures: true
+    always_use_package_imports: false
+    prefer_relative_imports: true

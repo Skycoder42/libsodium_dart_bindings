@@ -23,3 +23,5 @@ linter:
     prefer_single_quotes: true
     unawaited_futures: true
     sort_pub_dependencies: false
+    always_use_package_imports: false
+    prefer_relative_imports: true

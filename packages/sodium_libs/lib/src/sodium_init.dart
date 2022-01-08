@@ -3,9 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:sodium/sodium.dart' as sodium;
 import 'package:synchronized/synchronized.dart';
 
-import 'platforms/stub_platforms.dart'
-    if (dart.library.ffi) 'platforms/io_platforms.dart'
-    if (dart.library.js) 'platforms/js_platforms.dart';
 import 'sodium_platform.dart';
 
 /// Static class to obtain a [Sodium] instance.
@@ -21,20 +18,8 @@ abstract class SodiumInit {
 
   const SodiumInit._(); // coverage:ignore-line
 
-  /// Ensures that the correct platform plugin is registered
-  ///
-  /// This method is automatically called by [init] and usually does not need
-  /// to be called manually. However, If you are working with [SodiumPlatform],
-  /// You should call this method to make sure the correct
-  /// [SodiumPlatform.instance] is available.
-  ///
-  /// **Note:** This method only applies to Dart-VM targets. On the web, the
-  /// registration happens automatically.
-  static void ensurePlatformRegistered() {
-    if (!SodiumPlatform.isRegistered) {
-      Platforms.registerPlatformPlugin();
-    }
-  }
+  @Deprecated('Since flutter 2.8 plugins are automatically registered')
+  static void ensurePlatformRegistered() {}
 
   /// Creates a new [Sodium] instance and initializes it
   ///
@@ -56,7 +41,6 @@ abstract class SodiumInit {
           return _instance!;
         }
         WidgetsFlutterBinding.ensureInitialized();
-        ensurePlatformRegistered();
         _instance = await SodiumPlatform.instance.loadSodium();
         if (!kReleaseMode) {
           if (_instance!.version < _expectedVersion) {

@@ -1,7 +1,6 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:meta/meta.dart';
 import 'package:sodium/sodium.dart';
 import '../sodium_platform.dart';
 
@@ -40,8 +39,11 @@ class _SodiumIos implements Sodium {
   SodiumVersion get version => const SodiumVersion(10, 3, '1.0.18');
 }
 
-@internal
 class SodiumIos extends SodiumPlatform {
+  static void registerWith() {
+    SodiumPlatform.instance = SodiumIos();
+  }
+
   @override
   Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
         DynamicLibrary.process(),

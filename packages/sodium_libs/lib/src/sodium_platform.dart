@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:sodium/sodium.dart';
 
@@ -13,17 +12,13 @@ import 'package:sodium/sodium.dart';
 abstract class SodiumPlatform extends PlatformInterface {
   static final Object _token = Object();
 
-  static SodiumPlatform? _instance;
+  static late SodiumPlatform _instance;
 
   /// Default constructor
   SodiumPlatform() : super(token: _token);
 
   /// Returns the currently loaded native instance of this plugin
-  static SodiumPlatform get instance => _instance!;
-
-  /// @nodoc
-  @internal
-  static bool get isRegistered => _instance != null;
+  static SodiumPlatform get instance => _instance;
 
   /// Overrides or initializes the plugin with the given [instance].
   static set instance(SodiumPlatform instance) {

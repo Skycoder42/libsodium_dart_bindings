@@ -1,11 +1,13 @@
 import 'dart:ffi';
 
-import 'package:meta/meta.dart';
 import 'package:sodium/sodium.dart';
 import '../sodium_platform.dart';
 
-@internal
 class SodiumWindows extends SodiumPlatform {
+  static void registerWith() {
+    SodiumPlatform.instance = SodiumWindows();
+  }
+
   @override
   Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
         DynamicLibrary.open('libsodium.dll'),
