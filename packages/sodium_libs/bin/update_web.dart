@@ -1,13 +1,14 @@
-import 'dart:convert';
 import 'dart:io';
 
-const sumoArg = '--sumo';
+import '../libsodium_version.dart' show libsodium_version;
+
+const _sumoArg = '--sumo';
 
 Future<void> main(List<String> arguments) async {
-  final isSumo = arguments.contains(sumoArg);
+  final isSumo = arguments.contains(_sumoArg);
   final targetDir = Directory(
     arguments.firstWhere(
-      (arg) => arg != sumoArg,
+      (arg) => arg != _sumoArg,
       orElse: () => 'web',
     ),
   );
@@ -21,20 +22,6 @@ Future<void> main(List<String> arguments) async {
     return;
   }
 
-  stdout.writeln('> Loading sodium.js version info');
-  final scriptDir = File.fromUri(Platform.script).parent;
-  final versionInfo = File.fromUri(
-    scriptDir.uri.resolve('../libsodium_version.json'),
-  );
-  if (!await versionInfo.exists()) {
-    stderr.writeln('Failed to find version info at path: ${versionInfo.path}');
-    exitCode = 1;
-    return;
-  }
-  final versionJson = json.decode(
-    await versionInfo.readAsString(),
-  ) as Map<String, dynamic>;
-
   stdout.writeln('> Fetching sodium.js repository');
   final tmpDir = await Directory.systemTemp.createTemp();
   try {
@@ -42,7 +29,7 @@ Future<void> main(List<String> arguments) async {
       [
         'clone',
         '-b',
-        versionJson['js'] as String,
+        libsodium_version.js,
         '--depth',
         '1',
         'https://github.com/jedisct1/libsodium.js.git',

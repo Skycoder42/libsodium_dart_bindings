@@ -12,7 +12,17 @@ set(LIBSODIUM_ARCH "${CMAKE_VS_PLATFORM_NAME}")
 set(LIBSODIUM_CONFIG "${CMAKE_BUILD_TYPE}")
 set(LIBSODIUM_VS_VERSION "${CMAKE_VS_PLATFORM_TOOLSET}")
 
-file(READ "${CMAKE_CURRENT_SOURCE_DIR}/../libsodium_version.json" LIBSODIUM_VERSION_JSON)
+find_program(DART "dart")
+if(DART)
+  message("Found dart at: ${DART}")
+else()
+  message(FATAL_ERROR "Did not find dart in PATH!")
+endif()
+execute_process(COMMAND "${DART}" run
+                "${CMAKE_CURRENT_SOURCE_DIR}/../libsodium_version.dart"
+                OUTPUT_VARIABLE LIBSODIUM_VERSION_JSON
+                COMMAND_ERROR_IS_FATAL ANY
+)
 string(JSON LIBSODIUM_VERSION
        GET "${LIBSODIUM_VERSION_JSON}"
        ffi
@@ -33,7 +43,7 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
 
-if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}")  
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}")
   find_program(MINISIGN "minisign")
   if(MINISIGN)
     message("Found minisign at: ${MINISIGN}")
@@ -41,25 +51,25 @@ if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}")
     message(FATAL_ERROR "Did not find minisign in PATH. Please install it. See sodium_libs README")
   endif()
 
-  file(DOWNLOAD 
+  file(DOWNLOAD
        "https://download.libsodium.org/libsodium/releases/libsodium-${LIBSODIUM_VERSION}-stable-msvc.zip"
        "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}.zip"
        SHOW_PROGRESS
   )
-  file(DOWNLOAD 
+  file(DOWNLOAD
       "https://download.libsodium.org/libsodium/releases/libsodium-${LIBSODIUM_VERSION}-stable-msvc.zip.minisig"
       "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}.zip.minisig"
       SHOW_PROGRESS
   )
 
-  execute_process(COMMAND "minisign" -V
+  execute_process(COMMAND "${MINISIGN}" -V
                   -P "${LIBSODIUM_SIGNING_KEY}"
                   -m "libsodium-${LIBSODIUM_VERSION}.zip"
                   WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
                   COMMAND_ERROR_IS_FATAL ANY
   )
 
-  file(ARCHIVE_EXTRACT 
+  file(ARCHIVE_EXTRACT
        INPUT "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}.zip"
        VERBOSE
   )
