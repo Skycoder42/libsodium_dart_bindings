@@ -25,7 +25,7 @@ jobs:
     with:
       workingDirectory: packages/sodium
       buildRunner: true
-      publishExclude: lib/src/.gitignore
+      publishExclude: '["lib/src/.gitignore"]'
       unitTestPaths: test/unit
       coverageExclude: >-
         "**/*.freezed.dart"

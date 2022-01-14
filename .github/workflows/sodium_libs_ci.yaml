@@ -21,9 +21,20 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
     with:
       workingDirectory: packages/sodium_libs
-      buildRunner: false
-      publishExclude: android/src/main/.gitignore:example/windows/flutter/ephemeral/.plugin_symlinks
+      publishExclude: >-
+        [
+          "android/src/main/.gitignore",
+          "example/windows/flutter/ephemeral/.plugin_symlinks"
+        ]
       unitTestPaths: ""
+      integrationTestPaths: "example/integration_test"
+      integrationTestSetup: >-
+        {
+          "linux": "sudo apt-get -qq install libsodium-dev",
+          "windows": "choco install minisign -y",
+          "macos": "brew install libsodium",
+          "web": "cd example && flutter pub run sodium_libs:update_web --sumo"
+        }
   # test:
   #   strategy:
   #     fail-fast: false
