@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'sodium_libs'
-  s.version          = '0.1.0'
+  s.version          = '1.1.1'
   s.summary          = 'flutter libraries for sodium (macOS).'
   s.description      = <<-DESC
 flutter libraries for sodium (macOS).
                        DESC
   s.homepage         = 'https://github.com/Skycoder42/libsodium_dart_bindings'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Skycoder42' => 'kycoder42@users.noreply.github.com' }
+  s.author           = { 'Skycoder42' => 'skycoder42@users.noreply.github.com' }
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.dependency 'FlutterMacOS'
