@@ -1,7 +1,4 @@
-name: Continous Integration for package sodium
-
-env:
-  PACKAGE_NAME: sodium
+name: CI/CD for sodium
 
 on:
   workflow_dispatch:
@@ -18,14 +15,19 @@ on:
       - "packages/sodium/**"
       - ".github/workflows/sodium_ci.yaml"
 
+env:
+  workingDirectory: packages/sodium
+  buildRunner: true
+  publishExclude: '["lib/src/.gitignore"]'
+
 jobs:
   ci:
     name: Contintues Integration
     uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
     with:
-      workingDirectory: packages/sodium
-      buildRunner: true
-      publishExclude: '["lib/src/.gitignore"]'
+      workingDirectory: ${{ env.workingDirectory }}
+      buildRunner: ${{ env.buildRunner }}
+      publishExclude: ${{ env.publishExclude }}
       unitTestPaths: test/unit
       coverageExclude: >-
         "**/*.freezed.dart"
@@ -46,9 +48,9 @@ jobs:
     needs:
       - ci
     with:
-      workingDirectory: packages/sodium
-      buildRunner: true
+      workingDirectory: ${{ env.workingDirectory }}
+      buildRunner: ${{ env.buildRunner }}
+      publishExclude: ${{ env.publishExclude }}
       tagPrefix: sodium/v
-      publishExclude: lib/src/.gitignore
     secrets:
       PUB_DEV_CREDENTIALS: ${{ secrets.PUB_DEV_CREDENTIALS }}
