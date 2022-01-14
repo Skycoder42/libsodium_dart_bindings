@@ -13,9 +13,7 @@ set(LIBSODIUM_CONFIG "${CMAKE_BUILD_TYPE}")
 set(LIBSODIUM_VS_VERSION "${CMAKE_VS_PLATFORM_TOOLSET}")
 
 find_program(DART "dart")
-if(DART)
-  message("Found dart at: ${DART}")
-else()
+if(NOT DART)
   message(FATAL_ERROR "Did not find dart in PATH!")
 endif()
 execute_process(COMMAND "${DART}" run
@@ -45,9 +43,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
 
 if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}")
   find_program(MINISIGN "minisign")
-  if(MINISIGN)
-    message("Found minisign at: ${MINISIGN}")
-  else()
+  if(NOT MINISIGN)
     message(FATAL_ERROR "Did not find minisign in PATH. Please install it. See sodium_libs README")
   endif()
 
