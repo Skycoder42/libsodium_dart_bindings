@@ -27,7 +27,8 @@ jobs:
           "example/windows/flutter/ephemeral/.plugin_symlinks"
         ]
       unitTestPaths: ""
-      integrationTestPaths: "example/integration_test"
+      integrationTestProject: "example"
+      integrationTestPaths: "integration_test"
       integrationTestSetup: >-
         {
           "linux": "sudo apt-get -qq install libsodium-dev",
