@@ -14,15 +14,15 @@ dependencies:
     sdk: flutter
   js: ^0.6.3
   meta: ^1.7.0
-  plugin_platform_interface: ^2.0.2
-  sodium: ^1.1.2
+  plugin_platform_interface: ^2.1.2
+  sodium: ^1.2.0
   synchronized: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  dart_pre_commit: ^2.3.2
-  lint: ^1.7.2
+  dart_pre_commit: ^2.3.3
+  lint: ^1.8.1
 
 dependency_overrides:
   sodium:
