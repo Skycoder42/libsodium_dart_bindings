@@ -28,6 +28,7 @@ build/
 coverage/
 generated_plugin_registrant.*
 GeneratedPluginRegistrant.*
+generated_config.cmake
 
 # Omit commiting pubspec.lock for library packages:
 # https://dart.dev/guides/libraries/private-files#pubspeclock

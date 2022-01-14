@@ -28,7 +28,7 @@ jobs:
         ]
       unitTestPaths: ""
       integrationTestProject: "example"
-      integrationTestPaths: "integration_test"
+      integrationTestPaths: "integration_test/app_test.dart"
       integrationTestSetup: >-
         {
           "linux": "sudo apt-get -qq install libsodium-dev",
