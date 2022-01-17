@@ -36,6 +36,14 @@ jobs:
           "macos": "brew install libsodium",
           "web": "cd example && flutter pub run sodium_libs:update_web --sumo"
         }
+      platforms: >-
+        [
+          "android",
+          "linux",
+          "windows",
+          "macos",
+          "web"
+        ]
   # test:
   #   strategy:
   #     fail-fast: false
