@@ -31,6 +31,7 @@ jobs:
       integrationTestPaths: "integration_test/app_test.dart"
       integrationTestSetup: >-
         {
+          "android": "cd ../../.github/actions/build-android-binaries && yarn && yarn start $(mktemp -d) TEST",
           "linux": "sudo apt-get -qq install libsodium-dev",
           "windows": "choco install minisign -y",
           "macos": "brew install libsodium",
