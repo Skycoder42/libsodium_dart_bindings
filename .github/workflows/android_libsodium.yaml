@@ -81,8 +81,8 @@ jobs:
       - name: Copy lib to upload dir
         run: |
           set -e
-          mkdir -p upload/lib
-          cp libsodium-stable/libsodium-android-*/lib/libsodium.so upload/lib/
+          mkdir upload
+          cp libsodium-stable/libsodium-android-*/lib/libsodium.so upload/
       - name: Create artifact
         uses: actions/upload-artifact@v2
         with:
