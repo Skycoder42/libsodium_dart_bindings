@@ -19,7 +19,7 @@ Future<void> main() async {
 
     await util.run(
       'tar',
-      ['-xavf', outFile.path],
+      ['-xvf', outFile.path],
       workingDirectory: outDir,
     );
   } finally {
