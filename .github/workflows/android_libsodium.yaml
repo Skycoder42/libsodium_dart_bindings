@@ -82,7 +82,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.architecture }}
-          path: libsodium-android-*/lib/libsodium.so
+          path: libsodium-stable/libsodium-android-*/lib/libsodium.so
           if-no-files-found: error
 
   release:
