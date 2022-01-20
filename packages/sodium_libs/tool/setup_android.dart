@@ -9,7 +9,7 @@ Future<void> main() async {
 
   final downloadUri = Uri.https(
     'github.com',
-    '/Skycoder42/libsodium_dart_bindings/releases/download/libsodium-binaries%2Fandroid%2Fv${libsodium_version.ffi}/libsodium-android.tar.xz',
+    '/Skycoder42/libsodium_dart_bindings/releases/download/libsodium-binaries%2Fandroid%2Fv${libsodium_version.ffi}/libsodium-android.tar.gz',
   );
 
   final httpClient = HttpClient();

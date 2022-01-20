@@ -102,7 +102,7 @@ jobs:
         with:
           path: libsodium-android
       - name: Create combined archive
-        run: tar -cavf ../libsodium-android.tar.xz .
+        run: tar -czvf ../libsodium-android.tar.gz .
         working-directory: libsodium-android
       - name: Upload release
         uses: softprops/action-gh-release@v1
@@ -111,5 +111,5 @@ jobs:
           name: "[INTERNAL] Precompiled libsodium android binaries v${{ needs.extract_version.outputs.libsodium_version }}"
           body: Internal release of precompiled android binaries, required for the sodium_libs android plugin.
           prerelease: true
-          files: libsodium-android.tar.xz
+          files: libsodium-android.tar.gz
           fail_on_unmatched_files: true
