@@ -78,11 +78,16 @@ jobs:
       - name: Build libsodium.so
         run: "./dist-build/android-${{ matrix.buildTarget }}.sh"
         working-directory: libsodium-stable
+      - name: Copy lib to upload dir
+        run: |
+          set -e
+          mkdir -p upload/lib
+          cp libsodium-stable/libsodium-android-*/lib/libsodium.so upload/lib/
       - name: Create artifact
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.architecture }}
-          path: libsodium-stable/libsodium-android-*/lib/libsodium.so
+          path: upload
           if-no-files-found: error
 
   release:
@@ -100,7 +105,6 @@ jobs:
         run: tar -cavf ../libsodium-android.tar.xz .
         working-directory: libsodium-android
       - name: Upload release
-        if: steps.version.outputs.update == 'true'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: libsodium-binaries/android/v${{ needs.extract_version.outputs.libsodium_version }}
