@@ -74,7 +74,7 @@ jobs:
       - name: Verify signature
         run: minisign -P ${{ env.libsodium_signing_key }} -Vm "${{ steps.download.outputs.archive }}"
       - name: Extract sources
-        run: tar -xavf "$archive_name"
+        run: tar -xavf "${{ steps.download.outputs.archive }}"
       - name: Build libsodium.so
         run: "./dist-build/android-${{ matrix.buildTarget }}.sh"
         working-directory: libsodium-stable
