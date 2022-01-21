@@ -22,9 +22,9 @@ dependencies:
 dev_dependencies:
   args: ^2.3.0
   dart_pre_commit: ^2.3.3
+  dart_test_tools: ^2.0.2
   flutter_test:
     sdk: flutter
-  lint: ^1.8.1
 
 dependency_overrides:
   sodium:
