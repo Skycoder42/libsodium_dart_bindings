@@ -1,6 +1,6 @@
 @OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
 
-// dart_pre_commit:ignore-library-import
+// ignore: test_library_import
 import 'package:sodium/sodium.ffi.dart';
 import 'package:test/test.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-// dart_pre_commit:ignore-library-import
+// ignore: test_library_import
 import 'package:sodium/sodium.dart';
 import 'package:test/test.dart' as t;
 

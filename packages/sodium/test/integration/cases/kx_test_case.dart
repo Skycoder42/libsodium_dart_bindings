@@ -1,4 +1,4 @@
-// dart_pre_commit:ignore-library-import
+// ignore: test_library_import
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
