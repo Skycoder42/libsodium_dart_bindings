@@ -1,3 +1,4 @@
+// ignore: test_library_import
 import 'package:sodium/sodium.dart';
 import 'package:test/test.dart';
 
