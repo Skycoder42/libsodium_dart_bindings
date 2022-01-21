@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
+import '../../../tool/util.dart' as util;
 import 'libsodium_js_generator/file_loader.dart';
 import 'libsodium_js_generator/generators/constants_generator.dart';
 import 'libsodium_js_generator/generators/library_generator.dart';
@@ -63,5 +64,5 @@ Future<void> main(List<String> args) async {
     await outSink.close();
   }
 
-  await Process.run('dart', ['format', '--fix', outFile.path]);
+  await util.run('dart', ['format', '--fix', outFile.path]);
 }

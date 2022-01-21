@@ -2,35 +2,40 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 
-import '../../../scripts/fetch_libsodium/common.dart';
-import '../../../scripts/fetch_libsodium/fetch.dart';
+import '../../../tool/util.dart' as util;
+import '../../sodium_libs/libsodium_version.dart' show libsodium_version;
+
+const _defaultOutDir = 'test/integration/binaries/win';
+const _defaultArch = 'x64';
+const _defaultMode = 'Release';
+const _defaultVsVersion = 'v142';
 
 Future<void> main(List<String> rawArgs) async {
   final parser = ArgParser(allowTrailingOptions: false)
     ..addOption(
-      'version-file',
-      abbr: 'v',
-      defaultsTo: _FetchWindows.defaultVersionPath,
-    )
-    ..addOption(
       'out-dir',
       abbr: 'o',
-      defaultsTo: _FetchWindows.defaultOutDir,
+      defaultsTo: _defaultOutDir,
     )
     ..addOption(
       'arch',
       abbr: 'a',
-      defaultsTo: _FetchWindows.defaultArch,
+      defaultsTo: _defaultArch,
     )
     ..addOption(
       'release-mode',
       abbr: 'm',
-      defaultsTo: _FetchWindows.defaultMode,
+      defaultsTo: _defaultMode,
     )
     ..addOption(
       'vs-version',
       abbr: 's',
-      defaultsTo: _FetchWindows.defaultVsVersion,
+      defaultsTo: _defaultVsVersion,
+    )
+    ..addOption(
+      'version',
+      abbr: 'v',
+      defaultsTo: libsodium_version.ffi,
     )
     ..addFlag('help', abbr: 'h', negatable: false);
 
@@ -40,54 +45,52 @@ Future<void> main(List<String> rawArgs) async {
     return;
   }
 
-  const fetch = _FetchWindows();
-  final version = await fetch.readVersion(args['version-file'] as String);
-  await fetch(
-    version: version,
+  await _run(
     outDir: args['out-dir'] as String,
     arch: args['arch'] as String,
     mode: args['release-mode'] as String,
     vsVersion: args['vs-version'] as String,
+    version: args['version'] as String,
   );
 }
 
-class _FetchWindows with FetchCommon implements Fetch {
-  static const defaultVersionPath = '../sodium_libs/libsodium_version.json';
-  static const defaultOutDir = 'test/integration/binaries/win';
-  static const defaultArch = 'x64';
-  static const defaultMode = 'Release';
-  static const defaultVsVersion = 'v142';
+Future<void> _run({
+  required String outDir,
+  required String arch,
+  required String mode,
+  required String vsVersion,
+  required String version,
+}) async {
+  final baseUri = Uri.https(
+    'download.libsodium.org',
+    '/libsodium/releases/libsodium-$version-stable-msvc.zip',
+  );
 
-  const _FetchWindows();
-
-  @override
-  Future<void> call({
-    required SodiumVersion version,
-    String outDir = defaultOutDir,
-    String arch = defaultArch,
-    String mode = defaultMode,
-    String vsVersion = defaultVsVersion,
-  }) async {
-    final releaseDir = await downloadRelease(
-      version.ffiVersion,
-      platform: 'msvc',
-      isZip: true,
+  final tmpDir = await Directory.systemTemp.createTemp();
+  final httpClient = HttpClient();
+  try {
+    final archive = await httpClient.download(
+      tmpDir,
+      baseUri,
+      withSignature: true,
     );
-    try {
-      final libsodiumDll = File.fromUri(
-        releaseDir.uri
-            .resolve('libsodium/$arch/$mode/$vsVersion/dynamic/libsodium.dll'),
-      );
-      await libsodiumDll.assertExists();
+    await util.verify(archive);
+    await util.extract(archive: archive, outDir: tmpDir);
 
-      // copy to sodium integration testfelixf
-      final winTestDir = Directory(outDir);
-      await winTestDir.create(recursive: true);
-      await libsodiumDll.copy(
-        winTestDir.uri.resolve('libsodium.dll').toFilePath(),
-      );
-    } finally {
-      await releaseDir.delete(recursive: true);
-    }
+    final libsodiumDll = File.fromUri(
+      tmpDir.uri
+          .resolve('libsodium/$arch/$mode/$vsVersion/dynamic/libsodium.dll'),
+    );
+    await libsodiumDll.assertExists();
+
+    final winTestDir = Directory(outDir);
+    await winTestDir.create(recursive: true);
+    stdout.writeln('> Copying ${libsodiumDll.path} to ${winTestDir.path}');
+    await libsodiumDll.copy(
+      winTestDir.uri.resolve('libsodium.dll').toFilePath(),
+    );
+  } finally {
+    stdout.writeln('> Cleaning up');
+    await tmpDir.delete(recursive: true);
   }
 }

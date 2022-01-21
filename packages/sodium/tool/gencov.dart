@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 
-import '../../../scripts/run.dart';
+import '../../../tool/util.dart' as util;
 
 const _platformVm = 'vm';
 const _platformJs = 'js';
@@ -65,7 +65,7 @@ Future<void> main(List<String> rawArgs) async {
     ]);
 
     if (clean) {
-      await run(
+      await util.run(
         'lcov',
         const [
           '--remove',
@@ -79,7 +79,7 @@ Future<void> main(List<String> rawArgs) async {
       );
     }
 
-    await run(
+    await util.run(
       'genhtml',
       [
         '--no-function-coverage',
@@ -102,11 +102,11 @@ Future<void> main(List<String> rawArgs) async {
           '${Platform.operatingSystem} is not supported',
         );
       }
-      await run(executable, const ['coverage/html/index.html']);
+      await util.run(executable, const ['coverage/html/index.html']);
     }
-  } on ChildErrorException catch (e) {
+  } on util.ChildErrorException catch (e) {
     exitCode = e.exitCode;
   }
 }
 
-Future<void> _runDart(List<String> arguments) => run('dart', arguments);
+Future<void> _runDart(List<String> arguments) => util.run('dart', arguments);

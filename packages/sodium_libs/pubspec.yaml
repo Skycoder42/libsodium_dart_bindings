@@ -1,6 +1,7 @@
 name: sodium_libs
 version: 1.1.1
-description: Flutter companion package to sodium that provides the low-level libsodium binaries for easy use.
+description: Flutter companion package to sodium that provides the low-level
+  libsodium binaries for easy use.
 homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
@@ -19,9 +20,10 @@ dependencies:
   synchronized: ^3.0.0
 
 dev_dependencies:
+  args: ^2.3.0
+  dart_pre_commit: ^2.3.3
   flutter_test:
     sdk: flutter
-  dart_pre_commit: ^2.3.3
   lint: ^1.8.1
 
 dependency_overrides:
