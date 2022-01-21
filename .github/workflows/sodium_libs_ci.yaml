@@ -37,7 +37,6 @@ jobs:
           "macos": "brew install libsodium",
           "web": "cd example && flutter pub run sodium_libs:update_web --sumo"
         }
-      prePublish: dart run tool/setup_android.dart
       platforms: >-
         [
           "android",
