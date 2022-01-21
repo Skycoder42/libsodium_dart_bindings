@@ -24,7 +24,8 @@ Future<void> run(
   bool runInShell = false,
   Directory? workingDirectory,
 }) async {
-  stdout.writeln('> Running $executable ${arguments.join(' ')}');
+  final pwdMsg = workingDirectory != null ? ' (in $workingDirectory)' : '';
+  stdout.writeln('> Running $executable ${arguments.join(' ')}$pwdMsg');
   final process = await Process.start(
     executable,
     arguments,
