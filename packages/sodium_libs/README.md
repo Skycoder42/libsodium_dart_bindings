@@ -9,6 +9,7 @@ provides the low-level libsodium binaries for easy use.
 - [Features](#features)
 - [Installation](#installation)
   * [Platform requirements](#platform-requirements)
+    + [iOS](#ios)
     + [Linux](#linux)
     + [Windows](#windows)
     + [Web](#web)
@@ -35,6 +36,24 @@ Simply add `sodium_libs` to your `pubspec.yaml` and run `pub get` (or
 ### Platform requirements
 In addition to installing the package, you will also have to install operating
 system specific tools for some platforms:
+
+#### iOS
+Currently, there is a [Bug in the upstream Swift-Sodium package](https://github.com/jedisct1/swift-sodium/issues/251)
+that prevents the library from beeing run on an iOs simulator with XCode 12 or
+higher. As a temporary workaround, you have to add the following snippet to your
+`Podfile` in order to make it work. This will overwrite the required settings
+in the dependencies until fixed upstream:
+
+```Podfile
+post_install do |installer|
+  # You might already have code here. Keep that as is
+
+  # Workaround for https://github.com/jedisct1/swift-sodium/issues/251
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+  end
+end
+```
 
 #### Linux
 You have to install [libsodium](https://github.com/jedisct1/libsodium) on your
