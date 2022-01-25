@@ -6,8 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0+2] - 2022-01-25
 ### Changed
-- Replaced `lint` with `dart_test_tools` which makes the default rules of `lint`
-even more strict
+- Replaced `lint` with `dart_test_tools` which makes the default rules of `lint` even more strict
 - Refactored test setup tooling
 
 ## [1.2.0+1] - 2022-01-14
@@ -32,19 +31,15 @@ even more strict
 
 ## [1.1.1] - 2021-08-26
 ### Changed
-- `SodiumInit.init` now automatically handles multiple initializations and no
-longer requires the `initNative` parameter for consecutive invocations (#3)
+- `SodiumInit.init` now automatically handles multiple initializations and no longer requires the `initNative` parameter for consecutive invocations (#3)
 ### Deprecated
-- The `initNative` parameter of `SodiumInit.init` has been deprecated as it no
-longer has any effect (#3)
+- The `initNative` parameter of `SodiumInit.init` has been deprecated as it no longer has any effect (#3)
 
 ## [1.1.0] - 2021-08-17
 ### Added
 - `SecureKey.split` extension that allows to split one key into multiple (#2)
-- `SecureKey.nativeHandle` and `SecureKey.fromNativeHandle` to allow passing
-secure keys across isolate boundaries
-- `SodiumInit.init` can now be called with `initNative: false` to disable
-initialization of the native library, in case it has already been initialized
+- `SecureKey.nativeHandle` and `SecureKey.fromNativeHandle` to allow passing secure keys across isolate boundaries
+- `SodiumInit.init` can now be called with `initNative: false` to disable initialization of the native library, in case it has already been initialized
 
 ## [1.0.0] - 2021-07-08
 ### Changed

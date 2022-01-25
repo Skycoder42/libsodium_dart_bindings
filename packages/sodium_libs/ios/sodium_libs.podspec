@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'sodium_libs'
-  s.version          = '1.1.1'
+  s.version          = '1.2.0'
   s.summary          = 'flutter libraries for sodium (macOS).'
   s.description      = <<-DESC
 flutter libraries for sodium (macOS).
