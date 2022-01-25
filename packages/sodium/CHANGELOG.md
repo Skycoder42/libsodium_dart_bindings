@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0+2] - 2022-01-25
+### Changed
+- Replaced `lint` with `dart_test_tools` which makes the default rules of `lint`
+even more strict
+- Refactored test setup tooling
+
 ## [1.2.0+1] - 2022-01-14
 ### Changed
 - Set minimum required dart SDK version to 2.15
@@ -112,7 +118,7 @@ initialization of the native library, in case it has already been initialized
 ### Added
 - Initial test release - not ready for use yet!
 
-## [Unreleased]
+## [Unreleased] - 20XX-XX-XX
 ### Added
 ### Changed
 ### Deprecated
