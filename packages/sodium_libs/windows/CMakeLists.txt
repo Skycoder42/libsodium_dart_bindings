@@ -13,10 +13,12 @@ set(LIBSODIUM_CONFIG "${CMAKE_BUILD_TYPE}")
 set(LIBSODIUM_VS_VERSION "${CMAKE_VS_PLATFORM_TOOLSET}")
 
 find_program(DART "dart")
-if(NOT DART)
+if(DART)
+  message(DEBUG "Found dart at: ${DART}")
+else()
   message(FATAL_ERROR "Did not find dart in PATH!")
 endif()
-execute_process(COMMAND "${DART}" run
+execute_process(COMMAND cmd /c "${DART}" run
                 "${CMAKE_CURRENT_SOURCE_DIR}/../libsodium_version.dart"
                 OUTPUT_VARIABLE LIBSODIUM_VERSION_JSON
                 COMMAND_ERROR_IS_FATAL ANY
