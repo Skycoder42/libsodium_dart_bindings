@@ -10,15 +10,14 @@
 #endif
 
 #if defined(__cplusplus)
-extern "C"
-{
+extern "C" {
 #endif
 
-    FLUTTER_PLUGIN_EXPORT void SodiumLibsPluginRegisterWithRegistrar(
-        FlutterDesktopPluginRegistrarRef registrar);
+FLUTTER_PLUGIN_EXPORT void SodiumLibsPluginRegisterWithRegistrar(
+    FlutterDesktopPluginRegistrarRef registrar);
 
 #if defined(__cplusplus)
-} // extern "C"
+}  // extern "C"
 #endif
 
-#endif // FLUTTER_PLUGIN_SODIUM_LIBS_PLUGIN_H_
+#endif  // FLUTTER_PLUGIN_SODIUM_LIBS_PLUGIN_H_

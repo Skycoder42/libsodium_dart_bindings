@@ -5,9 +5,9 @@
 Pod::Spec.new do |s|
   s.name             = 'sodium_libs'
   s.version          = '1.2.0'
-  s.summary          = 'flutter libraries for sodium (macOS).'
+  s.summary          = 'Flutter companion package to sodium that provides the low-level libsodium binaries for easy use.'
   s.description      = <<-DESC
-flutter libraries for sodium (macOS).
+Flutter companion package to sodium that provides the low-level libsodium binaries for easy use.
                        DESC
   s.homepage         = 'https://github.com/Skycoder42/libsodium_dart_bindings'
   s.license          = { :file => '../LICENSE' }
