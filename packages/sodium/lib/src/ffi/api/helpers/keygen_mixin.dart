@@ -16,7 +16,7 @@ mixin KeygenMixin {
   SecureKey keygenImpl({
     required LibSodiumFFI sodium,
     required int keyBytes,
-    required void Function(Pointer<Uint8> k) implementation,
+    required void Function(Pointer<UnsignedChar> k) implementation,
   }) {
     final key = SecureKeyFFI.alloc(sodium, keyBytes);
     try {

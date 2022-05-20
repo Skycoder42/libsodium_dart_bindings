@@ -9,7 +9,7 @@ import 'sodium_pointer.dart';
 
 /// @nodoc
 @internal
-typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<Uint8> keyPtr);
+typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<UnsignedChar> keyPtr);
 
 /// @nodoc
 @internal

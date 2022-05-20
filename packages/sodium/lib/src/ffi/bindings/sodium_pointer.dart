@@ -102,8 +102,9 @@ class SodiumPointer<T extends NativeType> {
       count,
     );
     try {
-      sodiumPtr._asTypedIntListRaw().setRange(0, count, list);
-      sodiumPtr.memoryProtection = memoryProtection;
+      sodiumPtr
+        ..fill(list)
+        ..memoryProtection = memoryProtection;
       return sodiumPtr;
     } catch (e) {
       sodiumPtr.dispose();
@@ -216,7 +217,7 @@ class SodiumPointer<T extends NativeType> {
 
     return SodiumPointer._view(
       sodium,
-      _elementAtRaw(offset),
+      ptr.dynamicElementAt(offset),
       length ?? count - offset,
       _locked,
       _memoryProtection,
@@ -237,7 +238,10 @@ class SodiumPointer<T extends NativeType> {
         'but requested offset=$offset + data=${data.length}',
       );
     }
-    _asTypedIntListRaw().setRange(offset, end, data);
+    final offsetPtr = ptr.dynamicElementAt(offset);
+    for (var i = 0; i < data.length; ++i) {
+      offsetPtr[i] = data[i];
+    }
   }
 
   /// Disposes the pointer and frees the allocated memory.
@@ -251,77 +255,13 @@ class SodiumPointer<T extends NativeType> {
     }
     sodium.sodium_free(ptr.cast());
   }
+}
 
-  List<num> _asTypedIntListRaw() {
-    switch (T) {
-      case Int8:
-        return (this as SodiumPointer<Int8>).asList();
-      case Int16:
-        return (this as SodiumPointer<Int16>).asList();
-      case Int32:
-        return (this as SodiumPointer<Int32>).asList();
-      case Int64:
-        return (this as SodiumPointer<Int64>).asList();
-      case Uint8:
-        return (this as SodiumPointer<Uint8>).asList();
-      case Uint16:
-        return (this as SodiumPointer<Uint16>).asList();
-      case Uint32:
-        return (this as SodiumPointer<Uint32>).asList();
-      case Uint64:
-        return (this as SodiumPointer<Uint64>).asList();
-      case Float:
-        return (this as SodiumPointer<Float>).asList();
-      case Double:
-        return (this as SodiumPointer<Double>).asList();
-      default:
-        // coverage:ignore-start
-        throw UnsupportedError(
-          'Cannot create a SodiumPointer<$T> from a List<num>',
-        );
-      // coverage:ignore-end
-    }
-  }
-
-  Pointer<T> _elementAtRaw(int offset) {
-    switch (T) {
-      case Int8:
-        return (this as SodiumPointer<Int8>).ptr.elementAt(offset)
-            as Pointer<T>;
-      case Int16:
-        return (this as SodiumPointer<Int16>).ptr.elementAt(offset)
-            as Pointer<T>;
-      case Int32:
-        return (this as SodiumPointer<Int32>).ptr.elementAt(offset)
-            as Pointer<T>;
-      case Int64:
-        return (this as SodiumPointer<Int64>).ptr.elementAt(offset)
-            as Pointer<T>;
-      case Uint8:
-        return (this as SodiumPointer<Uint8>).ptr.elementAt(offset)
-            as Pointer<T>;
-      case Uint16:
-        return (this as SodiumPointer<Uint16>).ptr.elementAt(offset)
-            as Pointer<T>;
-      case Uint32:
-        return (this as SodiumPointer<Uint32>).ptr.elementAt(offset)
-            as Pointer<T>;
-      case Uint64:
-        return (this as SodiumPointer<Uint64>).ptr.elementAt(offset)
-            as Pointer<T>;
-      case Float:
-        return (this as SodiumPointer<Float>).ptr.elementAt(offset)
-            as Pointer<T>;
-      case Double:
-        return (this as SodiumPointer<Double>).ptr.elementAt(offset)
-            as Pointer<T>;
-      default:
-        // coverage:ignore-start
-        throw UnsupportedError(
-          'Cannot get offset for a SodiumPointer<$T>',
-        );
-      // coverage:ignore-end
-    }
+extension SodiumPointerX<T extends NativeType> on SodiumPointer<T> {
+  T toList<T extends TypedData>(T Function(int) createList, [int? length]) {
+    final list = createList(length ?? count);
+    // TODO add logic
+    return list;
   }
 }
 
@@ -613,15 +553,20 @@ extension Int8SodiumList on Int8List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Int8> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Int8>(),
+      'Type $T is not able to hold data of type Int8',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
 /// Extensions on typed lists to add sodium pointer operations
@@ -634,15 +579,20 @@ extension Int16SodiumList on Int16List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Int16> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Int16>(),
+      'Type $T is not able to hold data of type Int16',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
 /// Extensions on typed lists to add sodium pointer operations
@@ -655,15 +605,20 @@ extension Int32SodiumList on Int32List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Int32> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Int32>(),
+      'Type $T is not able to hold data of type Int32',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
 /// Extensions on typed lists to add sodium pointer operations
@@ -676,15 +631,20 @@ extension Int64SodiumList on Int64List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Int64> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Int64>(),
+      'Type $T is not able to hold data of type Int64',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
 /// Extensions on typed lists to add sodium pointer operations
@@ -697,15 +657,20 @@ extension Uint8SodiumList on Uint8List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Uint8> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Uint8>(),
+      'Type $T is not able to hold data of type Uint8',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
 /// Extensions on typed lists to add sodium pointer operations
@@ -718,15 +683,20 @@ extension Uint16SodiumList on Uint16List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Uint16> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Uint16>(),
+      'Type $T is not able to hold data of type Uint16',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
 /// Extensions on typed lists to add sodium pointer operations
@@ -739,15 +709,20 @@ extension Uint32SodiumList on Uint32List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Uint32> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Uint32>(),
+      'Type $T is not able to hold data of type Uint32',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
 /// Extensions on typed lists to add sodium pointer operations
@@ -760,15 +735,20 @@ extension Uint64SodiumList on Uint64List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Uint64> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Uint64>(),
+      'Type $T is not able to hold data of type Uint64',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
 /// Extensions on typed lists to add sodium pointer operations
@@ -781,15 +761,20 @@ extension FloatSodiumList on Float32List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Float> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Float>(),
+      'Type $T is not able to hold data of type Float',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
 /// Extensions on typed lists to add sodium pointer operations
@@ -802,20 +787,23 @@ extension DoubleSodiumList on Float64List {
   /// If you want the [memoryProtection] to changed right after the copying is
   /// done, you can do so via this parameter. By default, the pointer keeps the
   /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<Double> toSodiumPointer(
+  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) =>
-      SodiumPointer.fromList(
-        sodium,
-        this,
-        memoryProtection: memoryProtection,
-      );
+  }) {
+    assert(
+      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Double>(),
+      'Type $T is not able to hold data of type Double',
+    );
+    return SodiumPointer.fromList(
+      sodium,
+      this,
+      memoryProtection: memoryProtection,
+    );
+  }
 }
 
-abstract class _StaticallyTypedSizeOf {
-  const _StaticallyTypedSizeOf._();
-
+extension _StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
   static int staticSizeOf<T>() {
     switch (T) {
       case Int8:
@@ -838,8 +826,251 @@ abstract class _StaticallyTypedSizeOf {
         return sizeOf<Float>();
       case Double:
         return sizeOf<Double>();
+      case Char:
+        return sizeOf<Char>();
+      case Short:
+        return sizeOf<Short>();
+      case Int:
+        return sizeOf<Int>();
+      case Long:
+        return sizeOf<Long>();
+      case LongLong:
+        return sizeOf<LongLong>();
+      case UnsignedChar:
+        return sizeOf<UnsignedChar>();
+      case UnsignedShort:
+        return sizeOf<UnsignedShort>();
+      case UnsignedInt:
+        return sizeOf<UnsignedInt>();
+      case UnsignedLong:
+        return sizeOf<UnsignedLong>();
+      case UnsignedLongLong:
+        return sizeOf<UnsignedLongLong>();
+      case SignedChar:
+        return sizeOf<SignedChar>();
       case IntPtr:
         return sizeOf<IntPtr>();
+      case UintPtr:
+        return sizeOf<UintPtr>();
+      case Size:
+        return sizeOf<Size>();
+      case WChar:
+        return sizeOf<WChar>();
+      default:
+        throw UnsupportedError(
+          'Cannot create a SodiumPointer for $T. T must be a primitive type',
+        );
+    }
+  }
+
+  Pointer<T> dynamicElementAt(int index) {
+    switch (T) {
+      case Int8:
+        return (this as Pointer<Int8>).elementAt(index) as Pointer<T>;
+      case Int16:
+        return (this as Pointer<Int16>).elementAt(index) as Pointer<T>;
+      case Int32:
+        return (this as Pointer<Int32>).elementAt(index) as Pointer<T>;
+      case Int64:
+        return (this as Pointer<Int64>).elementAt(index) as Pointer<T>;
+      case Uint8:
+        return (this as Pointer<Uint8>).elementAt(index) as Pointer<T>;
+      case Uint16:
+        return (this as Pointer<Uint16>).elementAt(index) as Pointer<T>;
+      case Uint32:
+        return (this as Pointer<Uint32>).elementAt(index) as Pointer<T>;
+      case Uint64:
+        return (this as Pointer<Uint64>).elementAt(index) as Pointer<T>;
+      case Float:
+        return (this as Pointer<Float>).elementAt(index) as Pointer<T>;
+      case Double:
+        return (this as Pointer<Double>).elementAt(index) as Pointer<T>;
+      case Char:
+        return (this as Pointer<Char>).elementAt(index) as Pointer<T>;
+      case Short:
+        return (this as Pointer<Short>).elementAt(index) as Pointer<T>;
+      case Int:
+        return (this as Pointer<Int>).elementAt(index) as Pointer<T>;
+      case Long:
+        return (this as Pointer<Long>).elementAt(index) as Pointer<T>;
+      case LongLong:
+        return (this as Pointer<LongLong>).elementAt(index) as Pointer<T>;
+      case UnsignedChar:
+        return (this as Pointer<UnsignedChar>).elementAt(index) as Pointer<T>;
+      case UnsignedShort:
+        return (this as Pointer<UnsignedShort>).elementAt(index) as Pointer<T>;
+      case UnsignedInt:
+        return (this as Pointer<UnsignedInt>).elementAt(index) as Pointer<T>;
+      case UnsignedLong:
+        return (this as Pointer<UnsignedLong>).elementAt(index) as Pointer<T>;
+      case UnsignedLongLong:
+        return (this as Pointer<UnsignedLongLong>).elementAt(index)
+            as Pointer<T>;
+      case SignedChar:
+        return (this as Pointer<SignedChar>).elementAt(index) as Pointer<T>;
+      case IntPtr:
+        return (this as Pointer<IntPtr>).elementAt(index) as Pointer<T>;
+      case UintPtr:
+        return (this as Pointer<UintPtr>).elementAt(index) as Pointer<T>;
+      case Size:
+        return (this as Pointer<Size>).elementAt(index) as Pointer<T>;
+      case WChar:
+        return (this as Pointer<WChar>).elementAt(index) as Pointer<T>;
+      default:
+        throw UnsupportedError(
+          'Cannot create a SodiumPointer for $T. T must be a primitive type',
+        );
+    }
+  }
+
+  // ignore: unused_element
+  num operator [](int index) {
+    switch (T) {
+      case Int8:
+        return Uint8Pointer(this as Pointer<Uint8>)[index];
+      case Int16:
+        return Int16Pointer(this as Pointer<Int16>)[index];
+      case Int32:
+        return Int32Pointer(this as Pointer<Int32>)[index];
+      case Int64:
+        return Int64Pointer(this as Pointer<Int64>)[index];
+      case Uint8:
+        return Uint8Pointer(this as Pointer<Uint8>)[index];
+      case Uint16:
+        return Uint16Pointer(this as Pointer<Uint16>)[index];
+      case Uint32:
+        return Uint32Pointer(this as Pointer<Uint32>)[index];
+      case Uint64:
+        return Uint64Pointer(this as Pointer<Uint64>)[index];
+      case Float:
+        return FloatPointer(this as Pointer<Float>)[index];
+      case Double:
+        return DoublePointer(this as Pointer<Double>)[index];
+      case Char:
+        return AbiSpecificIntegerPointer(this as Pointer<Char>)[index];
+      case Short:
+        return AbiSpecificIntegerPointer(this as Pointer<Short>)[index];
+      case Int:
+        return AbiSpecificIntegerPointer(this as Pointer<Int>)[index];
+      case Long:
+        return AbiSpecificIntegerPointer(this as Pointer<Long>)[index];
+      case LongLong:
+        return AbiSpecificIntegerPointer(this as Pointer<LongLong>)[index];
+      case UnsignedChar:
+        return AbiSpecificIntegerPointer(this as Pointer<UnsignedChar>)[index];
+      case UnsignedShort:
+        return AbiSpecificIntegerPointer(this as Pointer<UnsignedShort>)[index];
+      case UnsignedInt:
+        return AbiSpecificIntegerPointer(this as Pointer<UnsignedInt>)[index];
+      case UnsignedLong:
+        return AbiSpecificIntegerPointer(this as Pointer<UnsignedLong>)[index];
+      case UnsignedLongLong:
+        return AbiSpecificIntegerPointer(
+          this as Pointer<UnsignedLongLong>,
+        )[index];
+      case SignedChar:
+        return AbiSpecificIntegerPointer(this as Pointer<SignedChar>)[index];
+      case IntPtr:
+        return AbiSpecificIntegerPointer(this as Pointer<IntPtr>)[index];
+      case UintPtr:
+        return AbiSpecificIntegerPointer(this as Pointer<UintPtr>)[index];
+      case Size:
+        return AbiSpecificIntegerPointer(this as Pointer<Size>)[index];
+      case WChar:
+        return AbiSpecificIntegerPointer(this as Pointer<WChar>)[index];
+      default:
+        throw UnsupportedError(
+          'Cannot create a SodiumPointer for $T. T must be a primitive type',
+        );
+    }
+  }
+
+  void operator []=(int index, num value) {
+    switch (T) {
+      case Int8:
+        Uint8Pointer(this as Pointer<Uint8>)[index] = value as int;
+        break;
+      case Int16:
+        Int16Pointer(this as Pointer<Int16>)[index] = value as int;
+        break;
+      case Int32:
+        Int32Pointer(this as Pointer<Int32>)[index] = value as int;
+        break;
+      case Int64:
+        Int64Pointer(this as Pointer<Int64>)[index] = value as int;
+        break;
+      case Uint8:
+        Uint8Pointer(this as Pointer<Uint8>)[index] = value as int;
+        break;
+      case Uint16:
+        Uint16Pointer(this as Pointer<Uint16>)[index] = value as int;
+        break;
+      case Uint32:
+        Uint32Pointer(this as Pointer<Uint32>)[index] = value as int;
+        break;
+      case Uint64:
+        Uint64Pointer(this as Pointer<Uint64>)[index] = value as int;
+        break;
+      case Float:
+        FloatPointer(this as Pointer<Float>)[index] = value as double;
+        break;
+      case Double:
+        DoublePointer(this as Pointer<Double>)[index] = value as double;
+        break;
+      case Char:
+        AbiSpecificIntegerPointer(this as Pointer<Char>)[index] = value as int;
+        break;
+      case Short:
+        AbiSpecificIntegerPointer(this as Pointer<Short>)[index] = value as int;
+        break;
+      case Int:
+        AbiSpecificIntegerPointer(this as Pointer<Int>)[index] = value as int;
+        break;
+      case Long:
+        AbiSpecificIntegerPointer(this as Pointer<Long>)[index] = value as int;
+        break;
+      case LongLong:
+        AbiSpecificIntegerPointer(this as Pointer<LongLong>)[index] =
+            value as int;
+        break;
+      case UnsignedChar:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedChar>)[index] =
+            value as int;
+        break;
+      case UnsignedShort:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedShort>)[index] =
+            value as int;
+        break;
+      case UnsignedInt:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedInt>)[index] =
+            value as int;
+        break;
+      case UnsignedLong:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedLong>)[index] =
+            value as int;
+        break;
+      case UnsignedLongLong:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedLongLong>)[index] =
+            value as int;
+        break;
+      case SignedChar:
+        AbiSpecificIntegerPointer(this as Pointer<SignedChar>)[index] =
+            value as int;
+        break;
+      case IntPtr:
+        AbiSpecificIntegerPointer(this as Pointer<IntPtr>)[index] =
+            value as int;
+        break;
+      case UintPtr:
+        AbiSpecificIntegerPointer(this as Pointer<UintPtr>)[index] =
+            value as int;
+        break;
+      case Size:
+        AbiSpecificIntegerPointer(this as Pointer<Size>)[index] = value as int;
+        break;
+      case WChar:
+        AbiSpecificIntegerPointer(this as Pointer<WChar>)[index] = value as int;
+        break;
       default:
         throw UnsupportedError(
           'Cannot create a SodiumPointer for $T. T must be a primitive type',

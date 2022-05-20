@@ -14,10 +14,13 @@ import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 
+/// @nodoc
 @internal
 class AeadFFI with AeadValidations, KeygenMixin implements Aead {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   AeadFFI(this.sodium);
 
   @override
@@ -49,9 +52,9 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? adPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? adPtr;
     try {
       dataPtr = SodiumPointer.alloc(
         sodium,
@@ -106,9 +109,9 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? adPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? adPtr;
     try {
       dataPtr = cipherText.toSodiumPointer(sodium);
       noncePtr = nonce.toSodiumPointer(
@@ -135,6 +138,7 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
         ),
       );
       SodiumException.checkSucceededInt(result);
+#
 
       return dataPtr.copyAsList(dataPtr.count - aBytes);
     } finally {

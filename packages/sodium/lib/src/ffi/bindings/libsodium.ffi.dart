@@ -19,22 +19,22 @@ class LibSodiumFFI {
           lookup)
       : _lookup = lookup;
 
-  ffi.Pointer<ffi.Int8> sodium_version_string() {
+  ffi.Pointer<ffi.Char> sodium_version_string() {
     return _sodium_version_string();
   }
 
   late final _sodium_version_stringPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'sodium_version_string');
   late final _sodium_version_string =
-      _sodium_version_stringPtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _sodium_version_stringPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int sodium_library_version_major() {
     return _sodium_library_version_major();
   }
 
   late final _sodium_library_version_majorPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_library_version_major');
   late final _sodium_library_version_major =
       _sodium_library_version_majorPtr.asFunction<int Function()>();
@@ -44,7 +44,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_library_version_minorPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_library_version_minor');
   late final _sodium_library_version_minor =
       _sodium_library_version_minorPtr.asFunction<int Function()>();
@@ -54,8 +54,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_library_minimalPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
-          'sodium_library_minimal');
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>('sodium_library_minimal');
   late final _sodium_library_minimal =
       _sodium_library_minimalPtr.asFunction<int Function()>();
 
@@ -64,7 +63,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_initPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>('sodium_init');
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>('sodium_init');
   late final _sodium_init = _sodium_initPtr.asFunction<int Function()>();
 
   int sodium_set_misuse_handler(
@@ -77,7 +76,7 @@ class LibSodiumFFI {
 
   late final _sodium_set_misuse_handlerPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
+              ffi.Int Function(
                   ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>>)>>(
       'sodium_set_misuse_handler');
   late final _sodium_set_misuse_handler =
@@ -97,7 +96,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_aes256gcm_is_availablePtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'crypto_aead_aes256gcm_is_available');
   late final _crypto_aead_aes256gcm_is_available =
       _crypto_aead_aes256gcm_is_availablePtr.asFunction<int Function()>();
@@ -107,7 +106,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_aes256gcm_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_aes256gcm_keybytes');
   late final _crypto_aead_aes256gcm_keybytes =
       _crypto_aead_aes256gcm_keybytesPtr.asFunction<int Function()>();
@@ -117,7 +116,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_aes256gcm_nsecbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_aes256gcm_nsecbytes');
   late final _crypto_aead_aes256gcm_nsecbytes =
       _crypto_aead_aes256gcm_nsecbytesPtr.asFunction<int Function()>();
@@ -127,7 +126,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_aes256gcm_npubbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_aes256gcm_npubbytes');
   late final _crypto_aead_aes256gcm_npubbytes =
       _crypto_aead_aes256gcm_npubbytesPtr.asFunction<int Function()>();
@@ -137,7 +136,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_aes256gcm_abytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_aes256gcm_abytes');
   late final _crypto_aead_aes256gcm_abytes =
       _crypto_aead_aes256gcm_abytesPtr.asFunction<int Function()>();
@@ -147,7 +146,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_aes256gcm_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_aes256gcm_messagebytes_max');
   late final _crypto_aead_aes256gcm_messagebytes_max =
       _crypto_aead_aes256gcm_messagebytes_maxPtr.asFunction<int Function()>();
@@ -157,21 +156,21 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_aes256gcm_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_aes256gcm_statebytes');
   late final _crypto_aead_aes256gcm_statebytes =
       _crypto_aead_aes256gcm_statebytesPtr.asFunction<int Function()>();
 
   int crypto_aead_aes256gcm_encrypt(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint64> clen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedLongLong> clen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_aes256gcm_encrypt(
       c,
@@ -188,39 +187,39 @@ class LibSodiumFFI {
 
   late final _crypto_aead_aes256gcm_encryptPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_aead_aes256gcm_encrypt');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_aead_aes256gcm_encrypt');
   late final _crypto_aead_aes256gcm_encrypt =
       _crypto_aead_aes256gcm_encryptPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_aes256gcm_decrypt(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint64> mlen_p,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_aes256gcm_decrypt(
       m,
@@ -237,40 +236,40 @@ class LibSodiumFFI {
 
   late final _crypto_aead_aes256gcm_decryptPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_aead_aes256gcm_decrypt');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_aead_aes256gcm_decrypt');
   late final _crypto_aead_aes256gcm_decrypt =
       _crypto_aead_aes256gcm_decryptPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_aes256gcm_encrypt_detached(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint64> maclen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedLongLong> maclen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_aes256gcm_encrypt_detached(
       c,
@@ -288,42 +287,42 @@ class LibSodiumFFI {
 
   late final _crypto_aead_aes256gcm_encrypt_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_aes256gcm_encrypt_detached');
   late final _crypto_aead_aes256gcm_encrypt_detached =
       _crypto_aead_aes256gcm_encrypt_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_aes256gcm_decrypt_detached(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_aes256gcm_decrypt_detached(
       m,
@@ -340,33 +339,33 @@ class LibSodiumFFI {
 
   late final _crypto_aead_aes256gcm_decrypt_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_aes256gcm_decrypt_detached');
   late final _crypto_aead_aes256gcm_decrypt_detached =
       _crypto_aead_aes256gcm_decrypt_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_aes256gcm_beforenm(
     ffi.Pointer<crypto_aead_aes256gcm_state> ctx_,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_aes256gcm_beforenm(
       ctx_,
@@ -375,23 +374,24 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_aes256gcm_beforenmPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_aead_aes256gcm_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_aead_aes256gcm_beforenm');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<crypto_aead_aes256gcm_state>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_aes256gcm_beforenm');
   late final _crypto_aead_aes256gcm_beforenm =
       _crypto_aead_aes256gcm_beforenmPtr.asFunction<
           int Function(ffi.Pointer<crypto_aead_aes256gcm_state>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_aes256gcm_encrypt_afternm(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint64> clen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedLongLong> clen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
     ffi.Pointer<crypto_aead_aes256gcm_state> ctx_,
   ) {
     return _crypto_aead_aes256gcm_encrypt_afternm(
@@ -409,39 +409,39 @@ class LibSodiumFFI {
 
   late final _crypto_aead_aes256gcm_encrypt_afternmPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
                   ffi.Pointer<crypto_aead_aes256gcm_state>)>>(
       'crypto_aead_aes256gcm_encrypt_afternm');
   late final _crypto_aead_aes256gcm_encrypt_afternm =
       _crypto_aead_aes256gcm_encrypt_afternmPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               ffi.Pointer<crypto_aead_aes256gcm_state>)>();
 
   int crypto_aead_aes256gcm_decrypt_afternm(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint64> mlen_p,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
+    ffi.Pointer<ffi.UnsignedChar> npub,
     ffi.Pointer<crypto_aead_aes256gcm_state> ctx_,
   ) {
     return _crypto_aead_aes256gcm_decrypt_afternm(
@@ -459,40 +459,40 @@ class LibSodiumFFI {
 
   late final _crypto_aead_aes256gcm_decrypt_afternmPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
                   ffi.Pointer<crypto_aead_aes256gcm_state>)>>(
       'crypto_aead_aes256gcm_decrypt_afternm');
   late final _crypto_aead_aes256gcm_decrypt_afternm =
       _crypto_aead_aes256gcm_decrypt_afternmPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               ffi.Pointer<crypto_aead_aes256gcm_state>)>();
 
   int crypto_aead_aes256gcm_encrypt_detached_afternm(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint64> maclen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedLongLong> maclen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
     ffi.Pointer<crypto_aead_aes256gcm_state> ctx_,
   ) {
     return _crypto_aead_aes256gcm_encrypt_detached_afternm(
@@ -511,41 +511,41 @@ class LibSodiumFFI {
 
   late final _crypto_aead_aes256gcm_encrypt_detached_afternmPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
                   ffi.Pointer<crypto_aead_aes256gcm_state>)>>(
       'crypto_aead_aes256gcm_encrypt_detached_afternm');
   late final _crypto_aead_aes256gcm_encrypt_detached_afternm =
       _crypto_aead_aes256gcm_encrypt_detached_afternmPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               ffi.Pointer<crypto_aead_aes256gcm_state>)>();
 
   int crypto_aead_aes256gcm_decrypt_detached_afternm(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
+    ffi.Pointer<ffi.UnsignedChar> npub,
     ffi.Pointer<crypto_aead_aes256gcm_state> ctx_,
   ) {
     return _crypto_aead_aes256gcm_decrypt_detached_afternm(
@@ -563,50 +563,50 @@ class LibSodiumFFI {
 
   late final _crypto_aead_aes256gcm_decrypt_detached_afternmPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
                   ffi.Pointer<crypto_aead_aes256gcm_state>)>>(
       'crypto_aead_aes256gcm_decrypt_detached_afternm');
   late final _crypto_aead_aes256gcm_decrypt_detached_afternm =
       _crypto_aead_aes256gcm_decrypt_detached_afternmPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               ffi.Pointer<crypto_aead_aes256gcm_state>)>();
 
   void crypto_aead_aes256gcm_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_aes256gcm_keygen(
       k,
     );
   }
 
-  late final _crypto_aead_aes256gcm_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_aead_aes256gcm_keygen');
+  late final _crypto_aead_aes256gcm_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_aes256gcm_keygen');
   late final _crypto_aead_aes256gcm_keygen = _crypto_aead_aes256gcm_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_chacha20poly1305_ietf_keybytes() {
     return _crypto_aead_chacha20poly1305_ietf_keybytes();
   }
 
   late final _crypto_aead_chacha20poly1305_ietf_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_ietf_keybytes');
   late final _crypto_aead_chacha20poly1305_ietf_keybytes =
       _crypto_aead_chacha20poly1305_ietf_keybytesPtr
@@ -617,7 +617,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_ietf_nsecbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_ietf_nsecbytes');
   late final _crypto_aead_chacha20poly1305_ietf_nsecbytes =
       _crypto_aead_chacha20poly1305_ietf_nsecbytesPtr
@@ -628,7 +628,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_ietf_npubbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_ietf_npubbytes');
   late final _crypto_aead_chacha20poly1305_ietf_npubbytes =
       _crypto_aead_chacha20poly1305_ietf_npubbytesPtr
@@ -639,7 +639,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_ietf_abytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_ietf_abytes');
   late final _crypto_aead_chacha20poly1305_ietf_abytes =
       _crypto_aead_chacha20poly1305_ietf_abytesPtr.asFunction<int Function()>();
@@ -649,22 +649,22 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_ietf_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_ietf_messagebytes_max');
   late final _crypto_aead_chacha20poly1305_ietf_messagebytes_max =
       _crypto_aead_chacha20poly1305_ietf_messagebytes_maxPtr
           .asFunction<int Function()>();
 
   int crypto_aead_chacha20poly1305_ietf_encrypt(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint64> clen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedLongLong> clen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_ietf_encrypt(
       c,
@@ -681,40 +681,40 @@ class LibSodiumFFI {
 
   late final _crypto_aead_chacha20poly1305_ietf_encryptPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_chacha20poly1305_ietf_encrypt');
   late final _crypto_aead_chacha20poly1305_ietf_encrypt =
       _crypto_aead_chacha20poly1305_ietf_encryptPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_chacha20poly1305_ietf_decrypt(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint64> mlen_p,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_ietf_decrypt(
       m,
@@ -731,41 +731,41 @@ class LibSodiumFFI {
 
   late final _crypto_aead_chacha20poly1305_ietf_decryptPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_chacha20poly1305_ietf_decrypt');
   late final _crypto_aead_chacha20poly1305_ietf_decrypt =
       _crypto_aead_chacha20poly1305_ietf_decryptPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_chacha20poly1305_ietf_encrypt_detached(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint64> maclen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedLongLong> maclen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_ietf_encrypt_detached(
       c,
@@ -783,42 +783,42 @@ class LibSodiumFFI {
 
   late final _crypto_aead_chacha20poly1305_ietf_encrypt_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_chacha20poly1305_ietf_encrypt_detached');
   late final _crypto_aead_chacha20poly1305_ietf_encrypt_detached =
       _crypto_aead_chacha20poly1305_ietf_encrypt_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_chacha20poly1305_ietf_decrypt_detached(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_ietf_decrypt_detached(
       m,
@@ -835,51 +835,51 @@ class LibSodiumFFI {
 
   late final _crypto_aead_chacha20poly1305_ietf_decrypt_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_chacha20poly1305_ietf_decrypt_detached');
   late final _crypto_aead_chacha20poly1305_ietf_decrypt_detached =
       _crypto_aead_chacha20poly1305_ietf_decrypt_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_aead_chacha20poly1305_ietf_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_ietf_keygen(
       k,
     );
   }
 
-  late final _crypto_aead_chacha20poly1305_ietf_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_aead_chacha20poly1305_ietf_keygen');
+  late final _crypto_aead_chacha20poly1305_ietf_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_chacha20poly1305_ietf_keygen');
   late final _crypto_aead_chacha20poly1305_ietf_keygen =
       _crypto_aead_chacha20poly1305_ietf_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_chacha20poly1305_keybytes() {
     return _crypto_aead_chacha20poly1305_keybytes();
   }
 
   late final _crypto_aead_chacha20poly1305_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_keybytes');
   late final _crypto_aead_chacha20poly1305_keybytes =
       _crypto_aead_chacha20poly1305_keybytesPtr.asFunction<int Function()>();
@@ -889,7 +889,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_nsecbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_nsecbytes');
   late final _crypto_aead_chacha20poly1305_nsecbytes =
       _crypto_aead_chacha20poly1305_nsecbytesPtr.asFunction<int Function()>();
@@ -899,7 +899,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_npubbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_npubbytes');
   late final _crypto_aead_chacha20poly1305_npubbytes =
       _crypto_aead_chacha20poly1305_npubbytesPtr.asFunction<int Function()>();
@@ -909,7 +909,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_abytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_abytes');
   late final _crypto_aead_chacha20poly1305_abytes =
       _crypto_aead_chacha20poly1305_abytesPtr.asFunction<int Function()>();
@@ -919,22 +919,22 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_chacha20poly1305_messagebytes_max');
   late final _crypto_aead_chacha20poly1305_messagebytes_max =
       _crypto_aead_chacha20poly1305_messagebytes_maxPtr
           .asFunction<int Function()>();
 
   int crypto_aead_chacha20poly1305_encrypt(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint64> clen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedLongLong> clen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_encrypt(
       c,
@@ -950,40 +950,41 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_encryptPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_aead_chacha20poly1305_encrypt');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_chacha20poly1305_encrypt');
   late final _crypto_aead_chacha20poly1305_encrypt =
       _crypto_aead_chacha20poly1305_encryptPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_chacha20poly1305_decrypt(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint64> mlen_p,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_decrypt(
       m,
@@ -999,41 +1000,42 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_chacha20poly1305_decryptPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_aead_chacha20poly1305_decrypt');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_chacha20poly1305_decrypt');
   late final _crypto_aead_chacha20poly1305_decrypt =
       _crypto_aead_chacha20poly1305_decryptPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_chacha20poly1305_encrypt_detached(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint64> maclen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedLongLong> maclen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_encrypt_detached(
       c,
@@ -1051,42 +1053,42 @@ class LibSodiumFFI {
 
   late final _crypto_aead_chacha20poly1305_encrypt_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_chacha20poly1305_encrypt_detached');
   late final _crypto_aead_chacha20poly1305_encrypt_detached =
       _crypto_aead_chacha20poly1305_encrypt_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_chacha20poly1305_decrypt_detached(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_decrypt_detached(
       m,
@@ -1103,51 +1105,51 @@ class LibSodiumFFI {
 
   late final _crypto_aead_chacha20poly1305_decrypt_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_chacha20poly1305_decrypt_detached');
   late final _crypto_aead_chacha20poly1305_decrypt_detached =
       _crypto_aead_chacha20poly1305_decrypt_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_aead_chacha20poly1305_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_chacha20poly1305_keygen(
       k,
     );
   }
 
-  late final _crypto_aead_chacha20poly1305_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_aead_chacha20poly1305_keygen');
+  late final _crypto_aead_chacha20poly1305_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_chacha20poly1305_keygen');
   late final _crypto_aead_chacha20poly1305_keygen =
       _crypto_aead_chacha20poly1305_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_xchacha20poly1305_ietf_keybytes() {
     return _crypto_aead_xchacha20poly1305_ietf_keybytes();
   }
 
   late final _crypto_aead_xchacha20poly1305_ietf_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_xchacha20poly1305_ietf_keybytes');
   late final _crypto_aead_xchacha20poly1305_ietf_keybytes =
       _crypto_aead_xchacha20poly1305_ietf_keybytesPtr
@@ -1158,7 +1160,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_xchacha20poly1305_ietf_nsecbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_xchacha20poly1305_ietf_nsecbytes');
   late final _crypto_aead_xchacha20poly1305_ietf_nsecbytes =
       _crypto_aead_xchacha20poly1305_ietf_nsecbytesPtr
@@ -1169,7 +1171,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_xchacha20poly1305_ietf_npubbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_xchacha20poly1305_ietf_npubbytes');
   late final _crypto_aead_xchacha20poly1305_ietf_npubbytes =
       _crypto_aead_xchacha20poly1305_ietf_npubbytesPtr
@@ -1180,7 +1182,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_xchacha20poly1305_ietf_abytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_xchacha20poly1305_ietf_abytes');
   late final _crypto_aead_xchacha20poly1305_ietf_abytes =
       _crypto_aead_xchacha20poly1305_ietf_abytesPtr
@@ -1191,22 +1193,22 @@ class LibSodiumFFI {
   }
 
   late final _crypto_aead_xchacha20poly1305_ietf_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_aead_xchacha20poly1305_ietf_messagebytes_max');
   late final _crypto_aead_xchacha20poly1305_ietf_messagebytes_max =
       _crypto_aead_xchacha20poly1305_ietf_messagebytes_maxPtr
           .asFunction<int Function()>();
 
   int crypto_aead_xchacha20poly1305_ietf_encrypt(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint64> clen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedLongLong> clen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_xchacha20poly1305_ietf_encrypt(
       c,
@@ -1223,40 +1225,40 @@ class LibSodiumFFI {
 
   late final _crypto_aead_xchacha20poly1305_ietf_encryptPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_xchacha20poly1305_ietf_encrypt');
   late final _crypto_aead_xchacha20poly1305_ietf_encrypt =
       _crypto_aead_xchacha20poly1305_ietf_encryptPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_xchacha20poly1305_ietf_decrypt(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint64> mlen_p,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_xchacha20poly1305_ietf_decrypt(
       m,
@@ -1273,41 +1275,41 @@ class LibSodiumFFI {
 
   late final _crypto_aead_xchacha20poly1305_ietf_decryptPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_xchacha20poly1305_ietf_decrypt');
   late final _crypto_aead_xchacha20poly1305_ietf_decrypt =
       _crypto_aead_xchacha20poly1305_ietf_decryptPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint64> maclen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedLongLong> maclen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
       c,
@@ -1325,42 +1327,42 @@ class LibSodiumFFI {
 
   late final _crypto_aead_xchacha20poly1305_ietf_encrypt_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint64>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_xchacha20poly1305_ietf_encrypt_detached');
   late final _crypto_aead_xchacha20poly1305_ietf_encrypt_detached =
       _crypto_aead_xchacha20poly1305_ietf_encrypt_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> nsec,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
-    ffi.Pointer<ffi.Uint8> npub,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
       m,
@@ -1377,51 +1379,51 @@ class LibSodiumFFI {
 
   late final _crypto_aead_xchacha20poly1305_ietf_decrypt_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_aead_xchacha20poly1305_ietf_decrypt_detached');
   late final _crypto_aead_xchacha20poly1305_ietf_decrypt_detached =
       _crypto_aead_xchacha20poly1305_ietf_decrypt_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_aead_xchacha20poly1305_ietf_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_aead_xchacha20poly1305_ietf_keygen(
       k,
     );
   }
 
-  late final _crypto_aead_xchacha20poly1305_ietf_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_aead_xchacha20poly1305_ietf_keygen');
+  late final _crypto_aead_xchacha20poly1305_ietf_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_xchacha20poly1305_ietf_keygen');
   late final _crypto_aead_xchacha20poly1305_ietf_keygen =
       _crypto_aead_xchacha20poly1305_ietf_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_hash_sha512_statebytes() {
     return _crypto_hash_sha512_statebytes();
   }
 
   late final _crypto_hash_sha512_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_hash_sha512_statebytes');
   late final _crypto_hash_sha512_statebytes =
       _crypto_hash_sha512_statebytesPtr.asFunction<int Function()>();
@@ -1431,14 +1433,14 @@ class LibSodiumFFI {
   }
 
   late final _crypto_hash_sha512_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_hash_sha512_bytes');
   late final _crypto_hash_sha512_bytes =
       _crypto_hash_sha512_bytesPtr.asFunction<int Function()>();
 
   int crypto_hash_sha512(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_hash_sha512(
@@ -1450,10 +1452,13 @@ class LibSodiumFFI {
 
   late final _crypto_hash_sha512Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_hash_sha512');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_hash_sha512');
   late final _crypto_hash_sha512 = _crypto_hash_sha512Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_hash_sha512_init(
     ffi.Pointer<crypto_hash_sha512_state> state,
@@ -1465,14 +1470,14 @@ class LibSodiumFFI {
 
   late final _crypto_hash_sha512_initPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<crypto_hash_sha512_state>)>>(
+              ffi.Int Function(ffi.Pointer<crypto_hash_sha512_state>)>>(
       'crypto_hash_sha512_init');
   late final _crypto_hash_sha512_init = _crypto_hash_sha512_initPtr
       .asFunction<int Function(ffi.Pointer<crypto_hash_sha512_state>)>();
 
   int crypto_hash_sha512_update(
     ffi.Pointer<crypto_hash_sha512_state> state,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_hash_sha512_update(
@@ -1484,18 +1489,18 @@ class LibSodiumFFI {
 
   late final _crypto_hash_sha512_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_hash_sha512_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_hash_sha512_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_hash_sha512_update');
   late final _crypto_hash_sha512_update =
       _crypto_hash_sha512_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_hash_sha512_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_hash_sha512_final(
     ffi.Pointer<crypto_hash_sha512_state> state,
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
   ) {
     return _crypto_hash_sha512_final(
       state,
@@ -1505,19 +1510,19 @@ class LibSodiumFFI {
 
   late final _crypto_hash_sha512_finalPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_hash_sha512_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_hash_sha512_final');
+          ffi.Int Function(ffi.Pointer<crypto_hash_sha512_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_hash_sha512_final');
   late final _crypto_hash_sha512_final =
       _crypto_hash_sha512_finalPtr.asFunction<
-          int Function(
-              ffi.Pointer<crypto_hash_sha512_state>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<crypto_hash_sha512_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_hmacsha512_bytes() {
     return _crypto_auth_hmacsha512_bytes();
   }
 
   late final _crypto_auth_hmacsha512_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_auth_hmacsha512_bytes');
   late final _crypto_auth_hmacsha512_bytes =
       _crypto_auth_hmacsha512_bytesPtr.asFunction<int Function()>();
@@ -1527,16 +1532,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_auth_hmacsha512_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_auth_hmacsha512_keybytes');
   late final _crypto_auth_hmacsha512_keybytes =
       _crypto_auth_hmacsha512_keybytesPtr.asFunction<int Function()>();
 
   int crypto_auth_hmacsha512(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_hmacsha512(
       out,
@@ -1548,17 +1553,20 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha512Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64, ffi.Pointer<ffi.Uint8>)>>('crypto_auth_hmacsha512');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_auth_hmacsha512');
   late final _crypto_auth_hmacsha512 = _crypto_auth_hmacsha512Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_hmacsha512_verify(
-    ffi.Pointer<ffi.Uint8> h,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> h,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_hmacsha512_verify(
       h,
@@ -1570,29 +1578,32 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha512_verifyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_auth_hmacsha512_verify');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_auth_hmacsha512_verify');
   late final _crypto_auth_hmacsha512_verify =
       _crypto_auth_hmacsha512_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_hmacsha512_statebytes() {
     return _crypto_auth_hmacsha512_statebytes();
   }
 
   late final _crypto_auth_hmacsha512_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_auth_hmacsha512_statebytes');
   late final _crypto_auth_hmacsha512_statebytes =
       _crypto_auth_hmacsha512_statebytesPtr.asFunction<int Function()>();
 
   int crypto_auth_hmacsha512_init(
     ffi.Pointer<crypto_auth_hmacsha512_state> state,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
   ) {
     return _crypto_auth_hmacsha512_init(
@@ -1604,16 +1615,18 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha512_initPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_auth_hmacsha512_state>,
-              ffi.Pointer<ffi.Uint8>, size_t)>>('crypto_auth_hmacsha512_init');
+          ffi.Int Function(
+              ffi.Pointer<crypto_auth_hmacsha512_state>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_auth_hmacsha512_init');
   late final _crypto_auth_hmacsha512_init =
       _crypto_auth_hmacsha512_initPtr.asFunction<
           int Function(ffi.Pointer<crypto_auth_hmacsha512_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_auth_hmacsha512_update(
     ffi.Pointer<crypto_auth_hmacsha512_state> state,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_auth_hmacsha512_update(
@@ -1625,18 +1638,18 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha512_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_auth_hmacsha512_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_auth_hmacsha512_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_auth_hmacsha512_update');
   late final _crypto_auth_hmacsha512_update =
       _crypto_auth_hmacsha512_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_auth_hmacsha512_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_auth_hmacsha512_final(
     ffi.Pointer<crypto_auth_hmacsha512_state> state,
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
   ) {
     return _crypto_auth_hmacsha512_final(
       state,
@@ -1646,33 +1659,33 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha512_finalPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_auth_hmacsha512_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_auth_hmacsha512_final');
+          ffi.Int Function(ffi.Pointer<crypto_auth_hmacsha512_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_auth_hmacsha512_final');
   late final _crypto_auth_hmacsha512_final =
       _crypto_auth_hmacsha512_finalPtr.asFunction<
           int Function(ffi.Pointer<crypto_auth_hmacsha512_state>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_auth_hmacsha512_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_hmacsha512_keygen(
       k,
     );
   }
 
-  late final _crypto_auth_hmacsha512_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_auth_hmacsha512_keygen');
+  late final _crypto_auth_hmacsha512_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_auth_hmacsha512_keygen');
   late final _crypto_auth_hmacsha512_keygen = _crypto_auth_hmacsha512_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_hmacsha512256_bytes() {
     return _crypto_auth_hmacsha512256_bytes();
   }
 
   late final _crypto_auth_hmacsha512256_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_auth_hmacsha512256_bytes');
   late final _crypto_auth_hmacsha512256_bytes =
       _crypto_auth_hmacsha512256_bytesPtr.asFunction<int Function()>();
@@ -1682,16 +1695,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_auth_hmacsha512256_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_auth_hmacsha512256_keybytes');
   late final _crypto_auth_hmacsha512256_keybytes =
       _crypto_auth_hmacsha512256_keybytesPtr.asFunction<int Function()>();
 
   int crypto_auth_hmacsha512256(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_hmacsha512256(
       out,
@@ -1703,21 +1716,24 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha512256Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_auth_hmacsha512256');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_auth_hmacsha512256');
   late final _crypto_auth_hmacsha512256 =
       _crypto_auth_hmacsha512256Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_hmacsha512256_verify(
-    ffi.Pointer<ffi.Uint8> h,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> h,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_hmacsha512256_verify(
       h,
@@ -1728,30 +1744,34 @@ class LibSodiumFFI {
   }
 
   late final _crypto_auth_hmacsha512256_verifyPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_auth_hmacsha512256_verify');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_auth_hmacsha512256_verify');
   late final _crypto_auth_hmacsha512256_verify =
       _crypto_auth_hmacsha512256_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_hmacsha512256_statebytes() {
     return _crypto_auth_hmacsha512256_statebytes();
   }
 
   late final _crypto_auth_hmacsha512256_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_auth_hmacsha512256_statebytes');
   late final _crypto_auth_hmacsha512256_statebytes =
       _crypto_auth_hmacsha512256_statebytesPtr.asFunction<int Function()>();
 
   int crypto_auth_hmacsha512256_init(
     ffi.Pointer<crypto_auth_hmacsha512256_state> state,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
   ) {
     return _crypto_auth_hmacsha512256_init(
@@ -1763,18 +1783,18 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha512256_initPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_auth_hmacsha512256_state>,
-              ffi.Pointer<ffi.Uint8>,
-              size_t)>>('crypto_auth_hmacsha512256_init');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_auth_hmacsha512256_init');
   late final _crypto_auth_hmacsha512256_init =
       _crypto_auth_hmacsha512256_initPtr.asFunction<
           int Function(ffi.Pointer<crypto_auth_hmacsha512256_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_auth_hmacsha512256_update(
     ffi.Pointer<crypto_auth_hmacsha512256_state> state,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_auth_hmacsha512256_update(
@@ -1786,18 +1806,18 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha512256_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_auth_hmacsha512256_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_auth_hmacsha512256_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_auth_hmacsha512256_update');
   late final _crypto_auth_hmacsha512256_update =
       _crypto_auth_hmacsha512256_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_auth_hmacsha512256_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_auth_hmacsha512256_final(
     ffi.Pointer<crypto_auth_hmacsha512256_state> state,
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
   ) {
     return _crypto_auth_hmacsha512256_final(
       state,
@@ -1806,35 +1826,36 @@ class LibSodiumFFI {
   }
 
   late final _crypto_auth_hmacsha512256_finalPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_auth_hmacsha512256_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_auth_hmacsha512256_final');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<crypto_auth_hmacsha512256_state>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_auth_hmacsha512256_final');
   late final _crypto_auth_hmacsha512256_final =
       _crypto_auth_hmacsha512256_finalPtr.asFunction<
           int Function(ffi.Pointer<crypto_auth_hmacsha512256_state>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_auth_hmacsha512256_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_hmacsha512256_keygen(
       k,
     );
   }
 
-  late final _crypto_auth_hmacsha512256_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_auth_hmacsha512256_keygen');
+  late final _crypto_auth_hmacsha512256_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_auth_hmacsha512256_keygen');
   late final _crypto_auth_hmacsha512256_keygen =
       _crypto_auth_hmacsha512256_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_bytes() {
     return _crypto_auth_bytes();
   }
 
   late final _crypto_auth_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_auth_bytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_auth_bytes');
   late final _crypto_auth_bytes =
       _crypto_auth_bytesPtr.asFunction<int Function()>();
 
@@ -1843,25 +1864,25 @@ class LibSodiumFFI {
   }
 
   late final _crypto_auth_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_auth_keybytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_auth_keybytes');
   late final _crypto_auth_keybytes =
       _crypto_auth_keybytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_auth_primitive() {
+  ffi.Pointer<ffi.Char> crypto_auth_primitive() {
     return _crypto_auth_primitive();
   }
 
   late final _crypto_auth_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_auth_primitive');
   late final _crypto_auth_primitive =
-      _crypto_auth_primitivePtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _crypto_auth_primitivePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_auth(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth(
       out,
@@ -1873,17 +1894,20 @@ class LibSodiumFFI {
 
   late final _crypto_authPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64, ffi.Pointer<ffi.Uint8>)>>('crypto_auth');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_auth');
   late final _crypto_auth = _crypto_authPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_verify(
-    ffi.Pointer<ffi.Uint8> h,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> h,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_verify(
       h,
@@ -1895,32 +1919,35 @@ class LibSodiumFFI {
 
   late final _crypto_auth_verifyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64, ffi.Pointer<ffi.Uint8>)>>('crypto_auth_verify');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_auth_verify');
   late final _crypto_auth_verify = _crypto_auth_verifyPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_auth_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_keygen(
       k,
     );
   }
 
-  late final _crypto_auth_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_auth_keygen');
+  late final _crypto_auth_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_auth_keygen');
   late final _crypto_auth_keygen = _crypto_auth_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_hash_sha256_statebytes() {
     return _crypto_hash_sha256_statebytes();
   }
 
   late final _crypto_hash_sha256_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_hash_sha256_statebytes');
   late final _crypto_hash_sha256_statebytes =
       _crypto_hash_sha256_statebytesPtr.asFunction<int Function()>();
@@ -1930,14 +1957,14 @@ class LibSodiumFFI {
   }
 
   late final _crypto_hash_sha256_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_hash_sha256_bytes');
   late final _crypto_hash_sha256_bytes =
       _crypto_hash_sha256_bytesPtr.asFunction<int Function()>();
 
   int crypto_hash_sha256(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_hash_sha256(
@@ -1949,10 +1976,13 @@ class LibSodiumFFI {
 
   late final _crypto_hash_sha256Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_hash_sha256');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_hash_sha256');
   late final _crypto_hash_sha256 = _crypto_hash_sha256Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_hash_sha256_init(
     ffi.Pointer<crypto_hash_sha256_state> state,
@@ -1964,14 +1994,14 @@ class LibSodiumFFI {
 
   late final _crypto_hash_sha256_initPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<crypto_hash_sha256_state>)>>(
+              ffi.Int Function(ffi.Pointer<crypto_hash_sha256_state>)>>(
       'crypto_hash_sha256_init');
   late final _crypto_hash_sha256_init = _crypto_hash_sha256_initPtr
       .asFunction<int Function(ffi.Pointer<crypto_hash_sha256_state>)>();
 
   int crypto_hash_sha256_update(
     ffi.Pointer<crypto_hash_sha256_state> state,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_hash_sha256_update(
@@ -1983,18 +2013,18 @@ class LibSodiumFFI {
 
   late final _crypto_hash_sha256_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_hash_sha256_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_hash_sha256_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_hash_sha256_update');
   late final _crypto_hash_sha256_update =
       _crypto_hash_sha256_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_hash_sha256_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_hash_sha256_final(
     ffi.Pointer<crypto_hash_sha256_state> state,
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
   ) {
     return _crypto_hash_sha256_final(
       state,
@@ -2004,19 +2034,19 @@ class LibSodiumFFI {
 
   late final _crypto_hash_sha256_finalPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_hash_sha256_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_hash_sha256_final');
+          ffi.Int Function(ffi.Pointer<crypto_hash_sha256_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_hash_sha256_final');
   late final _crypto_hash_sha256_final =
       _crypto_hash_sha256_finalPtr.asFunction<
-          int Function(
-              ffi.Pointer<crypto_hash_sha256_state>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<crypto_hash_sha256_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_hmacsha256_bytes() {
     return _crypto_auth_hmacsha256_bytes();
   }
 
   late final _crypto_auth_hmacsha256_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_auth_hmacsha256_bytes');
   late final _crypto_auth_hmacsha256_bytes =
       _crypto_auth_hmacsha256_bytesPtr.asFunction<int Function()>();
@@ -2026,16 +2056,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_auth_hmacsha256_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_auth_hmacsha256_keybytes');
   late final _crypto_auth_hmacsha256_keybytes =
       _crypto_auth_hmacsha256_keybytesPtr.asFunction<int Function()>();
 
   int crypto_auth_hmacsha256(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_hmacsha256(
       out,
@@ -2047,17 +2077,20 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha256Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64, ffi.Pointer<ffi.Uint8>)>>('crypto_auth_hmacsha256');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_auth_hmacsha256');
   late final _crypto_auth_hmacsha256 = _crypto_auth_hmacsha256Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_hmacsha256_verify(
-    ffi.Pointer<ffi.Uint8> h,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> h,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_hmacsha256_verify(
       h,
@@ -2069,29 +2102,32 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha256_verifyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_auth_hmacsha256_verify');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_auth_hmacsha256_verify');
   late final _crypto_auth_hmacsha256_verify =
       _crypto_auth_hmacsha256_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_auth_hmacsha256_statebytes() {
     return _crypto_auth_hmacsha256_statebytes();
   }
 
   late final _crypto_auth_hmacsha256_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_auth_hmacsha256_statebytes');
   late final _crypto_auth_hmacsha256_statebytes =
       _crypto_auth_hmacsha256_statebytesPtr.asFunction<int Function()>();
 
   int crypto_auth_hmacsha256_init(
     ffi.Pointer<crypto_auth_hmacsha256_state> state,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
   ) {
     return _crypto_auth_hmacsha256_init(
@@ -2103,16 +2139,18 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha256_initPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_auth_hmacsha256_state>,
-              ffi.Pointer<ffi.Uint8>, size_t)>>('crypto_auth_hmacsha256_init');
+          ffi.Int Function(
+              ffi.Pointer<crypto_auth_hmacsha256_state>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_auth_hmacsha256_init');
   late final _crypto_auth_hmacsha256_init =
       _crypto_auth_hmacsha256_initPtr.asFunction<
           int Function(ffi.Pointer<crypto_auth_hmacsha256_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_auth_hmacsha256_update(
     ffi.Pointer<crypto_auth_hmacsha256_state> state,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_auth_hmacsha256_update(
@@ -2124,18 +2162,18 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha256_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_auth_hmacsha256_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_auth_hmacsha256_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_auth_hmacsha256_update');
   late final _crypto_auth_hmacsha256_update =
       _crypto_auth_hmacsha256_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_auth_hmacsha256_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_auth_hmacsha256_final(
     ffi.Pointer<crypto_auth_hmacsha256_state> state,
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
   ) {
     return _crypto_auth_hmacsha256_final(
       state,
@@ -2145,33 +2183,33 @@ class LibSodiumFFI {
 
   late final _crypto_auth_hmacsha256_finalPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_auth_hmacsha256_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_auth_hmacsha256_final');
+          ffi.Int Function(ffi.Pointer<crypto_auth_hmacsha256_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_auth_hmacsha256_final');
   late final _crypto_auth_hmacsha256_final =
       _crypto_auth_hmacsha256_finalPtr.asFunction<
           int Function(ffi.Pointer<crypto_auth_hmacsha256_state>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_auth_hmacsha256_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_auth_hmacsha256_keygen(
       k,
     );
   }
 
-  late final _crypto_auth_hmacsha256_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_auth_hmacsha256_keygen');
+  late final _crypto_auth_hmacsha256_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_auth_hmacsha256_keygen');
   late final _crypto_auth_hmacsha256_keygen = _crypto_auth_hmacsha256_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_xsalsa20_keybytes() {
     return _crypto_stream_xsalsa20_keybytes();
   }
 
   late final _crypto_stream_xsalsa20_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_xsalsa20_keybytes');
   late final _crypto_stream_xsalsa20_keybytes =
       _crypto_stream_xsalsa20_keybytesPtr.asFunction<int Function()>();
@@ -2181,7 +2219,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_xsalsa20_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_xsalsa20_noncebytes');
   late final _crypto_stream_xsalsa20_noncebytes =
       _crypto_stream_xsalsa20_noncebytesPtr.asFunction<int Function()>();
@@ -2191,16 +2229,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_xsalsa20_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_xsalsa20_messagebytes_max');
   late final _crypto_stream_xsalsa20_messagebytes_max =
       _crypto_stream_xsalsa20_messagebytes_maxPtr.asFunction<int Function()>();
 
   int crypto_stream_xsalsa20(
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_xsalsa20(
       c,
@@ -2212,21 +2250,21 @@ class LibSodiumFFI {
 
   late final _crypto_stream_xsalsa20Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_xsalsa20');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_xsalsa20');
   late final _crypto_stream_xsalsa20 = _crypto_stream_xsalsa20Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_xsalsa20_xor(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_xsalsa20_xor(
       c,
@@ -2239,24 +2277,28 @@ class LibSodiumFFI {
 
   late final _crypto_stream_xsalsa20_xorPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_xsalsa20_xor');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_xsalsa20_xor');
   late final _crypto_stream_xsalsa20_xor =
       _crypto_stream_xsalsa20_xorPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_xsalsa20_xor_ic(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> n,
     int ic,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_xsalsa20_xor_ic(
       c,
@@ -2270,38 +2312,43 @@ class LibSodiumFFI {
 
   late final _crypto_stream_xsalsa20_xor_icPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
               ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_xsalsa20_xor_ic');
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_xsalsa20_xor_ic');
   late final _crypto_stream_xsalsa20_xor_ic =
       _crypto_stream_xsalsa20_xor_icPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_stream_xsalsa20_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_xsalsa20_keygen(
       k,
     );
   }
 
-  late final _crypto_stream_xsalsa20_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_stream_xsalsa20_keygen');
+  late final _crypto_stream_xsalsa20_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_xsalsa20_keygen');
   late final _crypto_stream_xsalsa20_keygen = _crypto_stream_xsalsa20_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xsalsa20poly1305_seedbytes() {
     return _crypto_box_curve25519xsalsa20poly1305_seedbytes();
   }
 
   late final _crypto_box_curve25519xsalsa20poly1305_seedbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xsalsa20poly1305_seedbytes');
   late final _crypto_box_curve25519xsalsa20poly1305_seedbytes =
       _crypto_box_curve25519xsalsa20poly1305_seedbytesPtr
@@ -2312,7 +2359,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xsalsa20poly1305_publickeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xsalsa20poly1305_publickeybytes');
   late final _crypto_box_curve25519xsalsa20poly1305_publickeybytes =
       _crypto_box_curve25519xsalsa20poly1305_publickeybytesPtr
@@ -2323,7 +2370,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xsalsa20poly1305_secretkeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xsalsa20poly1305_secretkeybytes');
   late final _crypto_box_curve25519xsalsa20poly1305_secretkeybytes =
       _crypto_box_curve25519xsalsa20poly1305_secretkeybytesPtr
@@ -2334,7 +2381,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xsalsa20poly1305_beforenmbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xsalsa20poly1305_beforenmbytes');
   late final _crypto_box_curve25519xsalsa20poly1305_beforenmbytes =
       _crypto_box_curve25519xsalsa20poly1305_beforenmbytesPtr
@@ -2345,7 +2392,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xsalsa20poly1305_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xsalsa20poly1305_noncebytes');
   late final _crypto_box_curve25519xsalsa20poly1305_noncebytes =
       _crypto_box_curve25519xsalsa20poly1305_noncebytesPtr
@@ -2356,7 +2403,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xsalsa20poly1305_macbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xsalsa20poly1305_macbytes');
   late final _crypto_box_curve25519xsalsa20poly1305_macbytes =
       _crypto_box_curve25519xsalsa20poly1305_macbytesPtr
@@ -2367,16 +2414,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xsalsa20poly1305_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xsalsa20poly1305_messagebytes_max');
   late final _crypto_box_curve25519xsalsa20poly1305_messagebytes_max =
       _crypto_box_curve25519xsalsa20poly1305_messagebytes_maxPtr
           .asFunction<int Function()>();
 
   int crypto_box_curve25519xsalsa20poly1305_seed_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
-    ffi.Pointer<ffi.Uint8> seed,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
+    ffi.Pointer<ffi.UnsignedChar> seed,
   ) {
     return _crypto_box_curve25519xsalsa20poly1305_seed_keypair(
       pk,
@@ -2387,17 +2434,19 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xsalsa20poly1305_seed_keypairPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xsalsa20poly1305_seed_keypair');
   late final _crypto_box_curve25519xsalsa20poly1305_seed_keypair =
       _crypto_box_curve25519xsalsa20poly1305_seed_keypairPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xsalsa20poly1305_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xsalsa20poly1305_keypair(
       pk,
@@ -2407,17 +2456,18 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xsalsa20poly1305_keypairPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xsalsa20poly1305_keypair');
   late final _crypto_box_curve25519xsalsa20poly1305_keypair =
       _crypto_box_curve25519xsalsa20poly1305_keypairPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xsalsa20poly1305_beforenm(
-    ffi.Pointer<ffi.Uint8> k,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> k,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xsalsa20poly1305_beforenm(
       k,
@@ -2428,20 +2478,22 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xsalsa20poly1305_beforenmPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xsalsa20poly1305_beforenm');
   late final _crypto_box_curve25519xsalsa20poly1305_beforenm =
       _crypto_box_curve25519xsalsa20poly1305_beforenmPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xsalsa20poly1305_boxzerobytes() {
     return _crypto_box_curve25519xsalsa20poly1305_boxzerobytes();
   }
 
   late final _crypto_box_curve25519xsalsa20poly1305_boxzerobytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xsalsa20poly1305_boxzerobytes');
   late final _crypto_box_curve25519xsalsa20poly1305_boxzerobytes =
       _crypto_box_curve25519xsalsa20poly1305_boxzerobytesPtr
@@ -2452,19 +2504,19 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xsalsa20poly1305_zerobytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xsalsa20poly1305_zerobytes');
   late final _crypto_box_curve25519xsalsa20poly1305_zerobytes =
       _crypto_box_curve25519xsalsa20poly1305_zerobytesPtr
           .asFunction<int Function()>();
 
   int crypto_box_curve25519xsalsa20poly1305(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xsalsa20poly1305(
       c,
@@ -2478,31 +2530,31 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xsalsa20poly1305Ptr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xsalsa20poly1305');
   late final _crypto_box_curve25519xsalsa20poly1305 =
       _crypto_box_curve25519xsalsa20poly1305Ptr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xsalsa20poly1305_open(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xsalsa20poly1305_open(
       m,
@@ -2516,30 +2568,30 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xsalsa20poly1305_openPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xsalsa20poly1305_open');
   late final _crypto_box_curve25519xsalsa20poly1305_open =
       _crypto_box_curve25519xsalsa20poly1305_openPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xsalsa20poly1305_afternm(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_curve25519xsalsa20poly1305_afternm(
       c,
@@ -2552,20 +2604,28 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xsalsa20poly1305_afternmPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xsalsa20poly1305_afternm');
   late final _crypto_box_curve25519xsalsa20poly1305_afternm =
       _crypto_box_curve25519xsalsa20poly1305_afternmPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xsalsa20poly1305_open_afternm(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_curve25519xsalsa20poly1305_open_afternm(
       m,
@@ -2578,20 +2638,28 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xsalsa20poly1305_open_afternmPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xsalsa20poly1305_open_afternm');
   late final _crypto_box_curve25519xsalsa20poly1305_open_afternm =
       _crypto_box_curve25519xsalsa20poly1305_open_afternmPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_seedbytes() {
     return _crypto_box_seedbytes();
   }
 
   late final _crypto_box_seedbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_box_seedbytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_box_seedbytes');
   late final _crypto_box_seedbytes =
       _crypto_box_seedbytesPtr.asFunction<int Function()>();
 
@@ -2600,7 +2668,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_publickeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_publickeybytes');
   late final _crypto_box_publickeybytes =
       _crypto_box_publickeybytesPtr.asFunction<int Function()>();
@@ -2610,7 +2678,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_secretkeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_secretkeybytes');
   late final _crypto_box_secretkeybytes =
       _crypto_box_secretkeybytesPtr.asFunction<int Function()>();
@@ -2620,7 +2688,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_box_noncebytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_box_noncebytes');
   late final _crypto_box_noncebytes =
       _crypto_box_noncebytesPtr.asFunction<int Function()>();
 
@@ -2629,7 +2697,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_macbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_box_macbytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_box_macbytes');
   late final _crypto_box_macbytes =
       _crypto_box_macbytesPtr.asFunction<int Function()>();
 
@@ -2638,25 +2706,25 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_messagebytes_max');
   late final _crypto_box_messagebytes_max =
       _crypto_box_messagebytes_maxPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_box_primitive() {
+  ffi.Pointer<ffi.Char> crypto_box_primitive() {
     return _crypto_box_primitive();
   }
 
   late final _crypto_box_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_box_primitive');
   late final _crypto_box_primitive =
-      _crypto_box_primitivePtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _crypto_box_primitivePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_box_seed_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
-    ffi.Pointer<ffi.Uint8> seed,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
+    ffi.Pointer<ffi.UnsignedChar> seed,
   ) {
     return _crypto_box_seed_keypair(
       pk,
@@ -2667,15 +2735,17 @@ class LibSodiumFFI {
 
   late final _crypto_box_seed_keypairPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_seed_keypair');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_seed_keypair');
   late final _crypto_box_seed_keypair = _crypto_box_seed_keypairPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_keypair(
       pk,
@@ -2685,18 +2755,19 @@ class LibSodiumFFI {
 
   late final _crypto_box_keypairPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_keypair');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_keypair');
   late final _crypto_box_keypair = _crypto_box_keypairPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_easy(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_easy(
       c,
@@ -2710,29 +2781,29 @@ class LibSodiumFFI {
 
   late final _crypto_box_easyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_easy');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_easy');
   late final _crypto_box_easy = _crypto_box_easyPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
           int,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_open_easy(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_open_easy(
       m,
@@ -2746,30 +2817,30 @@ class LibSodiumFFI {
 
   late final _crypto_box_open_easyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_open_easy');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_open_easy');
   late final _crypto_box_open_easy = _crypto_box_open_easyPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
           int,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_detached(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_detached(
       c,
@@ -2784,32 +2855,32 @@ class LibSodiumFFI {
 
   late final _crypto_box_detachedPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_detached');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_detached');
   late final _crypto_box_detached = _crypto_box_detachedPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
           int,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_open_detached(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_open_detached(
       m,
@@ -2824,39 +2895,39 @@ class LibSodiumFFI {
 
   late final _crypto_box_open_detachedPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_open_detached');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_open_detached');
   late final _crypto_box_open_detached =
       _crypto_box_open_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_beforenmbytes() {
     return _crypto_box_beforenmbytes();
   }
 
   late final _crypto_box_beforenmbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_beforenmbytes');
   late final _crypto_box_beforenmbytes =
       _crypto_box_beforenmbytesPtr.asFunction<int Function()>();
 
   int crypto_box_beforenm(
-    ffi.Pointer<ffi.Uint8> k,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> k,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_beforenm(
       k,
@@ -2867,18 +2938,20 @@ class LibSodiumFFI {
 
   late final _crypto_box_beforenmPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_beforenm');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_beforenm');
   late final _crypto_box_beforenm = _crypto_box_beforenmPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_easy_afternm(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_easy_afternm(
       c,
@@ -2891,22 +2964,22 @@ class LibSodiumFFI {
 
   late final _crypto_box_easy_afternmPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_easy_afternm');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_easy_afternm');
   late final _crypto_box_easy_afternm = _crypto_box_easy_afternmPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_open_easy_afternm(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_open_easy_afternm(
       m,
@@ -2919,24 +2992,28 @@ class LibSodiumFFI {
 
   late final _crypto_box_open_easy_afternmPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_open_easy_afternm');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_open_easy_afternm');
   late final _crypto_box_open_easy_afternm =
       _crypto_box_open_easy_afternmPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_detached_afternm(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_detached_afternm(
       c,
@@ -2950,30 +3027,30 @@ class LibSodiumFFI {
 
   late final _crypto_box_detached_afternmPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_detached_afternm');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_detached_afternm');
   late final _crypto_box_detached_afternm =
       _crypto_box_detached_afternmPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_open_detached_afternm(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_open_detached_afternm(
       m,
@@ -2986,38 +3063,39 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_open_detached_afternmPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_open_detached_afternm');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_box_open_detached_afternm');
   late final _crypto_box_open_detached_afternm =
       _crypto_box_open_detached_afternmPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_sealbytes() {
     return _crypto_box_sealbytes();
   }
 
   late final _crypto_box_sealbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_box_sealbytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_box_sealbytes');
   late final _crypto_box_sealbytes =
       _crypto_box_sealbytesPtr.asFunction<int Function()>();
 
   int crypto_box_seal(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> pk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
   ) {
     return _crypto_box_seal(
       c,
@@ -3029,18 +3107,21 @@ class LibSodiumFFI {
 
   late final _crypto_box_sealPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64, ffi.Pointer<ffi.Uint8>)>>('crypto_box_seal');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_seal');
   late final _crypto_box_seal = _crypto_box_sealPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_seal_open(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_seal_open(
       m,
@@ -3053,22 +3134,22 @@ class LibSodiumFFI {
 
   late final _crypto_box_seal_openPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_seal_open');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_seal_open');
   late final _crypto_box_seal_open = _crypto_box_seal_openPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_zerobytes() {
     return _crypto_box_zerobytes();
   }
 
   late final _crypto_box_zerobytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_box_zerobytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_box_zerobytes');
   late final _crypto_box_zerobytes =
       _crypto_box_zerobytesPtr.asFunction<int Function()>();
 
@@ -3077,17 +3158,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_boxzerobytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_box_boxzerobytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_box_boxzerobytes');
   late final _crypto_box_boxzerobytes =
       _crypto_box_boxzerobytesPtr.asFunction<int Function()>();
 
   int crypto_box(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box(
       c,
@@ -3101,29 +3183,29 @@ class LibSodiumFFI {
 
   late final _crypto_boxPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box');
   late final _crypto_box = _crypto_boxPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
           int,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_open(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_open(
       m,
@@ -3137,28 +3219,28 @@ class LibSodiumFFI {
 
   late final _crypto_box_openPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_open');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_open');
   late final _crypto_box_open = _crypto_box_openPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
           int,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_afternm(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_afternm(
       c,
@@ -3171,22 +3253,22 @@ class LibSodiumFFI {
 
   late final _crypto_box_afternmPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_afternm');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_afternm');
   late final _crypto_box_afternm = _crypto_box_afternmPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_open_afternm(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_open_afternm(
       m,
@@ -3199,22 +3281,22 @@ class LibSodiumFFI {
 
   late final _crypto_box_open_afternmPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_box_open_afternm');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_box_open_afternm');
   late final _crypto_box_open_afternm = _crypto_box_open_afternmPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_hsalsa20_outputbytes() {
     return _crypto_core_hsalsa20_outputbytes();
   }
 
   late final _crypto_core_hsalsa20_outputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_hsalsa20_outputbytes');
   late final _crypto_core_hsalsa20_outputbytes =
       _crypto_core_hsalsa20_outputbytesPtr.asFunction<int Function()>();
@@ -3224,7 +3306,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_hsalsa20_inputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_hsalsa20_inputbytes');
   late final _crypto_core_hsalsa20_inputbytes =
       _crypto_core_hsalsa20_inputbytesPtr.asFunction<int Function()>();
@@ -3234,7 +3316,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_hsalsa20_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_hsalsa20_keybytes');
   late final _crypto_core_hsalsa20_keybytes =
       _crypto_core_hsalsa20_keybytesPtr.asFunction<int Function()>();
@@ -3244,16 +3326,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_hsalsa20_constbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_hsalsa20_constbytes');
   late final _crypto_core_hsalsa20_constbytes =
       _crypto_core_hsalsa20_constbytesPtr.asFunction<int Function()>();
 
   int crypto_core_hsalsa20(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
-    ffi.Pointer<ffi.Uint8> k,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> k,
+    ffi.Pointer<ffi.UnsignedChar> c,
   ) {
     return _crypto_core_hsalsa20(
       out,
@@ -3265,21 +3347,21 @@ class LibSodiumFFI {
 
   late final _crypto_core_hsalsa20Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_hsalsa20');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_hsalsa20');
   late final _crypto_core_hsalsa20 = _crypto_core_hsalsa20Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_hchacha20_outputbytes() {
     return _crypto_core_hchacha20_outputbytes();
   }
 
   late final _crypto_core_hchacha20_outputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_hchacha20_outputbytes');
   late final _crypto_core_hchacha20_outputbytes =
       _crypto_core_hchacha20_outputbytesPtr.asFunction<int Function()>();
@@ -3289,7 +3371,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_hchacha20_inputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_hchacha20_inputbytes');
   late final _crypto_core_hchacha20_inputbytes =
       _crypto_core_hchacha20_inputbytesPtr.asFunction<int Function()>();
@@ -3299,7 +3381,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_hchacha20_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_hchacha20_keybytes');
   late final _crypto_core_hchacha20_keybytes =
       _crypto_core_hchacha20_keybytesPtr.asFunction<int Function()>();
@@ -3309,16 +3391,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_hchacha20_constbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_hchacha20_constbytes');
   late final _crypto_core_hchacha20_constbytes =
       _crypto_core_hchacha20_constbytesPtr.asFunction<int Function()>();
 
   int crypto_core_hchacha20(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
-    ffi.Pointer<ffi.Uint8> k,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> k,
+    ffi.Pointer<ffi.UnsignedChar> c,
   ) {
     return _crypto_core_hchacha20(
       out,
@@ -3330,21 +3412,21 @@ class LibSodiumFFI {
 
   late final _crypto_core_hchacha20Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_hchacha20');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_hchacha20');
   late final _crypto_core_hchacha20 = _crypto_core_hchacha20Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_salsa20_outputbytes() {
     return _crypto_core_salsa20_outputbytes();
   }
 
   late final _crypto_core_salsa20_outputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa20_outputbytes');
   late final _crypto_core_salsa20_outputbytes =
       _crypto_core_salsa20_outputbytesPtr.asFunction<int Function()>();
@@ -3354,7 +3436,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_salsa20_inputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa20_inputbytes');
   late final _crypto_core_salsa20_inputbytes =
       _crypto_core_salsa20_inputbytesPtr.asFunction<int Function()>();
@@ -3364,7 +3446,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_salsa20_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa20_keybytes');
   late final _crypto_core_salsa20_keybytes =
       _crypto_core_salsa20_keybytesPtr.asFunction<int Function()>();
@@ -3374,16 +3456,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_salsa20_constbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa20_constbytes');
   late final _crypto_core_salsa20_constbytes =
       _crypto_core_salsa20_constbytesPtr.asFunction<int Function()>();
 
   int crypto_core_salsa20(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
-    ffi.Pointer<ffi.Uint8> k,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> k,
+    ffi.Pointer<ffi.UnsignedChar> c,
   ) {
     return _crypto_core_salsa20(
       out,
@@ -3395,21 +3477,21 @@ class LibSodiumFFI {
 
   late final _crypto_core_salsa20Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_salsa20');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_salsa20');
   late final _crypto_core_salsa20 = _crypto_core_salsa20Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_salsa2012_outputbytes() {
     return _crypto_core_salsa2012_outputbytes();
   }
 
   late final _crypto_core_salsa2012_outputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa2012_outputbytes');
   late final _crypto_core_salsa2012_outputbytes =
       _crypto_core_salsa2012_outputbytesPtr.asFunction<int Function()>();
@@ -3419,7 +3501,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_salsa2012_inputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa2012_inputbytes');
   late final _crypto_core_salsa2012_inputbytes =
       _crypto_core_salsa2012_inputbytesPtr.asFunction<int Function()>();
@@ -3429,7 +3511,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_salsa2012_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa2012_keybytes');
   late final _crypto_core_salsa2012_keybytes =
       _crypto_core_salsa2012_keybytesPtr.asFunction<int Function()>();
@@ -3439,16 +3521,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_salsa2012_constbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa2012_constbytes');
   late final _crypto_core_salsa2012_constbytes =
       _crypto_core_salsa2012_constbytesPtr.asFunction<int Function()>();
 
   int crypto_core_salsa2012(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
-    ffi.Pointer<ffi.Uint8> k,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> k,
+    ffi.Pointer<ffi.UnsignedChar> c,
   ) {
     return _crypto_core_salsa2012(
       out,
@@ -3460,21 +3542,21 @@ class LibSodiumFFI {
 
   late final _crypto_core_salsa2012Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_salsa2012');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_salsa2012');
   late final _crypto_core_salsa2012 = _crypto_core_salsa2012Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_salsa208_outputbytes() {
     return _crypto_core_salsa208_outputbytes();
   }
 
   late final _crypto_core_salsa208_outputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa208_outputbytes');
   late final _crypto_core_salsa208_outputbytes =
       _crypto_core_salsa208_outputbytesPtr.asFunction<int Function()>();
@@ -3484,7 +3566,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_salsa208_inputbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa208_inputbytes');
   late final _crypto_core_salsa208_inputbytes =
       _crypto_core_salsa208_inputbytesPtr.asFunction<int Function()>();
@@ -3494,7 +3576,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_salsa208_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa208_keybytes');
   late final _crypto_core_salsa208_keybytes =
       _crypto_core_salsa208_keybytesPtr.asFunction<int Function()>();
@@ -3504,16 +3586,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_salsa208_constbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_salsa208_constbytes');
   late final _crypto_core_salsa208_constbytes =
       _crypto_core_salsa208_constbytesPtr.asFunction<int Function()>();
 
   int crypto_core_salsa208(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
-    ffi.Pointer<ffi.Uint8> k,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> k,
+    ffi.Pointer<ffi.UnsignedChar> c,
   ) {
     return _crypto_core_salsa208(
       out,
@@ -3525,21 +3607,21 @@ class LibSodiumFFI {
 
   late final _crypto_core_salsa208Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_salsa208');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_salsa208');
   late final _crypto_core_salsa208 = _crypto_core_salsa208Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_generichash_blake2b_bytes_min() {
     return _crypto_generichash_blake2b_bytes_min();
   }
 
   late final _crypto_generichash_blake2b_bytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_blake2b_bytes_min');
   late final _crypto_generichash_blake2b_bytes_min =
       _crypto_generichash_blake2b_bytes_minPtr.asFunction<int Function()>();
@@ -3549,7 +3631,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_blake2b_bytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_blake2b_bytes_max');
   late final _crypto_generichash_blake2b_bytes_max =
       _crypto_generichash_blake2b_bytes_maxPtr.asFunction<int Function()>();
@@ -3559,7 +3641,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_blake2b_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_blake2b_bytes');
   late final _crypto_generichash_blake2b_bytes =
       _crypto_generichash_blake2b_bytesPtr.asFunction<int Function()>();
@@ -3569,7 +3651,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_blake2b_keybytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_blake2b_keybytes_min');
   late final _crypto_generichash_blake2b_keybytes_min =
       _crypto_generichash_blake2b_keybytes_minPtr.asFunction<int Function()>();
@@ -3579,7 +3661,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_blake2b_keybytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_blake2b_keybytes_max');
   late final _crypto_generichash_blake2b_keybytes_max =
       _crypto_generichash_blake2b_keybytes_maxPtr.asFunction<int Function()>();
@@ -3589,7 +3671,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_blake2b_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_blake2b_keybytes');
   late final _crypto_generichash_blake2b_keybytes =
       _crypto_generichash_blake2b_keybytesPtr.asFunction<int Function()>();
@@ -3599,7 +3681,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_blake2b_saltbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_blake2b_saltbytes');
   late final _crypto_generichash_blake2b_saltbytes =
       _crypto_generichash_blake2b_saltbytesPtr.asFunction<int Function()>();
@@ -3609,7 +3691,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_blake2b_personalbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_blake2b_personalbytes');
   late final _crypto_generichash_blake2b_personalbytes =
       _crypto_generichash_blake2b_personalbytesPtr.asFunction<int Function()>();
@@ -3619,17 +3701,17 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_blake2b_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_blake2b_statebytes');
   late final _crypto_generichash_blake2b_statebytes =
       _crypto_generichash_blake2b_statebytesPtr.asFunction<int Function()>();
 
   int crypto_generichash_blake2b(
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
   ) {
     return _crypto_generichash_blake2b(
@@ -3644,27 +3726,32 @@ class LibSodiumFFI {
 
   late final _crypto_generichash_blake2bPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              size_t,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              size_t)>>('crypto_generichash_blake2b');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_generichash_blake2b');
   late final _crypto_generichash_blake2b =
       _crypto_generichash_blake2bPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, int)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int)>();
 
   int crypto_generichash_blake2b_salt_personal(
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
-    ffi.Pointer<ffi.Uint8> salt,
-    ffi.Pointer<ffi.Uint8> personal,
+    ffi.Pointer<ffi.UnsignedChar> salt,
+    ffi.Pointer<ffi.UnsignedChar> personal,
   ) {
     return _crypto_generichash_blake2b_salt_personal(
       out,
@@ -3680,31 +3767,31 @@ class LibSodiumFFI {
 
   late final _crypto_generichash_blake2b_salt_personalPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  size_t,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  size_t,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Size,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Size,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_generichash_blake2b_salt_personal');
   late final _crypto_generichash_blake2b_salt_personal =
       _crypto_generichash_blake2b_salt_personalPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_generichash_blake2b_init(
     ffi.Pointer<crypto_generichash_blake2b_state> state,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
     int outlen,
   ) {
@@ -3718,23 +3805,23 @@ class LibSodiumFFI {
 
   late final _crypto_generichash_blake2b_initPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_generichash_blake2b_state>,
-              ffi.Pointer<ffi.Uint8>,
-              size_t,
-              size_t)>>('crypto_generichash_blake2b_init');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Size)>>('crypto_generichash_blake2b_init');
   late final _crypto_generichash_blake2b_init =
       _crypto_generichash_blake2b_initPtr.asFunction<
           int Function(ffi.Pointer<crypto_generichash_blake2b_state>,
-              ffi.Pointer<ffi.Uint8>, int, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int, int)>();
 
   int crypto_generichash_blake2b_init_salt_personal(
     ffi.Pointer<crypto_generichash_blake2b_state> state,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
     int outlen,
-    ffi.Pointer<ffi.Uint8> salt,
-    ffi.Pointer<ffi.Uint8> personal,
+    ffi.Pointer<ffi.UnsignedChar> salt,
+    ffi.Pointer<ffi.UnsignedChar> personal,
   ) {
     return _crypto_generichash_blake2b_init_salt_personal(
       state,
@@ -3748,27 +3835,27 @@ class LibSodiumFFI {
 
   late final _crypto_generichash_blake2b_init_salt_personalPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
+              ffi.Int Function(
                   ffi.Pointer<crypto_generichash_blake2b_state>,
-                  ffi.Pointer<ffi.Uint8>,
-                  size_t,
-                  size_t,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Size,
+                  ffi.Size,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_generichash_blake2b_init_salt_personal');
   late final _crypto_generichash_blake2b_init_salt_personal =
       _crypto_generichash_blake2b_init_salt_personalPtr.asFunction<
           int Function(
               ffi.Pointer<crypto_generichash_blake2b_state>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_generichash_blake2b_update(
     ffi.Pointer<crypto_generichash_blake2b_state> state,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_generichash_blake2b_update(
@@ -3780,18 +3867,18 @@ class LibSodiumFFI {
 
   late final _crypto_generichash_blake2b_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_generichash_blake2b_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_generichash_blake2b_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_generichash_blake2b_update');
   late final _crypto_generichash_blake2b_update =
       _crypto_generichash_blake2b_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_generichash_blake2b_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_generichash_blake2b_final(
     ffi.Pointer<crypto_generichash_blake2b_state> state,
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
   ) {
     return _crypto_generichash_blake2b_final(
@@ -3803,36 +3890,36 @@ class LibSodiumFFI {
 
   late final _crypto_generichash_blake2b_finalPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_generichash_blake2b_state>,
-              ffi.Pointer<ffi.Uint8>,
-              size_t)>>('crypto_generichash_blake2b_final');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_generichash_blake2b_final');
   late final _crypto_generichash_blake2b_final =
       _crypto_generichash_blake2b_finalPtr.asFunction<
           int Function(ffi.Pointer<crypto_generichash_blake2b_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   void crypto_generichash_blake2b_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_generichash_blake2b_keygen(
       k,
     );
   }
 
-  late final _crypto_generichash_blake2b_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_generichash_blake2b_keygen');
+  late final _crypto_generichash_blake2b_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_generichash_blake2b_keygen');
   late final _crypto_generichash_blake2b_keygen =
       _crypto_generichash_blake2b_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_generichash_bytes_min() {
     return _crypto_generichash_bytes_min();
   }
 
   late final _crypto_generichash_bytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_bytes_min');
   late final _crypto_generichash_bytes_min =
       _crypto_generichash_bytes_minPtr.asFunction<int Function()>();
@@ -3842,7 +3929,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_bytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_bytes_max');
   late final _crypto_generichash_bytes_max =
       _crypto_generichash_bytes_maxPtr.asFunction<int Function()>();
@@ -3852,7 +3939,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_bytes');
   late final _crypto_generichash_bytes =
       _crypto_generichash_bytesPtr.asFunction<int Function()>();
@@ -3862,7 +3949,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_keybytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_keybytes_min');
   late final _crypto_generichash_keybytes_min =
       _crypto_generichash_keybytes_minPtr.asFunction<int Function()>();
@@ -3872,7 +3959,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_keybytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_keybytes_max');
   late final _crypto_generichash_keybytes_max =
       _crypto_generichash_keybytes_maxPtr.asFunction<int Function()>();
@@ -3882,37 +3969,37 @@ class LibSodiumFFI {
   }
 
   late final _crypto_generichash_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_keybytes');
   late final _crypto_generichash_keybytes =
       _crypto_generichash_keybytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_generichash_primitive() {
+  ffi.Pointer<ffi.Char> crypto_generichash_primitive() {
     return _crypto_generichash_primitive();
   }
 
   late final _crypto_generichash_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_generichash_primitive');
   late final _crypto_generichash_primitive = _crypto_generichash_primitivePtr
-      .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_generichash_statebytes() {
     return _crypto_generichash_statebytes();
   }
 
   late final _crypto_generichash_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_generichash_statebytes');
   late final _crypto_generichash_statebytes =
       _crypto_generichash_statebytesPtr.asFunction<int Function()>();
 
   int crypto_generichash(
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
   ) {
     return _crypto_generichash(
@@ -3927,20 +4014,25 @@ class LibSodiumFFI {
 
   late final _crypto_generichashPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              size_t,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              size_t)>>('crypto_generichash');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_generichash');
   late final _crypto_generichash = _crypto_generichashPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>, int)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>,
+          int,
+          ffi.Pointer<ffi.UnsignedChar>,
+          int,
+          ffi.Pointer<ffi.UnsignedChar>,
+          int)>();
 
   int crypto_generichash_init(
     ffi.Pointer<crypto_generichash_state> state,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
     int outlen,
   ) {
@@ -3954,18 +4046,18 @@ class LibSodiumFFI {
 
   late final _crypto_generichash_initPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_generichash_state>,
-              ffi.Pointer<ffi.Uint8>,
-              size_t,
-              size_t)>>('crypto_generichash_init');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Size)>>('crypto_generichash_init');
   late final _crypto_generichash_init = _crypto_generichash_initPtr.asFunction<
       int Function(ffi.Pointer<crypto_generichash_state>,
-          ffi.Pointer<ffi.Uint8>, int, int)>();
+          ffi.Pointer<ffi.UnsignedChar>, int, int)>();
 
   int crypto_generichash_update(
     ffi.Pointer<crypto_generichash_state> state,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_generichash_update(
@@ -3977,18 +4069,18 @@ class LibSodiumFFI {
 
   late final _crypto_generichash_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_generichash_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_generichash_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_generichash_update');
   late final _crypto_generichash_update =
       _crypto_generichash_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_generichash_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_generichash_final(
     ffi.Pointer<crypto_generichash_state> state,
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
   ) {
     return _crypto_generichash_final(
@@ -4000,39 +4092,41 @@ class LibSodiumFFI {
 
   late final _crypto_generichash_finalPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_generichash_state>,
-              ffi.Pointer<ffi.Uint8>, size_t)>>('crypto_generichash_final');
+          ffi.Int Function(
+              ffi.Pointer<crypto_generichash_state>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_generichash_final');
   late final _crypto_generichash_final =
       _crypto_generichash_finalPtr.asFunction<
           int Function(ffi.Pointer<crypto_generichash_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   void crypto_generichash_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_generichash_keygen(
       k,
     );
   }
 
-  late final _crypto_generichash_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_generichash_keygen');
+  late final _crypto_generichash_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_generichash_keygen');
   late final _crypto_generichash_keygen = _crypto_generichash_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_hash_bytes() {
     return _crypto_hash_bytes();
   }
 
   late final _crypto_hash_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_hash_bytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_hash_bytes');
   late final _crypto_hash_bytes =
       _crypto_hash_bytesPtr.asFunction<int Function()>();
 
   int crypto_hash(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_hash(
@@ -4044,27 +4138,30 @@ class LibSodiumFFI {
 
   late final _crypto_hashPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_hash');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_hash');
   late final _crypto_hash = _crypto_hashPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>, int)>();
 
-  ffi.Pointer<ffi.Int8> crypto_hash_primitive() {
+  ffi.Pointer<ffi.Char> crypto_hash_primitive() {
     return _crypto_hash_primitive();
   }
 
   late final _crypto_hash_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_hash_primitive');
   late final _crypto_hash_primitive =
-      _crypto_hash_primitivePtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _crypto_hash_primitivePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_kdf_blake2b_bytes_min() {
     return _crypto_kdf_blake2b_bytes_min();
   }
 
   late final _crypto_kdf_blake2b_bytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_kdf_blake2b_bytes_min');
   late final _crypto_kdf_blake2b_bytes_min =
       _crypto_kdf_blake2b_bytes_minPtr.asFunction<int Function()>();
@@ -4074,7 +4171,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kdf_blake2b_bytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_kdf_blake2b_bytes_max');
   late final _crypto_kdf_blake2b_bytes_max =
       _crypto_kdf_blake2b_bytes_maxPtr.asFunction<int Function()>();
@@ -4084,7 +4181,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kdf_blake2b_contextbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_kdf_blake2b_contextbytes');
   late final _crypto_kdf_blake2b_contextbytes =
       _crypto_kdf_blake2b_contextbytesPtr.asFunction<int Function()>();
@@ -4094,17 +4191,17 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kdf_blake2b_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_kdf_blake2b_keybytes');
   late final _crypto_kdf_blake2b_keybytes =
       _crypto_kdf_blake2b_keybytesPtr.asFunction<int Function()>();
 
   int crypto_kdf_blake2b_derive_from_key(
-    ffi.Pointer<ffi.Uint8> subkey,
+    ffi.Pointer<ffi.UnsignedChar> subkey,
     int subkey_len,
     int subkey_id,
-    ffi.Pointer<ffi.Int8> ctx,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.Char> ctx,
+    ffi.Pointer<ffi.UnsignedChar> key,
   ) {
     return _crypto_kdf_blake2b_derive_from_key(
       subkey,
@@ -4116,24 +4213,25 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kdf_blake2b_derive_from_keyPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              size_t,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_kdf_blake2b_derive_from_key');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Size,
+                  ffi.Uint64,
+                  ffi.Pointer<ffi.Char>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_kdf_blake2b_derive_from_key');
   late final _crypto_kdf_blake2b_derive_from_key =
       _crypto_kdf_blake2b_derive_from_keyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, int, int, ffi.Pointer<ffi.Int8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>, int, int,
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_kdf_bytes_min() {
     return _crypto_kdf_bytes_min();
   }
 
   late final _crypto_kdf_bytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_kdf_bytes_min');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_kdf_bytes_min');
   late final _crypto_kdf_bytes_min =
       _crypto_kdf_bytes_minPtr.asFunction<int Function()>();
 
@@ -4142,7 +4240,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kdf_bytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_kdf_bytes_max');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_kdf_bytes_max');
   late final _crypto_kdf_bytes_max =
       _crypto_kdf_bytes_maxPtr.asFunction<int Function()>();
 
@@ -4151,7 +4249,8 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kdf_contextbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_kdf_contextbytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_kdf_contextbytes');
   late final _crypto_kdf_contextbytes =
       _crypto_kdf_contextbytesPtr.asFunction<int Function()>();
 
@@ -4160,26 +4259,26 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kdf_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_kdf_keybytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_kdf_keybytes');
   late final _crypto_kdf_keybytes =
       _crypto_kdf_keybytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_kdf_primitive() {
+  ffi.Pointer<ffi.Char> crypto_kdf_primitive() {
     return _crypto_kdf_primitive();
   }
 
   late final _crypto_kdf_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_kdf_primitive');
   late final _crypto_kdf_primitive =
-      _crypto_kdf_primitivePtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _crypto_kdf_primitivePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_kdf_derive_from_key(
-    ffi.Pointer<ffi.Uint8> subkey,
+    ffi.Pointer<ffi.UnsignedChar> subkey,
     int subkey_len,
     int subkey_id,
-    ffi.Pointer<ffi.Int8> ctx,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.Char> ctx,
+    ffi.Pointer<ffi.UnsignedChar> key,
   ) {
     return _crypto_kdf_derive_from_key(
       subkey,
@@ -4192,37 +4291,37 @@ class LibSodiumFFI {
 
   late final _crypto_kdf_derive_from_keyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              size_t,
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
               ffi.Uint64,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_kdf_derive_from_key');
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_kdf_derive_from_key');
   late final _crypto_kdf_derive_from_key =
       _crypto_kdf_derive_from_keyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, int, int, ffi.Pointer<ffi.Int8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>, int, int,
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_kdf_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_kdf_keygen(
       k,
     );
   }
 
-  late final _crypto_kdf_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_kdf_keygen');
-  late final _crypto_kdf_keygen =
-      _crypto_kdf_keygenPtr.asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+  late final _crypto_kdf_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_kdf_keygen');
+  late final _crypto_kdf_keygen = _crypto_kdf_keygenPtr
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_kx_publickeybytes() {
     return _crypto_kx_publickeybytes();
   }
 
   late final _crypto_kx_publickeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_kx_publickeybytes');
   late final _crypto_kx_publickeybytes =
       _crypto_kx_publickeybytesPtr.asFunction<int Function()>();
@@ -4232,7 +4331,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kx_secretkeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_kx_secretkeybytes');
   late final _crypto_kx_secretkeybytes =
       _crypto_kx_secretkeybytesPtr.asFunction<int Function()>();
@@ -4242,7 +4341,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kx_seedbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_kx_seedbytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_kx_seedbytes');
   late final _crypto_kx_seedbytes =
       _crypto_kx_seedbytesPtr.asFunction<int Function()>();
 
@@ -4251,25 +4350,25 @@ class LibSodiumFFI {
   }
 
   late final _crypto_kx_sessionkeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_kx_sessionkeybytes');
   late final _crypto_kx_sessionkeybytes =
       _crypto_kx_sessionkeybytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_kx_primitive() {
+  ffi.Pointer<ffi.Char> crypto_kx_primitive() {
     return _crypto_kx_primitive();
   }
 
   late final _crypto_kx_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_kx_primitive');
   late final _crypto_kx_primitive =
-      _crypto_kx_primitivePtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _crypto_kx_primitivePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_kx_seed_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
-    ffi.Pointer<ffi.Uint8> seed,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
+    ffi.Pointer<ffi.UnsignedChar> seed,
   ) {
     return _crypto_kx_seed_keypair(
       pk,
@@ -4280,15 +4379,17 @@ class LibSodiumFFI {
 
   late final _crypto_kx_seed_keypairPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_kx_seed_keypair');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_kx_seed_keypair');
   late final _crypto_kx_seed_keypair = _crypto_kx_seed_keypairPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_kx_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_kx_keypair(
       pk,
@@ -4298,17 +4399,18 @@ class LibSodiumFFI {
 
   late final _crypto_kx_keypairPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_kx_keypair');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_kx_keypair');
   late final _crypto_kx_keypair = _crypto_kx_keypairPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_kx_client_session_keys(
-    ffi.Pointer<ffi.Uint8> rx,
-    ffi.Pointer<ffi.Uint8> tx,
-    ffi.Pointer<ffi.Uint8> client_pk,
-    ffi.Pointer<ffi.Uint8> client_sk,
-    ffi.Pointer<ffi.Uint8> server_pk,
+    ffi.Pointer<ffi.UnsignedChar> rx,
+    ffi.Pointer<ffi.UnsignedChar> tx,
+    ffi.Pointer<ffi.UnsignedChar> client_pk,
+    ffi.Pointer<ffi.UnsignedChar> client_sk,
+    ffi.Pointer<ffi.UnsignedChar> server_pk,
   ) {
     return _crypto_kx_client_session_keys(
       rx,
@@ -4321,27 +4423,27 @@ class LibSodiumFFI {
 
   late final _crypto_kx_client_session_keysPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_kx_client_session_keys');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_kx_client_session_keys');
   late final _crypto_kx_client_session_keys =
       _crypto_kx_client_session_keysPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_kx_server_session_keys(
-    ffi.Pointer<ffi.Uint8> rx,
-    ffi.Pointer<ffi.Uint8> tx,
-    ffi.Pointer<ffi.Uint8> server_pk,
-    ffi.Pointer<ffi.Uint8> server_sk,
-    ffi.Pointer<ffi.Uint8> client_pk,
+    ffi.Pointer<ffi.UnsignedChar> rx,
+    ffi.Pointer<ffi.UnsignedChar> tx,
+    ffi.Pointer<ffi.UnsignedChar> server_pk,
+    ffi.Pointer<ffi.UnsignedChar> server_sk,
+    ffi.Pointer<ffi.UnsignedChar> client_pk,
   ) {
     return _crypto_kx_server_session_keys(
       rx,
@@ -4354,20 +4456,20 @@ class LibSodiumFFI {
 
   late final _crypto_kx_server_session_keysPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_kx_server_session_keys');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_kx_server_session_keys');
   late final _crypto_kx_server_session_keys =
       _crypto_kx_server_session_keysPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   late final ffi.Pointer<ffi.Pointer<FILE>> _stdin =
       _lookup<ffi.Pointer<FILE>>('stdin');
@@ -4395,7 +4497,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_onetimeauth_poly1305_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_onetimeauth_poly1305_statebytes');
   late final _crypto_onetimeauth_poly1305_statebytes =
       _crypto_onetimeauth_poly1305_statebytesPtr.asFunction<int Function()>();
@@ -4405,7 +4507,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_onetimeauth_poly1305_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_onetimeauth_poly1305_bytes');
   late final _crypto_onetimeauth_poly1305_bytes =
       _crypto_onetimeauth_poly1305_bytesPtr.asFunction<int Function()>();
@@ -4415,16 +4517,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_onetimeauth_poly1305_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_onetimeauth_poly1305_keybytes');
   late final _crypto_onetimeauth_poly1305_keybytes =
       _crypto_onetimeauth_poly1305_keybytesPtr.asFunction<int Function()>();
 
   int crypto_onetimeauth_poly1305(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_onetimeauth_poly1305(
       out,
@@ -4436,21 +4538,24 @@ class LibSodiumFFI {
 
   late final _crypto_onetimeauth_poly1305Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_onetimeauth_poly1305');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_onetimeauth_poly1305');
   late final _crypto_onetimeauth_poly1305 =
       _crypto_onetimeauth_poly1305Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_onetimeauth_poly1305_verify(
-    ffi.Pointer<ffi.Uint8> h,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> h,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_onetimeauth_poly1305_verify(
       h,
@@ -4461,20 +4566,24 @@ class LibSodiumFFI {
   }
 
   late final _crypto_onetimeauth_poly1305_verifyPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_onetimeauth_poly1305_verify');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_onetimeauth_poly1305_verify');
   late final _crypto_onetimeauth_poly1305_verify =
       _crypto_onetimeauth_poly1305_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_onetimeauth_poly1305_init(
     ffi.Pointer<crypto_onetimeauth_poly1305_state> state,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
   ) {
     return _crypto_onetimeauth_poly1305_init(
       state,
@@ -4483,17 +4592,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_onetimeauth_poly1305_initPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_onetimeauth_poly1305_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_onetimeauth_poly1305_init');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<crypto_onetimeauth_poly1305_state>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_onetimeauth_poly1305_init');
   late final _crypto_onetimeauth_poly1305_init =
       _crypto_onetimeauth_poly1305_initPtr.asFunction<
           int Function(ffi.Pointer<crypto_onetimeauth_poly1305_state>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_onetimeauth_poly1305_update(
     ffi.Pointer<crypto_onetimeauth_poly1305_state> state,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_onetimeauth_poly1305_update(
@@ -4505,18 +4615,18 @@ class LibSodiumFFI {
 
   late final _crypto_onetimeauth_poly1305_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_onetimeauth_poly1305_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_onetimeauth_poly1305_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_onetimeauth_poly1305_update');
   late final _crypto_onetimeauth_poly1305_update =
       _crypto_onetimeauth_poly1305_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_onetimeauth_poly1305_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_onetimeauth_poly1305_final(
     ffi.Pointer<crypto_onetimeauth_poly1305_state> state,
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
   ) {
     return _crypto_onetimeauth_poly1305_final(
       state,
@@ -4525,35 +4635,36 @@ class LibSodiumFFI {
   }
 
   late final _crypto_onetimeauth_poly1305_finalPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_onetimeauth_poly1305_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_onetimeauth_poly1305_final');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<crypto_onetimeauth_poly1305_state>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_onetimeauth_poly1305_final');
   late final _crypto_onetimeauth_poly1305_final =
       _crypto_onetimeauth_poly1305_finalPtr.asFunction<
           int Function(ffi.Pointer<crypto_onetimeauth_poly1305_state>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_onetimeauth_poly1305_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_onetimeauth_poly1305_keygen(
       k,
     );
   }
 
-  late final _crypto_onetimeauth_poly1305_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_onetimeauth_poly1305_keygen');
+  late final _crypto_onetimeauth_poly1305_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_onetimeauth_poly1305_keygen');
   late final _crypto_onetimeauth_poly1305_keygen =
       _crypto_onetimeauth_poly1305_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_onetimeauth_statebytes() {
     return _crypto_onetimeauth_statebytes();
   }
 
   late final _crypto_onetimeauth_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_onetimeauth_statebytes');
   late final _crypto_onetimeauth_statebytes =
       _crypto_onetimeauth_statebytesPtr.asFunction<int Function()>();
@@ -4563,7 +4674,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_onetimeauth_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_onetimeauth_bytes');
   late final _crypto_onetimeauth_bytes =
       _crypto_onetimeauth_bytesPtr.asFunction<int Function()>();
@@ -4573,26 +4684,26 @@ class LibSodiumFFI {
   }
 
   late final _crypto_onetimeauth_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_onetimeauth_keybytes');
   late final _crypto_onetimeauth_keybytes =
       _crypto_onetimeauth_keybytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_onetimeauth_primitive() {
+  ffi.Pointer<ffi.Char> crypto_onetimeauth_primitive() {
     return _crypto_onetimeauth_primitive();
   }
 
   late final _crypto_onetimeauth_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_onetimeauth_primitive');
   late final _crypto_onetimeauth_primitive = _crypto_onetimeauth_primitivePtr
-      .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_onetimeauth(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_onetimeauth(
       out,
@@ -4604,17 +4715,20 @@ class LibSodiumFFI {
 
   late final _crypto_onetimeauthPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64, ffi.Pointer<ffi.Uint8>)>>('crypto_onetimeauth');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_onetimeauth');
   late final _crypto_onetimeauth = _crypto_onetimeauthPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_onetimeauth_verify(
-    ffi.Pointer<ffi.Uint8> h,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> h,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_onetimeauth_verify(
       h,
@@ -4626,19 +4740,22 @@ class LibSodiumFFI {
 
   late final _crypto_onetimeauth_verifyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_onetimeauth_verify');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_onetimeauth_verify');
   late final _crypto_onetimeauth_verify =
       _crypto_onetimeauth_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_onetimeauth_init(
     ffi.Pointer<crypto_onetimeauth_state> state,
-    ffi.Pointer<ffi.Uint8> key,
+    ffi.Pointer<ffi.UnsignedChar> key,
   ) {
     return _crypto_onetimeauth_init(
       state,
@@ -4648,15 +4765,15 @@ class LibSodiumFFI {
 
   late final _crypto_onetimeauth_initPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_onetimeauth_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_onetimeauth_init');
+          ffi.Int Function(ffi.Pointer<crypto_onetimeauth_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_onetimeauth_init');
   late final _crypto_onetimeauth_init = _crypto_onetimeauth_initPtr.asFunction<
-      int Function(
-          ffi.Pointer<crypto_onetimeauth_state>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<crypto_onetimeauth_state>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_onetimeauth_update(
     ffi.Pointer<crypto_onetimeauth_state> state,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
   ) {
     return _crypto_onetimeauth_update(
@@ -4668,18 +4785,18 @@ class LibSodiumFFI {
 
   late final _crypto_onetimeauth_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_onetimeauth_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_onetimeauth_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_onetimeauth_update');
   late final _crypto_onetimeauth_update =
       _crypto_onetimeauth_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_onetimeauth_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_onetimeauth_final(
     ffi.Pointer<crypto_onetimeauth_state> state,
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
   ) {
     return _crypto_onetimeauth_final(
       state,
@@ -4689,33 +4806,33 @@ class LibSodiumFFI {
 
   late final _crypto_onetimeauth_finalPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_onetimeauth_state>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_onetimeauth_final');
+          ffi.Int Function(ffi.Pointer<crypto_onetimeauth_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_onetimeauth_final');
   late final _crypto_onetimeauth_final =
       _crypto_onetimeauth_finalPtr.asFunction<
-          int Function(
-              ffi.Pointer<crypto_onetimeauth_state>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<crypto_onetimeauth_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_onetimeauth_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_onetimeauth_keygen(
       k,
     );
   }
 
-  late final _crypto_onetimeauth_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_onetimeauth_keygen');
+  late final _crypto_onetimeauth_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_onetimeauth_keygen');
   late final _crypto_onetimeauth_keygen = _crypto_onetimeauth_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_pwhash_argon2i_alg_argon2i13() {
     return _crypto_pwhash_argon2i_alg_argon2i13();
   }
 
   late final _crypto_pwhash_argon2i_alg_argon2i13Ptr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'crypto_pwhash_argon2i_alg_argon2i13');
   late final _crypto_pwhash_argon2i_alg_argon2i13 =
       _crypto_pwhash_argon2i_alg_argon2i13Ptr.asFunction<int Function()>();
@@ -4725,7 +4842,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_bytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_bytes_min');
   late final _crypto_pwhash_argon2i_bytes_min =
       _crypto_pwhash_argon2i_bytes_minPtr.asFunction<int Function()>();
@@ -4735,7 +4852,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_bytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_bytes_max');
   late final _crypto_pwhash_argon2i_bytes_max =
       _crypto_pwhash_argon2i_bytes_maxPtr.asFunction<int Function()>();
@@ -4745,7 +4862,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_passwd_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_passwd_min');
   late final _crypto_pwhash_argon2i_passwd_min =
       _crypto_pwhash_argon2i_passwd_minPtr.asFunction<int Function()>();
@@ -4755,7 +4872,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_passwd_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_passwd_max');
   late final _crypto_pwhash_argon2i_passwd_max =
       _crypto_pwhash_argon2i_passwd_maxPtr.asFunction<int Function()>();
@@ -4765,7 +4882,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_saltbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_saltbytes');
   late final _crypto_pwhash_argon2i_saltbytes =
       _crypto_pwhash_argon2i_saltbytesPtr.asFunction<int Function()>();
@@ -4775,28 +4892,28 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_strbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_strbytes');
   late final _crypto_pwhash_argon2i_strbytes =
       _crypto_pwhash_argon2i_strbytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_pwhash_argon2i_strprefix() {
+  ffi.Pointer<ffi.Char> crypto_pwhash_argon2i_strprefix() {
     return _crypto_pwhash_argon2i_strprefix();
   }
 
   late final _crypto_pwhash_argon2i_strprefixPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_pwhash_argon2i_strprefix');
   late final _crypto_pwhash_argon2i_strprefix =
       _crypto_pwhash_argon2i_strprefixPtr
-          .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+          .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_pwhash_argon2i_opslimit_min() {
     return _crypto_pwhash_argon2i_opslimit_min();
   }
 
   late final _crypto_pwhash_argon2i_opslimit_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_opslimit_min');
   late final _crypto_pwhash_argon2i_opslimit_min =
       _crypto_pwhash_argon2i_opslimit_minPtr.asFunction<int Function()>();
@@ -4806,7 +4923,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_opslimit_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_opslimit_max');
   late final _crypto_pwhash_argon2i_opslimit_max =
       _crypto_pwhash_argon2i_opslimit_maxPtr.asFunction<int Function()>();
@@ -4816,7 +4933,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_memlimit_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_memlimit_min');
   late final _crypto_pwhash_argon2i_memlimit_min =
       _crypto_pwhash_argon2i_memlimit_minPtr.asFunction<int Function()>();
@@ -4826,7 +4943,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_memlimit_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_memlimit_max');
   late final _crypto_pwhash_argon2i_memlimit_max =
       _crypto_pwhash_argon2i_memlimit_maxPtr.asFunction<int Function()>();
@@ -4836,7 +4953,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_opslimit_interactivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_opslimit_interactive');
   late final _crypto_pwhash_argon2i_opslimit_interactive =
       _crypto_pwhash_argon2i_opslimit_interactivePtr
@@ -4847,7 +4964,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_memlimit_interactivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_memlimit_interactive');
   late final _crypto_pwhash_argon2i_memlimit_interactive =
       _crypto_pwhash_argon2i_memlimit_interactivePtr
@@ -4858,7 +4975,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_opslimit_moderatePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_opslimit_moderate');
   late final _crypto_pwhash_argon2i_opslimit_moderate =
       _crypto_pwhash_argon2i_opslimit_moderatePtr.asFunction<int Function()>();
@@ -4868,7 +4985,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_memlimit_moderatePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_memlimit_moderate');
   late final _crypto_pwhash_argon2i_memlimit_moderate =
       _crypto_pwhash_argon2i_memlimit_moderatePtr.asFunction<int Function()>();
@@ -4878,7 +4995,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_opslimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_opslimit_sensitive');
   late final _crypto_pwhash_argon2i_opslimit_sensitive =
       _crypto_pwhash_argon2i_opslimit_sensitivePtr.asFunction<int Function()>();
@@ -4888,17 +5005,17 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2i_memlimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2i_memlimit_sensitive');
   late final _crypto_pwhash_argon2i_memlimit_sensitive =
       _crypto_pwhash_argon2i_memlimit_sensitivePtr.asFunction<int Function()>();
 
   int crypto_pwhash_argon2i(
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
-    ffi.Pointer<ffi.Uint8> salt,
+    ffi.Pointer<ffi.UnsignedChar> salt,
     int opslimit,
     int memlimit,
     int alg,
@@ -4917,22 +5034,22 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_argon2iPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              size_t,
-              ffi.Int32)>>('crypto_pwhash_argon2i');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Size,
+              ffi.Int)>>('crypto_pwhash_argon2i');
   late final _crypto_pwhash_argon2i = _crypto_pwhash_argon2iPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Int8>, int,
-          ffi.Pointer<ffi.Uint8>, int, int, int)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int, ffi.Pointer<ffi.Char>,
+          int, ffi.Pointer<ffi.UnsignedChar>, int, int, int)>();
 
   int crypto_pwhash_argon2i_str(
-    ffi.Pointer<ffi.Int8> out,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> out,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
     int opslimit,
     int memlimit,
@@ -4948,16 +5065,20 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_argon2i_strPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>,
-              ffi.Uint64, ffi.Uint64, size_t)>>('crypto_pwhash_argon2i_str');
+          ffi.Int Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_argon2i_str');
   late final _crypto_pwhash_argon2i_str =
       _crypto_pwhash_argon2i_strPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int, int, int)>();
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int, int, int)>();
 
   int crypto_pwhash_argon2i_str_verify(
-    ffi.Pointer<ffi.Int8> str,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> str,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
   ) {
     return _crypto_pwhash_argon2i_str_verify(
@@ -4969,14 +5090,14 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_argon2i_str_verifyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>,
-              ffi.Uint64)>>('crypto_pwhash_argon2i_str_verify');
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong)>>('crypto_pwhash_argon2i_str_verify');
   late final _crypto_pwhash_argon2i_str_verify =
       _crypto_pwhash_argon2i_str_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int)>();
+          int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int)>();
 
   int crypto_pwhash_argon2i_str_needs_rehash(
-    ffi.Pointer<ffi.Int8> str,
+    ffi.Pointer<ffi.Char> str,
     int opslimit,
     int memlimit,
   ) {
@@ -4989,18 +5110,18 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_argon2i_str_needs_rehashPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Uint64,
-              size_t)>>('crypto_pwhash_argon2i_str_needs_rehash');
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_argon2i_str_needs_rehash');
   late final _crypto_pwhash_argon2i_str_needs_rehash =
       _crypto_pwhash_argon2i_str_needs_rehashPtr
-          .asFunction<int Function(ffi.Pointer<ffi.Int8>, int, int)>();
+          .asFunction<int Function(ffi.Pointer<ffi.Char>, int, int)>();
 
   int crypto_pwhash_argon2id_alg_argon2id13() {
     return _crypto_pwhash_argon2id_alg_argon2id13();
   }
 
   late final _crypto_pwhash_argon2id_alg_argon2id13Ptr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'crypto_pwhash_argon2id_alg_argon2id13');
   late final _crypto_pwhash_argon2id_alg_argon2id13 =
       _crypto_pwhash_argon2id_alg_argon2id13Ptr.asFunction<int Function()>();
@@ -5010,7 +5131,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_bytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_bytes_min');
   late final _crypto_pwhash_argon2id_bytes_min =
       _crypto_pwhash_argon2id_bytes_minPtr.asFunction<int Function()>();
@@ -5020,7 +5141,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_bytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_bytes_max');
   late final _crypto_pwhash_argon2id_bytes_max =
       _crypto_pwhash_argon2id_bytes_maxPtr.asFunction<int Function()>();
@@ -5030,7 +5151,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_passwd_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_passwd_min');
   late final _crypto_pwhash_argon2id_passwd_min =
       _crypto_pwhash_argon2id_passwd_minPtr.asFunction<int Function()>();
@@ -5040,7 +5161,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_passwd_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_passwd_max');
   late final _crypto_pwhash_argon2id_passwd_max =
       _crypto_pwhash_argon2id_passwd_maxPtr.asFunction<int Function()>();
@@ -5050,7 +5171,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_saltbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_saltbytes');
   late final _crypto_pwhash_argon2id_saltbytes =
       _crypto_pwhash_argon2id_saltbytesPtr.asFunction<int Function()>();
@@ -5060,28 +5181,28 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_strbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_strbytes');
   late final _crypto_pwhash_argon2id_strbytes =
       _crypto_pwhash_argon2id_strbytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_pwhash_argon2id_strprefix() {
+  ffi.Pointer<ffi.Char> crypto_pwhash_argon2id_strprefix() {
     return _crypto_pwhash_argon2id_strprefix();
   }
 
   late final _crypto_pwhash_argon2id_strprefixPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_pwhash_argon2id_strprefix');
   late final _crypto_pwhash_argon2id_strprefix =
       _crypto_pwhash_argon2id_strprefixPtr
-          .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+          .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_pwhash_argon2id_opslimit_min() {
     return _crypto_pwhash_argon2id_opslimit_min();
   }
 
   late final _crypto_pwhash_argon2id_opslimit_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_opslimit_min');
   late final _crypto_pwhash_argon2id_opslimit_min =
       _crypto_pwhash_argon2id_opslimit_minPtr.asFunction<int Function()>();
@@ -5091,7 +5212,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_opslimit_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_opslimit_max');
   late final _crypto_pwhash_argon2id_opslimit_max =
       _crypto_pwhash_argon2id_opslimit_maxPtr.asFunction<int Function()>();
@@ -5101,7 +5222,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_memlimit_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_memlimit_min');
   late final _crypto_pwhash_argon2id_memlimit_min =
       _crypto_pwhash_argon2id_memlimit_minPtr.asFunction<int Function()>();
@@ -5111,7 +5232,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_memlimit_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_memlimit_max');
   late final _crypto_pwhash_argon2id_memlimit_max =
       _crypto_pwhash_argon2id_memlimit_maxPtr.asFunction<int Function()>();
@@ -5121,7 +5242,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_opslimit_interactivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_opslimit_interactive');
   late final _crypto_pwhash_argon2id_opslimit_interactive =
       _crypto_pwhash_argon2id_opslimit_interactivePtr
@@ -5132,7 +5253,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_memlimit_interactivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_memlimit_interactive');
   late final _crypto_pwhash_argon2id_memlimit_interactive =
       _crypto_pwhash_argon2id_memlimit_interactivePtr
@@ -5143,7 +5264,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_opslimit_moderatePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_opslimit_moderate');
   late final _crypto_pwhash_argon2id_opslimit_moderate =
       _crypto_pwhash_argon2id_opslimit_moderatePtr.asFunction<int Function()>();
@@ -5153,7 +5274,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_memlimit_moderatePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_memlimit_moderate');
   late final _crypto_pwhash_argon2id_memlimit_moderate =
       _crypto_pwhash_argon2id_memlimit_moderatePtr.asFunction<int Function()>();
@@ -5163,7 +5284,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_opslimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_opslimit_sensitive');
   late final _crypto_pwhash_argon2id_opslimit_sensitive =
       _crypto_pwhash_argon2id_opslimit_sensitivePtr
@@ -5174,18 +5295,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_argon2id_memlimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_argon2id_memlimit_sensitive');
   late final _crypto_pwhash_argon2id_memlimit_sensitive =
       _crypto_pwhash_argon2id_memlimit_sensitivePtr
           .asFunction<int Function()>();
 
   int crypto_pwhash_argon2id(
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
-    ffi.Pointer<ffi.Uint8> salt,
+    ffi.Pointer<ffi.UnsignedChar> salt,
     int opslimit,
     int memlimit,
     int alg,
@@ -5204,22 +5325,22 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_argon2idPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              size_t,
-              ffi.Int32)>>('crypto_pwhash_argon2id');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Size,
+              ffi.Int)>>('crypto_pwhash_argon2id');
   late final _crypto_pwhash_argon2id = _crypto_pwhash_argon2idPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Int8>, int,
-          ffi.Pointer<ffi.Uint8>, int, int, int)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int, ffi.Pointer<ffi.Char>,
+          int, ffi.Pointer<ffi.UnsignedChar>, int, int, int)>();
 
   int crypto_pwhash_argon2id_str(
-    ffi.Pointer<ffi.Int8> out,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> out,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
     int opslimit,
     int memlimit,
@@ -5235,16 +5356,20 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_argon2id_strPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>,
-              ffi.Uint64, ffi.Uint64, size_t)>>('crypto_pwhash_argon2id_str');
+          ffi.Int Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_argon2id_str');
   late final _crypto_pwhash_argon2id_str =
       _crypto_pwhash_argon2id_strPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int, int, int)>();
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int, int, int)>();
 
   int crypto_pwhash_argon2id_str_verify(
-    ffi.Pointer<ffi.Int8> str,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> str,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
   ) {
     return _crypto_pwhash_argon2id_str_verify(
@@ -5256,14 +5381,14 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_argon2id_str_verifyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>,
-              ffi.Uint64)>>('crypto_pwhash_argon2id_str_verify');
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong)>>('crypto_pwhash_argon2id_str_verify');
   late final _crypto_pwhash_argon2id_str_verify =
       _crypto_pwhash_argon2id_str_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int)>();
+          int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int)>();
 
   int crypto_pwhash_argon2id_str_needs_rehash(
-    ffi.Pointer<ffi.Int8> str,
+    ffi.Pointer<ffi.Char> str,
     int opslimit,
     int memlimit,
   ) {
@@ -5276,18 +5401,18 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_argon2id_str_needs_rehashPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Uint64,
-              size_t)>>('crypto_pwhash_argon2id_str_needs_rehash');
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_argon2id_str_needs_rehash');
   late final _crypto_pwhash_argon2id_str_needs_rehash =
       _crypto_pwhash_argon2id_str_needs_rehashPtr
-          .asFunction<int Function(ffi.Pointer<ffi.Int8>, int, int)>();
+          .asFunction<int Function(ffi.Pointer<ffi.Char>, int, int)>();
 
   int crypto_pwhash_alg_argon2i13() {
     return _crypto_pwhash_alg_argon2i13();
   }
 
   late final _crypto_pwhash_alg_argon2i13Ptr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'crypto_pwhash_alg_argon2i13');
   late final _crypto_pwhash_alg_argon2i13 =
       _crypto_pwhash_alg_argon2i13Ptr.asFunction<int Function()>();
@@ -5297,7 +5422,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_alg_argon2id13Ptr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'crypto_pwhash_alg_argon2id13');
   late final _crypto_pwhash_alg_argon2id13 =
       _crypto_pwhash_alg_argon2id13Ptr.asFunction<int Function()>();
@@ -5307,7 +5432,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_alg_defaultPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'crypto_pwhash_alg_default');
   late final _crypto_pwhash_alg_default =
       _crypto_pwhash_alg_defaultPtr.asFunction<int Function()>();
@@ -5317,7 +5442,8 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_bytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_pwhash_bytes_min');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_bytes_min');
   late final _crypto_pwhash_bytes_min =
       _crypto_pwhash_bytes_minPtr.asFunction<int Function()>();
 
@@ -5326,7 +5452,8 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_bytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_pwhash_bytes_max');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_bytes_max');
   late final _crypto_pwhash_bytes_max =
       _crypto_pwhash_bytes_maxPtr.asFunction<int Function()>();
 
@@ -5335,7 +5462,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_passwd_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_passwd_min');
   late final _crypto_pwhash_passwd_min =
       _crypto_pwhash_passwd_minPtr.asFunction<int Function()>();
@@ -5345,7 +5472,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_passwd_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_passwd_max');
   late final _crypto_pwhash_passwd_max =
       _crypto_pwhash_passwd_maxPtr.asFunction<int Function()>();
@@ -5355,7 +5482,8 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_saltbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_pwhash_saltbytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_saltbytes');
   late final _crypto_pwhash_saltbytes =
       _crypto_pwhash_saltbytesPtr.asFunction<int Function()>();
 
@@ -5364,26 +5492,27 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_strbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_pwhash_strbytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_strbytes');
   late final _crypto_pwhash_strbytes =
       _crypto_pwhash_strbytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_pwhash_strprefix() {
+  ffi.Pointer<ffi.Char> crypto_pwhash_strprefix() {
     return _crypto_pwhash_strprefix();
   }
 
   late final _crypto_pwhash_strprefixPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_pwhash_strprefix');
   late final _crypto_pwhash_strprefix = _crypto_pwhash_strprefixPtr
-      .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_pwhash_opslimit_min() {
     return _crypto_pwhash_opslimit_min();
   }
 
   late final _crypto_pwhash_opslimit_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_opslimit_min');
   late final _crypto_pwhash_opslimit_min =
       _crypto_pwhash_opslimit_minPtr.asFunction<int Function()>();
@@ -5393,7 +5522,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_opslimit_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_opslimit_max');
   late final _crypto_pwhash_opslimit_max =
       _crypto_pwhash_opslimit_maxPtr.asFunction<int Function()>();
@@ -5403,7 +5532,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_memlimit_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_memlimit_min');
   late final _crypto_pwhash_memlimit_min =
       _crypto_pwhash_memlimit_minPtr.asFunction<int Function()>();
@@ -5413,7 +5542,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_memlimit_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_memlimit_max');
   late final _crypto_pwhash_memlimit_max =
       _crypto_pwhash_memlimit_maxPtr.asFunction<int Function()>();
@@ -5423,7 +5552,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_opslimit_interactivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_opslimit_interactive');
   late final _crypto_pwhash_opslimit_interactive =
       _crypto_pwhash_opslimit_interactivePtr.asFunction<int Function()>();
@@ -5433,7 +5562,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_memlimit_interactivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_memlimit_interactive');
   late final _crypto_pwhash_memlimit_interactive =
       _crypto_pwhash_memlimit_interactivePtr.asFunction<int Function()>();
@@ -5443,7 +5572,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_opslimit_moderatePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_opslimit_moderate');
   late final _crypto_pwhash_opslimit_moderate =
       _crypto_pwhash_opslimit_moderatePtr.asFunction<int Function()>();
@@ -5453,7 +5582,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_memlimit_moderatePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_memlimit_moderate');
   late final _crypto_pwhash_memlimit_moderate =
       _crypto_pwhash_memlimit_moderatePtr.asFunction<int Function()>();
@@ -5463,7 +5592,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_opslimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_opslimit_sensitive');
   late final _crypto_pwhash_opslimit_sensitive =
       _crypto_pwhash_opslimit_sensitivePtr.asFunction<int Function()>();
@@ -5473,17 +5602,17 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_memlimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_memlimit_sensitive');
   late final _crypto_pwhash_memlimit_sensitive =
       _crypto_pwhash_memlimit_sensitivePtr.asFunction<int Function()>();
 
   int crypto_pwhash(
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
-    ffi.Pointer<ffi.Uint8> salt,
+    ffi.Pointer<ffi.UnsignedChar> salt,
     int opslimit,
     int memlimit,
     int alg,
@@ -5502,22 +5631,22 @@ class LibSodiumFFI {
 
   late final _crypto_pwhashPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              size_t,
-              ffi.Int32)>>('crypto_pwhash');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Size,
+              ffi.Int)>>('crypto_pwhash');
   late final _crypto_pwhash = _crypto_pwhashPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Int8>, int,
-          ffi.Pointer<ffi.Uint8>, int, int, int)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int, ffi.Pointer<ffi.Char>,
+          int, ffi.Pointer<ffi.UnsignedChar>, int, int, int)>();
 
   int crypto_pwhash_str(
-    ffi.Pointer<ffi.Int8> out,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> out,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
     int opslimit,
     int memlimit,
@@ -5533,15 +5662,19 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_strPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>,
-              ffi.Uint64, ffi.Uint64, size_t)>>('crypto_pwhash_str');
+          ffi.Int Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_str');
   late final _crypto_pwhash_str = _crypto_pwhash_strPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int, int, int)>();
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int, int, int)>();
 
   int crypto_pwhash_str_alg(
-    ffi.Pointer<ffi.Int8> out,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> out,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
     int opslimit,
     int memlimit,
@@ -5559,20 +5692,20 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_str_algPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Int8>,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Uint64,
-              ffi.Uint64,
-              size_t,
-              ffi.Int32)>>('crypto_pwhash_str_alg');
+          ffi.Int Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.UnsignedLongLong,
+              ffi.Size,
+              ffi.Int)>>('crypto_pwhash_str_alg');
   late final _crypto_pwhash_str_alg = _crypto_pwhash_str_algPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int, int, int, int)>();
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int, int, int, int)>();
 
   int crypto_pwhash_str_verify(
-    ffi.Pointer<ffi.Int8> str,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> str,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
   ) {
     return _crypto_pwhash_str_verify(
@@ -5584,14 +5717,14 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_str_verifyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>,
-              ffi.Uint64)>>('crypto_pwhash_str_verify');
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong)>>('crypto_pwhash_str_verify');
   late final _crypto_pwhash_str_verify =
       _crypto_pwhash_str_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int)>();
+          int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int)>();
 
   int crypto_pwhash_str_needs_rehash(
-    ffi.Pointer<ffi.Int8> str,
+    ffi.Pointer<ffi.Char> str,
     int opslimit,
     int memlimit,
   ) {
@@ -5604,28 +5737,28 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_str_needs_rehashPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Uint64,
-              size_t)>>('crypto_pwhash_str_needs_rehash');
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_str_needs_rehash');
   late final _crypto_pwhash_str_needs_rehash =
       _crypto_pwhash_str_needs_rehashPtr
-          .asFunction<int Function(ffi.Pointer<ffi.Int8>, int, int)>();
+          .asFunction<int Function(ffi.Pointer<ffi.Char>, int, int)>();
 
-  ffi.Pointer<ffi.Int8> crypto_pwhash_primitive() {
+  ffi.Pointer<ffi.Char> crypto_pwhash_primitive() {
     return _crypto_pwhash_primitive();
   }
 
   late final _crypto_pwhash_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_pwhash_primitive');
   late final _crypto_pwhash_primitive = _crypto_pwhash_primitivePtr
-      .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_scalarmult_curve25519_bytes() {
     return _crypto_scalarmult_curve25519_bytes();
   }
 
   late final _crypto_scalarmult_curve25519_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_scalarmult_curve25519_bytes');
   late final _crypto_scalarmult_curve25519_bytes =
       _crypto_scalarmult_curve25519_bytesPtr.asFunction<int Function()>();
@@ -5635,15 +5768,15 @@ class LibSodiumFFI {
   }
 
   late final _crypto_scalarmult_curve25519_scalarbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_scalarmult_curve25519_scalarbytes');
   late final _crypto_scalarmult_curve25519_scalarbytes =
       _crypto_scalarmult_curve25519_scalarbytesPtr.asFunction<int Function()>();
 
   int crypto_scalarmult_curve25519(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> p,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> p,
   ) {
     return _crypto_scalarmult_curve25519(
       q,
@@ -5654,16 +5787,18 @@ class LibSodiumFFI {
 
   late final _crypto_scalarmult_curve25519Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_scalarmult_curve25519');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_scalarmult_curve25519');
   late final _crypto_scalarmult_curve25519 =
       _crypto_scalarmult_curve25519Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_scalarmult_curve25519_base(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
   ) {
     return _crypto_scalarmult_curve25519_base(
       q,
@@ -5672,19 +5807,22 @@ class LibSodiumFFI {
   }
 
   late final _crypto_scalarmult_curve25519_basePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_scalarmult_curve25519_base');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_scalarmult_curve25519_base');
   late final _crypto_scalarmult_curve25519_base =
       _crypto_scalarmult_curve25519_basePtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_scalarmult_bytes() {
     return _crypto_scalarmult_bytes();
   }
 
   late final _crypto_scalarmult_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_scalarmult_bytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_scalarmult_bytes');
   late final _crypto_scalarmult_bytes =
       _crypto_scalarmult_bytesPtr.asFunction<int Function()>();
 
@@ -5693,24 +5831,24 @@ class LibSodiumFFI {
   }
 
   late final _crypto_scalarmult_scalarbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_scalarmult_scalarbytes');
   late final _crypto_scalarmult_scalarbytes =
       _crypto_scalarmult_scalarbytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_scalarmult_primitive() {
+  ffi.Pointer<ffi.Char> crypto_scalarmult_primitive() {
     return _crypto_scalarmult_primitive();
   }
 
   late final _crypto_scalarmult_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_scalarmult_primitive');
   late final _crypto_scalarmult_primitive = _crypto_scalarmult_primitivePtr
-      .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_scalarmult_base(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
   ) {
     return _crypto_scalarmult_base(
       q,
@@ -5720,15 +5858,16 @@ class LibSodiumFFI {
 
   late final _crypto_scalarmult_basePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_scalarmult_base');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_scalarmult_base');
   late final _crypto_scalarmult_base = _crypto_scalarmult_basePtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_scalarmult(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> p,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> p,
   ) {
     return _crypto_scalarmult(
       q,
@@ -5739,18 +5878,20 @@ class LibSodiumFFI {
 
   late final _crypto_scalarmultPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_scalarmult');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_scalarmult');
   late final _crypto_scalarmult = _crypto_scalarmultPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_xsalsa20poly1305_keybytes() {
     return _crypto_secretbox_xsalsa20poly1305_keybytes();
   }
 
   late final _crypto_secretbox_xsalsa20poly1305_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xsalsa20poly1305_keybytes');
   late final _crypto_secretbox_xsalsa20poly1305_keybytes =
       _crypto_secretbox_xsalsa20poly1305_keybytesPtr
@@ -5761,7 +5902,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_xsalsa20poly1305_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xsalsa20poly1305_noncebytes');
   late final _crypto_secretbox_xsalsa20poly1305_noncebytes =
       _crypto_secretbox_xsalsa20poly1305_noncebytesPtr
@@ -5772,7 +5913,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_xsalsa20poly1305_macbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xsalsa20poly1305_macbytes');
   late final _crypto_secretbox_xsalsa20poly1305_macbytes =
       _crypto_secretbox_xsalsa20poly1305_macbytesPtr
@@ -5783,18 +5924,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_xsalsa20poly1305_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xsalsa20poly1305_messagebytes_max');
   late final _crypto_secretbox_xsalsa20poly1305_messagebytes_max =
       _crypto_secretbox_xsalsa20poly1305_messagebytes_maxPtr
           .asFunction<int Function()>();
 
   int crypto_secretbox_xsalsa20poly1305(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_xsalsa20poly1305(
       c,
@@ -5806,24 +5947,29 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_xsalsa20poly1305Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_secretbox_xsalsa20poly1305');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_secretbox_xsalsa20poly1305');
   late final _crypto_secretbox_xsalsa20poly1305 =
       _crypto_secretbox_xsalsa20poly1305Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_xsalsa20poly1305_open(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_xsalsa20poly1305_open(
       m,
@@ -5836,35 +5982,43 @@ class LibSodiumFFI {
 
   late final _crypto_secretbox_xsalsa20poly1305_openPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_secretbox_xsalsa20poly1305_open');
   late final _crypto_secretbox_xsalsa20poly1305_open =
       _crypto_secretbox_xsalsa20poly1305_openPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_secretbox_xsalsa20poly1305_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_xsalsa20poly1305_keygen(
       k,
     );
   }
 
-  late final _crypto_secretbox_xsalsa20poly1305_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_secretbox_xsalsa20poly1305_keygen');
+  late final _crypto_secretbox_xsalsa20poly1305_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_secretbox_xsalsa20poly1305_keygen');
   late final _crypto_secretbox_xsalsa20poly1305_keygen =
       _crypto_secretbox_xsalsa20poly1305_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_xsalsa20poly1305_boxzerobytes() {
     return _crypto_secretbox_xsalsa20poly1305_boxzerobytes();
   }
 
   late final _crypto_secretbox_xsalsa20poly1305_boxzerobytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xsalsa20poly1305_boxzerobytes');
   late final _crypto_secretbox_xsalsa20poly1305_boxzerobytes =
       _crypto_secretbox_xsalsa20poly1305_boxzerobytesPtr
@@ -5875,7 +6029,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_xsalsa20poly1305_zerobytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xsalsa20poly1305_zerobytes');
   late final _crypto_secretbox_xsalsa20poly1305_zerobytes =
       _crypto_secretbox_xsalsa20poly1305_zerobytesPtr
@@ -5886,7 +6040,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_keybytes');
   late final _crypto_secretbox_keybytes =
       _crypto_secretbox_keybytesPtr.asFunction<int Function()>();
@@ -5896,7 +6050,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_noncebytes');
   late final _crypto_secretbox_noncebytes =
       _crypto_secretbox_noncebytesPtr.asFunction<int Function()>();
@@ -5906,37 +6060,37 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_macbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_macbytes');
   late final _crypto_secretbox_macbytes =
       _crypto_secretbox_macbytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_secretbox_primitive() {
+  ffi.Pointer<ffi.Char> crypto_secretbox_primitive() {
     return _crypto_secretbox_primitive();
   }
 
   late final _crypto_secretbox_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_secretbox_primitive');
   late final _crypto_secretbox_primitive = _crypto_secretbox_primitivePtr
-      .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_secretbox_messagebytes_max() {
     return _crypto_secretbox_messagebytes_max();
   }
 
   late final _crypto_secretbox_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_messagebytes_max');
   late final _crypto_secretbox_messagebytes_max =
       _crypto_secretbox_messagebytes_maxPtr.asFunction<int Function()>();
 
   int crypto_secretbox_easy(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_easy(
       c,
@@ -5949,22 +6103,22 @@ class LibSodiumFFI {
 
   late final _crypto_secretbox_easyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_secretbox_easy');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_secretbox_easy');
   late final _crypto_secretbox_easy = _crypto_secretbox_easyPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_open_easy(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_open_easy(
       m,
@@ -5977,24 +6131,28 @@ class LibSodiumFFI {
 
   late final _crypto_secretbox_open_easyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_secretbox_open_easy');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_secretbox_open_easy');
   late final _crypto_secretbox_open_easy =
       _crypto_secretbox_open_easyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_detached(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_detached(
       c,
@@ -6008,30 +6166,30 @@ class LibSodiumFFI {
 
   late final _crypto_secretbox_detachedPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_secretbox_detached');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_secretbox_detached');
   late final _crypto_secretbox_detached =
       _crypto_secretbox_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_open_detached(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_open_detached(
       m,
@@ -6044,44 +6202,45 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_open_detachedPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_secretbox_open_detached');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_secretbox_open_detached');
   late final _crypto_secretbox_open_detached =
       _crypto_secretbox_open_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_secretbox_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_keygen(
       k,
     );
   }
 
-  late final _crypto_secretbox_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_secretbox_keygen');
+  late final _crypto_secretbox_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_secretbox_keygen');
   late final _crypto_secretbox_keygen = _crypto_secretbox_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_zerobytes() {
     return _crypto_secretbox_zerobytes();
   }
 
   late final _crypto_secretbox_zerobytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_zerobytes');
   late final _crypto_secretbox_zerobytes =
       _crypto_secretbox_zerobytesPtr.asFunction<int Function()>();
@@ -6091,17 +6250,17 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_boxzerobytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_boxzerobytes');
   late final _crypto_secretbox_boxzerobytes =
       _crypto_secretbox_boxzerobytesPtr.asFunction<int Function()>();
 
   int crypto_secretbox(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox(
       c,
@@ -6114,22 +6273,22 @@ class LibSodiumFFI {
 
   late final _crypto_secretboxPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_secretbox');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_secretbox');
   late final _crypto_secretbox = _crypto_secretboxPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_open(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_open(
       m,
@@ -6142,22 +6301,22 @@ class LibSodiumFFI {
 
   late final _crypto_secretbox_openPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_secretbox_open');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_secretbox_open');
   late final _crypto_secretbox_open = _crypto_secretbox_openPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_chacha20_keybytes() {
     return _crypto_stream_chacha20_keybytes();
   }
 
   late final _crypto_stream_chacha20_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_chacha20_keybytes');
   late final _crypto_stream_chacha20_keybytes =
       _crypto_stream_chacha20_keybytesPtr.asFunction<int Function()>();
@@ -6167,7 +6326,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_chacha20_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_chacha20_noncebytes');
   late final _crypto_stream_chacha20_noncebytes =
       _crypto_stream_chacha20_noncebytesPtr.asFunction<int Function()>();
@@ -6177,16 +6336,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_chacha20_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_chacha20_messagebytes_max');
   late final _crypto_stream_chacha20_messagebytes_max =
       _crypto_stream_chacha20_messagebytes_maxPtr.asFunction<int Function()>();
 
   int crypto_stream_chacha20(
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_chacha20(
       c,
@@ -6198,21 +6357,21 @@ class LibSodiumFFI {
 
   late final _crypto_stream_chacha20Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_chacha20');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_chacha20');
   late final _crypto_stream_chacha20 = _crypto_stream_chacha20Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_chacha20_xor(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_chacha20_xor(
       c,
@@ -6225,24 +6384,28 @@ class LibSodiumFFI {
 
   late final _crypto_stream_chacha20_xorPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_chacha20_xor');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_chacha20_xor');
   late final _crypto_stream_chacha20_xor =
       _crypto_stream_chacha20_xorPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_chacha20_xor_ic(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> n,
     int ic,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_chacha20_xor_ic(
       c,
@@ -6256,38 +6419,43 @@ class LibSodiumFFI {
 
   late final _crypto_stream_chacha20_xor_icPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
               ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_chacha20_xor_ic');
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_chacha20_xor_ic');
   late final _crypto_stream_chacha20_xor_ic =
       _crypto_stream_chacha20_xor_icPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_stream_chacha20_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_chacha20_keygen(
       k,
     );
   }
 
-  late final _crypto_stream_chacha20_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_stream_chacha20_keygen');
+  late final _crypto_stream_chacha20_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_chacha20_keygen');
   late final _crypto_stream_chacha20_keygen = _crypto_stream_chacha20_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_chacha20_ietf_keybytes() {
     return _crypto_stream_chacha20_ietf_keybytes();
   }
 
   late final _crypto_stream_chacha20_ietf_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_chacha20_ietf_keybytes');
   late final _crypto_stream_chacha20_ietf_keybytes =
       _crypto_stream_chacha20_ietf_keybytesPtr.asFunction<int Function()>();
@@ -6297,7 +6465,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_chacha20_ietf_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_chacha20_ietf_noncebytes');
   late final _crypto_stream_chacha20_ietf_noncebytes =
       _crypto_stream_chacha20_ietf_noncebytesPtr.asFunction<int Function()>();
@@ -6307,17 +6475,17 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_chacha20_ietf_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_chacha20_ietf_messagebytes_max');
   late final _crypto_stream_chacha20_ietf_messagebytes_max =
       _crypto_stream_chacha20_ietf_messagebytes_maxPtr
           .asFunction<int Function()>();
 
   int crypto_stream_chacha20_ietf(
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_chacha20_ietf(
       c,
@@ -6329,22 +6497,22 @@ class LibSodiumFFI {
 
   late final _crypto_stream_chacha20_ietfPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_chacha20_ietf');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_chacha20_ietf');
   late final _crypto_stream_chacha20_ietf =
       _crypto_stream_chacha20_ietfPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_chacha20_ietf_xor(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_chacha20_ietf_xor(
       c,
@@ -6356,25 +6524,30 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_chacha20_ietf_xorPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_chacha20_ietf_xor');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_chacha20_ietf_xor');
   late final _crypto_stream_chacha20_ietf_xor =
       _crypto_stream_chacha20_ietf_xorPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_chacha20_ietf_xor_ic(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> n,
     int ic,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_chacha20_ietf_xor_ic(
       c,
@@ -6387,40 +6560,46 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_chacha20_ietf_xor_icPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint32,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_chacha20_ietf_xor_ic');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Uint32,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_chacha20_ietf_xor_ic');
   late final _crypto_stream_chacha20_ietf_xor_ic =
       _crypto_stream_chacha20_ietf_xor_icPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_stream_chacha20_ietf_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_chacha20_ietf_keygen(
       k,
     );
   }
 
-  late final _crypto_stream_chacha20_ietf_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_stream_chacha20_ietf_keygen');
+  late final _crypto_stream_chacha20_ietf_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_chacha20_ietf_keygen');
   late final _crypto_stream_chacha20_ietf_keygen =
       _crypto_stream_chacha20_ietf_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretstream_xchacha20poly1305_abytes() {
     return _crypto_secretstream_xchacha20poly1305_abytes();
   }
 
   late final _crypto_secretstream_xchacha20poly1305_abytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretstream_xchacha20poly1305_abytes');
   late final _crypto_secretstream_xchacha20poly1305_abytes =
       _crypto_secretstream_xchacha20poly1305_abytesPtr
@@ -6431,7 +6610,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretstream_xchacha20poly1305_headerbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretstream_xchacha20poly1305_headerbytes');
   late final _crypto_secretstream_xchacha20poly1305_headerbytes =
       _crypto_secretstream_xchacha20poly1305_headerbytesPtr
@@ -6442,7 +6621,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretstream_xchacha20poly1305_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretstream_xchacha20poly1305_keybytes');
   late final _crypto_secretstream_xchacha20poly1305_keybytes =
       _crypto_secretstream_xchacha20poly1305_keybytesPtr
@@ -6453,7 +6632,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretstream_xchacha20poly1305_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretstream_xchacha20poly1305_messagebytes_max');
   late final _crypto_secretstream_xchacha20poly1305_messagebytes_max =
       _crypto_secretstream_xchacha20poly1305_messagebytes_maxPtr
@@ -6464,7 +6643,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretstream_xchacha20poly1305_tag_messagePtr =
-      _lookup<ffi.NativeFunction<ffi.Uint8 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.UnsignedChar Function()>>(
           'crypto_secretstream_xchacha20poly1305_tag_message');
   late final _crypto_secretstream_xchacha20poly1305_tag_message =
       _crypto_secretstream_xchacha20poly1305_tag_messagePtr
@@ -6475,7 +6654,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretstream_xchacha20poly1305_tag_pushPtr =
-      _lookup<ffi.NativeFunction<ffi.Uint8 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.UnsignedChar Function()>>(
           'crypto_secretstream_xchacha20poly1305_tag_push');
   late final _crypto_secretstream_xchacha20poly1305_tag_push =
       _crypto_secretstream_xchacha20poly1305_tag_pushPtr
@@ -6486,7 +6665,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretstream_xchacha20poly1305_tag_rekeyPtr =
-      _lookup<ffi.NativeFunction<ffi.Uint8 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.UnsignedChar Function()>>(
           'crypto_secretstream_xchacha20poly1305_tag_rekey');
   late final _crypto_secretstream_xchacha20poly1305_tag_rekey =
       _crypto_secretstream_xchacha20poly1305_tag_rekeyPtr
@@ -6497,7 +6676,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretstream_xchacha20poly1305_tag_finalPtr =
-      _lookup<ffi.NativeFunction<ffi.Uint8 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.UnsignedChar Function()>>(
           'crypto_secretstream_xchacha20poly1305_tag_final');
   late final _crypto_secretstream_xchacha20poly1305_tag_final =
       _crypto_secretstream_xchacha20poly1305_tag_finalPtr
@@ -6508,31 +6687,31 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretstream_xchacha20poly1305_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretstream_xchacha20poly1305_statebytes');
   late final _crypto_secretstream_xchacha20poly1305_statebytes =
       _crypto_secretstream_xchacha20poly1305_statebytesPtr
           .asFunction<int Function()>();
 
   void crypto_secretstream_xchacha20poly1305_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretstream_xchacha20poly1305_keygen(
       k,
     );
   }
 
-  late final _crypto_secretstream_xchacha20poly1305_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_secretstream_xchacha20poly1305_keygen');
+  late final _crypto_secretstream_xchacha20poly1305_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_secretstream_xchacha20poly1305_keygen');
   late final _crypto_secretstream_xchacha20poly1305_keygen =
       _crypto_secretstream_xchacha20poly1305_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretstream_xchacha20poly1305_init_push(
     ffi.Pointer<crypto_secretstream_xchacha20poly1305_state> state,
-    ffi.Pointer<ffi.Uint8> header,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> header,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretstream_xchacha20poly1305_init_push(
       state,
@@ -6543,23 +6722,23 @@ class LibSodiumFFI {
 
   late final _crypto_secretstream_xchacha20poly1305_init_pushPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
+              ffi.Int Function(
                   ffi.Pointer<crypto_secretstream_xchacha20poly1305_state>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_secretstream_xchacha20poly1305_init_push');
   late final _crypto_secretstream_xchacha20poly1305_init_push =
       _crypto_secretstream_xchacha20poly1305_init_pushPtr.asFunction<
           int Function(ffi.Pointer<crypto_secretstream_xchacha20poly1305_state>,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretstream_xchacha20poly1305_push(
     ffi.Pointer<crypto_secretstream_xchacha20poly1305_state> state,
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint64> clen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedLongLong> clen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
     int tag,
   ) {
@@ -6577,31 +6756,31 @@ class LibSodiumFFI {
 
   late final _crypto_secretstream_xchacha20poly1305_pushPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_secretstream_xchacha20poly1305_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Uint8)>>('crypto_secretstream_xchacha20poly1305_push');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.UnsignedChar)>>('crypto_secretstream_xchacha20poly1305_push');
   late final _crypto_secretstream_xchacha20poly1305_push =
       _crypto_secretstream_xchacha20poly1305_pushPtr.asFunction<
           int Function(
               ffi.Pointer<crypto_secretstream_xchacha20poly1305_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
               int)>();
 
   int crypto_secretstream_xchacha20poly1305_init_pull(
     ffi.Pointer<crypto_secretstream_xchacha20poly1305_state> state,
-    ffi.Pointer<ffi.Uint8> header,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> header,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretstream_xchacha20poly1305_init_pull(
       state,
@@ -6612,24 +6791,24 @@ class LibSodiumFFI {
 
   late final _crypto_secretstream_xchacha20poly1305_init_pullPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
+              ffi.Int Function(
                   ffi.Pointer<crypto_secretstream_xchacha20poly1305_state>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_secretstream_xchacha20poly1305_init_pull');
   late final _crypto_secretstream_xchacha20poly1305_init_pull =
       _crypto_secretstream_xchacha20poly1305_init_pullPtr.asFunction<
           int Function(ffi.Pointer<crypto_secretstream_xchacha20poly1305_state>,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretstream_xchacha20poly1305_pull(
     ffi.Pointer<crypto_secretstream_xchacha20poly1305_state> state,
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint64> mlen_p,
-    ffi.Pointer<ffi.Uint8> tag_p,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> tag_p,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> ad,
+    ffi.Pointer<ffi.UnsignedChar> ad,
     int adlen,
   ) {
     return _crypto_secretstream_xchacha20poly1305_pull(
@@ -6645,26 +6824,27 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretstream_xchacha20poly1305_pullPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<crypto_secretstream_xchacha20poly1305_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_secretstream_xchacha20poly1305_pull');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<crypto_secretstream_xchacha20poly1305_state>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong)>>(
+      'crypto_secretstream_xchacha20poly1305_pull');
   late final _crypto_secretstream_xchacha20poly1305_pull =
       _crypto_secretstream_xchacha20poly1305_pullPtr.asFunction<
           int Function(
               ffi.Pointer<crypto_secretstream_xchacha20poly1305_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int)>();
 
   void crypto_secretstream_xchacha20poly1305_rekey(
@@ -6690,7 +6870,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_shorthash_siphash24_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_shorthash_siphash24_bytes');
   late final _crypto_shorthash_siphash24_bytes =
       _crypto_shorthash_siphash24_bytesPtr.asFunction<int Function()>();
@@ -6700,16 +6880,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_shorthash_siphash24_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_shorthash_siphash24_keybytes');
   late final _crypto_shorthash_siphash24_keybytes =
       _crypto_shorthash_siphash24_keybytesPtr.asFunction<int Function()>();
 
   int crypto_shorthash_siphash24(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_shorthash_siphash24(
       out,
@@ -6721,22 +6901,25 @@ class LibSodiumFFI {
 
   late final _crypto_shorthash_siphash24Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_shorthash_siphash24');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_shorthash_siphash24');
   late final _crypto_shorthash_siphash24 =
       _crypto_shorthash_siphash24Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_shorthash_siphashx24_bytes() {
     return _crypto_shorthash_siphashx24_bytes();
   }
 
   late final _crypto_shorthash_siphashx24_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_shorthash_siphashx24_bytes');
   late final _crypto_shorthash_siphashx24_bytes =
       _crypto_shorthash_siphashx24_bytesPtr.asFunction<int Function()>();
@@ -6746,16 +6929,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_shorthash_siphashx24_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_shorthash_siphashx24_keybytes');
   late final _crypto_shorthash_siphashx24_keybytes =
       _crypto_shorthash_siphashx24_keybytesPtr.asFunction<int Function()>();
 
   int crypto_shorthash_siphashx24(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_shorthash_siphashx24(
       out,
@@ -6767,22 +6950,26 @@ class LibSodiumFFI {
 
   late final _crypto_shorthash_siphashx24Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_shorthash_siphashx24');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_shorthash_siphashx24');
   late final _crypto_shorthash_siphashx24 =
       _crypto_shorthash_siphashx24Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_shorthash_bytes() {
     return _crypto_shorthash_bytes();
   }
 
   late final _crypto_shorthash_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_shorthash_bytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_shorthash_bytes');
   late final _crypto_shorthash_bytes =
       _crypto_shorthash_bytesPtr.asFunction<int Function()>();
 
@@ -6791,26 +6978,26 @@ class LibSodiumFFI {
   }
 
   late final _crypto_shorthash_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_shorthash_keybytes');
   late final _crypto_shorthash_keybytes =
       _crypto_shorthash_keybytesPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_shorthash_primitive() {
+  ffi.Pointer<ffi.Char> crypto_shorthash_primitive() {
     return _crypto_shorthash_primitive();
   }
 
   late final _crypto_shorthash_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_shorthash_primitive');
   late final _crypto_shorthash_primitive = _crypto_shorthash_primitivePtr
-      .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_shorthash(
-    ffi.Pointer<ffi.Uint8> out,
-    ffi.Pointer<ffi.Uint8> in1,
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
     int inlen,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_shorthash(
       out,
@@ -6822,32 +7009,35 @@ class LibSodiumFFI {
 
   late final _crypto_shorthashPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64, ffi.Pointer<ffi.Uint8>)>>('crypto_shorthash');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_shorthash');
   late final _crypto_shorthash = _crypto_shorthashPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_shorthash_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_shorthash_keygen(
       k,
     );
   }
 
-  late final _crypto_shorthash_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_shorthash_keygen');
+  late final _crypto_shorthash_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_shorthash_keygen');
   late final _crypto_shorthash_keygen = _crypto_shorthash_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519ph_statebytes() {
     return _crypto_sign_ed25519ph_statebytes();
   }
 
   late final _crypto_sign_ed25519ph_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_sign_ed25519ph_statebytes');
   late final _crypto_sign_ed25519ph_statebytes =
       _crypto_sign_ed25519ph_statebytesPtr.asFunction<int Function()>();
@@ -6857,7 +7047,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_sign_ed25519_bytes');
   late final _crypto_sign_ed25519_bytes =
       _crypto_sign_ed25519_bytesPtr.asFunction<int Function()>();
@@ -6867,7 +7057,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_seedbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_sign_ed25519_seedbytes');
   late final _crypto_sign_ed25519_seedbytes =
       _crypto_sign_ed25519_seedbytesPtr.asFunction<int Function()>();
@@ -6877,7 +7067,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_publickeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_sign_ed25519_publickeybytes');
   late final _crypto_sign_ed25519_publickeybytes =
       _crypto_sign_ed25519_publickeybytesPtr.asFunction<int Function()>();
@@ -6887,7 +7077,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_secretkeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_sign_ed25519_secretkeybytes');
   late final _crypto_sign_ed25519_secretkeybytes =
       _crypto_sign_ed25519_secretkeybytesPtr.asFunction<int Function()>();
@@ -6897,17 +7087,17 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_sign_ed25519_messagebytes_max');
   late final _crypto_sign_ed25519_messagebytes_max =
       _crypto_sign_ed25519_messagebytes_maxPtr.asFunction<int Function()>();
 
   int crypto_sign_ed25519(
-    ffi.Pointer<ffi.Uint8> sm,
-    ffi.Pointer<ffi.Uint64> smlen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> sm,
+    ffi.Pointer<ffi.UnsignedLongLong> smlen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign_ed25519(
       sm,
@@ -6920,22 +7110,26 @@ class LibSodiumFFI {
 
   late final _crypto_sign_ed25519Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_ed25519');
   late final _crypto_sign_ed25519 = _crypto_sign_ed25519Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint64>,
-          ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedLongLong>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          int,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519_open(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint64> mlen_p,
-    ffi.Pointer<ffi.Uint8> sm,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> sm,
     int smlen,
-    ffi.Pointer<ffi.Uint8> pk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
   ) {
     return _crypto_sign_ed25519_open(
       m,
@@ -6948,23 +7142,27 @@ class LibSodiumFFI {
 
   late final _crypto_sign_ed25519_openPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519_open');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_ed25519_open');
   late final _crypto_sign_ed25519_open =
       _crypto_sign_ed25519_openPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519_detached(
-    ffi.Pointer<ffi.Uint8> sig,
-    ffi.Pointer<ffi.Uint64> siglen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> sig,
+    ffi.Pointer<ffi.UnsignedLongLong> siglen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign_ed25519_detached(
       sig,
@@ -6977,22 +7175,26 @@ class LibSodiumFFI {
 
   late final _crypto_sign_ed25519_detachedPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519_detached');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_ed25519_detached');
   late final _crypto_sign_ed25519_detached =
       _crypto_sign_ed25519_detachedPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519_verify_detached(
-    ffi.Pointer<ffi.Uint8> sig,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> sig,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> pk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
   ) {
     return _crypto_sign_ed25519_verify_detached(
       sig,
@@ -7003,20 +7205,24 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_verify_detachedPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519_verify_detached');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_sign_ed25519_verify_detached');
   late final _crypto_sign_ed25519_verify_detached =
       _crypto_sign_ed25519_verify_detachedPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign_ed25519_keypair(
       pk,
@@ -7026,16 +7232,17 @@ class LibSodiumFFI {
 
   late final _crypto_sign_ed25519_keypairPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519_keypair');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_ed25519_keypair');
   late final _crypto_sign_ed25519_keypair =
       _crypto_sign_ed25519_keypairPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519_seed_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
-    ffi.Pointer<ffi.Uint8> seed,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
+    ffi.Pointer<ffi.UnsignedChar> seed,
   ) {
     return _crypto_sign_ed25519_seed_keypair(
       pk,
@@ -7045,17 +7252,20 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_seed_keypairPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519_seed_keypair');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_sign_ed25519_seed_keypair');
   late final _crypto_sign_ed25519_seed_keypair =
       _crypto_sign_ed25519_seed_keypairPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519_pk_to_curve25519(
-    ffi.Pointer<ffi.Uint8> curve25519_pk,
-    ffi.Pointer<ffi.Uint8> ed25519_pk,
+    ffi.Pointer<ffi.UnsignedChar> curve25519_pk,
+    ffi.Pointer<ffi.UnsignedChar> ed25519_pk,
   ) {
     return _crypto_sign_ed25519_pk_to_curve25519(
       curve25519_pk,
@@ -7064,16 +7274,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_pk_to_curve25519Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519_pk_to_curve25519');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_sign_ed25519_pk_to_curve25519');
   late final _crypto_sign_ed25519_pk_to_curve25519 =
       _crypto_sign_ed25519_pk_to_curve25519Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519_sk_to_curve25519(
-    ffi.Pointer<ffi.Uint8> curve25519_sk,
-    ffi.Pointer<ffi.Uint8> ed25519_sk,
+    ffi.Pointer<ffi.UnsignedChar> curve25519_sk,
+    ffi.Pointer<ffi.UnsignedChar> ed25519_sk,
   ) {
     return _crypto_sign_ed25519_sk_to_curve25519(
       curve25519_sk,
@@ -7082,16 +7294,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_sk_to_curve25519Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519_sk_to_curve25519');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_sign_ed25519_sk_to_curve25519');
   late final _crypto_sign_ed25519_sk_to_curve25519 =
       _crypto_sign_ed25519_sk_to_curve25519Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519_sk_to_seed(
-    ffi.Pointer<ffi.Uint8> seed,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> seed,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign_ed25519_sk_to_seed(
       seed,
@@ -7100,16 +7314,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519_sk_to_seedPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519_sk_to_seed');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_sign_ed25519_sk_to_seed');
   late final _crypto_sign_ed25519_sk_to_seed =
       _crypto_sign_ed25519_sk_to_seedPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519_sk_to_pk(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign_ed25519_sk_to_pk(
       pk,
@@ -7119,11 +7335,12 @@ class LibSodiumFFI {
 
   late final _crypto_sign_ed25519_sk_to_pkPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519_sk_to_pk');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_ed25519_sk_to_pk');
   late final _crypto_sign_ed25519_sk_to_pk =
       _crypto_sign_ed25519_sk_to_pkPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519ph_init(
     ffi.Pointer<crypto_sign_ed25519ph_state> state,
@@ -7135,14 +7352,14 @@ class LibSodiumFFI {
 
   late final _crypto_sign_ed25519ph_initPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<crypto_sign_ed25519ph_state>)>>(
+              ffi.Int Function(ffi.Pointer<crypto_sign_ed25519ph_state>)>>(
       'crypto_sign_ed25519ph_init');
   late final _crypto_sign_ed25519ph_init = _crypto_sign_ed25519ph_initPtr
       .asFunction<int Function(ffi.Pointer<crypto_sign_ed25519ph_state>)>();
 
   int crypto_sign_ed25519ph_update(
     ffi.Pointer<crypto_sign_ed25519ph_state> state,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
   ) {
     return _crypto_sign_ed25519ph_update(
@@ -7154,20 +7371,20 @@ class LibSodiumFFI {
 
   late final _crypto_sign_ed25519ph_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_sign_ed25519ph_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64)>>('crypto_sign_ed25519ph_update');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_sign_ed25519ph_update');
   late final _crypto_sign_ed25519ph_update =
       _crypto_sign_ed25519ph_updatePtr.asFunction<
           int Function(ffi.Pointer<crypto_sign_ed25519ph_state>,
-              ffi.Pointer<ffi.Uint8>, int)>();
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_sign_ed25519ph_final_create(
     ffi.Pointer<crypto_sign_ed25519ph_state> state,
-    ffi.Pointer<ffi.Uint8> sig,
-    ffi.Pointer<ffi.Uint64> siglen_p,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> sig,
+    ffi.Pointer<ffi.UnsignedLongLong> siglen_p,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign_ed25519ph_final_create(
       state,
@@ -7178,24 +7395,25 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519ph_final_createPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<crypto_sign_ed25519ph_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519ph_final_create');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<crypto_sign_ed25519ph_state>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_sign_ed25519ph_final_create');
   late final _crypto_sign_ed25519ph_final_create =
       _crypto_sign_ed25519ph_final_createPtr.asFunction<
           int Function(
               ffi.Pointer<crypto_sign_ed25519ph_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_ed25519ph_final_verify(
     ffi.Pointer<crypto_sign_ed25519ph_state> state,
-    ffi.Pointer<ffi.Uint8> sig,
-    ffi.Pointer<ffi.Uint8> pk,
+    ffi.Pointer<ffi.UnsignedChar> sig,
+    ffi.Pointer<ffi.UnsignedChar> pk,
   ) {
     return _crypto_sign_ed25519ph_final_verify(
       state,
@@ -7205,22 +7423,24 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_ed25519ph_final_verifyPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<crypto_sign_ed25519ph_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_ed25519ph_final_verify');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<crypto_sign_ed25519ph_state>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_sign_ed25519ph_final_verify');
   late final _crypto_sign_ed25519ph_final_verify =
       _crypto_sign_ed25519ph_final_verifyPtr.asFunction<
           int Function(ffi.Pointer<crypto_sign_ed25519ph_state>,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_statebytes() {
     return _crypto_sign_statebytes();
   }
 
   late final _crypto_sign_statebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_sign_statebytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_sign_statebytes');
   late final _crypto_sign_statebytes =
       _crypto_sign_statebytesPtr.asFunction<int Function()>();
 
@@ -7229,7 +7449,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_sign_bytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_sign_bytes');
   late final _crypto_sign_bytes =
       _crypto_sign_bytesPtr.asFunction<int Function()>();
 
@@ -7238,7 +7458,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_seedbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_sign_seedbytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('crypto_sign_seedbytes');
   late final _crypto_sign_seedbytes =
       _crypto_sign_seedbytesPtr.asFunction<int Function()>();
 
@@ -7247,7 +7467,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_publickeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_sign_publickeybytes');
   late final _crypto_sign_publickeybytes =
       _crypto_sign_publickeybytesPtr.asFunction<int Function()>();
@@ -7257,7 +7477,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_secretkeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_sign_secretkeybytes');
   late final _crypto_sign_secretkeybytes =
       _crypto_sign_secretkeybytesPtr.asFunction<int Function()>();
@@ -7267,25 +7487,25 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_sign_messagebytes_max');
   late final _crypto_sign_messagebytes_max =
       _crypto_sign_messagebytes_maxPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_sign_primitive() {
+  ffi.Pointer<ffi.Char> crypto_sign_primitive() {
     return _crypto_sign_primitive();
   }
 
   late final _crypto_sign_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_sign_primitive');
   late final _crypto_sign_primitive =
-      _crypto_sign_primitivePtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _crypto_sign_primitivePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_sign_seed_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
-    ffi.Pointer<ffi.Uint8> seed,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
+    ffi.Pointer<ffi.UnsignedChar> seed,
   ) {
     return _crypto_sign_seed_keypair(
       pk,
@@ -7296,16 +7516,18 @@ class LibSodiumFFI {
 
   late final _crypto_sign_seed_keypairPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_seed_keypair');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_seed_keypair');
   late final _crypto_sign_seed_keypair =
       _crypto_sign_seed_keypairPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign_keypair(
       pk,
@@ -7315,17 +7537,18 @@ class LibSodiumFFI {
 
   late final _crypto_sign_keypairPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_keypair');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_keypair');
   late final _crypto_sign_keypair = _crypto_sign_keypairPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign(
-    ffi.Pointer<ffi.Uint8> sm,
-    ffi.Pointer<ffi.Uint64> smlen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> sm,
+    ffi.Pointer<ffi.UnsignedLongLong> smlen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign(
       sm,
@@ -7338,22 +7561,26 @@ class LibSodiumFFI {
 
   late final _crypto_signPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign');
   late final _crypto_sign = _crypto_signPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint64>,
-          ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedLongLong>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          int,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_open(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint64> mlen_p,
-    ffi.Pointer<ffi.Uint8> sm,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> sm,
     int smlen,
-    ffi.Pointer<ffi.Uint8> pk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
   ) {
     return _crypto_sign_open(
       m,
@@ -7366,22 +7593,26 @@ class LibSodiumFFI {
 
   late final _crypto_sign_openPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_open');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_open');
   late final _crypto_sign_open = _crypto_sign_openPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint64>,
-          ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedLongLong>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          int,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_detached(
-    ffi.Pointer<ffi.Uint8> sig,
-    ffi.Pointer<ffi.Uint64> siglen_p,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> sig,
+    ffi.Pointer<ffi.UnsignedLongLong> siglen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign_detached(
       sig,
@@ -7394,21 +7625,25 @@ class LibSodiumFFI {
 
   late final _crypto_sign_detachedPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_detached');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_detached');
   late final _crypto_sign_detached = _crypto_sign_detachedPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint64>,
-          ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedLongLong>,
+          ffi.Pointer<ffi.UnsignedChar>,
+          int,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_verify_detached(
-    ffi.Pointer<ffi.Uint8> sig,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> sig,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> pk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
   ) {
     return _crypto_sign_verify_detached(
       sig,
@@ -7420,15 +7655,18 @@ class LibSodiumFFI {
 
   late final _crypto_sign_verify_detachedPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_verify_detached');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_verify_detached');
   late final _crypto_sign_verify_detached =
       _crypto_sign_verify_detachedPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_init(
     ffi.Pointer<crypto_sign_state> state,
@@ -7439,15 +7677,14 @@ class LibSodiumFFI {
   }
 
   late final _crypto_sign_initPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<crypto_sign_state>)>>('crypto_sign_init');
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<crypto_sign_state>)>>(
+      'crypto_sign_init');
   late final _crypto_sign_init = _crypto_sign_initPtr
       .asFunction<int Function(ffi.Pointer<crypto_sign_state>)>();
 
   int crypto_sign_update(
     ffi.Pointer<crypto_sign_state> state,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
   ) {
     return _crypto_sign_update(
@@ -7459,17 +7696,19 @@ class LibSodiumFFI {
 
   late final _crypto_sign_updatePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<crypto_sign_state>,
-              ffi.Pointer<ffi.Uint8>, ffi.Uint64)>>('crypto_sign_update');
+          ffi.Int Function(
+              ffi.Pointer<crypto_sign_state>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('crypto_sign_update');
   late final _crypto_sign_update = _crypto_sign_updatePtr.asFunction<
-      int Function(
-          ffi.Pointer<crypto_sign_state>, ffi.Pointer<ffi.Uint8>, int)>();
+      int Function(ffi.Pointer<crypto_sign_state>,
+          ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int crypto_sign_final_create(
     ffi.Pointer<crypto_sign_state> state,
-    ffi.Pointer<ffi.Uint8> sig,
-    ffi.Pointer<ffi.Uint64> siglen_p,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> sig,
+    ffi.Pointer<ffi.UnsignedLongLong> siglen_p,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_sign_final_create(
       state,
@@ -7481,20 +7720,23 @@ class LibSodiumFFI {
 
   late final _crypto_sign_final_createPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_sign_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_final_create');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_final_create');
   late final _crypto_sign_final_create =
       _crypto_sign_final_createPtr.asFunction<
-          int Function(ffi.Pointer<crypto_sign_state>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint64>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<crypto_sign_state>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_sign_final_verify(
     ffi.Pointer<crypto_sign_state> state,
-    ffi.Pointer<ffi.Uint8> sig,
-    ffi.Pointer<ffi.Uint8> pk,
+    ffi.Pointer<ffi.UnsignedChar> sig,
+    ffi.Pointer<ffi.UnsignedChar> pk,
   ) {
     return _crypto_sign_final_verify(
       state,
@@ -7505,21 +7747,22 @@ class LibSodiumFFI {
 
   late final _crypto_sign_final_verifyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<crypto_sign_state>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_sign_final_verify');
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_sign_final_verify');
   late final _crypto_sign_final_verify =
       _crypto_sign_final_verifyPtr.asFunction<
-          int Function(ffi.Pointer<crypto_sign_state>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<crypto_sign_state>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_keybytes() {
     return _crypto_stream_keybytes();
   }
 
   late final _crypto_stream_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_stream_keybytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_stream_keybytes');
   late final _crypto_stream_keybytes =
       _crypto_stream_keybytesPtr.asFunction<int Function()>();
 
@@ -7528,7 +7771,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_noncebytes');
   late final _crypto_stream_noncebytes =
       _crypto_stream_noncebytesPtr.asFunction<int Function()>();
@@ -7538,26 +7781,26 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_messagebytes_max');
   late final _crypto_stream_messagebytes_max =
       _crypto_stream_messagebytes_maxPtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_stream_primitive() {
+  ffi.Pointer<ffi.Char> crypto_stream_primitive() {
     return _crypto_stream_primitive();
   }
 
   late final _crypto_stream_primitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_stream_primitive');
   late final _crypto_stream_primitive = _crypto_stream_primitivePtr
-      .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_stream(
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream(
       c,
@@ -7569,21 +7812,21 @@ class LibSodiumFFI {
 
   late final _crypto_streamPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream');
   late final _crypto_stream = _crypto_streamPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_xor(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_xor(
       c,
@@ -7596,36 +7839,36 @@ class LibSodiumFFI {
 
   late final _crypto_stream_xorPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_xor');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_xor');
   late final _crypto_stream_xor = _crypto_stream_xorPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-          ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          int, ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_stream_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_keygen(
       k,
     );
   }
 
-  late final _crypto_stream_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_stream_keygen');
+  late final _crypto_stream_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_keygen');
   late final _crypto_stream_keygen = _crypto_stream_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_salsa20_keybytes() {
     return _crypto_stream_salsa20_keybytes();
   }
 
   late final _crypto_stream_salsa20_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_salsa20_keybytes');
   late final _crypto_stream_salsa20_keybytes =
       _crypto_stream_salsa20_keybytesPtr.asFunction<int Function()>();
@@ -7635,7 +7878,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_salsa20_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_salsa20_noncebytes');
   late final _crypto_stream_salsa20_noncebytes =
       _crypto_stream_salsa20_noncebytesPtr.asFunction<int Function()>();
@@ -7645,16 +7888,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_salsa20_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_salsa20_messagebytes_max');
   late final _crypto_stream_salsa20_messagebytes_max =
       _crypto_stream_salsa20_messagebytes_maxPtr.asFunction<int Function()>();
 
   int crypto_stream_salsa20(
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa20(
       c,
@@ -7666,21 +7909,21 @@ class LibSodiumFFI {
 
   late final _crypto_stream_salsa20Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_salsa20');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_salsa20');
   late final _crypto_stream_salsa20 = _crypto_stream_salsa20Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_salsa20_xor(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa20_xor(
       c,
@@ -7693,24 +7936,28 @@ class LibSodiumFFI {
 
   late final _crypto_stream_salsa20_xorPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_salsa20_xor');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_salsa20_xor');
   late final _crypto_stream_salsa20_xor =
       _crypto_stream_salsa20_xorPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_salsa20_xor_ic(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> n,
     int ic,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa20_xor_ic(
       c,
@@ -7724,44 +7971,50 @@ class LibSodiumFFI {
 
   late final _crypto_stream_salsa20_xor_icPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
               ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_salsa20_xor_ic');
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_salsa20_xor_ic');
   late final _crypto_stream_salsa20_xor_ic =
       _crypto_stream_salsa20_xor_icPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_stream_salsa20_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa20_keygen(
       k,
     );
   }
 
-  late final _crypto_stream_salsa20_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_stream_salsa20_keygen');
+  late final _crypto_stream_salsa20_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_salsa20_keygen');
   late final _crypto_stream_salsa20_keygen = _crypto_stream_salsa20_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_verify_16_bytes() {
     return _crypto_verify_16_bytes();
   }
 
   late final _crypto_verify_16_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_verify_16_bytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_verify_16_bytes');
   late final _crypto_verify_16_bytes =
       _crypto_verify_16_bytesPtr.asFunction<int Function()>();
 
   int crypto_verify_16(
-    ffi.Pointer<ffi.Uint8> x,
-    ffi.Pointer<ffi.Uint8> y,
+    ffi.Pointer<ffi.UnsignedChar> x,
+    ffi.Pointer<ffi.UnsignedChar> y,
   ) {
     return _crypto_verify_16(
       x,
@@ -7771,23 +8024,25 @@ class LibSodiumFFI {
 
   late final _crypto_verify_16Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_verify_16');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_verify_16');
   late final _crypto_verify_16 = _crypto_verify_16Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_verify_32_bytes() {
     return _crypto_verify_32_bytes();
   }
 
   late final _crypto_verify_32_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_verify_32_bytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_verify_32_bytes');
   late final _crypto_verify_32_bytes =
       _crypto_verify_32_bytesPtr.asFunction<int Function()>();
 
   int crypto_verify_32(
-    ffi.Pointer<ffi.Uint8> x,
-    ffi.Pointer<ffi.Uint8> y,
+    ffi.Pointer<ffi.UnsignedChar> x,
+    ffi.Pointer<ffi.UnsignedChar> y,
   ) {
     return _crypto_verify_32(
       x,
@@ -7797,23 +8052,25 @@ class LibSodiumFFI {
 
   late final _crypto_verify_32Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_verify_32');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_verify_32');
   late final _crypto_verify_32 = _crypto_verify_32Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_verify_64_bytes() {
     return _crypto_verify_64_bytes();
   }
 
   late final _crypto_verify_64_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('crypto_verify_64_bytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_verify_64_bytes');
   late final _crypto_verify_64_bytes =
       _crypto_verify_64_bytesPtr.asFunction<int Function()>();
 
   int crypto_verify_64(
-    ffi.Pointer<ffi.Uint8> x,
-    ffi.Pointer<ffi.Uint8> y,
+    ffi.Pointer<ffi.UnsignedChar> x,
+    ffi.Pointer<ffi.UnsignedChar> y,
   ) {
     return _crypto_verify_64(
       x,
@@ -7823,17 +8080,18 @@ class LibSodiumFFI {
 
   late final _crypto_verify_64Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_verify_64');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_verify_64');
   late final _crypto_verify_64 = _crypto_verify_64Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int randombytes_seedbytes() {
     return _randombytes_seedbytes();
   }
 
   late final _randombytes_seedbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>('randombytes_seedbytes');
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>('randombytes_seedbytes');
   late final _randombytes_seedbytes =
       _randombytes_seedbytesPtr.asFunction<int Function()>();
 
@@ -7848,15 +8106,16 @@ class LibSodiumFFI {
   }
 
   late final _randombytes_bufPtr = _lookup<
-          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>, size_t)>>(
-      'randombytes_buf');
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Pointer<ffi.Void>, ffi.Size)>>('randombytes_buf');
   late final _randombytes_buf = _randombytes_bufPtr
       .asFunction<void Function(ffi.Pointer<ffi.Void>, int)>();
 
   void randombytes_buf_deterministic(
     ffi.Pointer<ffi.Void> buf,
     int size,
-    ffi.Pointer<ffi.Uint8> seed,
+    ffi.Pointer<ffi.UnsignedChar> seed,
   ) {
     return _randombytes_buf_deterministic(
       buf,
@@ -7867,11 +8126,12 @@ class LibSodiumFFI {
 
   late final _randombytes_buf_deterministicPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Void>, size_t,
-              ffi.Pointer<ffi.Uint8>)>>('randombytes_buf_deterministic');
+          ffi.Void Function(ffi.Pointer<ffi.Void>, ffi.Size,
+              ffi.Pointer<ffi.UnsignedChar>)>>('randombytes_buf_deterministic');
   late final _randombytes_buf_deterministic =
       _randombytes_buf_deterministicPtr.asFunction<
-          void Function(ffi.Pointer<ffi.Void>, int, ffi.Pointer<ffi.Uint8>)>();
+          void Function(
+              ffi.Pointer<ffi.Void>, int, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int randombytes_random() {
     return _randombytes_random();
@@ -7910,7 +8170,7 @@ class LibSodiumFFI {
   }
 
   late final _randombytes_closePtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>('randombytes_close');
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>('randombytes_close');
   late final _randombytes_close =
       _randombytes_closePtr.asFunction<int Function()>();
 
@@ -7924,25 +8184,25 @@ class LibSodiumFFI {
 
   late final _randombytes_set_implementationPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<randombytes_implementation>)>>(
+              ffi.Int Function(ffi.Pointer<randombytes_implementation>)>>(
       'randombytes_set_implementation');
   late final _randombytes_set_implementation =
       _randombytes_set_implementationPtr
           .asFunction<int Function(ffi.Pointer<randombytes_implementation>)>();
 
-  ffi.Pointer<ffi.Int8> randombytes_implementation_name() {
+  ffi.Pointer<ffi.Char> randombytes_implementation_name() {
     return _randombytes_implementation_name();
   }
 
   late final _randombytes_implementation_namePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'randombytes_implementation_name');
   late final _randombytes_implementation_name =
       _randombytes_implementation_namePtr
-          .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+          .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   void randombytes(
-    ffi.Pointer<ffi.Uint8> buf,
+    ffi.Pointer<ffi.UnsignedChar> buf,
     int buf_len,
   ) {
     return _randombytes(
@@ -7953,10 +8213,10 @@ class LibSodiumFFI {
 
   late final _randombytesPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(
-              ffi.Pointer<ffi.Uint8>, ffi.Uint64)>>('randombytes');
-  late final _randombytes =
-      _randombytesPtr.asFunction<void Function(ffi.Pointer<ffi.Uint8>, int)>();
+          ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong)>>('randombytes');
+  late final _randombytes = _randombytesPtr
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   late final ffi.Pointer<randombytes_implementation>
       _randombytes_internal_implementation =
@@ -7979,7 +8239,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_neonPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_neon');
   late final _sodium_runtime_has_neon =
       _sodium_runtime_has_neonPtr.asFunction<int Function()>();
@@ -7989,7 +8249,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_sse2Ptr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_sse2');
   late final _sodium_runtime_has_sse2 =
       _sodium_runtime_has_sse2Ptr.asFunction<int Function()>();
@@ -7999,7 +8259,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_sse3Ptr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_sse3');
   late final _sodium_runtime_has_sse3 =
       _sodium_runtime_has_sse3Ptr.asFunction<int Function()>();
@@ -8009,7 +8269,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_ssse3Ptr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_ssse3');
   late final _sodium_runtime_has_ssse3 =
       _sodium_runtime_has_ssse3Ptr.asFunction<int Function()>();
@@ -8019,7 +8279,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_sse41Ptr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_sse41');
   late final _sodium_runtime_has_sse41 =
       _sodium_runtime_has_sse41Ptr.asFunction<int Function()>();
@@ -8029,8 +8289,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_avxPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
-          'sodium_runtime_has_avx');
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>('sodium_runtime_has_avx');
   late final _sodium_runtime_has_avx =
       _sodium_runtime_has_avxPtr.asFunction<int Function()>();
 
@@ -8039,7 +8298,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_avx2Ptr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_avx2');
   late final _sodium_runtime_has_avx2 =
       _sodium_runtime_has_avx2Ptr.asFunction<int Function()>();
@@ -8049,7 +8308,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_avx512fPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_avx512f');
   late final _sodium_runtime_has_avx512f =
       _sodium_runtime_has_avx512fPtr.asFunction<int Function()>();
@@ -8059,7 +8318,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_pclmulPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_pclmul');
   late final _sodium_runtime_has_pclmul =
       _sodium_runtime_has_pclmulPtr.asFunction<int Function()>();
@@ -8069,7 +8328,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_aesniPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_aesni');
   late final _sodium_runtime_has_aesni =
       _sodium_runtime_has_aesniPtr.asFunction<int Function()>();
@@ -8079,7 +8338,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_runtime_has_rdrandPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'sodium_runtime_has_rdrand');
   late final _sodium_runtime_has_rdrand =
       _sodium_runtime_has_rdrandPtr.asFunction<int Function()>();
@@ -8095,8 +8354,9 @@ class LibSodiumFFI {
   }
 
   late final _sodium_memzeroPtr = _lookup<
-          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>, size_t)>>(
-      'sodium_memzero');
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Pointer<ffi.Void>, ffi.Size)>>('sodium_memzero');
   late final _sodium_memzero = _sodium_memzeroPtr
       .asFunction<void Function(ffi.Pointer<ffi.Void>, int)>();
 
@@ -8109,7 +8369,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_stackzeroPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(size_t)>>(
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Size)>>(
           'sodium_stackzero');
   late final _sodium_stackzero =
       _sodium_stackzeroPtr.asFunction<void Function(int)>();
@@ -8128,14 +8388,14 @@ class LibSodiumFFI {
 
   late final _sodium_memcmpPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.Void>,
-              size_t)>>('sodium_memcmp');
+          ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.Void>,
+              ffi.Size)>>('sodium_memcmp');
   late final _sodium_memcmp = _sodium_memcmpPtr.asFunction<
       int Function(ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.Void>, int)>();
 
   int sodium_compare(
-    ffi.Pointer<ffi.Uint8> b1_,
-    ffi.Pointer<ffi.Uint8> b2_,
+    ffi.Pointer<ffi.UnsignedChar> b1_,
+    ffi.Pointer<ffi.UnsignedChar> b2_,
     int len,
   ) {
     return _sodium_compare(
@@ -8147,13 +8407,14 @@ class LibSodiumFFI {
 
   late final _sodium_comparePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              size_t)>>('sodium_compare');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Size)>>('sodium_compare');
   late final _sodium_compare = _sodium_comparePtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int)>();
+      int Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int sodium_is_zero(
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> n,
     int nlen,
   ) {
     return _sodium_is_zero(
@@ -8164,13 +8425,13 @@ class LibSodiumFFI {
 
   late final _sodium_is_zeroPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>, size_t)>>('sodium_is_zero');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Size)>>('sodium_is_zero');
   late final _sodium_is_zero = _sodium_is_zeroPtr
-      .asFunction<int Function(ffi.Pointer<ffi.Uint8>, int)>();
+      .asFunction<int Function(ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   void sodium_increment(
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> n,
     int nlen,
   ) {
     return _sodium_increment(
@@ -8182,13 +8443,13 @@ class LibSodiumFFI {
   late final _sodium_incrementPtr = _lookup<
       ffi.NativeFunction<
           ffi.Void Function(
-              ffi.Pointer<ffi.Uint8>, size_t)>>('sodium_increment');
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Size)>>('sodium_increment');
   late final _sodium_increment = _sodium_incrementPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>, int)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   void sodium_add(
-    ffi.Pointer<ffi.Uint8> a,
-    ffi.Pointer<ffi.Uint8> b,
+    ffi.Pointer<ffi.UnsignedChar> a,
+    ffi.Pointer<ffi.UnsignedChar> b,
     int len,
   ) {
     return _sodium_add(
@@ -8200,14 +8461,15 @@ class LibSodiumFFI {
 
   late final _sodium_addPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              size_t)>>('sodium_add');
+          ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Size)>>('sodium_add');
   late final _sodium_add = _sodium_addPtr.asFunction<
-      void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int)>();
+      void Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   void sodium_sub(
-    ffi.Pointer<ffi.Uint8> a,
-    ffi.Pointer<ffi.Uint8> b,
+    ffi.Pointer<ffi.UnsignedChar> a,
+    ffi.Pointer<ffi.UnsignedChar> b,
     int len,
   ) {
     return _sodium_sub(
@@ -8219,15 +8481,16 @@ class LibSodiumFFI {
 
   late final _sodium_subPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              size_t)>>('sodium_sub');
+          ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Size)>>('sodium_sub');
   late final _sodium_sub = _sodium_subPtr.asFunction<
-      void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int)>();
+      void Function(
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>, int)>();
 
-  ffi.Pointer<ffi.Int8> sodium_bin2hex(
-    ffi.Pointer<ffi.Int8> hex,
+  ffi.Pointer<ffi.Char> sodium_bin2hex(
+    ffi.Pointer<ffi.Char> hex,
     int hex_maxlen,
-    ffi.Pointer<ffi.Uint8> bin,
+    ffi.Pointer<ffi.UnsignedChar> bin,
     int bin_len,
   ) {
     return _sodium_bin2hex(
@@ -8240,20 +8503,20 @@ class LibSodiumFFI {
 
   late final _sodium_bin2hexPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Pointer<ffi.Int8> Function(ffi.Pointer<ffi.Int8>, size_t,
-              ffi.Pointer<ffi.Uint8>, size_t)>>('sodium_bin2hex');
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>, ffi.Size,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Size)>>('sodium_bin2hex');
   late final _sodium_bin2hex = _sodium_bin2hexPtr.asFunction<
-      ffi.Pointer<ffi.Int8> Function(
-          ffi.Pointer<ffi.Int8>, int, ffi.Pointer<ffi.Uint8>, int)>();
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.UnsignedChar>, int)>();
 
   int sodium_hex2bin(
-    ffi.Pointer<ffi.Uint8> bin,
+    ffi.Pointer<ffi.UnsignedChar> bin,
     int bin_maxlen,
-    ffi.Pointer<ffi.Int8> hex,
+    ffi.Pointer<ffi.Char> hex,
     int hex_len,
-    ffi.Pointer<ffi.Int8> ignore,
-    ffi.Pointer<size_t> bin_len,
-    ffi.Pointer<ffi.Pointer<ffi.Int8>> hex_end,
+    ffi.Pointer<ffi.Char> ignore,
+    ffi.Pointer<ffi.Size> bin_len,
+    ffi.Pointer<ffi.Pointer<ffi.Char>> hex_end,
   ) {
     return _sodium_hex2bin(
       bin,
@@ -8268,23 +8531,23 @@ class LibSodiumFFI {
 
   late final _sodium_hex2binPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              size_t,
-              ffi.Pointer<ffi.Int8>,
-              size_t,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Pointer<size_t>,
-              ffi.Pointer<ffi.Pointer<ffi.Int8>>)>>('sodium_hex2bin');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Pointer<ffi.Char>,
+              ffi.Size,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Size>,
+              ffi.Pointer<ffi.Pointer<ffi.Char>>)>>('sodium_hex2bin');
   late final _sodium_hex2bin = _sodium_hex2binPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Uint8>,
+          ffi.Pointer<ffi.UnsignedChar>,
           int,
-          ffi.Pointer<ffi.Int8>,
+          ffi.Pointer<ffi.Char>,
           int,
-          ffi.Pointer<ffi.Int8>,
-          ffi.Pointer<size_t>,
-          ffi.Pointer<ffi.Pointer<ffi.Int8>>)>();
+          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Size>,
+          ffi.Pointer<ffi.Pointer<ffi.Char>>)>();
 
   int sodium_base64_encoded_len(
     int bin_len,
@@ -8297,15 +8560,15 @@ class LibSodiumFFI {
   }
 
   late final _sodium_base64_encoded_lenPtr =
-      _lookup<ffi.NativeFunction<size_t Function(size_t, ffi.Int32)>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function(ffi.Size, ffi.Int)>>(
           'sodium_base64_encoded_len');
   late final _sodium_base64_encoded_len =
       _sodium_base64_encoded_lenPtr.asFunction<int Function(int, int)>();
 
-  ffi.Pointer<ffi.Int8> sodium_bin2base64(
-    ffi.Pointer<ffi.Int8> b64,
+  ffi.Pointer<ffi.Char> sodium_bin2base64(
+    ffi.Pointer<ffi.Char> b64,
     int b64_maxlen,
-    ffi.Pointer<ffi.Uint8> bin,
+    ffi.Pointer<ffi.UnsignedChar> bin,
     int bin_len,
     int variant,
   ) {
@@ -8320,20 +8583,24 @@ class LibSodiumFFI {
 
   late final _sodium_bin2base64Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Pointer<ffi.Int8> Function(ffi.Pointer<ffi.Int8>, size_t,
-              ffi.Pointer<ffi.Uint8>, size_t, ffi.Int32)>>('sodium_bin2base64');
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Size,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Int)>>('sodium_bin2base64');
   late final _sodium_bin2base64 = _sodium_bin2base64Ptr.asFunction<
-      ffi.Pointer<ffi.Int8> Function(
-          ffi.Pointer<ffi.Int8>, int, ffi.Pointer<ffi.Uint8>, int, int)>();
+      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>, int,
+          ffi.Pointer<ffi.UnsignedChar>, int, int)>();
 
   int sodium_base642bin(
-    ffi.Pointer<ffi.Uint8> bin,
+    ffi.Pointer<ffi.UnsignedChar> bin,
     int bin_maxlen,
-    ffi.Pointer<ffi.Int8> b64,
+    ffi.Pointer<ffi.Char> b64,
     int b64_len,
-    ffi.Pointer<ffi.Int8> ignore,
-    ffi.Pointer<size_t> bin_len,
-    ffi.Pointer<ffi.Pointer<ffi.Int8>> b64_end,
+    ffi.Pointer<ffi.Char> ignore,
+    ffi.Pointer<ffi.Size> bin_len,
+    ffi.Pointer<ffi.Pointer<ffi.Char>> b64_end,
     int variant,
   ) {
     return _sodium_base642bin(
@@ -8350,24 +8617,24 @@ class LibSodiumFFI {
 
   late final _sodium_base642binPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              size_t,
-              ffi.Pointer<ffi.Int8>,
-              size_t,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Pointer<size_t>,
-              ffi.Pointer<ffi.Pointer<ffi.Int8>>,
-              ffi.Int32)>>('sodium_base642bin');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Pointer<ffi.Char>,
+              ffi.Size,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Size>,
+              ffi.Pointer<ffi.Pointer<ffi.Char>>,
+              ffi.Int)>>('sodium_base642bin');
   late final _sodium_base642bin = _sodium_base642binPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Uint8>,
+          ffi.Pointer<ffi.UnsignedChar>,
           int,
-          ffi.Pointer<ffi.Int8>,
+          ffi.Pointer<ffi.Char>,
           int,
-          ffi.Pointer<ffi.Int8>,
-          ffi.Pointer<size_t>,
-          ffi.Pointer<ffi.Pointer<ffi.Int8>>,
+          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Size>,
+          ffi.Pointer<ffi.Pointer<ffi.Char>>,
           int)>();
 
   int sodium_mlock(
@@ -8382,7 +8649,7 @@ class LibSodiumFFI {
 
   late final _sodium_mlockPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Void>, size_t)>>('sodium_mlock');
+          ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>('sodium_mlock');
   late final _sodium_mlock =
       _sodium_mlockPtr.asFunction<int Function(ffi.Pointer<ffi.Void>, int)>();
 
@@ -8398,7 +8665,7 @@ class LibSodiumFFI {
 
   late final _sodium_munlockPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Void>, size_t)>>('sodium_munlock');
+          ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>('sodium_munlock');
   late final _sodium_munlock =
       _sodium_munlockPtr.asFunction<int Function(ffi.Pointer<ffi.Void>, int)>();
 
@@ -8411,7 +8678,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_mallocPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(size_t)>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.Size)>>(
           'sodium_malloc');
   late final _sodium_malloc =
       _sodium_mallocPtr.asFunction<ffi.Pointer<ffi.Void> Function(int)>();
@@ -8427,8 +8694,9 @@ class LibSodiumFFI {
   }
 
   late final _sodium_allocarrayPtr = _lookup<
-          ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(size_t, size_t)>>(
-      'sodium_allocarray');
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Size, ffi.Size)>>('sodium_allocarray');
   late final _sodium_allocarray = _sodium_allocarrayPtr
       .asFunction<ffi.Pointer<ffi.Void> Function(int, int)>();
 
@@ -8455,7 +8723,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_mprotect_noaccessPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<ffi.Void>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>)>>(
           'sodium_mprotect_noaccess');
   late final _sodium_mprotect_noaccess = _sodium_mprotect_noaccessPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
@@ -8469,7 +8737,7 @@ class LibSodiumFFI {
   }
 
   late final _sodium_mprotect_readonlyPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<ffi.Void>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>)>>(
           'sodium_mprotect_readonly');
   late final _sodium_mprotect_readonly = _sodium_mprotect_readonlyPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
@@ -8483,14 +8751,14 @@ class LibSodiumFFI {
   }
 
   late final _sodium_mprotect_readwritePtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<ffi.Void>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>)>>(
           'sodium_mprotect_readwrite');
   late final _sodium_mprotect_readwrite = _sodium_mprotect_readwritePtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
 
   int sodium_pad(
-    ffi.Pointer<size_t> padded_buflen_p,
-    ffi.Pointer<ffi.Uint8> buf,
+    ffi.Pointer<ffi.Size> padded_buflen_p,
+    ffi.Pointer<ffi.UnsignedChar> buf,
     int unpadded_buflen,
     int blocksize,
     int max_buflen,
@@ -8506,15 +8774,15 @@ class LibSodiumFFI {
 
   late final _sodium_padPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<size_t>, ffi.Pointer<ffi.Uint8>,
-              size_t, size_t, size_t)>>('sodium_pad');
+          ffi.Int Function(ffi.Pointer<ffi.Size>, ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size, ffi.Size, ffi.Size)>>('sodium_pad');
   late final _sodium_pad = _sodium_padPtr.asFunction<
-      int Function(
-          ffi.Pointer<size_t>, ffi.Pointer<ffi.Uint8>, int, int, int)>();
+      int Function(ffi.Pointer<ffi.Size>, ffi.Pointer<ffi.UnsignedChar>, int,
+          int, int)>();
 
   int sodium_unpad(
-    ffi.Pointer<size_t> unpadded_buflen_p,
-    ffi.Pointer<ffi.Uint8> buf,
+    ffi.Pointer<ffi.Size> unpadded_buflen_p,
+    ffi.Pointer<ffi.UnsignedChar> buf,
     int padded_buflen,
     int blocksize,
   ) {
@@ -8528,17 +8796,18 @@ class LibSodiumFFI {
 
   late final _sodium_unpadPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<size_t>, ffi.Pointer<ffi.Uint8>,
-              size_t, size_t)>>('sodium_unpad');
+          ffi.Int Function(ffi.Pointer<ffi.Size>, ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size, ffi.Size)>>('sodium_unpad');
   late final _sodium_unpad = _sodium_unpadPtr.asFunction<
-      int Function(ffi.Pointer<size_t>, ffi.Pointer<ffi.Uint8>, int, int)>();
+      int Function(
+          ffi.Pointer<ffi.Size>, ffi.Pointer<ffi.UnsignedChar>, int, int)>();
 
   int crypto_stream_xchacha20_keybytes() {
     return _crypto_stream_xchacha20_keybytes();
   }
 
   late final _crypto_stream_xchacha20_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_xchacha20_keybytes');
   late final _crypto_stream_xchacha20_keybytes =
       _crypto_stream_xchacha20_keybytesPtr.asFunction<int Function()>();
@@ -8548,7 +8817,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_xchacha20_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_xchacha20_noncebytes');
   late final _crypto_stream_xchacha20_noncebytes =
       _crypto_stream_xchacha20_noncebytesPtr.asFunction<int Function()>();
@@ -8558,16 +8827,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_xchacha20_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_xchacha20_messagebytes_max');
   late final _crypto_stream_xchacha20_messagebytes_max =
       _crypto_stream_xchacha20_messagebytes_maxPtr.asFunction<int Function()>();
 
   int crypto_stream_xchacha20(
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_xchacha20(
       c,
@@ -8579,21 +8848,21 @@ class LibSodiumFFI {
 
   late final _crypto_stream_xchacha20Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_xchacha20');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_xchacha20');
   late final _crypto_stream_xchacha20 = _crypto_stream_xchacha20Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_xchacha20_xor(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_xchacha20_xor(
       c,
@@ -8606,24 +8875,28 @@ class LibSodiumFFI {
 
   late final _crypto_stream_xchacha20_xorPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_xchacha20_xor');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_xchacha20_xor');
   late final _crypto_stream_xchacha20_xor =
       _crypto_stream_xchacha20_xorPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_xchacha20_xor_ic(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> n,
     int ic,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_xchacha20_xor_ic(
       c,
@@ -8636,40 +8909,46 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_xchacha20_xor_icPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_xchacha20_xor_ic');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Uint64,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_xchacha20_xor_ic');
   late final _crypto_stream_xchacha20_xor_ic =
       _crypto_stream_xchacha20_xor_icPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_stream_xchacha20_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_xchacha20_keygen(
       k,
     );
   }
 
-  late final _crypto_stream_xchacha20_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_stream_xchacha20_keygen');
+  late final _crypto_stream_xchacha20_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_xchacha20_keygen');
   late final _crypto_stream_xchacha20_keygen =
       _crypto_stream_xchacha20_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_seedbytes() {
     return _crypto_box_curve25519xchacha20poly1305_seedbytes();
   }
 
   late final _crypto_box_curve25519xchacha20poly1305_seedbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xchacha20poly1305_seedbytes');
   late final _crypto_box_curve25519xchacha20poly1305_seedbytes =
       _crypto_box_curve25519xchacha20poly1305_seedbytesPtr
@@ -8680,7 +8959,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xchacha20poly1305_publickeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xchacha20poly1305_publickeybytes');
   late final _crypto_box_curve25519xchacha20poly1305_publickeybytes =
       _crypto_box_curve25519xchacha20poly1305_publickeybytesPtr
@@ -8691,7 +8970,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xchacha20poly1305_secretkeybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xchacha20poly1305_secretkeybytes');
   late final _crypto_box_curve25519xchacha20poly1305_secretkeybytes =
       _crypto_box_curve25519xchacha20poly1305_secretkeybytesPtr
@@ -8702,7 +8981,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xchacha20poly1305_beforenmbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xchacha20poly1305_beforenmbytes');
   late final _crypto_box_curve25519xchacha20poly1305_beforenmbytes =
       _crypto_box_curve25519xchacha20poly1305_beforenmbytesPtr
@@ -8713,7 +8992,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xchacha20poly1305_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xchacha20poly1305_noncebytes');
   late final _crypto_box_curve25519xchacha20poly1305_noncebytes =
       _crypto_box_curve25519xchacha20poly1305_noncebytesPtr
@@ -8724,7 +9003,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xchacha20poly1305_macbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xchacha20poly1305_macbytes');
   late final _crypto_box_curve25519xchacha20poly1305_macbytes =
       _crypto_box_curve25519xchacha20poly1305_macbytesPtr
@@ -8735,16 +9014,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_box_curve25519xchacha20poly1305_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xchacha20poly1305_messagebytes_max');
   late final _crypto_box_curve25519xchacha20poly1305_messagebytes_max =
       _crypto_box_curve25519xchacha20poly1305_messagebytes_maxPtr
           .asFunction<int Function()>();
 
   int crypto_box_curve25519xchacha20poly1305_seed_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
-    ffi.Pointer<ffi.Uint8> seed,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
+    ffi.Pointer<ffi.UnsignedChar> seed,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_seed_keypair(
       pk,
@@ -8755,17 +9034,19 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_seed_keypairPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_seed_keypair');
   late final _crypto_box_curve25519xchacha20poly1305_seed_keypair =
       _crypto_box_curve25519xchacha20poly1305_seed_keypairPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_keypair(
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_keypair(
       pk,
@@ -8775,20 +9056,21 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_keypairPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_keypair');
   late final _crypto_box_curve25519xchacha20poly1305_keypair =
       _crypto_box_curve25519xchacha20poly1305_keypairPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_easy(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_easy(
       c,
@@ -8802,31 +9084,31 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_easyPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_easy');
   late final _crypto_box_curve25519xchacha20poly1305_easy =
       _crypto_box_curve25519xchacha20poly1305_easyPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_open_easy(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_open_easy(
       m,
@@ -8840,32 +9122,32 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_open_easyPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_open_easy');
   late final _crypto_box_curve25519xchacha20poly1305_open_easy =
       _crypto_box_curve25519xchacha20poly1305_open_easyPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_detached(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_detached(
       c,
@@ -8880,34 +9162,34 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_detached');
   late final _crypto_box_curve25519xchacha20poly1305_detached =
       _crypto_box_curve25519xchacha20poly1305_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_open_detached(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_open_detached(
       m,
@@ -8922,30 +9204,30 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_open_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_open_detached');
   late final _crypto_box_curve25519xchacha20poly1305_open_detached =
       _crypto_box_curve25519xchacha20poly1305_open_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_beforenm(
-    ffi.Pointer<ffi.Uint8> k,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> k,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_beforenm(
       k,
@@ -8956,20 +9238,22 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_beforenmPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_beforenm');
   late final _crypto_box_curve25519xchacha20poly1305_beforenm =
       _crypto_box_curve25519xchacha20poly1305_beforenmPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_easy_afternm(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_easy_afternm(
       c,
@@ -8982,20 +9266,28 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_easy_afternmPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_easy_afternm');
   late final _crypto_box_curve25519xchacha20poly1305_easy_afternm =
       _crypto_box_curve25519xchacha20poly1305_easy_afternmPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_open_easy_afternm(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_open_easy_afternm(
       m,
@@ -9009,25 +9301,29 @@ class LibSodiumFFI {
   late final _crypto_box_curve25519xchacha20poly1305_open_easy_afternmPtr =
       _lookup<
               ffi.NativeFunction<
-                  ffi.Int32 Function(
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Uint64,
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Pointer<ffi.Uint8>)>>(
+                  ffi.Int Function(
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.UnsignedLongLong,
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.Pointer<ffi.UnsignedChar>)>>(
           'crypto_box_curve25519xchacha20poly1305_open_easy_afternm');
   late final _crypto_box_curve25519xchacha20poly1305_open_easy_afternm =
       _crypto_box_curve25519xchacha20poly1305_open_easy_afternmPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_detached_afternm(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_detached_afternm(
       c,
@@ -9042,31 +9338,31 @@ class LibSodiumFFI {
   late final _crypto_box_curve25519xchacha20poly1305_detached_afternmPtr =
       _lookup<
               ffi.NativeFunction<
-                  ffi.Int32 Function(
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Uint64,
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Pointer<ffi.Uint8>)>>(
+                  ffi.Int Function(
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.UnsignedLongLong,
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.Pointer<ffi.UnsignedChar>)>>(
           'crypto_box_curve25519xchacha20poly1305_detached_afternm');
   late final _crypto_box_curve25519xchacha20poly1305_detached_afternm =
       _crypto_box_curve25519xchacha20poly1305_detached_afternmPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_open_detached_afternm(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_open_detached_afternm(
       m,
@@ -9081,41 +9377,41 @@ class LibSodiumFFI {
   late final _crypto_box_curve25519xchacha20poly1305_open_detached_afternmPtr =
       _lookup<
               ffi.NativeFunction<
-                  ffi.Int32 Function(
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Uint64,
-                      ffi.Pointer<ffi.Uint8>,
-                      ffi.Pointer<ffi.Uint8>)>>(
+                  ffi.Int Function(
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.UnsignedLongLong,
+                      ffi.Pointer<ffi.UnsignedChar>,
+                      ffi.Pointer<ffi.UnsignedChar>)>>(
           'crypto_box_curve25519xchacha20poly1305_open_detached_afternm');
   late final _crypto_box_curve25519xchacha20poly1305_open_detached_afternm =
       _crypto_box_curve25519xchacha20poly1305_open_detached_afternmPtr
           .asFunction<
               int Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
                   int,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>();
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_sealbytes() {
     return _crypto_box_curve25519xchacha20poly1305_sealbytes();
   }
 
   late final _crypto_box_curve25519xchacha20poly1305_sealbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_box_curve25519xchacha20poly1305_sealbytes');
   late final _crypto_box_curve25519xchacha20poly1305_sealbytes =
       _crypto_box_curve25519xchacha20poly1305_sealbytesPtr
           .asFunction<int Function()>();
 
   int crypto_box_curve25519xchacha20poly1305_seal(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> pk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_seal(
       c,
@@ -9127,20 +9423,26 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_sealPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_seal');
   late final _crypto_box_curve25519xchacha20poly1305_seal =
       _crypto_box_curve25519xchacha20poly1305_sealPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_box_curve25519xchacha20poly1305_seal_open(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> pk,
-    ffi.Pointer<ffi.Uint8> sk,
+    ffi.Pointer<ffi.UnsignedChar> pk,
+    ffi.Pointer<ffi.UnsignedChar> sk,
   ) {
     return _crypto_box_curve25519xchacha20poly1305_seal_open(
       m,
@@ -9153,20 +9455,28 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_seal_openPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_box_curve25519xchacha20poly1305_seal_open');
   late final _crypto_box_curve25519xchacha20poly1305_seal_open =
       _crypto_box_curve25519xchacha20poly1305_seal_openPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ed25519_bytes() {
     return _crypto_core_ed25519_bytes();
   }
 
   late final _crypto_core_ed25519_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_ed25519_bytes');
   late final _crypto_core_ed25519_bytes =
       _crypto_core_ed25519_bytesPtr.asFunction<int Function()>();
@@ -9176,7 +9486,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_uniformbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_ed25519_uniformbytes');
   late final _crypto_core_ed25519_uniformbytes =
       _crypto_core_ed25519_uniformbytesPtr.asFunction<int Function()>();
@@ -9186,7 +9496,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_hashbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_ed25519_hashbytes');
   late final _crypto_core_ed25519_hashbytes =
       _crypto_core_ed25519_hashbytesPtr.asFunction<int Function()>();
@@ -9196,7 +9506,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_scalarbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_ed25519_scalarbytes');
   late final _crypto_core_ed25519_scalarbytes =
       _crypto_core_ed25519_scalarbytesPtr.asFunction<int Function()>();
@@ -9206,31 +9516,31 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_nonreducedscalarbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_ed25519_nonreducedscalarbytes');
   late final _crypto_core_ed25519_nonreducedscalarbytes =
       _crypto_core_ed25519_nonreducedscalarbytesPtr
           .asFunction<int Function()>();
 
   int crypto_core_ed25519_is_valid_point(
-    ffi.Pointer<ffi.Uint8> p,
+    ffi.Pointer<ffi.UnsignedChar> p,
   ) {
     return _crypto_core_ed25519_is_valid_point(
       p,
     );
   }
 
-  late final _crypto_core_ed25519_is_valid_pointPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_core_ed25519_is_valid_point');
+  late final _crypto_core_ed25519_is_valid_pointPtr = _lookup<
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_is_valid_point');
   late final _crypto_core_ed25519_is_valid_point =
       _crypto_core_ed25519_is_valid_pointPtr
-          .asFunction<int Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<int Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ed25519_add(
-    ffi.Pointer<ffi.Uint8> r,
-    ffi.Pointer<ffi.Uint8> p,
-    ffi.Pointer<ffi.Uint8> q,
+    ffi.Pointer<ffi.UnsignedChar> r,
+    ffi.Pointer<ffi.UnsignedChar> p,
+    ffi.Pointer<ffi.UnsignedChar> q,
   ) {
     return _crypto_core_ed25519_add(
       r,
@@ -9241,16 +9551,18 @@ class LibSodiumFFI {
 
   late final _crypto_core_ed25519_addPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_add');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_ed25519_add');
   late final _crypto_core_ed25519_add = _crypto_core_ed25519_addPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ed25519_sub(
-    ffi.Pointer<ffi.Uint8> r,
-    ffi.Pointer<ffi.Uint8> p,
-    ffi.Pointer<ffi.Uint8> q,
+    ffi.Pointer<ffi.UnsignedChar> r,
+    ffi.Pointer<ffi.UnsignedChar> p,
+    ffi.Pointer<ffi.UnsignedChar> q,
   ) {
     return _crypto_core_ed25519_sub(
       r,
@@ -9261,15 +9573,17 @@ class LibSodiumFFI {
 
   late final _crypto_core_ed25519_subPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_sub');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_ed25519_sub');
   late final _crypto_core_ed25519_sub = _crypto_core_ed25519_subPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ed25519_from_uniform(
-    ffi.Pointer<ffi.Uint8> p,
-    ffi.Pointer<ffi.Uint8> r,
+    ffi.Pointer<ffi.UnsignedChar> p,
+    ffi.Pointer<ffi.UnsignedChar> r,
   ) {
     return _crypto_core_ed25519_from_uniform(
       p,
@@ -9278,16 +9592,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_from_uniformPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_from_uniform');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_from_uniform');
   late final _crypto_core_ed25519_from_uniform =
       _crypto_core_ed25519_from_uniformPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ed25519_from_hash(
-    ffi.Pointer<ffi.Uint8> p,
-    ffi.Pointer<ffi.Uint8> h,
+    ffi.Pointer<ffi.UnsignedChar> p,
+    ffi.Pointer<ffi.UnsignedChar> h,
   ) {
     return _crypto_core_ed25519_from_hash(
       p,
@@ -9297,44 +9613,45 @@ class LibSodiumFFI {
 
   late final _crypto_core_ed25519_from_hashPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_from_hash');
+          ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_ed25519_from_hash');
   late final _crypto_core_ed25519_from_hash =
       _crypto_core_ed25519_from_hashPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ed25519_random(
-    ffi.Pointer<ffi.Uint8> p,
+    ffi.Pointer<ffi.UnsignedChar> p,
   ) {
     return _crypto_core_ed25519_random(
       p,
     );
   }
 
-  late final _crypto_core_ed25519_randomPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_core_ed25519_random');
+  late final _crypto_core_ed25519_randomPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_random');
   late final _crypto_core_ed25519_random = _crypto_core_ed25519_randomPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ed25519_scalar_random(
-    ffi.Pointer<ffi.Uint8> r,
+    ffi.Pointer<ffi.UnsignedChar> r,
   ) {
     return _crypto_core_ed25519_scalar_random(
       r,
     );
   }
 
-  late final _crypto_core_ed25519_scalar_randomPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_core_ed25519_scalar_random');
+  late final _crypto_core_ed25519_scalar_randomPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_scalar_random');
   late final _crypto_core_ed25519_scalar_random =
       _crypto_core_ed25519_scalar_randomPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ed25519_scalar_invert(
-    ffi.Pointer<ffi.Uint8> recip,
-    ffi.Pointer<ffi.Uint8> s,
+    ffi.Pointer<ffi.UnsignedChar> recip,
+    ffi.Pointer<ffi.UnsignedChar> s,
   ) {
     return _crypto_core_ed25519_scalar_invert(
       recip,
@@ -9343,16 +9660,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_scalar_invertPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_scalar_invert');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_scalar_invert');
   late final _crypto_core_ed25519_scalar_invert =
       _crypto_core_ed25519_scalar_invertPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ed25519_scalar_negate(
-    ffi.Pointer<ffi.Uint8> neg,
-    ffi.Pointer<ffi.Uint8> s,
+    ffi.Pointer<ffi.UnsignedChar> neg,
+    ffi.Pointer<ffi.UnsignedChar> s,
   ) {
     return _crypto_core_ed25519_scalar_negate(
       neg,
@@ -9361,16 +9680,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_scalar_negatePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_scalar_negate');
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_scalar_negate');
   late final _crypto_core_ed25519_scalar_negate =
       _crypto_core_ed25519_scalar_negatePtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          void Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ed25519_scalar_complement(
-    ffi.Pointer<ffi.Uint8> comp,
-    ffi.Pointer<ffi.Uint8> s,
+    ffi.Pointer<ffi.UnsignedChar> comp,
+    ffi.Pointer<ffi.UnsignedChar> s,
   ) {
     return _crypto_core_ed25519_scalar_complement(
       comp,
@@ -9380,17 +9701,18 @@ class LibSodiumFFI {
 
   late final _crypto_core_ed25519_scalar_complementPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_core_ed25519_scalar_complement');
   late final _crypto_core_ed25519_scalar_complement =
       _crypto_core_ed25519_scalar_complementPtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          void Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ed25519_scalar_add(
-    ffi.Pointer<ffi.Uint8> z,
-    ffi.Pointer<ffi.Uint8> x,
-    ffi.Pointer<ffi.Uint8> y,
+    ffi.Pointer<ffi.UnsignedChar> z,
+    ffi.Pointer<ffi.UnsignedChar> x,
+    ffi.Pointer<ffi.UnsignedChar> y,
   ) {
     return _crypto_core_ed25519_scalar_add(
       z,
@@ -9400,18 +9722,21 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_scalar_addPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_scalar_add');
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_scalar_add');
   late final _crypto_core_ed25519_scalar_add =
       _crypto_core_ed25519_scalar_addPtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          void Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ed25519_scalar_sub(
-    ffi.Pointer<ffi.Uint8> z,
-    ffi.Pointer<ffi.Uint8> x,
-    ffi.Pointer<ffi.Uint8> y,
+    ffi.Pointer<ffi.UnsignedChar> z,
+    ffi.Pointer<ffi.UnsignedChar> x,
+    ffi.Pointer<ffi.UnsignedChar> y,
   ) {
     return _crypto_core_ed25519_scalar_sub(
       z,
@@ -9421,18 +9746,21 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_scalar_subPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_scalar_sub');
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_scalar_sub');
   late final _crypto_core_ed25519_scalar_sub =
       _crypto_core_ed25519_scalar_subPtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          void Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ed25519_scalar_mul(
-    ffi.Pointer<ffi.Uint8> z,
-    ffi.Pointer<ffi.Uint8> x,
-    ffi.Pointer<ffi.Uint8> y,
+    ffi.Pointer<ffi.UnsignedChar> z,
+    ffi.Pointer<ffi.UnsignedChar> x,
+    ffi.Pointer<ffi.UnsignedChar> y,
   ) {
     return _crypto_core_ed25519_scalar_mul(
       z,
@@ -9442,17 +9770,20 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_scalar_mulPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_scalar_mul');
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_scalar_mul');
   late final _crypto_core_ed25519_scalar_mul =
       _crypto_core_ed25519_scalar_mulPtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          void Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ed25519_scalar_reduce(
-    ffi.Pointer<ffi.Uint8> r,
-    ffi.Pointer<ffi.Uint8> s,
+    ffi.Pointer<ffi.UnsignedChar> r,
+    ffi.Pointer<ffi.UnsignedChar> s,
   ) {
     return _crypto_core_ed25519_scalar_reduce(
       r,
@@ -9461,19 +9792,21 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ed25519_scalar_reducePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ed25519_scalar_reduce');
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ed25519_scalar_reduce');
   late final _crypto_core_ed25519_scalar_reduce =
       _crypto_core_ed25519_scalar_reducePtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          void Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ristretto255_bytes() {
     return _crypto_core_ristretto255_bytes();
   }
 
   late final _crypto_core_ristretto255_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_ristretto255_bytes');
   late final _crypto_core_ristretto255_bytes =
       _crypto_core_ristretto255_bytesPtr.asFunction<int Function()>();
@@ -9483,7 +9816,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ristretto255_hashbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_ristretto255_hashbytes');
   late final _crypto_core_ristretto255_hashbytes =
       _crypto_core_ristretto255_hashbytesPtr.asFunction<int Function()>();
@@ -9493,7 +9826,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ristretto255_scalarbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_ristretto255_scalarbytes');
   late final _crypto_core_ristretto255_scalarbytes =
       _crypto_core_ristretto255_scalarbytesPtr.asFunction<int Function()>();
@@ -9503,31 +9836,31 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ristretto255_nonreducedscalarbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_core_ristretto255_nonreducedscalarbytes');
   late final _crypto_core_ristretto255_nonreducedscalarbytes =
       _crypto_core_ristretto255_nonreducedscalarbytesPtr
           .asFunction<int Function()>();
 
   int crypto_core_ristretto255_is_valid_point(
-    ffi.Pointer<ffi.Uint8> p,
+    ffi.Pointer<ffi.UnsignedChar> p,
   ) {
     return _crypto_core_ristretto255_is_valid_point(
       p,
     );
   }
 
-  late final _crypto_core_ristretto255_is_valid_pointPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_core_ristretto255_is_valid_point');
+  late final _crypto_core_ristretto255_is_valid_pointPtr = _lookup<
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ristretto255_is_valid_point');
   late final _crypto_core_ristretto255_is_valid_point =
       _crypto_core_ristretto255_is_valid_pointPtr
-          .asFunction<int Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<int Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ristretto255_add(
-    ffi.Pointer<ffi.Uint8> r,
-    ffi.Pointer<ffi.Uint8> p,
-    ffi.Pointer<ffi.Uint8> q,
+    ffi.Pointer<ffi.UnsignedChar> r,
+    ffi.Pointer<ffi.UnsignedChar> p,
+    ffi.Pointer<ffi.UnsignedChar> q,
   ) {
     return _crypto_core_ristretto255_add(
       r,
@@ -9538,17 +9871,19 @@ class LibSodiumFFI {
 
   late final _crypto_core_ristretto255_addPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ristretto255_add');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_ristretto255_add');
   late final _crypto_core_ristretto255_add =
       _crypto_core_ristretto255_addPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ristretto255_sub(
-    ffi.Pointer<ffi.Uint8> r,
-    ffi.Pointer<ffi.Uint8> p,
-    ffi.Pointer<ffi.Uint8> q,
+    ffi.Pointer<ffi.UnsignedChar> r,
+    ffi.Pointer<ffi.UnsignedChar> p,
+    ffi.Pointer<ffi.UnsignedChar> q,
   ) {
     return _crypto_core_ristretto255_sub(
       r,
@@ -9559,16 +9894,18 @@ class LibSodiumFFI {
 
   late final _crypto_core_ristretto255_subPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ristretto255_sub');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_ristretto255_sub');
   late final _crypto_core_ristretto255_sub =
       _crypto_core_ristretto255_subPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ristretto255_from_hash(
-    ffi.Pointer<ffi.Uint8> p,
-    ffi.Pointer<ffi.Uint8> r,
+    ffi.Pointer<ffi.UnsignedChar> p,
+    ffi.Pointer<ffi.UnsignedChar> r,
   ) {
     return _crypto_core_ristretto255_from_hash(
       p,
@@ -9577,46 +9914,48 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ristretto255_from_hashPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ristretto255_from_hash');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ristretto255_from_hash');
   late final _crypto_core_ristretto255_from_hash =
       _crypto_core_ristretto255_from_hashPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ristretto255_random(
-    ffi.Pointer<ffi.Uint8> p,
+    ffi.Pointer<ffi.UnsignedChar> p,
   ) {
     return _crypto_core_ristretto255_random(
       p,
     );
   }
 
-  late final _crypto_core_ristretto255_randomPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_core_ristretto255_random');
+  late final _crypto_core_ristretto255_randomPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ristretto255_random');
   late final _crypto_core_ristretto255_random =
       _crypto_core_ristretto255_randomPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ristretto255_scalar_random(
-    ffi.Pointer<ffi.Uint8> r,
+    ffi.Pointer<ffi.UnsignedChar> r,
   ) {
     return _crypto_core_ristretto255_scalar_random(
       r,
     );
   }
 
-  late final _crypto_core_ristretto255_scalar_randomPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_core_ristretto255_scalar_random');
+  late final _crypto_core_ristretto255_scalar_randomPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ristretto255_scalar_random');
   late final _crypto_core_ristretto255_scalar_random =
       _crypto_core_ristretto255_scalar_randomPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_core_ristretto255_scalar_invert(
-    ffi.Pointer<ffi.Uint8> recip,
-    ffi.Pointer<ffi.Uint8> s,
+    ffi.Pointer<ffi.UnsignedChar> recip,
+    ffi.Pointer<ffi.UnsignedChar> s,
   ) {
     return _crypto_core_ristretto255_scalar_invert(
       recip,
@@ -9626,16 +9965,17 @@ class LibSodiumFFI {
 
   late final _crypto_core_ristretto255_scalar_invertPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_core_ristretto255_scalar_invert');
   late final _crypto_core_ristretto255_scalar_invert =
       _crypto_core_ristretto255_scalar_invertPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ristretto255_scalar_negate(
-    ffi.Pointer<ffi.Uint8> neg,
-    ffi.Pointer<ffi.Uint8> s,
+    ffi.Pointer<ffi.UnsignedChar> neg,
+    ffi.Pointer<ffi.UnsignedChar> s,
   ) {
     return _crypto_core_ristretto255_scalar_negate(
       neg,
@@ -9645,16 +9985,17 @@ class LibSodiumFFI {
 
   late final _crypto_core_ristretto255_scalar_negatePtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_core_ristretto255_scalar_negate');
   late final _crypto_core_ristretto255_scalar_negate =
       _crypto_core_ristretto255_scalar_negatePtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          void Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ristretto255_scalar_complement(
-    ffi.Pointer<ffi.Uint8> comp,
-    ffi.Pointer<ffi.Uint8> s,
+    ffi.Pointer<ffi.UnsignedChar> comp,
+    ffi.Pointer<ffi.UnsignedChar> s,
   ) {
     return _crypto_core_ristretto255_scalar_complement(
       comp,
@@ -9664,17 +10005,18 @@ class LibSodiumFFI {
 
   late final _crypto_core_ristretto255_scalar_complementPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_core_ristretto255_scalar_complement');
   late final _crypto_core_ristretto255_scalar_complement =
       _crypto_core_ristretto255_scalar_complementPtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          void Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ristretto255_scalar_add(
-    ffi.Pointer<ffi.Uint8> z,
-    ffi.Pointer<ffi.Uint8> x,
-    ffi.Pointer<ffi.Uint8> y,
+    ffi.Pointer<ffi.UnsignedChar> z,
+    ffi.Pointer<ffi.UnsignedChar> x,
+    ffi.Pointer<ffi.UnsignedChar> y,
   ) {
     return _crypto_core_ristretto255_scalar_add(
       z,
@@ -9684,18 +10026,21 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ristretto255_scalar_addPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ristretto255_scalar_add');
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ristretto255_scalar_add');
   late final _crypto_core_ristretto255_scalar_add =
       _crypto_core_ristretto255_scalar_addPtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          void Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ristretto255_scalar_sub(
-    ffi.Pointer<ffi.Uint8> z,
-    ffi.Pointer<ffi.Uint8> x,
-    ffi.Pointer<ffi.Uint8> y,
+    ffi.Pointer<ffi.UnsignedChar> z,
+    ffi.Pointer<ffi.UnsignedChar> x,
+    ffi.Pointer<ffi.UnsignedChar> y,
   ) {
     return _crypto_core_ristretto255_scalar_sub(
       z,
@@ -9705,18 +10050,21 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ristretto255_scalar_subPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ristretto255_scalar_sub');
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ristretto255_scalar_sub');
   late final _crypto_core_ristretto255_scalar_sub =
       _crypto_core_ristretto255_scalar_subPtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          void Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ristretto255_scalar_mul(
-    ffi.Pointer<ffi.Uint8> z,
-    ffi.Pointer<ffi.Uint8> x,
-    ffi.Pointer<ffi.Uint8> y,
+    ffi.Pointer<ffi.UnsignedChar> z,
+    ffi.Pointer<ffi.UnsignedChar> x,
+    ffi.Pointer<ffi.UnsignedChar> y,
   ) {
     return _crypto_core_ristretto255_scalar_mul(
       z,
@@ -9726,17 +10074,20 @@ class LibSodiumFFI {
   }
 
   late final _crypto_core_ristretto255_scalar_mulPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_core_ristretto255_scalar_mul');
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_core_ristretto255_scalar_mul');
   late final _crypto_core_ristretto255_scalar_mul =
       _crypto_core_ristretto255_scalar_mulPtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          void Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_core_ristretto255_scalar_reduce(
-    ffi.Pointer<ffi.Uint8> r,
-    ffi.Pointer<ffi.Uint8> s,
+    ffi.Pointer<ffi.UnsignedChar> r,
+    ffi.Pointer<ffi.UnsignedChar> s,
   ) {
     return _crypto_core_ristretto255_scalar_reduce(
       r,
@@ -9746,19 +10097,20 @@ class LibSodiumFFI {
 
   late final _crypto_core_ristretto255_scalar_reducePtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_core_ristretto255_scalar_reduce');
   late final _crypto_core_ristretto255_scalar_reduce =
       _crypto_core_ristretto255_scalar_reducePtr.asFunction<
-          void Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          void Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_scalarmult_ed25519_bytes() {
     return _crypto_scalarmult_ed25519_bytes();
   }
 
   late final _crypto_scalarmult_ed25519_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_scalarmult_ed25519_bytes');
   late final _crypto_scalarmult_ed25519_bytes =
       _crypto_scalarmult_ed25519_bytesPtr.asFunction<int Function()>();
@@ -9768,15 +10120,15 @@ class LibSodiumFFI {
   }
 
   late final _crypto_scalarmult_ed25519_scalarbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_scalarmult_ed25519_scalarbytes');
   late final _crypto_scalarmult_ed25519_scalarbytes =
       _crypto_scalarmult_ed25519_scalarbytesPtr.asFunction<int Function()>();
 
   int crypto_scalarmult_ed25519(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> p,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> p,
   ) {
     return _crypto_scalarmult_ed25519(
       q,
@@ -9787,17 +10139,19 @@ class LibSodiumFFI {
 
   late final _crypto_scalarmult_ed25519Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_scalarmult_ed25519');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_scalarmult_ed25519');
   late final _crypto_scalarmult_ed25519 =
       _crypto_scalarmult_ed25519Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_scalarmult_ed25519_noclamp(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> p,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> p,
   ) {
     return _crypto_scalarmult_ed25519_noclamp(
       q,
@@ -9807,17 +10161,20 @@ class LibSodiumFFI {
   }
 
   late final _crypto_scalarmult_ed25519_noclampPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_scalarmult_ed25519_noclamp');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_scalarmult_ed25519_noclamp');
   late final _crypto_scalarmult_ed25519_noclamp =
       _crypto_scalarmult_ed25519_noclampPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_scalarmult_ed25519_base(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
   ) {
     return _crypto_scalarmult_ed25519_base(
       q,
@@ -9826,16 +10183,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_scalarmult_ed25519_basePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_scalarmult_ed25519_base');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_scalarmult_ed25519_base');
   late final _crypto_scalarmult_ed25519_base =
       _crypto_scalarmult_ed25519_basePtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_scalarmult_ed25519_base_noclamp(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
   ) {
     return _crypto_scalarmult_ed25519_base_noclamp(
       q,
@@ -9845,19 +10204,20 @@ class LibSodiumFFI {
 
   late final _crypto_scalarmult_ed25519_base_noclampPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_scalarmult_ed25519_base_noclamp');
   late final _crypto_scalarmult_ed25519_base_noclamp =
       _crypto_scalarmult_ed25519_base_noclampPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_scalarmult_ristretto255_bytes() {
     return _crypto_scalarmult_ristretto255_bytes();
   }
 
   late final _crypto_scalarmult_ristretto255_bytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_scalarmult_ristretto255_bytes');
   late final _crypto_scalarmult_ristretto255_bytes =
       _crypto_scalarmult_ristretto255_bytesPtr.asFunction<int Function()>();
@@ -9867,16 +10227,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_scalarmult_ristretto255_scalarbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_scalarmult_ristretto255_scalarbytes');
   late final _crypto_scalarmult_ristretto255_scalarbytes =
       _crypto_scalarmult_ristretto255_scalarbytesPtr
           .asFunction<int Function()>();
 
   int crypto_scalarmult_ristretto255(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> p,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> p,
   ) {
     return _crypto_scalarmult_ristretto255(
       q,
@@ -9886,17 +10246,20 @@ class LibSodiumFFI {
   }
 
   late final _crypto_scalarmult_ristretto255Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_scalarmult_ristretto255');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_scalarmult_ristretto255');
   late final _crypto_scalarmult_ristretto255 =
       _crypto_scalarmult_ristretto255Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+          int Function(ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_scalarmult_ristretto255_base(
-    ffi.Pointer<ffi.Uint8> q,
-    ffi.Pointer<ffi.Uint8> n,
+    ffi.Pointer<ffi.UnsignedChar> q,
+    ffi.Pointer<ffi.UnsignedChar> n,
   ) {
     return _crypto_scalarmult_ristretto255_base(
       q,
@@ -9905,19 +10268,21 @@ class LibSodiumFFI {
   }
 
   late final _crypto_scalarmult_ristretto255_basePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_scalarmult_ristretto255_base');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_scalarmult_ristretto255_base');
   late final _crypto_scalarmult_ristretto255_base =
       _crypto_scalarmult_ristretto255_basePtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_xchacha20poly1305_keybytes() {
     return _crypto_secretbox_xchacha20poly1305_keybytes();
   }
 
   late final _crypto_secretbox_xchacha20poly1305_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xchacha20poly1305_keybytes');
   late final _crypto_secretbox_xchacha20poly1305_keybytes =
       _crypto_secretbox_xchacha20poly1305_keybytesPtr
@@ -9928,7 +10293,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_xchacha20poly1305_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xchacha20poly1305_noncebytes');
   late final _crypto_secretbox_xchacha20poly1305_noncebytes =
       _crypto_secretbox_xchacha20poly1305_noncebytesPtr
@@ -9939,7 +10304,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_xchacha20poly1305_macbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xchacha20poly1305_macbytes');
   late final _crypto_secretbox_xchacha20poly1305_macbytes =
       _crypto_secretbox_xchacha20poly1305_macbytesPtr
@@ -9950,18 +10315,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_secretbox_xchacha20poly1305_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_secretbox_xchacha20poly1305_messagebytes_max');
   late final _crypto_secretbox_xchacha20poly1305_messagebytes_max =
       _crypto_secretbox_xchacha20poly1305_messagebytes_maxPtr
           .asFunction<int Function()>();
 
   int crypto_secretbox_xchacha20poly1305_easy(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_xchacha20poly1305_easy(
       c,
@@ -9974,20 +10339,28 @@ class LibSodiumFFI {
 
   late final _crypto_secretbox_xchacha20poly1305_easyPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_secretbox_xchacha20poly1305_easy');
   late final _crypto_secretbox_xchacha20poly1305_easy =
       _crypto_secretbox_xchacha20poly1305_easyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_xchacha20poly1305_open_easy(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_xchacha20poly1305_open_easy(
       m,
@@ -10000,21 +10373,29 @@ class LibSodiumFFI {
 
   late final _crypto_secretbox_xchacha20poly1305_open_easyPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64, ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_secretbox_xchacha20poly1305_open_easy');
   late final _crypto_secretbox_xchacha20poly1305_open_easy =
       _crypto_secretbox_xchacha20poly1305_open_easyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_xchacha20poly1305_detached(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_xchacha20poly1305_detached(
       c,
@@ -10028,31 +10409,31 @@ class LibSodiumFFI {
 
   late final _crypto_secretbox_xchacha20poly1305_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_secretbox_xchacha20poly1305_detached');
   late final _crypto_secretbox_xchacha20poly1305_detached =
       _crypto_secretbox_xchacha20poly1305_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_secretbox_xchacha20poly1305_open_detached(
-    ffi.Pointer<ffi.Uint8> m,
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> mac,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_secretbox_xchacha20poly1305_open_detached(
       m,
@@ -10066,30 +10447,30 @@ class LibSodiumFFI {
 
   late final _crypto_secretbox_xchacha20poly1305_open_detachedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Uint64,
-                  ffi.Pointer<ffi.Uint8>,
-                  ffi.Pointer<ffi.Uint8>)>>(
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
       'crypto_secretbox_xchacha20poly1305_open_detached');
   late final _crypto_secretbox_xchacha20poly1305_open_detached =
       _crypto_secretbox_xchacha20poly1305_open_detachedPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
               int,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>();
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_pwhash_scryptsalsa208sha256_bytes_min() {
     return _crypto_pwhash_scryptsalsa208sha256_bytes_min();
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_bytes_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_bytes_min');
   late final _crypto_pwhash_scryptsalsa208sha256_bytes_min =
       _crypto_pwhash_scryptsalsa208sha256_bytes_minPtr
@@ -10100,7 +10481,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_bytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_bytes_max');
   late final _crypto_pwhash_scryptsalsa208sha256_bytes_max =
       _crypto_pwhash_scryptsalsa208sha256_bytes_maxPtr
@@ -10111,7 +10492,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_passwd_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_passwd_min');
   late final _crypto_pwhash_scryptsalsa208sha256_passwd_min =
       _crypto_pwhash_scryptsalsa208sha256_passwd_minPtr
@@ -10122,7 +10503,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_passwd_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_passwd_max');
   late final _crypto_pwhash_scryptsalsa208sha256_passwd_max =
       _crypto_pwhash_scryptsalsa208sha256_passwd_maxPtr
@@ -10133,7 +10514,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_saltbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_saltbytes');
   late final _crypto_pwhash_scryptsalsa208sha256_saltbytes =
       _crypto_pwhash_scryptsalsa208sha256_saltbytesPtr
@@ -10144,29 +10525,29 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_strbytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_strbytes');
   late final _crypto_pwhash_scryptsalsa208sha256_strbytes =
       _crypto_pwhash_scryptsalsa208sha256_strbytesPtr
           .asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> crypto_pwhash_scryptsalsa208sha256_strprefix() {
+  ffi.Pointer<ffi.Char> crypto_pwhash_scryptsalsa208sha256_strprefix() {
     return _crypto_pwhash_scryptsalsa208sha256_strprefix();
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_strprefixPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_strprefix');
   late final _crypto_pwhash_scryptsalsa208sha256_strprefix =
       _crypto_pwhash_scryptsalsa208sha256_strprefixPtr
-          .asFunction<ffi.Pointer<ffi.Int8> Function()>();
+          .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   int crypto_pwhash_scryptsalsa208sha256_opslimit_min() {
     return _crypto_pwhash_scryptsalsa208sha256_opslimit_min();
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_opslimit_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_opslimit_min');
   late final _crypto_pwhash_scryptsalsa208sha256_opslimit_min =
       _crypto_pwhash_scryptsalsa208sha256_opslimit_minPtr
@@ -10177,7 +10558,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_opslimit_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_opslimit_max');
   late final _crypto_pwhash_scryptsalsa208sha256_opslimit_max =
       _crypto_pwhash_scryptsalsa208sha256_opslimit_maxPtr
@@ -10188,7 +10569,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_memlimit_minPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_memlimit_min');
   late final _crypto_pwhash_scryptsalsa208sha256_memlimit_min =
       _crypto_pwhash_scryptsalsa208sha256_memlimit_minPtr
@@ -10199,7 +10580,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_memlimit_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_memlimit_max');
   late final _crypto_pwhash_scryptsalsa208sha256_memlimit_max =
       _crypto_pwhash_scryptsalsa208sha256_memlimit_maxPtr
@@ -10210,7 +10591,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_opslimit_interactivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_opslimit_interactive');
   late final _crypto_pwhash_scryptsalsa208sha256_opslimit_interactive =
       _crypto_pwhash_scryptsalsa208sha256_opslimit_interactivePtr
@@ -10221,7 +10602,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_memlimit_interactivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_memlimit_interactive');
   late final _crypto_pwhash_scryptsalsa208sha256_memlimit_interactive =
       _crypto_pwhash_scryptsalsa208sha256_memlimit_interactivePtr
@@ -10232,7 +10613,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive');
   late final _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive =
       _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitivePtr
@@ -10243,18 +10624,18 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive');
   late final _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive =
       _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitivePtr
           .asFunction<int Function()>();
 
   int crypto_pwhash_scryptsalsa208sha256(
-    ffi.Pointer<ffi.Uint8> out,
+    ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
-    ffi.Pointer<ffi.Uint8> salt,
+    ffi.Pointer<ffi.UnsignedChar> salt,
     int opslimit,
     int memlimit,
   ) {
@@ -10271,22 +10652,28 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_scryptsalsa208sha256Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              size_t)>>('crypto_pwhash_scryptsalsa208sha256');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_scryptsalsa208sha256');
   late final _crypto_pwhash_scryptsalsa208sha256 =
       _crypto_pwhash_scryptsalsa208sha256Ptr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Int8>, int,
-              ffi.Pointer<ffi.Uint8>, int, int)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.Char>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              int)>();
 
   int crypto_pwhash_scryptsalsa208sha256_str(
-    ffi.Pointer<ffi.Int8> out,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> out,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
     int opslimit,
     int memlimit,
@@ -10302,20 +10689,20 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_scryptsalsa208sha256_strPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Int8>,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Uint64,
-              ffi.Uint64,
-              size_t)>>('crypto_pwhash_scryptsalsa208sha256_str');
+          ffi.Int Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_scryptsalsa208sha256_str');
   late final _crypto_pwhash_scryptsalsa208sha256_str =
       _crypto_pwhash_scryptsalsa208sha256_strPtr.asFunction<
           int Function(
-              ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int, int, int)>();
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int, int, int)>();
 
   int crypto_pwhash_scryptsalsa208sha256_str_verify(
-    ffi.Pointer<ffi.Int8> str,
-    ffi.Pointer<ffi.Int8> passwd,
+    ffi.Pointer<ffi.Char> str,
+    ffi.Pointer<ffi.Char> passwd,
     int passwdlen,
   ) {
     return _crypto_pwhash_scryptsalsa208sha256_str_verify(
@@ -10326,12 +10713,13 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_str_verifyPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>,
-              ffi.Uint64)>>('crypto_pwhash_scryptsalsa208sha256_str_verify');
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
+                  ffi.UnsignedLongLong)>>(
+      'crypto_pwhash_scryptsalsa208sha256_str_verify');
   late final _crypto_pwhash_scryptsalsa208sha256_str_verify =
       _crypto_pwhash_scryptsalsa208sha256_str_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Int8>, ffi.Pointer<ffi.Int8>, int)>();
+          int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int)>();
 
   int crypto_pwhash_scryptsalsa208sha256_ll(
     ffi.Pointer<ffi.Uint8> passwd,
@@ -10359,23 +10747,23 @@ class LibSodiumFFI {
 
   late final _crypto_pwhash_scryptsalsa208sha256_llPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<ffi.Uint8>,
-              size_t,
+              ffi.Size,
               ffi.Pointer<ffi.Uint8>,
-              size_t,
+              ffi.Size,
               ffi.Uint64,
               ffi.Uint32,
               ffi.Uint32,
               ffi.Pointer<ffi.Uint8>,
-              size_t)>>('crypto_pwhash_scryptsalsa208sha256_ll');
+              ffi.Size)>>('crypto_pwhash_scryptsalsa208sha256_ll');
   late final _crypto_pwhash_scryptsalsa208sha256_ll =
       _crypto_pwhash_scryptsalsa208sha256_llPtr.asFunction<
           int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>, int,
               int, int, int, ffi.Pointer<ffi.Uint8>, int)>();
 
   int crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(
-    ffi.Pointer<ffi.Int8> str,
+    ffi.Pointer<ffi.Char> str,
     int opslimit,
     int memlimit,
   ) {
@@ -10387,19 +10775,20 @@ class LibSodiumFFI {
   }
 
   late final _crypto_pwhash_scryptsalsa208sha256_str_needs_rehashPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Int8>, ffi.Uint64,
-              size_t)>>('crypto_pwhash_scryptsalsa208sha256_str_needs_rehash');
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.Char>, ffi.UnsignedLongLong, ffi.Size)>>(
+      'crypto_pwhash_scryptsalsa208sha256_str_needs_rehash');
   late final _crypto_pwhash_scryptsalsa208sha256_str_needs_rehash =
       _crypto_pwhash_scryptsalsa208sha256_str_needs_rehashPtr
-          .asFunction<int Function(ffi.Pointer<ffi.Int8>, int, int)>();
+          .asFunction<int Function(ffi.Pointer<ffi.Char>, int, int)>();
 
   int crypto_stream_salsa2012_keybytes() {
     return _crypto_stream_salsa2012_keybytes();
   }
 
   late final _crypto_stream_salsa2012_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_salsa2012_keybytes');
   late final _crypto_stream_salsa2012_keybytes =
       _crypto_stream_salsa2012_keybytesPtr.asFunction<int Function()>();
@@ -10409,7 +10798,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_salsa2012_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_salsa2012_noncebytes');
   late final _crypto_stream_salsa2012_noncebytes =
       _crypto_stream_salsa2012_noncebytesPtr.asFunction<int Function()>();
@@ -10419,16 +10808,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_salsa2012_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_salsa2012_messagebytes_max');
   late final _crypto_stream_salsa2012_messagebytes_max =
       _crypto_stream_salsa2012_messagebytes_maxPtr.asFunction<int Function()>();
 
   int crypto_stream_salsa2012(
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa2012(
       c,
@@ -10440,21 +10829,21 @@ class LibSodiumFFI {
 
   late final _crypto_stream_salsa2012Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_salsa2012');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_salsa2012');
   late final _crypto_stream_salsa2012 = _crypto_stream_salsa2012Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_salsa2012_xor(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa2012_xor(
       c,
@@ -10467,38 +10856,42 @@ class LibSodiumFFI {
 
   late final _crypto_stream_salsa2012_xorPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_salsa2012_xor');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_salsa2012_xor');
   late final _crypto_stream_salsa2012_xor =
       _crypto_stream_salsa2012_xorPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_stream_salsa2012_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa2012_keygen(
       k,
     );
   }
 
-  late final _crypto_stream_salsa2012_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_stream_salsa2012_keygen');
+  late final _crypto_stream_salsa2012_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_salsa2012_keygen');
   late final _crypto_stream_salsa2012_keygen =
       _crypto_stream_salsa2012_keygenPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+          .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_salsa208_keybytes() {
     return _crypto_stream_salsa208_keybytes();
   }
 
   late final _crypto_stream_salsa208_keybytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_salsa208_keybytes');
   late final _crypto_stream_salsa208_keybytes =
       _crypto_stream_salsa208_keybytesPtr.asFunction<int Function()>();
@@ -10508,7 +10901,7 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_salsa208_noncebytesPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_salsa208_noncebytes');
   late final _crypto_stream_salsa208_noncebytes =
       _crypto_stream_salsa208_noncebytesPtr.asFunction<int Function()>();
@@ -10518,16 +10911,16 @@ class LibSodiumFFI {
   }
 
   late final _crypto_stream_salsa208_messagebytes_maxPtr =
-      _lookup<ffi.NativeFunction<size_t Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
           'crypto_stream_salsa208_messagebytes_max');
   late final _crypto_stream_salsa208_messagebytes_max =
       _crypto_stream_salsa208_messagebytes_maxPtr.asFunction<int Function()>();
 
   int crypto_stream_salsa208(
-    ffi.Pointer<ffi.Uint8> c,
+    ffi.Pointer<ffi.UnsignedChar> c,
     int clen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa208(
       c,
@@ -10539,21 +10932,21 @@ class LibSodiumFFI {
 
   late final _crypto_stream_salsa208Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_salsa208');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_salsa208');
   late final _crypto_stream_salsa208 = _crypto_stream_salsa208Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>,
-          ffi.Pointer<ffi.Uint8>)>();
+      int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_stream_salsa208_xor(
-    ffi.Pointer<ffi.Uint8> c,
-    ffi.Pointer<ffi.Uint8> m,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> m,
     int mlen,
-    ffi.Pointer<ffi.Uint8> n,
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> n,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa208_xor(
       c,
@@ -10566,75 +10959,77 @@ class LibSodiumFFI {
 
   late final _crypto_stream_salsa208_xorPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Uint64,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Pointer<ffi.Uint8>)>>('crypto_stream_salsa208_xor');
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_stream_salsa208_xor');
   late final _crypto_stream_salsa208_xor =
       _crypto_stream_salsa208_xorPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>, int,
-              ffi.Pointer<ffi.Uint8>, ffi.Pointer<ffi.Uint8>)>();
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   void crypto_stream_salsa208_keygen(
-    ffi.Pointer<ffi.Uint8> k,
+    ffi.Pointer<ffi.UnsignedChar> k,
   ) {
     return _crypto_stream_salsa208_keygen(
       k,
     );
   }
 
-  late final _crypto_stream_salsa208_keygenPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Uint8>)>>(
-          'crypto_stream_salsa208_keygen');
+  late final _crypto_stream_salsa208_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_stream_salsa208_keygen');
   late final _crypto_stream_salsa208_keygen = _crypto_stream_salsa208_keygenPtr
-      .asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
 }
 
 class max_align_t extends ffi.Opaque {}
 
 class __fsid_t extends ffi.Struct {
   @ffi.Array.multi([2])
-  external ffi.Array<ffi.Int32> __val;
+  external ffi.Array<ffi.Int> __val;
 }
-
-typedef size_t = ffi.IntPtr;
 
 class crypto_aead_aes256gcm_state_ extends ffi.Struct {
   @ffi.Array.multi([512])
-  external ffi.Array<ffi.Uint8> opaque;
+  external ffi.Array<ffi.UnsignedChar> opaque;
 }
 
 typedef crypto_aead_aes256gcm_state = crypto_aead_aes256gcm_state_;
 
 class div_t extends ffi.Struct {
-  @ffi.Int32()
+  @ffi.Int()
   external int quot;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int rem;
 }
 
 class ldiv_t extends ffi.Struct {
-  @ffi.Int64()
+  @ffi.Long()
   external int quot;
 
-  @ffi.Int64()
+  @ffi.Long()
   external int rem;
 }
 
 class lldiv_t extends ffi.Struct {
-  @ffi.Int64()
+  @ffi.LongLong()
   external int quot;
 
-  @ffi.Int64()
+  @ffi.LongLong()
   external int rem;
 }
 
 class __sigset_t extends ffi.Struct {
   @ffi.Array.multi([16])
-  external ffi.Array<ffi.Uint64> __val;
+  external ffi.Array<ffi.UnsignedLong> __val;
 }
 
 class timeval extends ffi.Struct {
@@ -10645,8 +11040,8 @@ class timeval extends ffi.Struct {
   external int tv_usec;
 }
 
-typedef __time_t = ffi.Int64;
-typedef __suseconds_t = ffi.Int64;
+typedef __time_t = ffi.Long;
+typedef __suseconds_t = ffi.Long;
 
 class timespec extends ffi.Struct {
   @__time_t()
@@ -10656,14 +11051,29 @@ class timespec extends ffi.Struct {
   external int tv_nsec;
 }
 
-typedef __syscall_slong_t = ffi.Int64;
+typedef __syscall_slong_t = ffi.Long;
 
 class fd_set extends ffi.Struct {
   @ffi.Array.multi([16])
   external ffi.Array<__fd_mask> __fds_bits;
 }
 
-typedef __fd_mask = ffi.Int64;
+typedef __fd_mask = ffi.Long;
+
+class __atomic_wide_counter extends ffi.Union {
+  @ffi.UnsignedLongLong()
+  external int __value64;
+
+  external UnnamedStruct1 __value32;
+}
+
+class UnnamedStruct1 extends ffi.Struct {
+  @ffi.UnsignedInt()
+  external int __low;
+
+  @ffi.UnsignedInt()
+  external int __high;
+}
 
 class __pthread_internal_list extends ffi.Struct {
   external ffi.Pointer<__pthread_internal_list> __prev;
@@ -10676,25 +11086,25 @@ class __pthread_internal_slist extends ffi.Struct {
 }
 
 class __pthread_mutex_s extends ffi.Struct {
-  @ffi.Int32()
+  @ffi.Int()
   external int __lock;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __count;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int __owner;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __nusers;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int __kind;
 
-  @ffi.Int16()
+  @ffi.Short()
   external int __spins;
 
-  @ffi.Int16()
+  @ffi.Short()
   external int __elision;
 
   external __pthread_list_t __list;
@@ -10703,86 +11113,90 @@ class __pthread_mutex_s extends ffi.Struct {
 typedef __pthread_list_t = __pthread_internal_list;
 
 class __pthread_rwlock_arch_t extends ffi.Struct {
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __readers;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __writers;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __wrphase_futex;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __writers_futex;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __pad3;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __pad4;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int __cur_writer;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int __shared;
 
-  @ffi.Int8()
+  @ffi.SignedChar()
   external int __rwelision;
 
   @ffi.Array.multi([7])
-  external ffi.Array<ffi.Uint8> __pad1;
+  external ffi.Array<ffi.UnsignedChar> __pad1;
 
-  @ffi.Uint64()
+  @ffi.UnsignedLong()
   external int __pad2;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __flags;
 }
 
 class __pthread_cond_s extends ffi.Struct {
-  @ffi.Array.multi([2])
-  external ffi.Array<ffi.Uint32> __g_refs;
+  external __atomic_wide_counter __wseq;
+
+  external __atomic_wide_counter __g1_start;
 
   @ffi.Array.multi([2])
-  external ffi.Array<ffi.Uint32> __g_size;
+  external ffi.Array<ffi.UnsignedInt> __g_refs;
 
-  @ffi.Uint32()
+  @ffi.Array.multi([2])
+  external ffi.Array<ffi.UnsignedInt> __g_size;
+
+  @ffi.UnsignedInt()
   external int __g1_orig_size;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __wrefs;
 
   @ffi.Array.multi([2])
-  external ffi.Array<ffi.Uint32> __g_signals;
+  external ffi.Array<ffi.UnsignedInt> __g_signals;
 }
 
 class __once_flag extends ffi.Struct {
-  @ffi.Int32()
+  @ffi.Int()
   external int __data;
 }
 
 class pthread_mutexattr_t extends ffi.Union {
   @ffi.Array.multi([4])
-  external ffi.Array<ffi.Int8> __size;
+  external ffi.Array<ffi.Char> __size;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int __align;
 }
 
 class pthread_condattr_t extends ffi.Union {
   @ffi.Array.multi([4])
-  external ffi.Array<ffi.Int8> __size;
+  external ffi.Array<ffi.Char> __size;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int __align;
 }
 
 class pthread_attr_t extends ffi.Union {
   @ffi.Array.multi([56])
-  external ffi.Array<ffi.Int8> __size;
+  external ffi.Array<ffi.Char> __size;
 
-  @ffi.Int64()
+  @ffi.Long()
   external int __align;
 }
 
@@ -10790,9 +11204,9 @@ class pthread_mutex_t extends ffi.Union {
   external __pthread_mutex_s __data;
 
   @ffi.Array.multi([40])
-  external ffi.Array<ffi.Int8> __size;
+  external ffi.Array<ffi.Char> __size;
 
-  @ffi.Int64()
+  @ffi.Long()
   external int __align;
 }
 
@@ -10800,9 +11214,9 @@ class pthread_cond_t extends ffi.Union {
   external __pthread_cond_s __data;
 
   @ffi.Array.multi([48])
-  external ffi.Array<ffi.Int8> __size;
+  external ffi.Array<ffi.Char> __size;
 
-  @ffi.Int64()
+  @ffi.LongLong()
   external int __align;
 }
 
@@ -10810,33 +11224,33 @@ class pthread_rwlock_t extends ffi.Union {
   external __pthread_rwlock_arch_t __data;
 
   @ffi.Array.multi([56])
-  external ffi.Array<ffi.Int8> __size;
+  external ffi.Array<ffi.Char> __size;
 
-  @ffi.Int64()
+  @ffi.Long()
   external int __align;
 }
 
 class pthread_rwlockattr_t extends ffi.Union {
   @ffi.Array.multi([8])
-  external ffi.Array<ffi.Int8> __size;
+  external ffi.Array<ffi.Char> __size;
 
-  @ffi.Int64()
+  @ffi.Long()
   external int __align;
 }
 
 class pthread_barrier_t extends ffi.Union {
   @ffi.Array.multi([32])
-  external ffi.Array<ffi.Int8> __size;
+  external ffi.Array<ffi.Char> __size;
 
-  @ffi.Int64()
+  @ffi.Long()
   external int __align;
 }
 
 class pthread_barrierattr_t extends ffi.Union {
   @ffi.Array.multi([4])
-  external ffi.Array<ffi.Int8> __size;
+  external ffi.Array<ffi.Char> __size;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int __align;
 }
 
@@ -10847,13 +11261,13 @@ class random_data extends ffi.Struct {
 
   external ffi.Pointer<ffi.Int32> state;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int rand_type;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int rand_deg;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int rand_sep;
 
   external ffi.Pointer<ffi.Int32> end_ptr;
@@ -10861,18 +11275,18 @@ class random_data extends ffi.Struct {
 
 class drand48_data extends ffi.Struct {
   @ffi.Array.multi([3])
-  external ffi.Array<ffi.Uint16> __x;
+  external ffi.Array<ffi.UnsignedShort> __x;
 
   @ffi.Array.multi([3])
-  external ffi.Array<ffi.Uint16> __old_x;
+  external ffi.Array<ffi.UnsignedShort> __old_x;
 
-  @ffi.Uint16()
+  @ffi.UnsignedShort()
   external int __c;
 
-  @ffi.Uint16()
+  @ffi.UnsignedShort()
   external int __init;
 
-  @ffi.Uint64()
+  @ffi.UnsignedLongLong()
   external int __a;
 }
 
@@ -10914,24 +11328,24 @@ class crypto_auth_hmacsha256_state extends ffi.Struct {
 
 class crypto_generichash_blake2b_state extends ffi.Struct {
   @ffi.Array.multi([384])
-  external ffi.Array<ffi.Uint8> opaque;
+  external ffi.Array<ffi.UnsignedChar> opaque;
 }
 
 typedef crypto_generichash_state = crypto_generichash_blake2b_state;
 
 class __mbstate_t extends ffi.Struct {
-  @ffi.Int32()
+  @ffi.Int()
   external int __count;
 
   external UnnamedUnion1 __value;
 }
 
 class UnnamedUnion1 extends ffi.Union {
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int __wch;
 
   @ffi.Array.multi([4])
-  external ffi.Array<ffi.Int8> __wchb;
+  external ffi.Array<ffi.Char> __wchb;
 }
 
 class _G_fpos_t extends ffi.Struct {
@@ -10941,7 +11355,7 @@ class _G_fpos_t extends ffi.Struct {
   external __mbstate_t __state;
 }
 
-typedef __off_t = ffi.Int64;
+typedef __off_t = ffi.Long;
 
 class _G_fpos64_t extends ffi.Struct {
   @__off64_t()
@@ -10950,55 +11364,55 @@ class _G_fpos64_t extends ffi.Struct {
   external __mbstate_t __state;
 }
 
-typedef __off64_t = ffi.Int64;
+typedef __off64_t = ffi.Long;
 
 class _IO_FILE extends ffi.Struct {
-  @ffi.Int32()
+  @ffi.Int()
   external int _flags;
 
-  external ffi.Pointer<ffi.Int8> _IO_read_ptr;
+  external ffi.Pointer<ffi.Char> _IO_read_ptr;
 
-  external ffi.Pointer<ffi.Int8> _IO_read_end;
+  external ffi.Pointer<ffi.Char> _IO_read_end;
 
-  external ffi.Pointer<ffi.Int8> _IO_read_base;
+  external ffi.Pointer<ffi.Char> _IO_read_base;
 
-  external ffi.Pointer<ffi.Int8> _IO_write_base;
+  external ffi.Pointer<ffi.Char> _IO_write_base;
 
-  external ffi.Pointer<ffi.Int8> _IO_write_ptr;
+  external ffi.Pointer<ffi.Char> _IO_write_ptr;
 
-  external ffi.Pointer<ffi.Int8> _IO_write_end;
+  external ffi.Pointer<ffi.Char> _IO_write_end;
 
-  external ffi.Pointer<ffi.Int8> _IO_buf_base;
+  external ffi.Pointer<ffi.Char> _IO_buf_base;
 
-  external ffi.Pointer<ffi.Int8> _IO_buf_end;
+  external ffi.Pointer<ffi.Char> _IO_buf_end;
 
-  external ffi.Pointer<ffi.Int8> _IO_save_base;
+  external ffi.Pointer<ffi.Char> _IO_save_base;
 
-  external ffi.Pointer<ffi.Int8> _IO_backup_base;
+  external ffi.Pointer<ffi.Char> _IO_backup_base;
 
-  external ffi.Pointer<ffi.Int8> _IO_save_end;
+  external ffi.Pointer<ffi.Char> _IO_save_end;
 
   external ffi.Pointer<_IO_marker> _markers;
 
   external ffi.Pointer<_IO_FILE> _chain;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int _fileno;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int _flags2;
 
   @__off_t()
   external int _old_offset;
 
-  @ffi.Uint16()
+  @ffi.UnsignedShort()
   external int _cur_column;
 
-  @ffi.Int8()
+  @ffi.SignedChar()
   external int _vtable_offset;
 
   @ffi.Array.multi([1])
-  external ffi.Array<ffi.Int8> _shortbuf;
+  external ffi.Array<ffi.Char> _shortbuf;
 
   external ffi.Pointer<_IO_lock_t> _lock;
 
@@ -11013,14 +11427,14 @@ class _IO_FILE extends ffi.Struct {
 
   external ffi.Pointer<ffi.Void> _freeres_buf;
 
-  @size_t()
+  @ffi.Size()
   external int __pad5;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int _mode;
 
   @ffi.Array.multi([20])
-  external ffi.Array<ffi.Int8> _unused2;
+  external ffi.Array<ffi.Char> _unused2;
 }
 
 class _IO_marker extends ffi.Opaque {}
@@ -11035,20 +11449,20 @@ typedef FILE = _IO_FILE;
 
 class crypto_onetimeauth_poly1305_state extends ffi.Struct {
   @ffi.Array.multi([256])
-  external ffi.Array<ffi.Uint8> opaque;
+  external ffi.Array<ffi.UnsignedChar> opaque;
 }
 
 typedef crypto_onetimeauth_state = crypto_onetimeauth_poly1305_state;
 
 class crypto_secretstream_xchacha20poly1305_state extends ffi.Struct {
   @ffi.Array.multi([32])
-  external ffi.Array<ffi.Uint8> k;
+  external ffi.Array<ffi.UnsignedChar> k;
 
   @ffi.Array.multi([12])
-  external ffi.Array<ffi.Uint8> nonce;
+  external ffi.Array<ffi.UnsignedChar> nonce;
 
   @ffi.Array.multi([8])
-  external ffi.Array<ffi.Uint8> _pad;
+  external ffi.Array<ffi.UnsignedChar> _pad;
 }
 
 class crypto_sign_ed25519ph_state extends ffi.Struct {
@@ -11058,7 +11472,7 @@ class crypto_sign_ed25519ph_state extends ffi.Struct {
 typedef crypto_sign_state = crypto_sign_ed25519ph_state;
 
 class randombytes_implementation extends ffi.Struct {
-  external ffi.Pointer<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>
+  external ffi.Pointer<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>
       implementation_name;
 
   external ffi.Pointer<ffi.NativeFunction<ffi.Uint32 Function()>> random;
@@ -11069,9 +11483,10 @@ class randombytes_implementation extends ffi.Struct {
       uniform;
 
   external ffi.Pointer<
-      ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>, size_t)>> buf;
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<ffi.Void>, ffi.Size)>> buf;
 
-  external ffi.Pointer<ffi.NativeFunction<ffi.Int32 Function()>> close;
+  external ffi.Pointer<ffi.NativeFunction<ffi.Int Function()>> close;
 }
 
 const int NULL = 0;
@@ -11108,6 +11523,14 @@ const int __USE_XOPEN2K8 = 1;
 
 const int _ATFILE_SOURCE = 1;
 
+const int __WORDSIZE = 64;
+
+const int __WORDSIZE_TIME64_COMPAT32 = 1;
+
+const int __SYSCALL_WORDSIZE = 64;
+
+const int __TIMESIZE = 64;
+
 const int __USE_MISC = 1;
 
 const int __USE_ATFILE = 1;
@@ -11122,7 +11545,11 @@ const int _STDC_PREDEF_H = 1;
 
 const int __STDC_IEC_559__ = 1;
 
+const int __STDC_IEC_60559_BFP__ = 201404;
+
 const int __STDC_IEC_559_COMPLEX__ = 1;
+
+const int __STDC_IEC_60559_COMPLEX__ = 201404;
 
 const int __STDC_ISO_10646__ = 201706;
 
@@ -11130,7 +11557,7 @@ const int __GNU_LIBRARY__ = 6;
 
 const int __GLIBC__ = 2;
 
-const int __GLIBC_MINOR__ = 33;
+const int __GLIBC_MINOR__ = 35;
 
 const int _SYS_CDEFS_H = 1;
 
@@ -11139,12 +11566,6 @@ const int __THROW = 1;
 const int __THROWNL = 1;
 
 const int __glibc_c99_flexarr_available = 1;
-
-const int __WORDSIZE = 64;
-
-const int __WORDSIZE_TIME64_COMPAT32 = 1;
-
-const int __SYSCALL_WORDSIZE = 64;
 
 const int __LDOUBLE_REDIRECTS_TO_FLOAT128_ABI = 0;
 
@@ -11156,6 +11577,8 @@ const int __GLIBC_USE_IEC_60559_BFP_EXT = 1;
 
 const int __GLIBC_USE_IEC_60559_BFP_EXT_C2X = 1;
 
+const int __GLIBC_USE_IEC_60559_EXT = 1;
+
 const int __GLIBC_USE_IEC_60559_FUNCS_EXT = 1;
 
 const int __GLIBC_USE_IEC_60559_FUNCS_EXT_C2X = 1;
@@ -11163,8 +11586,6 @@ const int __GLIBC_USE_IEC_60559_FUNCS_EXT_C2X = 1;
 const int __GLIBC_USE_IEC_60559_TYPES_EXT = 1;
 
 const int _BITS_TYPES_H = 1;
-
-const int __TIMESIZE = 64;
 
 const int _BITS_TYPESIZES_H = 1;
 
@@ -11397,8 +11818,6 @@ const int PTHREAD_DESTRUCTOR_ITERATIONS = 4;
 const int _POSIX_THREAD_THREADS_MAX = 64;
 
 const int AIO_PRIO_DELTA_MAX = 20;
-
-const int PTHREAD_STACK_MIN = 16384;
 
 const int DELAYTIMER_MAX = 2147483647;
 
