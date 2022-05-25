@@ -58,7 +58,7 @@ class SodiumPointer<T extends NativeType> {
   }) {
     RangeError.checkNotNegative(count, 'count');
 
-    final elementSize = StaticallyTypedSizeOf.staticSizeOf<T>();
+    final elementSize = _StaticallyTypedSizeOf.staticSizeOf<T>();
     late final SodiumPointer<T> ptr;
     if (count != 1) {
       ptr = SodiumPointer.raw(
@@ -93,7 +93,7 @@ class SodiumPointer<T extends NativeType> {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) {
     final count = list.length;
-    final typeLen = StaticallyTypedSizeOf.staticSizeOf<T>();
+    final typeLen = _StaticallyTypedSizeOf.staticSizeOf<T>();
     final sodiumPtr = SodiumPointer.raw(
       sodium,
       sodium.sodium_allocarray(count, typeLen).cast<T>(),
@@ -121,7 +121,7 @@ class SodiumPointer<T extends NativeType> {
   /// The number of bytes a single element of T is wide.
   ///
   /// This is basically the same as `sizeOf<T>()`.
-  int get elementSize => StaticallyTypedSizeOf.staticSizeOf<T>();
+  int get elementSize => _StaticallyTypedSizeOf.staticSizeOf<T>();
 
   /// The total number of bytes this pointer is long
   int get byteLength => count * elementSize;
@@ -255,7 +255,7 @@ class SodiumPointer<T extends NativeType> {
   /// returned list. If you still dispose of the pointer, any try to access the
   /// data will crash your application.
   List<TNum> asListView<TNum extends num>() {
-    final signage = StaticallyTypedSizeOf.signage<T>();
+    final signage = _StaticallyTypedSizeOf.signage<T>();
     switch (signage) {
       case _Signage.signed:
         if (elementSize <= sizeOf<Int8>()) {
@@ -288,9 +288,11 @@ class SodiumPointer<T extends NativeType> {
         break;
     }
 
+    // coverage:ignore-start
     throw UnsupportedError(
       'Cannot create a list view for a pointer of type $T',
     );
+    // coverage:ignore-end
   }
 
   /// Disposes the pointer and frees the allocated memory.
@@ -361,14 +363,12 @@ extension TypedNumberListX on List<num> {
     }
     final typedDataThis = this as TypedData;
 
-    if (StaticallyTypedSizeOf.staticSizeOf<T>() <
+    if (_StaticallyTypedSizeOf.staticSizeOf<T>() <
         typedDataThis.elementSizeInBytes) {
       throw ArgumentError.value(
         T,
         'T',
-        'A SodiumPointer<$T> is not able to hold data of '
-            '${typedDataThis.elementSizeInBytes} bytes, '
-            'as given by the type of this: $runtimeType',
+        'A $runtimeType does not fit into SodiumPointer of type',
       );
     }
 
@@ -386,10 +386,7 @@ enum _Signage {
   float,
 }
 
-/// @nodoc
-@visibleForTesting
-extension StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
-  /// @nodoc
+extension _StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
   static int staticSizeOf<T>() {
     switch (T) {
       case Int8:
@@ -442,15 +439,15 @@ extension StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
         return sizeOf<Size>();
       case WChar:
         return sizeOf<WChar>();
+      // coverage:ignore-start
       default:
         throw UnsupportedError(
           'Cannot create a SodiumPointer for $T. T must be a primitive type',
         );
+      // coverage:ignore-end
     }
   }
 
-  /// @nodoc
-  // ignore: library_private_types_in_public_api
   static _Signage signage<T>() {
     switch (T) {
       case Int8:
@@ -481,14 +478,15 @@ extension StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
       case Float:
       case Double:
         return _Signage.float;
+      // coverage:ignore-start
       default:
         throw UnsupportedError(
           'Cannot create a SodiumPointer for $T. T must be a primitive type',
         );
+      // coverage:ignore-end
     }
   }
 
-  /// @nodoc
   Pointer<T> dynamicElementAt(int index) {
     switch (T) {
       case Int8:
@@ -542,76 +540,15 @@ extension StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
         return (this as Pointer<Size>).elementAt(index) as Pointer<T>;
       case WChar:
         return (this as Pointer<WChar>).elementAt(index) as Pointer<T>;
+      // coverage:ignore-start
       default:
         throw UnsupportedError(
           'Cannot create a SodiumPointer for $T. T must be a primitive type',
         );
+      // coverage:ignore-end
     }
   }
 
-  /// @nodoc
-  num operator [](int index) {
-    switch (T) {
-      case Int8:
-        return Int8Pointer(this as Pointer<Int8>)[index];
-      case Int16:
-        return Int16Pointer(this as Pointer<Int16>)[index];
-      case Int32:
-        return Int32Pointer(this as Pointer<Int32>)[index];
-      case Int64:
-        return Int64Pointer(this as Pointer<Int64>)[index];
-      case Uint8:
-        return Uint8Pointer(this as Pointer<Uint8>)[index];
-      case Uint16:
-        return Uint16Pointer(this as Pointer<Uint16>)[index];
-      case Uint32:
-        return Uint32Pointer(this as Pointer<Uint32>)[index];
-      case Uint64:
-        return Uint64Pointer(this as Pointer<Uint64>)[index];
-      case Float:
-        return FloatPointer(this as Pointer<Float>)[index];
-      case Double:
-        return DoublePointer(this as Pointer<Double>)[index];
-      case Char:
-        return AbiSpecificIntegerPointer(this as Pointer<Char>)[index];
-      case Short:
-        return AbiSpecificIntegerPointer(this as Pointer<Short>)[index];
-      case Int:
-        return AbiSpecificIntegerPointer(this as Pointer<Int>)[index];
-      case Long:
-        return AbiSpecificIntegerPointer(this as Pointer<Long>)[index];
-      case LongLong:
-        return AbiSpecificIntegerPointer(this as Pointer<LongLong>)[index];
-      case UnsignedChar:
-        return AbiSpecificIntegerPointer(this as Pointer<UnsignedChar>)[index];
-      case UnsignedShort:
-        return AbiSpecificIntegerPointer(this as Pointer<UnsignedShort>)[index];
-      case UnsignedInt:
-        return AbiSpecificIntegerPointer(this as Pointer<UnsignedInt>)[index];
-      case UnsignedLong:
-        return AbiSpecificIntegerPointer(this as Pointer<UnsignedLong>)[index];
-      case UnsignedLongLong:
-        return AbiSpecificIntegerPointer(
-          this as Pointer<UnsignedLongLong>,
-        )[index];
-      case SignedChar:
-        return AbiSpecificIntegerPointer(this as Pointer<SignedChar>)[index];
-      case IntPtr:
-        return AbiSpecificIntegerPointer(this as Pointer<IntPtr>)[index];
-      case UintPtr:
-        return AbiSpecificIntegerPointer(this as Pointer<UintPtr>)[index];
-      case Size:
-        return AbiSpecificIntegerPointer(this as Pointer<Size>)[index];
-      case WChar:
-        return AbiSpecificIntegerPointer(this as Pointer<WChar>)[index];
-      default:
-        throw UnsupportedError(
-          'Cannot create a SodiumPointer for $T. T must be a primitive type',
-        );
-    }
-  }
-
-  /// @nodoc
   void operator []=(int index, num value) {
     switch (T) {
       case Int8:
@@ -698,10 +635,12 @@ extension StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
       case WChar:
         AbiSpecificIntegerPointer(this as Pointer<WChar>)[index] = value as int;
         break;
+      // coverage:ignore-start
       default:
         throw UnsupportedError(
           'Cannot create a SodiumPointer for $T. T must be a primitive type',
         );
+      // coverage:ignore-end
     }
   }
 }

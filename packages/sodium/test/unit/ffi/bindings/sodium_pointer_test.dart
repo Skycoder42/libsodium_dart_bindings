@@ -1082,5 +1082,134 @@ void main() {
         );
       });
     });
+
+    test('throws error if used on an untyped list', () {
+      expect(
+        () => <int>[].toSodiumPointer<Uint8>(mockSodium),
+        throwsUnsupportedError,
+      );
+    });
+
+    test('throw error if data does not fit into pointer', () {
+      expect(
+        () => Uint16List(0).toSodiumPointer<Uint8>(mockSodium),
+        throwsArgumentError,
+      );
+      expect(
+        () => Uint32List(0).toSodiumPointer<Uint8>(mockSodium),
+        throwsArgumentError,
+      );
+      expect(
+        () => Uint32List(0).toSodiumPointer<Uint16>(mockSodium),
+        throwsArgumentError,
+      );
+      expect(
+        () => Uint64List(0).toSodiumPointer<Uint8>(mockSodium),
+        throwsArgumentError,
+      );
+      expect(
+        () => Uint64List(0).toSodiumPointer<Uint16>(mockSodium),
+        throwsArgumentError,
+      );
+      expect(
+        () => Uint64List(0).toSodiumPointer<Uint32>(mockSodium),
+        throwsArgumentError,
+      );
+    });
   });
+}
+
+extension _TestHelper<T extends NativeType> on Pointer<T> {
+  void operator []=(int index, num value) {
+    switch (T) {
+      case Int8:
+        Int8Pointer(this as Pointer<Int8>)[index] = value as int;
+        break;
+      case Int16:
+        Int16Pointer(this as Pointer<Int16>)[index] = value as int;
+        break;
+      case Int32:
+        Int32Pointer(this as Pointer<Int32>)[index] = value as int;
+        break;
+      case Int64:
+        Int64Pointer(this as Pointer<Int64>)[index] = value as int;
+        break;
+      case Uint8:
+        Uint8Pointer(this as Pointer<Uint8>)[index] = value as int;
+        break;
+      case Uint16:
+        Uint16Pointer(this as Pointer<Uint16>)[index] = value as int;
+        break;
+      case Uint32:
+        Uint32Pointer(this as Pointer<Uint32>)[index] = value as int;
+        break;
+      case Uint64:
+        Uint64Pointer(this as Pointer<Uint64>)[index] = value as int;
+        break;
+      case Float:
+        FloatPointer(this as Pointer<Float>)[index] = value as double;
+        break;
+      case Double:
+        DoublePointer(this as Pointer<Double>)[index] = value as double;
+        break;
+      case Char:
+        AbiSpecificIntegerPointer(this as Pointer<Char>)[index] = value as int;
+        break;
+      case Short:
+        AbiSpecificIntegerPointer(this as Pointer<Short>)[index] = value as int;
+        break;
+      case Int:
+        AbiSpecificIntegerPointer(this as Pointer<Int>)[index] = value as int;
+        break;
+      case Long:
+        AbiSpecificIntegerPointer(this as Pointer<Long>)[index] = value as int;
+        break;
+      case LongLong:
+        AbiSpecificIntegerPointer(this as Pointer<LongLong>)[index] =
+            value as int;
+        break;
+      case UnsignedChar:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedChar>)[index] =
+            value as int;
+        break;
+      case UnsignedShort:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedShort>)[index] =
+            value as int;
+        break;
+      case UnsignedInt:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedInt>)[index] =
+            value as int;
+        break;
+      case UnsignedLong:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedLong>)[index] =
+            value as int;
+        break;
+      case UnsignedLongLong:
+        AbiSpecificIntegerPointer(this as Pointer<UnsignedLongLong>)[index] =
+            value as int;
+        break;
+      case SignedChar:
+        AbiSpecificIntegerPointer(this as Pointer<SignedChar>)[index] =
+            value as int;
+        break;
+      case IntPtr:
+        AbiSpecificIntegerPointer(this as Pointer<IntPtr>)[index] =
+            value as int;
+        break;
+      case UintPtr:
+        AbiSpecificIntegerPointer(this as Pointer<UintPtr>)[index] =
+            value as int;
+        break;
+      case Size:
+        AbiSpecificIntegerPointer(this as Pointer<Size>)[index] = value as int;
+        break;
+      case WChar:
+        AbiSpecificIntegerPointer(this as Pointer<WChar>)[index] = value as int;
+        break;
+      default:
+        throw UnsupportedError(
+          'Cannot create a SodiumPointer for $T. T must be a primitive type',
+        );
+    }
+  }
 }
