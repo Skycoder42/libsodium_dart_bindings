@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, public_member_api_docs
 
 @JS()
 library sodium.js;
@@ -18,6 +18,10 @@ typedef HashSha256State = num;
 typedef HashSha512State = num;
 
 typedef OnetimeauthState = num;
+
+typedef AuthHmacsha256State = num;
+
+typedef AuthHmacsha512State = num;
 
 @JS()
 @anonymous
@@ -675,7 +679,20 @@ class LibSodiumJS {
     Uint8List key,
   );
 
+  external Uint8List crypto_auth_hmacsha256_final(
+    AuthHmacsha256State state_address,
+  );
+
+  external AuthHmacsha256State crypto_auth_hmacsha256_init(
+    Uint8List? key,
+  );
+
   external Uint8List crypto_auth_hmacsha256_keygen();
+
+  external void crypto_auth_hmacsha256_update(
+    AuthHmacsha256State state_address,
+    Uint8List message_chunk,
+  );
 
   external bool crypto_auth_hmacsha256_verify(
     Uint8List tag,
@@ -688,7 +705,20 @@ class LibSodiumJS {
     Uint8List key,
   );
 
+  external Uint8List crypto_auth_hmacsha512_final(
+    AuthHmacsha512State state_address,
+  );
+
+  external AuthHmacsha512State crypto_auth_hmacsha512_init(
+    Uint8List? key,
+  );
+
   external Uint8List crypto_auth_hmacsha512_keygen();
+
+  external void crypto_auth_hmacsha512_update(
+    AuthHmacsha512State state_address,
+    Uint8List message_chunk,
+  );
 
   external bool crypto_auth_hmacsha512_verify(
     Uint8List tag,
@@ -835,6 +865,18 @@ class LibSodiumJS {
   external Uint8List crypto_core_ed25519_sub(
     Uint8List p,
     Uint8List q,
+  );
+
+  external Uint8List crypto_core_hchacha20(
+    Uint8List input,
+    Uint8List privateKey,
+    Uint8List? constant,
+  );
+
+  external Uint8List crypto_core_hsalsa20(
+    Uint8List input,
+    Uint8List privateKey,
+    Uint8List? constant,
   );
 
   external Uint8List crypto_core_ristretto255_add(

@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -101,9 +101,9 @@ void main() {
               ),
           () => mockSodium.crypto_auth(
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(key)),
+                any(that: hasRawData<UnsignedChar>(key)),
               ),
         ]);
       });
@@ -118,7 +118,10 @@ void main() {
             any(),
           ),
         ).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer<Uint8>, tag);
+          fillPointer(
+            i.positionalArguments.first as Pointer<UnsignedChar>,
+            tag,
+          );
           return 0;
         });
 
@@ -212,10 +215,10 @@ void main() {
                 any(that: hasRawData(key)),
               ),
           () => mockSodium.crypto_auth_verify(
-                any(that: hasRawData<Uint8>(tag)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(tag)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(key)),
+                any(that: hasRawData<UnsignedChar>(key)),
               ),
         ]);
       });

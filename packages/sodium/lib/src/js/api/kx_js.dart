@@ -10,10 +10,13 @@ import '../bindings/sodium.js.dart' hide KeyPair;
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class KxJS with KxValidations implements Kx {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   KxJS(this.sodium);
 
   @override

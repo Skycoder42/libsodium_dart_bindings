@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!js': Skip('Requires dart:js')})
+@TestOn('js')
 
 // ignore: test_library_import
 import 'package:sodium/sodium.js.dart';

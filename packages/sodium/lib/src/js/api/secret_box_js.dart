@@ -10,10 +10,13 @@ import '../bindings/sodium.js.dart' hide SecretBox;
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class SecretBoxJS with SecretBoxValidations implements SecretBox {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   SecretBoxJS(this.sodium);
 
   @override

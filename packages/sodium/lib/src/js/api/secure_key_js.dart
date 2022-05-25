@@ -7,19 +7,25 @@ import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 
+/// @nodoc
 @internal
 typedef SecureKeyJSNativeHandle = Uint8List;
 
+/// @nodoc
 @internal
 class SecureKeyJS with SecureKeyEquality implements SecureKey {
+  /// @nodoc
   final LibSodiumJS sodium;
   final Uint8List _raw;
 
+  /// @nodoc
   SecureKeyJS(this.sodium, this._raw);
 
+  /// @nodoc
   factory SecureKeyJS.alloc(LibSodiumJS sodium, int length) =>
       SecureKeyJS(sodium, Uint8List(length));
 
+  /// @nodoc
   factory SecureKeyJS.random(LibSodiumJS sodium, int length) => SecureKeyJS(
         sodium,
         JsError.wrap(() => sodium.randombytes_buf(length)),

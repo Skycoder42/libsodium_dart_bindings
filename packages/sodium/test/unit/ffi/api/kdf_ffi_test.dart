@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 
@@ -151,9 +151,9 @@ void main() {
                 subkeyLen,
                 subkeyId,
                 any(
-                  that: hasRawData<Int8>(context.toCharArray(memoryWidth: 5)),
+                  that: hasRawData<Char>(context.toCharArray(memoryWidth: 5)),
                 ),
-                any(that: hasRawData<Uint8>(masterKey)),
+                any(that: hasRawData<UnsignedChar>(masterKey)),
               ),
         ]);
       });

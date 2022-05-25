@@ -8,17 +8,19 @@ import '../../api/randombytes.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 
+/// @nodoc
 @internal
 class RandombytesFFI implements Randombytes {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   RandombytesFFI(this.sodium);
 
   @override
-  int get seedBytes => sodium.randombytes_seedbytes().toSizeT();
+  int get seedBytes => sodium.randombytes_seedbytes();
 
   @override
   int random() => sodium.randombytes_random();
@@ -28,10 +30,10 @@ class RandombytesFFI implements Randombytes {
 
   @override
   Uint8List buf(int size) {
-    final ptr = SodiumPointer<Uint8>.alloc(sodium, count: size);
+    final ptr = SodiumPointer<UnsignedChar>.alloc(sodium, count: size);
     try {
-      sodium.randombytes_buf(ptr.ptr.cast(), ptr.byteLength.toIntPtr());
-      return ptr.copyAsList();
+      sodium.randombytes_buf(ptr.ptr.cast(), ptr.byteLength);
+      return Uint8List.fromList(ptr.asListView());
     } finally {
       ptr.dispose();
     }
@@ -41,8 +43,8 @@ class RandombytesFFI implements Randombytes {
   Uint8List bufDeterministic(int size, Uint8List seed) {
     Validations.checkIsSame(seed.length, seedBytes, 'seed');
 
-    SodiumPointer<Uint8>? seedPtr;
-    SodiumPointer<Uint8>? resultPtr;
+    SodiumPointer<UnsignedChar>? seedPtr;
+    SodiumPointer<UnsignedChar>? resultPtr;
     try {
       seedPtr = seed.toSodiumPointer(
         sodium,
@@ -51,10 +53,10 @@ class RandombytesFFI implements Randombytes {
       resultPtr = SodiumPointer.alloc(sodium, count: size);
       sodium.randombytes_buf_deterministic(
         resultPtr.ptr.cast(),
-        resultPtr.byteLength.toIntPtr(),
+        resultPtr.byteLength,
         seedPtr.ptr,
       );
-      return resultPtr.copyAsList();
+      return Uint8List.fromList(resultPtr.asListView());
     } finally {
       resultPtr?.dispose();
       seedPtr?.dispose();

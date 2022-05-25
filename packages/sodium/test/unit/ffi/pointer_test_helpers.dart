@@ -44,9 +44,10 @@ extension ListToPtrX on List<int> {
 class HasRawDataMatcher<T extends NativeType> extends Matcher {
   static const _stateKey = 'HasRawDataMatcher_state_key';
 
-  final List<int> data;
+  final List<num> data;
+  final int? sizeHint;
 
-  const HasRawDataMatcher(this.data);
+  const HasRawDataMatcher(this.data, this.sizeHint);
 
   @override
   Description describe(Description description) =>
@@ -72,9 +73,31 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
       expect(item, isA<Pointer<T>>());
 
       final ptr = (item as Pointer<T>).cast<Uint8>();
+      final ptrBuffer = ptr.asTypedList(data.length * (sizeHint ?? 1)).buffer;
+      final List<int> ptrList;
+      switch (sizeHint) {
+        case 8:
+          ptrList = ptrBuffer.asUint64List();
+          break;
+        case 4:
+          ptrList = ptrBuffer.asUint32List();
+          break;
+        case 2:
+          ptrList = ptrBuffer.asUint16List();
+          break;
+        case 1:
+        case null:
+          ptrList = ptrBuffer.asUint8List();
+          break;
+        default:
+          matchState[_stateKey] = 'invalid sizeHint $sizeHint';
+          return false;
+      }
+
       for (var i = 0; i < data.length; ++i) {
-        matchState[_stateKey] = 'has different value at index $i';
-        expect(ptr.elementAt(i).value, data[i]);
+        matchState[_stateKey] =
+            'has different value at index $i: ${ptrList[i]}';
+        expect(ptrList[i], data[i]);
         matchState.remove(_stateKey);
       }
 
@@ -86,5 +109,5 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
   }
 }
 
-Matcher hasRawData<T extends NativeType>(List<int> data) =>
-    HasRawDataMatcher<T>(data);
+Matcher hasRawData<T extends NativeType>(List<num> data, {int? sizeHint}) =>
+    HasRawDataMatcher<T>(data, sizeHint);

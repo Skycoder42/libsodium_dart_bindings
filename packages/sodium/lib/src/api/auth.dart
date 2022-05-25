@@ -46,14 +46,17 @@ abstract class Auth {
   });
 }
 
+/// @nodoc
 @internal
 mixin AuthValidations implements Auth {
+  /// @nodoc
   void validateTag(Uint8List tag) => Validations.checkIsSame(
         tag.length,
         bytes,
         'tag',
       );
 
+  /// @nodoc
   void validateKey(SecureKey key) => Validations.checkIsSame(
         key.length,
         keyBytes,

@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -138,7 +138,7 @@ void main() {
           () => mockSodium.crypto_generichash(
                 any(that: isNot(nullptr)),
                 hashBytes,
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
                 any(that: equals(nullptr)),
                 0,
@@ -179,9 +179,9 @@ void main() {
           () => mockSodium.crypto_generichash(
                 any(that: isNot(nullptr)),
                 outLen,
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(key)),
+                any(that: hasRawData<UnsignedChar>(key)),
                 key.length,
               ),
         ]);
@@ -201,7 +201,10 @@ void main() {
             any(),
           ),
         ).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer<Uint8>, hash);
+          fillPointer(
+            i.positionalArguments.first as Pointer<UnsignedChar>,
+            hash,
+          );
           return 0;
         });
 
@@ -224,7 +227,10 @@ void main() {
             any(),
           ),
         ).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer<Uint8>, hash);
+          fillPointer(
+            i.positionalArguments.first as Pointer<UnsignedChar>,
+            hash,
+          );
           return 0;
         });
 

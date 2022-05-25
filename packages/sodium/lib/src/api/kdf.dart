@@ -49,20 +49,24 @@ abstract class Kdf {
   });
 }
 
+/// @nodoc
 @internal
 mixin KdfValidations implements Kdf {
+  /// @nodoc
   void validateMasterKey(SecureKey masterKey) => Validations.checkIsSame(
         masterKey.length,
         keyBytes,
         'masterKey',
       );
 
+  /// @nodoc
   void validateContext(String context) => Validations.checkAtMost(
         utf8.encode(context).length,
         contextBytes,
         'context',
       );
 
+  /// @nodoc
   void validateSubkeyLen(int subkeyLen) => Validations.checkInRange(
         subkeyLen,
         bytesMin,

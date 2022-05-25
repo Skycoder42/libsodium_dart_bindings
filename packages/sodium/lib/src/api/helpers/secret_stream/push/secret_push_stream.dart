@@ -5,11 +5,16 @@ import 'package:meta/meta.dart';
 import '../../../secret_stream.dart';
 import 'secret_stream_push_transformer.dart';
 
+/// @nodoc
 @internal
 class SecretPushStream extends SecretExStream<SecretStreamCipherMessage> {
+  /// @nodoc
   final SecretStreamPushTransformerSink sink;
+
+  /// @nodoc
   final Stream<SecretStreamCipherMessage> stream;
 
+  /// @nodoc
   SecretPushStream(this.sink, this.stream);
 
   @override

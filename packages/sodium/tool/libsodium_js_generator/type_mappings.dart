@@ -78,6 +78,10 @@ class TypeMappings {
     'hash_sha512_state_address': TypeInfo('HashSha512State'),
     'onetimeauth_state': TypeInfo('OnetimeauthState', typeDef: 'num'),
     'onetimeauth_state_address': TypeInfo('OnetimeauthState'),
+    'auth_hmacsha256_state': TypeInfo('AuthHmacsha256State', typeDef: 'num'),
+    'auth_hmacsha256_state_address': TypeInfo('AuthHmacsha256State'),
+    'auth_hmacsha512_state': TypeInfo('AuthHmacsha512State', typeDef: 'num'),
+    'auth_hmacsha512_state_address': TypeInfo('AuthHmacsha512State'),
     // hidden types
     'randombytes_implementation': TypeInfo('Never'),
     'randombytes_set_implementation_result': TypeInfo('Never'),

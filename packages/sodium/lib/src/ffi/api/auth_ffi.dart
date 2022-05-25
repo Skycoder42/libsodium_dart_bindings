@@ -9,21 +9,23 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 
+/// @nodoc
 @internal
 class AuthFFI with AuthValidations, KeygenMixin implements Auth {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   AuthFFI(this.sodium);
 
   @override
-  int get bytes => sodium.crypto_auth_bytes().toSizeT();
+  int get bytes => sodium.crypto_auth_bytes();
 
   @override
-  int get keyBytes => sodium.crypto_auth_keybytes().toSizeT();
+  int get keyBytes => sodium.crypto_auth_keybytes();
 
   @override
   SecureKey keygen() => keygenImpl(
@@ -39,8 +41,8 @@ class AuthFFI with AuthValidations, KeygenMixin implements Auth {
   }) {
     validateKey(key);
 
-    SodiumPointer<Uint8>? messagePtr;
-    SodiumPointer<Uint8>? tagPtr;
+    SodiumPointer<UnsignedChar>? messagePtr;
+    SodiumPointer<UnsignedChar>? tagPtr;
     try {
       messagePtr = message.toSodiumPointer(
         sodium,
@@ -59,7 +61,7 @@ class AuthFFI with AuthValidations, KeygenMixin implements Auth {
       );
       SodiumException.checkSucceededInt(result);
 
-      return tagPtr.copyAsList();
+      return Uint8List.fromList(tagPtr.asListView());
     } finally {
       messagePtr?.dispose();
       tagPtr?.dispose();
@@ -75,8 +77,8 @@ class AuthFFI with AuthValidations, KeygenMixin implements Auth {
     validateTag(tag);
     validateKey(key);
 
-    SodiumPointer<Uint8>? messagePtr;
-    SodiumPointer<Uint8>? tagPtr;
+    SodiumPointer<UnsignedChar>? messagePtr;
+    SodiumPointer<UnsignedChar>? tagPtr;
     try {
       tagPtr = tag.toSodiumPointer(
         sodium,

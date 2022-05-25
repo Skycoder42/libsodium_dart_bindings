@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -257,9 +257,9 @@ void main() {
           () => mockSodium.crypto_pwhash(
             any(that: isNot(nullptr)),
             5,
-            any(that: hasRawData<Int8>(password)),
+            any(that: hasRawData<Char>(password)),
             password.length,
-            any(that: hasRawData<Uint8>(salt)),
+            any(that: hasRawData<UnsignedChar>(salt)),
             3,
             7,
             42,
@@ -315,7 +315,7 @@ void main() {
           ),
         ).thenAnswer((i) {
           fillPointer(
-            i.positionalArguments.first as Pointer<Uint8>,
+            i.positionalArguments.first as Pointer<UnsignedChar>,
             testData,
           );
           return 0;
@@ -397,8 +397,8 @@ void main() {
 
         verify(
           () => mockSodium.crypto_pwhash_str(
-            any(that: hasRawData<Int8>(List.filled(5, 0))),
-            any(that: hasRawData<Int8>(password.toCharArray())),
+            any(that: hasRawData<Char>(List.filled(5, 0))),
+            any(that: hasRawData<Char>(password.toCharArray())),
             password.length,
             5,
             2,
@@ -441,7 +441,7 @@ void main() {
           ),
         ).thenAnswer((i) {
           fillPointer(
-            i.positionalArguments.first as Pointer<Int8>,
+            i.positionalArguments.first as Pointer<Char>,
             testHash,
           );
           return 0;
@@ -468,7 +468,7 @@ void main() {
           ),
         ).thenAnswer((i) {
           fillPointer(
-            i.positionalArguments.first as Pointer<Int8>,
+            i.positionalArguments.first as Pointer<Char>,
             testHash,
           );
           return 0;
@@ -530,9 +530,9 @@ void main() {
         verify(
           () => mockSodium.crypto_pwhash_str_verify(
             any(
-              that: hasRawData<Int8>(passwordHash.toCharArray(memoryWidth: 5)),
+              that: hasRawData<Char>(passwordHash.toCharArray(memoryWidth: 5)),
             ),
-            any(that: hasRawData<Int8>(password.toCharArray())),
+            any(that: hasRawData<Char>(password.toCharArray())),
             password.length,
           ),
         );
@@ -622,7 +622,7 @@ void main() {
         verify(
           () => mockSodium.crypto_pwhash_str_needs_rehash(
             any(
-              that: hasRawData<Int8>(passwordHash.toCharArray(memoryWidth: 5)),
+              that: hasRawData<Char>(passwordHash.toCharArray(memoryWidth: 5)),
             ),
             9,
             8,

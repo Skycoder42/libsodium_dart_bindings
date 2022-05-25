@@ -14,10 +14,13 @@ import 'crypto_js.dart';
 import 'randombytes_js.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class SodiumJS implements Sodium {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   SodiumJS(this.sodium);
 
   @override

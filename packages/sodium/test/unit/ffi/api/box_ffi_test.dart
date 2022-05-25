@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -177,12 +177,12 @@ void main() {
                   any(that: hasRawData(secretKey)),
                 ),
             () => mockSodium.crypto_box_easy(
-                  any(that: hasRawData<Uint8>(mac + message)),
-                  any(that: hasRawData<Uint8>(message)),
+                  any(that: hasRawData<UnsignedChar>(mac + message)),
+                  any(that: hasRawData<UnsignedChar>(message)),
                   message.length,
-                  any(that: hasRawData<Uint8>(nonce)),
-                  any(that: hasRawData<Uint8>(publicKey)),
-                  any(that: hasRawData<Uint8>(secretKey)),
+                  any(that: hasRawData<UnsignedChar>(nonce)),
+                  any(that: hasRawData<UnsignedChar>(publicKey)),
+                  any(that: hasRawData<UnsignedChar>(secretKey)),
                 ),
           ]);
         });
@@ -199,7 +199,10 @@ void main() {
               any(),
             ),
           ).thenAnswer((i) {
-            fillPointer(i.positionalArguments.first as Pointer<Uint8>, cipher);
+            fillPointer(
+              i.positionalArguments.first as Pointer<UnsignedChar>,
+              cipher,
+            );
             return 0;
           });
 
@@ -333,12 +336,12 @@ void main() {
                   any(that: hasRawData(secretKey)),
                 ),
             () => mockSodium.crypto_box_open_easy(
-                  any(that: hasRawData<Uint8>(cipherText.sublist(5))),
-                  any(that: hasRawData<Uint8>(cipherText)),
+                  any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
+                  any(that: hasRawData<UnsignedChar>(cipherText)),
                   cipherText.length,
-                  any(that: hasRawData<Uint8>(nonce)),
-                  any(that: hasRawData<Uint8>(publicKey)),
-                  any(that: hasRawData<Uint8>(secretKey)),
+                  any(that: hasRawData<UnsignedChar>(nonce)),
+                  any(that: hasRawData<UnsignedChar>(publicKey)),
+                  any(that: hasRawData<UnsignedChar>(secretKey)),
                 ),
           ]);
         });
@@ -355,7 +358,10 @@ void main() {
               any(),
             ),
           ).thenAnswer((i) {
-            fillPointer(i.positionalArguments.first as Pointer<Uint8>, message);
+            fillPointer(
+              i.positionalArguments.first as Pointer<UnsignedChar>,
+              message,
+            );
             return 0;
           });
 
@@ -476,13 +482,13 @@ void main() {
                   any(that: hasRawData(secretKey)),
                 ),
             () => mockSodium.crypto_box_detached(
-                  any(that: hasRawData<Uint8>(message)),
+                  any(that: hasRawData<UnsignedChar>(message)),
                   any(that: isNot(nullptr)),
-                  any(that: hasRawData<Uint8>(message)),
+                  any(that: hasRawData<UnsignedChar>(message)),
                   message.length,
-                  any(that: hasRawData<Uint8>(nonce)),
-                  any(that: hasRawData<Uint8>(publicKey)),
-                  any(that: hasRawData<Uint8>(secretKey)),
+                  any(that: hasRawData<UnsignedChar>(nonce)),
+                  any(that: hasRawData<UnsignedChar>(publicKey)),
+                  any(that: hasRawData<UnsignedChar>(secretKey)),
                 ),
           ]);
         });
@@ -501,8 +507,11 @@ void main() {
               any(),
             ),
           ).thenAnswer((i) {
-            fillPointer(i.positionalArguments[0] as Pointer<Uint8>, cipherText);
-            fillPointer(i.positionalArguments[1] as Pointer<Uint8>, mac);
+            fillPointer(
+              i.positionalArguments[0] as Pointer<UnsignedChar>,
+              cipherText,
+            );
+            fillPointer(i.positionalArguments[1] as Pointer<UnsignedChar>, mac);
             return 0;
           });
 
@@ -653,13 +662,13 @@ void main() {
                   any(that: hasRawData(secretKey)),
                 ),
             () => mockSodium.crypto_box_open_detached(
-                  any(that: hasRawData<Uint8>(cipherText)),
-                  any(that: hasRawData<Uint8>(cipherText)),
-                  any(that: hasRawData<Uint8>(mac)),
+                  any(that: hasRawData<UnsignedChar>(cipherText)),
+                  any(that: hasRawData<UnsignedChar>(cipherText)),
+                  any(that: hasRawData<UnsignedChar>(mac)),
                   cipherText.length,
-                  any(that: hasRawData<Uint8>(nonce)),
-                  any(that: hasRawData<Uint8>(publicKey)),
-                  any(that: hasRawData<Uint8>(secretKey)),
+                  any(that: hasRawData<UnsignedChar>(nonce)),
+                  any(that: hasRawData<UnsignedChar>(publicKey)),
+                  any(that: hasRawData<UnsignedChar>(secretKey)),
                 ),
           ]);
         });
@@ -677,7 +686,10 @@ void main() {
               any(),
             ),
           ).thenAnswer((i) {
-            fillPointer(i.positionalArguments.first as Pointer<Uint8>, message);
+            fillPointer(
+              i.positionalArguments.first as Pointer<UnsignedChar>,
+              message,
+            );
             return 0;
           });
 
@@ -776,8 +788,8 @@ void main() {
                 ),
             () => mockSodium.crypto_box_beforenm(
                   any(that: isNot(nullptr)),
-                  any(that: hasRawData<Uint8>(publicKey)),
-                  any(that: hasRawData<Uint8>(secretKey)),
+                  any(that: hasRawData<UnsignedChar>(publicKey)),
+                  any(that: hasRawData<UnsignedChar>(secretKey)),
                 ),
             () => mockSodium.sodium_mprotect_noaccess(
                   any(that: isNot(nullptr)),
@@ -879,10 +891,10 @@ void main() {
                   any(that: hasRawData(publicKey)),
                 ),
             () => mockSodium.crypto_box_seal(
-                  any(that: hasRawData<Uint8>(seal + message)),
-                  any(that: hasRawData<Uint8>(message)),
+                  any(that: hasRawData<UnsignedChar>(seal + message)),
+                  any(that: hasRawData<UnsignedChar>(message)),
                   message.length,
-                  any(that: hasRawData<Uint8>(publicKey)),
+                  any(that: hasRawData<UnsignedChar>(publicKey)),
                 ),
           ]);
         });
@@ -897,7 +909,10 @@ void main() {
               any(),
             ),
           ).thenAnswer((i) {
-            fillPointer(i.positionalArguments.first as Pointer<Uint8>, cipher);
+            fillPointer(
+              i.positionalArguments.first as Pointer<UnsignedChar>,
+              cipher,
+            );
             return 0;
           });
 
@@ -1002,11 +1017,11 @@ void main() {
                   any(that: hasRawData(secretKey)),
                 ),
             () => mockSodium.crypto_box_seal_open(
-                  any(that: hasRawData<Uint8>(cipherText.sublist(5))),
-                  any(that: hasRawData<Uint8>(cipherText)),
+                  any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
+                  any(that: hasRawData<UnsignedChar>(cipherText)),
                   cipherText.length,
-                  any(that: hasRawData<Uint8>(publicKey)),
-                  any(that: hasRawData<Uint8>(secretKey)),
+                  any(that: hasRawData<UnsignedChar>(publicKey)),
+                  any(that: hasRawData<UnsignedChar>(secretKey)),
                 ),
           ]);
         });
@@ -1022,7 +1037,10 @@ void main() {
               any(),
             ),
           ).thenAnswer((i) {
-            fillPointer(i.positionalArguments.first as Pointer<Uint8>, message);
+            fillPointer(
+              i.positionalArguments.first as Pointer<UnsignedChar>,
+              message,
+            );
             return 0;
           });
 
@@ -1074,7 +1092,7 @@ void main() {
         SecureKeyFFI(
           SodiumPointer.raw(
             mockSodium,
-            sharedKey.toPointer(),
+            sharedKey.toPointer().cast(),
             sharedKey.length,
           ),
         ),
@@ -1125,11 +1143,11 @@ void main() {
                 any(that: hasRawData(sharedKey)),
               ),
           () => mockSodium.crypto_box_easy_afternm(
-                any(that: hasRawData<Uint8>(mac + message)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(mac + message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(nonce)),
-                any(that: hasRawData<Uint8>(sharedKey)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(sharedKey)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(
                 any(that: hasRawData(sharedKey)),
@@ -1237,11 +1255,11 @@ void main() {
                 any(that: hasRawData(sharedKey)),
               ),
           () => mockSodium.crypto_box_open_easy_afternm(
-                any(that: hasRawData<Uint8>(cipherText.sublist(5))),
-                any(that: hasRawData<Uint8>(cipherText)),
+                any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
                 cipherText.length,
-                any(that: hasRawData<Uint8>(nonce)),
-                any(that: hasRawData<Uint8>(sharedKey)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(sharedKey)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(
                 any(that: hasRawData(sharedKey)),
@@ -1338,12 +1356,12 @@ void main() {
                 any(that: hasRawData(sharedKey)),
               ),
           () => mockSodium.crypto_box_detached_afternm(
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(nonce)),
-                any(that: hasRawData<Uint8>(sharedKey)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(sharedKey)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(
                 any(that: hasRawData(sharedKey)),
@@ -1471,12 +1489,12 @@ void main() {
                 any(that: hasRawData(sharedKey)),
               ),
           () => mockSodium.crypto_box_open_detached_afternm(
-                any(that: hasRawData<Uint8>(cipherText)),
-                any(that: hasRawData<Uint8>(cipherText)),
-                any(that: hasRawData<Uint8>(mac)),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                any(that: hasRawData<UnsignedChar>(mac)),
                 cipherText.length,
-                any(that: hasRawData<Uint8>(nonce)),
-                any(that: hasRawData<Uint8>(sharedKey)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(sharedKey)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(
                 any(that: hasRawData(sharedKey)),

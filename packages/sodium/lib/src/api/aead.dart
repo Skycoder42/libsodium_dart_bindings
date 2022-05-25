@@ -79,26 +79,31 @@ abstract class Aead {
   });
 }
 
+/// @nodoc
 @internal
 mixin AeadValidations implements Aead {
+  /// @nodoc
   void validateNonce(Uint8List nonce) => Validations.checkIsSame(
         nonce.length,
         nonceBytes,
         'nonce',
       );
 
+  /// @nodoc
   void validateKey(SecureKey key) => Validations.checkIsSame(
         key.length,
         keyBytes,
         'key',
       );
 
+  /// @nodoc
   void validateMac(Uint8List mac) => Validations.checkIsSame(
         mac.length,
         aBytes,
         'mac',
       );
 
+  /// @nodoc
   void validateEasyCipherText(Uint8List cipherText) => Validations.checkAtLeast(
         cipherText.length,
         aBytes,

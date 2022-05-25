@@ -40,6 +40,7 @@ enum SecretStreamMessageTag {
 /// thrown, unless `requireFinalized` has been set to false when the stream
 /// was created.
 class StreamClosedEarlyException implements Exception {
+  /// Default constructor
   StreamClosedEarlyException();
 
   // coverage:ignore-start
@@ -55,9 +56,13 @@ class StreamClosedEarlyException implements Exception {
 /// If the first message that is decrypted by a decryption (pull) stream does
 /// not have the correct amout of bytes, this exception will be thrown.
 class InvalidHeaderException implements Exception {
+  /// The number of bytes the header should have had
   final int expectedBytes;
+
+  /// The number of bytes the header actually had
   final int actualBytes;
 
+  /// Default constructor
   InvalidHeaderException(this.expectedBytes, this.actualBytes);
 
   // coverage:ignore-start
@@ -71,6 +76,7 @@ class InvalidHeaderException implements Exception {
 /// A container class for a extended plain message before encryption.
 @freezed
 class SecretStreamPlainMessage with _$SecretStreamPlainMessage {
+  /// Default constructor
   const factory SecretStreamPlainMessage(
     /// The message that should be encrypted.
     Uint8List message, {
@@ -91,6 +97,7 @@ class SecretStreamPlainMessage with _$SecretStreamPlainMessage {
 /// A container class for a extended cipher message before decryption.
 @freezed
 class SecretStreamCipherMessage with _$SecretStreamCipherMessage {
+  /// Default constructor
   const factory SecretStreamCipherMessage(
     /// The message that should be decrypted.
     Uint8List message, {
@@ -306,8 +313,10 @@ abstract class SecretStream {
   });
 }
 
+/// @nodoc
 @internal
 mixin SecretStreamValidations implements SecretStream {
+  /// @nodoc
   void validateKey(SecureKey key) => Validations.checkIsSame(
         key.length,
         keyBytes,

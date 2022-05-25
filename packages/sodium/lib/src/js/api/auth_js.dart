@@ -9,10 +9,13 @@ import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class AuthJS with AuthValidations implements Auth {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   AuthJS(this.sodium);
 
   @override

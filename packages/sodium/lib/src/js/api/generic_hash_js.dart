@@ -11,10 +11,13 @@ import '../bindings/to_safe_int.dart';
 import 'helpers/generic_hash/generic_hash_consumer_js.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class GenericHashJS with GenericHashValidations implements GenericHash {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   GenericHashJS(this.sodium);
 
   @override

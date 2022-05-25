@@ -9,10 +9,13 @@ import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class ShortHashJS with ShortHashValidations implements ShortHash {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   ShortHashJS(this.sodium);
 
   @override

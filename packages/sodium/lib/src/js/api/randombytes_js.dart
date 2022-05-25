@@ -8,10 +8,13 @@ import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 
+/// @nodoc
 @internal
 class RandombytesJS implements Randombytes {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   RandombytesJS(this.sodium);
 
   // Not exported in JS library

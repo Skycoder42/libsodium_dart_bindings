@@ -2,7 +2,6 @@ import 'dart:ffi';
 
 import 'libsodium.ffi.dart';
 import 'memory_protection.dart';
-import 'size_t_extension.dart';
 
 /// An [Allocator] using the libsodium memory functionality.
 ///
@@ -23,7 +22,7 @@ class SodiumAllocator implements Allocator {
       throw ArgumentError('Cannot align memory when using SodiumAllocator');
     }
 
-    return sodium.sodium_malloc(byteCount.toIntPtr()).cast();
+    return sodium.sodium_malloc(byteCount).cast();
   }
 
   /// Provides sodium_free.
@@ -38,20 +37,20 @@ class SodiumAllocator implements Allocator {
   ///
   /// See https://libsodium.gitbook.io/doc/memory_management#zeroing-memory
   void memzero(Pointer<NativeType> pointer, int byteCount) {
-    sodium.sodium_memzero(pointer.cast(), byteCount.toIntPtr());
+    sodium.sodium_memzero(pointer.cast(), byteCount);
   }
 
   /// Provides sodium_mlock.
   ///
   /// See https://libsodium.gitbook.io/doc/memory_management#locking-memory
   bool lock(Pointer<NativeType> pointer, int byteCount) =>
-      sodium.sodium_mlock(pointer.cast(), byteCount.toIntPtr()) == 0;
+      sodium.sodium_mlock(pointer.cast(), byteCount) == 0;
 
   /// Provides sodium_munlock.
   ///
   /// See https://libsodium.gitbook.io/doc/memory_management#locking-memory
   bool unlock(Pointer<NativeType> pointer, int byteCount) =>
-      sodium.sodium_munlock(pointer.cast(), byteCount.toIntPtr()) == 0;
+      sodium.sodium_munlock(pointer.cast(), byteCount) == 0;
 
   /// Provides sodium_mprotect_*.
   ///

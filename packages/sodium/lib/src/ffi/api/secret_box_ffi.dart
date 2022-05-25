@@ -10,24 +10,26 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 
+/// @nodoc
 @internal
 class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   SecretBoxFFI(this.sodium);
 
   @override
-  int get keyBytes => sodium.crypto_secretbox_keybytes().toSizeT();
+  int get keyBytes => sodium.crypto_secretbox_keybytes();
 
   @override
-  int get macBytes => sodium.crypto_secretbox_macbytes().toSizeT();
+  int get macBytes => sodium.crypto_secretbox_macbytes();
 
   @override
-  int get nonceBytes => sodium.crypto_secretbox_noncebytes().toSizeT();
+  int get nonceBytes => sodium.crypto_secretbox_noncebytes();
 
   @override
   SecureKey keygen() => keygenImpl(
@@ -45,8 +47,8 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
     try {
       dataPtr = SodiumPointer.alloc(
         sodium,
@@ -71,7 +73,7 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
       noncePtr?.dispose();
@@ -88,8 +90,8 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
     try {
       dataPtr = cipherText.toSodiumPointer(sodium);
       noncePtr = nonce.toSodiumPointer(
@@ -109,7 +111,7 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.viewAt(macBytes).copyAsList();
+      return Uint8List.fromList(dataPtr.viewAt(macBytes).asListView());
     } finally {
       dataPtr?.dispose();
       noncePtr?.dispose();
@@ -125,9 +127,9 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? macPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? macPtr;
     try {
       dataPtr = message.toSodiumPointer(sodium);
       noncePtr = nonce.toSodiumPointer(
@@ -150,8 +152,8 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: dataPtr.copyAsList(),
-        mac: macPtr.copyAsList(),
+        cipherText: Uint8List.fromList(dataPtr.asListView()),
+        mac: Uint8List.fromList(macPtr.asListView()),
       );
     } finally {
       dataPtr?.dispose();
@@ -171,9 +173,9 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? macPtr;
-    SodiumPointer<Uint8>? noncePtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? macPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
     try {
       dataPtr = cipherText.toSodiumPointer(sodium);
       macPtr = mac.toSodiumPointer(
@@ -198,7 +200,7 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
       macPtr?.dispose();

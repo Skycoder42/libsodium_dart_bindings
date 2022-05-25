@@ -26,26 +26,32 @@ class _SinkState<TState extends Object> with _$_SinkState<TState> {
   const factory _SinkState.closed() = _Closed<TState>;
 }
 
+/// @nodoc
 @internal
 abstract class SecretStreamPushTransformerSink<TState extends Object>
     implements EventSink<SecretStreamPlainMessage> {
   _SinkState<TState> _state = const _SinkState.uninitialized();
 
+  /// @nodoc
   @protected
   void rekey(TState cryptoState);
 
+  /// @nodoc
   @protected
   void disposeState(TState cryptoState);
 
+  /// @nodoc
   @protected
   InitPushResult<TState> initialize(SecureKey key);
 
+  /// @nodoc
   @protected
   SecretStreamCipherMessage encryptMessage(
     TState cryptoState,
     SecretStreamPlainMessage event,
   );
 
+  /// @nodoc
   @nonVirtual
   void init(EventSink<SecretStreamCipherMessage> outSink, SecureKey key) =>
       _state.maybeWhen(
@@ -53,6 +59,7 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
         orElse: _throwInitialized,
       );
 
+  /// @nodoc
   @nonVirtual
   void triggerRekey() => _state.when(
         initialized: (_, cryptoState) => rekey(cryptoState),
@@ -170,15 +177,19 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
       );
 }
 
+/// @nodoc
 @internal
 abstract class SecretStreamPushTransformer<TState extends Object>
     implements
         SecretExStreamTransformer<SecretStreamPlainMessage,
             SecretStreamCipherMessage> {
+  /// @nodoc
   final SecureKey key;
 
+  /// @nodoc
   const SecretStreamPushTransformer(this.key);
 
+  /// @nodoc
   @protected
   SecretStreamPushTransformerSink<TState> createSink();
 

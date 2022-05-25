@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -101,9 +101,9 @@ void main() {
               ),
           () => mockSodium.crypto_shorthash(
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(key)),
+                any(that: hasRawData<UnsignedChar>(key)),
               ),
         ]);
       });

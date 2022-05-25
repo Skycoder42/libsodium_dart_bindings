@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -163,9 +163,9 @@ void main() {
           () => mockSodium.crypto_kx_client_session_keys(
                 any(that: isNot(nullptr)),
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(clientPublicKey)),
-                any(that: hasRawData<Uint8>(clientSecretKey)),
-                any(that: hasRawData<Uint8>(serverPublicKey)),
+                any(that: hasRawData<UnsignedChar>(clientPublicKey)),
+                any(that: hasRawData<UnsignedChar>(clientSecretKey)),
+                any(that: hasRawData<UnsignedChar>(serverPublicKey)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
           () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
@@ -309,9 +309,9 @@ void main() {
           () => mockSodium.crypto_kx_server_session_keys(
                 any(that: isNot(nullptr)),
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(serverPublicKey)),
-                any(that: hasRawData<Uint8>(serverSecretKey)),
-                any(that: hasRawData<Uint8>(clientPublicKey)),
+                any(that: hasRawData<UnsignedChar>(serverPublicKey)),
+                any(that: hasRawData<UnsignedChar>(serverSecretKey)),
+                any(that: hasRawData<UnsignedChar>(clientPublicKey)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
           () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),

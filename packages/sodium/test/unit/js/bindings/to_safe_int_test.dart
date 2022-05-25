@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!js': Skip('Requires dart:js')})
+@TestOn('js')
 
 import 'package:sodium/src/js/bindings/to_safe_int.dart';
 import 'package:test/test.dart';

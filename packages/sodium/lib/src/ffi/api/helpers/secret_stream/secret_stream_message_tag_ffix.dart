@@ -3,8 +3,10 @@ import 'package:meta/meta.dart';
 import '../../../../api/secret_stream.dart';
 import '../../../bindings/libsodium.ffi.dart';
 
+/// @nodoc
 @internal
 extension SecretStreamMessageTagFFIX on SecretStreamMessageTag {
+  /// @nodoc
   int getValue(LibSodiumFFI sodium) {
     switch (this) {
       case SecretStreamMessageTag.message:
@@ -18,6 +20,7 @@ extension SecretStreamMessageTagFFIX on SecretStreamMessageTag {
     }
   }
 
+  /// @nodoc
   static SecretStreamMessageTag fromValue(LibSodiumFFI sodium, int value) {
     if (value == sodium.crypto_secretstream_xchacha20poly1305_tag_message()) {
       return SecretStreamMessageTag.message;

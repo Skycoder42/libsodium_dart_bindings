@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 // ignore: test_library_import
 import 'package:sodium/sodium.ffi.dart';

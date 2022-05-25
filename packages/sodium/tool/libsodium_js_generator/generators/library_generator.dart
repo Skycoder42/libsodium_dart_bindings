@@ -5,7 +5,9 @@ class LibraryGenerator {
 
   void writeImports(StringSink sink) {
     sink
-      ..writeln('// ignore_for_file: non_constant_identifier_names')
+      ..writeln(
+        '// ignore_for_file: non_constant_identifier_names, public_member_api_docs',
+      )
       ..writeln()
       ..writeln('@JS()')
       ..writeln('library sodium.js;')

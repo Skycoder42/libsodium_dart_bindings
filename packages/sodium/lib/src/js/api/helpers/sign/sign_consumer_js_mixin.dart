@@ -6,20 +6,25 @@ import 'package:meta/meta.dart';
 import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 
+/// @nodoc
 @internal
 mixin SignConsumerJSMixin<T extends Object>
     implements StreamConsumer<Uint8List> {
+  /// @nodoc
   LibSodiumJS get sodium;
 
   final _signatureCompleter = Completer<T>();
   late final SignState _state;
 
+  /// @nodoc
   @protected
   Future<T> get result => _signatureCompleter.future;
 
+  /// @nodoc
   @protected
   T finalize(SignState state);
 
+  /// @nodoc
   @protected
   void initState() {
     _state = JsError.wrap(() => sodium.crypto_sign_init());

@@ -1,6 +1,7 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
@@ -16,7 +17,7 @@ import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 
-class MockSodiumPointer extends Mock implements SodiumPointer<Uint8> {}
+class MockSodiumPointer extends Mock implements SodiumPointer<UnsignedChar> {}
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -87,16 +88,18 @@ void main() {
   });
 
   group('members', () {
-    const testList = [0, 1, 2, 3, 4];
-    late Pointer<Uint8> testPtr;
+    final testList = Uint8List.fromList(const [0, 1, 2, 3, 4]);
+    late Pointer<UnsignedChar> testPtr;
 
     late SecureKeyFFI sut;
 
     setUp(() {
-      testPtr = testList.toPointer();
+      testPtr = testList.toPointer().cast();
 
       when(() => mockSodiumPointer.count).thenReturn(testList.length);
       when(() => mockSodiumPointer.ptr).thenReturn(testPtr);
+      when(() => mockSodiumPointer.asListView()).thenReturn(testList);
+      when(() => mockSodiumPointer.asListView<int>()).thenReturn(testList);
 
       sut = SecureKeyFFI(mockSodiumPointer);
       clearInteractions(mockSodiumPointer);
@@ -257,12 +260,7 @@ void main() {
         final bytes = sut.extractBytes();
 
         expect(bytes, testList);
-
-        final replaceList = testList.map((e) => e + 1).toList();
-        testPtr.asTypedList(replaceList.length).setAll(0, replaceList);
-
-        expect(bytes, testList);
-        expect(sut.extractBytes(), replaceList);
+        expect(bytes, isNot(same(testList)));
       });
 
       test('unlocks then relocks memory for extracting', () {
@@ -296,12 +294,7 @@ void main() {
         final res = sut.copy();
 
         expect(res.extractBytes(), testList);
-
-        final replaceList = testList.map((e) => e + 1).toList();
-        testPtr.asTypedList(replaceList.length).setAll(0, replaceList);
-
-        expect(sut.extractBytes(), replaceList);
-        expect(res.extractBytes(), testList);
+        expect(res.nativeHandle, isNot(sut.nativeHandle));
       });
     });
 

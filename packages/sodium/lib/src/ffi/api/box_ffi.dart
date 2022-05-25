@@ -11,16 +11,20 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 import 'secure_key_ffi.dart';
 
+/// @nodoc
 @internal
 class PrecalculatedBoxFFI implements PrecalculatedBox {
+  /// @nodoc
   final BoxFFI box;
+
+  /// @nodoc
   final SecureKeyFFI sharedKey;
 
+  /// @nodoc
   PrecalculatedBoxFFI(this.box, this.sharedKey);
 
   @override
@@ -30,8 +34,8 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
   }) {
     box.validateNonce(nonce);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
     try {
       dataPtr = SodiumPointer.alloc(
         box.sodium,
@@ -55,7 +59,7 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
       noncePtr?.dispose();
@@ -71,8 +75,8 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       ..validateEasyCipherText(cipherText)
       ..validateNonce(nonce);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
     try {
       dataPtr = cipherText.toSodiumPointer(box.sodium);
       noncePtr = nonce.toSodiumPointer(
@@ -91,7 +95,7 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.viewAt(box.macBytes).copyAsList();
+      return Uint8List.fromList(dataPtr.viewAt(box.macBytes).asListView());
     } finally {
       dataPtr?.dispose();
       noncePtr?.dispose();
@@ -105,9 +109,9 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
   }) {
     box.validateNonce(nonce);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? macPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? macPtr;
     try {
       dataPtr = message.toSodiumPointer(box.sodium);
       noncePtr = nonce.toSodiumPointer(
@@ -129,8 +133,8 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: dataPtr.copyAsList(),
-        mac: macPtr.copyAsList(),
+        cipherText: Uint8List.fromList(dataPtr.asListView()),
+        mac: Uint8List.fromList(macPtr.asListView()),
       );
     } finally {
       dataPtr?.dispose();
@@ -149,9 +153,9 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       ..validateMac(mac)
       ..validateNonce(nonce);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? macPtr;
-    SodiumPointer<Uint8>? noncePtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? macPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
     try {
       dataPtr = cipherText.toSodiumPointer(box.sodium);
       macPtr = mac.toSodiumPointer(
@@ -175,7 +179,7 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
       macPtr?.dispose();
@@ -187,29 +191,32 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
   void dispose() => sharedKey.dispose();
 }
 
+/// @nodoc
 @internal
 class BoxFFI with BoxValidations, KeygenMixin implements Box {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   BoxFFI(this.sodium);
 
   @override
-  int get publicKeyBytes => sodium.crypto_box_publickeybytes().toSizeT();
+  int get publicKeyBytes => sodium.crypto_box_publickeybytes();
 
   @override
-  int get secretKeyBytes => sodium.crypto_box_secretkeybytes().toSizeT();
+  int get secretKeyBytes => sodium.crypto_box_secretkeybytes();
 
   @override
-  int get macBytes => sodium.crypto_box_macbytes().toSizeT();
+  int get macBytes => sodium.crypto_box_macbytes();
 
   @override
-  int get nonceBytes => sodium.crypto_box_noncebytes().toSizeT();
+  int get nonceBytes => sodium.crypto_box_noncebytes();
 
   @override
-  int get seedBytes => sodium.crypto_box_seedbytes().toSizeT();
+  int get seedBytes => sodium.crypto_box_seedbytes();
 
   @override
-  int get sealBytes => sodium.crypto_box_sealbytes().toSizeT();
+  int get sealBytes => sodium.crypto_box_sealbytes();
 
   @override
   KeyPair keyPair() => keyPairImpl(
@@ -242,9 +249,9 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       dataPtr = SodiumPointer.alloc(
         sodium,
@@ -274,7 +281,7 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
       noncePtr?.dispose();
@@ -294,9 +301,9 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       dataPtr = cipherText.toSodiumPointer(sodium);
       noncePtr = nonce.toSodiumPointer(
@@ -321,7 +328,7 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.viewAt(macBytes).copyAsList();
+      return Uint8List.fromList(dataPtr.viewAt(macBytes).asListView());
     } finally {
       dataPtr?.dispose();
       noncePtr?.dispose();
@@ -340,10 +347,10 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? publicKeyPtr;
-    SodiumPointer<Uint8>? macPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? macPtr;
     try {
       dataPtr = message.toSodiumPointer(sodium);
       noncePtr = nonce.toSodiumPointer(
@@ -371,8 +378,8 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: dataPtr.copyAsList(),
-        mac: macPtr.copyAsList(),
+        cipherText: Uint8List.fromList(dataPtr.asListView()),
+        mac: Uint8List.fromList(macPtr.asListView()),
       );
     } finally {
       dataPtr?.dispose();
@@ -395,10 +402,10 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? macPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? macPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       dataPtr = cipherText.toSodiumPointer(sodium);
       macPtr = mac.toSodiumPointer(
@@ -428,7 +435,7 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
       macPtr?.dispose();
@@ -446,7 +453,7 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validateSecretKey(secretKey);
 
     SecureKeyFFI? sharedKey;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       publicKeyPtr = publicKey.toSodiumPointer(
         sodium,
@@ -454,7 +461,7 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       sharedKey = SecureKeyFFI.alloc(
         sodium,
-        sodium.crypto_box_beforenmbytes().toSizeT(),
+        sodium.crypto_box_beforenmbytes(),
       );
 
       final result = sharedKey.runUnlockedNative(
@@ -486,8 +493,8 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
   }) {
     validatePublicKey(publicKey);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       dataPtr = SodiumPointer.alloc(
         sodium,
@@ -508,7 +515,7 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
       publicKeyPtr?.dispose();
@@ -525,8 +532,8 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       dataPtr = cipherText.toSodiumPointer(sodium);
       publicKeyPtr = publicKey.toSodiumPointer(
@@ -546,7 +553,7 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.viewAt(sealBytes).copyAsList();
+      return Uint8List.fromList(dataPtr.viewAt(sealBytes).asListView());
     } finally {
       dataPtr?.dispose();
       publicKeyPtr?.dispose();

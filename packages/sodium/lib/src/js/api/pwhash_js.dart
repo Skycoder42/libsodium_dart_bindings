@@ -11,8 +11,10 @@ import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @visibleForTesting
 extension CrypoPwhashAlgorithmJS on CryptoPwhashAlgorithm {
+  /// @nodoc
   int getValue(LibSodiumJS sodium) {
     switch (this) {
       case CryptoPwhashAlgorithm.defaultAlg:
@@ -25,10 +27,13 @@ extension CrypoPwhashAlgorithmJS on CryptoPwhashAlgorithm {
   }
 }
 
+/// @nodoc
 @internal
 class PwhashJS with PwHashValidations implements Pwhash {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   PwhashJS(this.sodium);
 
   @override

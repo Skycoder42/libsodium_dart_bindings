@@ -4,8 +4,10 @@ import '../../../../api/secret_stream.dart';
 import '../../../bindings/sodium.js.dart';
 import '../../../bindings/to_safe_int.dart';
 
+/// @nodoc
 @internal
 extension SecretStreamMessageTagJSX on SecretStreamMessageTag {
+  /// @nodoc
   int getValue(LibSodiumJS sodium) {
     switch (this) {
       case SecretStreamMessageTag.message:
@@ -23,6 +25,7 @@ extension SecretStreamMessageTagJSX on SecretStreamMessageTag {
     }
   }
 
+  /// @nodoc
   static SecretStreamMessageTag fromValue(LibSodiumJS sodium, int value) {
     if (value ==
         sodium.crypto_secretstream_xchacha20poly1305_TAG_MESSAGE

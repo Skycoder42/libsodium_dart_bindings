@@ -10,28 +10,30 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 import 'secure_key_ffi.dart';
 
+/// @nodoc
 @internal
 class KxFFI with KxValidations, KeygenMixin implements Kx {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   KxFFI(this.sodium);
 
   @override
-  int get publicKeyBytes => sodium.crypto_kx_publickeybytes().toSizeT();
+  int get publicKeyBytes => sodium.crypto_kx_publickeybytes();
 
   @override
-  int get secretKeyBytes => sodium.crypto_kx_secretkeybytes().toSizeT();
+  int get secretKeyBytes => sodium.crypto_kx_secretkeybytes();
 
   @override
-  int get seedBytes => sodium.crypto_kx_seedbytes().toSizeT();
+  int get seedBytes => sodium.crypto_kx_seedbytes();
 
   @override
-  int get sessionKeyBytes => sodium.crypto_kx_sessionkeybytes().toSizeT();
+  int get sessionKeyBytes => sodium.crypto_kx_sessionkeybytes();
 
   @override
   KeyPair keyPair() => keyPairImpl(
@@ -65,8 +67,8 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
 
     SecureKeyFFI? rxKey;
     SecureKeyFFI? txKey;
-    SodiumPointer<Uint8>? clientPublicKeyPtr;
-    SodiumPointer<Uint8>? serverPublicKeyPtr;
+    SodiumPointer<UnsignedChar>? clientPublicKeyPtr;
+    SodiumPointer<UnsignedChar>? serverPublicKeyPtr;
     try {
       rxKey = SecureKeyFFI.alloc(sodium, sessionKeyBytes);
       txKey = SecureKeyFFI.alloc(sodium, sessionKeyBytes);
@@ -123,8 +125,8 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
 
     SecureKeyFFI? rxKey;
     SecureKeyFFI? txKey;
-    SodiumPointer<Uint8>? serverPublicKeyPtr;
-    SodiumPointer<Uint8>? clientPublicKeyPtr;
+    SodiumPointer<UnsignedChar>? serverPublicKeyPtr;
+    SodiumPointer<UnsignedChar>? clientPublicKeyPtr;
     try {
       rxKey = SecureKeyFFI.alloc(sodium, sessionKeyBytes);
       txKey = SecureKeyFFI.alloc(sodium, sessionKeyBytes);

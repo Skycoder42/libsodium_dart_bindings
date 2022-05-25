@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -54,7 +54,7 @@ void main() {
 
       expect(sut.elementSize, sizeOf<Uint16>());
       expect(sut.count, 4);
-      expect(sut.byteLength, 8);
+      expect(sut.byteLength, 4 * sizeOf<Uint16>());
     });
 
     group('alloc', () {
@@ -75,7 +75,7 @@ void main() {
 
         expect(sut.elementSize, sizeOf<Uint16>());
         expect(sut.count, 10);
-        expect(sut.byteLength, 20);
+        expect(sut.byteLength, 10 * sizeOf<Uint16>());
 
         verify(() => mockSodium.sodium_allocarray(10, sizeOf<Uint16>()));
       });
@@ -90,16 +90,106 @@ void main() {
       testData<Tuple2<SodiumPointer<dynamic> Function(), int>>(
         'allocates correct element size for supported types',
         [
-          Tuple2(() => SodiumPointer<Uint8>.alloc(mockSodium, count: 2), 1),
-          Tuple2(() => SodiumPointer<Uint16>.alloc(mockSodium, count: 2), 2),
-          Tuple2(() => SodiumPointer<Uint32>.alloc(mockSodium, count: 2), 4),
-          Tuple2(() => SodiumPointer<Uint64>.alloc(mockSodium, count: 2), 8),
-          Tuple2(() => SodiumPointer<Int8>.alloc(mockSodium, count: 2), 1),
-          Tuple2(() => SodiumPointer<Int16>.alloc(mockSodium, count: 2), 2),
-          Tuple2(() => SodiumPointer<Int32>.alloc(mockSodium, count: 2), 4),
-          Tuple2(() => SodiumPointer<Int64>.alloc(mockSodium, count: 2), 8),
-          Tuple2(() => SodiumPointer<Float>.alloc(mockSodium, count: 2), 4),
-          Tuple2(() => SodiumPointer<Double>.alloc(mockSodium, count: 2), 8),
+          Tuple2(
+            () => SodiumPointer<Uint8>.alloc(mockSodium, count: 2),
+            sizeOf<Uint8>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Uint16>.alloc(mockSodium, count: 2),
+            sizeOf<Uint16>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Uint32>.alloc(mockSodium, count: 2),
+            sizeOf<Uint32>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Uint64>.alloc(mockSodium, count: 2),
+            sizeOf<Uint64>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Int8>.alloc(mockSodium, count: 2),
+            sizeOf<Int8>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Int16>.alloc(mockSodium, count: 2),
+            sizeOf<Int16>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Int32>.alloc(mockSodium, count: 2),
+            sizeOf<Int32>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Int64>.alloc(mockSodium, count: 2),
+            sizeOf<Int64>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Float>.alloc(mockSodium, count: 2),
+            sizeOf<Float>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Double>.alloc(mockSodium, count: 2),
+            sizeOf<Double>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Char>.alloc(mockSodium, count: 2),
+            sizeOf<Char>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Short>.alloc(mockSodium, count: 2),
+            sizeOf<Short>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Int>.alloc(mockSodium, count: 2),
+            sizeOf<Int>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Long>.alloc(mockSodium, count: 2),
+            sizeOf<Long>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<LongLong>.alloc(mockSodium, count: 2),
+            sizeOf<LongLong>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<UnsignedChar>.alloc(mockSodium, count: 2),
+            sizeOf<UnsignedChar>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<UnsignedShort>.alloc(mockSodium, count: 2),
+            sizeOf<UnsignedShort>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<UnsignedInt>.alloc(mockSodium, count: 2),
+            sizeOf<UnsignedInt>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<UnsignedLong>.alloc(mockSodium, count: 2),
+            sizeOf<UnsignedLong>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<UnsignedLongLong>.alloc(mockSodium, count: 2),
+            sizeOf<UnsignedLongLong>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<SignedChar>.alloc(mockSodium, count: 2),
+            sizeOf<SignedChar>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<IntPtr>.alloc(mockSodium, count: 2),
+            sizeOf<IntPtr>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<UintPtr>.alloc(mockSodium, count: 2),
+            sizeOf<UintPtr>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<Size>.alloc(mockSodium, count: 2),
+            sizeOf<Size>(),
+          ),
+          Tuple2(
+            () => SodiumPointer<WChar>.alloc(mockSodium, count: 2),
+            sizeOf<WChar>(),
+          ),
         ],
         (fixture) {
           final sut = fixture.item1();
@@ -111,7 +201,7 @@ void main() {
 
       test('throws for unsupported pointer types', () {
         expect(
-          () => SodiumPointer<Void>.alloc(mockSodium),
+          () => SodiumPointer<Handle>.alloc(mockSodium),
           throwsA(isA<UnsupportedError>()),
         );
       });
@@ -183,9 +273,11 @@ void main() {
         const rawList = [1, 2, 3];
         final sut = SodiumPointer<Uint16>.fromList(mockSodium, rawList);
         expect(sut.count, rawList.length);
-        expect(sut.elementSize, 2);
+        expect(sut.elementSize, sizeOf<Uint16>());
 
-        verify(() => mockSodium.sodium_allocarray(rawList.length, 2));
+        verify(
+          () => mockSodium.sodium_allocarray(rawList.length, sizeOf<Uint16>()),
+        );
       });
 
       test('copies list bytes to new array', () {
@@ -424,6 +516,9 @@ void main() {
           expect(view.ptr, Pointer.fromAddress(fixture.item3));
           expect(view.count, fixture.item4);
         },
+        fixtureToString: (fixture) =>
+            '(offset: ${fixture.item1}, length: ${fixture.item2}) '
+            '-> (address: ${fixture.item3}, count: ${fixture.item4})',
       );
 
       test('dispose does not free views', () {
@@ -431,6 +526,8 @@ void main() {
 
         verifyNever(() => mockSodium.sodium_free(sut.ptr.cast()));
       });
+
+      // TODO test dynamicElementAt ?
     });
 
     group('fill', () {
@@ -473,10 +570,15 @@ void main() {
           // ignore: cascade_invocations
           sut.fill(fixture.item1, offset: fixture.item2);
 
-          expect(sut.asList(), fixture.item3);
+          expect(sut.asListView(), fixture.item3);
         },
+        fixtureToString: (fixture) =>
+            '(data: ${fixture.item1}, offset: ${fixture.item2}) '
+            '-> ${fixture.item3}',
       );
     });
+
+    // TODO test asListView
 
     test('dispose frees the pointer', () {
       sut.dispose();
@@ -492,675 +594,349 @@ void main() {
       mockAllocArray(mockSodium);
     });
 
-    group('Int8', () {
-      late SodiumPointer<Int8> sut;
+    void _testPointerListConversions<TPtr extends NativeType,
+        TList extends List<int>>({
+      required int elementSize,
+      required Pointer<TPtr> Function(int lengthInBytes) alloc,
+      required TList Function(List<int> data) createList,
+      bool exactListType = true,
+      void Function(SodiumPointer<TPtr> Function() getSut)? subTests,
+    }) {
+      late SodiumPointer<TPtr> sut;
 
       setUp(() {
-        final ptr = calloc<Int8>(testData.length * sizeOf<Int8>());
-        ptr.asTypedList(testData.length).setAll(0, testData);
+        final ptr = alloc(testData.length * elementSize);
+        for (var i = 0; i < testData.length; ++i) {
+          ptr[i] = testData[i];
+        }
         sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
-
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
-
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
-
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('toDartString converts to utf8 string', () {
-        final string = sut.toDartString();
-
-        expect(string, 'AB\x00CD');
-      });
-
-      test('toDartString converts to zero terminated utf8 string', () {
-        final string = sut.toDartString(zeroTerminated: true);
-
-        expect(string, 'AB');
-      });
-
-      test('copies list to pointer', () {
-        final typedTestData = Int8List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
-
-      test('copies string to pointer', () {
-        const string = 'AB\x00CD';
-
-        final ptr = string.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
-
-      test('copies zero terminated string to pointer', () {
-        const string = 'AB\x00CD';
-
-        final ptr = string.toSodiumPointer(mockSodium, zeroTerminated: true);
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
-
-      test('copies string to fixed width pointer', () {
-        const string = 'AB';
-
-        final ptr = string.toSodiumPointer(mockSodium, memoryWidth: 4);
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, 4);
-        for (var i = 0; i < 2; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-        for (var i = 2; i < 4; ++i) {
-          expect(ptr.ptr.elementAt(i).value, 0);
-        }
       });
 
       test('viewAt uses offset correctly', () {
         final view = sut.viewAt(2, 2);
 
         expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
+        expect(
+          view.ptr,
+          hasRawData<TPtr>(
+            testData.sublist(2, 4),
+            sizeHint: elementSize,
+          ),
+        );
       });
 
       test('fill fills correct bytes', () {
-        sut.fill(const <int>[1, 2, 3], offset: 1);
+        sut.fill(const [1, 2, 3], offset: 1);
 
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
+        expect(sut.count, testData.length);
+        expect(
+          sut.ptr,
+          hasRawData<TPtr>(
+            [testData[0], 1, 2, 3, testData[4]],
+            sizeHint: elementSize,
+          ),
+        );
       });
+
+      test('asListView returns memory view', () {
+        final list = sut.asListView();
+        expect(list, testData);
+        if (exactListType) {
+          expect(list, isA<TList>());
+        } else {
+          expect(list, isA<List<int>>());
+          expect(list, isA<TypedData>());
+        }
+
+        list[0] = 10;
+        list[1] = 11;
+        expect(
+          sut.ptr,
+          hasRawData<TPtr>(
+            [10, 11, ...testData.skip(2)],
+            sizeHint: elementSize,
+          ),
+        );
+
+        sut.fill([20, 21], offset: 2);
+        expect(list[2], 20);
+        expect(list[3], 21);
+      });
+
+      test('toSodiumPointer copies list to pointer', () {
+        final typedTestData = createList(testData.cast());
+
+        final ptr = typedTestData.toSodiumPointer<TPtr>(
+          mockSodium,
+          memoryProtection: MemoryProtection.readOnly,
+        );
+
+        expect(ptr.sodium, mockSodium);
+        expect(ptr.elementSize, elementSize);
+        expect(ptr.count, testData.length);
+        expect(ptr.memoryProtection, MemoryProtection.readOnly);
+        expect(
+          ptr.ptr,
+          hasRawData<TPtr>(
+            testData,
+            sizeHint: elementSize,
+          ),
+        );
+      });
+
+      subTests?.call(() => sut);
+    }
+
+    group('Int8', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<Int8>(),
+        alloc: (bytes) => calloc<Int8>(bytes),
+        createList: Int8List.fromList,
+      );
     });
 
     group('Int16', () {
-      late SodiumPointer<Int16> sut;
-
-      setUp(() {
-        final ptr = calloc<Int16>(testData.length * sizeOf<Int16>());
-        ptr.asTypedList(testData.length).setAll(0, testData);
-        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
-
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
-
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
-
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copies list to pointer', () {
-        final typedTestData = Int16List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
-
-      test('viewAt uses offset correctly', () {
-        final view = sut.viewAt(2, 2);
-
-        expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
-      });
-
-      test('fill fills correct bytes', () {
-        sut.fill(const <int>[1, 2, 3], offset: 1);
-
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
-      });
+      _testPointerListConversions(
+        elementSize: sizeOf<Int16>(),
+        alloc: (bytes) => calloc<Int16>(bytes),
+        createList: Int16List.fromList,
+      );
     });
 
     group('Int32', () {
-      late SodiumPointer<Int32> sut;
-
-      setUp(() {
-        final ptr = calloc<Int32>(testData.length * sizeOf<Int32>());
-        ptr.asTypedList(testData.length).setAll(0, testData);
-        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
-
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
-
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
-
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copies list to pointer', () {
-        final typedTestData = Int32List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
-
-      test('viewAt uses offset correctly', () {
-        final view = sut.viewAt(2, 2);
-
-        expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
-      });
-
-      test('fill fills correct bytes', () {
-        sut.fill(const <int>[1, 2, 3], offset: 1);
-
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
-      });
+      _testPointerListConversions(
+        elementSize: sizeOf<Int32>(),
+        alloc: (bytes) => calloc<Int32>(bytes),
+        createList: Int32List.fromList,
+      );
     });
 
     group('Int64', () {
-      late SodiumPointer<Int64> sut;
-
-      setUp(() {
-        final ptr = calloc<Int64>(testData.length * sizeOf<Int64>());
-        ptr.asTypedList(testData.length).setAll(0, testData);
-        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
-
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
-
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
-
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copies list to pointer', () {
-        final typedTestData = Int64List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
-
-      test('viewAt uses offset correctly', () {
-        final view = sut.viewAt(2, 2);
-
-        expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
-      });
-
-      test('fill fills correct bytes', () {
-        sut.fill(const <int>[1, 2, 3], offset: 1);
-
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
-      });
+      _testPointerListConversions(
+        elementSize: sizeOf<Int64>(),
+        alloc: (bytes) => calloc<Int64>(bytes),
+        createList: Int64List.fromList,
+      );
     });
 
     group('Uint8', () {
-      late SodiumPointer<Uint8> sut;
-
-      setUp(() {
-        final ptr = calloc<Uint8>(testData.length * sizeOf<Uint8>());
-        ptr.asTypedList(testData.length).setAll(0, testData);
-        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
-
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
-
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
-
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copies list to pointer', () {
-        final typedTestData = Uint8List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
-
-      test('viewAt uses offset correctly', () {
-        final view = sut.viewAt(2, 2);
-
-        expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
-      });
-
-      test('fill fills correct bytes', () {
-        sut.fill(const <int>[1, 2, 3], offset: 1);
-
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
-      });
+      _testPointerListConversions(
+        elementSize: sizeOf<Uint8>(),
+        alloc: (bytes) => calloc<Uint8>(bytes),
+        createList: Uint8List.fromList,
+      );
     });
 
     group('Uint16', () {
-      late SodiumPointer<Uint16> sut;
-
-      setUp(() {
-        final ptr = calloc<Uint16>(testData.length * sizeOf<Uint16>());
-        ptr.asTypedList(testData.length).setAll(0, testData);
-        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
-
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
-
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
-
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copies list to pointer', () {
-        final typedTestData = Uint16List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
-
-      test('viewAt uses offset correctly', () {
-        final view = sut.viewAt(2, 2);
-
-        expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
-      });
-
-      test('fill fills correct bytes', () {
-        sut.fill(const <int>[1, 2, 3], offset: 1);
-
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
-      });
+      _testPointerListConversions(
+        elementSize: sizeOf<Uint16>(),
+        alloc: (bytes) => calloc<Uint16>(bytes),
+        createList: Uint16List.fromList,
+      );
     });
 
     group('Uint32', () {
-      late SodiumPointer<Uint32> sut;
-
-      setUp(() {
-        final ptr = calloc<Uint32>(testData.length * sizeOf<Uint32>());
-        ptr.asTypedList(testData.length).setAll(0, testData);
-        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
-
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
-
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
-
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copies list to pointer', () {
-        final typedTestData = Uint32List.fromList(testData);
-
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
-
-      test('viewAt uses offset correctly', () {
-        final view = sut.viewAt(2, 2);
-
-        expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
-      });
-
-      test('fill fills correct bytes', () {
-        sut.fill(const <int>[1, 2, 3], offset: 1);
-
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
-      });
+      _testPointerListConversions(
+        elementSize: sizeOf<Uint32>(),
+        alloc: (bytes) => calloc<Uint32>(bytes),
+        createList: Uint32List.fromList,
+      );
     });
 
     group('Uint64', () {
-      late SodiumPointer<Uint64> sut;
+      _testPointerListConversions(
+        elementSize: sizeOf<Uint64>(),
+        alloc: (bytes) => calloc<Uint64>(bytes),
+        createList: Uint64List.fromList,
+      );
+    });
 
-      setUp(() {
-        final ptr = calloc<Uint64>(testData.length * sizeOf<Uint64>());
-        ptr.asTypedList(testData.length).setAll(0, testData);
-        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
+    group('Char', () {
+      _testPointerListConversions<Char, Int8List>(
+        elementSize: sizeOf<Char>(),
+        alloc: (bytes) => calloc<Char>(bytes),
+        createList: Int8List.fromList,
+        exactListType: false,
+        subTests: (getSut) {
+          test('toDartString converts to utf8 string', () {
+            final string = getSut().toDartString();
 
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
+            expect(string, 'AB\x00CD');
+          });
 
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
+          test('toDartString converts to zero terminated utf8 string', () {
+            final string = getSut().toDartString(zeroTerminated: true);
 
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
+            expect(string, 'AB');
+          });
 
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
+          test('copies string to pointer', () {
+            const string = 'AB\x00CD';
 
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
+            final ptr = string.toSodiumPointer(
+              mockSodium,
+              memoryProtection: MemoryProtection.readOnly,
+            );
 
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
+            expect(ptr.sodium, mockSodium);
+            expect(ptr.count, testData.length);
+            expect(ptr.memoryProtection, MemoryProtection.readOnly);
+            expect(ptr.ptr, hasRawData<Char>(testData));
+          });
 
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
+          test('copies zero terminated string to pointer', () {
+            const string = 'AB\x00CD';
 
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
+            final ptr = string.toSodiumPointer(
+              mockSodium,
+              zeroTerminated: true,
+            );
 
-      test('copies list to pointer', () {
-        final typedTestData = Uint64List.fromList(testData);
+            expect(ptr.sodium, mockSodium);
+            expect(ptr.count, 2);
+            expect(ptr.ptr, hasRawData<Char>(testData.sublist(0, 2)));
+          });
 
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
+          test('copies string to fixed width pointer', () {
+            const string = 'AB';
 
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
-        }
-      });
+            final ptr = string.toSodiumPointer(mockSodium, memoryWidth: 4);
 
-      test('viewAt uses offset correctly', () {
-        final view = sut.viewAt(2, 2);
+            expect(ptr.sodium, mockSodium);
+            expect(ptr.count, 4);
+            expect(
+              ptr.ptr,
+              hasRawData<Char>([...testData.sublist(0, 2), 0, 0]),
+            );
+          });
+        },
+      );
+    });
 
-        expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
-      });
+    group('Short', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<Short>(),
+        alloc: (bytes) => calloc<Short>(bytes),
+        createList: Int16List.fromList,
+        exactListType: false,
+      );
+    });
 
-      test('fill fills correct bytes', () {
-        sut.fill(const <int>[1, 2, 3], offset: 1);
+    group('Int', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<Int>(),
+        alloc: (bytes) => calloc<Int>(bytes),
+        createList: Int32List.fromList,
+        exactListType: false,
+      );
+    });
 
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
-      });
+    group('Long', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<Long>(),
+        alloc: (bytes) => calloc<Long>(bytes),
+        createList: Int32List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('LongLong', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<LongLong>(),
+        alloc: (bytes) => calloc<LongLong>(bytes),
+        createList: Int64List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('UnsignedChar', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<UnsignedChar>(),
+        alloc: (bytes) => calloc<UnsignedChar>(bytes),
+        createList: Uint8List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('UnsignedShort', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<UnsignedShort>(),
+        alloc: (bytes) => calloc<UnsignedShort>(bytes),
+        createList: Uint16List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('UnsignedInt', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<UnsignedInt>(),
+        alloc: (bytes) => calloc<UnsignedInt>(bytes),
+        createList: Uint32List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('UnsignedLong', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<UnsignedLong>(),
+        alloc: (bytes) => calloc<UnsignedLong>(bytes),
+        createList: Uint32List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('UnsignedLongLong', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<UnsignedLongLong>(),
+        alloc: (bytes) => calloc<UnsignedLongLong>(bytes),
+        createList: Uint64List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('SignedChar', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<SignedChar>(),
+        alloc: (bytes) => calloc<SignedChar>(bytes),
+        createList: Int8List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('IntPtr', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<IntPtr>(),
+        alloc: (bytes) => calloc<IntPtr>(bytes),
+        createList: Int32List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('UintPtr', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<UintPtr>(),
+        alloc: (bytes) => calloc<UintPtr>(bytes),
+        createList: Uint32List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('Size', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<Size>(),
+        alloc: (bytes) => calloc<Size>(bytes),
+        createList: Uint32List.fromList,
+        exactListType: false,
+      );
+    });
+
+    group('WChar', () {
+      _testPointerListConversions(
+        elementSize: sizeOf<WChar>(),
+        alloc: (bytes) => calloc<WChar>(bytes),
+        createList: Uint16List.fromList,
+        exactListType: false,
+      );
     });
 
     group('Float', () {
@@ -1168,79 +944,73 @@ void main() {
 
       setUp(() {
         final ptr = calloc<Float>(testData.length * sizeOf<Float>());
-        ptr
-            .asTypedList(testData.length)
-            .setAll(0, testData.map((e) => e.toDouble()));
-        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
-
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
-
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
-
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copies list to pointer', () {
-        final typedTestData = Float32List.fromList(
-          testData.map((e) => e.toDouble()).toList(),
-        );
-
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
         for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
+          ptr[i] = testData[i].toDouble();
         }
+        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
       });
 
       test('viewAt uses offset correctly', () {
         final view = sut.viewAt(2, 2);
 
         expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
+        expect(
+          view.ptr.asTypedList(view.count),
+          testData.sublist(2, 4),
+        );
       });
 
       test('fill fills correct bytes', () {
-        sut.fill(const <double>[1, 2, 3], offset: 1);
+        sut.fill(const [1.1, 2.2, 3.3], offset: 1);
 
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
+        expect(sut.count, testData.length);
+        expect(
+          sut.ptr.asTypedList(sut.count),
+          [
+            testData[0],
+            1.100000023841858,
+            2.200000047683716,
+            3.299999952316284,
+            testData[4]
+          ],
+        );
+      });
+
+      test('asListView returns memory view', () {
+        final list = sut.asListView();
+        expect(list, testData);
+        expect(list, isA<Float32List>());
+
+        list[0] = 10.5;
+        list[1] = 11.5;
+        expect(
+          sut.ptr.asTypedList(sut.count),
+          [10.5, 11.5, ...testData.skip(2)],
+        );
+
+        sut.fill([20.2, 21.1], offset: 2);
+        expect(list[2], 20.200000762939453);
+        expect(list[3], 21.100000381469727);
+      });
+
+      test('toSodiumPointer copies list to pointer', () {
+        final typedTestData = Float32List.fromList(
+          testData.map((e) => e.toDouble()).toList(),
+        );
+
+        final ptr = typedTestData.toSodiumPointer<Float>(
+          mockSodium,
+          memoryProtection: MemoryProtection.readOnly,
+        );
+
+        expect(ptr.sodium, mockSodium);
+        expect(ptr.elementSize, sizeOf<Float>());
+        expect(ptr.count, testData.length);
+        expect(ptr.memoryProtection, MemoryProtection.readOnly);
+        expect(
+          ptr.ptr.asTypedList(ptr.count),
+          testData,
+        );
       });
     });
 
@@ -1249,79 +1019,67 @@ void main() {
 
       setUp(() {
         final ptr = calloc<Double>(testData.length * sizeOf<Double>());
-        ptr
-            .asTypedList(testData.length)
-            .setAll(0, testData.map((e) => e.toDouble()));
-        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-      });
-
-      test('asList returns memory view', () {
-        final list = sut.asList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 10);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 20);
-      });
-
-      test('asList returns shortened memory view', () {
-        final list = sut.asList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copyAsList returns memory copy', () {
-        final list = sut.copyAsList();
-        expect(list, testData);
-
-        list[0] = 10;
-        expect(sut.ptr.elementAt(0).value, 0x41);
-
-        sut.ptr.elementAt(1).value = 20;
-        expect(list[1], 0x42);
-      });
-
-      test('copyAsList returns shortened memory copy', () {
-        final list = sut.copyAsList(1);
-        expect(list, hasLength(1));
-      });
-
-      test('copies list to pointer', () {
-        final typedTestData = Float64List.fromList(
-          testData.map((e) => e.toDouble()).toList(),
-        );
-
-        final ptr = typedTestData.toSodiumPointer(
-          mockSodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        expect(ptr.sodium, mockSodium);
-        expect(ptr.count, testData.length);
-        expect(ptr.memoryProtection, MemoryProtection.readOnly);
         for (var i = 0; i < testData.length; ++i) {
-          expect(ptr.ptr.elementAt(i).value, testData[i]);
+          ptr[i] = testData[i].toDouble();
         }
+        sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
       });
 
       test('viewAt uses offset correctly', () {
         final view = sut.viewAt(2, 2);
 
         expect(view.count, 2);
-        for (var i = 0; i < 2; ++i) {
-          expect(view.ptr.elementAt(i).value, testData[i + 2]);
-        }
+        expect(
+          view.ptr.asTypedList(view.count),
+          testData.sublist(2, 4),
+        );
       });
 
       test('fill fills correct bytes', () {
-        sut.fill(const <double>[1, 2, 3], offset: 1);
+        sut.fill(const [1.1, 2.2, 3.3], offset: 1);
 
-        expect(sut.ptr.elementAt(0).value, testData[0]);
-        for (var i = 1; i < 4; ++i) {
-          expect(sut.ptr.elementAt(i).value, i);
-        }
-        expect(sut.ptr.elementAt(4).value, testData[4]);
+        expect(sut.count, testData.length);
+        expect(
+          sut.ptr.asTypedList(sut.count),
+          [testData[0], 1.1, 2.2, 3.3, testData[4]],
+        );
+      });
+
+      test('asListView returns memory view', () {
+        final list = sut.asListView();
+        expect(list, testData);
+        expect(list, isA<Float64List>());
+
+        list[0] = 10.5;
+        list[1] = 11.5;
+        expect(
+          sut.ptr.asTypedList(sut.count),
+          [10.5, 11.5, ...testData.skip(2)],
+        );
+
+        sut.fill([20.2, 21.1], offset: 2);
+        expect(list[2], 20.2);
+        expect(list[3], 21.1);
+      });
+
+      test('toSodiumPointer copies list to pointer', () {
+        final typedTestData = Float64List.fromList(
+          testData.map((e) => e.toDouble()).toList(),
+        );
+
+        final ptr = typedTestData.toSodiumPointer<Double>(
+          mockSodium,
+          memoryProtection: MemoryProtection.readOnly,
+        );
+
+        expect(ptr.sodium, mockSodium);
+        expect(ptr.elementSize, sizeOf<Double>());
+        expect(ptr.count, testData.length);
+        expect(ptr.memoryProtection, MemoryProtection.readOnly);
+        expect(
+          ptr.ptr.asTypedList(ptr.count),
+          testData,
+        );
       });
     });
   });

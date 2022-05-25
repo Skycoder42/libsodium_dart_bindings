@@ -10,6 +10,7 @@ import '../../../bindings/memory_protection.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'sign_consumer_ffi_mixin.dart';
 
+/// @nodoc
 @internal
 class VerificationConsumerFFI
     with SignConsumerFFIMixin<bool>
@@ -17,9 +18,13 @@ class VerificationConsumerFFI
   @override
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   final Uint8List signature;
+
+  /// @nodoc
   final Uint8List publicKey;
 
+  /// @nodoc
   VerificationConsumerFFI({
     required this.sodium,
     required this.signature,
@@ -32,9 +37,9 @@ class VerificationConsumerFFI
   Future<bool> get signatureValid => result;
 
   @override
-  bool finalize(SodiumPointer<Uint8> state) {
-    SodiumPointer<Uint8>? signaturePtr;
-    SodiumPointer<Uint8>? publicKeyPtr;
+  bool finalize(SodiumPointer<UnsignedChar> state) {
+    SodiumPointer<UnsignedChar>? signaturePtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
 
     try {
       signaturePtr = signature.toSodiumPointer(

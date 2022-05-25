@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -125,11 +125,11 @@ void main() {
                 any(that: hasRawData(secretKey)),
               ),
           () => mockSodium.crypto_sign(
-                any(that: hasRawData<Uint8>(signature + message)),
+                any(that: hasRawData<UnsignedChar>(signature + message)),
                 any(that: equals(nullptr)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(secretKey)),
+                any(that: hasRawData<UnsignedChar>(secretKey)),
               ),
         ]);
       });
@@ -231,11 +231,11 @@ void main() {
                 any(that: hasRawData(publicKey)),
               ),
           () => mockSodium.crypto_sign_open(
-                any(that: hasRawData<Uint8>(signedMessage.sublist(5))),
+                any(that: hasRawData<UnsignedChar>(signedMessage.sublist(5))),
                 any(that: equals(nullptr)),
-                any(that: hasRawData<Uint8>(signedMessage)),
+                any(that: hasRawData<UnsignedChar>(signedMessage)),
                 signedMessage.length,
-                any(that: hasRawData<Uint8>(publicKey)),
+                any(that: hasRawData<UnsignedChar>(publicKey)),
               ),
         ]);
       });
@@ -330,9 +330,9 @@ void main() {
           () => mockSodium.crypto_sign_detached(
                 any(that: isNot(nullptr)),
                 any(that: equals(nullptr)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(secretKey)),
+                any(that: hasRawData<UnsignedChar>(secretKey)),
               ),
         ]);
       });
@@ -443,10 +443,10 @@ void main() {
                 any(that: hasRawData(publicKey)),
               ),
           () => mockSodium.crypto_sign_verify_detached(
-                any(that: hasRawData<Uint8>(signature)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(signature)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(publicKey)),
+                any(that: hasRawData<UnsignedChar>(publicKey)),
               ),
         ]);
       });
@@ -634,7 +634,7 @@ void main() {
               ),
           () => mockSodium.crypto_sign_ed25519_sk_to_seed(
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(secretKey)),
+                any(that: hasRawData<UnsignedChar>(secretKey)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
         ]);
@@ -705,7 +705,7 @@ void main() {
               ),
           () => mockSodium.crypto_sign_ed25519_sk_to_pk(
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(secretKey)),
+                any(that: hasRawData<UnsignedChar>(secretKey)),
               ),
         ]);
       });

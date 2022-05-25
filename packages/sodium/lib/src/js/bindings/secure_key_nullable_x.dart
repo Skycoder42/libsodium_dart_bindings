@@ -11,6 +11,7 @@ typedef SecureNullableCallbackFn<T> = T Function(Uint8List? data);
 /// @nodoc
 @internal
 extension SecureKeyNullableX on SecureKey? {
+  /// @nodoc
   T runMaybeUnlockedSync<T>(SecureNullableCallbackFn<T> callback) =>
       this != null
           ? this!.runUnlockedSync((data) => callback(data))

@@ -12,16 +12,18 @@ import '../../api/sodium_exception.dart';
 import '../../api/sodium_version.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'crypto_ffi.dart';
 import 'randombytes_ffi.dart';
 import 'secure_key_ffi.dart';
 
+/// @nodoc
 @internal
 class SodiumFFI implements Sodium {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   SodiumFFI(this.sodium);
 
   @override
@@ -34,20 +36,22 @@ class SodiumFFI implements Sodium {
   @override
   Uint8List pad(Uint8List buf, int blocksize) {
     final maxLen = buf.length + blocksize;
-    SodiumPointer<Uint8>? extendedBuffer;
-    SodiumPointer<size_t>? paddedLength;
+    SodiumPointer<UnsignedChar>? extendedBuffer;
+    SodiumPointer<Size>? paddedLength;
     try {
       extendedBuffer = SodiumPointer.alloc(sodium, count: maxLen)..fill(buf);
       paddedLength = SodiumPointer.alloc(sodium, zeroMemory: true);
       final result = sodium.sodium_pad(
         paddedLength.ptr,
         extendedBuffer.ptr,
-        buf.length.toIntPtr(),
-        blocksize.toIntPtr(),
-        maxLen.toIntPtr(),
+        buf.length,
+        blocksize,
+        maxLen,
       );
       SodiumException.checkSucceededInt(result);
-      return extendedBuffer.copyAsList(paddedLength.ptr.value);
+      return Uint8List.fromList(
+        extendedBuffer.viewAt(0, paddedLength.ptr.value).asListView(),
+      );
     } finally {
       extendedBuffer?.dispose();
       paddedLength?.dispose();
@@ -56,8 +60,8 @@ class SodiumFFI implements Sodium {
 
   @override
   Uint8List unpad(Uint8List buf, int blocksize) {
-    SodiumPointer<Uint8>? extendedBuffer;
-    SodiumPointer<size_t>? unpaddedLength;
+    SodiumPointer<UnsignedChar>? extendedBuffer;
+    SodiumPointer<Size>? unpaddedLength;
     try {
       extendedBuffer = buf.toSodiumPointer(
         sodium,
@@ -67,11 +71,13 @@ class SodiumFFI implements Sodium {
       final result = sodium.sodium_unpad(
         unpaddedLength.ptr,
         extendedBuffer.ptr,
-        extendedBuffer.count.toIntPtr(),
-        blocksize.toIntPtr(),
+        extendedBuffer.count,
+        blocksize,
       );
       SodiumException.checkSucceededInt(result);
-      return extendedBuffer.copyAsList(unpaddedLength.ptr.value);
+      return Uint8List.fromList(
+        extendedBuffer.viewAt(0, unpaddedLength.ptr.value).asListView(),
+      );
     } finally {
       extendedBuffer?.dispose();
       unpaddedLength?.dispose();

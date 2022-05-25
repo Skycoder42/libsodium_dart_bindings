@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -124,11 +124,11 @@ void main() {
                 any(that: hasRawData(key)),
               ),
           () => mockSodium.crypto_secretbox_easy(
-                any(that: hasRawData<Uint8>(mac + message)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(mac + message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(nonce)),
-                any(that: hasRawData<Uint8>(key)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
               ),
         ]);
       });
@@ -144,7 +144,10 @@ void main() {
             any(),
           ),
         ).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer<Uint8>, cipher);
+          fillPointer(
+            i.positionalArguments.first as Pointer<UnsignedChar>,
+            cipher,
+          );
           return 0;
         });
 
@@ -252,11 +255,11 @@ void main() {
                 any(that: hasRawData(key)),
               ),
           () => mockSodium.crypto_secretbox_open_easy(
-                any(that: hasRawData<Uint8>(cipherText.sublist(5))),
-                any(that: hasRawData<Uint8>(cipherText)),
+                any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
                 cipherText.length,
-                any(that: hasRawData<Uint8>(nonce)),
-                any(that: hasRawData<Uint8>(key)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
               ),
         ]);
       });
@@ -272,7 +275,10 @@ void main() {
             any(),
           ),
         ).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer<Uint8>, message);
+          fillPointer(
+            i.positionalArguments.first as Pointer<UnsignedChar>,
+            message,
+          );
           return 0;
         });
 
@@ -368,12 +374,12 @@ void main() {
                 any(that: hasRawData(key)),
               ),
           () => mockSodium.crypto_secretbox_detached(
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
-                any(that: hasRawData<Uint8>(nonce)),
-                any(that: hasRawData<Uint8>(key)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
               ),
         ]);
       });
@@ -391,8 +397,11 @@ void main() {
             any(),
           ),
         ).thenAnswer((i) {
-          fillPointer(i.positionalArguments[0] as Pointer<Uint8>, cipherText);
-          fillPointer(i.positionalArguments[1] as Pointer<Uint8>, mac);
+          fillPointer(
+            i.positionalArguments[0] as Pointer<UnsignedChar>,
+            cipherText,
+          );
+          fillPointer(i.positionalArguments[1] as Pointer<UnsignedChar>, mac);
           return 0;
         });
 
@@ -516,12 +525,12 @@ void main() {
                 any(that: hasRawData(key)),
               ),
           () => mockSodium.crypto_secretbox_open_detached(
-                any(that: hasRawData<Uint8>(cipherText)),
-                any(that: hasRawData<Uint8>(cipherText)),
-                any(that: hasRawData<Uint8>(mac)),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                any(that: hasRawData<UnsignedChar>(mac)),
                 cipherText.length,
-                any(that: hasRawData<Uint8>(nonce)),
-                any(that: hasRawData<Uint8>(key)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
               ),
         ]);
       });
@@ -538,7 +547,10 @@ void main() {
             any(),
           ),
         ).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer<Uint8>, message);
+          fillPointer(
+            i.positionalArguments.first as Pointer<UnsignedChar>,
+            message,
+          );
           return 0;
         });
 

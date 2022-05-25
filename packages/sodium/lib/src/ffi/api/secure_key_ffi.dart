@@ -8,37 +8,44 @@ import '../../api/secure_key.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 
+/// @nodoc
 @internal
-typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<Uint8> pointer);
+typedef SecureFFICallbackFn<T> = T Function(
+  SodiumPointer<UnsignedChar> pointer,
+);
 
+/// @nodoc
 @internal
 typedef SecureKeyFFINativeHandle = List<int>;
 
+/// @nodoc
 @internal
 class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
-  final SodiumPointer<Uint8> _raw;
+  final SodiumPointer<UnsignedChar> _raw;
 
+  /// @nodoc
   SecureKeyFFI(this._raw) {
     _raw
       ..locked = true
       ..memoryProtection = MemoryProtection.noAccess;
   }
 
+  /// @nodoc
   factory SecureKeyFFI.alloc(LibSodiumFFI sodium, int length) => SecureKeyFFI(
-        SodiumPointer<Uint8>.alloc(
+        SodiumPointer<UnsignedChar>.alloc(
           sodium,
           count: length,
           memoryProtection: MemoryProtection.noAccess,
         ),
       );
 
+  /// @nodoc
   factory SecureKeyFFI.random(LibSodiumFFI sodium, int length) {
-    final raw = SodiumPointer<Uint8>.alloc(sodium, count: length);
+    final raw = SodiumPointer<UnsignedChar>.alloc(sodium, count: length);
     try {
-      sodium.randombytes_buf(raw.ptr.cast(), raw.byteLength.toIntPtr());
+      sodium.randombytes_buf(raw.ptr.cast(), raw.byteLength);
       return SecureKeyFFI(raw);
     } catch (e) {
       raw.dispose();
@@ -69,7 +76,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     bool writable = false,
   }) =>
       runUnlockedNative(
-        (pointer) => callback(pointer.asList()),
+        (pointer) => callback(pointer.asListView() as Uint8List),
         writable: writable,
       );
 
@@ -81,7 +88,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     try {
       _raw.memoryProtection =
           writable ? MemoryProtection.readWrite : MemoryProtection.readOnly;
-      return await callback(_raw.asList());
+      return await callback(_raw.asListView() as Uint8List);
     } finally {
       _raw.memoryProtection = MemoryProtection.noAccess;
     }
@@ -89,12 +96,12 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
 
   @override
   Uint8List extractBytes() =>
-      runUnlockedNative((pointer) => pointer.copyAsList());
+      runUnlockedNative((pointer) => Uint8List.fromList(pointer.asListView()));
 
   @override
   SecureKey copy() => runUnlockedNative(
         (originalPointer) => SecureKeyFFI(
-          originalPointer.asList().toSodiumPointer(
+          originalPointer.asListView().toSodiumPointer(
                 _raw.sodium,
                 memoryProtection: MemoryProtection.noAccess,
               ),

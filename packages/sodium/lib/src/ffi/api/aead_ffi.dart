@@ -10,7 +10,6 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 
@@ -24,16 +23,13 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
   AeadFFI(this.sodium);
 
   @override
-  int get keyBytes =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_keybytes().toSizeT();
+  int get keyBytes => sodium.crypto_aead_xchacha20poly1305_ietf_keybytes();
 
   @override
-  int get nonceBytes =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_npubbytes().toSizeT();
+  int get nonceBytes => sodium.crypto_aead_xchacha20poly1305_ietf_npubbytes();
 
   @override
-  int get aBytes =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_abytes().toSizeT();
+  int get aBytes => sodium.crypto_aead_xchacha20poly1305_ietf_abytes();
 
   @override
   SecureKey keygen() => keygenImpl(
@@ -90,7 +86,7 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
       noncePtr?.dispose();
@@ -138,9 +134,10 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
         ),
       );
       SodiumException.checkSucceededInt(result);
-#
 
-      return dataPtr.copyAsList(dataPtr.count - aBytes);
+      return Uint8List.fromList(
+        dataPtr.viewAt(0, dataPtr.count - aBytes).asListView(),
+      );
     } finally {
       dataPtr?.dispose();
       noncePtr?.dispose();
@@ -158,10 +155,10 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? adPtr;
-    SodiumPointer<Uint8>? macPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? adPtr;
+    SodiumPointer<UnsignedChar>? macPtr;
     try {
       dataPtr = message.toSodiumPointer(sodium);
       noncePtr = nonce.toSodiumPointer(
@@ -192,8 +189,8 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: dataPtr.copyAsList(),
-        mac: macPtr.copyAsList(),
+        cipherText: Uint8List.fromList(dataPtr.asListView()),
+        mac: Uint8List.fromList(macPtr.asListView()),
       );
     } finally {
       dataPtr?.dispose();
@@ -215,10 +212,10 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? macPtr;
-    SodiumPointer<Uint8>? noncePtr;
-    SodiumPointer<Uint8>? adPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? macPtr;
+    SodiumPointer<UnsignedChar>? noncePtr;
+    SodiumPointer<UnsignedChar>? adPtr;
     try {
       dataPtr = cipherText.toSodiumPointer(sodium);
       macPtr = mac.toSodiumPointer(
@@ -250,7 +247,7 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
       macPtr?.dispose();

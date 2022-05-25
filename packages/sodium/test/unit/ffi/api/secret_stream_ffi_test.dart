@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/helpers/secret_stream/secret_stream_pull_transformer_ffi.dart';

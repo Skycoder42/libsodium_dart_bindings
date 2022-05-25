@@ -1,9 +1,11 @@
 import 'package:meta/meta.dart';
 
+/// @nodoc
 @internal
 abstract class Validations {
   const Validations._(); // coverage:ignore-line
 
+  /// @nodoc
   static void checkInRange(
     int value,
     int minValue,
@@ -12,6 +14,7 @@ abstract class Validations {
   ) =>
       RangeError.checkValueInInterval(value, minValue, maxValue, name);
 
+  /// @nodoc
   static void checkIsSame(int value, int expected, String name) {
     if (value != expected) {
       throw RangeError.value(
@@ -22,6 +25,7 @@ abstract class Validations {
     }
   }
 
+  /// @nodoc
   static void checkAtLeast(int value, int minValue, String name) {
     if (value < minValue) {
       throw RangeError.value(
@@ -32,6 +36,7 @@ abstract class Validations {
     }
   }
 
+  /// @nodoc
   static void checkAtMost(int value, int maxValue, String name) {
     if (value > maxValue) {
       throw RangeError.value(

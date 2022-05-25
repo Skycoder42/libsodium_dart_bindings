@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'dart:ffi';
@@ -89,12 +89,13 @@ void main() {
         final res = sut.initialize(SecureKeyFake.empty(0));
 
         expect(res.state.count, stateData.length);
-        expect(res.state.ptr, hasRawData<Uint8>(stateData));
+        expect(res.state.ptr, hasRawData<UnsignedChar>(stateData));
         expect(res.header, headerData);
 
         verify(() => mockSodium.sodium_free(any())).called(2);
         verifyNever(
-          () => mockSodium.sodium_free(any(that: hasRawData<Uint8>(stateData))),
+          () => mockSodium
+              .sodium_free(any(that: hasRawData<UnsignedChar>(stateData))),
         );
       });
 
@@ -117,7 +118,7 @@ void main() {
     });
 
     test('rekey calls rekey with passed state', () {
-      final state = SodiumPointer<Uint8>.alloc(mockSodium);
+      final state = SodiumPointer<UnsignedChar>.alloc(mockSodium);
 
       sut.rekey(state);
 
@@ -154,7 +155,7 @@ void main() {
         final messageData = List.generate(20, (index) => index + 10);
         final additionalData = List.generate(5, (index) => index * index);
         const tag = SecretStreamMessageTag.push;
-        final state = SodiumPointer<Uint8>.alloc(mockSodium);
+        final state = SodiumPointer<UnsignedChar>.alloc(mockSodium);
 
         sut.encryptMessage(
           state,
@@ -172,9 +173,9 @@ void main() {
                 state.ptr.cast(),
                 any(that: isNot(nullptr)),
                 any(that: equals(nullptr)),
-                any(that: hasRawData<Uint8>(messageData)),
+                any(that: hasRawData<UnsignedChar>(messageData)),
                 messageData.length,
-                any(that: hasRawData<Uint8>(additionalData)),
+                any(that: hasRawData<UnsignedChar>(additionalData)),
                 additionalData.length,
                 42,
               ),
@@ -196,7 +197,7 @@ void main() {
         ).thenReturn(0);
 
         final messageData = List.generate(20, (index) => index + 10);
-        final state = SodiumPointer<Uint8>.alloc(mockSodium);
+        final state = SodiumPointer<UnsignedChar>.alloc(mockSodium);
 
         sut.encryptMessage(
           state,
@@ -209,7 +210,7 @@ void main() {
                 state.ptr.cast(),
                 any(that: isNot(nullptr)),
                 any(that: equals(nullptr)),
-                any(that: hasRawData<Uint8>(messageData)),
+                any(that: hasRawData<UnsignedChar>(messageData)),
                 messageData.length,
                 nullptr.cast(),
                 0,
@@ -283,7 +284,7 @@ void main() {
     });
 
     test('disposeState frees the state', () {
-      final state = SodiumPointer<Uint8>.alloc(mockSodium);
+      final state = SodiumPointer<UnsignedChar>.alloc(mockSodium);
 
       sut.disposeState(state);
 

@@ -8,28 +8,30 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 import 'secure_key_ffi.dart';
 
+/// @nodoc
 @internal
 class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   KdfFFI(this.sodium);
 
   @override
-  int get bytesMin => sodium.crypto_kdf_bytes_min().toSizeT();
+  int get bytesMin => sodium.crypto_kdf_bytes_min();
 
   @override
-  int get bytesMax => sodium.crypto_kdf_bytes_max().toSizeT();
+  int get bytesMax => sodium.crypto_kdf_bytes_max();
 
   @override
-  int get contextBytes => sodium.crypto_kdf_contextbytes().toSizeT();
+  int get contextBytes => sodium.crypto_kdf_contextbytes();
 
   @override
-  int get keyBytes => sodium.crypto_kdf_keybytes().toSizeT();
+  int get keyBytes => sodium.crypto_kdf_keybytes();
 
   @override
   SecureKey keygen() => keygenImpl(
@@ -50,7 +52,7 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
     validateSubkeyLen(subkeyLen);
 
     SecureKeyFFI? subKey;
-    SodiumPointer<Int8>? contextPtr;
+    SodiumPointer<Char>? contextPtr;
     try {
       subKey = SecureKeyFFI.alloc(sodium, subkeyLen);
       contextPtr = context.toSodiumPointer(
@@ -64,7 +66,7 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
           sodium,
           (masterKeyPtr) => sodium.crypto_kdf_derive_from_key(
             subKeyPtr.ptr,
-            subKeyPtr.count.toIntPtr(),
+            subKeyPtr.count,
             subkeyId,
             contextPtr!.ptr,
             masterKeyPtr.ptr,

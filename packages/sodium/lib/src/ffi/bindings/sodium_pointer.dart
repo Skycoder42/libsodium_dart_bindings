@@ -7,7 +7,6 @@ import '../../api/string_x.dart';
 
 import 'libsodium.ffi.dart';
 import 'memory_protection.dart';
-import 'size_t_extension.dart';
 
 /// A C-Pointer wrapper that uses the memory utilities of libsodium.
 ///
@@ -40,11 +39,12 @@ class SodiumPointer<T extends NativeType> {
   /// `sizeOf<T>` bytes wide. If you set [count] to a higher value, it will be
   /// `sizeOf<T> * count`.
   ///
-  /// If you want to immediatly set the [memoryProtection] level, you can do so.
-  /// By default, the pointer is not protected and thus is writable.
+  /// If you want to immediately set the [memoryProtection] level, you can do so
+  /// by changing the parameter to a different value. By default, the pointer is
+  /// not protected and thus is writable.
   ///
-  /// By default, the memory is filled with 0xdb bytes. If you want to fill it
-  /// with 0x00 instead, simply set [zeroMemory] to true.
+  /// By default, the memory is filled with `0xdb` bytes. If you want to fill it
+  /// with `0x00` instead, simply set [zeroMemory] to true.
   ///
   /// Internally, sodium_malloc or sodium_allocarray are used to allocate the
   /// memory.
@@ -58,20 +58,18 @@ class SodiumPointer<T extends NativeType> {
   }) {
     RangeError.checkNotNegative(count, 'count');
 
-    final elementSize = _StaticallyTypedSizeOf.staticSizeOf<T>();
+    final elementSize = StaticallyTypedSizeOf.staticSizeOf<T>();
     late final SodiumPointer<T> ptr;
     if (count != 1) {
       ptr = SodiumPointer.raw(
         sodium,
-        sodium
-            .sodium_allocarray(count.toIntPtr(), elementSize.toIntPtr())
-            .cast(),
+        sodium.sodium_allocarray(count, elementSize).cast(),
         count,
       );
     } else {
       ptr = SodiumPointer.raw(
         sodium,
-        sodium.sodium_malloc(elementSize.toIntPtr()).cast(),
+        sodium.sodium_malloc(elementSize).cast(),
         1,
       );
     }
@@ -95,10 +93,10 @@ class SodiumPointer<T extends NativeType> {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) {
     final count = list.length;
-    final typeLen = _StaticallyTypedSizeOf.staticSizeOf<T>();
+    final typeLen = StaticallyTypedSizeOf.staticSizeOf<T>();
     final sodiumPtr = SodiumPointer.raw(
       sodium,
-      sodium.sodium_allocarray(count.toIntPtr(), typeLen.toIntPtr()).cast<T>(),
+      sodium.sodium_allocarray(count, typeLen).cast<T>(),
       count,
     );
     try {
@@ -123,16 +121,16 @@ class SodiumPointer<T extends NativeType> {
   /// The number of bytes a single element of T is wide.
   ///
   /// This is basically the same as `sizeOf<T>()`.
-  int get elementSize => _StaticallyTypedSizeOf.staticSizeOf<T>();
+  int get elementSize => StaticallyTypedSizeOf.staticSizeOf<T>();
 
   /// The total number of bytes this pointer is long
   int get byteLength => count * elementSize;
 
-  /// Controlls whether the pointer is locked in memory or not.
+  /// Controls whether the pointer is locked in memory or not.
   ///
   /// This provides convenient access to sodium_mlock and sodium_munlock via
   /// a single property. All [SodiumPointer]s are locked by default, as
-  /// sodium_malloc already lockes them.
+  /// sodium_malloc already locks them.
   ///
   /// See https://libsodium.gitbook.io/doc/memory_management#locking-memory
   bool get locked => _locked;
@@ -144,16 +142,16 @@ class SodiumPointer<T extends NativeType> {
 
     int result;
     if (locked) {
-      result = sodium.sodium_mlock(ptr.cast(), byteLength.toIntPtr());
+      result = sodium.sodium_mlock(ptr.cast(), byteLength);
     } else {
-      result = sodium.sodium_munlock(ptr.cast(), byteLength.toIntPtr());
+      result = sodium.sodium_munlock(ptr.cast(), byteLength);
     }
     SodiumException.checkSucceededInt(result);
 
     _locked = locked;
   }
 
-  /// Controlls the memory protection level of the allocated memory
+  /// Controls the memory protection level of the allocated memory
   ///
   /// This provides convenient access to sodium_mprotect_noaccess,
   /// sodium_mprotect_readonly and sodium_mprotect_readwrite via a single
@@ -188,7 +186,7 @@ class SodiumPointer<T extends NativeType> {
   /// Provides sodium_memzero
   ///
   /// See https://libsodium.gitbook.io/doc/memory_management#zeroing-memory
-  void zeroMemory() => sodium.sodium_memzero(ptr.cast(), byteLength.toIntPtr());
+  void zeroMemory() => sodium.sodium_memzero(ptr.cast(), byteLength);
 
   /// Returns a view of a subset of the memory the pointer is pointing to.
   ///
@@ -196,7 +194,7 @@ class SodiumPointer<T extends NativeType> {
   /// beginning, [length] controls how many elements are selected.
   ///
   /// **Important:** This method works with *elements*, not *bytes*. This means,
-  /// an offset of 1 on a `SodiumPointer<Uint32>` will advanace one element,
+  /// an offset of 1 on a `SodiumPointer<Uint32>` will advance one element,
   /// which is equivalent to `sizeOf<Uint32>()`, i.e. 4 bytes.
   SodiumPointer<T> viewAt(int offset, [int? length]) {
     if (offset > count) {
@@ -244,6 +242,57 @@ class SodiumPointer<T extends NativeType> {
     }
   }
 
+  /// Returns a dart list view on the pointer.
+  ///
+  /// The resulting list operates on the same memory. This means if you modify
+  /// elements of the list, the data the pointer points to changes as well.
+  /// You can either get a reference to the whole pointer, or use [viewAt] to
+  /// select a specific portion of the pointer. All returned lists are
+  /// guaranteed to also implement the [TypedData] interface.
+  ///
+  /// **Note:** As the returned list is a reference, calling
+  /// [SodiumPointer.dispose] is not allowed as long as you still use the
+  /// returned list. If you still dispose of the pointer, any try to access the
+  /// data will crash your application.
+  List<TNum> asListView<TNum extends num>() {
+    final signage = StaticallyTypedSizeOf.signage<T>();
+    switch (signage) {
+      case _Signage.signed:
+        if (elementSize <= sizeOf<Int8>()) {
+          return ptr.cast<Int8>().asTypedList(count) as List<TNum>;
+        } else if (elementSize <= sizeOf<Int16>()) {
+          return ptr.cast<Int16>().asTypedList(count) as List<TNum>;
+        } else if (elementSize <= sizeOf<Int32>()) {
+          return ptr.cast<Int32>().asTypedList(count) as List<TNum>;
+        } else if (elementSize <= sizeOf<Int64>()) {
+          return ptr.cast<Int64>().asTypedList(count) as List<TNum>;
+        }
+        break;
+      case _Signage.unsigned:
+        if (elementSize <= sizeOf<Uint8>()) {
+          return ptr.cast<Uint8>().asTypedList(count) as List<TNum>;
+        } else if (elementSize <= sizeOf<Uint16>()) {
+          return ptr.cast<Uint16>().asTypedList(count) as List<TNum>;
+        } else if (elementSize <= sizeOf<Uint32>()) {
+          return ptr.cast<Uint32>().asTypedList(count) as List<TNum>;
+        } else if (elementSize <= sizeOf<Uint64>()) {
+          return ptr.cast<Uint64>().asTypedList(count) as List<TNum>;
+        }
+        break;
+      case _Signage.float:
+        if (elementSize <= sizeOf<Float>()) {
+          return ptr.cast<Float>().asTypedList(count) as List<TNum>;
+        } else if (elementSize <= sizeOf<Double>()) {
+          return ptr.cast<Double>().asTypedList(count) as List<TNum>;
+        }
+        break;
+    }
+
+    throw UnsupportedError(
+      'Cannot create a list view for a pointer of type $T',
+    );
+  }
+
   /// Disposes the pointer and frees the allocated memory.
   ///
   /// Provides sodium_free
@@ -257,278 +306,25 @@ class SodiumPointer<T extends NativeType> {
   }
 }
 
-extension SodiumPointerX<T extends NativeType> on SodiumPointer<T> {
-  T toList<T extends TypedData>(T Function(int) createList, [int? length]) {
-    final list = createList(length ?? count);
-    // TODO add logic
-    return list;
-  }
-}
-
 /// Extensions on specific sodium pointers for easy conversion to dart types
-extension Int8SodiumPtr on SodiumPointer<Int8> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Int8List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Int8List copyAsList([int? length]) => Int8List.fromList(asList(length));
-
+extension CharSodiumPtr on SodiumPointer<Char> {
   /// Converts the pointer to a dart string using the [utf8] encoding.
   ///
   /// This is simply a shortcut to [Int8ListX.toDartString], which is called on
-  /// the result of [asList].
-  String toDartString({bool zeroTerminated = false}) =>
-      asList().toDartString(zeroTerminated: zeroTerminated);
-}
-
-/// Extensions on specific sodium pointers for easy conversion to dart types
-extension Int16SodiumPtr on SodiumPointer<Int16> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Int16List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Int16List copyAsList([int? length]) => Int16List.fromList(asList(length));
-}
-
-/// Extensions on specific sodium pointers for easy conversion to dart types
-extension Int32SodiumPtr on SodiumPointer<Int32> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Int32List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Int32List copyAsList([int? length]) => Int32List.fromList(asList(length));
-}
-
-/// Extensions on specific sodium pointers for easy conversion to dart types
-extension Int64SodiumPtr on SodiumPointer<Int64> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Int64List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Int64List copyAsList([int? length]) => Int64List.fromList(asList(length));
-}
-
-/// Extensions on specific sodium pointers for easy conversion to dart types
-extension Uint8SodiumPtr on SodiumPointer<Uint8> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Uint8List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Uint8List copyAsList([int? length]) => Uint8List.fromList(asList(length));
-}
-
-/// Extensions on specific sodium pointers for easy conversion to dart types
-extension Uint16SodiumPtr on SodiumPointer<Uint16> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Uint16List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Uint16List copyAsList([int? length]) => Uint16List.fromList(asList(length));
-}
-
-/// Extensions on specific sodium pointers for easy conversion to dart types
-extension Uint32SodiumPtr on SodiumPointer<Uint32> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Uint32List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Uint32List copyAsList([int? length]) => Uint32List.fromList(asList(length));
-}
-
-/// Extensions on specific sodium pointers for easy conversion to dart types
-extension Uint64SodiumPtr on SodiumPointer<Uint64> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Uint64List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Uint64List copyAsList([int? length]) => Uint64List.fromList(asList(length));
-}
-
-/// Extensions on specific sodium pointers for easy conversion to dart types
-extension FloatSodiumPtr on SodiumPointer<Float> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Float32List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Float32List copyAsList([int? length]) => Float32List.fromList(asList(length));
-}
-
-/// Extensions on specific sodium pointers for easy conversion to dart types
-extension DoubleSodiumPtr on SodiumPointer<Double> {
-  /// Returns a dart list view on the pointer.
-  ///
-  /// The resulting list operates on the same memory. This means if you modify
-  /// elements of the list, the data the pointer points to changes as well.
-  /// You can either get a reference to the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  ///
-  /// **Note:** As the returned list is a reference, calling
-  /// [SodiumPointer.dispose] is not allowed as long as you still use the
-  /// returned list. If you still dispose of the pointer, any try to access the
-  /// data will crash your application.
-  Float64List asList([int? length]) => ptr.asTypedList(length ?? count);
-
-  /// Returns a dart list copy off the pointer.
-  ///
-  /// The resulting list is a copy of the memory. This means if you modify
-  /// elements of the list, the data the pointer is not changed and you can
-  /// safely dispose the pointer without breaking the copied data.
-  /// You can either get a copy of the whole pointer, or only the first
-  /// [length] elements. (Counted in elements, **not** bytes).
-  Float64List copyAsList([int? length]) => Float64List.fromList(asList(length));
+  /// the data of the [ptr].
+  String toDartString({bool zeroTerminated = false}) => ptr
+      .cast<Int8>()
+      .asTypedList(count)
+      .toDartString(zeroTerminated: zeroTerminated);
 }
 
 /// Extensions on String to add sodium pointer operations
 extension SodiumString on String {
   /// Converts the string to a [SodiumPointer<Int8>]
   ///
-  /// This simpyl combines [StringX.toCharArray] with
+  /// This simply combines [StringX.toCharArray] with
   /// [Int8SodiumList.toSodiumPointer].
-  SodiumPointer<Int8> toSodiumPointer(
+  SodiumPointer<Char> toSodiumPointer(
     LibSodiumFFI sodium, {
     int? memoryWidth,
     bool zeroTerminated = false,
@@ -544,7 +340,7 @@ extension SodiumString on String {
 }
 
 /// Extensions on typed lists to add sodium pointer operations
-extension Int8SodiumList on Int8List {
+extension TypedNumberListX on List<num> {
   /// Converts the list to a sodium pointer
   ///
   /// This is done by first allocating a [SodiumPointer] with [length] elements
@@ -557,10 +353,25 @@ extension Int8SodiumList on Int8List {
     LibSodiumFFI sodium, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
   }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Int8>(),
-      'Type $T is not able to hold data of type Int8',
-    );
+    if (this is! TypedData) {
+      throw UnsupportedError(
+        'The toSodiumPointer extension can only be used on typed data lists '
+        'like Uint8List',
+      );
+    }
+    final typedDataThis = this as TypedData;
+
+    if (StaticallyTypedSizeOf.staticSizeOf<T>() <
+        typedDataThis.elementSizeInBytes) {
+      throw ArgumentError.value(
+        T,
+        'T',
+        'A SodiumPointer<$T> is not able to hold data of '
+            '${typedDataThis.elementSizeInBytes} bytes, '
+            'as given by the type of this: $runtimeType',
+      );
+    }
+
     return SodiumPointer.fromList(
       sodium,
       this,
@@ -569,241 +380,16 @@ extension Int8SodiumList on Int8List {
   }
 }
 
-/// Extensions on typed lists to add sodium pointer operations
-extension Int16SodiumList on Int16List {
-  /// Converts the list to a sodium pointer
-  ///
-  /// This is done by first allocating a [SodiumPointer] with [length] elements
-  /// and the copying all data from the list to the pointer.
-  ///
-  /// If you want the [memoryProtection] to changed right after the copying is
-  /// done, you can do so via this parameter. By default, the pointer keeps the
-  /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
-    LibSodiumFFI sodium, {
-    MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Int16>(),
-      'Type $T is not able to hold data of type Int16',
-    );
-    return SodiumPointer.fromList(
-      sodium,
-      this,
-      memoryProtection: memoryProtection,
-    );
-  }
+enum _Signage {
+  signed,
+  unsigned,
+  float,
 }
 
-/// Extensions on typed lists to add sodium pointer operations
-extension Int32SodiumList on Int32List {
-  /// Converts the list to a sodium pointer
-  ///
-  /// This is done by first allocating a [SodiumPointer] with [length] elements
-  /// and the copying all data from the list to the pointer.
-  ///
-  /// If you want the [memoryProtection] to changed right after the copying is
-  /// done, you can do so via this parameter. By default, the pointer keeps the
-  /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
-    LibSodiumFFI sodium, {
-    MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Int32>(),
-      'Type $T is not able to hold data of type Int32',
-    );
-    return SodiumPointer.fromList(
-      sodium,
-      this,
-      memoryProtection: memoryProtection,
-    );
-  }
-}
-
-/// Extensions on typed lists to add sodium pointer operations
-extension Int64SodiumList on Int64List {
-  /// Converts the list to a sodium pointer
-  ///
-  /// This is done by first allocating a [SodiumPointer] with [length] elements
-  /// and the copying all data from the list to the pointer.
-  ///
-  /// If you want the [memoryProtection] to changed right after the copying is
-  /// done, you can do so via this parameter. By default, the pointer keeps the
-  /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
-    LibSodiumFFI sodium, {
-    MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Int64>(),
-      'Type $T is not able to hold data of type Int64',
-    );
-    return SodiumPointer.fromList(
-      sodium,
-      this,
-      memoryProtection: memoryProtection,
-    );
-  }
-}
-
-/// Extensions on typed lists to add sodium pointer operations
-extension Uint8SodiumList on Uint8List {
-  /// Converts the list to a sodium pointer
-  ///
-  /// This is done by first allocating a [SodiumPointer] with [length] elements
-  /// and the copying all data from the list to the pointer.
-  ///
-  /// If you want the [memoryProtection] to changed right after the copying is
-  /// done, you can do so via this parameter. By default, the pointer keeps the
-  /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
-    LibSodiumFFI sodium, {
-    MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Uint8>(),
-      'Type $T is not able to hold data of type Uint8',
-    );
-    return SodiumPointer.fromList(
-      sodium,
-      this,
-      memoryProtection: memoryProtection,
-    );
-  }
-}
-
-/// Extensions on typed lists to add sodium pointer operations
-extension Uint16SodiumList on Uint16List {
-  /// Converts the list to a sodium pointer
-  ///
-  /// This is done by first allocating a [SodiumPointer] with [length] elements
-  /// and the copying all data from the list to the pointer.
-  ///
-  /// If you want the [memoryProtection] to changed right after the copying is
-  /// done, you can do so via this parameter. By default, the pointer keeps the
-  /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
-    LibSodiumFFI sodium, {
-    MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Uint16>(),
-      'Type $T is not able to hold data of type Uint16',
-    );
-    return SodiumPointer.fromList(
-      sodium,
-      this,
-      memoryProtection: memoryProtection,
-    );
-  }
-}
-
-/// Extensions on typed lists to add sodium pointer operations
-extension Uint32SodiumList on Uint32List {
-  /// Converts the list to a sodium pointer
-  ///
-  /// This is done by first allocating a [SodiumPointer] with [length] elements
-  /// and the copying all data from the list to the pointer.
-  ///
-  /// If you want the [memoryProtection] to changed right after the copying is
-  /// done, you can do so via this parameter. By default, the pointer keeps the
-  /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
-    LibSodiumFFI sodium, {
-    MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Uint32>(),
-      'Type $T is not able to hold data of type Uint32',
-    );
-    return SodiumPointer.fromList(
-      sodium,
-      this,
-      memoryProtection: memoryProtection,
-    );
-  }
-}
-
-/// Extensions on typed lists to add sodium pointer operations
-extension Uint64SodiumList on Uint64List {
-  /// Converts the list to a sodium pointer
-  ///
-  /// This is done by first allocating a [SodiumPointer] with [length] elements
-  /// and the copying all data from the list to the pointer.
-  ///
-  /// If you want the [memoryProtection] to changed right after the copying is
-  /// done, you can do so via this parameter. By default, the pointer keeps the
-  /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
-    LibSodiumFFI sodium, {
-    MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Uint64>(),
-      'Type $T is not able to hold data of type Uint64',
-    );
-    return SodiumPointer.fromList(
-      sodium,
-      this,
-      memoryProtection: memoryProtection,
-    );
-  }
-}
-
-/// Extensions on typed lists to add sodium pointer operations
-extension FloatSodiumList on Float32List {
-  /// Converts the list to a sodium pointer
-  ///
-  /// This is done by first allocating a [SodiumPointer] with [length] elements
-  /// and the copying all data from the list to the pointer.
-  ///
-  /// If you want the [memoryProtection] to changed right after the copying is
-  /// done, you can do so via this parameter. By default, the pointer keeps the
-  /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
-    LibSodiumFFI sodium, {
-    MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Float>(),
-      'Type $T is not able to hold data of type Float',
-    );
-    return SodiumPointer.fromList(
-      sodium,
-      this,
-      memoryProtection: memoryProtection,
-    );
-  }
-}
-
-/// Extensions on typed lists to add sodium pointer operations
-extension DoubleSodiumList on Float64List {
-  /// Converts the list to a sodium pointer
-  ///
-  /// This is done by first allocating a [SodiumPointer] with [length] elements
-  /// and the copying all data from the list to the pointer.
-  ///
-  /// If you want the [memoryProtection] to changed right after the copying is
-  /// done, you can do so via this parameter. By default, the pointer keeps the
-  /// default [MemoryProtection.readWrite] mode.
-  SodiumPointer<T> toSodiumPointer<T extends NativeType>(
-    LibSodiumFFI sodium, {
-    MemoryProtection memoryProtection = MemoryProtection.readWrite,
-  }) {
-    assert(
-      _StaticallyTypedSizeOf.staticSizeOf<T>() >= sizeOf<Double>(),
-      'Type $T is not able to hold data of type Double',
-    );
-    return SodiumPointer.fromList(
-      sodium,
-      this,
-      memoryProtection: memoryProtection,
-    );
-  }
-}
-
-extension _StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
+/// @nodoc
+@visibleForTesting
+extension StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
+  /// @nodoc
   static int staticSizeOf<T>() {
     switch (T) {
       case Int8:
@@ -863,6 +449,46 @@ extension _StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
     }
   }
 
+  /// @nodoc
+  // ignore: library_private_types_in_public_api
+  static _Signage signage<T>() {
+    switch (T) {
+      case Int8:
+      case Int16:
+      case Int32:
+      case Int64:
+      case Char:
+      case Short:
+      case Int:
+      case Long:
+      case LongLong:
+      case SignedChar:
+      case IntPtr:
+      case WChar:
+        return _Signage.signed;
+      case Uint8:
+      case Uint16:
+      case Uint32:
+      case Uint64:
+      case UnsignedChar:
+      case UnsignedShort:
+      case UnsignedInt:
+      case UnsignedLong:
+      case UnsignedLongLong:
+      case UintPtr:
+      case Size:
+        return _Signage.unsigned;
+      case Float:
+      case Double:
+        return _Signage.float;
+      default:
+        throw UnsupportedError(
+          'Cannot create a SodiumPointer for $T. T must be a primitive type',
+        );
+    }
+  }
+
+  /// @nodoc
   Pointer<T> dynamicElementAt(int index) {
     switch (T) {
       case Int8:
@@ -923,11 +549,11 @@ extension _StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
     }
   }
 
-  // ignore: unused_element
+  /// @nodoc
   num operator [](int index) {
     switch (T) {
       case Int8:
-        return Uint8Pointer(this as Pointer<Uint8>)[index];
+        return Int8Pointer(this as Pointer<Int8>)[index];
       case Int16:
         return Int16Pointer(this as Pointer<Int16>)[index];
       case Int32:
@@ -985,10 +611,11 @@ extension _StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
     }
   }
 
+  /// @nodoc
   void operator []=(int index, num value) {
     switch (T) {
       case Int8:
-        Uint8Pointer(this as Pointer<Uint8>)[index] = value as int;
+        Int8Pointer(this as Pointer<Int8>)[index] = value as int;
         break;
       case Int16:
         Int16Pointer(this as Pointer<Int16>)[index] = value as int;

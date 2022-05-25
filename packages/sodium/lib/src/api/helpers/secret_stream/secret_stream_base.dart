@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import '../../secret_stream.dart';
 import '../../secure_key.dart';
 
+/// @nodoc
 @internal
 mixin SecretStreamBase implements SecretStream {
   @override

@@ -155,8 +155,10 @@ abstract class Pwhash {
   });
 }
 
+/// @nodoc
 @internal
 mixin PwHashValidations implements Pwhash {
+  /// @nodoc
   void validateOutLen(int outLen) => Validations.checkInRange(
         outLen,
         bytesMin,
@@ -164,12 +166,14 @@ mixin PwHashValidations implements Pwhash {
         'outLen',
       );
 
+  /// @nodoc
   void validatePasswordHash(Int8List passwordHash) => Validations.checkIsSame(
         passwordHash.length,
         strBytes,
         'passwordHash',
       );
 
+  /// @nodoc
   void validatePasswordHashStr(String passwordHash) => Validations.checkInRange(
         passwordHash.length,
         1,
@@ -177,6 +181,7 @@ mixin PwHashValidations implements Pwhash {
         'passwordHash',
       );
 
+  /// @nodoc
   void validatePassword(Int8List password) => Validations.checkInRange(
         password.length,
         passwdMin,
@@ -184,12 +189,14 @@ mixin PwHashValidations implements Pwhash {
         'password',
       );
 
+  /// @nodoc
   void validateSalt(Uint8List salt) => Validations.checkIsSame(
         salt.length,
         saltBytes,
         'salt',
       );
 
+  /// @nodoc
   void validateOpsLimit(int opsLimit) => Validations.checkInRange(
         opsLimit,
         opsLimitMin,
@@ -197,6 +204,7 @@ mixin PwHashValidations implements Pwhash {
         'opsLimit',
       );
 
+  /// @nodoc
   void validateMemLimit(int memLimit) => Validations.checkInRange(
         memLimit,
         memLimitMin,

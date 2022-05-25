@@ -11,11 +11,14 @@ import '../../../bindings/sodium.js.dart';
 import '../../../bindings/to_safe_int.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
+/// @nodoc
 @internal
 class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
     SecretstreamXchacha20poly1305State> {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   SecretStreamPullTransformerSinkJS(
     this.sodium,
     // ignore: avoid_positional_boolean_parameters
@@ -80,11 +83,14 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
   void disposeState(SecretstreamXchacha20poly1305State cryptoState) {}
 }
 
+/// @nodoc
 @internal
 class SecretStreamPullTransformerJS
     extends SecretStreamPullTransformer<SecretstreamXchacha20poly1305State> {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   const SecretStreamPullTransformerJS(
     this.sodium,
     SecureKey key,

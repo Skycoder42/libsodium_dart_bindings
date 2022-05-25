@@ -9,36 +9,38 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/generic_hash/generic_hash_consumer_ffi.dart';
 import 'helpers/keygen_mixin.dart';
 
+/// @nodoc
 @internal
 class GenericHashFFI
     with GenericHashValidations, KeygenMixin
     implements GenericHash {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   GenericHashFFI(this.sodium);
 
   @override
-  int get bytes => sodium.crypto_generichash_bytes().toSizeT();
+  int get bytes => sodium.crypto_generichash_bytes();
 
   @override
-  int get bytesMin => sodium.crypto_generichash_bytes_min().toSizeT();
+  int get bytesMin => sodium.crypto_generichash_bytes_min();
 
   @override
-  int get bytesMax => sodium.crypto_generichash_bytes_max().toSizeT();
+  int get bytesMax => sodium.crypto_generichash_bytes_max();
 
   @override
-  int get keyBytes => sodium.crypto_generichash_keybytes().toSizeT();
+  int get keyBytes => sodium.crypto_generichash_keybytes();
 
   @override
-  int get keyBytesMin => sodium.crypto_generichash_keybytes_min().toSizeT();
+  int get keyBytesMin => sodium.crypto_generichash_keybytes_min();
 
   @override
-  int get keyBytesMax => sodium.crypto_generichash_keybytes_max().toSizeT();
+  int get keyBytesMax => sodium.crypto_generichash_keybytes_max();
 
   @override
   SecureKey keygen() => keygenImpl(
@@ -60,8 +62,8 @@ class GenericHashFFI
       validateKey(key);
     }
 
-    SodiumPointer<Uint8>? outPtr;
-    SodiumPointer<Uint8>? inPtr;
+    SodiumPointer<UnsignedChar>? outPtr;
+    SodiumPointer<UnsignedChar>? inPtr;
     try {
       outPtr = SodiumPointer.alloc(
         sodium,
@@ -76,16 +78,16 @@ class GenericHashFFI
         sodium,
         (keyPtr) => sodium.crypto_generichash(
           outPtr!.ptr,
-          outPtr.count.toIntPtr(),
+          outPtr.count,
           inPtr!.ptr,
           inPtr.count,
           keyPtr?.ptr ?? nullptr,
-          keyPtr?.count.toIntPtr() ?? 0,
+          keyPtr?.count ?? 0,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return outPtr.copyAsList();
+      return Uint8List.fromList(outPtr.asListView());
     } finally {
       outPtr?.dispose();
       inPtr?.dispose();

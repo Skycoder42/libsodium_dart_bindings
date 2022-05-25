@@ -37,8 +37,10 @@ abstract class ShortHash {
   });
 }
 
+/// @nodoc
 @internal
 mixin ShortHashValidations implements ShortHash {
+  /// @nodoc
   void validateKey(SecureKey key) => Validations.checkIsSame(
         key.length,
         keyBytes,

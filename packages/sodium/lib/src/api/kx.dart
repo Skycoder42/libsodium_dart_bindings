@@ -18,6 +18,7 @@ part 'kx.freezed.dart';
 class SessionKeys with _$SessionKeys {
   const SessionKeys._();
 
+  /// Default Constructor
   // ignore: sort_unnamed_constructors_first
   const factory SessionKeys({
     /// Session key to be used to decrypt received data
@@ -93,8 +94,10 @@ abstract class Kx {
   });
 }
 
+/// @nodoc
 @internal
 mixin KxValidations implements Kx {
+  /// @nodoc
   void validatePublicKey(Uint8List publicKey, String namePrefix) =>
       Validations.checkIsSame(
         publicKey.length,
@@ -102,6 +105,7 @@ mixin KxValidations implements Kx {
         '${namePrefix}PublicKey',
       );
 
+  /// @nodoc
   void validateSecretKey(SecureKey secretKey, String namePrefix) =>
       Validations.checkIsSame(
         secretKey.length,
@@ -109,6 +113,7 @@ mixin KxValidations implements Kx {
         '${namePrefix}SecretKey',
       );
 
+  /// @nodoc
   void validateSeed(SecureKey seed) => Validations.checkIsSame(
         seed.length,
         seedBytes,

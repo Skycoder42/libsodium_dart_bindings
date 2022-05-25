@@ -214,26 +214,31 @@ abstract class Sign {
   Uint8List skToPk(SecureKey secretKey);
 }
 
+/// @nodoc
 @internal
 mixin SignValidations implements Sign {
+  /// @nodoc
   void validatePublicKey(Uint8List publicKey) => Validations.checkIsSame(
         publicKey.length,
         publicKeyBytes,
         'publicKey',
       );
 
+  /// @nodoc
   void validateSecretKey(SecureKey secretKey) => Validations.checkIsSame(
         secretKey.length,
         secretKeyBytes,
         'secretKey',
       );
 
+  /// @nodoc
   void validateSignature(Uint8List signature) => Validations.checkIsSame(
         signature.length,
         bytes,
         'signature',
       );
 
+  /// @nodoc
   void validateSignedMessage(Uint8List signedMessage) =>
       Validations.checkAtLeast(
         signedMessage.length,
@@ -241,6 +246,7 @@ mixin SignValidations implements Sign {
         'signature',
       );
 
+  /// @nodoc
   void validateSeed(SecureKey seed) => Validations.checkIsSame(
         seed.length,
         seedBytes,

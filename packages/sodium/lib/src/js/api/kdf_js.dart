@@ -7,10 +7,13 @@ import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class KdfJS with KdfValidations implements Kdf {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   KdfJS(this.sodium);
 
   @override

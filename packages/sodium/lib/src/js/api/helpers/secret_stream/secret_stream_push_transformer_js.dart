@@ -8,11 +8,14 @@ import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
+/// @nodoc
 @internal
 class SecretStreamPushTransformerSinkJS extends SecretStreamPushTransformerSink<
     SecretstreamXchacha20poly1305State> {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   SecretStreamPushTransformerSinkJS(this.sodium);
 
   @override
@@ -61,11 +64,14 @@ class SecretStreamPushTransformerSinkJS extends SecretStreamPushTransformerSink<
   void disposeState(SecretstreamXchacha20poly1305State cryptoState) {}
 }
 
+/// @nodoc
 @internal
 class SecretStreamPushTransformerJS
     extends SecretStreamPushTransformer<SecretstreamXchacha20poly1305State> {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   const SecretStreamPushTransformerJS(this.sodium, SecureKey key) : super(key);
 
   @override

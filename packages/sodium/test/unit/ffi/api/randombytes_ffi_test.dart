@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -100,7 +100,7 @@ void main() {
         () => mockSodium.randombytes_buf_deterministic(
           any(that: isNot(nullptr)),
           length,
-          any(that: hasRawData<Uint8>(seed)),
+          any(that: hasRawData<UnsignedChar>(seed)),
         ),
       );
     });

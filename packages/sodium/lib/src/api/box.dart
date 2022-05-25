@@ -180,44 +180,52 @@ abstract class Box {
   });
 }
 
+/// @nodoc
 @internal
 mixin BoxValidations implements Box {
+  /// @nodoc
   void validatePublicKey(Uint8List publicKey) => Validations.checkIsSame(
         publicKey.length,
         publicKeyBytes,
         'publicKey',
       );
 
+  /// @nodoc
   void validateSecretKey(SecureKey secretKey) => Validations.checkIsSame(
         secretKey.length,
         secretKeyBytes,
         'secretKey',
       );
 
+  /// @nodoc
   void validateMac(Uint8List mac) => Validations.checkIsSame(
         mac.length,
         macBytes,
         'mac',
       );
 
+  /// @nodoc
   void validateNonce(Uint8List nonce) => Validations.checkIsSame(
         nonce.length,
         nonceBytes,
         'nonce',
       );
 
+  /// @nodoc
   void validateSeed(SecureKey seed) => Validations.checkIsSame(
         seed.length,
         seedBytes,
         'seed',
       );
 
+  /// @nodoc
   void validateEasyCipherText(Uint8List cipherText) => Validations.checkAtLeast(
         cipherText.length,
         macBytes,
         'cipherText',
       );
 
+  /// @nodoc
   void validateSealCipherText(Uint8List cipherText) => Validations.checkAtLeast(
         cipherText.length,
         sealBytes,

@@ -150,6 +150,7 @@ abstract class SecureKey {
   dynamic get nativeHandle;
 }
 
+/// @nodoc
 @internal
 mixin SecureKeyEquality implements SecureKey {
   @override

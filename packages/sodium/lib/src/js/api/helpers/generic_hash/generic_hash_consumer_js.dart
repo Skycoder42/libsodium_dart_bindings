@@ -9,9 +9,13 @@ import '../../../bindings/js_error.dart';
 import '../../../bindings/secure_key_nullable_x.dart';
 import '../../../bindings/sodium.js.dart';
 
+/// @nodoc
 @internal
 class GenericHashConsumerJS implements GenericHashConsumer {
+  /// @nodoc
   final LibSodiumJS sodium;
+
+  /// @nodoc
   final int outLen;
 
   final _hashCompleter = Completer<Uint8List>();
@@ -20,6 +24,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
   @override
   Future<Uint8List> get hash => _hashCompleter.future;
 
+  /// @nodoc
   GenericHashConsumerJS({
     required this.sodium,
     required this.outLen,

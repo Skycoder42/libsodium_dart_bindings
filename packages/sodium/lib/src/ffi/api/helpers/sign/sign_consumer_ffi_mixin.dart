@@ -7,28 +7,32 @@ import 'package:meta/meta.dart';
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/memory_protection.dart';
-import '../../../bindings/size_t_extension.dart';
 import '../../../bindings/sodium_pointer.dart';
 
+/// @nodoc
 @internal
 mixin SignConsumerFFIMixin<T extends Object>
     implements StreamConsumer<Uint8List> {
+  /// @nodoc
   LibSodiumFFI get sodium;
 
   final _signatureCompleter = Completer<T>();
-  late final SodiumPointer<Uint8> _state;
+  late final SodiumPointer<UnsignedChar> _state;
 
+  /// @nodoc
   @protected
   Future<T> get result => _signatureCompleter.future;
 
+  /// @nodoc
   @protected
-  T finalize(SodiumPointer<Uint8> state);
+  T finalize(SodiumPointer<UnsignedChar> state);
 
+  /// @nodoc
   @protected
   void initState() {
     _state = SodiumPointer.alloc(
       sodium,
-      count: sodium.crypto_sign_statebytes().toSizeT(),
+      count: sodium.crypto_sign_statebytes(),
       zeroMemory: true,
     );
 
@@ -46,7 +50,7 @@ mixin SignConsumerFFIMixin<T extends Object>
     _ensureNotCompleted();
 
     return stream.map((event) {
-      SodiumPointer<Uint8>? messagePtr;
+      SodiumPointer<UnsignedChar>? messagePtr;
       try {
         messagePtr = event.toSodiumPointer(
           sodium,

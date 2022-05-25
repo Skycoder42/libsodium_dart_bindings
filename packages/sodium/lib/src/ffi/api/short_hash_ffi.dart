@@ -9,21 +9,23 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 
+/// @nodoc
 @internal
 class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   ShortHashFFI(this.sodium);
 
   @override
-  int get bytes => sodium.crypto_shorthash_bytes().toSizeT();
+  int get bytes => sodium.crypto_shorthash_bytes();
 
   @override
-  int get keyBytes => sodium.crypto_shorthash_keybytes().toSizeT();
+  int get keyBytes => sodium.crypto_shorthash_keybytes();
 
   @override
   SecureKey keygen() => keygenImpl(
@@ -39,8 +41,8 @@ class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
   }) {
     validateKey(key);
 
-    SodiumPointer<Uint8>? messagePtr;
-    SodiumPointer<Uint8>? outPtr;
+    SodiumPointer<UnsignedChar>? messagePtr;
+    SodiumPointer<UnsignedChar>? outPtr;
     try {
       outPtr = SodiumPointer.alloc(sodium, count: bytes);
       messagePtr = message.toSodiumPointer(
@@ -59,7 +61,7 @@ class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
       );
       SodiumException.checkSucceededInt(result);
 
-      return outPtr.copyAsList();
+      return Uint8List.fromList(outPtr.asListView());
     } finally {
       messagePtr?.dispose();
       outPtr?.dispose();

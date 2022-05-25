@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -136,7 +136,7 @@ void main() {
                 any(that: isNot(nullptr)),
                 any(that: isNot(nullptr)),
                 any(that: equals(nullptr)),
-                any(that: hasRawData<Uint8>(secretKey.data)),
+                any(that: hasRawData<UnsignedChar>(secretKey.data)),
               ),
         ]);
       });

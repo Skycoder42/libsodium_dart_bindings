@@ -30,48 +30,59 @@ class _SinkState<TState extends Object> with _$_SinkState<TState> {
   const factory _SinkState.closed() = _Closed<TState>;
 }
 
+/// @nodoc
 @internal
 abstract class SecretStreamPullTransformerSink<TState extends Object>
     implements EventSink<SecretStreamCipherMessage> {
+  /// @nodoc
   final bool requireFinalized;
 
   _SinkState<TState> _state = const _SinkState.uninitialized();
 
+  /// @nodoc
   SecretStreamPullTransformerSink(
     // ignore: avoid_positional_boolean_parameters
     this.requireFinalized,
   );
 
+  /// @nodoc
   @protected
   int get headerBytes;
 
+  /// @nodoc
   @protected
   void rekey(TState cryptoState);
 
+  /// @nodoc
   @protected
   void disposeState(TState cryptoState);
 
+  /// @nodoc
   @protected
   TState initialize(
     SecureKey key,
     Uint8List header,
   );
 
+  /// @nodoc
   @protected
   SecretStreamPlainMessage decryptMessage(
     TState cryptoState,
     SecretStreamCipherMessage event,
   );
 
+  /// @nodoc
   @nonVirtual
   void init(EventSink<SecretStreamPlainMessage> sink, SecureKey key) =>
       _state.maybeWhen(
         uninitialized: () {
           _state = _SinkState.preInit(sink, key.copy());
+          return null;
         },
         orElse: _throwInitialized,
       );
 
+  /// @nodoc
   @nonVirtual
   void triggerRekey() => _state.when(
         postInit: (_, cryptoState) => rekey(cryptoState),
@@ -200,20 +211,26 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
       );
 }
 
+/// @nodoc
 @internal
 abstract class SecretStreamPullTransformer<TState extends Object>
     implements
         SecretExStreamTransformer<SecretStreamCipherMessage,
             SecretStreamPlainMessage> {
+  /// @nodoc
   final SecureKey key;
+
+  /// @nodoc
   final bool requireFinalized;
 
+  /// @nodoc
   const SecretStreamPullTransformer(
     this.key,
     // ignore: avoid_positional_boolean_parameters
     this.requireFinalized,
   );
 
+  /// @nodoc
   @protected
   // ignore: avoid_positional_boolean_parameters
   SecretStreamPullTransformerSink<TState> createSink(bool requireFinalized);

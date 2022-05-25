@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
@@ -10,34 +11,33 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
-import '../../../bindings/size_t_extension.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'secret_stream_message_tag_ffix.dart';
 
+/// @nodoc
 @internal
 class SecretStreamPushTransformerSinkFFI
-    extends SecretStreamPushTransformerSink<SodiumPointer<Uint8>> {
+    extends SecretStreamPushTransformerSink<SodiumPointer<UnsignedChar>> {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   SecretStreamPushTransformerSinkFFI(this.sodium);
 
   @override
   @protected
-  InitPushResult<SodiumPointer<Uint8>> initialize(SecureKey key) {
-    SodiumPointer<Uint8>? statePtr;
-    SodiumPointer<Uint8>? headerPtr;
+  InitPushResult<SodiumPointer<UnsignedChar>> initialize(SecureKey key) {
+    SodiumPointer<UnsignedChar>? statePtr;
+    SodiumPointer<UnsignedChar>? headerPtr;
     try {
-      statePtr = SodiumPointer<Uint8>.alloc(
+      statePtr = SodiumPointer<UnsignedChar>.alloc(
         sodium,
         zeroMemory: true,
-        count:
-            sodium.crypto_secretstream_xchacha20poly1305_statebytes().toSizeT(),
+        count: sodium.crypto_secretstream_xchacha20poly1305_statebytes(),
       );
-      headerPtr = SodiumPointer<Uint8>.alloc(
+      headerPtr = SodiumPointer<UnsignedChar>.alloc(
         sodium,
-        count: sodium
-            .crypto_secretstream_xchacha20poly1305_headerbytes()
-            .toSizeT(),
+        count: sodium.crypto_secretstream_xchacha20poly1305_headerbytes(),
       );
       final result = key.runUnlockedNative(
         sodium,
@@ -50,7 +50,7 @@ class SecretStreamPushTransformerSinkFFI
       SodiumException.checkSucceededInt(result);
 
       return InitPushResult(
-        header: headerPtr.copyAsList(),
+        header: Uint8List.fromList(headerPtr.asListView()),
         state: statePtr,
       );
     } catch (e) {
@@ -63,7 +63,7 @@ class SecretStreamPushTransformerSinkFFI
 
   @override
   @protected
-  void rekey(SodiumPointer<Uint8> cryptoState) =>
+  void rekey(SodiumPointer<UnsignedChar> cryptoState) =>
       sodium.crypto_secretstream_xchacha20poly1305_rekey(
         cryptoState.ptr.cast(),
       );
@@ -71,12 +71,12 @@ class SecretStreamPushTransformerSinkFFI
   @override
   @protected
   SecretStreamCipherMessage encryptMessage(
-    SodiumPointer<Uint8> cryptoState,
+    SodiumPointer<UnsignedChar> cryptoState,
     SecretStreamPlainMessage event,
   ) {
-    SodiumPointer<Uint8>? messagePtr;
-    SodiumPointer<Uint8>? adPtr;
-    SodiumPointer<Uint8>? cipherPtr;
+    SodiumPointer<UnsignedChar>? messagePtr;
+    SodiumPointer<UnsignedChar>? adPtr;
+    SodiumPointer<UnsignedChar>? cipherPtr;
     try {
       messagePtr = event.message.toSodiumPointer(
         sodium,
@@ -89,7 +89,7 @@ class SecretStreamPushTransformerSinkFFI
       cipherPtr = SodiumPointer.alloc(
         sodium,
         count: messagePtr.count +
-            sodium.crypto_secretstream_xchacha20poly1305_abytes().toSizeT(),
+            sodium.crypto_secretstream_xchacha20poly1305_abytes(),
       );
 
       final result = sodium.crypto_secretstream_xchacha20poly1305_push(
@@ -105,7 +105,7 @@ class SecretStreamPushTransformerSinkFFI
       SodiumException.checkSucceededInt(result);
 
       return SecretStreamCipherMessage(
-        cipherPtr.copyAsList(),
+        Uint8List.fromList(cipherPtr.asListView()),
         additionalData: event.additionalData,
       );
     } finally {
@@ -117,17 +117,21 @@ class SecretStreamPushTransformerSinkFFI
 
   @override
   @protected
-  void disposeState(SodiumPointer<Uint8> cryptoState) => cryptoState.dispose();
+  void disposeState(SodiumPointer<UnsignedChar> cryptoState) =>
+      cryptoState.dispose();
 }
 
+/// @nodoc
 @internal
 class SecretStreamPushTransformerFFI
-    extends SecretStreamPushTransformer<SodiumPointer<Uint8>> {
+    extends SecretStreamPushTransformer<SodiumPointer<UnsignedChar>> {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   const SecretStreamPushTransformerFFI(this.sodium, SecureKey key) : super(key);
 
   @override
-  SecretStreamPushTransformerSink<SodiumPointer<Uint8>> createSink() =>
+  SecretStreamPushTransformerSink<SodiumPointer<UnsignedChar>> createSink() =>
       SecretStreamPushTransformerSinkFFI(sodium);
 }

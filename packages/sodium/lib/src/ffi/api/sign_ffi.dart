@@ -10,30 +10,32 @@ import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/size_t_extension.dart';
 import '../bindings/sodium_pointer.dart';
 import 'helpers/keygen_mixin.dart';
 import 'helpers/sign/signature_consumer_ffi.dart';
 import 'helpers/sign/verification_consumer_ffi.dart';
 import 'secure_key_ffi.dart';
 
+/// @nodoc
 @internal
 class SignFFI with SignValidations, KeygenMixin implements Sign {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   SignFFI(this.sodium);
 
   @override
-  int get publicKeyBytes => sodium.crypto_sign_publickeybytes().toSizeT();
+  int get publicKeyBytes => sodium.crypto_sign_publickeybytes();
 
   @override
-  int get secretKeyBytes => sodium.crypto_sign_secretkeybytes().toSizeT();
+  int get secretKeyBytes => sodium.crypto_sign_secretkeybytes();
 
   @override
-  int get bytes => sodium.crypto_sign_bytes().toSizeT();
+  int get bytes => sodium.crypto_sign_bytes();
 
   @override
-  int get seedBytes => sodium.crypto_sign_seedbytes().toSizeT();
+  int get seedBytes => sodium.crypto_sign_seedbytes();
 
   @override
   KeyPair keyPair() => keyPairImpl(
@@ -62,7 +64,7 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
   }) {
     validateSecretKey(secretKey);
 
-    SodiumPointer<Uint8>? dataPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
     try {
       dataPtr = SodiumPointer.alloc(
         sodium,
@@ -86,7 +88,7 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.copyAsList();
+      return Uint8List.fromList(dataPtr.asListView());
     } finally {
       dataPtr?.dispose();
     }
@@ -100,8 +102,8 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
     validateSignedMessage(signedMessage);
     validatePublicKey(publicKey);
 
-    SodiumPointer<Uint8>? dataPtr;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? dataPtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       dataPtr = signedMessage.toSodiumPointer(sodium);
       publicKeyPtr = publicKey.toSodiumPointer(
@@ -118,7 +120,7 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.viewAt(bytes).copyAsList();
+      return Uint8List.fromList(dataPtr.viewAt(bytes).asListView());
     } finally {
       dataPtr?.dispose();
       publicKeyPtr?.dispose();
@@ -132,8 +134,8 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
   }) {
     validateSecretKey(secretKey);
 
-    SodiumPointer<Uint8>? messagePtr;
-    SodiumPointer<Uint8>? signaturePtr;
+    SodiumPointer<UnsignedChar>? messagePtr;
+    SodiumPointer<UnsignedChar>? signaturePtr;
     try {
       messagePtr = message.toSodiumPointer(
         sodium,
@@ -156,7 +158,7 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
       SodiumException.checkSucceededInt(result);
 
-      return signaturePtr.copyAsList();
+      return Uint8List.fromList(signaturePtr.asListView());
     } finally {
       messagePtr?.dispose();
       signaturePtr?.dispose();
@@ -172,9 +174,9 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
     validateSignature(signature);
     validatePublicKey(publicKey);
 
-    SodiumPointer<Uint8>? messagePtr;
-    SodiumPointer<Uint8>? signaturePtr;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? messagePtr;
+    SodiumPointer<UnsignedChar>? signaturePtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       messagePtr = message.toSodiumPointer(
         sodium,
@@ -260,7 +262,8 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
   Uint8List skToPk(SecureKey secretKey) {
     validateSecretKey(secretKey);
 
-    final publicKey = SodiumPointer<Uint8>.alloc(sodium, count: publicKeyBytes);
+    final publicKey =
+        SodiumPointer<UnsignedChar>.alloc(sodium, count: publicKeyBytes);
     try {
       final result = secretKey.runUnlockedNative(
         sodium,
@@ -271,7 +274,7 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
       SodiumException.checkSucceededInt(result);
 
-      return publicKey.copyAsList();
+      return Uint8List.fromList(publicKey.asListView());
     } finally {
       publicKey.dispose();
     }

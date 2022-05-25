@@ -15,7 +15,7 @@ void testKeygen({
   required LibSodiumFFI mockSodium,
   required SecureKey Function() runKeygen,
   required int Function() keyBytesNative,
-  required void Function(Pointer<Uint8> k) keygenNative,
+  required void Function(Pointer<UnsignedChar> k) keygenNative,
 }) =>
     group('keygen', () {
       const keyLen = 24;
@@ -41,7 +41,10 @@ void testKeygen({
       test('returns generated key', () {
         final testData = List.generate(keyLen, (index) => index);
         when(() => keygenNative(any())).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer<Uint8>, testData);
+          fillPointer(
+            i.positionalArguments.first as Pointer<UnsignedChar>,
+            testData,
+          );
         });
 
         final res = runKeygen();
@@ -64,7 +67,8 @@ void testKeypair({
   required KeyPair Function() runKeypair,
   required int Function() secretKeyBytesNative,
   required int Function() publicKeyBytesNative,
-  required int Function(Pointer<Uint8> pk, Pointer<Uint8> sk) keypairNative,
+  required int Function(Pointer<UnsignedChar> pk, Pointer<UnsignedChar> sk)
+      keypairNative,
 }) =>
     group('keypair', () {
       const secretKeyLen = 42;
@@ -103,8 +107,14 @@ void testKeypair({
         );
         final testSecret = List.generate(secretKeyLen, (index) => index);
         when(() => keypairNative(any(), any())).thenAnswer((i) {
-          fillPointer(i.positionalArguments[0] as Pointer<Uint8>, testPublic);
-          fillPointer(i.positionalArguments[1] as Pointer<Uint8>, testSecret);
+          fillPointer(
+            i.positionalArguments[0] as Pointer<UnsignedChar>,
+            testPublic,
+          );
+          fillPointer(
+            i.positionalArguments[1] as Pointer<UnsignedChar>,
+            testSecret,
+          );
           return 0;
         });
 
@@ -135,9 +145,9 @@ void testSeedKeypair({
   required int Function() secretKeyBytesNative,
   required int Function() publicKeyBytesNative,
   required int Function(
-    Pointer<Uint8> pk,
-    Pointer<Uint8> sk,
-    Pointer<Uint8> seed,
+    Pointer<UnsignedChar> pk,
+    Pointer<UnsignedChar> sk,
+    Pointer<UnsignedChar> seed,
   )
       seedKeypairNative,
 }) =>
@@ -181,7 +191,7 @@ void testSeedKeypair({
           () => seedKeypairNative(
                 any(that: isNot(nullptr)),
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(seed)),
+                any(that: hasRawData<UnsignedChar>(seed)),
               ),
           () => mockSodium.sodium_mprotect_noaccess(
                 any(that: isNot(hasRawData(seed))),
@@ -196,8 +206,14 @@ void testSeedKeypair({
         );
         final testSecret = List.generate(secretKeyLen, (index) => index);
         when(() => seedKeypairNative(any(), any(), any())).thenAnswer((i) {
-          fillPointer(i.positionalArguments[0] as Pointer<Uint8>, testPublic);
-          fillPointer(i.positionalArguments[1] as Pointer<Uint8>, testSecret);
+          fillPointer(
+            i.positionalArguments[0] as Pointer<UnsignedChar>,
+            testPublic,
+          );
+          fillPointer(
+            i.positionalArguments[1] as Pointer<UnsignedChar>,
+            testSecret,
+          );
           return 0;
         });
 

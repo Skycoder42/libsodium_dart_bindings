@@ -10,12 +10,15 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
-import '../../../bindings/size_t_extension.dart';
 import '../../../bindings/sodium_pointer.dart';
 
+/// @nodoc
 @internal
 class GenericHashConsumerFFI implements GenericHashConsumer {
+  /// @nodoc
   final LibSodiumFFI sodium;
+
+  /// @nodoc
   final int outLen;
 
   final _hashCompleter = Completer<Uint8List>();
@@ -24,6 +27,7 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
   @override
   Future<Uint8List> get hash => _hashCompleter.future;
 
+  /// @nodoc
   GenericHashConsumerFFI({
     required this.sodium,
     required this.outLen,
@@ -31,7 +35,7 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
   }) {
     _state = SodiumPointer.alloc(
       sodium,
-      count: sodium.crypto_generichash_statebytes().toSizeT(),
+      count: sodium.crypto_generichash_statebytes(),
       zeroMemory: true,
     );
 
@@ -41,8 +45,8 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
         (keyPtr) => sodium.crypto_generichash_init(
           _state.ptr.cast(),
           keyPtr?.ptr ?? nullptr,
-          keyPtr?.count.toIntPtr() ?? 0,
-          outLen.toIntPtr(),
+          keyPtr?.count ?? 0,
+          outLen,
         ),
       );
       SodiumException.checkSucceededInt(result);
@@ -57,7 +61,7 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
     _ensureNotCompleted();
 
     return stream.map((event) {
-      SodiumPointer<Uint8>? messagePtr;
+      SodiumPointer<UnsignedChar>? messagePtr;
       try {
         messagePtr = event.toSodiumPointer(
           sodium,
@@ -80,9 +84,9 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
   Future<Uint8List> close() {
     _ensureNotCompleted();
 
-    SodiumPointer<Uint8>? outPtr;
+    SodiumPointer<UnsignedChar>? outPtr;
     try {
-      outPtr = SodiumPointer<Uint8>.alloc(
+      outPtr = SodiumPointer<UnsignedChar>.alloc(
         sodium,
         count: outLen,
         zeroMemory: true,
@@ -91,11 +95,11 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
       final result = sodium.crypto_generichash_final(
         _state.ptr.cast(),
         outPtr.ptr,
-        outPtr.count.toIntPtr(),
+        outPtr.count,
       );
       SodiumException.checkSucceededInt(result);
 
-      _hashCompleter.complete(outPtr.copyAsList());
+      _hashCompleter.complete(Uint8List.fromList(outPtr.asListView()));
     } catch (e, s) {
       _hashCompleter.completeError(e, s);
     } finally {

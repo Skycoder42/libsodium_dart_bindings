@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -87,7 +87,7 @@ void main() {
         () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
         () => mockSodium.crypto_generichash_init(
               any(that: isNot(nullptr)),
-              any(that: hasRawData<Uint8>(key)),
+              any(that: hasRawData<UnsignedChar>(key)),
               key.length,
               outLen,
             ),
@@ -163,7 +163,7 @@ void main() {
               ),
           () => mockSodium.crypto_generichash_update(
                 any(that: isNot(nullptr)),
-                any(that: hasRawData<Uint8>(message)),
+                any(that: hasRawData<UnsignedChar>(message)),
                 message.length,
               ),
           () => mockSodium.sodium_free(

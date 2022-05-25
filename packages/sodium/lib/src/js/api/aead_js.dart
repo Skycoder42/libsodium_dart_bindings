@@ -10,10 +10,13 @@ import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class AeadJS with AeadValidations implements Aead {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   AeadJS(this.sodium);
 
   @override

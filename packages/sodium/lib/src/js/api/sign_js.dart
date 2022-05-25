@@ -12,10 +12,13 @@ import 'helpers/sign/signature_consumer_js.dart';
 import 'helpers/sign/verification_consumer_js.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class SignJS with SignValidations implements Sign {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   SignJS(this.sodium);
 
   @override

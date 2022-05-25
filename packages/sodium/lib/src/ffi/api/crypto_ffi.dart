@@ -25,10 +25,13 @@ import 'secret_stream_ffi.dart';
 import 'short_hash_ffi.dart';
 import 'sign_ffi.dart';
 
+/// @nodoc
 @internal
 class CryptoFFI implements Crypto {
+  /// @nodoc
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   CryptoFFI(this.sodium);
 
   @override

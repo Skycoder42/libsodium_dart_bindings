@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:async';
 import 'dart:ffi';
@@ -80,7 +80,7 @@ void addStreamTests({
             ),
         () => mockSodium.crypto_sign_update(
               any(that: isNot(nullptr)),
-              any(that: hasRawData<Uint8>(message)),
+              any(that: hasRawData<UnsignedChar>(message)),
               message.length,
             ),
         () => mockSodium.sodium_free(

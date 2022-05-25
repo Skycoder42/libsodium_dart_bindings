@@ -12,6 +12,7 @@ class SodiumException implements Exception {
   /// Default constructor.
   SodiumException([this.originalMessage]);
 
+  /// @nodoc
   @internal
   static void checkSucceededInt(
     int result,
@@ -21,6 +22,7 @@ class SodiumException implements Exception {
     }
   }
 
+  /// @nodoc
   @internal
   static void checkSucceededInitInt(
     int result,
@@ -31,6 +33,7 @@ class SodiumException implements Exception {
     }
   }
 
+  /// @nodoc
   @internal
   // ignore: avoid_positional_boolean_parameters
   static void checkSucceededBool(bool result) {
@@ -39,6 +42,7 @@ class SodiumException implements Exception {
     }
   }
 
+  /// @nodoc
   @internal
   static T checkSucceededObject<T extends Object>(T? result) {
     if (result == null) {

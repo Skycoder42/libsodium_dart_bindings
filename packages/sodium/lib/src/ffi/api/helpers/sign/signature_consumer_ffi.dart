@@ -9,10 +9,10 @@ import '../../../../api/sign.dart';
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.dart';
 import '../../../bindings/secure_key_native.dart';
-import '../../../bindings/size_t_extension.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'sign_consumer_ffi_mixin.dart';
 
+/// @nodoc
 @internal
 class SignatureConsumerFFI
     with SignConsumerFFIMixin<Uint8List>
@@ -20,8 +20,10 @@ class SignatureConsumerFFI
   @override
   final LibSodiumFFI sodium;
 
+  /// @nodoc
   late final SecureKey secretKey;
 
+  /// @nodoc
   SignatureConsumerFFI({
     required this.sodium,
     required SecureKey secretKey,
@@ -39,10 +41,10 @@ class SignatureConsumerFFI
   Future<Uint8List> get signature => result;
 
   @override
-  Uint8List finalize(SodiumPointer<Uint8> state) {
-    final signaturePtr = SodiumPointer<Uint8>.alloc(
+  Uint8List finalize(SodiumPointer<UnsignedChar> state) {
+    final signaturePtr = SodiumPointer<UnsignedChar>.alloc(
       sodium,
-      count: sodium.crypto_sign_bytes().toSizeT(),
+      count: sodium.crypto_sign_bytes(),
       zeroMemory: true,
     );
 
@@ -58,7 +60,7 @@ class SignatureConsumerFFI
       );
       SodiumException.checkSucceededInt(result);
 
-      return signaturePtr.copyAsList();
+      return Uint8List.fromList(signaturePtr.asListView());
     } finally {
       signaturePtr.dispose();
     }

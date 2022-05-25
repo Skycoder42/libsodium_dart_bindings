@@ -25,10 +25,13 @@ import 'secret_stream_js.dart';
 import 'short_hash_js.dart';
 import 'sign_js.dart';
 
+/// @nodoc
 @internal
 class CryptoJS implements Crypto {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   CryptoJS(this.sodium);
 
   @override

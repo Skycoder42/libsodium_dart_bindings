@@ -1,6 +1,7 @@
 import 'secure_key.dart';
 import 'sodium.dart';
 
+/// Extensions on SecureKey
 extension SecureKeySplit on SecureKey {
   /// Creates multiple secure keys of different [lengths] from a single key.
   /// It is especially useful for using pwHash to generate enough bytes for

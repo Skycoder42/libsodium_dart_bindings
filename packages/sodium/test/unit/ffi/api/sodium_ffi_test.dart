@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -88,7 +88,7 @@ void main() {
       verify(
         () => mockSodium.sodium_pad(
           any(that: isNot(nullptr)),
-          any(that: hasRawData<Uint8>(testData)),
+          any(that: hasRawData<UnsignedChar>(testData)),
           testData.length,
           blocksize,
           46,
@@ -158,7 +158,7 @@ void main() {
       verify(
         () => mockSodium.sodium_unpad(
           any(that: isNot(nullptr)),
-          any(that: hasRawData<Uint8>(testData)),
+          any(that: hasRawData<UnsignedChar>(testData)),
           testData.length,
           blocksize,
         ),

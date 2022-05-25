@@ -11,11 +11,16 @@ import '../bindings/sodium.js.dart' hide KeyPair;
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class PrecalculatedBoxJS implements PrecalculatedBox {
+  /// @nodoc
   final BoxJS box;
+
+  /// @nodoc
   final SecureKeyJS sharedKey;
 
+  /// @nodoc
   PrecalculatedBoxJS(this.box, this.sharedKey);
 
   @override
@@ -88,10 +93,13 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
   void dispose() => sharedKey.dispose();
 }
 
+/// @nodoc
 @internal
 class BoxJS with BoxValidations implements Box {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   BoxJS(this.sodium);
 
   @override

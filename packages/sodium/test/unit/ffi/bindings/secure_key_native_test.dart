@@ -1,4 +1,4 @@
-@OnPlatform(<String, dynamic>{'!dart-vm': Skip('Requires dart:ffi')})
+@TestOn('dart-vm')
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -17,7 +17,7 @@ import '../pointer_test_helpers.dart';
 
 class MockLibSodiumFFI extends Mock implements LibSodiumFFI {}
 
-class MockSodiumPointer extends Mock implements SodiumPointer<Uint8> {}
+class MockSodiumPointer extends Mock implements SodiumPointer<UnsignedChar> {}
 
 class MockSecureKey extends Mock implements SecureKey {}
 
@@ -28,7 +28,7 @@ void main() {
 
   setUpAll(() {
     registerPointers();
-    registerFallbackValue((SodiumPointer<Uint8> _) => null);
+    registerFallbackValue((SodiumPointer<UnsignedChar> _) => null);
     registerFallbackValue((Uint8List _) => null);
   });
 
@@ -41,13 +41,13 @@ void main() {
       final mockPtr = MockSodiumPointer();
       final sutMock = MockSecureKeyNative();
       when(
-        () => sutMock.runUnlockedNative(
+        () => sutMock.runUnlockedNative<int>(
           any(),
           writable: any(named: 'writable'),
         ),
       ).thenAnswer((i) {
-        final cb = i.positionalArguments.first as dynamic Function(
-          SodiumPointer<Uint8>,
+        final cb = i.positionalArguments.first as int Function(
+          SodiumPointer<UnsignedChar>,
         );
         return cb(mockPtr);
       });
@@ -63,7 +63,7 @@ void main() {
       );
       expect(result, 42);
 
-      verify(() => sutMock.runUnlockedNative(any(), writable: true));
+      verify(() => sutMock.runUnlockedNative<int>(any(), writable: true));
     });
 
     group('SecureKey', () {
@@ -76,12 +76,12 @@ void main() {
       });
 
       void mockRun(Uint8List data) => when(
-            () => sutMock.runUnlockedSync(
+            () => sutMock.runUnlockedSync<bool>(
               any(),
               writable: any(named: 'writable'),
             ),
           ).thenAnswer((i) {
-            final callback = i.positionalArguments.first as dynamic Function(
+            final callback = i.positionalArguments.first as bool Function(
               Uint8List,
             );
             return callback(data);
@@ -101,7 +101,7 @@ void main() {
             mockSodium,
             (pointer) {
               expect(pointer.count, testData.length);
-              expect(pointer.ptr, hasRawData<Uint8>(testData));
+              expect(pointer.ptr, hasRawData<UnsignedChar>(testData));
               expect(pointer.memoryProtection, fixture.item2);
               return true;
             },
@@ -126,7 +126,7 @@ void main() {
         final result = sutMock.runUnlockedNative(
           mockSodium,
           (pointer) {
-            pointer.asList().setAll(0, resultData);
+            pointer.asListView().setAll(0, resultData);
             return true;
           },
           writable: true,
@@ -140,7 +140,7 @@ void main() {
         mockRun(Uint8List(5));
 
         expect(
-          () => sutMock.runUnlockedNative(
+          () => sutMock.runUnlockedNative<bool>(
             mockSodium,
             (pointer) => throw Exception(),
           ),

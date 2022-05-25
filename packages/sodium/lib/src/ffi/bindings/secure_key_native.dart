@@ -14,7 +14,7 @@ typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<UnsignedChar> keyPtr);
 /// @nodoc
 @internal
 typedef SecureFFINullableCallbackFn<T> = T Function(
-  SodiumPointer<Uint8>? keyPtr,
+  SodiumPointer<UnsignedChar>? keyPtr,
 );
 
 /// @nodoc
@@ -22,6 +22,7 @@ typedef SecureFFINullableCallbackFn<T> = T Function(
 abstract class SecureKeyNative implements SecureKey {
   const SecureKeyNative._(); // coverage:ignore-line
 
+  /// @nodoc
   T runUnlockedNative<T>(
     SecureFFICallbackFn<T> callback, {
     bool writable = false,
@@ -31,6 +32,7 @@ abstract class SecureKeyNative implements SecureKey {
 /// @nodoc
 @internal
 extension SecureKeySafeCastX on SecureKey {
+  /// @nodoc
   T runUnlockedNative<T>(
     LibSodiumFFI sodium,
     SecureFFICallbackFn<T> callback, {
@@ -53,7 +55,7 @@ extension SecureKeySafeCastX on SecureKey {
   }) =>
       runUnlockedSync(
         (data) {
-          final ptr = data.toSodiumPointer(
+          final ptr = data.toSodiumPointer<UnsignedChar>(
             sodium,
             memoryProtection: writable
                 ? MemoryProtection.readWrite
@@ -62,7 +64,7 @@ extension SecureKeySafeCastX on SecureKey {
           try {
             final result = callback(ptr);
             if (writable) {
-              data.setRange(0, data.length, ptr.asList());
+              data.setRange(0, data.length, ptr.asListView());
             }
             return result;
           } finally {
@@ -76,6 +78,7 @@ extension SecureKeySafeCastX on SecureKey {
 /// @nodoc
 @internal
 extension SecureKeyNullableSafeCastX on SecureKey? {
+  /// @nodoc
   T runMaybeUnlockedNative<T>(
     LibSodiumFFI sodium,
     SecureFFINullableCallbackFn<T> callback,

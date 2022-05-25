@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
@@ -10,8 +11,10 @@ import '../../bindings/secure_key_native.dart';
 import '../../bindings/sodium_pointer.dart';
 import '../secure_key_ffi.dart';
 
+/// @nodoc
 @internal
 mixin KeygenMixin {
+  /// @nodoc
   @protected
   SecureKey keygenImpl({
     required LibSodiumFFI sodium,
@@ -31,15 +34,17 @@ mixin KeygenMixin {
     }
   }
 
+  /// @nodoc
   @protected
   KeyPair keyPairImpl({
     required LibSodiumFFI sodium,
     required int secretKeyBytes,
     required int publicKeyBytes,
-    required int Function(Pointer<Uint8> pk, Pointer<Uint8> sk) implementation,
+    required int Function(Pointer<UnsignedChar> pk, Pointer<UnsignedChar> sk)
+        implementation,
   }) {
     SecureKeyFFI? secretKey;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       secretKey = SecureKeyFFI.alloc(sodium, secretKeyBytes);
       publicKeyPtr = SodiumPointer.alloc(sodium, count: publicKeyBytes);
@@ -55,7 +60,7 @@ mixin KeygenMixin {
 
       return KeyPair(
         secretKey: secretKey,
-        publicKey: publicKeyPtr.copyAsList(),
+        publicKey: Uint8List.fromList(publicKeyPtr.asListView()),
       );
     } catch (e) {
       secretKey?.dispose();
@@ -65,6 +70,7 @@ mixin KeygenMixin {
     }
   }
 
+  /// @nodoc
   @protected
   KeyPair seedKeyPairImpl({
     required LibSodiumFFI sodium,
@@ -72,14 +78,14 @@ mixin KeygenMixin {
     required int secretKeyBytes,
     required int publicKeyBytes,
     required int Function(
-      Pointer<Uint8> pk,
-      Pointer<Uint8> sk,
-      Pointer<Uint8> seed,
+      Pointer<UnsignedChar> pk,
+      Pointer<UnsignedChar> sk,
+      Pointer<UnsignedChar> seed,
     )
         implementation,
   }) {
     SecureKeyFFI? secretKey;
-    SodiumPointer<Uint8>? publicKeyPtr;
+    SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
       secretKey = SecureKeyFFI.alloc(sodium, secretKeyBytes);
       publicKeyPtr = SodiumPointer.alloc(sodium, count: publicKeyBytes);
@@ -99,7 +105,7 @@ mixin KeygenMixin {
 
       return KeyPair(
         secretKey: secretKey,
-        publicKey: publicKeyPtr.copyAsList(),
+        publicKey: Uint8List.fromList(publicKeyPtr.asListView()),
       );
     } catch (e) {
       secretKey?.dispose();

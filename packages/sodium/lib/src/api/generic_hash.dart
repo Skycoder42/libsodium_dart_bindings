@@ -121,8 +121,10 @@ abstract class GenericHash {
   });
 }
 
+/// @nodoc
 @internal
 mixin GenericHashValidations implements GenericHash {
+  /// @nodoc
   void validateOutLen(int outLen) => Validations.checkInRange(
         outLen,
         bytesMin,
@@ -130,6 +132,7 @@ mixin GenericHashValidations implements GenericHash {
         'outLen',
       );
 
+  /// @nodoc
   void validateKey(SecureKey key) => Validations.checkInRange(
         key.length,
         keyBytesMin,

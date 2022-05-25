@@ -10,12 +10,15 @@ import 'helpers/secret_stream/secret_stream_pull_transformer_js.dart';
 import 'helpers/secret_stream/secret_stream_push_transformer_js.dart';
 import 'secure_key_js.dart';
 
+/// @nodoc
 @internal
 class SecretStreamJS
     with SecretStreamBase, SecretStreamValidations
     implements SecretStream {
+  /// @nodoc
   final LibSodiumJS sodium;
 
+  /// @nodoc
   SecretStreamJS(this.sodium);
 
   @override
