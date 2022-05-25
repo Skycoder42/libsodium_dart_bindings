@@ -303,5 +303,13 @@ void main() {
 
       verify(() => mockSodiumPointer.dispose());
     });
+
+    test('nativeHandle returns list with address and count', () {
+      final nativeHandle = sut.nativeHandle;
+
+      expect(nativeHandle, hasLength(2));
+      expect(nativeHandle[0], testPtr.address);
+      expect(nativeHandle[1], testList.length);
+    });
   });
 }

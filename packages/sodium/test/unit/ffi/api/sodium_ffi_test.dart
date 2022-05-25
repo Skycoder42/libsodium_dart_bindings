@@ -8,6 +8,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
+import 'package:sodium/src/ffi/api/secure_key_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
@@ -212,6 +213,29 @@ void main() {
     final res = sut.secureCopy(data);
 
     expect(res.extractBytes(), data);
+  });
+
+  group('secureHandle', () {
+    test('creates SecureKeyFFI instance with copied data', () {
+      mockAllocArray(mockSodium);
+
+      const data = [11, 22];
+      final res = sut.secureHandle(data) as SecureKeyFFI;
+
+      // ignore: cascade_invocations
+      res.runUnlockedNative<void>((pointer) {
+        expect(pointer.sodium, mockSodium);
+        expect(pointer.ptr.address, data[0]);
+        expect(pointer.count, data[1]);
+      });
+    });
+
+    test('throws if handle is not exactly 2 elements', () {
+      expect(
+        () => sut.secureHandle([1, 2, 3]),
+        throwsArgumentError,
+      );
+    });
   });
 
   test('randombytes returns RandombytesFFI instance', () {

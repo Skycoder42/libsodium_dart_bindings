@@ -128,6 +128,13 @@ void main() {
     expect(res.extractBytes(), data);
   });
 
+  test('secureHandle creates SecureKey instance with data', () {
+    final data = Uint8List.fromList(List.generate(15, (index) => index));
+    final res = sut.secureHandle(data);
+
+    expect(res.extractBytes(), data);
+  });
+
   test('randombytes returns RandombytesJS instance', () {
     expect(
       sut.randombytes,
