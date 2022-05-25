@@ -2,8 +2,7 @@ include: package:dart_test_tools/analysis_options_package.yaml
 
 analyzer:
   exclude:
-    - "**/*.ffi.dart"
-    - "**/*.freezed.dart"
-    - "build/**"
+    - "**.freezed.dart"
     - "example/web/**"
+    - "lib/src/ffi/bindings/libsodium.ffi.dart"
     - "test/integration/js_test_common.dart"
