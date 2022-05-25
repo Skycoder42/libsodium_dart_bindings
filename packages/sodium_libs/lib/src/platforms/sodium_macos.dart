@@ -39,7 +39,9 @@ class _SodiumMacos implements Sodium {
   SodiumVersion get version => const SodiumVersion(10, 3, '1.0.18');
 }
 
+/// macOS platform implementation of SodiumPlatform
 class SodiumMacos extends SodiumPlatform {
+  /// Registers the [SodiumMacos] as [SodiumPlatform.instance]
   static void registerWith() {
     SodiumPlatform.instance = SodiumMacos();
   }

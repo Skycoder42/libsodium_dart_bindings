@@ -3,7 +3,9 @@ import 'dart:ffi';
 import 'package:sodium/sodium.dart';
 import '../sodium_platform.dart';
 
+/// Windows platform implementation of SodiumPlatform
 class SodiumWindows extends SodiumPlatform {
+  /// Registers the [SodiumWindows] as [SodiumPlatform.instance]
   static void registerWith() {
     SodiumPlatform.instance = SodiumWindows();
   }

@@ -4,17 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.2] - 2022-04-27
+## 1.2.2
 ### Changed
 - updated referenced libsodium.js to version 0.7.10
   - integration tests now run this version
   - the `update_web` command will now download this version
 
-## [1.2.1] - 2022-04-14
+## 1.2.2
+### Changed
+- Updated minimum required dart version to 1.17.0
+- Updated minimum required flutter version to 3.0.0
+- Updated minimum required `sodium` version to 1.2.2
+- Updated dependencies
+
+## 1.2.1
 ### Fixed
 - Windows: Invoke dart via CMD in CMake to prevent problems on Windows 11 (#9)
 
-## [1.2.0] - 2021-01-25
+## 1.2.0
 ### Added
 - Added support for the Sumo-Version of sodium.js (#4)
 ### Changed
@@ -36,33 +43,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed unused native code
 - Added README hint on how to use the library on iOs Simulators
 
-## [1.1.1] - 2021-08-26
+## 1.1.1
 ### Changed
 - `SodiumInit.init` now automatically handles multiple initializations and no longer requires the `initNative` parameter for consecutive invocations (#3)
 - Updated minimum required `sodium` version to `1.1.1`
 ### Deprecated
 - The `initNative` parameter of `SodiumInit.init` has been deprecated as it no longer has any effect (#3)
 
-## [1.1.0] - 2021-08-17
+## 1.1.0
 ### Added
 - `SodiumInit.init` can now be called with `initNative: false` to disable initialization of the native library, in case it has already been initialized
 ### Changed
 - Updated minimum required `sodium` version to `1.1.0`
 
-## [1.0.1] - 2021-07-13
+## 1.0.1
 ### Fixed
 - Make links in README secure (pub.dev score)
 - Use longer package description (pub.dev score)
 
-## [1.0.0] - 2021-07-12
+## 1.0.0
 ### Fixed
 - Web/Windows builds did not work when packages was installed via pub.dev
 
-## [0.1.0] - 2021-06-24
+## 0.1.0
 ### Added
 - Initial release
 
-## [Unreleased] - 20XX-XX-XX
+## Unreleased
 ### Added
 ### Changed
 ### Deprecated

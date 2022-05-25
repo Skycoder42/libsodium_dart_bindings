@@ -19,7 +19,9 @@ class _SodiumBrowserInit {
   external factory _SodiumBrowserInit({void Function(dynamic sodium) onload});
 }
 
+/// Web platform implementation of SodiumPlatform
 class SodiumWeb extends SodiumPlatform {
+  /// Registers the [SodiumWeb] as [SodiumPlatform.instance]
   static void registerWith([Registrar? registrar]) {
     SodiumPlatform.instance = SodiumWeb();
   }

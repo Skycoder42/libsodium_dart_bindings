@@ -18,6 +18,7 @@ abstract class SodiumInit {
 
   const SodiumInit._(); // coverage:ignore-line
 
+  /// @nodoc
   @Deprecated('Since flutter 2.8 plugins are automatically registered')
   static void ensurePlatformRegistered() {}
 
