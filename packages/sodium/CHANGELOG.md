@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.2.2
+### Changed
+- Add missing tests and coverage ignores
+
 ## 1.2.1
 ### Changed
 - Updated minimum required dart SDK to 1.17.0
