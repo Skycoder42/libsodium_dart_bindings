@@ -78,6 +78,8 @@ jobs:
       - name: Build libsodium.so
         run: "./dist-build/android-${{ matrix.buildTarget }}.sh"
         working-directory: libsodium-stable
+        env:
+          LIBSODIUM_FULL_BUILD: 1
       - name: Copy lib to upload dir
         run: |
           set -e
