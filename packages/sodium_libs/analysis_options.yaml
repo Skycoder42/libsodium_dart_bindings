@@ -4,3 +4,7 @@ analyzer:
   exclude:
     - "build/**"
     - "**/generated_plugin_registrant.dart"
+
+linter:
+  rules:
+    comment_references: false

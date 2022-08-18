@@ -49,5 +49,5 @@ class SodiumMacos extends SodiumPlatform {
   @override
   Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
         DynamicLibrary.process(),
-      ).then((sodium) => _SodiumMacos(sodium));
+      ).then(_SodiumMacos.new);
 }

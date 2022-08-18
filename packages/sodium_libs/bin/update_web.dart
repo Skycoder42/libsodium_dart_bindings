@@ -13,7 +13,7 @@ Future<void> main(List<String> arguments) async {
     ),
   );
 
-  if (!await targetDir.exists()) {
+  if (!targetDir.existsSync()) {
     stderr.writeln(
       'Directory ${targetDir.path} does not exists - '
       'cannot download web binaries!',
@@ -46,7 +46,7 @@ Future<void> main(List<String> arguments) async {
         'dist/${isSumo ? 'browsers-sumo' : 'browsers'}/sodium.js',
       ),
     );
-    if (!await sodiumJsFile.exists()) {
+    if (!sodiumJsFile.existsSync()) {
       stderr.writeln('Broken git repository - unable to find sodium.js');
       exitCode = 1;
       return;
