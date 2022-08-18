@@ -22,7 +22,7 @@ jobs:
     with:
       workingDirectory: packages/sodium
       buildRunner: true
-      publishExclude: '["lib/src/.gitignore"]'
+      publishExclude: '["lib/src/.gitignore", "test/analysis_options.yaml"]'
       unitTestPaths: test/unit
       coverageExclude: >-
         "**/*.freezed.dart"
@@ -45,7 +45,7 @@ jobs:
     with:
       workingDirectory: packages/sodium
       buildRunner: true
-      publishExclude: '["lib/src/.gitignore"]'
+      publishExclude: '["lib/src/.gitignore", "test/analysis_options.yaml"]'
       tagPrefix: sodium/v
     secrets:
       PUB_DEV_CREDENTIALS: ${{ secrets.PUB_DEV_CREDENTIALS }}
