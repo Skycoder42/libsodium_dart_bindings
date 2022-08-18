@@ -4,10 +4,9 @@ import 'dart:typed_data';
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class AuthTestCase extends TestCase {
-  AuthTestCase(TestRunner runner) : super(runner);
+  AuthTestCase(super.runner);
 
   @override
   String get name => 'auth';

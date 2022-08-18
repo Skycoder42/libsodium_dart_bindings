@@ -2,10 +2,9 @@
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class KxTestCase extends TestCase {
-  KxTestCase(TestRunner runner) : super(runner);
+  KxTestCase(super.runner);
 
   @override
   String get name => 'kx';

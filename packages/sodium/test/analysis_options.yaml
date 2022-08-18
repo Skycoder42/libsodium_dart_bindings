@@ -1,0 +1,9 @@
+import: ../analysis_options.yaml
+
+analyzer:
+  exclude:
+    - "integration/js_test_common.dart"
+
+linter:
+  rules:
+    unnecessary_lambdas: false

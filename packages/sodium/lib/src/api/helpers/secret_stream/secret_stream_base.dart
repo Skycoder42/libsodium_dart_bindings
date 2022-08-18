@@ -15,7 +15,7 @@ mixin SecretStreamBase implements SecretStream {
     return StreamTransformer.fromBind(
       (stream) => stream
           .where((message) => message.isNotEmpty)
-          .map((message) => SecretStreamPlainMessage(message))
+          .map(SecretStreamPlainMessage.new)
           .transform(transformer)
           .map((event) => event.message),
     );
@@ -29,7 +29,7 @@ mixin SecretStreamBase implements SecretStream {
     final transformer = createPullEx(key, requireFinalized: requireFinalized);
     return StreamTransformer.fromBind(
       (stream) => stream
-          .map((message) => SecretStreamCipherMessage(message))
+          .map(SecretStreamCipherMessage.new)
           .transform(transformer)
           .where((event) => event.message.isNotEmpty)
           .map((event) => event.message),

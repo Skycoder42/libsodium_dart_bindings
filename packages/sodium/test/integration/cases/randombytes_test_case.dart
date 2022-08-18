@@ -4,10 +4,9 @@ import 'dart:typed_data';
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class RandombytesTestCase extends TestCase {
-  RandombytesTestCase(TestRunner runner) : super(runner);
+  RandombytesTestCase(super.runner);
 
   @override
   String get name => 'randombytes';

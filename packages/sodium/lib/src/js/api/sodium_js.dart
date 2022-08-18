@@ -27,7 +27,7 @@ class SodiumJS implements Sodium {
   SodiumVersion get version => SodiumVersion(
         sodium.SODIUM_LIBRARY_VERSION_MAJOR.toSafeUInt32(),
         sodium.SODIUM_LIBRARY_VERSION_MINOR.toSafeUInt32(),
-        JsError.wrap(() => sodium.sodium_version_string()),
+        JsError.wrap(sodium.sodium_version_string),
       );
 
   @override

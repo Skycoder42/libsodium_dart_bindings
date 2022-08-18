@@ -2,10 +2,9 @@
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class KdfTestCase extends TestCase {
-  KdfTestCase(TestRunner runner) : super(runner);
+  KdfTestCase(super.runner);
 
   @override
   String get name => 'kdf';

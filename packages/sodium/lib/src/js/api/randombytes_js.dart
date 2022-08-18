@@ -47,11 +47,11 @@ class RandombytesJS implements Randombytes {
 
   @override
   void close() => JsError.wrap(
-        () => sodium.randombytes_close(),
+        sodium.randombytes_close,
       );
 
   @override
   void stir() => JsError.wrap(
-        () => sodium.randombytes_stir(),
+        sodium.randombytes_stir,
       );
 }

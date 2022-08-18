@@ -4,12 +4,11 @@ import 'dart:typed_data';
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class PwhashTestCase extends TestCase {
   final bool is32Bit;
 
-  PwhashTestCase(TestRunner runner, {this.is32Bit = false}) : super(runner);
+  PwhashTestCase(super.runner, {this.is32Bit = false});
 
   @override
   String get name => 'pwhash';

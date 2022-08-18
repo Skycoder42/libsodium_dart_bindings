@@ -6,12 +6,12 @@ class Symbol extends Constant {
   final String? returnValue;
 
   const Symbol({
-    required String name,
-    required String type,
+    required super.name,
+    required super.type,
     required this.inputs,
     required this.outputs,
     this.returnValue,
-  }) : super(name: name, type: type);
+  });
 
   Symbol.fromJson(Map<String, dynamic> json)
       : this(

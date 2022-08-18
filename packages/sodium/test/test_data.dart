@@ -14,7 +14,7 @@ void testData<T>(
   int? retry,
   String Function(T fixture)? fixtureToString,
 }) {
-  assert(fixtures.isNotEmpty);
+  assert(fixtures.isNotEmpty, 'fixtures must not be empty');
   group(description, () {
     for (final fixture in fixtures) {
       test(

@@ -42,7 +42,7 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
   SecureKey keygen() => SecureKeyJS(
         sodium,
         JsError.wrap(
-          () => sodium.crypto_generichash_keygen(),
+          sodium.crypto_generichash_keygen,
         ),
       );
 

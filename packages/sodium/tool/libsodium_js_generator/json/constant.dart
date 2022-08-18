@@ -14,8 +14,5 @@ class Constant {
         );
 
   static Iterable<Constant> fromJsonList(List<dynamic>? json) =>
-      json
-          ?.cast<Map<String, dynamic>>()
-          .map((entry) => Constant.fromJson(entry)) ??
-      const [];
+      json?.cast<Map<String, dynamic>>().map(Constant.fromJson) ?? const [];
 }

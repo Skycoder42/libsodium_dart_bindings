@@ -5,10 +5,9 @@ import 'dart:typed_data';
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class SecretStreamTestCase extends TestCase {
-  SecretStreamTestCase(TestRunner runner) : super(runner);
+  SecretStreamTestCase(super.runner);
 
   @override
   String get name => 'secretstream';

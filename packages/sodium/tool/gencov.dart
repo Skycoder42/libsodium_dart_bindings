@@ -32,7 +32,7 @@ Future<void> main(List<String> rawArgs) async {
     final open = args['open'] as bool;
 
     final coverageDir = Directory('coverage');
-    if (await coverageDir.exists()) {
+    if (coverageDir.existsSync()) {
       await Directory('coverage').delete(recursive: true);
     }
 

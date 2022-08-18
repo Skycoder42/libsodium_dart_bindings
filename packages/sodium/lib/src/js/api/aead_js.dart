@@ -35,7 +35,7 @@ class AeadJS with AeadValidations implements Aead {
   SecureKey keygen() => SecureKeyJS(
         sodium,
         JsError.wrap(
-          () => sodium.crypto_aead_xchacha20poly1305_ietf_keygen(),
+          sodium.crypto_aead_xchacha20poly1305_ietf_keygen,
         ),
       );
 

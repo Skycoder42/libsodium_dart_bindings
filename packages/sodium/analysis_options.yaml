@@ -5,4 +5,8 @@ analyzer:
     - "**.freezed.dart"
     - "example/web/**"
     - "lib/src/ffi/bindings/libsodium.ffi.dart"
-    - "test/integration/js_test_common.dart"
+
+linter:
+  rules:
+    comment_references: false
+    avoid_catches_without_on_clauses: false

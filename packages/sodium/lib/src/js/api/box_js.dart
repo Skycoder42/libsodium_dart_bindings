@@ -122,7 +122,7 @@ class BoxJS with BoxValidations implements Box {
 
   @override
   KeyPair keyPair() {
-    final keyPair = JsError.wrap(() => sodium.crypto_box_keypair());
+    final keyPair = JsError.wrap(sodium.crypto_box_keypair);
 
     return KeyPair(
       publicKey: keyPair.publicKey,
@@ -136,7 +136,7 @@ class BoxJS with BoxValidations implements Box {
 
     final keyPair = JsError.wrap(
       () => seed.runUnlockedSync(
-        (seedData) => sodium.crypto_box_seed_keypair(seedData),
+        sodium.crypto_box_seed_keypair,
       ),
     );
 

@@ -4,10 +4,9 @@ import 'dart:typed_data';
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class GenericHashTestCase extends TestCase {
-  GenericHashTestCase(TestRunner runner) : super(runner);
+  GenericHashTestCase(super.runner);
 
   @override
   String get name => 'generichash';

@@ -31,7 +31,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        JsError.wrap(() => sodium.crypto_secretbox_keygen()),
+        JsError.wrap(sodium.crypto_secretbox_keygen),
       );
 
   @override

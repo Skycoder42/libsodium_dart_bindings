@@ -4,10 +4,9 @@ import 'dart:typed_data';
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class AeadTestCase extends TestCase {
-  AeadTestCase(TestRunner runner) : super(runner);
+  AeadTestCase(super.runner);
 
   @override
   String get name => 'aead';

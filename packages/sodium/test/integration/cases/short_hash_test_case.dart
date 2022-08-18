@@ -4,10 +4,9 @@ import 'dart:typed_data';
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class ShortHashTestCase extends TestCase {
-  ShortHashTestCase(TestRunner runner) : super(runner);
+  ShortHashTestCase(super.runner);
 
   @override
   String get name => 'shorthash';

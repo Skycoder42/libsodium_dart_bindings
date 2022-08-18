@@ -6,10 +6,9 @@ import 'package:tuple/tuple.dart';
 
 import '../../test_data.dart';
 import '../test_case.dart';
-import '../test_runner.dart';
 
 class SodiumTestCase extends TestCase {
-  SodiumTestCase(TestRunner runner) : super(runner);
+  SodiumTestCase(super.runner);
 
   @override
   String get name => 'sodium';

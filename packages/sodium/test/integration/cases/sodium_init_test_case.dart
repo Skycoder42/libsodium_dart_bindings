@@ -23,10 +23,10 @@ class SodiumInitTestCase extends TestCase {
       // Use this to ensure SodiumInit.init can be successfully called
       // more than once for each platform.
       for (var i = 0; i < 3; i++) {
-        final _sodium = await runner.loadSodium();
+        final sodium = await runner.loadSodium();
 
         // Ensure this new reference to sodium actually works
-        _sodium.secureRandom(1);
+        sodium.secureRandom(1);
       }
     });
   }

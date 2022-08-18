@@ -22,9 +22,7 @@ class SecretStreamPushTransformerSinkJS extends SecretStreamPushTransformerSink<
   InitPushResult<SecretstreamXchacha20poly1305State> initialize(SecureKey key) {
     final initResult = JsError.wrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_secretstream_xchacha20poly1305_init_push(
-          keyData,
-        ),
+        sodium.crypto_secretstream_xchacha20poly1305_init_push,
       ),
     );
 

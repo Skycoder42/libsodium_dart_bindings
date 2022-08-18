@@ -27,7 +27,7 @@ class AuthJS with AuthValidations implements Auth {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        JsError.wrap(() => sodium.crypto_auth_keygen()),
+        JsError.wrap(sodium.crypto_auth_keygen),
       );
 
   @override

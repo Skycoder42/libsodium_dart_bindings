@@ -1,4 +1,7 @@
-/// A Version number class that providies the libsodium implementation version.
+import 'package:meta/meta.dart';
+
+/// A Version number class that provides the libsodium implementation version.
+@immutable
 class SodiumVersion {
   final String _versionString;
 

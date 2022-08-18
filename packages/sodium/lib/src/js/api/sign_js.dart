@@ -35,7 +35,7 @@ class SignJS with SignValidations implements Sign {
 
   @override
   KeyPair keyPair() {
-    final keyPair = JsError.wrap(() => sodium.crypto_sign_keypair());
+    final keyPair = JsError.wrap(sodium.crypto_sign_keypair);
 
     return KeyPair(
       publicKey: keyPair.publicKey,
@@ -49,7 +49,7 @@ class SignJS with SignValidations implements Sign {
 
     final keyPair = JsError.wrap(
       () => seed.runUnlockedSync(
-        (seedData) => sodium.crypto_sign_seed_keypair(seedData),
+        sodium.crypto_sign_seed_keypair,
       ),
     );
 
@@ -165,7 +165,7 @@ class SignJS with SignValidations implements Sign {
 
     return JsError.wrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium.crypto_sign_ed25519_sk_to_pk(secretKeyData),
+        sodium.crypto_sign_ed25519_sk_to_pk,
       ),
     );
   }

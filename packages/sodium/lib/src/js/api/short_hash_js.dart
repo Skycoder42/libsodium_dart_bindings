@@ -27,7 +27,7 @@ class ShortHashJS with ShortHashValidations implements ShortHash {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        JsError.wrap(() => sodium.crypto_shorthash_keygen()),
+        JsError.wrap(sodium.crypto_shorthash_keygen),
       );
 
   @override
