@@ -23,9 +23,5 @@ dev_dependencies:
   test: ^1.21.1
   tuple: ^2.0.0
 
-dependency_overrides:
-  sodium:
-    path: "../../sodium"
-
 flutter:
   uses-material-design: true

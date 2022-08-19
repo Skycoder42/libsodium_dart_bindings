@@ -25,10 +25,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-dependency_overrides:
-  sodium:
-    path: "../sodium"
-
 executables:
   update_web: update_web
 
