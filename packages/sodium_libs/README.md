@@ -8,12 +8,12 @@ provides the low-level libsodium binaries for easy use.
 ## Table of contents
 - [Features](#features)
 - [Installation](#installation)
-  * [Platform requirements](#platform-requirements)
-    + [iOS](#ios)
-    + [Linux](#linux)
-    + [Windows](#windows)
-    + [Web](#web)
+  * [iOS](#ios)
+  * [Linux](#linux)
+  * [Windows](#windows)
+  * [Web](#web)
 - [Usage](#usage)
+  * [Web](#web-1)
 - [Documentation](#documentation)
 
 <small><i><a href='https://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
@@ -33,11 +33,10 @@ the documentation of that package for more details about the actual APIs.
 Simply add `sodium_libs` to your `pubspec.yaml` and run `pub get` (or
 `flutter pub get`).
 
-### Platform requirements
 In addition to installing the package, you will also have to install operating
-system specific tools for some platforms:
+system specific tools for some platforms.
 
-#### iOS
+### iOS
 Currently, there is a [Bug in the upstream Swift-Sodium package](https://github.com/jedisct1/swift-sodium/issues/251)
 that prevents the library from beeing run on an iOs simulator with XCode 12 or
 higher. As a temporary workaround, you have to add the following snippet to your
@@ -55,7 +54,7 @@ post_install do |installer|
 end
 ```
 
-#### Linux
+### Linux
 You have to install [libsodium](https://github.com/jedisct1/libsodium) on your
 system. How you do this depends on your distribution:
 - Arch/Manjaro: `[sudo] pacman -S libsodium`
@@ -65,7 +64,7 @@ system. How you do this depends on your distribution:
 When bundeling the application for release, remember to also include the
 `libsodium.so` into the deployment package.
 
-#### Windows
+### Windows
 Since the plugin downloads the binaries at build time, it needs
 [minisign](https://jedisct1.github.io/minisign/) to validate their integrity.
 The easiest way to install minisign is via
@@ -75,9 +74,9 @@ The easiest way to install minisign is via
 choco install minisign
 ```
 
-#### Web
+### Web
 The web setup differs slightly from the others. Instead of just installing some
-system library, you need to add
+system library or tool, you need to add
 [`sodium.js`](https://github.com/jedisct1/libsodium.js) to each project. You can
 do this automatically by running the following command in every new project.
 
@@ -101,6 +100,23 @@ import 'package:sodium_libs/sodium_libs.dart';
 final sodium = await SodiumInit.init();
 // You now have a Sodium instance, see sodium package to continue
 ```
+### Web
+**Important:** Running a flutter application in debug mode in the *browser* with
+`sodium_libs` is not possible. If you get errors like the following:
+
+```
+TypeError: Cannot read properties of undefined (reading 'then')
+sodium.js 1:771173  <fn>
+sodium.js 1:771205  <fn>
+```
+
+You will have to run the application in release mode:
+
+```bash
+flutter run --release -d chrome
+```
+
+For all other platforms, debugging works as expected.
 
 ## Documentation
 The documentation is available at
