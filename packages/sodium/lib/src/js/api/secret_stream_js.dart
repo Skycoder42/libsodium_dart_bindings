@@ -36,7 +36,7 @@ class SecretStreamJS
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        JsError.wrap(
+        jsErrorWrap(
           sodium.crypto_secretstream_xchacha20poly1305_keygen,
         ),
       );

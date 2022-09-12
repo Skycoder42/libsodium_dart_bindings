@@ -34,7 +34,7 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
     SecureKey key,
     Uint8List header,
   ) =>
-      JsError.wrap(
+      jsErrorWrap(
         () => key.runUnlockedSync(
           (keyData) => sodium.crypto_secretstream_xchacha20poly1305_init_pull(
             header,
@@ -44,7 +44,7 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
       );
 
   @override
-  void rekey(SecretstreamXchacha20poly1305State cryptoState) => JsError.wrap(
+  void rekey(SecretstreamXchacha20poly1305State cryptoState) => jsErrorWrap(
         // ignore result, as it is always true
         () => sodium.crypto_secretstream_xchacha20poly1305_rekey(cryptoState),
       );
@@ -54,7 +54,7 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
     SecretstreamXchacha20poly1305State cryptoState,
     SecretStreamCipherMessage event,
   ) {
-    final dynamic pullResult = JsError.wrap<dynamic>(
+    final dynamic pullResult = jsErrorWrap<dynamic>(
       () => sodium.crypto_secretstream_xchacha20poly1305_pull(
         cryptoState,
         event.message,

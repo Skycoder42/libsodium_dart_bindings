@@ -38,7 +38,7 @@ class SignatureConsumerJS
   Future<Uint8List> get signature => result;
 
   @override
-  Uint8List finalize(SignState state) => JsError.wrap(
+  Uint8List finalize(SignState state) => jsErrorWrap(
         () => secretKey.runUnlockedSync(
           (secretKeyData) => sodium.crypto_sign_final_create(
             state,

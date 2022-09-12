@@ -27,14 +27,14 @@ mixin SignConsumerJSMixin<T extends Object>
   /// @nodoc
   @protected
   void initState() {
-    _state = JsError.wrap(() => sodium.crypto_sign_init());
+    _state = jsErrorWrap(() => sodium.crypto_sign_init());
   }
 
   @override
   void add(Uint8List data) {
     _ensureNotCompleted();
 
-    JsError.wrap(
+    jsErrorWrap(
       () => sodium.crypto_sign_update(_state, data),
     );
   }

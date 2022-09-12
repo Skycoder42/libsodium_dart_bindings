@@ -34,7 +34,7 @@ class AeadJS with AeadValidations implements Aead {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        JsError.wrap(
+        jsErrorWrap(
           sodium.crypto_aead_xchacha20poly1305_ietf_keygen,
         ),
       );
@@ -49,7 +49,7 @@ class AeadJS with AeadValidations implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
           message,
@@ -73,7 +73,7 @@ class AeadJS with AeadValidations implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
           null,
@@ -96,7 +96,7 @@ class AeadJS with AeadValidations implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    final cipher = JsError.wrap(
+    final cipher = jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
           message,
@@ -126,7 +126,7 @@ class AeadJS with AeadValidations implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
           null,

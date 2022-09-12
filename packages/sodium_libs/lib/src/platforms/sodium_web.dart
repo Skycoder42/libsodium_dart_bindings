@@ -28,8 +28,14 @@ class SodiumWeb extends SodiumPlatform {
 
   @override
   Future<Sodium> loadSodium({bool initNative = true}) async {
-    final completer = Completer<dynamic>();
+    // check if sodium was already loaded
+    final dynamic sodium = getProperty<dynamic>(window, 'sodium');
+    if (sodium != null) {
+      return SodiumInit.init(sodium);
+    }
 
+    // if not, overwrite sodium window property with custom onload
+    final completer = Completer<dynamic>();
     setProperty(
       window,
       'sodium',
@@ -38,12 +44,13 @@ class SodiumWeb extends SodiumPlatform {
       ),
     );
 
+    // ... add the sodium script to the page
     final script = ScriptElement()
       ..type = 'text/javascript'
       ..async = true
       // ignore: unsafe_html
       ..src = 'sodium.js';
-    document.head!.append(script);
+    document.body!.append(script);
 
     return SodiumInit.init(await completer.future);
   }

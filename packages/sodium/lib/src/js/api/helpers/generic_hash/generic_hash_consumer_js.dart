@@ -30,7 +30,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
     required this.outLen,
     SecureKey? key,
   }) {
-    _state = JsError.wrap(
+    _state = jsErrorWrap(
       () => key.runMaybeUnlockedSync(
         (keyData) => sodium.crypto_generichash_init(keyData, outLen),
       ),
@@ -41,7 +41,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
   void add(Uint8List data) {
     _ensureNotCompleted();
 
-    JsError.wrap(
+    jsErrorWrap(
       () => sodium.crypto_generichash_update(_state, data),
     );
   }
@@ -57,7 +57,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
     _ensureNotCompleted();
 
     try {
-      final result = JsError.wrap(
+      final result = jsErrorWrap(
         () => sodium.crypto_generichash_final(
           _state,
           outLen,

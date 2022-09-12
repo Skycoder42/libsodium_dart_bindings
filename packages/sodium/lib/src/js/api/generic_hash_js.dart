@@ -41,7 +41,7 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        JsError.wrap(
+        jsErrorWrap(
           sodium.crypto_generichash_keygen,
         ),
       );
@@ -59,7 +59,7 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
       validateKey(key);
     }
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => key.runMaybeUnlockedSync(
         (keyData) => sodium.crypto_generichash(
           outLen ?? bytes,

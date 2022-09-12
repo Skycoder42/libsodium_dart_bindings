@@ -31,7 +31,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        JsError.wrap(sodium.crypto_secretbox_keygen),
+        jsErrorWrap(sodium.crypto_secretbox_keygen),
       );
 
   @override
@@ -43,7 +43,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_secretbox_easy(
           message,
@@ -64,7 +64,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_secretbox_open_easy(
           cipherText,
@@ -84,7 +84,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    final cipher = JsError.wrap(
+    final cipher = jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_secretbox_detached(
           message,
@@ -111,7 +111,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_secretbox_open_detached(
           cipherText,

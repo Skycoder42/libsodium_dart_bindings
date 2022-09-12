@@ -33,7 +33,7 @@ class KxJS with KxValidations implements Kx {
 
   @override
   KeyPair keyPair() {
-    final keyPair = JsError.wrap(sodium.crypto_kx_keypair);
+    final keyPair = jsErrorWrap(sodium.crypto_kx_keypair);
 
     return KeyPair(
       publicKey: keyPair.publicKey,
@@ -45,7 +45,7 @@ class KxJS with KxValidations implements Kx {
   KeyPair seedKeyPair(SecureKey seed) {
     validateSeed(seed);
 
-    final keyPair = JsError.wrap(
+    final keyPair = jsErrorWrap(
       () => seed.runUnlockedSync(
         sodium.crypto_kx_seed_keypair,
       ),
@@ -67,7 +67,7 @@ class KxJS with KxValidations implements Kx {
     validateSecretKey(clientSecretKey, 'client');
     validatePublicKey(serverPublicKey, 'server');
 
-    final sessionKeys = JsError.wrap(
+    final sessionKeys = jsErrorWrap(
       () => clientSecretKey.runUnlockedSync(
         (clientSecretKeyData) => sodium.crypto_kx_client_session_keys(
           clientPublicKey,
@@ -93,7 +93,7 @@ class KxJS with KxValidations implements Kx {
     validateSecretKey(serverSecretKey, 'server');
     validatePublicKey(clientPublicKey, 'client');
 
-    final sessionKeys = JsError.wrap(
+    final sessionKeys = jsErrorWrap(
       () => serverSecretKey.runUnlockedSync(
         (serverSecretKeyData) => sodium.crypto_kx_server_session_keys(
           serverPublicKey,

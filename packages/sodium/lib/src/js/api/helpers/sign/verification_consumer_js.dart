@@ -34,7 +34,7 @@ class VerificationConsumerJS
   Future<bool> get signatureValid => result;
 
   @override
-  bool finalize(SignState state) => JsError.wrap(
+  bool finalize(SignState state) => jsErrorWrap(
         () => sodium.crypto_sign_final_verify(
           state,
           signature,

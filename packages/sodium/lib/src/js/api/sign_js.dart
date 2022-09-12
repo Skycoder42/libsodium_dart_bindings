@@ -35,7 +35,7 @@ class SignJS with SignValidations implements Sign {
 
   @override
   KeyPair keyPair() {
-    final keyPair = JsError.wrap(sodium.crypto_sign_keypair);
+    final keyPair = jsErrorWrap(sodium.crypto_sign_keypair);
 
     return KeyPair(
       publicKey: keyPair.publicKey,
@@ -47,7 +47,7 @@ class SignJS with SignValidations implements Sign {
   KeyPair seedKeyPair(SecureKey seed) {
     validateSeed(seed);
 
-    final keyPair = JsError.wrap(
+    final keyPair = jsErrorWrap(
       () => seed.runUnlockedSync(
         sodium.crypto_sign_seed_keypair,
       ),
@@ -66,7 +66,7 @@ class SignJS with SignValidations implements Sign {
   }) {
     validateSecretKey(secretKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_sign(message, secretKeyData),
       ),
@@ -81,7 +81,7 @@ class SignJS with SignValidations implements Sign {
     validateSignedMessage(signedMessage);
     validatePublicKey(publicKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => sodium.crypto_sign_open(signedMessage, publicKey),
     );
   }
@@ -93,7 +93,7 @@ class SignJS with SignValidations implements Sign {
   }) {
     validateSecretKey(secretKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_sign_detached(message, secretKeyData),
       ),
@@ -109,7 +109,7 @@ class SignJS with SignValidations implements Sign {
     validateSignature(signature);
     validatePublicKey(publicKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => sodium.crypto_sign_verify_detached(
         signature,
         message,
@@ -149,7 +149,7 @@ class SignJS with SignValidations implements Sign {
   SecureKey skToSeed(SecureKey secretKey) {
     validateSecretKey(secretKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => secretKey.runUnlockedSync(
         (secretKeyData) => SecureKeyJS(
           sodium,
@@ -163,7 +163,7 @@ class SignJS with SignValidations implements Sign {
   Uint8List skToPk(SecureKey secretKey) {
     validateSecretKey(secretKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => secretKey.runUnlockedSync(
         sodium.crypto_sign_ed25519_sk_to_pk,
       ),

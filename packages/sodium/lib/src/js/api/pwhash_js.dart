@@ -98,7 +98,7 @@ class PwhashJS with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    final result = JsError.wrap(
+    final result = jsErrorWrap(
       () => sodium.crypto_pwhash(
         outLen,
         Uint8List.view(password.buffer),
@@ -122,7 +122,7 @@ class PwhashJS with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    final result = JsError.wrap(
+    final result = jsErrorWrap(
       () => sodium.crypto_pwhash_str(
         passwordChars.unsignedView(),
         opsLimit,
@@ -141,7 +141,7 @@ class PwhashJS with PwHashValidations implements Pwhash {
     validatePasswordHashStr(passwordHash);
     validatePassword(passwordChars);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => sodium.crypto_pwhash_str_verify(
         passwordHash,
         passwordChars.unsignedView(),
@@ -159,7 +159,7 @@ class PwhashJS with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => sodium.crypto_pwhash_str_needs_rehash(
         passwordHash,
         opsLimit,

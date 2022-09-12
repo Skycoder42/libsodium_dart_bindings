@@ -9,7 +9,7 @@ void main() {
     test('returns value on success', () {
       const value = 'value';
 
-      final res = JsError.wrap(() => value);
+      final res = jsErrorWrap(() => value);
 
       expect(res, value);
     });
@@ -19,7 +19,7 @@ void main() {
 
       expect(
         // ignore: only_throw_errors
-        () => JsError.wrap(() => throw JsError(message)),
+        () => jsErrorWrap(() => throw JsError(message)),
         throwsA(
           isA<SodiumException>().having(
             (e) => e.originalMessage,

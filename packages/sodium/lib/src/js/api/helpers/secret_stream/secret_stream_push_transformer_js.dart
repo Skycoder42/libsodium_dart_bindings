@@ -20,7 +20,7 @@ class SecretStreamPushTransformerSinkJS extends SecretStreamPushTransformerSink<
 
   @override
   InitPushResult<SecretstreamXchacha20poly1305State> initialize(SecureKey key) {
-    final initResult = JsError.wrap(
+    final initResult = jsErrorWrap(
       () => key.runUnlockedSync(
         sodium.crypto_secretstream_xchacha20poly1305_init_push,
       ),
@@ -33,7 +33,7 @@ class SecretStreamPushTransformerSinkJS extends SecretStreamPushTransformerSink<
   }
 
   @override
-  void rekey(SecretstreamXchacha20poly1305State cryptoState) => JsError.wrap(
+  void rekey(SecretstreamXchacha20poly1305State cryptoState) => jsErrorWrap(
         // always returns true, ignore result
         () => sodium.crypto_secretstream_xchacha20poly1305_rekey(cryptoState),
       );
@@ -43,7 +43,7 @@ class SecretStreamPushTransformerSinkJS extends SecretStreamPushTransformerSink<
     SecretstreamXchacha20poly1305State cryptoState,
     SecretStreamPlainMessage event,
   ) {
-    final cipherText = JsError.wrap(
+    final cipherText = jsErrorWrap(
       () => sodium.crypto_secretstream_xchacha20poly1305_push(
         cryptoState,
         event.message,

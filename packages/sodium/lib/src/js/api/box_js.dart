@@ -30,7 +30,7 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
   }) {
     box.validateNonce(nonce);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => sharedKey.runUnlockedSync(
         (sharedKeyData) => box.sodium.crypto_box_easy_afternm(
           message,
@@ -50,7 +50,7 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
       ..validateEasyCipherText(cipherText)
       ..validateNonce(nonce);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => sharedKey.runUnlockedSync(
         (sharedKeyData) => box.sodium.crypto_box_open_easy_afternm(
           cipherText,
@@ -122,7 +122,7 @@ class BoxJS with BoxValidations implements Box {
 
   @override
   KeyPair keyPair() {
-    final keyPair = JsError.wrap(sodium.crypto_box_keypair);
+    final keyPair = jsErrorWrap(sodium.crypto_box_keypair);
 
     return KeyPair(
       publicKey: keyPair.publicKey,
@@ -134,7 +134,7 @@ class BoxJS with BoxValidations implements Box {
   KeyPair seedKeyPair(SecureKey seed) {
     validateSeed(seed);
 
-    final keyPair = JsError.wrap(
+    final keyPair = jsErrorWrap(
       () => seed.runUnlockedSync(
         sodium.crypto_box_seed_keypair,
       ),
@@ -157,7 +157,7 @@ class BoxJS with BoxValidations implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_easy(
           message,
@@ -181,7 +181,7 @@ class BoxJS with BoxValidations implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_open_easy(
           cipherText,
@@ -204,7 +204,7 @@ class BoxJS with BoxValidations implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    final cipher = JsError.wrap(
+    final cipher = jsErrorWrap(
       () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_detached(
           message,
@@ -234,7 +234,7 @@ class BoxJS with BoxValidations implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_open_detached(
           cipherText,
@@ -259,7 +259,7 @@ class BoxJS with BoxValidations implements Box {
       this,
       SecureKeyJS(
         sodium,
-        JsError.wrap(
+        jsErrorWrap(
           () => secretKey.runUnlockedSync(
             (secretKeyData) => sodium.crypto_box_beforenm(
               publicKey,
@@ -278,7 +278,7 @@ class BoxJS with BoxValidations implements Box {
   }) {
     validatePublicKey(publicKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => sodium.crypto_box_seal(
         message,
         publicKey,
@@ -296,7 +296,7 @@ class BoxJS with BoxValidations implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_seal_open(
           cipherText,

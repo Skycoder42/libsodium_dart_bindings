@@ -31,7 +31,7 @@ class KdfJS with KdfValidations implements Kdf {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        JsError.wrap(sodium.crypto_kdf_keygen),
+        jsErrorWrap(sodium.crypto_kdf_keygen),
       );
 
   @override
@@ -47,7 +47,7 @@ class KdfJS with KdfValidations implements Kdf {
 
     return SecureKeyJS(
       sodium,
-      JsError.wrap(
+      jsErrorWrap(
         () => masterKey.runUnlockedSync(
           (masterKeyData) => sodium.crypto_kdf_derive_from_key(
             subkeyLen,

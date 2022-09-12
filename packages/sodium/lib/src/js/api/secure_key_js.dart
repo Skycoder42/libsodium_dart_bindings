@@ -28,7 +28,7 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
   /// @nodoc
   factory SecureKeyJS.random(LibSodiumJS sodium, int length) => SecureKeyJS(
         sodium,
-        JsError.wrap(() => sodium.randombytes_buf(length)),
+        jsErrorWrap(() => sodium.randombytes_buf(length)),
       );
 
   @override
@@ -56,7 +56,7 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
 
   @override
   void dispose() {
-    JsError.wrap(() => sodium.memzero(_raw));
+    jsErrorWrap(() => sodium.memzero(_raw));
   }
 
   @override

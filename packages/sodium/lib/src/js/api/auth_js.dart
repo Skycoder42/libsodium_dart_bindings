@@ -27,7 +27,7 @@ class AuthJS with AuthValidations implements Auth {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        JsError.wrap(sodium.crypto_auth_keygen),
+        jsErrorWrap(sodium.crypto_auth_keygen),
       );
 
   @override
@@ -37,7 +37,7 @@ class AuthJS with AuthValidations implements Auth {
   }) {
     validateKey(key);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_auth(
           message,
@@ -56,7 +56,7 @@ class AuthJS with AuthValidations implements Auth {
     validateTag(tag);
     validateKey(key);
 
-    return JsError.wrap(
+    return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_auth_verify(
           tag,
