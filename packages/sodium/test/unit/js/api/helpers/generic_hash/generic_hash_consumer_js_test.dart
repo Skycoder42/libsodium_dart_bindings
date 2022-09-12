@@ -112,6 +112,33 @@ void main() {
       clearInteractions(mockSodium);
     });
 
+    group('add', () {
+      test('calls crypto_generichash_update with the given data', () {
+        final message = List.generate(25, (index) => index * 3);
+
+        sut.add(Uint8List.fromList(message));
+
+        verify(
+          () => mockSodium.crypto_generichash_update(
+            state,
+            Uint8List.fromList(message),
+          ),
+        );
+      });
+
+      test('throws StateError when adding data after completition', () async {
+        when(() => mockSodium.crypto_generichash_final(any(), any()))
+            .thenReturn(Uint8List(0));
+
+        await sut.close();
+
+        expect(
+          () => sut.add(Uint8List(0)),
+          throwsA(isA<StateError>()),
+        );
+      });
+    });
+
     group('addStream', () {
       test('calls crypto_generichash_update on stream events', () async {
         final message = List.generate(25, (index) => index * 3);

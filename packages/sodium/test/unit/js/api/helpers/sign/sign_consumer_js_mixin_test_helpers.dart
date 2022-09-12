@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
+import 'package:sodium/src/js/api/helpers/sign/sign_consumer_js_mixin.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 
 import 'package:sodium/src/js/bindings/sodium.js.dart';
@@ -15,10 +16,42 @@ import 'package:test/test.dart';
 void addStreamTests({
   required LibSodiumJS mockSodium,
   required num state,
-  required StreamConsumer<Uint8List> Function() createSut,
+  required SignConsumerJSMixin Function() createSut,
   void Function()? setUpVerify,
 }) {
   assert(mockSodium is Mock);
+
+  group('add', () {
+    late SignConsumerJSMixin sut;
+
+    setUp(() {
+      sut = createSut();
+    });
+
+    test('call crypto_sign_update on stream events', () {
+      final message = List.generate(25, (index) => index * 3);
+
+      sut.add(Uint8List.fromList(message));
+
+      verify(
+        () => mockSodium.crypto_sign_update(
+          state,
+          Uint8List.fromList(message),
+        ),
+      );
+    });
+
+    test('throws StateError when adding a stream after completition', () async {
+      setUpVerify?.call();
+
+      await sut.close();
+
+      expect(
+        () => sut.add(Uint8List(0)),
+        throwsA(isA<StateError>()),
+      );
+    });
+  });
 
   group('addStream', () {
     late StreamConsumer<Uint8List> sut;

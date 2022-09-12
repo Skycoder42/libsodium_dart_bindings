@@ -9,7 +9,7 @@ import '../../../bindings/sodium.js.dart';
 /// @nodoc
 @internal
 mixin SignConsumerJSMixin<T extends Object>
-    implements StreamConsumer<Uint8List> {
+    implements StreamConsumer<Uint8List>, Sink<Uint8List> {
   /// @nodoc
   LibSodiumJS get sodium;
 
@@ -31,16 +31,18 @@ mixin SignConsumerJSMixin<T extends Object>
   }
 
   @override
-  Future<void> addStream(Stream<Uint8List> stream) {
+  void add(Uint8List data) {
     _ensureNotCompleted();
 
-    return stream
-        .map(
-          (event) => JsError.wrap(
-            () => sodium.crypto_sign_update(_state, event),
-          ),
-        )
-        .drain<void>();
+    JsError.wrap(
+      () => sodium.crypto_sign_update(_state, data),
+    );
+  }
+
+  @override
+  Future<void> addStream(Stream<Uint8List> stream) {
+    _ensureNotCompleted();
+    return stream.map(add).drain<void>();
   }
 
   @override

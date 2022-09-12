@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
+import 'package:sodium/src/ffi/api/helpers/sign/sign_consumer_ffi_mixin.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
 
@@ -15,7 +16,7 @@ import '../../../pointer_test_helpers.dart';
 @isTestGroup
 void initStateTests({
   required LibSodiumFFI mockSodium,
-  required StreamConsumer<Uint8List> Function() createSut,
+  required SignConsumerFFIMixin Function() createSut,
   void Function()? setUp,
 }) {
   test('initializes sign state', () {
@@ -54,10 +55,52 @@ void initStateTests({
 @isTestGroup
 void addStreamTests({
   required LibSodiumFFI mockSodium,
-  required StreamConsumer<Uint8List> Function() createSut,
+  required SignConsumerFFIMixin Function() createSut,
   void Function()? setUpVerify,
 }) {
   assert(mockSodium is Mock);
+
+  group('add', () {
+    late SignConsumerFFIMixin sut;
+
+    setUp(() {
+      sut = createSut();
+    });
+
+    test('call crypto_sign_update with the given data', () {
+      when(() => mockSodium.crypto_sign_update(any(), any(), any()))
+          .thenReturn(0);
+
+      final message = List.generate(25, (index) => index * 3);
+
+      sut.add(Uint8List.fromList(message));
+
+      verifyInOrder([
+        () => mockSodium.sodium_mprotect_readonly(
+              any(that: hasRawData(message)),
+            ),
+        () => mockSodium.crypto_sign_update(
+              any(that: isNot(nullptr)),
+              any(that: hasRawData<UnsignedChar>(message)),
+              message.length,
+            ),
+        () => mockSodium.sodium_free(
+              any(that: hasRawData(message)),
+            ),
+      ]);
+    });
+
+    test('throws StateError when adding a data after completition', () async {
+      setUpVerify?.call();
+
+      await sut.close();
+
+      expect(
+        () => sut.add(Uint8List(0)),
+        throwsA(isA<StateError>()),
+      );
+    });
+  });
 
   group('addStream', () {
     late StreamConsumer<Uint8List> sut;

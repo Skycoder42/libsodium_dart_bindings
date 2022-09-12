@@ -55,29 +55,32 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
       rethrow;
     }
   }
+  @override
+  void add(Uint8List data) {
+    _ensureNotCompleted();
+
+    SodiumPointer<UnsignedChar>? messagePtr;
+    try {
+      messagePtr = data.toSodiumPointer(
+        sodium,
+        memoryProtection: MemoryProtection.readOnly,
+      );
+
+      final result = sodium.crypto_generichash_update(
+        _state.ptr.cast(),
+        messagePtr.ptr,
+        messagePtr.count,
+      );
+      SodiumException.checkSucceededInt(result);
+    } finally {
+      messagePtr?.dispose();
+    }
+  }
 
   @override
   Future addStream(Stream<Uint8List> stream) {
     _ensureNotCompleted();
-
-    return stream.map((event) {
-      SodiumPointer<UnsignedChar>? messagePtr;
-      try {
-        messagePtr = event.toSodiumPointer(
-          sodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
-
-        final result = sodium.crypto_generichash_update(
-          _state.ptr.cast(),
-          messagePtr.ptr,
-          messagePtr.count,
-        );
-        SodiumException.checkSucceededInt(result);
-      } finally {
-        messagePtr?.dispose();
-      }
-    }).drain<void>();
+    return stream.map(add).drain<void>();
   }
 
   @override

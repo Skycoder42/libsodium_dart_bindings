@@ -12,7 +12,7 @@ import '../../../bindings/sodium_pointer.dart';
 /// @nodoc
 @internal
 mixin SignConsumerFFIMixin<T extends Object>
-    implements StreamConsumer<Uint8List> {
+    implements StreamConsumer<Uint8List>, Sink<Uint8List> {
   /// @nodoc
   LibSodiumFFI get sodium;
 
@@ -46,27 +46,31 @@ mixin SignConsumerFFIMixin<T extends Object>
   }
 
   @override
-  Future<void> addStream(Stream<Uint8List> stream) {
+  void add(Uint8List data) {
     _ensureNotCompleted();
 
-    return stream.map((event) {
-      SodiumPointer<UnsignedChar>? messagePtr;
-      try {
-        messagePtr = event.toSodiumPointer(
-          sodium,
-          memoryProtection: MemoryProtection.readOnly,
-        );
+    SodiumPointer<UnsignedChar>? messagePtr;
+    try {
+      messagePtr = data.toSodiumPointer(
+        sodium,
+        memoryProtection: MemoryProtection.readOnly,
+      );
 
-        final result = sodium.crypto_sign_update(
-          _state.ptr.cast(),
-          messagePtr.ptr,
-          messagePtr.count,
-        );
-        SodiumException.checkSucceededInt(result);
-      } finally {
-        messagePtr?.dispose();
-      }
-    }).drain<void>();
+      final result = sodium.crypto_sign_update(
+        _state.ptr.cast(),
+        messagePtr.ptr,
+        messagePtr.count,
+      );
+      SodiumException.checkSucceededInt(result);
+    } finally {
+      messagePtr?.dispose();
+    }
+  }
+
+  @override
+  Future<void> addStream(Stream<Uint8List> stream) {
+    _ensureNotCompleted();
+    return stream.map(add).drain<void>();
   }
 
   @override

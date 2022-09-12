@@ -10,7 +10,8 @@ import 'secure_key.dart';
 /// data.
 ///
 /// See [GenericHash.createConsumer] for more details.
-abstract class GenericHashConsumer implements StreamConsumer<Uint8List> {
+abstract class GenericHashConsumer
+    implements StreamConsumer<Uint8List>, Sink<Uint8List> {
   const GenericHashConsumer._(); // coverage:ignore-line
 
   /// A future that resolves to the hash of the data.

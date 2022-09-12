@@ -38,16 +38,18 @@ class GenericHashConsumerJS implements GenericHashConsumer {
   }
 
   @override
-  Future addStream(Stream<Uint8List> stream) {
+  void add(Uint8List data) {
     _ensureNotCompleted();
 
-    return stream
-        .map(
-          (event) => JsError.wrap(
-            () => sodium.crypto_generichash_update(_state, event),
-          ),
-        )
-        .drain<void>();
+    JsError.wrap(
+      () => sodium.crypto_generichash_update(_state, data),
+    );
+  }
+
+  @override
+  Future addStream(Stream<Uint8List> stream) {
+    _ensureNotCompleted();
+    return stream.map(add).drain<void>();
   }
 
   @override

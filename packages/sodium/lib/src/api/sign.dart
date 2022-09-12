@@ -11,7 +11,8 @@ import 'secure_key.dart';
 /// stream of data.
 ///
 /// See [Sign.createConsumer] for more details.
-abstract class SignatureConsumer implements StreamConsumer<Uint8List> {
+abstract class SignatureConsumer
+    implements StreamConsumer<Uint8List>, Sink<Uint8List> {
   const SignatureConsumer._(); // coverage:ignore-line
 
   /// A future that resolves to the signature of the data.
@@ -38,7 +39,8 @@ abstract class SignatureConsumer implements StreamConsumer<Uint8List> {
 /// of data.
 ///
 /// See [Sign.createVerifyConsumer] for more details.
-abstract class VerificationConsumer implements StreamConsumer<Uint8List> {
+abstract class VerificationConsumer
+    implements StreamConsumer<Uint8List>, Sink<Uint8List> {
   const VerificationConsumer._(); // coverage:ignore-line
 
   /// A future that resolves to the signature validation of the data.
