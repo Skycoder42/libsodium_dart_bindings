@@ -37,7 +37,8 @@ class MyApp extends StatelessWidget {
 
                 if (snapshot.hasError) {
                   return Text(
-                    'Failed to load libsodium with error: ${snapshot.error}',
+                    'Failed to load libsodium with error: ${snapshot.error}\n'
+                    '${snapshot.stackTrace}',
                     key: resultTextKey,
                     style: TextStyle(color: Colors.red.shade900),
                   );

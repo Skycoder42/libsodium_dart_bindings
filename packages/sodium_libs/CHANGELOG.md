@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.2.5
+### Added
+- The web variant will now check if sodium.js was already loaded before attempting to add the `<script>` element to
+the page
+- The `update_web` command will now add a `<script>` element to the `<head>` of your `index.html`
+  - Speeds up page loads
+  - Fixes problems with debugging flutter web applications
+  - Can be disabled by passing the `--no-edit-index` flag to `update_web`
+### Fixed
+- Debugging flutter web applications now works, as long as the `sodium.js` library is preloaded
+  - Simply run `dart run sodium_libs:update_web` again on your project to automatically update your `index.html` to
+  preload `sodium.js`
+### Changed
+- Updated minimum required `sodium` version to 1.2.4
+
 ## 1.2.4+2
 ### Changed
 - Update dependencies
