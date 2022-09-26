@@ -533,7 +533,7 @@ void main() {
     group('fill', () {
       test('throws if offset exceeds count', () {
         expect(
-          () => sut.fill([], offset: 10),
+          () => sut.fill(<int>[], offset: 10),
           throwsA(isA<ArgumentError>()),
         );
       });

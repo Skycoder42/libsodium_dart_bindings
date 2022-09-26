@@ -37,7 +37,7 @@ extension StringX on String {
         ..setRange(0, chars.length, chars)
         ..fillRange(chars.length, memoryWidth, 0);
     } else {
-      return Int8List.fromList(chars.toList());
+      return Int8List.fromList(chars);
     }
   }
 }
