@@ -18,7 +18,7 @@ dev_dependencies:
   coverage: ^1.5.0
   dart_pre_commit: ^3.0.2
   dart_test_tools: ^4.5.3
-  ffigen: ^6.1.2
+  ffigen: ">=6.1.2 <8.0.0"
   freezed: ^2.1.0+1
   mocktail: ^0.3.0
   path: ^1.8.2
