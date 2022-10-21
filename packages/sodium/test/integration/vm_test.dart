@@ -5,19 +5,19 @@ import 'dart:ffi';
 import 'dart:io';
 
 // ignore: test_library_import
-import 'package:sodium/sodium.dart';
+import 'package:sodium/sodium_sumo.dart';
 import 'package:test/test.dart';
 
 import 'test_runner.dart';
 
-class VmTestRunner extends TestRunner {
-  VmTestRunner() : super(isSumoTest: true);
+class VmTestRunner extends SumoTestRunner {
+  VmTestRunner();
 
   @override
   bool get is32Bit => sizeOf<IntPtr>() == 4;
 
   @override
-  Future<Sodium> loadSodium() async {
+  Future<SodiumSumo> loadSodium() async {
     String libSodiumPath;
     if (Platform.isLinux) {
       final ldConfigRes = await Process.run('ldconfig', const ['-p']);
@@ -62,7 +62,7 @@ class VmTestRunner extends TestRunner {
     // ignore: avoid_print
     print('Found libsodium at: $libSodiumPath');
     final dylib = DynamicLibrary.open(libSodiumPath);
-    return SodiumInit.init(dylib);
+    return SodiumSumoInit.init(dylib);
   }
 }
 

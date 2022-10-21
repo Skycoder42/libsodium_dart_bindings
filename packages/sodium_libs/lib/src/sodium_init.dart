@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sodium/sodium.dart' as sodium;
+import 'package:sodium/sodium_sumo.dart' as sodium_sumo;
 import 'package:synchronized/synchronized.dart';
 
 import 'sodium_platform.dart';
@@ -18,10 +19,6 @@ abstract class SodiumInit {
 
   const SodiumInit._(); // coverage:ignore-line
 
-  /// @nodoc
-  @Deprecated('Since flutter 2.8 plugins are automatically registered')
-  static void ensurePlatformRegistered() {}
-
   /// Creates a new [Sodium] instance and initializes it
   ///
   /// Internally, this method ensures the correct [SodiumPlatform] is available
@@ -33,11 +30,7 @@ abstract class SodiumInit {
   ///
   /// **Note:** Calling this method multiple times will always return the same
   /// instance.
-  static Future<sodium.Sodium> init({
-    @Deprecated('initNative is no longer required and will be ignored.')
-        bool initNative = true,
-  }) =>
-      _instanceLock.synchronized(() async {
+  static Future<sodium.Sodium> init() => _instanceLock.synchronized(() async {
         if (_instance != null) {
           return _instance!;
         }
@@ -55,4 +48,33 @@ abstract class SodiumInit {
         }
         return _instance!;
       });
+
+  /// Creates a new [sodium_sumo.SodiumSumo] instance and initializes it
+  ///
+  /// Internally, this method ensures the correct [SodiumPlatform] is available
+  /// and then uses [SodiumPlatform.loadSodium] to create an instance.
+  ///
+  /// [SodiumPlatform.loadSodium] will automatically load a sumo variant if the
+  /// given binary does support the sumo APIs. If that is not the case, this
+  /// method will throw a [sodium.SodiumException].
+  ///
+  /// In addition, when not running in release mode, it also performs a version
+  /// check on the library to ensure you are using the correct native binary on
+  /// platforms, where the binary is fetched dynamically.
+  ///
+  /// **Note:** Calling this method multiple times will always return the same
+  /// instance.
+  static Future<sodium_sumo.SodiumSumo> initSumo() async {
+    final sodiumInstance = await init();
+
+    if (sodiumInstance is! sodium_sumo.SodiumSumo) {
+      throw sodium.SodiumException(
+        'The libsodium binary currently in use does not support the '
+        'sodium sumo APIs! Please replace it with a variant that does support '
+        'the sumo APIs.',
+      );
+    }
+
+    return sodiumInstance;
+  }
 }

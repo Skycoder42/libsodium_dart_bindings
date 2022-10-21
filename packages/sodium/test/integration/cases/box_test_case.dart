@@ -11,11 +11,11 @@ class BoxTestCase extends TestCase {
   @override
   String get name => 'box';
 
-  Box get sut => sodium.crypto.box;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.box;
+
       expect(sut.publicKeyBytes, 32, reason: 'publicKeyBytes');
       expect(sut.secretKeyBytes, 32, reason: 'secretKeyBytes');
       expect(sut.macBytes, 16, reason: 'macBytes');
@@ -24,7 +24,9 @@ class BoxTestCase extends TestCase {
       expect(sut.sealBytes, 48, reason: 'sealBytes');
     });
 
-    test('keyPair generates different correct length keys', () {
+    test('keyPair generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.box;
+
       final key1 = sut.keyPair();
       final key2 = sut.keyPair();
 
@@ -43,7 +45,10 @@ class BoxTestCase extends TestCase {
     });
 
     group('seedKeypair', () {
-      test('generates different correct length keys for different seeds', () {
+      test('generates different correct length keys for different seeds',
+          (sodium) {
+        final sut = sodium.crypto.box;
+
         final seed1 = sodium.secureRandom(sut.seedBytes);
         final seed2 = sodium.secureRandom(sut.seedBytes);
 
@@ -67,7 +72,9 @@ class BoxTestCase extends TestCase {
         expect(key1.publicKey, isNot(key2.publicKey));
       });
 
-      test('generates same correct length keys for same seeds', () {
+      test('generates same correct length keys for same seeds', (sodium) {
+        final sut = sodium.crypto.box;
+
         final seed = sodium.secureRandom(sut.seedBytes);
 
         printOnFailure('seed: ${seed.extractBytes()}');
@@ -91,7 +98,9 @@ class BoxTestCase extends TestCase {
     });
 
     group('easy', () {
-      test('can encrypt and decrypt data', () {
+      test('can encrypt and decrypt data', (sodium) {
+        final sut = sodium.crypto.box;
+
         final senderKey = sut.keyPair();
         final recipientKey = sut.keyPair();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
@@ -131,7 +140,9 @@ class BoxTestCase extends TestCase {
         expect(restored, message);
       });
 
-      test('fails if data is invalid', () {
+      test('fails if data is invalid', (sodium) {
+        final sut = sodium.crypto.box;
+
         final senderKey = sut.keyPair();
         final recipientKey = sut.keyPair();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
@@ -169,7 +180,9 @@ class BoxTestCase extends TestCase {
     });
 
     group('detached', () {
-      test('can encrypt and decrypt data', () {
+      test('can encrypt and decrypt data', (sodium) {
+        final sut = sodium.crypto.box;
+
         final senderKey = sut.keyPair();
         final recipientKey = sut.keyPair();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
@@ -210,7 +223,9 @@ class BoxTestCase extends TestCase {
         expect(restored, message);
       });
 
-      test('fails if data is invalid', () {
+      test('fails if data is invalid', (sodium) {
+        final sut = sodium.crypto.box;
+
         final senderKey = sut.keyPair();
         final recipientKey = sut.keyPair();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
@@ -252,7 +267,9 @@ class BoxTestCase extends TestCase {
       late PrecalculatedBox senderPreBox;
       late PrecalculatedBox recipientPreBox;
 
-      setUp(() {
+      setUp((sodium) {
+        final sut = sodium.crypto.box;
+
         final senderKey = sut.keyPair();
         final recipientKey = sut.keyPair();
 
@@ -276,7 +293,9 @@ class BoxTestCase extends TestCase {
       });
 
       group('easy', () {
-        test('can encrypt and decrypt data', () {
+        test('can encrypt and decrypt data', (sodium) {
+          final sut = sodium.crypto.box;
+
           final nonce = sodium.randombytes.buf(sut.nonceBytes);
           final message = Uint8List.fromList(
             List.generate(32, (index) => index * 2),
@@ -302,7 +321,9 @@ class BoxTestCase extends TestCase {
           expect(restored, message);
         });
 
-        test('fails if data is invalid', () {
+        test('fails if data is invalid', (sodium) {
+          final sut = sodium.crypto.box;
+
           final nonce = sodium.randombytes.buf(sut.nonceBytes);
 
           printOnFailure('nonce: $nonce');
@@ -326,7 +347,9 @@ class BoxTestCase extends TestCase {
       });
 
       group('detached', () {
-        test('can encrypt and decrypt data', () {
+        test('can encrypt and decrypt data', (sodium) {
+          final sut = sodium.crypto.box;
+
           final nonce = sodium.randombytes.buf(sut.nonceBytes);
           final message = Uint8List.fromList(
             List.generate(32, (index) => index * 2),
@@ -353,7 +376,9 @@ class BoxTestCase extends TestCase {
           expect(restored, message);
         });
 
-        test('fails if data is invalid', () {
+        test('fails if data is invalid', (sodium) {
+          final sut = sodium.crypto.box;
+
           final nonce = sodium.randombytes.buf(sut.nonceBytes);
 
           printOnFailure('nonce: $nonce');
@@ -379,7 +404,9 @@ class BoxTestCase extends TestCase {
     });
 
     group('seal', () {
-      test('can encrypt and decrypt data', () {
+      test('can encrypt and decrypt data', (sodium) {
+        final sut = sodium.crypto.box;
+
         final recipientKey = sut.keyPair();
         final message = Uint8List.fromList(
           List.generate(32, (index) => index * 2),
@@ -409,7 +436,9 @@ class BoxTestCase extends TestCase {
         expect(restored, message);
       });
 
-      test('fails if data is invalid', () {
+      test('fails if data is invalid', (sodium) {
+        final sut = sodium.crypto.box;
+
         final recipientKey = sut.keyPair();
 
         printOnFailure(

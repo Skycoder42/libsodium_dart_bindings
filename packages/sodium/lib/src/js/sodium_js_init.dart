@@ -17,18 +17,13 @@ abstract class SodiumInit {
   /// The [libsodium] parameter must be a loaded
   /// `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on your platform. Please
   /// refer to the README for more details on loading the library.
-  static Future<Sodium> init(
-    dynamic libsodium, {
-    @Deprecated('initNative is deprecated and will be ignored.')
-        bool initNative = true,
-  }) =>
+  static Future<Sodium> init(dynamic libsodium) =>
       initFromSodiumJS(libsodium as LibSodiumJS);
 
   /// Creates a [Sodium] instance for the loaded libsodium as [LibSodiumJS].
   ///
-  /// The [sodiumJsObject] parameter must be a loaded `sodium.js` -
-  /// depending on your platform. Please refer to the README for more details
-  /// on loading the library.
+  /// The [libsodium] parameter must be a loaded `sodium.js`. Please refer
+  /// to the README for more details on loading the library.
   static Future<Sodium> initFromSodiumJS(LibSodiumJS libsodium) =>
       Future.value(SodiumJS(libsodium));
 }

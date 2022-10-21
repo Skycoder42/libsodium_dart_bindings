@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
-import 'package:sodium/src/ffi/sodium_ffi_init.dart';
+import 'package:sodium/src/ffi/sodium_sumo_ffi_init.dart';
 import 'package:test/test.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
@@ -19,7 +19,7 @@ void main() {
   test('calls sodium_init', () async {
     when(() => mockSodium.sodium_init()).thenReturn(0);
 
-    await SodiumInit.initFromSodiumFFI(mockSodium);
+    await SodiumSumoInit.initFromSodiumFFI(mockSodium);
 
     verify(() => mockSodium.sodium_init());
   });
@@ -28,7 +28,7 @@ void main() {
     when(() => mockSodium.sodium_init()).thenReturn(-1);
 
     expect(
-      () => SodiumInit.initFromSodiumFFI(mockSodium),
+      () => SodiumSumoInit.initFromSodiumFFI(mockSodium),
       throwsA(isA<SodiumException>()),
     );
   });
@@ -36,7 +36,7 @@ void main() {
   test('resturns SodiumFFI instance', () async {
     when(() => mockSodium.sodium_init()).thenReturn(0);
 
-    final sodium = await SodiumInit.initFromSodiumFFI(mockSodium);
+    final sodium = await SodiumSumoInit.initFromSodiumFFI(mockSodium);
     expect(
       sodium,
       isA<SodiumFFI>().having(

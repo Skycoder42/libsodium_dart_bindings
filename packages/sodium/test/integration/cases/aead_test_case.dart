@@ -11,17 +11,19 @@ class AeadTestCase extends TestCase {
   @override
   String get name => 'aead';
 
-  Aead get sut => sodium.crypto.aead;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.aead;
+
       expect(sut.keyBytes, 32, reason: 'keyBytes');
       expect(sut.nonceBytes, 24, reason: 'nonceBytes');
       expect(sut.aBytes, 16, reason: 'aBytes');
     });
 
-    test('keygen generates different correct length keys', () {
+    test('keygen generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.aead;
+
       final key1 = sut.keygen();
       final key2 = sut.keygen();
 
@@ -35,7 +37,9 @@ class AeadTestCase extends TestCase {
     });
 
     group('easy', () {
-      test('can encrypt and decrypt data without additional data', () {
+      test('can encrypt and decrypt data without additional data', (sodium) {
+        final sut = sodium.crypto.aead;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
         final message = Uint8List.fromList(
@@ -65,7 +69,9 @@ class AeadTestCase extends TestCase {
         expect(restored, message);
       });
 
-      test('can encrypt and decrypt data with additional data', () {
+      test('can encrypt and decrypt data with additional data', (sodium) {
+        final sut = sodium.crypto.aead;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
         final message = Uint8List.fromList(
@@ -101,7 +107,9 @@ class AeadTestCase extends TestCase {
         expect(restored, message);
       });
 
-      test('fails if additional data is different', () {
+      test('fails if additional data is different', (sodium) {
+        final sut = sodium.crypto.aead;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
         final message = Uint8List.fromList(
@@ -143,7 +151,9 @@ class AeadTestCase extends TestCase {
     });
 
     group('detached', () {
-      test('can encrypt and decrypt data without additional data', () {
+      test('can encrypt and decrypt data without additional data', (sodium) {
+        final sut = sodium.crypto.aead;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
         final message = Uint8List.fromList(
@@ -174,7 +184,9 @@ class AeadTestCase extends TestCase {
         expect(restored, message);
       });
 
-      test('can encrypt and decrypt data with additional data', () {
+      test('can encrypt and decrypt data with additional data', (sodium) {
+        final sut = sodium.crypto.aead;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
         final message = Uint8List.fromList(
@@ -211,7 +223,9 @@ class AeadTestCase extends TestCase {
         expect(restored, message);
       });
 
-      test('fails if additional data is different', () {
+      test('fails if additional data is different', (sodium) {
+        final sut = sodium.crypto.aead;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
         final message = Uint8List.fromList(

@@ -12,17 +12,19 @@ class SecretStreamTestCase extends TestCase {
   @override
   String get name => 'secretstream';
 
-  SecretStream get sut => sodium.crypto.secretStream;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.secretStream;
+
       expect(sut.aBytes, 17, reason: 'aBytes');
       expect(sut.headerBytes, 24, reason: 'headerBytes');
       expect(sut.keyBytes, 32, reason: 'keyBytes');
     });
 
-    test('keygen generates different correct length keys', () {
+    test('keygen generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.secretStream;
+
       final key1 = sut.keygen();
       final key2 = sut.keygen();
 
@@ -35,7 +37,9 @@ class SecretStreamTestCase extends TestCase {
       expect(key1, isNot(key2));
     });
 
-    test('simple correctly transforms simple datastream', () async {
+    test('simple correctly transforms simple datastream', (sodium) async {
+      final sut = sodium.crypto.secretStream;
+
       final key = sut.keygen();
       final plainEvents = [
         Uint8List.fromList(const [1, 2, 3]),
@@ -62,7 +66,9 @@ class SecretStreamTestCase extends TestCase {
     });
 
     group('extended', () {
-      test('correctly transforms complex datastream', () async {
+      test('correctly transforms complex datastream', (sodium) async {
+        final sut = sodium.crypto.secretStream;
+
         final key = sut.keygen();
         final plainEvents = [
           SecretStreamPlainMessage(Uint8List.fromList(const [1, 2, 3])),
@@ -101,7 +107,9 @@ class SecretStreamTestCase extends TestCase {
         expect(result, plainEvents);
       });
 
-      test('works with manual rekey', () async {
+      test('works with manual rekey', (sodium) async {
+        final sut = sodium.crypto.secretStream;
+
         final plainEvents = [
           SecretStreamPlainMessage(Uint8List.fromList(const [1, 1, 1])),
           SecretStreamPlainMessage(Uint8List.fromList(const [2, 2, 2])),
@@ -141,7 +149,9 @@ class SecretStreamTestCase extends TestCase {
         await controller.close();
       });
 
-      test('fails for broken rekey', () async {
+      test('fails for broken rekey', (sodium) async {
+        final sut = sodium.crypto.secretStream;
+
         final plainEvents = [
           SecretStreamPlainMessage(Uint8List.fromList(const [1, 1, 1])),
           SecretStreamPlainMessage(Uint8List.fromList(const [2, 2, 2])),

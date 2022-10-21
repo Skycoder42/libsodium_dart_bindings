@@ -1,6 +1,3 @@
-// ignore: test_library_import
-import 'package:sodium/sodium.dart';
-
 import '../test_case.dart';
 
 class KxTestCase extends TestCase {
@@ -9,18 +6,20 @@ class KxTestCase extends TestCase {
   @override
   String get name => 'kx';
 
-  Kx get sut => sodium.crypto.kx;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.kx;
+
       expect(sut.publicKeyBytes, 32, reason: 'publicKeyBytes');
       expect(sut.secretKeyBytes, 32, reason: 'secretKeyBytes');
       expect(sut.seedBytes, 32, reason: 'seedBytes');
       expect(sut.sessionKeyBytes, 32, reason: 'sessionKeyBytes');
     });
 
-    test('keyPair generates different correct length keys', () {
+    test('keyPair generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.kx;
+
       final key1 = sut.keyPair();
       final key2 = sut.keyPair();
 
@@ -39,7 +38,10 @@ class KxTestCase extends TestCase {
     });
 
     group('seedKeypair', () {
-      test('generates different correct length keys for different seeds', () {
+      test('generates different correct length keys for different seeds',
+          (sodium) {
+        final sut = sodium.crypto.kx;
+
         final seed1 = sodium.secureRandom(sut.seedBytes);
         final seed2 = sodium.secureRandom(sut.seedBytes);
 
@@ -63,7 +65,9 @@ class KxTestCase extends TestCase {
         expect(key1.publicKey, isNot(key2.publicKey));
       });
 
-      test('generates same correct length keys for same seeds', () {
+      test('generates same correct length keys for same seeds', (sodium) {
+        final sut = sodium.crypto.kx;
+
         final seed = sodium.secureRandom(sut.seedBytes);
 
         printOnFailure('seed: ${seed.extractBytes()}');
@@ -87,7 +91,9 @@ class KxTestCase extends TestCase {
     });
 
     group('sessionKeys', () {
-      test('generates correct session key pairs', () {
+      test('generates correct session key pairs', (sodium) {
+        final sut = sodium.crypto.kx;
+
         final clientKeys = sut.keyPair();
         final serverKeys = sut.keyPair();
 

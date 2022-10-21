@@ -62,7 +62,6 @@ void main() {
       when(() => mockSodium.crypto_sign_PUBLICKEYBYTES).thenReturn(5);
       when(() => mockSodium.crypto_sign_SECRETKEYBYTES).thenReturn(5);
       when(() => mockSodium.crypto_sign_BYTES).thenReturn(5);
-      when(() => mockSodium.crypto_sign_SEEDBYTES).thenReturn(5);
     });
 
     testKeypair(
@@ -483,104 +482,6 @@ void main() {
                 'publicKey',
                 Uint8List.fromList(publicKey),
               ),
-        );
-      });
-    });
-
-    group('skToSeed', () {
-      test('asserts if secretKey is invalid', () {
-        expect(
-          () => sut.skToSeed(SecureKeyFake.empty(10)),
-          throwsA(isA<RangeError>()),
-        );
-
-        verify(() => mockSodium.crypto_sign_SECRETKEYBYTES);
-      });
-
-      test('calls crypto_sign_ed25519_sk_to_seed with correct arguments', () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(any()),
-        ).thenReturn(Uint8List(0));
-
-        final secretKey = List.generate(5, (index) => 30 + index);
-
-        sut.skToSeed(SecureKeyFake(secretKey));
-
-        verify(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(
-            Uint8List.fromList(secretKey),
-          ),
-        );
-      });
-
-      test('returns seed of the secret key', () {
-        final seed = List.generate(5, (index) => 100 - index);
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(any()),
-        ).thenReturn(Uint8List.fromList(seed));
-
-        final result = sut.skToSeed(SecureKeyFake.empty(5));
-
-        expect(result.extractBytes(), seed);
-      });
-
-      test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(any()),
-        ).thenThrow(JsError());
-
-        expect(
-          () => sut.skToSeed(SecureKeyFake.empty(5)),
-          throwsA(isA<SodiumException>()),
-        );
-      });
-    });
-
-    group('skToPk', () {
-      test('asserts if secretKey is invalid', () {
-        expect(
-          () => sut.skToPk(SecureKeyFake.empty(10)),
-          throwsA(isA<RangeError>()),
-        );
-
-        verify(() => mockSodium.crypto_sign_SECRETKEYBYTES);
-      });
-
-      test('calls crypto_sign_ed25519_sk_to_pk with correct arguments', () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(any()),
-        ).thenReturn(Uint8List(0));
-
-        final secretKey = List.generate(5, (index) => 30 + index);
-
-        sut.skToPk(SecureKeyFake(secretKey));
-
-        verify(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(
-            Uint8List.fromList(secretKey),
-          ),
-        );
-      });
-
-      test('returns the public key of the secret key', () {
-        final publicKey = List.generate(5, (index) => 100 - index);
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(any()),
-        ).thenReturn(Uint8List.fromList(publicKey));
-
-        final result = sut.skToPk(SecureKeyFake.empty(5));
-
-        expect(result, publicKey);
-      });
-
-      test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(any()),
-        ).thenThrow(JsError());
-
-        expect(
-          () => sut.skToPk(SecureKeyFake.empty(5)),
-          throwsA(isA<SodiumException>()),
         );
       });
     });

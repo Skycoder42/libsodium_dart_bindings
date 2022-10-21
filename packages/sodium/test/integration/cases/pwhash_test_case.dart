@@ -1,8 +1,5 @@
 import 'dart:typed_data';
 
-// ignore: test_library_import
-import 'package:sodium/sodium.dart';
-
 import '../test_case.dart';
 
 class PwhashTestCase extends TestCase {
@@ -13,11 +10,11 @@ class PwhashTestCase extends TestCase {
   @override
   String get name => 'pwhash';
 
-  Pwhash get sut => sodium.crypto.pwhash;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.pwhash;
+
       expect(sut.bytesMin, 16, reason: 'bytesMin');
       expect(sut.bytesMax, 4294967295, reason: 'bytesMax');
 
@@ -46,7 +43,9 @@ class PwhashTestCase extends TestCase {
     });
 
     group('call', () {
-      test('generates different hashes for different inputs', () {
+      test('generates different hashes for different inputs', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
         const outLen = 32;
         final password = Int8List.fromList(List.generate(10, (index) => index));
 
@@ -72,7 +71,9 @@ class PwhashTestCase extends TestCase {
         expect(pwHash1, isNot(pwHash2));
       });
 
-      test('generates same hashes for same inputs', () {
+      test('generates same hashes for same inputs', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
         const outLen = 32;
         final password = Int8List.fromList(List.generate(10, (index) => index));
         final salt = sodium.randombytes.buf(sut.saltBytes);
@@ -101,7 +102,9 @@ class PwhashTestCase extends TestCase {
     });
 
     group('str and strVerify', () {
-      test('verify succeeds if password is same', () {
+      test('verify succeeds if password is same', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
         const password = 'password1';
         final pwHash = sut.str(
           password: password,
@@ -120,7 +123,9 @@ class PwhashTestCase extends TestCase {
         expect(verified, isTrue);
       });
 
-      test('verify failes if password is different', () {
+      test('verify failes if password is different', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
         final pwHash = sut.str(
           password: 'password1',
           memLimit: sut.memLimitMin,
@@ -140,7 +145,9 @@ class PwhashTestCase extends TestCase {
     });
 
     group('str and strNeedsRehash', () {
-      test('does not need rehash if params are the same', () {
+      test('does not need rehash if params are the same', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
         final pwHash = sut.str(
           password: 'password1',
           memLimit: sut.memLimitMin,
@@ -157,7 +164,9 @@ class PwhashTestCase extends TestCase {
         expect(needsRehash, isFalse);
       });
 
-      test('does need rehash if params are different same', () {
+      test('does need rehash if params are different same', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
         final pwHash = sut.str(
           password: 'password1',
           memLimit: sut.memLimitMin,

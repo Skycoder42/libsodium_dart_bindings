@@ -13,12 +13,7 @@ abstract class SodiumInit {
   /// The [libsodium] parameter must be a loaded
   /// `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on your platform. Please
   /// refer to the README for more details on loading the library.
-  static Future<Sodium> init(
-    dynamic libsodium, {
-    @Deprecated('initNative is no longer required and will be ignored.')
-        bool initNative = true,
-  }) =>
-      throw UnsupportedError(
+  static Future<Sodium> init(dynamic libsodium) => throw UnsupportedError(
         'The current platform does support neither dart:ffi nor dart:js',
       );
 }

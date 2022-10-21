@@ -15,13 +15,6 @@ class JsError {
 
   /// @nodoc
   external factory JsError([String? message]);
-
-  /// Wraps any callback to convert [JsError]s to [SodiumException]s.
-  ///
-  /// This simply runs the [callback] and catches all instances of [JsError] and
-  /// rethrows the error message as [SodiumException].
-  @Deprecated('Use the global jsErrorWrap method instead')
-  static T wrap<T>(T Function() callback) => jsErrorWrap<T>(callback);
 }
 
 /// Wraps any callback to convert [JsError]s to [SodiumException]s.

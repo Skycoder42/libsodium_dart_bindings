@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'package:sodium/sodium.dart';
+import 'package:sodium/sodium_sumo.dart';
 import '../sodium_platform.dart';
 
 /// Linux platform implementation of SodiumPlatform
@@ -11,7 +11,7 @@ class SodiumLinux extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium({bool initNative = true}) => SodiumInit.init(
+  Future<Sodium> loadSodium() => SodiumSumoInit.init(
         DynamicLibrary.process(),
       );
 

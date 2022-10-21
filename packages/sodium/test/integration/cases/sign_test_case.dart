@@ -11,18 +11,20 @@ class SignTestCase extends TestCase {
   @override
   String get name => 'sign';
 
-  Sign get sut => sodium.crypto.sign;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.sign;
+
       expect(sut.publicKeyBytes, 32, reason: 'publicKeyBytes');
       expect(sut.secretKeyBytes, 64, reason: 'secretKeyBytes');
       expect(sut.bytes, 64, reason: 'bytes');
       expect(sut.seedBytes, 32, reason: 'seedBytes');
     });
 
-    test('keyPair generates different correct length keys', () {
+    test('keyPair generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.sign;
+
       final key1 = sut.keyPair();
       final key2 = sut.keyPair();
 
@@ -41,7 +43,10 @@ class SignTestCase extends TestCase {
     });
 
     group('seedKeypair', () {
-      test('generates different correct length keys for different seeds', () {
+      test('generates different correct length keys for different seeds',
+          (sodium) {
+        final sut = sodium.crypto.sign;
+
         final seed1 = sodium.secureRandom(sut.seedBytes);
         final seed2 = sodium.secureRandom(sut.seedBytes);
 
@@ -65,7 +70,9 @@ class SignTestCase extends TestCase {
         expect(key1.publicKey, isNot(key2.publicKey));
       });
 
-      test('generates same correct length keys for same seeds', () {
+      test('generates same correct length keys for same seeds', (sodium) {
+        final sut = sodium.crypto.sign;
+
         final seed = sodium.secureRandom(sut.seedBytes);
 
         printOnFailure('seed: ${seed.extractBytes()}');
@@ -89,7 +96,9 @@ class SignTestCase extends TestCase {
     });
 
     group('combined', () {
-      test('can sign and open data', () {
+      test('can sign and open data', (sodium) {
+        final sut = sodium.crypto.sign;
+
         final signerKey = sut.keyPair();
         final message = Uint8List.fromList(
           List.generate(32, (index) => index * 2),
@@ -117,7 +126,9 @@ class SignTestCase extends TestCase {
         expect(recovered, message);
       });
 
-      test('fails if signature is invalid', () {
+      test('fails if signature is invalid', (sodium) {
+        final sut = sodium.crypto.sign;
+
         final signerKey = sut.keyPair();
         final message = Uint8List.fromList(
           List.generate(32, (index) => index * 2),
@@ -149,7 +160,9 @@ class SignTestCase extends TestCase {
     });
 
     group('detached', () {
-      test('can sign and verify data', () {
+      test('can sign and verify data', (sodium) {
+        final sut = sodium.crypto.sign;
+
         final signerKey = sut.keyPair();
         final message = Uint8List.fromList(
           List.generate(32, (index) => index * 2),
@@ -178,7 +191,9 @@ class SignTestCase extends TestCase {
         expect(valid, isTrue);
       });
 
-      test('fails if signature is invalid', () {
+      test('fails if signature is invalid', (sodium) {
+        final sut = sodium.crypto.sign;
+
         final signerKey = sut.keyPair();
         final message = Uint8List.fromList(
           List.generate(32, (index) => index * 2),
@@ -210,7 +225,9 @@ class SignTestCase extends TestCase {
     });
 
     group('stream', () {
-      test('creates and verifies signature from data stream', () async {
+      test('creates and verifies signature from data stream', (sodium) async {
+        final sut = sodium.crypto.sign;
+
         final signerKey = sut.keyPair();
         final messages = List.generate(
           10,
@@ -242,7 +259,9 @@ class SignTestCase extends TestCase {
         expect(valid, isTrue);
       });
 
-      test('fails if signature is invalid', () async {
+      test('fails if signature is invalid', (sodium) async {
+        final sut = sodium.crypto.sign;
+
         final signerKey = sut.keyPair();
         final messages = List.generate(
           10,
@@ -275,19 +294,17 @@ class SignTestCase extends TestCase {
       });
     });
 
-    test(
-      'Can extract seed and public key from secret key',
-      () {
-        final seed = sodium.secureRandom(sut.seedBytes);
-        final keyPair = sut.seedKeyPair(seed);
+    testSumo('Can extract seed and public key from secret key', (sodium) {
+      final sut = sodium.crypto.sign;
 
-        final restoredSeed = sut.skToSeed(keyPair.secretKey);
-        expect(restoredSeed, seed);
+      final seed = sodium.secureRandom(sut.seedBytes);
+      final keyPair = sut.seedKeyPair(seed);
 
-        final restoredPk = sut.skToPk(keyPair.secretKey);
-        expect(restoredPk, keyPair.publicKey);
-      },
-      isSumo: true,
-    );
+      final restoredSeed = sut.skToSeed(keyPair.secretKey);
+      expect(restoredSeed, seed);
+
+      final restoredPk = sut.skToPk(keyPair.secretKey);
+      expect(restoredPk, keyPair.publicKey);
+    });
   }
 }

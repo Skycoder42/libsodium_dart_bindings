@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 // ignore: test_library_import
-import 'package:sodium/sodium.dart';
+import 'package:sodium/sodium_sumo.dart';
 import 'package:test/test.dart' as t;
 
 import 'cases/aead_test_case.dart';
@@ -21,24 +21,24 @@ import 'cases/sodium_init_test_case.dart';
 import 'cases/sodium_test_case.dart';
 import 'test_case.dart';
 
-typedef SetupFn = void Function(dynamic Function() body);
+typedef SetupAllFn = void Function(dynamic Function() body);
+typedef SetupFn = void Function(dynamic Function(Sodium sodium) body);
 typedef GroupFn = void Function(String description, dynamic Function() body);
 typedef TestFn = void Function(
-  String description,
-  dynamic Function() body, {
-  bool isSumo,
-});
+    String description, dynamic Function(Sodium sodium) body);
+typedef TestSumoFn = void Function(
+    String description, dynamic Function(SodiumSumo sodium) body);
 
 abstract class TestRunner {
   late final Sodium _sodium;
 
-  final bool isSumoTest;
+  bool get isSumoTest => false;
 
   bool get is32Bit => false;
 
-  TestRunner({
-    required this.isSumoTest,
-  });
+  Sodium get sodium => _sodium;
+
+  TestRunner();
 
   Iterable<TestCase> createTestCases() => [
         SodiumTestCase(this),
@@ -61,23 +61,25 @@ abstract class TestRunner {
   @visibleForTesting
   Future<Sodium> loadSodium();
 
-  Sodium get sodium => _sodium;
+  @visibleForOverriding
+  late SetupAllFn setUpAll = t.setUpAll;
 
   @visibleForOverriding
-  late SetupFn setUpAll = t.setUpAll;
+  void setUp(dynamic Function(Sodium sodium) body) =>
+      t.setUp(() => body(_sodium));
 
   @visibleForOverriding
-  void test(
-    String description,
-    dynamic Function() body, {
-    bool isSumo = false,
-  }) =>
+  void test(String description, dynamic Function(Sodium sodium) body) => t.test(
+        description,
+        () => body(_sodium),
+      );
+
+  @visibleForOverriding
+  void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
       t.test(
         description,
-        body,
-        skip: !isSumoTest && isSumo
-            ? 'This test only works with the sodium.js sumo variant'
-            : null,
+        () {},
+        skip: 'This test only works with the sodium.js sumo variant',
       );
 
   @visibleForOverriding
@@ -102,4 +104,23 @@ abstract class TestRunner {
       });
     }
   }
+}
+
+abstract class SumoTestRunner extends TestRunner {
+  @override
+  bool get isSumoTest => true;
+
+  SodiumSumo get sodium => _sodium as SodiumSumo;
+
+  @protected
+  @visibleForTesting
+  @override
+  Future<SodiumSumo> loadSodium();
+
+  @visibleForOverriding
+  void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
+      t.test(
+        description,
+        () => body(sodium),
+      );
 }

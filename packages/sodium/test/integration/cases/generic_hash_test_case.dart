@@ -1,8 +1,5 @@
 import 'dart:typed_data';
 
-// ignore: test_library_import
-import 'package:sodium/sodium.dart';
-
 import '../test_case.dart';
 
 class GenericHashTestCase extends TestCase {
@@ -11,11 +8,11 @@ class GenericHashTestCase extends TestCase {
   @override
   String get name => 'generichash';
 
-  GenericHash get sut => sodium.crypto.genericHash;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.genericHash;
+
       expect(sut.bytes, 32, reason: 'bytes');
       expect(sut.bytesMin, 16, reason: 'bytesMin');
       expect(sut.bytesMax, 64, reason: 'bytesMax');
@@ -24,7 +21,9 @@ class GenericHashTestCase extends TestCase {
       expect(sut.keyBytesMax, 64, reason: 'keyBytesMax');
     });
 
-    test('keygen generates different correct length keys', () {
+    test('keygen generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.genericHash;
+
       final key1 = sut.keygen();
       final key2 = sut.keygen();
 
@@ -38,7 +37,9 @@ class GenericHashTestCase extends TestCase {
     });
 
     group('hash', () {
-      test('generates same hash for same data', () {
+      test('generates same hash for same data', (sodium) {
+        final sut = sodium.crypto.genericHash;
+
         final message = Uint8List.fromList(
           List.generate(64, (index) => index + 32),
         );
@@ -57,7 +58,9 @@ class GenericHashTestCase extends TestCase {
         expect(hash1, hash2);
       });
 
-      test('generates different hashes for different data', () {
+      test('generates different hashes for different data', (sodium) {
+        final sut = sodium.crypto.genericHash;
+
         final message1 = Uint8List.fromList(
           List.generate(64, (index) => index + 32),
         );
@@ -80,7 +83,9 @@ class GenericHashTestCase extends TestCase {
         expect(hash1, isNot(hash2));
       });
 
-      test('generates same hash for same key', () {
+      test('generates same hash for same key', (sodium) {
+        final sut = sodium.crypto.genericHash;
+
         final key = sut.keygen();
         final message = Uint8List.fromList(
           List.generate(64, (index) => index),
@@ -108,7 +113,9 @@ class GenericHashTestCase extends TestCase {
         expect(hash1, hash2);
       });
 
-      test('generates different hashes for different keys', () {
+      test('generates different hashes for different keys', (sodium) {
+        final sut = sodium.crypto.genericHash;
+
         final key1 = sut.keygen();
         final key2 = sut.keygen();
         final message = Uint8List.fromList(
@@ -139,7 +146,9 @@ class GenericHashTestCase extends TestCase {
     });
 
     group('stream', () {
-      test('generates same hash for same data', () async {
+      test('generates same hash for same data', (sodium) async {
+        final sut = sodium.crypto.genericHash;
+
         final messages = List.generate(
           10,
           (i) => Uint8List.fromList(
@@ -161,7 +170,9 @@ class GenericHashTestCase extends TestCase {
         expect(hash1, hash2);
       });
 
-      test('generates different hashes for different data', () async {
+      test('generates different hashes for different data', (sodium) async {
+        final sut = sodium.crypto.genericHash;
+
         final messages1 = List.generate(
           10,
           (i) => Uint8List.fromList(
@@ -194,7 +205,9 @@ class GenericHashTestCase extends TestCase {
         expect(hash1, isNot(hash2));
       });
 
-      test('generates same hash for same key', () async {
+      test('generates same hash for same key', (sodium) async {
+        final sut = sodium.crypto.genericHash;
+
         final key = sut.keygen();
         final messages = List.generate(
           10,
@@ -225,7 +238,9 @@ class GenericHashTestCase extends TestCase {
         expect(hash1, hash2);
       });
 
-      test('generates different hashes for different keys', () async {
+      test('generates different hashes for different keys', (sodium) async {
+        final sut = sodium.crypto.genericHash;
+
         final key1 = sut.keygen();
         final key2 = sut.keygen();
         final messages = List.generate(

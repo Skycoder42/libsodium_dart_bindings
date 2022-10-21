@@ -1,6 +1,3 @@
-// ignore: test_library_import
-import 'package:sodium/sodium.dart';
-
 import '../test_case.dart';
 import '../test_runner.dart';
 
@@ -12,11 +9,9 @@ class SodiumInitTestCase extends TestCase {
   @override
   String get name => 'init';
 
-  Sodium get sut => sodium;
-
   @override
   void setupTests() {
-    test('can be called multiple times', () async {
+    test('can be called multiple times', (sodium) async {
       // TestRunner.loadSodium will call SodiumInit.init for the relevant
       // platform that the test is currently running on.
       //

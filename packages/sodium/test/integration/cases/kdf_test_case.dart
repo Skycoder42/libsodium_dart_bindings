@@ -1,6 +1,3 @@
-// ignore: test_library_import
-import 'package:sodium/sodium.dart';
-
 import '../test_case.dart';
 
 class KdfTestCase extends TestCase {
@@ -9,18 +6,20 @@ class KdfTestCase extends TestCase {
   @override
   String get name => 'kdf';
 
-  Kdf get sut => sodium.crypto.kdf;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.kdf;
+
       expect(sut.bytesMin, 16, reason: 'bytesMin');
       expect(sut.bytesMax, 64, reason: 'bytesMax');
       expect(sut.contextBytes, 8, reason: 'contextBytes');
       expect(sut.keyBytes, 32, reason: 'keyBytes');
     });
 
-    test('keygen generates different correct length keys', () {
+    test('keygen generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.kdf;
+
       final key1 = sut.keygen();
       final key2 = sut.keygen();
 
@@ -34,7 +33,9 @@ class KdfTestCase extends TestCase {
     });
 
     group('deriveFromKey', () {
-      test('same masterkey produces valid subkeys', () {
+      test('same masterkey produces valid subkeys', (sodium) {
+        final sut = sodium.crypto.kdf;
+
         final masterKey = sut.keygen();
 
         printOnFailure('masterKey: ${masterKey.extractBytes()}');
@@ -85,7 +86,9 @@ class KdfTestCase extends TestCase {
         expect(key3, key4);
       });
 
-      test('generates keys of correct lengts', () {
+      test('generates keys of correct lengts', (sodium) {
+        final sut = sodium.crypto.kdf;
+
         final masterKey = sut.keygen();
 
         printOnFailure('masterKey: ${masterKey.extractBytes()}');
@@ -104,7 +107,9 @@ class KdfTestCase extends TestCase {
         }
       });
 
-      test('different masterkeys generate different subkeys', () {
+      test('different masterkeys generate different subkeys', (sodium) {
+        final sut = sodium.crypto.kdf;
+
         final masterKey1 = sut.keygen();
         final masterKey2 = sut.keygen();
 

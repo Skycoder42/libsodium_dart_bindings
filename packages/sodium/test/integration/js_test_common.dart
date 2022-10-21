@@ -6,8 +6,11 @@ import 'dart:html';
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
+import 'package:meta/meta.dart';
 // ignore: test_library_import
 import 'package:sodium/sodium.dart';
+// ignore: test_library_import
+import 'package:sodium/sodium_sumo.dart';
 // ignore: test_library_import
 import 'package:sodium/sodium.js.dart';
 
@@ -23,16 +26,11 @@ class SodiumBrowserInit {
   });
 }
 
-class JsTestRunner extends TestRunner {
-  final String sodiumJsSrc;
+mixin JsLoaderMixin {
+  String get sodiumJsSrc;
 
-  JsTestRunner({
-    required this.sodiumJsSrc,
-    required bool isSumoTest,
-  }) : super(isSumoTest: isSumoTest);
-
-  @override
-  Future<Sodium> loadSodium() async {
+  @protected
+  Future<LibSodiumJS> loadSodiumJs() async {
     final completer = Completer<LibSodiumJS>();
 
     setProperty(
@@ -46,6 +44,6 @@ class JsTestRunner extends TestRunner {
     final script = ScriptElement()..text = sodiumJsSrc;
     document.head!.append(script);
 
-    return SodiumInit.init(await completer.future);
+    return completer.future;
   }
 }

@@ -1,10 +1,7 @@
 import 'dart:typed_data';
 
-// ignore: test_library_import
-import 'package:sodium/sodium.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../test_data.dart';
 import '../test_case.dart';
 
 class SodiumTestCase extends TestCase {
@@ -13,47 +10,47 @@ class SodiumTestCase extends TestCase {
   @override
   String get name => 'sodium';
 
-  Sodium get sut => sodium;
-
   @override
   void setupTests() {
-    test('reports correct version', () {
-      final version = sut.version;
+    test('reports correct version', (sodium) {
+      final version = sodium.version;
 
       expect(version.major, 10);
       expect(version.minor, greaterThanOrEqualTo(3));
     });
 
-    testData<Tuple2<int, int>>(
-      'pad adds expected padding and unpad removes it',
-      const [
+    group('pad adds expected padding and unpad removes it', () {
+      const fixtures = [
         Tuple2(14, 16),
         Tuple2(15, 16),
         Tuple2(16, 32),
         Tuple2(17, 32),
         Tuple2(18, 32),
-      ],
-      (fixture) {
-        const blockSize = 16;
-        final baseBuf = Uint8List(fixture.item1);
+      ];
 
-        final paddedBuf = sut.pad(baseBuf, blockSize);
-        printOnFailure('Padded buf: $paddedBuf');
+      for (final fixture in fixtures) {
+        test('(Variant: $fixture)', (sodium) {
+          const blockSize = 16;
+          final baseBuf = Uint8List(fixture.item1);
 
-        expect(paddedBuf, hasLength(fixture.item2));
-        expect(paddedBuf.sublist(0, baseBuf.length), baseBuf);
+          final paddedBuf = sodium.pad(baseBuf, blockSize);
+          printOnFailure('Padded buf: $paddedBuf');
 
-        final unpaddedBuf = sut.unpad(paddedBuf, blockSize);
-        printOnFailure('Padded buf: $unpaddedBuf');
+          expect(paddedBuf, hasLength(fixture.item2));
+          expect(paddedBuf.sublist(0, baseBuf.length), baseBuf);
 
-        expect(unpaddedBuf, baseBuf);
-      },
-    );
+          final unpaddedBuf = sodium.unpad(paddedBuf, blockSize);
+          printOnFailure('Padded buf: $unpaddedBuf');
+
+          expect(unpaddedBuf, baseBuf);
+        });
+      }
+    });
 
     group('SecureKey', () {
-      test('secureAlloc creates secure key of correct size', () {
+      test('secureAlloc creates secure key of correct size', (sodium) {
         const length = 42;
-        final secureKey = sut.secureAlloc(length);
+        final secureKey = sodium.secureAlloc(length);
         try {
           expect(secureKey, hasLength(length));
           expect(secureKey.extractBytes(), hasLength(length));
@@ -63,10 +60,10 @@ class SodiumTestCase extends TestCase {
       });
 
       test('secureRandom creates secure key of correct size with random data',
-          () {
+          (sodium) {
         const length = 42;
-        final secureKey1 = sut.secureRandom(length);
-        final secureKey2 = sut.secureRandom(length);
+        final secureKey1 = sodium.secureRandom(length);
+        final secureKey2 = sodium.secureRandom(length);
         try {
           expect(secureKey1, hasLength(length));
           expect(secureKey2, hasLength(length));
@@ -79,9 +76,9 @@ class SodiumTestCase extends TestCase {
         }
       });
 
-      test('runUnlockedSync allows data modification', () {
+      test('runUnlockedSync allows data modification', (sodium) {
         final testData = List.generate(10, (index) => index);
-        final secureKey = sut.secureAlloc(testData.length);
+        final secureKey = sodium.secureAlloc(testData.length);
         try {
           // write data
           final resLen = secureKey.runUnlockedSync(
@@ -105,9 +102,9 @@ class SodiumTestCase extends TestCase {
         }
       });
 
-      test('runUnlockedAsync allows data modification', () async {
+      test('runUnlockedAsync allows data modification', (sodium) async {
         final testData = List.generate(10, (index) => index);
-        final secureKey = sut.secureAlloc(testData.length);
+        final secureKey = sodium.secureAlloc(testData.length);
         try {
           // write data
           final resLen = await secureKey.runUnlockedAsync(

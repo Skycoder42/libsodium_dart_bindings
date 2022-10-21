@@ -1,8 +1,5 @@
 import 'dart:typed_data';
 
-// ignore: test_library_import
-import 'package:sodium/sodium.dart';
-
 import '../test_case.dart';
 
 class ShortHashTestCase extends TestCase {
@@ -11,16 +8,18 @@ class ShortHashTestCase extends TestCase {
   @override
   String get name => 'shorthash';
 
-  ShortHash get sut => sodium.crypto.shortHash;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.shortHash;
+
       expect(sut.bytes, 8, reason: 'bytes');
       expect(sut.keyBytes, 16, reason: 'keyBytes');
     });
 
-    test('keygen generates different correct length keys', () {
+    test('keygen generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.shortHash;
+
       final key1 = sut.keygen();
       final key2 = sut.keygen();
 
@@ -34,7 +33,9 @@ class ShortHashTestCase extends TestCase {
     });
 
     group('hash', () {
-      test('generates same hash for same data and key', () {
+      test('generates same hash for same data and key', (sodium) {
+        final sut = sodium.crypto.shortHash;
+
         final key = sut.keygen();
         final message = Uint8List.fromList(
           List.generate(64, (index) => index + 32),
@@ -59,7 +60,9 @@ class ShortHashTestCase extends TestCase {
 
         expect(hash1, hash2);
       });
-      test('generates same hash for different keys', () {
+      test('generates same hash for different keys', (sodium) {
+        final sut = sodium.crypto.shortHash;
+
         final key1 = sut.keygen();
         final key2 = sut.keygen();
         final message = Uint8List.fromList(

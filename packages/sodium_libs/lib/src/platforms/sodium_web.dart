@@ -27,7 +27,7 @@ class SodiumWeb extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium({bool initNative = true}) async {
+  Future<Sodium> loadSodium() async {
     // check if sodium was already loaded
     final dynamic sodium = getProperty<dynamic>(window, 'sodium');
     if (sodium != null) {

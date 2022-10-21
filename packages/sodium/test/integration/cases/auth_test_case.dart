@@ -1,8 +1,5 @@
 import 'dart:typed_data';
 
-// ignore: test_library_import
-import 'package:sodium/sodium.dart';
-
 import '../test_case.dart';
 
 class AuthTestCase extends TestCase {
@@ -11,16 +8,18 @@ class AuthTestCase extends TestCase {
   @override
   String get name => 'auth';
 
-  Auth get sut => sodium.crypto.auth;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.auth;
+
       expect(sut.bytes, 32, reason: 'bytes');
       expect(sut.keyBytes, 32, reason: 'keyBytes');
     });
 
-    test('keygen generates different correct length keys', () {
+    test('keygen generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.auth;
+
       final key1 = sut.keygen();
       final key2 = sut.keygen();
 
@@ -33,7 +32,9 @@ class AuthTestCase extends TestCase {
       expect(key1, isNot(key2));
     });
 
-    test('can create and verify auth tag', () {
+    test('can create and verify auth tag', (sodium) {
+      final sut = sodium.crypto.auth;
+
       final key = sut.keygen();
       final message = Uint8List.fromList(
         List.generate(32, (index) => index * 2),
@@ -58,7 +59,9 @@ class AuthTestCase extends TestCase {
       expect(verified, isTrue);
     });
 
-    test('fails if tag is invalid', () {
+    test('fails if tag is invalid', (sodium) {
+      final sut = sodium.crypto.auth;
+
       final key = sut.keygen();
       final message = Uint8List.fromList(
         List.generate(32, (index) => index * 2),

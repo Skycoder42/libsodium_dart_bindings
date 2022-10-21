@@ -198,22 +198,6 @@ abstract class Sign {
     required Uint8List signature,
     required Uint8List publicKey,
   });
-
-  /// Provides crypto_sign_ed25519_sk_to_seed.
-  ///
-  /// **⚠️ Important:** On the web, this is only available when using the sumo
-  /// version of sodium.js
-  ///
-  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures#extracting-the-seed-and-the-public-key-from-the-secret-key
-  SecureKey skToSeed(SecureKey secretKey);
-
-  /// Provides crypto_sign_ed25519_sk_to_pk.
-  ///
-  /// **⚠️ Important:** On the web, this is only available when using the sumo
-  /// version of sodium.js
-  ///
-  /// See https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures#extracting-the-seed-and-the-public-key-from-the-secret-key
-  Uint8List skToPk(SecureKey secretKey);
 }
 
 /// @nodoc

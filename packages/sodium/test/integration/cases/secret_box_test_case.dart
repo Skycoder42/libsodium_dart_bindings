@@ -11,17 +11,19 @@ class SecretBoxTestCase extends TestCase {
   @override
   String get name => 'secretbox';
 
-  SecretBox get sut => sodium.crypto.secretBox;
-
   @override
   void setupTests() {
-    test('constants return correct values', () {
+    test('constants return correct values', (sodium) {
+      final sut = sodium.crypto.secretBox;
+
       expect(sut.keyBytes, 32, reason: 'keyBytes');
       expect(sut.macBytes, 16, reason: 'macBytes');
       expect(sut.nonceBytes, 24, reason: 'nonceBytes');
     });
 
-    test('keygen generates different correct length keys', () {
+    test('keygen generates different correct length keys', (sodium) {
+      final sut = sodium.crypto.secretBox;
+
       final key1 = sut.keygen();
       final key2 = sut.keygen();
 
@@ -35,7 +37,9 @@ class SecretBoxTestCase extends TestCase {
     });
 
     group('easy', () {
-      test('can encrypt and decrypt data', () {
+      test('can encrypt and decrypt data', (sodium) {
+        final sut = sodium.crypto.secretBox;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
         final message = Uint8List.fromList(
@@ -65,7 +69,9 @@ class SecretBoxTestCase extends TestCase {
         expect(restored, message);
       });
 
-      test('fails if data is invalid', () {
+      test('fails if data is invalid', (sodium) {
+        final sut = sodium.crypto.secretBox;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
 
@@ -93,7 +99,9 @@ class SecretBoxTestCase extends TestCase {
     });
 
     group('detached', () {
-      test('can encrypt and decrypt data', () {
+      test('can encrypt and decrypt data', (sodium) {
+        final sut = sodium.crypto.secretBox;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
         final message = Uint8List.fromList(
@@ -124,7 +132,9 @@ class SecretBoxTestCase extends TestCase {
         expect(restored, message);
       });
 
-      test('fails if data is invalid', () {
+      test('fails if data is invalid', (sodium) {
+        final sut = sodium.crypto.secretBox;
+
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
 
