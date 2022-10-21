@@ -1,4 +1,5 @@
 {
-  "cmake.configureOnOpen": false,
-  "dart.runPubGetOnPubspecChanges": false
+  "cSpell.words": [
+    "Scalarmult"
+  ]
 }
