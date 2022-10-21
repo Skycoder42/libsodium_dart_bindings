@@ -7,16 +7,19 @@ import 'dart:html';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
-import 'package:sodium/sodium.dart';
+import 'package:sodium/sodium.dart' show Sodium;
+import 'package:sodium/sodium.js.dart';
 
 import '../sodium_platform.dart';
 
 @JS()
 @anonymous
 class _SodiumBrowserInit {
-  external void Function(dynamic sodium) get onload;
+  external void Function(LibSodiumJS sodium) get onload;
 
-  external factory _SodiumBrowserInit({void Function(dynamic sodium) onload});
+  external factory _SodiumBrowserInit({
+    void Function(LibSodiumJS sodium) onload,
+  });
 }
 
 /// Web platform implementation of SodiumPlatform
@@ -29,13 +32,13 @@ class SodiumWeb extends SodiumPlatform {
   @override
   Future<Sodium> loadSodium() async {
     // check if sodium was already loaded
-    final dynamic sodium = getProperty<dynamic>(window, 'sodium');
+    final sodium = getProperty<LibSodiumJS?>(window, 'sodium');
     if (sodium != null) {
-      return SodiumInit.init(sodium);
+      return _sodiumInit(sodium);
     }
 
     // if not, overwrite sodium window property with custom onload
-    final completer = Completer<dynamic>();
+    final completer = Completer<LibSodiumJS>();
     setProperty(
       window,
       'sodium',
@@ -44,7 +47,7 @@ class SodiumWeb extends SodiumPlatform {
       ),
     );
 
-    // ... add the sodium script to the page
+    // ... and add the sodium script to the page
     final script = ScriptElement()
       ..type = 'text/javascript'
       ..async = true
@@ -52,7 +55,16 @@ class SodiumWeb extends SodiumPlatform {
       ..src = 'sodium.js';
     document.body!.append(script);
 
-    return SodiumInit.init(await completer.future);
+    return _sodiumInit(await completer.future);
+  }
+
+  Future<Sodium> _sodiumInit(LibSodiumJS sodium) {
+    // ignore: avoid_dynamic_calls
+    if (hasProperty(sodium, 'crypto_sign_ed25519_sk_to_seed')) {
+      return SodiumSumoInit.initFromSodiumJS(sodium);
+    } else {
+      return SodiumInit.initFromSodiumJS(sodium);
+    }
   }
 
   @override
