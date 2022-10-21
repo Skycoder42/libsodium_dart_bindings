@@ -1,8 +1,10 @@
 import 'package:meta/meta.dart';
 
 import '../../../api/sumo/crypto_sumo.dart';
+import '../../../api/sumo/scalarmult_sumo.dart';
 import '../../../api/sumo/sign_sumo.dart';
 import '../crypto_js.dart';
+import 'scalarmult_sumo_js.dart';
 import 'sign_sumo_js.dart';
 
 /// @nodoc
@@ -14,4 +16,7 @@ class CryptoSumoJS extends CryptoJS implements CryptoSumo {
   @override
   // ignore: overridden_fields
   late final SignSumo sign = SignSumoJS(sodium);
+
+  @override
+  late final ScalarmultSumo scalarmult = ScalarmultSumoJS(sodium);
 }

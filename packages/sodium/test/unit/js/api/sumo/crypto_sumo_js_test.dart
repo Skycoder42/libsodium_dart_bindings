@@ -2,6 +2,7 @@
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/sumo/crypto_sumo_js.dart';
+import 'package:sodium/src/js/api/sumo/scalarmult_sumo_js.dart';
 import 'package:sodium/src/js/api/sumo/sign_sumo_js.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
@@ -23,6 +24,17 @@ void main() {
     expect(
       sut.sign,
       isA<SignSumoJS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('scalarmult returns ScalarmultSumoJS instance', () {
+    expect(
+      sut.scalarmult,
+      isA<ScalarmultSumoJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

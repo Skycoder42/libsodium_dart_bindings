@@ -13,6 +13,7 @@ import 'cases/kdf_test_case.dart';
 import 'cases/kx_test_case.dart';
 import 'cases/pwhash_test_case.dart';
 import 'cases/randombytes_test_case.dart';
+import 'cases/scalarmult_test_case.dart';
 import 'cases/secret_box_test_case.dart';
 import 'cases/secret_stream_test_case.dart';
 import 'cases/short_hash_test_case.dart';
@@ -55,6 +56,7 @@ abstract class TestRunner {
         PwhashTestCase(this, is32Bit: is32Bit),
         KdfTestCase(this),
         KxTestCase(this),
+        ScalarMultTestCase(this),
       ];
 
   @protected

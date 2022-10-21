@@ -1,4 +1,5 @@
 import '../crypto.dart';
+import 'scalarmult_sumo.dart';
 import 'sign_sumo.dart';
 
 /// A meta class that provides access to all libsodium sumo crypto APIs.
@@ -7,4 +8,9 @@ abstract class CryptoSumo implements Crypto {
 
   @override
   SignSumo get sign;
+
+  /// An instance of [ScalarmultSumo].
+  ///
+  /// This provides all APIs that start with `crypto_scalarmult`.
+  ScalarmultSumo get scalarmult;
 }

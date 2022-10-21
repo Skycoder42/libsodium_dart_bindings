@@ -2,6 +2,7 @@
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/sumo/crypto_sumo_ffi.dart';
+import 'package:sodium/src/ffi/api/sumo/scalarmult_sumo_ffi.dart';
 import 'package:sodium/src/ffi/api/sumo/sign_sumo_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
@@ -23,6 +24,17 @@ void main() {
     expect(
       sut.sign,
       isA<SignSumoFFI>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('scalarmult returns ScalarmultSumoFFI instance', () {
+    expect(
+      sut.scalarmult,
+      isA<ScalarmultSumoFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,
