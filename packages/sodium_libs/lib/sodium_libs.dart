@@ -6,3 +6,4 @@ export 'src/platforms/platforms.fallback.dart'
 
 export 'src/sodium_init.dart';
 export 'src/sodium_platform.dart';
+export 'src/sodium_sumo_unavailable.dart';

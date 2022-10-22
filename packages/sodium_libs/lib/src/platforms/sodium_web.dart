@@ -9,8 +9,10 @@ import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:sodium/sodium.dart' show Sodium;
 import 'package:sodium/sodium.js.dart';
+import 'package:sodium/sodium_sumo.dart' show SodiumSumo;
 
 import '../sodium_platform.dart';
+import '../sodium_sumo_unavailable.dart';
 
 @JS()
 @anonymous
@@ -30,11 +32,28 @@ class SodiumWeb extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium() async {
+  Future<Sodium> loadSodium() =>
+      _loadLibSodiumJS().then(SodiumInit.initFromSodiumJS);
+
+  @override
+  Future<SodiumSumo> loadSodiumSumo() async {
+    final libSodiumJs = await _loadLibSodiumJS();
+    // ignore: avoid_dynamic_calls
+    if (hasProperty(libSodiumJs, 'crypto_sign_ed25519_sk_to_seed')) {
+      return SodiumSumoInit.initFromSodiumJS(libSodiumJs);
+    } else {
+      throw SodiumSumoUnavailable(
+        details:
+            'JS-API for sumo-method crypto_sign_ed25519_sk_to_seed is missing.',
+      );
+    }
+  }
+
+  Future<LibSodiumJS> _loadLibSodiumJS() {
     // check if sodium was already loaded
     final sodium = getProperty<LibSodiumJS?>(window, 'sodium');
     if (sodium != null) {
-      return _sodiumInit(sodium);
+      return Future.value(sodium);
     }
 
     // if not, overwrite sodium window property with custom onload
@@ -55,16 +74,7 @@ class SodiumWeb extends SodiumPlatform {
       ..src = 'sodium.js';
     document.body!.append(script);
 
-    return _sodiumInit(await completer.future);
-  }
-
-  Future<Sodium> _sodiumInit(LibSodiumJS sodium) {
-    // ignore: avoid_dynamic_calls
-    if (hasProperty(sodium, 'crypto_sign_ed25519_sk_to_seed')) {
-      return SodiumSumoInit.initFromSodiumJS(sodium);
-    } else {
-      return SodiumInit.initFromSodiumJS(sodium);
-    }
+    return completer.future;
   }
 
   @override

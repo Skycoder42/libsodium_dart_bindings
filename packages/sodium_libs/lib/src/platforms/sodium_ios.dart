@@ -1,16 +1,17 @@
 import 'dart:ffi';
 import 'dart:typed_data';
 
+import 'package:sodium/sodium.dart';
 import 'package:sodium/sodium_sumo.dart';
 import '../sodium_platform.dart';
 
-class _SodiumIos implements SodiumSumo {
-  final SodiumSumo _sodium;
+class _SodiumIos implements Sodium {
+  final Sodium _sodium;
 
   _SodiumIos(this._sodium);
 
   @override
-  CryptoSumo get crypto => _sodium.crypto;
+  Crypto get crypto => _sodium.crypto;
 
   @override
   Uint8List pad(Uint8List buf, int blocksize) => _sodium.pad(buf, blocksize);
@@ -39,6 +40,15 @@ class _SodiumIos implements SodiumSumo {
   SodiumVersion get version => const SodiumVersion(10, 3, '1.0.18');
 }
 
+class _SodiumSumoIos extends _SodiumIos implements SodiumSumo {
+  SodiumSumo get _sodiumSumo => super._sodium as SodiumSumo;
+
+  _SodiumSumoIos(SodiumSumo super.sodium);
+
+  @override
+  CryptoSumo get crypto => _sodiumSumo.crypto;
+}
+
 /// iOS platform implementation of SodiumPlatform
 class SodiumIos extends SodiumPlatform {
   /// Registers the [SodiumIos] as [SodiumPlatform.instance]
@@ -48,5 +58,9 @@ class SodiumIos extends SodiumPlatform {
 
   @override
   Future<Sodium> loadSodium() =>
-      SodiumSumoInit.init(DynamicLibrary.process()).then(_SodiumIos.new);
+      SodiumInit.init(DynamicLibrary.process()).then(_SodiumIos.new);
+
+  @override
+  Future<SodiumSumo> loadSodiumSumo() =>
+      SodiumSumoInit.init(DynamicLibrary.process()).then(_SodiumSumoIos.new);
 }

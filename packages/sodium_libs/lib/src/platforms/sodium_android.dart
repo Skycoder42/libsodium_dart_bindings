@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:sodium/sodium.dart';
 import 'package:sodium/sodium_sumo.dart';
 import '../sodium_platform.dart';
 
@@ -11,7 +12,12 @@ class SodiumAndroid extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium() => SodiumSumoInit.init(
+  Future<Sodium> loadSodium() => SodiumInit.init(
+        DynamicLibrary.open('libsodium.so'),
+      );
+
+  @override
+  Future<SodiumSumo> loadSodiumSumo() => SodiumSumoInit.init(
         DynamicLibrary.open('libsodium.so'),
       );
 }

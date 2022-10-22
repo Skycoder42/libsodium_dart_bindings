@@ -1,5 +1,7 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:sodium/sodium.dart';
+import 'package:sodium/sodium_sumo.dart';
+
+import 'sodium_sumo_unavailable.dart';
 
 /// The abstract platform interface
 ///
@@ -35,6 +37,20 @@ abstract class SodiumPlatform extends PlatformInterface {
   /// Check out the sodium package documentation for details on how to obtain
   /// a native instance on each platform.
   Future<Sodium> loadSodium();
+
+  /// Load an instance of [SodiumSumo] for the current platform.
+  ///
+  /// This is the sumo variant of the [loadSodium] method. Inside this method,
+  /// implementers should load a native instance of  [SodiumSumo] and return
+  /// that loaded instance.
+  ///
+  /// If the current platform implementation is unable to create the instance
+  /// because the underlying implementation does not contain the advanced sumo
+  /// APIs, a [SodiumSumoUnavailable] should be thrown.
+  ///
+  /// Check out the sodium package documentation for details on how to obtain
+  /// a native instance on each platform.
+  Future<SodiumSumo> loadSodiumSumo();
 
   /// A hint for the user if an outdated version of libsodium is detected.
   ///
