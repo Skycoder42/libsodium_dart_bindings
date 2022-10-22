@@ -1,26 +1,29 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sodium/sodium.dart' show Sodium;
+import 'package:sodium/sodium_sumo.dart' show SodiumSumo;
 import 'package:synchronized/synchronized.dart';
 
 import 'sodium_platform.dart';
+import 'sodium_sumo_unavailable.dart';
 import 'version_check.dart';
 
-/// Static class to obtain a [Sodium] instance.
+/// Static class to obtain a [SodiumSumo] instance.
 ///
 /// This is a static wrapper around [SodiumPlatform], which simplifies loading
-/// the [Sodium] instance and makes sure, the current platform plugin has
-/// been correctly loaded. Use [init] to obtain a [Sodium] instance.
-abstract class SodiumInit {
+/// the [SodiumSumo] instance and makes sure, the current platform plugin has
+/// been correctly loaded. Use [init] to obtain a [SodiumSumo] instance.
+abstract class SodiumSumoInit {
   static final _instanceLock = Lock();
-  static Sodium? _instance;
+  static SodiumSumo? _instance;
 
-  const SodiumInit._(); // coverage:ignore-line
+  const SodiumSumoInit._(); // coverage:ignore-line
 
-  /// Creates a new [Sodium] instance and initializes it
+  /// Creates a new [SodiumSumo] instance and initializes it
   ///
   /// Internally, this method ensures the correct [SodiumPlatform] is available
-  /// and then uses [SodiumPlatform.loadSodium] to create an instance.
+  /// and then uses [SodiumPlatform.loadSodiumSumo] to create an instance. If
+  /// the [SodiumPlatform] implementation does not support the advanced sumo
+  /// APIs, this method will throw a [SodiumSumoUnavailable] exception.
   ///
   /// In addition, when not running in release mode, it also performs a version
   /// check on the library to ensure you are using the correct native binary on
@@ -28,13 +31,13 @@ abstract class SodiumInit {
   ///
   /// **Note:** Calling this method multiple times will always return the same
   /// instance.
-  static Future<Sodium> init() => _instanceLock.synchronized(() async {
+  static Future<SodiumSumo> init() => _instanceLock.synchronized(() async {
         if (_instance != null) {
           return _instance!;
         }
 
         WidgetsFlutterBinding.ensureInitialized();
-        _instance = await SodiumPlatform.instance.loadSodium();
+        _instance = await SodiumPlatform.instance.loadSodiumSumo();
 
         if (!kReleaseMode) {
           VersionCheck.check(SodiumPlatform.instance, _instance!);

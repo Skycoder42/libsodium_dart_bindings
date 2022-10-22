@@ -17,7 +17,7 @@ class FlutterTestRunner extends SumoTestRunner {
   bool get is32Bit => arch.is32Bit;
 
   @override
-  Future<SodiumSumo> loadSodium() => SodiumInit.initSumo();
+  Future<SodiumSumo> loadSodium() => SodiumSumoInit.init();
 
   @override
   SetupAllFn get setUpAll => ft.setUpAll;
