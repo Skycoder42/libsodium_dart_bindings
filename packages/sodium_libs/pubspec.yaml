@@ -8,6 +8,7 @@ environment:
   flutter: ">=3.3.0"
 
 dependencies:
+  args: ^2.3.1
   flutter:
     sdk: flutter
   flutter_web_plugins:
@@ -20,7 +21,6 @@ dependencies:
   synchronized: ^3.0.0+3
 
 dev_dependencies:
-  args: ^2.3.1
   dart_pre_commit: ^4.0.0
   dart_test_tools: ^4.5.3+1
   flutter_test:

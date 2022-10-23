@@ -1,47 +1,87 @@
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:html/parser.dart' show parse;
 
 import '../libsodium_version.dart' show libsodium_version;
 
-const _sumoArg = '--sumo';
-const _noEditIndexArg = '--no-edit-index';
-const _helpArgs = ['-h', '--help', 'help'];
+const _sumoArg = 'sumo';
+const _editIndexArg = 'edit-index';
+const _targetDirectoryArg = 'target-directory';
+const _helpArg = 'help';
 
-Future<void> main(List<String> arguments) async {
-  if (arguments.any((arg) => _helpArgs.contains(arg))) {
-    _printHelp();
-    return;
+Future<void> main(List<String> rawArguments) async {
+  final parser = ArgParser(
+    allowTrailingOptions: false,
+    usageLineLength: stdout.hasTerminal ? stdout.terminalColumns : null,
+  )
+    ..addFlag(
+      _sumoArg,
+      help: 'Download the sumo variant of sodium.js.',
+    )
+    ..addFlag(
+      _editIndexArg,
+      defaultsTo: true,
+      help: 'Update index.html to automatically load sodium.js.',
+    )
+    ..addOption(
+      _targetDirectoryArg,
+      abbr: 'd',
+      defaultsTo: 'web',
+      help: 'The directory to download the binaries to.',
+    )
+    ..addFlag(
+      _helpArg,
+      abbr: 'h',
+      negatable: false,
+      help: 'Show this help.',
+    );
+
+  try {
+    final arguments = parser.parse(rawArguments);
+    if (arguments[_helpArg] as bool) {
+      stdout.writeln(parser.usage);
+      return;
+    }
+
+    final isSumo = arguments[_sumoArg] as bool;
+    final editIndex = arguments[_editIndexArg] as bool;
+    final targetDir = Directory(arguments[_targetDirectoryArg] as String);
+
+    exitCode = await _runUpdateWeb(isSumo, editIndex, targetDir);
+  } on ArgParserException catch (e) {
+    stderr
+      ..writeln(e.message)
+      ..writeln()
+      ..writeln('Usage:')
+      ..writeln(parser.usage);
+    exitCode = 127;
   }
+}
 
-  final isSumo = arguments.contains(_sumoArg);
-  final noEditIndex = arguments.contains(_noEditIndexArg);
-  final targetDir = Directory(
-    arguments.firstWhere(
-      (arg) => arg != _sumoArg,
-      orElse: () => 'web',
-    ),
-  );
-
+Future<int> _runUpdateWeb(
+  bool isSumo,
+  bool editIndex,
+  Directory targetDir,
+) async {
   if (!targetDir.existsSync()) {
     stderr.writeln(
       'Directory ${targetDir.path} does not exists - '
       'cannot download web binaries!',
     );
-    exitCode = 1;
-    return;
+    return 1;
   }
 
   if (!await _copySodiumJs(targetDir, isSumo)) {
-    exitCode = 1;
-    return;
+    return 1;
   }
 
-  if (!noEditIndex) {
+  if (editIndex) {
     await _writeScriptElement(targetDir);
   }
 
   stdout.writeln('> Done');
+  return 0;
 }
 
 Future<bool> _copySodiumJs(Directory targetDir, bool isSumo) async {
@@ -140,22 +180,4 @@ Future<bool> _runGit(List<String> arguments, Directory workingDir) async {
   }
 
   return true;
-}
-
-void _printHelp() {
-  stdout
-    ..writeln(
-      'Usage: dart run sodium_libs:update_web '
-      '[$_sumoArg] [$_noEditIndexArg] [<target_directory>]',
-    )
-    ..writeln()
-    ..writeln('$_sumoArg:           Download the sumo variant of sodium.js.')
-    ..writeln(
-      '$_noEditIndexArg:  Do not update index.html '
-      'to automatically load sodium.js.',
-    )
-    ..writeln(
-      'target_directory: The directory to download the binaries to. '
-      'By default, the "web" directory is used.',
-    );
 }
