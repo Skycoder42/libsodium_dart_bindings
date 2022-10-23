@@ -5,7 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## 2.0.0-dev.1
-TODO
+### Added
+- Added support for loading the `SodiumSumo` interface via `SodiumSumoInit.init`
+  - All native platforms (android, ios, linux, windows, macos) support the new APIs
+  - The web-platform also supports this, as long as it was initialized with `--sumo`
+### Changed
+- **Breaking:** Depends on sodium version 2.0.0
+  - Check that release for more details on all of the changes in that release.
+- **Breaking:** Added `loadSodiumSumo` to `SodiumPlatform` interface
 
 ## 1.2.5+1
 ### Changed
