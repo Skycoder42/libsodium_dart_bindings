@@ -8,7 +8,7 @@ environment:
   flutter: ">=3.3.0"
 
 executables:
-  update_web: sodium_libs_update_web
+  sodium_libs_update_web: update_web
 
 dependencies:
   args: ^2.3.1
