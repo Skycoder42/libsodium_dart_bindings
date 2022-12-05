@@ -35,6 +35,7 @@ class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
       );
 
   @override
+  @pragma('vm:entry-point')
   Uint8List call({
     required Uint8List message,
     required SecureKey key,

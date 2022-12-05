@@ -59,6 +59,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   int get strBytes => sodium.crypto_pwhash_strbytes();
 
   @override
+  @pragma('vm:entry-point')
   SecureKey call({
     required int outLen,
     required Int8List password,

@@ -35,6 +35,7 @@ class AuthFFI with AuthValidations, KeygenMixin implements Auth {
       );
 
   @override
+  @pragma('vm:entry-point')
   Uint8List call({
     required Uint8List message,
     required SecureKey key,

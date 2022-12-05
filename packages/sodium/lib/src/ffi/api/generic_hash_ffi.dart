@@ -50,6 +50,7 @@ class GenericHashFFI
       );
 
   @override
+  @pragma('vm:entry-point')
   Uint8List call({
     required Uint8List message,
     int? outLen,
