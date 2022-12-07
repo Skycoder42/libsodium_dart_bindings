@@ -31,6 +31,7 @@ abstract class Auth {
   /// Provides crypto_auth.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication#usage
+  @pragma('vm:entry-point')
   Uint8List call({
     required Uint8List message,
     required SecureKey key,

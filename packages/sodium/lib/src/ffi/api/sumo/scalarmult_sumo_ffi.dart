@@ -53,6 +53,7 @@ class ScalarmultSumoFFI
   }
 
   @override
+  @pragma('vm:entry-point')
   SecureKey call({
     required SecureKey n,
     required Uint8List p,
