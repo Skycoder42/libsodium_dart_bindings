@@ -1,0 +1,11 @@
+# Ignore
+## Recursive Windows symlink
+example/windows/flutter/ephemeral/.plugin_symlinks
+
+# Unignore
+## Generated build files
+!*.freezed.dart
+!*.g.dart
+
+## Android JNI libraries
+android/src/main/jniLibs

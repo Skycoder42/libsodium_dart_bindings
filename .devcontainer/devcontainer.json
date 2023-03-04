@@ -30,7 +30,4 @@
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {}
 	},
 	"postCreateCommand": "dart --disable-analytics && flutter config --no-analytics && melos run pre-commit:init",
-	"remoteEnv": {
-		"PATH": "${containerEnv:PATH}:/home/vscode/flutter/bin:/home/vscode/.pub-cache/bin"
-	}
 }

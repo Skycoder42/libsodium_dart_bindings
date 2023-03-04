@@ -6,12 +6,14 @@ library sodium_js_test;
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/api/key_pair.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
 import 'package:sodium/src/js/api/randombytes_js.dart';
+import 'package:sodium/src/js/api/secure_key_js.dart';
 import 'package:sodium/src/js/api/sodium_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
+import 'package:sodium/src/js/bindings/sodium.js.dart' hide KeyPair;
 import 'package:test/test.dart';
 
 class MockLibSodiumJS extends Mock implements LibSodiumJS {}
@@ -157,6 +159,39 @@ void main() {
         'sodium',
         mockSodium,
       ),
+    );
+  });
+
+  test('runIsolated prints warning and runs callback synchronously', () async {
+    final secureKey = SecureKeyJS(
+      mockSodium,
+      Uint8List.fromList(List.filled(10, 10)),
+    );
+    final keyPair = KeyPair(
+      publicKey: Uint8List.fromList(List.filled(20, 20)),
+      secretKey: SecureKeyJS(
+        mockSodium,
+        Uint8List.fromList(List.filled(30, 30)),
+      ),
+    );
+
+    expect(
+      () async {
+        final result = await sut.runIsolated(
+          secureKeys: [secureKey],
+          keyPairs: [keyPair],
+          (sodium, secureKeys, keyPairs) {
+            expect(secureKeys, hasLength(1));
+            expect(secureKeys.single, same(secureKey));
+            expect(keyPairs, hasLength(1));
+            expect(keyPairs.single, same(keyPair));
+            return secureKeys.single;
+          },
+        );
+
+        expect(result, same(secureKey));
+      },
+      prints(startsWith('WARNING: Sodium.runIsolated')),
     );
   });
 }

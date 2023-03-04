@@ -1,0 +1,4 @@
+# Unignore
+## Generated build files
+!*.freezed.dart
+!*.g.dart

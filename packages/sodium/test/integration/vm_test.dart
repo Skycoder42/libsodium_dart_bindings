@@ -62,8 +62,9 @@ class VmTestRunner extends SumoTestRunner {
     expect(File(libSodiumPath).existsSync(), isTrue);
     // ignore: avoid_print
     print('Found libsodium at: $libSodiumPath');
-    final dylib = DynamicLibrary.open(libSodiumPath);
-    return SodiumSumoInit.init(dylib);
+    return SodiumSumoInit.initWithIsolates(
+      () => DynamicLibrary.open(libSodiumPath),
+    );
   }
 }
 

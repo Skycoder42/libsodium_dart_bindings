@@ -21,11 +21,6 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
     with:
       workingDirectory: packages/sodium_libs
-      publishExclude: >-
-        [
-          "android/src/main/.gitignore",
-          "example/windows/flutter/ephemeral/.plugin_symlinks"
-        ]
       unitTestPaths: ""
       integrationTestProject: "example"
       integrationTestPaths: "integration_test/app_test.dart"
@@ -40,18 +35,11 @@ jobs:
 
   cd:
     name: CD
-    uses: Skycoder42/dart_test_tools/.github/workflows/publish.yml@main
+    uses: Skycoder42/dart_test_tools/.github/workflows/release.yml@main
     needs:
       - ci
     with:
-      flutter: true
       workingDirectory: packages/sodium_libs
-      publishExclude: >-
-        [
-          "android/src/main/.gitignore",
-          "example/windows/flutter/ephemeral/.plugin_symlinks"
-        ]
-      prePublish: dart run tool/setup_android.dart
       tagPrefix: sodium_libs/v
     secrets:
-      PUB_DEV_CREDENTIALS: ${{ secrets.PUB_DEV_CREDENTIALS }}
+      githubToken: ${{ secrets.GH_PAT }}

@@ -22,7 +22,6 @@ jobs:
     with:
       workingDirectory: packages/sodium
       buildRunner: true
-      publishExclude: '["lib/src/.gitignore", "test/analysis_options.yaml"]'
       unitTestPaths: test/unit
       coverageExclude: >-
         "**/*.freezed.dart"
@@ -39,13 +38,11 @@ jobs:
 
   cd:
     name: CD
-    uses: Skycoder42/dart_test_tools/.github/workflows/publish.yml@main
+    uses: Skycoder42/dart_test_tools/.github/workflows/release.yml@main
     needs:
       - ci
     with:
       workingDirectory: packages/sodium
-      buildRunner: true
-      publishExclude: '["lib/src/.gitignore", "test/analysis_options.yaml"]'
       tagPrefix: sodium/v
     secrets:
-      PUB_DEV_CREDENTIALS: ${{ secrets.PUB_DEV_CREDENTIALS }}
+      githubToken: ${{ secrets.GH_PAT }}

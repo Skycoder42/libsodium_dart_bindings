@@ -1,13 +1,16 @@
-// ignore_for_file: unnecessary_lambdas
+// ignore_for_file: unnecessary_lambdas, prefer_asserts_with_message
 
 @TestOn('dart-vm')
 library sodium_ffi_test;
 
 import 'dart:ffi';
+import 'dart:isolate';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/api/key_pair.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
@@ -16,6 +19,7 @@ import 'package:sodium/src/ffi/api/sodium_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
 
+import '../../../secure_key_fake.dart';
 import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
@@ -32,7 +36,15 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SodiumFFI(mockSodium);
+    sut = SodiumFFI(
+      mockSodium,
+      () {
+        registerPointers();
+        final sodium = MockSodiumFFI();
+        mockAllocArray(sodium);
+        return sodium;
+      },
+    );
   });
 
   test('version returns correct library version', () {
@@ -261,5 +273,73 @@ void main() {
         mockSodium,
       ),
     );
+  });
+
+  group('runIsolated', () {
+    test('invokes the given callback on a custom isolate', () async {
+      final currentIsolateName = Isolate.current.debugName;
+      final callbackIsolateName = await sut.runIsolated(
+        (sodium, secureKeys, keyPairs) => Isolate.current.debugName,
+      );
+
+      expect(callbackIsolateName, isNot(currentIsolateName));
+    });
+
+    test('passes over keys via the transferable secure key', () async {
+      mockAllocArray(mockSodium);
+
+      const testSecureKeyData = [1, 2, 3, 4, 5];
+      final testSecureKey = SecureKeyFake(testSecureKeyData);
+
+      final result = await sut.runIsolated(
+        secureKeys: [testSecureKey],
+        (sodium, secureKeys, keyPairs) {
+          assert(keyPairs.isEmpty, '$keyPairs.isEmpty');
+          assert(secureKeys.length == 1, '$secureKeys.length == 1');
+          final secureKey = secureKeys.single;
+          assert(
+            const ListEquality<int>()
+                .equals(secureKey.extractBytes(), testSecureKeyData),
+            '${secureKey.extractBytes()} == $testSecureKeyData',
+          );
+          return secureKey;
+        },
+      );
+
+      expect(result, testSecureKey);
+    });
+
+    test('passes over key pairs via the transferable key key', () async {
+      mockAllocArray(mockSodium);
+
+      const testPublicKeyData = [1, 2, 3, 4, 5];
+      const testSecretKeyData = [2, 4, 6, 8, 10];
+      final testKeyPair = KeyPair(
+        publicKey: Uint8List.fromList(testPublicKeyData),
+        secretKey: SecureKeyFake(testSecretKeyData),
+      );
+
+      final result = await sut.runIsolated(
+        keyPairs: [testKeyPair],
+        (sodium, secureKeys, keyPairs) {
+          assert(secureKeys.isEmpty, '$secureKeys.isEmpty');
+          assert(keyPairs.length == 1, '$keyPairs == 1');
+          final keyPair = keyPairs.single;
+          assert(
+            const ListEquality<int>()
+                .equals(keyPair.publicKey, testPublicKeyData),
+            '${keyPair.publicKey} == $testPublicKeyData',
+          );
+          assert(
+            const ListEquality<int>()
+                .equals(keyPair.secretKey.extractBytes(), testSecretKeyData),
+            '${keyPair.secretKey.extractBytes()} == $testSecretKeyData',
+          );
+          return keyPair;
+        },
+      );
+
+      expect(result, testKeyPair);
+    });
   });
 }

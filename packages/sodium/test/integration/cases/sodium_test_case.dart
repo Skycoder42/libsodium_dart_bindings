@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+// ignore: test_library_import
+import 'package:sodium/sodium.dart';
 import 'package:tuple/tuple.dart';
 
 import '../test_case.dart';
@@ -132,6 +134,58 @@ class SodiumTestCase extends TestCase {
           secureKey.dispose();
         }
       });
+    });
+
+    test('runIsolated', (sodium) async {
+      final secureKey = sodium.crypto.secretBox.keygen();
+      final keyPair1 = sodium.crypto.box.keyPair();
+      final keyPair2 = sodium.crypto.box.keyPair();
+
+      final message = 'Hello, World!'.toCharArray().unsignedView();
+      final nonce1 = sodium.randombytes.buf(sodium.crypto.secretBox.nonceBytes);
+      final nonce2 = sodium.randombytes.buf(sodium.crypto.box.nonceBytes);
+
+      final result = await sodium.runIsolated(
+        secureKeys: [secureKey],
+        keyPairs: [keyPair1, keyPair2],
+        (sodium, secureKeys, keyPairs) {
+          final secureKey = secureKeys.single;
+          final keyPair1 = keyPairs[0];
+          final keyPair2 = keyPairs[1];
+
+          final cipher1 = sodium.crypto.secretBox.easy(
+            message: message,
+            nonce: nonce1,
+            key: secureKey,
+          );
+
+          final cipher2 = sodium.crypto.box.easy(
+            message: cipher1,
+            nonce: nonce2,
+            publicKey: keyPair2.publicKey,
+            secretKey: keyPair1.secretKey,
+          );
+
+          final cipherKey = sodium.secureCopy(cipher2);
+
+          return cipherKey;
+        },
+      );
+
+      final plain2 = sodium.crypto.box.openEasy(
+        cipherText: result.extractBytes(),
+        nonce: nonce2,
+        publicKey: keyPair1.publicKey,
+        secretKey: keyPair2.secretKey,
+      );
+
+      final plain1 = sodium.crypto.secretBox.openEasy(
+        cipherText: plain2,
+        nonce: nonce1,
+        key: secureKey,
+      );
+
+      expect(plain1, message);
     });
   }
 }
