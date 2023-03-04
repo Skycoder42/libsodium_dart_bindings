@@ -585,6 +585,14 @@ void main() {
 
       verify(() => mockSodium.sodium_free(sut.ptr.cast()));
     });
+
+    test('detach returns the address without freeing it', () {
+      final address = sut.detach();
+
+      expect(address, isNot(nullptr));
+
+      verifyNever(() => mockSodium.sodium_free(sut.ptr.cast()));
+    });
   });
 
   group('list conversions', () {

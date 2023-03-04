@@ -88,6 +88,25 @@ void main() {
         verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))));
       });
     });
+
+    group('attach', () {
+      test('throws if nativeHandle has invalid length', () {
+        expect(
+          () => SecureKeyFFI.attach(mockSodium, [1, 2, 3]),
+          throwsA(isArgumentError),
+        );
+      });
+
+      test('creates key from valid native handle', () {
+        final key = SecureKeyFFI.attach(mockSodium, [1, 2]);
+
+        expect(key.length, 2);
+        verifyNever(() => mockSodium.sodium_allocarray(any(), any()));
+        verify(
+          () => mockSodium.sodium_mprotect_noaccess(Pointer.fromAddress(1)),
+        );
+      });
+    });
   });
 
   group('members', () {
