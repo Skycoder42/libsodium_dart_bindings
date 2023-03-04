@@ -15,7 +15,7 @@ class TransferableSecureKey with _$TransferableSecureKey {
   /// @nodoc
   factory TransferableSecureKey(SecureKey secureKey) =>
       secureKey is SecureKeyFFI
-          ? TransferableSecureKey.ffi(secureKey.nativeHandle)
+          ? TransferableSecureKey.ffi(secureKey.copy().detach())
           : TransferableSecureKey.generic(
               TransferableTypedData.fromList([secureKey.extractBytes()]),
             );
@@ -33,7 +33,7 @@ class TransferableSecureKey with _$TransferableSecureKey {
 
   /// @nodoc
   SecureKey toSecureKey(SodiumFFI sodium) => when(
-        ffi: (handle) => sodium.secureHandle(handle),
+        ffi: (handle) => SecureKeyFFI.attach(sodium.sodium, handle),
         generic: (data) => sodium.secureCopy(data.materialize().asUint8List()),
       );
 }

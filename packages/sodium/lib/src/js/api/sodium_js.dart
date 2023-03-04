@@ -54,10 +54,6 @@ class SodiumJS implements Sodium {
       );
 
   @override
-  SecureKey secureHandle(covariant SecureKeyJSNativeHandle nativeHandle) =>
-      SecureKeyJS(sodium, nativeHandle);
-
-  @override
   late final Randombytes randombytes = RandombytesJS(sodium);
 
   @override

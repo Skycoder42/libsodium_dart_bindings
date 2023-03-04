@@ -18,7 +18,7 @@ class TransferableKeyPair with _$TransferableKeyPair {
       ? TransferableKeyPair.ffi(
           publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
           secretKeyNativeHandle:
-              (keyPair.secretKey as SecureKeyFFI).nativeHandle,
+              (keyPair.secretKey as SecureKeyFFI).copy().detach(),
         )
       : TransferableKeyPair.generic(
           publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
@@ -45,7 +45,7 @@ class TransferableKeyPair with _$TransferableKeyPair {
   KeyPair toKeyPair(SodiumFFI sodium) => when(
         ffi: (publicKeyData, secretKeyHandle) => KeyPair(
           publicKey: publicKeyData.materialize().asUint8List(),
-          secretKey: sodium.secureHandle(secretKeyHandle),
+          secretKey: SecureKeyFFI.attach(sodium.sodium, secretKeyHandle),
         ),
         generic: (publicKeyData, secretKeyData) => KeyPair(
           publicKey: publicKeyData.materialize().asUint8List(),

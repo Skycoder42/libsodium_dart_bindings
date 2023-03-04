@@ -297,7 +297,6 @@ void main() {
         final res = sut.copy();
 
         expect(res.extractBytes(), testList);
-        expect(res.nativeHandle, isNot(sut.nativeHandle));
       });
     });
 
@@ -307,12 +306,16 @@ void main() {
       verify(() => mockSodiumPointer.dispose());
     });
 
-    test('nativeHandle returns list with address and count', () {
-      final nativeHandle = sut.nativeHandle;
+    test('detach returns list with detached address and count', () {
+      when(() => mockSodiumPointer.detach()).thenReturn(testPtr);
+
+      final nativeHandle = sut.detach();
 
       expect(nativeHandle, hasLength(2));
       expect(nativeHandle[0], testPtr.address);
       expect(nativeHandle[1], testList.length);
+
+      verify(() => mockSodiumPointer.detach());
     });
   });
 }

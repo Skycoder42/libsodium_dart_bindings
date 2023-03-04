@@ -53,6 +53,29 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     }
   }
 
+  /// @nodoc
+  @internal
+  factory SecureKeyFFI.attach(
+    LibSodiumFFI sodium,
+    SecureKeyFFINativeHandle nativeHandle,
+  ) {
+    if (nativeHandle.length != 2) {
+      throw ArgumentError.value(
+        nativeHandle,
+        'nativeHandle',
+        'Must be two integers',
+      );
+    }
+
+    return SecureKeyFFI(
+      SodiumPointer.raw(
+        sodium,
+        Pointer.fromAddress(nativeHandle[0]),
+        nativeHandle[1],
+      ),
+    );
+  }
+
   @override
   int get length => _raw.count;
 
@@ -99,7 +122,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
       runUnlockedNative((pointer) => Uint8List.fromList(pointer.asListView()));
 
   @override
-  SecureKey copy() => runUnlockedNative(
+  SecureKeyFFI copy() => runUnlockedNative(
         (originalPointer) => SecureKeyFFI(
           originalPointer.asListView().toSodiumPointer(
                 _raw.sodium,
@@ -113,6 +136,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     _raw.dispose();
   }
 
-  @override
-  SecureKeyFFINativeHandle get nativeHandle => [_raw.ptr.address, _raw.count];
+  /// @nodoc
+  @internal
+  SecureKeyFFINativeHandle detach() => [_raw.detach().address, _raw.count];
 }

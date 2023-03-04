@@ -123,25 +123,6 @@ class SodiumFFI implements Sodium {
       );
 
   @override
-  SecureKey secureHandle(covariant SecureKeyFFINativeHandle nativeHandle) {
-    if (nativeHandle.length != 2) {
-      throw ArgumentError.value(
-        nativeHandle,
-        'nativeHandle',
-        'Must be two integers',
-      );
-    }
-
-    return SecureKeyFFI(
-      SodiumPointer.raw(
-        sodium,
-        Pointer.fromAddress(nativeHandle[0]),
-        nativeHandle[1],
-      ),
-    );
-  }
-
-  @override
   late final Randombytes randombytes = RandombytesFFI(sodium);
 
   @override
@@ -153,26 +134,13 @@ class SodiumFFI implements Sodium {
     List<SecureKey> secureKeys = const [],
     List<KeyPair> keyPairs = const [],
   }) async {
-    final copiedSecureKeys =
-        secureKeys.map((secureKey) => secureKey.copy()).toList();
-    final copiedKeyPairs = keyPairs.map((keyPair) => keyPair.copy()).toList();
-
-    try {
-      final isolateResult = await _isolateRun(
-        _sodiumFactory,
-        copiedSecureKeys.map(TransferableSecureKey.new).toList(),
-        copiedKeyPairs.map(TransferableKeyPair.new).toList(),
-        callback,
-      );
-      return isolateResult.extract(this);
-    } finally {
-      for (final key in copiedSecureKeys) {
-        key.dispose();
-      }
-      for (final keyPair in copiedKeyPairs) {
-        keyPair.dispose();
-      }
-    }
+    final isolateResult = await _isolateRun(
+      _sodiumFactory,
+      secureKeys.map(TransferableSecureKey.new).toList(),
+      keyPairs.map(TransferableKeyPair.new).toList(),
+      callback,
+    );
+    return isolateResult.extract(this);
   }
 
   static Future<IsolateResult<T>> _isolateRun<T>(

@@ -54,17 +54,6 @@ void main() {
         expect(sut, same(fake));
         verify(() => mockSodium.secureRandom(10));
       });
-
-      test('fromNativeHandle calls secureHandle', () {
-        const nativeHandle = 'test_native_handle';
-        final fake = SecureKeyFake(const [5, 10, 15]);
-        when(() => mockSodium.secureHandle(any<dynamic>())).thenReturn(fake);
-
-        final sut = SecureKey.fromNativeHandle(mockSodium, nativeHandle);
-
-        expect(sut, same(fake));
-        verify(() => mockSodium.secureHandle(nativeHandle));
-      });
     });
   });
 

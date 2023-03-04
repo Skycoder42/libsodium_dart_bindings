@@ -57,28 +57,6 @@ abstract class SecureKey {
   factory SecureKey.random(Sodium sodium, int length) =>
       sodium.secureRandom(length);
 
-  /// Creates a secure key from a previously extracted [SecureKey.nativeHandle].
-  ///
-  /// > Dangerous API. Only use if you have no other choice and you know what
-  /// you are doing. You have been warned!
-  ///
-  /// Convenience factory constructor that redirects to [Sodium.secureHandle]
-  /// and calls it with [nativeHandle] on [sodium].
-  ///
-  /// Creating such a secure key will *not* create a copy of it, but instead
-  /// operate on the same low-level data. This means, if you take the handle
-  /// from one key and create a new one using this method, both [SecureKey]
-  /// instances will point to the same data.
-  ///
-  /// **Important:** Since multiple keys to the same handle all operate on the
-  /// same data, disposing one will dispose all, and changes to one immediatly
-  /// are reflected to the others. When using a handle across isolate
-  /// boundaries, make sure the different isolates never access the key at the
-  /// same time, as that might break the native code.
-  @experimental
-  factory SecureKey.fromNativeHandle(Sodium sodium, dynamic nativeHandle) =>
-      sodium.secureHandle(nativeHandle);
-
   /// Returns the length of the key in bytes, without unlocking it.
   int get length;
 
@@ -134,20 +112,6 @@ abstract class SecureKey {
   /// veriy important not to forget, as otherwise it can lead to memory leaks
   /// in the dart VM.
   void dispose();
-
-  /// Returns a native handle to the secure key.
-  ///
-  /// > Dangerous API. Only use if you have no other choice and you know what
-  /// you are doing. You have been warned!
-  ///
-  /// This handle can be passed between isolates and can be used with
-  /// [SecureKey.fromNativeHandle] to reconstruct it. It is like a pointer to
-  /// the underlying data.
-  ///
-  /// **Important:** If you dispose of the secure key via [SecureKey.dispose],
-  /// the handle becomes invalidated!
-  @experimental
-  dynamic get nativeHandle;
 }
 
 /// @nodoc

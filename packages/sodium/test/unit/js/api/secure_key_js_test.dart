@@ -126,11 +126,5 @@ void main() {
         );
       });
     });
-
-    test('nativeHandle returns internally used byte array', () {
-      final handle = sut.nativeHandle;
-
-      expect(handle, testList);
-    });
   });
 }

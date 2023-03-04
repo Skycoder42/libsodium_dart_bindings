@@ -11,7 +11,15 @@ import 'memory_protection.dart';
 /// A C-Pointer wrapper that uses the memory utilities of libsodium.
 ///
 /// See https://libsodium.gitbook.io/doc/memory_management
-class SodiumPointer<T extends NativeType> {
+class SodiumPointer<T extends NativeType> implements Finalizable {
+  static final _sodiumFinalizerCache = Expando<NativeFinalizer>();
+
+  static NativeFinalizer? _getFinalizer(LibSodiumFFI sodium) =>
+      sodium.sodium_freePtr != nullptr
+          ? _sodiumFinalizerCache[sodium] ??=
+              NativeFinalizer(sodium.sodium_freePtr)
+          : null;
+
   /// libsodium bindings used to access the C API
   final LibSodiumFFI sodium;
 
@@ -20,7 +28,10 @@ class SodiumPointer<T extends NativeType> {
 
   /// The number of elements this pointer is pointing to
   final int count;
-  final bool _isView;
+
+  final SodiumPointer<T>? _viewParent;
+
+  bool get _isView => _viewParent != null;
 
   bool _locked;
   MemoryProtection _memoryProtection;
@@ -28,9 +39,11 @@ class SodiumPointer<T extends NativeType> {
   /// Constructs the pointer from the lib[sodium] API, the raw [ptr] and the
   /// element [count].
   SodiumPointer.raw(this.sodium, this.ptr, this.count)
-      : _isView = false,
+      : _viewParent = null,
         _locked = true,
-        _memoryProtection = MemoryProtection.readWrite;
+        _memoryProtection = MemoryProtection.readWrite {
+    _getFinalizer(sodium)?.attach(this, ptr.cast(), detach: this);
+  }
 
   /// Allocates new memory using the libsodium APIs.
   ///
@@ -111,12 +124,13 @@ class SodiumPointer<T extends NativeType> {
   }
 
   SodiumPointer._view(
+    SodiumPointer<T> viewParent,
     this.sodium,
     this.ptr,
     this.count,
     this._locked,
     this._memoryProtection,
-  ) : _isView = true;
+  ) : _viewParent = viewParent;
 
   /// The number of bytes a single element of T is wide.
   ///
@@ -214,6 +228,7 @@ class SodiumPointer<T extends NativeType> {
     }
 
     return SodiumPointer._view(
+      this,
       sodium,
       ptr.dynamicElementAt(offset),
       length ?? count - offset,
@@ -301,7 +316,18 @@ class SodiumPointer<T extends NativeType> {
     if (_isView) {
       return;
     }
+    _getFinalizer(sodium)?.detach(this);
     sodium.sodium_free(ptr.cast());
+  }
+
+  /// @nodoc
+  @internal
+  Pointer<T> detach() {
+    if (_isView) {
+      throw UnsupportedError('Cannot transfer a memory view between isolates');
+    }
+    _getFinalizer(sodium)?.detach(this);
+    return ptr;
   }
 }
 

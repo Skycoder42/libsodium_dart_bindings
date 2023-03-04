@@ -20,6 +20,7 @@ void mockAllocArray(LibSodiumFFI mockSodium) {
   when(() => mockSodium.sodium_mprotect_readwrite(any())).thenReturn(0);
   when(() => mockSodium.sodium_mprotect_readonly(any())).thenReturn(0);
   when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
+  when(() => mockSodium.sodium_freePtr).thenReturn(nullptr);
 }
 
 void mockAlloc(LibSodiumFFI mockSodium, int value) {
@@ -29,6 +30,7 @@ void mockAlloc(LibSodiumFFI mockSodium, int value) {
     final ptr = calloc<Uint64>()..value = value;
     return ptr.cast();
   });
+  when(() => mockSodium.sodium_freePtr).thenReturn(nullptr);
 }
 
 void fillPointer<T extends NativeType>(Pointer<T> ptr, List<int> data) {

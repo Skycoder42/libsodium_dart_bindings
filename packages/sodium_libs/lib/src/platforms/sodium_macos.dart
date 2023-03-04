@@ -29,10 +29,6 @@ class _SodiumMacos implements Sodium {
   SecureKey secureRandom(int length) => _sodium.secureRandom(length);
 
   @override
-  SecureKey secureHandle(dynamic nativeHandle) =>
-      _sodium.secureHandle(nativeHandle);
-
-  @override
   Uint8List unpad(Uint8List buf, int blocksize) =>
       _sodium.unpad(buf, blocksize);
 
