@@ -38,6 +38,18 @@ class _SodiumMacos implements Sodium {
 
   @override
   SodiumVersion get version => const SodiumVersion(10, 3, '1.0.18');
+
+  @override
+  Future<T> runIsolated<T>(
+    SodiumIsolateCallback<T> callback, {
+    List<SecureKey> secureKeys = const [],
+    List<KeyPair> keyPairs = const [],
+  }) =>
+      _sodium.runIsolated(
+        callback,
+        secureKeys: secureKeys,
+        keyPairs: keyPairs,
+      );
 }
 
 class _SodiumSumoMacos extends _SodiumMacos implements SodiumSumo {
@@ -58,9 +70,11 @@ class SodiumMacos extends SodiumPlatform {
 
   @override
   Future<Sodium> loadSodium() =>
-      SodiumInit.init(DynamicLibrary.process()).then(_SodiumMacos.new);
+      SodiumInit.initWithIsolates(DynamicLibrary.process)
+          .then(_SodiumMacos.new);
 
   @override
   Future<SodiumSumo> loadSodiumSumo() =>
-      SodiumSumoInit.init(DynamicLibrary.process()).then(_SodiumSumoMacos.new);
+      SodiumSumoInit.initWithIsolates(DynamicLibrary.process)
+          .then(_SodiumSumoMacos.new);
 }

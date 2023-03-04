@@ -12,12 +12,12 @@ class SodiumAndroid extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium() => SodiumInit.init(
-        DynamicLibrary.open('libsodium.so'),
+  Future<Sodium> loadSodium() => SodiumInit.initWithIsolates(
+        () => DynamicLibrary.open('libsodium.so'),
       );
 
   @override
-  Future<SodiumSumo> loadSodiumSumo() => SodiumSumoInit.init(
-        DynamicLibrary.open('libsodium.so'),
+  Future<SodiumSumo> loadSodiumSumo() => SodiumSumoInit.initWithIsolates(
+        () => DynamicLibrary.open('libsodium.so'),
       );
 }

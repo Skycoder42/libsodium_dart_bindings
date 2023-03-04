@@ -11,21 +11,21 @@ executables:
   sodium_libs_update_web: update_web
 
 dependencies:
-  args: ^2.3.1
+  args: ^2.4.0
   flutter:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
   html: ^0.15.1
-  js: ^0.6.4
+  js: ^0.6.5
   meta: ^1.8.0
-  plugin_platform_interface: ^2.1.3
-  sodium: ^2.0.0
-  synchronized: ^3.0.0+3
+  plugin_platform_interface: ^2.1.4
+  sodium: ^2.0.1
+  synchronized: ^3.0.1
 
 dev_dependencies:
-  dart_pre_commit: ^4.0.0
-  dart_test_tools: ^4.5.3+1
+  dart_pre_commit: ^4.1.0
+  dart_test_tools: ^4.8.0
   flutter_test:
     sdk: flutter
 

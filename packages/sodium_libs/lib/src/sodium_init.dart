@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:sodium/sodium.dart' show Sodium;
 import 'package:synchronized/synchronized.dart';
 
@@ -33,7 +32,6 @@ abstract class SodiumInit {
           return _instance!;
         }
 
-        WidgetsFlutterBinding.ensureInitialized();
         _instance = await SodiumPlatform.instance.loadSodium();
 
         if (!kReleaseMode) {

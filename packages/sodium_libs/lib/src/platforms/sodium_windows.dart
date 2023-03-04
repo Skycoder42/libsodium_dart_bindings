@@ -12,13 +12,13 @@ class SodiumWindows extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium() => SodiumInit.init(
-        DynamicLibrary.open('libsodium.dll'),
+  Future<Sodium> loadSodium() => SodiumInit.initWithIsolates(
+        () => DynamicLibrary.open('libsodium.dll'),
       );
 
   @override
-  Future<SodiumSumo> loadSodiumSumo() => SodiumSumoInit.init(
-        DynamicLibrary.open('libsodium.dll'),
+  Future<SodiumSumo> loadSodiumSumo() => SodiumSumoInit.initWithIsolates(
+        () => DynamicLibrary.open('libsodium.dll'),
       );
 
   @override

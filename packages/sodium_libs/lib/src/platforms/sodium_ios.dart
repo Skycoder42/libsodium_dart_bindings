@@ -38,6 +38,18 @@ class _SodiumIos implements Sodium {
 
   @override
   SodiumVersion get version => const SodiumVersion(10, 3, '1.0.18');
+
+  @override
+  Future<T> runIsolated<T>(
+    SodiumIsolateCallback<T> callback, {
+    List<SecureKey> secureKeys = const [],
+    List<KeyPair> keyPairs = const [],
+  }) =>
+      _sodium.runIsolated(
+        callback,
+        secureKeys: secureKeys,
+        keyPairs: keyPairs,
+      );
 }
 
 class _SodiumSumoIos extends _SodiumIos implements SodiumSumo {
@@ -58,9 +70,10 @@ class SodiumIos extends SodiumPlatform {
 
   @override
   Future<Sodium> loadSodium() =>
-      SodiumInit.init(DynamicLibrary.process()).then(_SodiumIos.new);
+      SodiumInit.initWithIsolates(DynamicLibrary.process).then(_SodiumIos.new);
 
   @override
   Future<SodiumSumo> loadSodiumSumo() =>
-      SodiumSumoInit.init(DynamicLibrary.process()).then(_SodiumSumoIos.new);
+      SodiumSumoInit.initWithIsolates(DynamicLibrary.process)
+          .then(_SodiumSumoIos.new);
 }
