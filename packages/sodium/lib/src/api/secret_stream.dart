@@ -80,7 +80,6 @@ class SecretStreamPlainMessage with _$SecretStreamPlainMessage {
   const factory SecretStreamPlainMessage(
     /// The message that should be encrypted.
     Uint8List message, {
-
     /// Additional data, that should be used to generate authentication data.
     ///
     /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#encryption
@@ -101,7 +100,6 @@ class SecretStreamCipherMessage with _$SecretStreamCipherMessage {
   const factory SecretStreamCipherMessage(
     /// The message that should be decrypted.
     Uint8List message, {
-
     /// Additional data, that should be used to generate authentication data.
     ///
     /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#decryption
