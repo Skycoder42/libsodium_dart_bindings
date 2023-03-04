@@ -20,7 +20,7 @@ jobs:
       libsodium_version: ${{ steps.version.outputs.version }}
     steps:
       - name: Install Flutter-SDK
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Restore sodium_libs
