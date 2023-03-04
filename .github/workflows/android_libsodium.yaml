@@ -86,7 +86,7 @@ jobs:
           mkdir upload
           cp libsodium-stable/libsodium-android-*/lib/libsodium.so upload/
       - name: Create artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.architecture }}
           path: upload
