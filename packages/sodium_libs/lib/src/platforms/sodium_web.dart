@@ -32,22 +32,22 @@ class SodiumWeb extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium() =>
-      _loadLibSodiumJS().then(SodiumInit.initFromSodiumJS);
+  Future<Sodium> loadSodium() => SodiumInit.initFromSodiumJS2(_loadLibSodiumJS);
 
   @override
-  Future<SodiumSumo> loadSodiumSumo() async {
-    final libSodiumJs = await _loadLibSodiumJS();
-    // ignore: avoid_dynamic_calls
-    if (hasProperty(libSodiumJs, 'crypto_sign_ed25519_sk_to_seed')) {
-      return SodiumSumoInit.initFromSodiumJS(libSodiumJs);
-    } else {
-      throw SodiumSumoUnavailable(
-        details:
-            'JS-API for sumo-method crypto_sign_ed25519_sk_to_seed is missing.',
-      );
-    }
-  }
+  Future<SodiumSumo> loadSodiumSumo() =>
+      SodiumSumoInit.initFromSodiumJS2(() async {
+        final libSodiumJs = await _loadLibSodiumJS();
+        // ignore: avoid_dynamic_calls
+        if (hasProperty(libSodiumJs, 'crypto_sign_ed25519_sk_to_seed')) {
+          return libSodiumJs;
+        } else {
+          throw SodiumSumoUnavailable(
+            details: 'JS-API for sumo-method crypto_sign_ed25519_sk_to_seed '
+                'is missing.',
+          );
+        }
+      });
 
   Future<LibSodiumJS> _loadLibSodiumJS() {
     // check if sodium was already loaded

@@ -12,12 +12,11 @@ class SodiumLinux extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium() =>
-      SodiumInit.initWithIsolates(DynamicLibrary.process);
+  Future<Sodium> loadSodium() => SodiumInit.init2(DynamicLibrary.process);
 
   @override
   Future<SodiumSumo> loadSodiumSumo() =>
-      SodiumSumoInit.initWithIsolates(DynamicLibrary.process);
+      SodiumSumoInit.init2(DynamicLibrary.process);
 
   @override
   String get updateHint =>

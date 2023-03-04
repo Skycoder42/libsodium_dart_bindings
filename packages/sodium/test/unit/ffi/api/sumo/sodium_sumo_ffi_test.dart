@@ -28,6 +28,11 @@ void main() {
     sut = SodiumSumoFFI(mockSodium);
   });
 
+  test('fromFactory returns instance created by the factory', () async {
+    final sut = await SodiumSumoFFI.fromFactory(() => MockSodiumFFI());
+    expect(sut.sodium, isNot(same(mockSodium)));
+  });
+
   test('crypto returns CryptoSumoFFI instance', () {
     expect(
       sut.crypto,

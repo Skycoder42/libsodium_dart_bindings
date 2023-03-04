@@ -15,9 +15,9 @@ Future<void> main(List<String> arguments) async {
     exit(1);
   }
 
-  final libsodium = DynamicLibrary.open(arguments.first);
-
-  final sodium = await SodiumInit.init(libsodium);
+  final sodium = await SodiumInit.init2(
+    () => DynamicLibrary.open(arguments.first),
+  );
 
   final res = runSample(sodium);
 

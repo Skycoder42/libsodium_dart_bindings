@@ -47,6 +47,11 @@ void main() {
     );
   });
 
+  test('fromFactory returns instance created by the factory', () async {
+    final sut = await SodiumFFI.fromFactory(() => MockSodiumFFI());
+    expect(sut.sodium, isNot(same(mockSodium)));
+  });
+
   test('version returns correct library version', () {
     final vStr = 'version'.toNativeUtf8();
     try {
