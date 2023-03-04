@@ -1,4 +1,5 @@
 @TestOn('js')
+library generic_hash_consumer_js_test;
 
 import 'dart:typed_data';
 

@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 import 'test_runner.dart';
 
-export 'package:test/test.dart' hide test, group, setUp;
+export 'package:test/test.dart' hide group, setUp, test;
 
 abstract class TestCase {
   final TestRunner _runner;

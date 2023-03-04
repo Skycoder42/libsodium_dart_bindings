@@ -1,4 +1,5 @@
 @TestOn('js')
+library secret_stream_push_transformer_js_test;
 
 import 'dart:typed_data';
 

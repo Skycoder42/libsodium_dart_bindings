@@ -18,6 +18,7 @@ void testKeygen({
   required Uint8List Function() keygenNative,
 }) =>
     group('keygen', () {
+      // ignore: prefer_asserts_with_message
       assert(mockSodium is Mock);
 
       test('calls native implementation on generated key', () {
@@ -51,6 +52,7 @@ void testKeypair({
   required KeyPair Function() keypairNative,
 }) =>
     group('keypair', () {
+      // ignore: prefer_asserts_with_message
       assert(mockSodium is Mock);
 
       test('calls native implementation to allocate keys', () {
@@ -101,6 +103,7 @@ void testSeedKeypair({
     group('seedKeypair', () {
       const seedLen = 33;
 
+      // ignore: prefer_asserts_with_message
       assert(mockSodium is Mock);
 
       setUp(() {

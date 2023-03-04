@@ -87,9 +87,7 @@ class RandombytesTestCase extends TestCase {
     });
 
     test('close and stir close and reinit random', (sodium) {
-      final sut = sodium.randombytes;
-
-      sut
+      final sut = sodium.randombytes
         ..close()
         ..stir();
       expect(sut.random(), anything);

@@ -1,9 +1,9 @@
 @TestOn('js')
+library kx_js_test;
 
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/kx_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
@@ -71,7 +71,7 @@ void main() {
 
     testSeedKeypair(
       mockSodium: mockSodium,
-      runSeedKeypair: (SecureKey seed) => sut.seedKeyPair(seed),
+      runSeedKeypair: (seed) => sut.seedKeyPair(seed),
       seedBytesNative: () => mockSodium.crypto_kx_SEEDBYTES,
       seedKeypairNative: mockSodium.crypto_kx_seed_keypair,
     );

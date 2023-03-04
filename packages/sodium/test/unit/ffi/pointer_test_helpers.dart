@@ -10,6 +10,7 @@ void registerPointers() {
 }
 
 void mockAllocArray(LibSodiumFFI mockSodium) {
+  // ignore: prefer_asserts_with_message
   assert(mockSodium is Mock);
   when(() => mockSodium.sodium_allocarray(any(), any())).thenAnswer((i) {
     final totalSize =
@@ -22,6 +23,7 @@ void mockAllocArray(LibSodiumFFI mockSodium) {
 }
 
 void mockAlloc(LibSodiumFFI mockSodium, int value) {
+  // ignore: prefer_asserts_with_message
   assert(mockSodium is Mock);
   when(() => mockSodium.sodium_malloc(any())).thenAnswer((i) {
     final ptr = calloc<Uint64>()..value = value;

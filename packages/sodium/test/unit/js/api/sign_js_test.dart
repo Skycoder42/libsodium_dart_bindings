@@ -1,9 +1,11 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('js')
+library sign_js_test;
 
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/helpers/sign/signature_consumer_js.dart';
 import 'package:sodium/src/js/api/helpers/sign/verification_consumer_js.dart';
@@ -72,7 +74,7 @@ void main() {
 
     testSeedKeypair(
       mockSodium: mockSodium,
-      runSeedKeypair: (SecureKey seed) => sut.seedKeyPair(seed),
+      runSeedKeypair: (seed) => sut.seedKeyPair(seed),
       seedBytesNative: () => mockSodium.crypto_sign_SEEDBYTES,
       seedKeypairNative: mockSodium.crypto_sign_seed_keypair,
     );

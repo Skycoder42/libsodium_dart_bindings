@@ -8,13 +8,7 @@ import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:meta/meta.dart';
 // ignore: test_library_import
-import 'package:sodium/sodium.dart';
-// ignore: test_library_import
-import 'package:sodium/sodium_sumo.dart';
-// ignore: test_library_import
 import 'package:sodium/sodium.js.dart';
-
-import 'test_runner.dart';
 
 @JS()
 @anonymous

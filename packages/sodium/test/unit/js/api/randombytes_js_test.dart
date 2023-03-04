@@ -1,4 +1,7 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('js')
+library randombytes_js_test;
 
 import 'dart:typed_data';
 

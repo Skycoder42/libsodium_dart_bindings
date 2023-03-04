@@ -1,5 +1,3 @@
-@TestOn('js')
-
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -19,6 +17,7 @@ void addStreamTests({
   required SignConsumerJSMixin Function() createSut,
   void Function()? setUpVerify,
 }) {
+  // ignore: prefer_asserts_with_message
   assert(mockSodium is Mock);
 
   group('add', () {

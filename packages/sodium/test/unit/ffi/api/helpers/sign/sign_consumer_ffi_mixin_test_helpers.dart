@@ -1,4 +1,4 @@
-@TestOn('dart-vm')
+// ignore_for_file: prefer_asserts_with_message
 
 import 'dart:async';
 import 'dart:ffi';

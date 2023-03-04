@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_lambdas
+
 import 'dart:async';
 
 import 'package:meta/meta.dart';
@@ -26,9 +28,13 @@ typedef SetupAllFn = void Function(dynamic Function() body);
 typedef SetupFn = void Function(dynamic Function(Sodium sodium) body);
 typedef GroupFn = void Function(String description, dynamic Function() body);
 typedef TestFn = void Function(
-    String description, dynamic Function(Sodium sodium) body);
+  String description,
+  dynamic Function(Sodium sodium) body,
+);
 typedef TestSumoFn = void Function(
-    String description, dynamic Function(SodiumSumo sodium) body);
+  String description,
+  dynamic Function(SodiumSumo sodium) body,
+);
 
 abstract class TestRunner {
   late final Sodium _sodium;
@@ -112,6 +118,7 @@ abstract class SumoTestRunner extends TestRunner {
   @override
   bool get isSumoTest => true;
 
+  @override
   SodiumSumo get sodium => _sodium as SodiumSumo;
 
   @protected
@@ -119,6 +126,7 @@ abstract class SumoTestRunner extends TestRunner {
   @override
   Future<SodiumSumo> loadSodium();
 
+  @override
   @visibleForOverriding
   void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
       t.test(

@@ -1,4 +1,5 @@
 @TestOn('dart-vm')
+library secure_key_native_test;
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -28,7 +29,9 @@ void main() {
 
   setUpAll(() {
     registerPointers();
+    // ignore: avoid_types_on_closure_parameters
     registerFallbackValue((SodiumPointer<UnsignedChar> _) => null);
+    // ignore: avoid_types_on_closure_parameters
     registerFallbackValue((Uint8List _) => null);
   });
 

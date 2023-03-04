@@ -1,4 +1,7 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('dart-vm')
+library short_hash_ffi_test;
 
 import 'dart:ffi';
 import 'dart:typed_data';

@@ -1,4 +1,5 @@
 @TestOn('js')
+library auth_js_test;
 
 import 'dart:typed_data';
 

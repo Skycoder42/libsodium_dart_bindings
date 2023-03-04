@@ -1,10 +1,12 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('dart-vm')
+library kx_ffi_test;
 
 import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/kx_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
@@ -76,7 +78,7 @@ void main() {
 
     testSeedKeypair(
       mockSodium: mockSodium,
-      runSeedKeypair: (SecureKey seed) => sut.seedKeyPair(seed),
+      runSeedKeypair: (seed) => sut.seedKeyPair(seed),
       seedBytesNative: mockSodium.crypto_kx_seedbytes,
       secretKeyBytesNative: mockSodium.crypto_kx_secretkeybytes,
       publicKeyBytesNative: mockSodium.crypto_kx_publickeybytes,

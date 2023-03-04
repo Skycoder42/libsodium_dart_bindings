@@ -1,4 +1,7 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('dart-vm')
+library sign_sumo_ffi_test;
 
 import 'dart:ffi';
 

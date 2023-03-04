@@ -1,4 +1,5 @@
 @TestOn('js')
+library pwhash_js_test;
 
 import 'dart:typed_data';
 

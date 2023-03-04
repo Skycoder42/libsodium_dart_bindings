@@ -1,10 +1,12 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('dart-vm')
+library verification_consumer_ffi_test;
 
 import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/helpers/sign/verification_consumer_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
@@ -14,8 +16,6 @@ import '../../../pointer_test_helpers.dart';
 import 'sign_consumer_ffi_mixin_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
-
-class MockSecureKey extends Mock implements SecureKey {}
 
 void main() {
   final publicKey = Uint8List.fromList(

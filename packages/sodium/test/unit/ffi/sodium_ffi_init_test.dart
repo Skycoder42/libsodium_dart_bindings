@@ -1,4 +1,7 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('dart-vm')
+library sodium_ffi_init_test;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
@@ -28,7 +31,7 @@ void main() {
     when(() => mockSodium.sodium_init()).thenReturn(-1);
 
     expect(
-      () => SodiumSumoInit.initFromSodiumFFI(mockSodium),
+      () async => SodiumSumoInit.initFromSodiumFFI(mockSodium),
       throwsA(isA<SodiumException>()),
     );
   });

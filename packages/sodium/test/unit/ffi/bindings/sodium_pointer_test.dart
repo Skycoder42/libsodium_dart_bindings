@@ -1,4 +1,7 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('dart-vm')
+library sodium_pointer_test;
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -16,9 +19,6 @@ import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
-
-class MockSodiumPointer<T extends NativeType> extends Mock
-    implements SodiumPointer<T> {}
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -363,7 +363,7 @@ void main() {
           when(() => mockSodium.sodium_munlock(any(), any())).thenReturn(0);
 
           sut.locked = false;
-          assert(!sut.locked);
+          expect(sut.locked, isFalse);
 
           reset(mockSodium);
         });
@@ -445,7 +445,7 @@ void main() {
           when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
 
           sut.memoryProtection = MemoryProtection.noAccess;
-          assert(sut.memoryProtection == MemoryProtection.noAccess);
+          expect(sut.memoryProtection, MemoryProtection.noAccess);
 
           reset(mockSodium);
         });
@@ -594,7 +594,7 @@ void main() {
       mockAllocArray(mockSodium);
     });
 
-    void _testPointerListConversions<TPtr extends NativeType,
+    void testPointerListConversions<TPtr extends NativeType,
         TList extends List<int>>({
       required int elementSize,
       required Pointer<TPtr> Function(int lengthInBytes) alloc,
@@ -688,7 +688,7 @@ void main() {
     }
 
     group('Int8', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Int8>(),
         alloc: (bytes) => calloc<Int8>(bytes),
         createList: Int8List.fromList,
@@ -696,7 +696,7 @@ void main() {
     });
 
     group('Int16', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Int16>(),
         alloc: (bytes) => calloc<Int16>(bytes),
         createList: Int16List.fromList,
@@ -704,7 +704,7 @@ void main() {
     });
 
     group('Int32', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Int32>(),
         alloc: (bytes) => calloc<Int32>(bytes),
         createList: Int32List.fromList,
@@ -712,7 +712,7 @@ void main() {
     });
 
     group('Int64', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Int64>(),
         alloc: (bytes) => calloc<Int64>(bytes),
         createList: Int64List.fromList,
@@ -720,7 +720,7 @@ void main() {
     });
 
     group('Uint8', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Uint8>(),
         alloc: (bytes) => calloc<Uint8>(bytes),
         createList: Uint8List.fromList,
@@ -728,7 +728,7 @@ void main() {
     });
 
     group('Uint16', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Uint16>(),
         alloc: (bytes) => calloc<Uint16>(bytes),
         createList: Uint16List.fromList,
@@ -736,7 +736,7 @@ void main() {
     });
 
     group('Uint32', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Uint32>(),
         alloc: (bytes) => calloc<Uint32>(bytes),
         createList: Uint32List.fromList,
@@ -744,7 +744,7 @@ void main() {
     });
 
     group('Uint64', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Uint64>(),
         alloc: (bytes) => calloc<Uint64>(bytes),
         createList: Uint64List.fromList,
@@ -752,7 +752,7 @@ void main() {
     });
 
     group('Char', () {
-      _testPointerListConversions<Char, Int8List>(
+      testPointerListConversions<Char, Int8List>(
         elementSize: sizeOf<Char>(),
         alloc: (bytes) => calloc<Char>(bytes),
         createList: Int8List.fromList,
@@ -814,7 +814,7 @@ void main() {
     });
 
     group('Short', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Short>(),
         alloc: (bytes) => calloc<Short>(bytes),
         createList: Int16List.fromList,
@@ -823,7 +823,7 @@ void main() {
     });
 
     group('Int', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Int>(),
         alloc: (bytes) => calloc<Int>(bytes),
         createList: Int32List.fromList,
@@ -832,7 +832,7 @@ void main() {
     });
 
     group('Long', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Long>(),
         alloc: (bytes) => calloc<Long>(bytes),
         createList: Int32List.fromList,
@@ -841,7 +841,7 @@ void main() {
     });
 
     group('LongLong', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<LongLong>(),
         alloc: (bytes) => calloc<LongLong>(bytes),
         createList: Int64List.fromList,
@@ -850,7 +850,7 @@ void main() {
     });
 
     group('UnsignedChar', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<UnsignedChar>(),
         alloc: (bytes) => calloc<UnsignedChar>(bytes),
         createList: Uint8List.fromList,
@@ -859,7 +859,7 @@ void main() {
     });
 
     group('UnsignedShort', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<UnsignedShort>(),
         alloc: (bytes) => calloc<UnsignedShort>(bytes),
         createList: Uint16List.fromList,
@@ -868,7 +868,7 @@ void main() {
     });
 
     group('UnsignedInt', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<UnsignedInt>(),
         alloc: (bytes) => calloc<UnsignedInt>(bytes),
         createList: Uint32List.fromList,
@@ -877,7 +877,7 @@ void main() {
     });
 
     group('UnsignedLong', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<UnsignedLong>(),
         alloc: (bytes) => calloc<UnsignedLong>(bytes),
         createList: Uint32List.fromList,
@@ -886,7 +886,7 @@ void main() {
     });
 
     group('UnsignedLongLong', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<UnsignedLongLong>(),
         alloc: (bytes) => calloc<UnsignedLongLong>(bytes),
         createList: Uint64List.fromList,
@@ -895,7 +895,7 @@ void main() {
     });
 
     group('SignedChar', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<SignedChar>(),
         alloc: (bytes) => calloc<SignedChar>(bytes),
         createList: Int8List.fromList,
@@ -904,7 +904,7 @@ void main() {
     });
 
     group('IntPtr', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<IntPtr>(),
         alloc: (bytes) => calloc<IntPtr>(bytes),
         createList: Int32List.fromList,
@@ -913,7 +913,7 @@ void main() {
     });
 
     group('UintPtr', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<UintPtr>(),
         alloc: (bytes) => calloc<UintPtr>(bytes),
         createList: Uint32List.fromList,
@@ -922,7 +922,7 @@ void main() {
     });
 
     group('Size', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<Size>(),
         alloc: (bytes) => calloc<Size>(bytes),
         createList: Uint32List.fromList,
@@ -931,7 +931,7 @@ void main() {
     });
 
     group('WChar', () {
-      _testPointerListConversions(
+      testPointerListConversions(
         elementSize: sizeOf<WChar>(),
         alloc: (bytes) => calloc<WChar>(bytes),
         createList: Uint16List.fromList,

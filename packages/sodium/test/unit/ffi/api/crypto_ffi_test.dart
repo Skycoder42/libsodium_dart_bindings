@@ -1,4 +1,5 @@
 @TestOn('dart-vm')
+library crypto_ffi_test;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/aead_ffi.dart';

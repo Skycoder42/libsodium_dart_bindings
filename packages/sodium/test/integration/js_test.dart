@@ -1,4 +1,5 @@
 @TestOn('js')
+library js_test;
 
 // ignore: test_library_import
 import 'package:sodium/sodium.dart';

@@ -1,4 +1,5 @@
 @TestOn('js')
+library to_safe_int_test;
 
 import 'package:sodium/src/js/bindings/to_safe_int.dart';
 import 'package:test/test.dart';

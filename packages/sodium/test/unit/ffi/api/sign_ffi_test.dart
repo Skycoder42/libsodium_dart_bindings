@@ -1,10 +1,12 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('dart-vm')
+library sign_ffi_test;
 
 import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/helpers/sign/signature_consumer_ffi.dart';
 import 'package:sodium/src/ffi/api/helpers/sign/verification_consumer_ffi.dart';
@@ -79,7 +81,7 @@ void main() {
 
     testSeedKeypair(
       mockSodium: mockSodium,
-      runSeedKeypair: (SecureKey seed) => sut.seedKeyPair(seed),
+      runSeedKeypair: (seed) => sut.seedKeyPair(seed),
       seedBytesNative: mockSodium.crypto_sign_seedbytes,
       secretKeyBytesNative: mockSodium.crypto_sign_secretkeybytes,
       publicKeyBytesNative: mockSodium.crypto_sign_publickeybytes,

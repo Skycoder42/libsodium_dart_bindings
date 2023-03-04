@@ -1,4 +1,5 @@
 @TestOn('js')
+library crypto_js_test;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/aead_js.dart';

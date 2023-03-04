@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_lambdas
+
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';

@@ -1,5 +1,7 @@
+// ignore_for_file: unnecessary_lambdas, invalid_use_of_protected_member
+
 @TestOn('dart-vm')
-// ignore_for_file: invalid_use_of_protected_member
+library secret_stream_pull_transformer_ffi_test;
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -188,7 +190,9 @@ void main() {
                 state.ptr.cast(),
                 any(that: isNot(nullptr)),
                 any(that: equals(nullptr)),
-                any(that: predicate((Pointer<UnsignedChar> p) => p.value == 0)),
+                any(
+                  that: predicate<Pointer<UnsignedChar>>((p) => p.value == 0),
+                ),
                 any(that: hasRawData<UnsignedChar>(cipherData)),
                 cipherData.length,
                 any(that: hasRawData<UnsignedChar>(additionalData)),
@@ -229,7 +233,9 @@ void main() {
                 state.ptr.cast(),
                 any(that: isNot(nullptr)),
                 any(that: equals(nullptr)),
-                any(that: predicate((Pointer<UnsignedChar> p) => p.value == 0)),
+                any(
+                  that: predicate<Pointer<UnsignedChar>>((p) => p.value == 0),
+                ),
                 any(that: hasRawData<UnsignedChar>(cipherData)),
                 cipherData.length,
                 nullptr.cast(),

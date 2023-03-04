@@ -1,10 +1,10 @@
 @TestOn('js')
+library box_js_test;
 
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/detached_cipher_result.dart';
-import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/box_js.dart';
 import 'package:sodium/src/js/api/secure_key_js.dart';
@@ -86,7 +86,7 @@ void main() {
 
       testSeedKeypair(
         mockSodium: mockSodium,
-        runSeedKeypair: (SecureKey seed) => sut.seedKeyPair(seed),
+        runSeedKeypair: (seed) => sut.seedKeyPair(seed),
         seedBytesNative: () => mockSodium.crypto_box_SEEDBYTES,
         seedKeypairNative: mockSodium.crypto_box_seed_keypair,
       );

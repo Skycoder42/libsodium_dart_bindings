@@ -1,4 +1,5 @@
 @TestOn('js')
+library sodium_sumo_js_test;
 
 import 'dart:typed_data';
 

@@ -1,4 +1,5 @@
 @TestOn('js')
+library short_hash_js_test;
 
 import 'dart:typed_data';
 

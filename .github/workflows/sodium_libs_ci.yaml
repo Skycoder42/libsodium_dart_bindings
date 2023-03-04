@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "*"
+      - "**"
     paths:
       - "packages/sodium_libs/**"
       - ".github/workflows/sodium_libs_ci.yaml"
   pull_request:
     branches:
-      - "*"
+      - "**"
     paths:
       - "packages/sodium_libs/**"
       - ".github/workflows/sodium_libs_ci.yaml"
