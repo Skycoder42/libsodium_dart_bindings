@@ -1,3 +1,4 @@
+export 'src/ffi/api/helpers/isolates/libsodiumffi_factory.dart';
 export 'src/ffi/bindings/libsodium.ffi.dart';
 export 'src/ffi/bindings/memory_protection.dart';
 export 'src/ffi/bindings/sodium_allocator.dart';

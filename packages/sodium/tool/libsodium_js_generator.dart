@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart';
@@ -9,10 +8,6 @@ import 'libsodium_js_generator/generators/constants_generator.dart';
 import 'libsodium_js_generator/generators/library_generator.dart';
 import 'libsodium_js_generator/generators/symbols_generator.dart';
 import 'libsodium_js_generator/type_mappings.dart';
-
-extension FileX on File {
-  Future<dynamic> readAsJson() async => json.decode(await readAsString());
-}
 
 Future<void> main(List<String> args) async {
   final wrapperDir = Directory(args[0]);
