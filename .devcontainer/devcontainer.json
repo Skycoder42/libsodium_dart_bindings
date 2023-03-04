@@ -1,0 +1,36 @@
+{
+	"name": "Flutter (Stable)",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"blaxou.freezed",
+				"dart-code.dart-code",
+				"dart-Code.flutter",
+				"Gruntfuggly.todo-tree",
+				"me-dutour-mathieu.vscode-github-actions",
+				"mhutchie.git-graph",
+				"ryanluker.vscode-coverage-gutters",
+				"streetsidesoftware.code-spell-checker",
+				"streetsidesoftware.code-spell-checker-german",
+				"timonwong.shellcheck"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "zsh"
+			}
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {
+			"plugins": "git colorize vscode",
+			"omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions"
+		},
+		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {}
+	},
+	"postCreateCommand": "/usr/local/bin/on-post-create.sh",
+	"remoteEnv": {
+		"PATH": "${containerEnv:PATH}:/opt/flutter/bin:${containerEnv:PUB_CACHE:/opt/pub-cache}/bin"
+	}
+}

@@ -1,8 +1,8 @@
 name: sodium
 
 packages:
-  - packages/sodium/*
-  - packages/sodium_libs/*
+  - packages/sodium
+  - packages/sodium_libs
 
 scripts:
   get:
