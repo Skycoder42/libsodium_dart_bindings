@@ -7,18 +7,24 @@ import '../../api/string_x.dart';
 
 import 'libsodium.ffi.dart';
 import 'memory_protection.dart';
+import 'sodium_finalizer.dart';
 
 /// A C-Pointer wrapper that uses the memory utilities of libsodium.
 ///
 /// See https://libsodium.gitbook.io/doc/memory_management
 class SodiumPointer<T extends NativeType> implements Finalizable {
-  static final _sodiumFinalizerCache = Expando<NativeFinalizer>();
+  static final _sodiumFinalizerCache = Expando<SodiumFinalizer>();
 
-  static NativeFinalizer? _getFinalizer(LibSodiumFFI sodium) =>
-      sodium.sodium_freePtr != nullptr
-          ? _sodiumFinalizerCache[sodium] ??=
-              NativeFinalizer(sodium.sodium_freePtr)
-          : null;
+  static SodiumFinalizer _getFinalizer(LibSodiumFFI sodium) =>
+      _sodiumFinalizerCache[sodium] ??= SodiumFinalizer(sodium);
+
+  /// @nodoc
+  @visibleForTesting
+  static void debugOverwriteFinalizer(
+    LibSodiumFFI sodium,
+    SodiumFinalizer finalizer,
+  ) =>
+      _sodiumFinalizerCache[sodium] = finalizer;
 
   /// libsodium bindings used to access the C API
   final LibSodiumFFI sodium;
@@ -42,7 +48,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
       : _viewParent = null,
         _locked = true,
         _memoryProtection = MemoryProtection.readWrite {
-    _getFinalizer(sodium)?.attach(this, ptr.cast(), detach: this);
+    _getFinalizer(sodium).attach(this, ptr.cast());
   }
 
   /// Allocates new memory using the libsodium APIs.
@@ -316,7 +322,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
     if (_isView) {
       return;
     }
-    _getFinalizer(sodium)?.detach(this);
+    _getFinalizer(sodium).detach(this);
     sodium.sodium_free(ptr.cast());
   }
 
@@ -326,7 +332,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
     if (_isView) {
       throw UnsupportedError('Cannot transfer a memory view between isolates');
     }
-    _getFinalizer(sodium)?.detach(this);
+    _getFinalizer(sodium).detach(this);
     return ptr;
   }
 }

@@ -1,6 +1,9 @@
+// ignore_for_file: unnecessary_lambdas
+
 @TestOn('dart-vm')
 library transferable_secure_key_test;
 
+import 'dart:ffi';
 import 'dart:isolate';
 import 'dart:typed_data';
 
@@ -9,7 +12,16 @@ import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/ffi/api/helpers/isolates/transferable_secure_key.dart';
 import 'package:sodium/src/ffi/api/secure_key_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/sodium_finalizer.dart';
+import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
+
+import '../../../pointer_test_helpers.dart';
+
+class MockLibSodiumFFI extends Mock implements LibSodiumFFI {}
+
+class MockSodiumFinalizer extends Mock implements SodiumFinalizer {}
 
 class MockSodiumFFI extends Mock implements SodiumFFI {}
 
@@ -22,37 +34,55 @@ class FakeSecureKey extends Fake implements SecureKey {
   Uint8List extractBytes() => bytes;
 }
 
-class FakeSecureKeyFFI extends Fake implements SecureKeyFFI {
-  @override
-  final SecureKeyFFINativeHandle nativeHandle;
-
-  FakeSecureKeyFFI(this.nativeHandle);
-}
+class MockSecureKeyFFI extends Mock implements SecureKeyFFI {}
 
 void main() {
   setUpAll(() {
+    registerPointers();
     registerFallbackValue(Uint8List(0));
   });
 
   group('$TransferableSecureKey', () {
-    final testFfiKey = FakeSecureKeyFFI([0x12345678, 32]);
+    const testNativeHandle = [1234, 56];
+    final testFfiKeyMock1 = MockSecureKeyFFI();
+    final testFfiKeyMock2 = MockSecureKeyFFI();
     final testGenericKey =
         FakeSecureKey(Uint8List.fromList(List.generate(32, (index) => index)));
 
     final mockSodiumFFI = MockSodiumFFI();
+    final mockLibSodiumFFI = MockLibSodiumFFI();
+    final mockSodiumFinalizer = MockSodiumFinalizer();
 
     setUp(() {
+      reset(testFfiKeyMock1);
+      reset(testFfiKeyMock2);
       reset(mockSodiumFFI);
+      reset(mockLibSodiumFFI);
+      reset(mockSodiumFinalizer);
+
+      when(() => testFfiKeyMock1.copy()).thenReturn(testFfiKeyMock2);
+      when(() => testFfiKeyMock2.detach()).thenReturn(testNativeHandle);
+
+      when(() => mockSodiumFFI.sodium).thenReturn(mockLibSodiumFFI);
+      SodiumPointer.debugOverwriteFinalizer(
+        mockLibSodiumFFI,
+        mockSodiumFinalizer,
+      );
     });
 
     test('can wrap ffi secure key for transfer', () {
-      final sut = TransferableSecureKey(testFfiKey);
+      final sut = TransferableSecureKey(testFfiKeyMock1);
       sut.maybeWhen(
         ffi: (nativeHandle) {
-          expect(nativeHandle, testFfiKey.nativeHandle);
+          expect(nativeHandle, testNativeHandle);
         },
         orElse: () => fail(sut.toString()),
       );
+
+      verifyInOrder([
+        () => testFfiKeyMock1.copy(),
+        () => testFfiKeyMock2.detach(),
+      ]);
     });
 
     test('can wrap generic secure key for transfer', () {
@@ -66,14 +96,23 @@ void main() {
     });
 
     test('can reconstruct an ffi key', () {
-      when(() => mockSodiumFFI.secureHandle(any())).thenReturn(testFfiKey);
+      when(() => mockLibSodiumFFI.sodium_mprotect_noaccess(any()))
+          .thenReturn(0);
 
-      final result = TransferableSecureKey.ffi(testFfiKey.nativeHandle)
-          .toSecureKey(mockSodiumFFI);
+      final result = const TransferableSecureKey.ffi(testNativeHandle)
+          .toSecureKey(mockSodiumFFI) as SecureKeyFFI;
 
-      expect(result, same(testFfiKey));
+      verifyInOrder([
+        () => mockSodiumFinalizer.attach(
+              any(),
+              Pointer.fromAddress(testNativeHandle[0]),
+            ),
+        () => mockLibSodiumFFI.sodium_mprotect_noaccess(
+              Pointer.fromAddress(testNativeHandle[0]),
+            )
+      ]);
 
-      verify(() => mockSodiumFFI.secureHandle(testFfiKey.nativeHandle));
+      expect(result.detach(), testNativeHandle);
     });
 
     test('can reconstruct a generic key', () {

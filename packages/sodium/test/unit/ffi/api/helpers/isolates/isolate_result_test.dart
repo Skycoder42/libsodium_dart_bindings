@@ -20,6 +20,10 @@ class FakeSecureKey extends Fake implements SecureKey {}
 class FakeKeyPair extends Fake implements KeyPair {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(Uint8List(0));
+  });
+
   group('$IsolateResult', () {
     final mockSodiumFFI = MockSodiumFFI();
 
@@ -56,29 +60,31 @@ void main() {
       });
 
       test('returns transported secure key', () {
-        const testHandle = [1, 2];
+        final testData = Uint8List.fromList(List.filled(10, 10));
         final testSecureKey = FakeSecureKey();
-        when(() => mockSodiumFFI.secureHandle(any())).thenReturn(testSecureKey);
+        when(() => mockSodiumFFI.secureCopy(any())).thenReturn(testSecureKey);
 
         final sut = IsolateResult<SecureKey>.key(
-          const TransferableSecureKey.ffi(testHandle),
+          TransferableSecureKey.generic(
+            TransferableTypedData.fromList([testData]),
+          ),
         );
 
         expect(sut.extract(mockSodiumFFI), same(testSecureKey));
 
-        verify(() => mockSodiumFFI.secureHandle(testHandle));
+        verify(() => mockSodiumFFI.secureCopy(testData));
       });
 
       test('returns transported key pair', () {
         final testPublicKey = Uint8List.fromList(List.filled(10, 10));
-        const testHandle = [1, 2];
+        final testSecretData = Uint8List.fromList(List.filled(10, 10));
         final testSecureKey = FakeSecureKey();
-        when(() => mockSodiumFFI.secureHandle(any())).thenReturn(testSecureKey);
+        when(() => mockSodiumFFI.secureCopy(any())).thenReturn(testSecureKey);
 
         final sut = IsolateResult<KeyPair>.keyPair(
-          TransferableKeyPair.ffi(
+          TransferableKeyPair.generic(
             publicKeyBytes: TransferableTypedData.fromList([testPublicKey]),
-            secretKeyNativeHandle: testHandle,
+            secretKeyBytes: TransferableTypedData.fromList([testSecretData]),
           ),
         );
 
@@ -86,7 +92,7 @@ void main() {
         expect(result.publicKey, testPublicKey);
         expect(result.secretKey, same(testSecureKey));
 
-        verify(() => mockSodiumFFI.secureHandle(testHandle));
+        verify(() => mockSodiumFFI.secureCopy(testSecretData));
       });
     });
   });

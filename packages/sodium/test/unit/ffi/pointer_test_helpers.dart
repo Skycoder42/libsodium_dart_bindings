@@ -3,10 +3,17 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/sodium_finalizer.dart';
+import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
+
+class MockSodiumFinalizer extends Mock implements SodiumFinalizer {}
+
+class FakeFinalizable extends Fake implements Finalizable {}
 
 void registerPointers() {
   registerFallbackValue(nullptr);
+  registerFallbackValue(FakeFinalizable());
 }
 
 void mockAllocArray(LibSodiumFFI mockSodium) {
@@ -20,7 +27,7 @@ void mockAllocArray(LibSodiumFFI mockSodium) {
   when(() => mockSodium.sodium_mprotect_readwrite(any())).thenReturn(0);
   when(() => mockSodium.sodium_mprotect_readonly(any())).thenReturn(0);
   when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
-  when(() => mockSodium.sodium_freePtr).thenReturn(nullptr);
+  SodiumPointer.debugOverwriteFinalizer(mockSodium, MockSodiumFinalizer());
 }
 
 void mockAlloc(LibSodiumFFI mockSodium, int value) {
@@ -31,6 +38,7 @@ void mockAlloc(LibSodiumFFI mockSodium, int value) {
     return ptr.cast();
   });
   when(() => mockSodium.sodium_freePtr).thenReturn(nullptr);
+  SodiumPointer.debugOverwriteFinalizer(mockSodium, MockSodiumFinalizer());
 }
 
 void fillPointer<T extends NativeType>(Pointer<T> ptr, List<int> data) {
