@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/pwhash.dart';
+import 'package:sodium/src/api/sumo/pwhash.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../test_data.dart';
-import '../../test_validator.dart';
+import '../../../test_data.dart';
+import '../../../test_validator.dart';
 
 class MockPwhash extends Mock with PwHashValidations implements Pwhash {}
 

@@ -4,15 +4,15 @@ library pwhash_js_test;
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/pwhash.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
-import 'package:sodium/src/js/api/pwhash_js.dart';
+import 'package:sodium/src/api/sumo/pwhash.dart';
+import 'package:sodium/src/js/api/sumo/pwhash_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../../test_constants_mapping.dart';
+import '../../../../test_constants_mapping.dart';
 
 class MockLibSodiumJS extends Mock implements LibSodiumJS {}
 

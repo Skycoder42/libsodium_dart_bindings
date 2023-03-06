@@ -12,7 +12,7 @@ class PwhashTestCase extends TestCase {
 
   @override
   void setupTests() {
-    test('constants return correct values', (sodium) {
+    testSumo('constants return correct values', (sodium) {
       final sut = sodium.crypto.pwhash;
 
       expect(sut.bytesMin, 16, reason: 'bytesMin');
@@ -43,7 +43,7 @@ class PwhashTestCase extends TestCase {
     });
 
     group('call', () {
-      test('generates different hashes for different inputs', (sodium) {
+      testSumo('generates different hashes for different inputs', (sodium) {
         final sut = sodium.crypto.pwhash;
 
         const outLen = 32;
@@ -71,7 +71,7 @@ class PwhashTestCase extends TestCase {
         expect(pwHash1, isNot(pwHash2));
       });
 
-      test('generates same hashes for same inputs', (sodium) {
+      testSumo('generates same hashes for same inputs', (sodium) {
         final sut = sodium.crypto.pwhash;
 
         const outLen = 32;
@@ -102,7 +102,7 @@ class PwhashTestCase extends TestCase {
     });
 
     group('str and strVerify', () {
-      test('verify succeeds if password is same', (sodium) {
+      testSumo('verify succeeds if password is same', (sodium) {
         final sut = sodium.crypto.pwhash;
 
         const password = 'password1';
@@ -123,7 +123,7 @@ class PwhashTestCase extends TestCase {
         expect(verified, isTrue);
       });
 
-      test('verify failes if password is different', (sodium) {
+      testSumo('verify failes if password is different', (sodium) {
         final sut = sodium.crypto.pwhash;
 
         final pwHash = sut.str(
@@ -145,7 +145,7 @@ class PwhashTestCase extends TestCase {
     });
 
     group('str and strNeedsRehash', () {
-      test('does not need rehash if params are the same', (sodium) {
+      testSumo('does not need rehash if params are the same', (sodium) {
         final sut = sodium.crypto.pwhash;
 
         final pwHash = sut.str(
@@ -164,7 +164,7 @@ class PwhashTestCase extends TestCase {
         expect(needsRehash, isFalse);
       });
 
-      test('does need rehash if params are different same', (sodium) {
+      testSumo('does need rehash if params are different same', (sodium) {
         final sut = sodium.crypto.pwhash;
 
         final pwHash = sut.str(

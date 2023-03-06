@@ -15,10 +15,12 @@ Future<void> main() async {
   final libsodium = await _initImpl();
   final Sodium sodium = await SodiumInit.init(libsodium);
 
-  final res = runSample(sodium);
+  final message = "Hello, World!";
+  final cipher = runSample(sodium, message);
 
-  querySelector('#output')!.innerHtml =
-      'Sodium Version: ${sodium.version}<br/>Hash-Result: $res';
+  querySelector('#output')!.innerHtml = 'Sodium Version: ${sodium.version}<br/>'
+      'Plain text: $message<br/>'
+      'Secret box cipher:$cipher';
 }
 
 Future<dynamic> _initImpl() async {

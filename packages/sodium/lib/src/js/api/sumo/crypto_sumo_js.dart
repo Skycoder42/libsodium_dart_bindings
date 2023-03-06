@@ -1,10 +1,12 @@
 import 'package:meta/meta.dart';
 
 import '../../../api/sumo/crypto_sumo.dart';
-import '../../../api/sumo/scalarmult_sumo.dart';
+import '../../../api/sumo/pwhash.dart';
+import '../../../api/sumo/scalarmult.dart';
 import '../../../api/sumo/sign_sumo.dart';
 import '../crypto_js.dart';
-import 'scalarmult_sumo_js.dart';
+import 'pwhash_js.dart';
+import 'scalarmult_js.dart';
 import 'sign_sumo_js.dart';
 
 /// @nodoc
@@ -18,5 +20,8 @@ class CryptoSumoJS extends CryptoJS implements CryptoSumo {
   late final SignSumo sign = SignSumoJS(sodium);
 
   @override
-  late final ScalarmultSumo scalarmult = ScalarmultSumoJS(sodium);
+  late final Pwhash pwhash = PwhashJS(sodium);
+
+  @override
+  late final Scalarmult scalarmult = ScalarmultJS(sodium);
 }

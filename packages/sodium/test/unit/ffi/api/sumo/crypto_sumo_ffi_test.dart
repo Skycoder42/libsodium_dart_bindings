@@ -3,7 +3,8 @@ library crypto_sumo_ffi_test;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/sumo/crypto_sumo_ffi.dart';
-import 'package:sodium/src/ffi/api/sumo/scalarmult_sumo_ffi.dart';
+import 'package:sodium/src/ffi/api/sumo/pwhash_ffi.dart';
+import 'package:sodium/src/ffi/api/sumo/scalarmult_ffi.dart';
 import 'package:sodium/src/ffi/api/sumo/sign_sumo_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
@@ -32,10 +33,21 @@ void main() {
     );
   });
 
+  test('pwhash returns PwhashFFI instance', () {
+    expect(
+      sut.pwhash,
+      isA<PwhashFFI>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
   test('scalarmult returns ScalarmultSumoFFI instance', () {
     expect(
       sut.scalarmult,
-      isA<ScalarmultSumoFFI>().having(
+      isA<ScalarmultFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

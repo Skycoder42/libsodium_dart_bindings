@@ -7,7 +7,6 @@ import '../../api/crypto.dart';
 import '../../api/generic_hash.dart';
 import '../../api/kdf.dart';
 import '../../api/kx.dart';
-import '../../api/pwhash.dart';
 import '../../api/secret_box.dart';
 import '../../api/secret_stream.dart';
 import '../../api/short_hash.dart';
@@ -19,7 +18,6 @@ import 'box_js.dart';
 import 'generic_hash_js.dart';
 import 'kdf_js.dart';
 import 'kx_js.dart';
-import 'pwhash_js.dart';
 import 'secret_box_js.dart';
 import 'secret_stream_js.dart';
 import 'short_hash_js.dart';
@@ -57,9 +55,6 @@ class CryptoJS implements Crypto {
 
   @override
   late final ShortHash shortHash = ShortHashJS(sodium);
-
-  @override
-  late final Pwhash pwhash = PwhashJS(sodium);
 
   @override
   late final Kdf kdf = KdfJS(sodium);

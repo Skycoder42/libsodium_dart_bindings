@@ -7,17 +7,17 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/api/pwhash.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/api/string_x.dart';
-import 'package:sodium/src/ffi/api/pwhash_ffi.dart';
+import 'package:sodium/src/api/sumo/pwhash.dart';
+import 'package:sodium/src/ffi/api/sumo/pwhash_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../../test_constants_mapping.dart';
-import '../../../test_data.dart';
-import '../pointer_test_helpers.dart';
+import '../../../../test_constants_mapping.dart';
+import '../../../../test_data.dart';
+import '../../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 

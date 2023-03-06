@@ -19,7 +19,7 @@ dev_dependencies:
   coverage: ^1.6.3
   dart_pre_commit: ^4.1.0
   dart_test_tools: ^4.8.0
-  ffigen: ^7.2.6
+  ffigen: ^7.2.7
   freezed: ^2.3.2
   mocktail: ^0.3.0
   path: ^1.8.3

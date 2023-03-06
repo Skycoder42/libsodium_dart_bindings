@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
-import 'helpers/validations.dart';
-import 'secure_key.dart';
+import '../helpers/validations.dart';
+import '../secure_key.dart';
 
 /// Enum type for the different hashing algorithms that can be used.
 ///

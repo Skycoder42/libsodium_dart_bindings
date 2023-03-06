@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import '../../../api/secure_key.dart';
-import '../../../api/sumo/scalarmult_sumo.dart';
+import '../../../api/sumo/scalarmult.dart';
 import '../../bindings/js_error.dart';
 import '../../bindings/sodium.js.dart';
 import '../../bindings/to_safe_int.dart';
@@ -11,14 +11,12 @@ import '../secure_key_js.dart';
 
 /// @nodoc
 @internal
-class ScalarmultSumoJS
-    with ScalarmultSumoValidations
-    implements ScalarmultSumo {
+class ScalarmultJS with ScalarmultValidations implements Scalarmult {
   /// @nodoc
   final LibSodiumJS sodium;
 
   /// @nodoc
-  ScalarmultSumoJS(this.sodium);
+  ScalarmultJS(this.sodium);
 
   @override
   int get bytes => sodium.crypto_scalarmult_BYTES.toSafeUInt32();

@@ -1,7 +1,8 @@
 export 'sodium.dart' hide SodiumInit;
 
 export 'src/api/sumo/crypto_sumo.dart';
-export 'src/api/sumo/scalarmult_sumo.dart' hide ScalarmultSumoValidations;
+export 'src/api/sumo/pwhash.dart' hide PwHashValidations;
+export 'src/api/sumo/scalarmult.dart' hide ScalarmultValidations;
 export 'src/api/sumo/sign_sumo.dart';
 export 'src/api/sumo/sodium_sumo.dart';
 

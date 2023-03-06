@@ -19,7 +19,9 @@ Future<void> main(List<String> arguments) async {
     () => DynamicLibrary.open(arguments.first),
   );
 
-  final res = runSample(sodium);
+  const message = 'Hello, World!';
+  final cipher = runSample(sodium, message);
 
-  print('Hash-Result: $res');
+  print('Plain text: $message');
+  print('Secret box result: $cipher');
 }

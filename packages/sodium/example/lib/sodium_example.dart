@@ -3,26 +3,26 @@ import 'dart:typed_data';
 
 import 'package:sodium/sodium.dart';
 
-Uint8List runSample(Sodium sodium) {
+Uint8List runSample(Sodium sodium, String message) {
   print('libsodium version: ${sodium.version}');
 
-  const password = 'testtesttesttesttesttesttest';
-  final salt = sodium.randombytes.buf(sodium.crypto.pwhash.saltBytes);
-  final pwChars = password.toCharArray();
+  final plainTextBytes = message.toCharArray().unsignedView();
+  final nonce = sodium.randombytes.buf(sodium.crypto.secretBox.nonceBytes);
 
-  print('hashing...');
-  final timer = Stopwatch()..start();
-  final hashedPw = sodium.crypto.pwhash(
-    outLen: 64,
-    password: pwChars,
-    salt: salt,
-    opsLimit: sodium.crypto.pwhash.opsLimitInteractive,
-    memLimit: sodium.crypto.pwhash.memLimitInteractive,
-  );
-  timer.stop();
-  print('Done after ${timer.elapsed}');
+  final secretKey = sodium.crypto.secretBox.keygen();
+  try {
+    print('encrypting...');
+    final timer = Stopwatch()..start();
+    final cipherText = sodium.crypto.secretBox.easy(
+      message: plainTextBytes,
+      nonce: nonce,
+      key: secretKey,
+    );
+    timer.stop();
+    print('Done after ${timer.elapsed}');
 
-  final extracted = hashedPw.extractBytes();
-  hashedPw.dispose();
-  return extracted;
+    return cipherText;
+  } finally {
+    secretKey.dispose();
+  }
 }

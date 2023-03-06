@@ -941,8 +941,8 @@ class LibSodiumJS {
   external Uint8List crypto_generichash_blake2b_salt_personal(
     num subkey_len,
     Uint8List? key,
-    Uint8List id,
-    Uint8List ctx,
+    Uint8List? id,
+    Uint8List? ctx,
   );
 
   external Uint8List crypto_generichash_final(

@@ -3,7 +3,8 @@ library crypto_sumo_js_test;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/sumo/crypto_sumo_js.dart';
-import 'package:sodium/src/js/api/sumo/scalarmult_sumo_js.dart';
+import 'package:sodium/src/js/api/sumo/pwhash_js.dart';
+import 'package:sodium/src/js/api/sumo/scalarmult_js.dart';
 import 'package:sodium/src/js/api/sumo/sign_sumo_js.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
@@ -32,10 +33,21 @@ void main() {
     );
   });
 
+  test('pwhash returns PwhashJS instance', () {
+    expect(
+      sut.pwhash,
+      isA<PwhashJS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
   test('scalarmult returns ScalarmultSumoJS instance', () {
     expect(
       sut.scalarmult,
-      isA<ScalarmultSumoJS>().having(
+      isA<ScalarmultJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

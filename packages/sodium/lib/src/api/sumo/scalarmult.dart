@@ -10,8 +10,8 @@ import '../secure_key.dart';
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/advanced/scalar_multiplication.
 /// Please refer to that documentation for more details about these APIs.
-abstract class ScalarmultSumo {
-  const ScalarmultSumo._(); // coverage:ignore-line
+abstract class Scalarmult {
+  const Scalarmult._(); // coverage:ignore-line
 
   /// Provides crypto_scalarmult_BYTES.
   ///
@@ -39,7 +39,7 @@ abstract class ScalarmultSumo {
 
 /// @nodoc
 @internal
-mixin ScalarmultSumoValidations implements ScalarmultSumo {
+mixin ScalarmultValidations implements Scalarmult {
   /// @nodoc
   void validatePublicKey(Uint8List publicKey) => Validations.checkIsSame(
         publicKey.length,

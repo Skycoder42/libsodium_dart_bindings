@@ -24,6 +24,7 @@ class TypeMappings {
     'uint': TypeInfo('num'),
     'string': TypeInfo('String'),
     'buf': TypeInfo('Uint8List'),
+    'buf_optional': TypeInfo('Uint8List?'),
     'unsized_buf': TypeInfo('Uint8List'),
     'unsized_buf_optional': TypeInfo('Uint8List?'),
     'minsized_buf': TypeInfo('Uint8List'),

@@ -3,13 +3,13 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
-import '../../api/pwhash.dart';
-import '../../api/secure_key.dart';
-import '../../api/string_x.dart';
-import '../bindings/js_error.dart';
-import '../bindings/sodium.js.dart';
-import '../bindings/to_safe_int.dart';
-import 'secure_key_js.dart';
+import '../../../api/secure_key.dart';
+import '../../../api/string_x.dart';
+import '../../../api/sumo/pwhash.dart';
+import '../../bindings/js_error.dart';
+import '../../bindings/sodium.js.dart';
+import '../../bindings/to_safe_int.dart';
+import '../secure_key_js.dart';
 
 /// @nodoc
 @visibleForTesting

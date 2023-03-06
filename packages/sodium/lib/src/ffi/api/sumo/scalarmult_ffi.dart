@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 import '../../../api/secure_key.dart';
 import '../../../api/sodium_exception.dart';
-import '../../../api/sumo/scalarmult_sumo.dart';
+import '../../../api/sumo/scalarmult.dart';
 import '../../bindings/libsodium.ffi.dart';
 import '../../bindings/memory_protection.dart';
 import '../../bindings/secure_key_native.dart';
@@ -14,14 +14,12 @@ import '../secure_key_ffi.dart';
 
 /// @nodoc
 @internal
-class ScalarmultSumoFFI
-    with ScalarmultSumoValidations
-    implements ScalarmultSumo {
+class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
   /// @nodoc
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  ScalarmultSumoFFI(this.sodium);
+  ScalarmultFFI(this.sodium);
 
   @override
   int get bytes => sodium.crypto_scalarmult_bytes();
