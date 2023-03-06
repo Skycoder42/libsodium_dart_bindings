@@ -545,6 +545,15 @@ void main() {
         verifyNever(() => mockSodiumFinalizer.detach(sut));
       });
 
+      test('detach throws unsupported error', () {
+        expect(
+          () => sut.viewAt(0).detach(),
+          throwsA(isUnsupportedError),
+        );
+
+        verifyNever(() => mockSodiumFinalizer.detach(sut));
+      });
+
       // TODO test dynamicElementAt ?
     });
 
