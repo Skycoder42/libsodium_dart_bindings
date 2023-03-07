@@ -1,15 +1,10 @@
 # sodium
-[![Continous Integration for package sodium](https://github.com/Skycoder42/libsodium_dart_bindings/actions/workflows/sodium_ci.yaml/badge.svg)](https://github.com/Skycoder42/libsodium_dart_bindings/actions/workflows/sodium_ci.yaml)
+[![Continuous Integration for package sodium](https://github.com/Skycoder42/libsodium_dart_bindings/actions/workflows/sodium_ci.yaml/badge.svg)](https://github.com/Skycoder42/libsodium_dart_bindings/actions/workflows/sodium_ci.yaml)
 [![Pub Version](https://img.shields.io/pub/v/sodium)](https://pub.dev/packages/sodium)
 
 Dart bindings for libsodium, supporting both the VM and JS without flutter dependencies.
 
-## BREAKING CHANGES IN 3.0.0
-- `sodium.crypto.pwhash` is now only available in the sumo variant due to upstream changes
-- `SodiumInit.init` and `SodiumSumoInit.init` now take callbacks as parameter
-
 ## Table of contents
-- [BREAKING CHANGES IN 3.0.0](#breaking-changes-in-300)
 - [Features](#features)
   * [API Status](#api-status)
     + [Considered for the future](#considered-for-the-future)
@@ -66,7 +61,7 @@ in the VM.
 #### Considered for the future
 The following APIs I considered adding, but since they all appear below the "Advanced" Tab in the documentation, I
 decided against it for version 1.0.0. However, with version 2.0.0, support for advanced APIs has been enabled via sumo.
-This means all of those have now become feasble to implement and might be added in the future. If you need one of these
+This means all of those have now become feasible to implement and might be added in the future. If you need one of these
 or some other advanced API, please create an issue.
 
  libsodium API       | VM  | JS | Documentation
@@ -149,7 +144,7 @@ https://github.com/jedisct1/libsodium.js/#installation on how to load the librar
 since we are running JavaScript code, the setup is a little more complex. For flutter users, you can simply add
 [sodium_libs](https://pub.dev/packages/sodium_libs) to your project, which takes care of this for you.
 
-The only platform I have tried so far is the browser. However, similar approches should work for all JS environments
+The only platform I have tried so far is the browser. However, similar approaches should work for all JS environments
 that you can run transpiled dart code in.
 
 ##### Loading sodium.js into the browser via dart.
@@ -181,7 +176,7 @@ Future<Sodium> loadSodiumInBrowser() async {
   // create a completer that will wait for the library to be loaded
   final completer = Completer<dynamic>();
 
-  // Set the global `sodium` property to our JS type, with the callback beeing
+  // Set the global `sodium` property to our JS type, with the callback being
   // redirected to the completer
   setProperty(window, 'sodium', SodiumBrowserInit(
     onload: allowInterop(completer.complete),
@@ -205,8 +200,8 @@ Future<Sodium> loadSodiumInBrowser() async {
 ### Using the API
 Once you have acquired the `Sodium` instance, usage is fairly straight forward. The API mirrors the original native C
 api, splitting different categories of methods into different classes for maintainability, which are all built up in
-hierachical order starting at `Sodium`. For example, if you wanted to use the `crypto_secretbox_easy` method from the C
-api, the eqivalent dart code would be:
+hierarchical order starting at `Sodium`. For example, if you wanted to use the `crypto_secretbox_easy` method from the C
+api, the equivalent dart code would be:
 
 ```dart
 final sodium = // load libsodium for your platform
@@ -259,7 +254,7 @@ dart run build_runner build
 ```
 
 ### Example for the dart VM
-Locate/Download the libsodium binrary and run the example with it:
+Locate/Download the libsodium binary and run the example with it:
 
 ```sh
 cd packages/sodium/example

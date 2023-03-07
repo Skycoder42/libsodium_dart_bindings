@@ -11,6 +11,7 @@ import '../../api/secret_box.dart';
 import '../../api/secret_stream.dart';
 import '../../api/short_hash.dart';
 import '../../api/sign.dart';
+import '../../api/sumo/pwhash.dart';
 import '../bindings/libsodium.ffi.dart';
 import 'aead_ffi.dart';
 import 'auth_ffi.dart';
@@ -22,6 +23,7 @@ import 'secret_box_ffi.dart';
 import 'secret_stream_ffi.dart';
 import 'short_hash_ffi.dart';
 import 'sign_ffi.dart';
+import 'sumo/pwhash_ffi.dart';
 
 /// @nodoc
 @internal
@@ -61,4 +63,7 @@ class CryptoFFI implements Crypto {
 
   @override
   late final Kx kx = KxFFI(sodium);
+
+  @override
+  late final Pwhash pwhash = PwhashFFI(sodium);
 }

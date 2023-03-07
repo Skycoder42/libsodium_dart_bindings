@@ -8,6 +8,7 @@ import 'secret_box.dart';
 import 'secret_stream.dart';
 import 'short_hash.dart';
 import 'sign.dart';
+import 'sumo/pwhash.dart';
 
 /// A meta class that provides access to all libsodium crypto APIs.
 abstract class Crypto {
@@ -62,4 +63,13 @@ abstract class Crypto {
   ///
   /// This provides all APIs that start with `crypto_kx`.
   Kx get kx;
+
+  /// An instance of [Pwhash].
+  ///
+  /// This provides all APIs that start with `crypto_pwhash`.
+  @Deprecated(
+    'pwhash was removed from the standard sodium.js and is only available in '
+    'sodium-sumo.js. Please use SodiumSumo if you want to use the pwhash APIs',
+  )
+  Pwhash get pwhash;
 }

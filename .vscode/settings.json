@@ -1,8 +1,13 @@
 {
   "cSpell.words": [
     "blocksize",
+    "generichash",
     "nullptr",
-    "Scalarmult",
+    "pwhash",
+    "scalarmult",
+    "secretbox",
+    "secretstream",
+    "shorthash",
     "unpad",
     "unpadded"
   ]

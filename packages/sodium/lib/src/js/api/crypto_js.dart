@@ -11,6 +11,7 @@ import '../../api/secret_box.dart';
 import '../../api/secret_stream.dart';
 import '../../api/short_hash.dart';
 import '../../api/sign.dart';
+import '../../api/sumo/pwhash.dart';
 import '../bindings/sodium.js.dart' hide SecretBox;
 import 'aead_js.dart';
 import 'auth_js.dart';
@@ -22,6 +23,7 @@ import 'secret_box_js.dart';
 import 'secret_stream_js.dart';
 import 'short_hash_js.dart';
 import 'sign_js.dart';
+import 'sumo/pwhash_js.dart';
 
 /// @nodoc
 @internal
@@ -61,4 +63,7 @@ class CryptoJS implements Crypto {
 
   @override
   late final Kx kx = KxJS(sodium);
+
+  @override
+  late final Pwhash pwhash = PwhashJS(sodium);
 }

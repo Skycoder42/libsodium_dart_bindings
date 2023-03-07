@@ -13,6 +13,7 @@ abstract class CryptoSumo implements Crypto {
   /// An instance of [Pwhash].
   ///
   /// This provides all APIs that start with `crypto_pwhash`.
+  @override
   Pwhash get pwhash;
 
   /// An instance of [Scalarmult].

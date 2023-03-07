@@ -20,6 +20,7 @@ class CryptoSumoJS extends CryptoJS implements CryptoSumo {
   late final SignSumo sign = SignSumoJS(sodium);
 
   @override
+  // ignore: overridden_fields
   late final Pwhash pwhash = PwhashJS(sodium);
 
   @override
