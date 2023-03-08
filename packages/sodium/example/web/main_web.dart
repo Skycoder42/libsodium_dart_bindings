@@ -12,8 +12,7 @@ import 'interop.dart';
 
 Future<void> main() async {
   print('init...');
-  final libsodium = await _initImpl();
-  final Sodium sodium = await SodiumInit.init(libsodium);
+  final Sodium sodium = await SodiumInit.init2(_initImpl);
 
   final message = "Hello, World!";
   final cipher = runSample(sodium, message);

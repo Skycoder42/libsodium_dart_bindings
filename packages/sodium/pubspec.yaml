@@ -1,10 +1,10 @@
 name: sodium
 description: Dart bindings for libsodium, for the Dart-VM and for the Web
-version: 2.0.1
+version: 2.1.0
 homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
-  sdk: ">=2.18.2 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   ffi: ^2.0.1
@@ -46,3 +46,8 @@ dart_pre_commit:
     allowed:
       - js
       - meta
+
+cider:
+  link_template:
+    tag: https://github.com/Skycoder42/libsodium_dart_bindings/releases/tag/sodium%2Fv%tag%
+    diff: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv%from%...sodium%2Fv%to%

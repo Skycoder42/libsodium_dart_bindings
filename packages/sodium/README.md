@@ -97,11 +97,13 @@ load such a library and then pass it to the sodium APIs. This generally looks li
 import 'dart:ffi';
 import 'package:sodium/sodium.dart';
 
-// load the dynamic library into dart
-final libsodium = DynamicLibrary.open('/path/to/libsodium.XXX'); // or DynamicLibrary.process()
+// define a loader method that loads the dynamic library into dart
+DynamicLibrary loadLibsodium() {
+  return DynamicLibrary.open('/path/to/libsodium.XXX'); // or DynamicLibrary.process()
+}
 
 // initialize the sodium APIs
-final sodium = await SodiumInit.init(libsodium);
+final sodium = await SodiumInit.init2(loadLibsodium);
 ```
 
 The tricky part here is the path, aka `'/path/to/libsodium.XXX'`. It depends on the platform and how you intend to use
@@ -133,10 +135,13 @@ same:
 // required imports
 import 'package:sodium/sodium.dart';
 
-final sodiumJS = // somehow load the sodium.js into dart
+// define a loader method that loads the javascript object into dart
+dynamic loadSodiumJS() {
+  return ...; // somehow load the sodium.js into dart
+}
 
 // initialize the sodium APIs
-final sodium = await SodiumInit.init(sodiumJS);
+final sodium = await SodiumInit.init2(loadSodiumJS);
 ```
 
 The complex part is how to load the library into dart. Generally, you can refer to
@@ -172,7 +177,7 @@ class SodiumBrowserInit {
   external factory SodiumBrowserInit({void Function(dynamic sodium) onload});
 }
 
-Future<Sodium> loadSodiumInBrowser() async {
+Future<dynamic> loadSodiumInBrowser() async {
   // create a completer that will wait for the library to be loaded
   final completer = Completer<dynamic>();
 
@@ -190,11 +195,12 @@ Future<Sodium> loadSodiumInBrowser() async {
     ..src = 'sodium.js'; // use the path where you put the file on your server
   document.head!.append(script);
 
-  // await the completer
-  final dynamic sodiumJS = await completer.future;
+  // return the completer
+  return completer.future;
+}
 
-  // initialize the sodium APIs
-  return SodiumInit.init(sodiumJS);
+// in your main:
+final sodium = await SodiumInit.init2(loadSodiumInBrowser);
 ```
 
 ### Using the API
