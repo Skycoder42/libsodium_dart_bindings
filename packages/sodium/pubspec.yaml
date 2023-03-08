@@ -49,5 +49,5 @@ dart_pre_commit:
 
 cider:
   link_template:
-    tag: https://github.com/Skycoder42/libsodium_dart_bindings/releases/tag/sodium%2Fv%tag%
-    diff: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv%from%...sodium%2Fv%to%
+    tag: https://github.com/Skycoder42/libsodium_dart_bindings/releases/tag/sodium-v%tag%
+    diff: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v%from%...sodium-v%to%

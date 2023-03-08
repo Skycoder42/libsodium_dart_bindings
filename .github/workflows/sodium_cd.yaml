@@ -3,13 +3,13 @@ name: CD - Publish to pub.dev
 on:
   push:
     tags:
-      - "sodium/v*"
+      - "sodium-v*"
 
 jobs:
   publish:
     name: Publish
     uses: Skycoder42/dart_test_tools/.github/workflows/publish.yml@main
     with:
-      tagPrefix: sodium/v
+      tagPrefix: sodium-v
       workingDirectory: packages/sodium
       buildRunner: true

@@ -130,7 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial stable release
 
-[2.1.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv2.0.1...sodium%2Fv2.1.0
+[2.1.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv2.0.1...sodium-v2.1.0
 [2.0.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv2.0.0...sodium%2Fv2.0.1
 [2.0.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv1.2.5...sodium%2Fv2.0.0
 [1.2.5]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv1.2.4...sodium%2Fv1.2.5

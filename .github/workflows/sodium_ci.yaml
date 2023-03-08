@@ -43,6 +43,6 @@ jobs:
       - ci
     with:
       workingDirectory: packages/sodium
-      tagPrefix: sodium/v
+      tagPrefix: sodium-v
     secrets:
       githubToken: ${{ secrets.GH_PAT }}
