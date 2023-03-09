@@ -3,14 +3,14 @@ name: CD - Publish to pub.dev
 on:
   push:
     tags:
-      - "sodium_libs/v*"
+      - "sodium_libs-v*"
 
 jobs:
   publish:
     name: Publish
     uses: Skycoder42/dart_test_tools/.github/workflows/publish.yml@main
     with:
-      tagPrefix: sodium_libs/v
+      tagPrefix: sodium_libs-v
       flutter: true
       workingDirectory: packages/sodium_libs
       prePublish: dart run tool/setup_android.dart

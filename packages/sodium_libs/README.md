@@ -93,6 +93,9 @@ simplifies the initialization of that package. To initialize it, simply do the f
 ```dart
 import 'package:sodium_libs/sodium_libs.dart';
 
+// when used before rendering the first frame:
+WidgetsFlutterBinding.ensureInitialized();
+
 final sodium = await SodiumInit.init();
 // You now have a Sodium instance, see sodium package to continue
 ```
@@ -102,6 +105,9 @@ In case you want to use the `SodiumSumo` APIs, use the following instead. Also, 
 
 ```dart
 import 'package:sodium_libs/sodium_libs_sumo.dart';
+
+// when used before rendering the first frame:
+WidgetsFlutterBinding.ensureInitialized();
 
 final sodium = await SodiumSumoInit.init();
 // You now have a SodiumSumo instance, see sodium package to continue

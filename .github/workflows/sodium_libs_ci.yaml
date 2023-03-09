@@ -40,6 +40,6 @@ jobs:
       - ci
     with:
       workingDirectory: packages/sodium_libs
-      tagPrefix: sodium_libs/v
+      tagPrefix: sodium_libs-v
     secrets:
       githubToken: ${{ secrets.GH_PAT }}
