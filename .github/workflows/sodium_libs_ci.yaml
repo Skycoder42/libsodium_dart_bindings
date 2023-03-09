@@ -20,6 +20,7 @@ jobs:
     name: CI
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
     with:
+      platforms: '["android", "ios", "linux", "windows", "web"]'
       workingDirectory: packages/sodium_libs
       unitTestPaths: ""
       integrationTestProject: "example"
@@ -29,7 +30,7 @@ jobs:
           "android": "dart run tool/setup_android.dart",
           "linux": "sudo apt-get -qq install libsodium-dev",
           "windows": "choco install minisign -y",
-          "macos": "brew install libsodium && cd example && flutter build macos --debug",
+          "macos": "brew install libsodium",
           "web": "cd example && flutter pub run sodium_libs:update_web --sumo"
         }
 
