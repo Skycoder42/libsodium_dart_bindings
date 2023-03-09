@@ -8,4 +8,4 @@ example/windows/flutter/ephemeral/.plugin_symlinks
 !*.g.dart
 
 ## Android JNI libraries
-android/src/main/jniLibs
+!android/src/main/jniLibs

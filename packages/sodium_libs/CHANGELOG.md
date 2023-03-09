@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1+1] - 2023-03-09
+### Fixed
+- Fixed invalid publishing config that prevented android binaries from beeing published
+
 ## [2.0.1] - 2023-03-09
 ### Changed
 - The plugin now does not call `WidgetsFlutterBinding.ensureInitialized();` anymore. Instead, you have to do so yourself
@@ -128,6 +132,7 @@ the page
 ### Added
 - Initial stable release
 
+[2.0.1+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.0.1...sodium_libs-v2.0.1+1
 [2.0.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs%2Fv2.0.0...sodium_libs-v2.0.1
 [2.0.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs%2Fv1.2.5+1...sodium_libs%2Fv2.0.0
 [1.2.5+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs%2Fv1.2.5...sodium_libs%2Fv1.2.5+1
