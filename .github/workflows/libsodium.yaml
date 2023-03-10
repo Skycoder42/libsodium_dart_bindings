@@ -1,0 +1,44 @@
+name: Compile native libsodium binaries
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/sodium_libs/libsodium_version.dart
+      - packages/sodium_libs/tool/libsodium/*
+      - .github/workflows/libsodium.yaml
+
+jobs:
+  update_binaries:
+    name: Update binaries if required
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - android_arm64_v8a
+          - android_armeabi_v7a
+          - android_x86_64
+          - android_x86
+          - windows
+    steps:
+      - name: Install Dart-SDK (stable)
+        uses: dart-lang/setup-dart@v1
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - id: check
+        name: Check if upstream stable was updated
+        run: dart run tool/libsodium/detect_modified.dart ${{ matrix.platform }}
+        working-directory: packages/sodium_libs
+      - name: Build updated binaries
+        if: steps.check.outputs.modified == 'true'
+        run: dart run tool/libsodium/build_${{ matrix.platform }}.dart
+        working-directory: packages/sodium_libs
+      - name: Create artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: libsodium-${{ matrix.platform }}
+          path: ${{ github.env.RUNNER_TEMP}}/libsodium-${{ matrix.platform }}
+          if-no-files-found: error
