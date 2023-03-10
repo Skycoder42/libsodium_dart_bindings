@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 const _libsodiumSigningKey =
@@ -89,14 +90,18 @@ extension DirectoryX on Directory {
   File subFile(String path) => File.fromUri(uri.resolve(path));
 }
 
+typedef HeaderExtractor = FutureOr<void> Function(HttpHeaders headers);
+
 extension HttpClientX on HttpClient {
   Future<File> download(
     Directory targetDir,
     Uri uri, {
     bool withSignature = false,
+    HeaderExtractor? headerExtractor,
   }) async {
     final request = await getUrl(uri);
     final response = await request.close();
+    headerExtractor?.call(response.headers);
     if (response.statusCode >= 300) {
       throw StatusCodeException(response.statusCode);
     }
