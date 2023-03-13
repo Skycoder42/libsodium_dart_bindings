@@ -83,7 +83,7 @@ jobs:
             tar -cavf "../$artifact.tar.xz" "$artifact"
             docker run --rm \
               -v '${{ runner.temp }}/minisign.key:/run/secrets/minisign.key:ro' \
-              -v '..:/src' \
+              -v "$GITHUB_WORKSPACE:/src" \
               jedisct1/minisign -Ss /run/secrets/minisign.key  -m"/src/$artifact.tar.xz"
           done
         working-directory: artifacts
