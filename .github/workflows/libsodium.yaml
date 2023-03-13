@@ -60,6 +60,8 @@ jobs:
         if: steps.check.outputs.modified == 'true'
         run: dart run tool/libsodium/build.dart ${{ matrix.platform }}
         working-directory: packages/sodium_libs
+      - name: Print env
+        run: echo ${{ env }}
       - name: Create artifact
         if: steps.check.outputs.modified == 'true'
         uses: actions/upload-artifact@v3
