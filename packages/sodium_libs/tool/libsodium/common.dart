@@ -76,7 +76,7 @@ Future<void> buildArtifact(
 
     final archive = await httpClient.download(
       tmpDir,
-      CiPlatform.windows.downloadUrl,
+      platform.downloadUrl,
       withSignature: true,
       headerExtractor: (headers) =>
           lastModifiedHeader = headers[HttpHeaders.lastModifiedHeader]!.first,
