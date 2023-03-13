@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: libsodium-${{ matrix.platform }}
-          path: ${{ github.env.RUNNER_TEMP}}/libsodium-${{ matrix.platform }}
+          path: ${{ env.RUNNER_TEMP }}/libsodium-${{ matrix.platform }}
           if-no-files-found: error
 
   update_release:
