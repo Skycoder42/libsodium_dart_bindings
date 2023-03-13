@@ -37,14 +37,6 @@ jobs:
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
-      # - name: Install minisign
-      #   run: |
-      #     set -eo pipefail
-      #     curl -sSLo \
-      #       /tmp/minisign.tar.gz \
-      #       'https://github.com/jedisct1/minisign/releases/download/${{ env.minisignVersion }}/minisign-${{ env.minisignVersion }}-linux.tar.gz'
-      #     tar -xzvf /tmp/minisign.tar.gz /tmp
-      #     mv /tmp/minisign-linux/x86_64/minisign /usr/local/bin/minisign
       - name: Pull minisign docker image
         run: |
           set -eo pipefail
@@ -67,6 +59,9 @@ jobs:
           name: libsodium-${{ matrix.platform }}
           path: ${{ runner.temp }}/libsodium-${{ matrix.platform }}
           if-no-files-found: error
+          retention-days: 1
+      - name: Debug outputs
+        run: echo '${{ toJSON(steps) }}'
 
   update_release:
     name: Update release with new binaries
@@ -76,10 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Debug inputs
-        run: |
-          echo ${{ needs.update_binaries.outputs.modified }}
-          echo ${{ needs.update_binaries.outputs.version }}
-          echo ${{ toJSON(needs) }}
+        run: echo '${{ toJSON(needs) }}'
       - name: Download all binary artifacts
         uses: actions/download-artifact@v3
         with:
