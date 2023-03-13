@@ -23,20 +23,21 @@ Future<void> main(List<String> args) async {
 
 Future<void> _createAndroidArtifact(
   CiPlatform platform,
-  Directory archiveContents,
+  Directory extractDir,
   String lastModifiedHeader,
   Directory artifactDir,
 ) async {
+  final buildDir = extractDir.subDir('libsodium-stable');
   await run(
     './dist-build/android-${platform.buildTarget}.sh',
     const [],
-    workingDirectory: archiveContents,
+    workingDirectory: buildDir,
     environment: const {
       'LIBSODIUM_FULL_BUILD': '1',
     },
   );
 
-  final source = archiveContents
+  final source = buildDir
       .subDir('libsodium-android-${platform.buildTarget}')
       .subDir('lib')
       .subFile('libsodium.so');
@@ -48,7 +49,7 @@ Future<void> _createAndroidArtifact(
 
 Future<void> _createWindowsArtifact(
   CiPlatform platform,
-  Directory archiveContents,
+  Directory extractDir,
   String lastModifiedHeader,
   Directory artifactDir,
 ) async {
@@ -67,7 +68,8 @@ Future<void> _createWindowsArtifact(
     final configFiles = configEntry.value;
     for (final msvcVersion in msvcVersions) {
       for (final file in configFiles) {
-        final source = archiveContents
+        final source = extractDir
+            .subDir('libsodium')
             .subDir(arch)
             .subDir(config)
             .subDir(msvcVersion)
