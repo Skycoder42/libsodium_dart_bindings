@@ -60,8 +60,6 @@ jobs:
           path: ${{ runner.temp }}/libsodium-${{ matrix.platform }}
           if-no-files-found: error
           retention-days: 1
-      - name: Debug outputs
-        run: echo '${{ toJSON(steps) }}'
 
   update_release:
     name: Update release with new binaries
@@ -70,8 +68,10 @@ jobs:
     if: needs.update_binaries.outputs.modified == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: Debug inputs
-        run: echo '${{ toJSON(needs) }}'
+      - name: Pull minisign docker image
+        run: docker pull jedisct1/minisign
+      - name: Create docker secret for minisign
+        run: echo '${{ secrets.MINISIGN_SECRET_KEY }}' | docker secret create minisign-secret-key -
       - name: Download all binary artifacts
         uses: actions/download-artifact@v3
         with:
@@ -81,6 +81,10 @@ jobs:
           set -eo pipefail
           for artifact in *; do
             tar -cavf "../$artifact.tar.xz" "$artifact"
+            docker run --rm \
+              --secret minisign-secret-key \
+              -v "..:/src" \
+              jedisct1/minisign -Ss /run/secrets/minisign-secret-key -m "/src/$artifact.tar.xz"
           done
         working-directory: artifacts
       - name: Create or update release
@@ -90,5 +94,7 @@ jobs:
           name: "[INTERNAL] Precompiled libsodium binaries v${{ needs.update_binaries.outputs.version }}"
           body: Internal release of precompiled libsodium binaries, required for the sodium_libs package.
           prerelease: true
-          files: libsodium-*.tar.xz
+          files: |
+            libsodium-*.tar.xz
+            libsodium-*.tar.xz.minisig
           fail_on_unmatched_files: true
