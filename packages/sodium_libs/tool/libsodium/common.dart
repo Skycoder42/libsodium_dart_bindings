@@ -8,27 +8,32 @@ export '../../../../tool/util.dart';
 
 enum CiPlatform {
   // ignore: constant_identifier_names
-  android_arm64_v8a('.tar.gz'),
+  android_arm64_v8a('.tar.gz', 'arm64_v8a', 'armv8-a'),
   // ignore: constant_identifier_names
-  android_armeabi_v7a('.tar.gz'),
+  android_armeabi_v7a('.tar.gz', 'armeabi_v7a', 'armv7-a'),
   // ignore: constant_identifier_names
-  android_x86_64('.tar.gz'),
+  android_x86_64('.tar.gz', 'x86_64', null),
   // ignore: constant_identifier_names
-  android_x86('.tar.gz'),
-  windows('-msvc.zip');
+  android_x86('.tar.gz', 'x86', null),
+  windows('-msvc.zip', null, null);
 
   final String _suffix;
+  final String? _architecture;
+  final String? _buildTarget;
 
-  const CiPlatform(this._suffix);
+  const CiPlatform(this._suffix, this._architecture, this._buildTarget);
 
   Uri get downloadUrl => Uri.https(
         'download.libsodium.org',
         '/libsodium/releases/libsodium-${libsodium_version.ffi}-stable$_suffix',
       );
 
-  String get lastModifiedFileName => 'last-modified-$name.txt';
+  File get lastModifiedFile =>
+      File('tool/libsodium/.last-modified/${libsodium_version.ffi}/$name.txt');
 
-  File get lastModifiedFile => File('tool/libsodium/$lastModifiedFileName');
+  String get architecture => _architecture ?? name;
+
+  String get buildTarget => _buildTarget ?? architecture;
 }
 
 abstract class GithubEnv {
@@ -54,6 +59,7 @@ abstract class GithubEnv {
 }
 
 typedef CreateArtifactCb = FutureOr<void> Function(
+  CiPlatform platform,
   Directory archiveContents,
   String lastModifiedHeader,
   Directory artifactDir,
@@ -82,12 +88,13 @@ Future<void> buildArtifact(
         .subDir('libsodium-${platform.name}')
         .create();
     await createArtifact(
+      platform,
       tmpDir.subDir('libsodium'),
       lastModifiedHeader,
       artifactDir,
     );
     await artifactDir
-        .subFile(platform.lastModifiedFileName)
+        .subFile('last-modified.txt')
         .writeAsString(lastModifiedHeader);
   } finally {
     await tmpDir.delete(recursive: true);
