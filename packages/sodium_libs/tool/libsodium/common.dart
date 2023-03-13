@@ -8,20 +8,26 @@ export '../../../../tool/util.dart';
 
 enum CiPlatform {
   // ignore: constant_identifier_names
-  android_arm64_v8a('.tar.gz', 'arm64_v8a', 'armv8-a'),
+  android_arm64_v8a('.tar.gz', 'arm64_v8a', 'armv8-a', 'armv8-a+crypto'),
   // ignore: constant_identifier_names
-  android_armeabi_v7a('.tar.gz', 'armeabi_v7a', 'armv7-a'),
+  android_armeabi_v7a('.tar.gz', 'armeabi_v7a', 'armv7-a', null),
   // ignore: constant_identifier_names
-  android_x86_64('.tar.gz', 'x86_64', null),
+  android_x86_64('.tar.gz', 'x86_64', null, 'westmere'),
   // ignore: constant_identifier_names
-  android_x86('.tar.gz', 'x86', null),
-  windows('-msvc.zip', null, null);
+  android_x86('.tar.gz', 'x86', null, 'i686'),
+  windows('-msvc.zip', null, null, null);
 
   final String _suffix;
   final String? _architecture;
   final String? _buildTarget;
+  final String? _installTarget;
 
-  const CiPlatform(this._suffix, this._architecture, this._buildTarget);
+  const CiPlatform(
+    this._suffix,
+    this._architecture,
+    this._buildTarget,
+    this._installTarget,
+  );
 
   Uri get downloadUrl => Uri.https(
         'download.libsodium.org',
@@ -34,6 +40,8 @@ enum CiPlatform {
   String get architecture => _architecture ?? name;
 
   String get buildTarget => _buildTarget ?? architecture;
+
+  String get installTarget => _installTarget ?? buildTarget;
 }
 
 abstract class GithubEnv {

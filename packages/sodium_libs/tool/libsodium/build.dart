@@ -38,7 +38,7 @@ Future<void> _createAndroidArtifact(
   );
 
   final source = buildDir
-      .subDir('libsodium-android-${platform.buildTarget}')
+      .subDir('libsodium-android-${platform.installTarget}')
       .subDir('lib')
       .subFile('libsodium.so');
   final target =
