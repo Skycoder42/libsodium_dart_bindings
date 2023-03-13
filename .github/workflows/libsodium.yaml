@@ -71,7 +71,7 @@ jobs:
       - name: Pull minisign docker image
         run: docker pull jedisct1/minisign
       - name: Create docker secret for minisign
-        run: echo '${{ secrets.MINISIGN_SECRET_KEY }}' | docker secret create minisign-secret-key -
+        run: echo '${{ secrets.MINISIGN_SECRET_KEY }}' > ${{ runner.temp }}/minisign.key
       - name: Download all binary artifacts
         uses: actions/download-artifact@v3
         with:
@@ -82,9 +82,9 @@ jobs:
           for artifact in *; do
             tar -cavf "../$artifact.tar.xz" "$artifact"
             docker run --rm \
-              --secret minisign-secret-key \
-              -v "..:/src" \
-              jedisct1/minisign -Ss /run/secrets/minisign-secret-key -m "/src/$artifact.tar.xz"
+              -v '${{ runner.temp }}/minisign.key:/run/secrets/minisign.key:ro' \
+              -v '..:/src' \
+              jedisct1/minisign -Ss /run/secrets/minisign.key  -m"/src/$artifact.tar.xz"
           done
         working-directory: artifacts
       - name: Create or update release
