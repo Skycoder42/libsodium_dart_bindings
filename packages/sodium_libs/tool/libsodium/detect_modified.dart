@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import '../../libsodium_version.dart';
 import 'common.dart';
 
 Future<void> main(List<String> args) async {
@@ -22,8 +23,7 @@ Future<void> main(List<String> args) async {
 
     if (lastModifiedHeader != lastModifiedContent) {
       await GithubEnv.setOutput('modified', true);
-    } else {
-      await GithubEnv.setOutput('modified', false);
+      await GithubEnv.setOutput('version', libsodium_version.ffi);
     }
   } finally {
     httpClient.close(force: true);

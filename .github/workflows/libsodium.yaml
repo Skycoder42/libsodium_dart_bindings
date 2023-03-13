@@ -10,10 +10,19 @@ on:
       - packages/sodium_libs/tool/libsodium/*
       - .github/workflows/libsodium.yaml
 
+env:
+  minisignVersion: 0.11
+
 jobs:
   update_binaries:
     name: Update binaries if required
     runs-on: ubuntu-latest
+    outputs:
+      # only one of the matrix jobs result gets returned
+      # but that is okay, also only positive checks update these variables
+      # and those are all the same
+      modified: ${{ steps.check.outputs.modified }}
+      version: ${{ steps.check.outputs.version }}
     strategy:
       fail-fast: false
       matrix:
@@ -26,6 +35,19 @@ jobs:
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
+      # - name: Install minisign
+      #   run: |
+      #     set -eo pipefail
+      #     curl -sSLo \
+      #       /tmp/minisign.tar.gz \
+      #       'https://github.com/jedisct1/minisign/releases/download/${{ env.minisignVersion }}/minisign-${{ env.minisignVersion }}-linux.tar.gz'
+      #     tar -xzvf /tmp/minisign.tar.gz /tmp
+      #     mv /tmp/minisign-linux/x86_64/minisign /usr/local/bin/minisign
+      - name: Pull minisign docker image
+        run: |
+          set -eo pipefail
+          docker pull jedisct1/minisign
+          echo "MINISIGN_DOCKER=true" >> "$GITHUB_ENV"
       - name: Checkout Repository
         uses: actions/checkout@v3
       - id: check
@@ -34,11 +56,40 @@ jobs:
         working-directory: packages/sodium_libs
       - name: Build updated binaries
         if: steps.check.outputs.modified == 'true'
-        run: dart run tool/libsodium/build_${{ matrix.platform }}.dart
+        run: dart run tool/libsodium/build.dart ${{ matrix.platform }}
         working-directory: packages/sodium_libs
       - name: Create artifact
+        if: steps.check.outputs.modified == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: libsodium-${{ matrix.platform }}
           path: ${{ github.env.RUNNER_TEMP}}/libsodium-${{ matrix.platform }}
           if-no-files-found: error
+
+  update_release:
+    name: Update release with new binaries
+    needs:
+      - update_binaries
+    if: needs.update_binaries.outputs.modified == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all binary artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+      - name: Create release artifacts
+        run: |
+          set -eo pipefail
+          for artifact in *; do
+            tar -cavf "../$artifact.tar.zstd" "$artifact"
+          done
+        working-directory: artifacts
+      - name: Create or update release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: libsodium-binaries/v${{ needs.update_binaries.outputs.version }}
+          name: "[INTERNAL] Precompiled libsodium binaries v${{ needs.update_binaries.outputs.version }}"
+          body: Internal release of precompiled libsodium binaries, required for the sodium_libs package.
+          prerelease: true
+          files: libsodium-*.tar.xz
+          fail_on_unmatched_files: true

@@ -27,6 +27,7 @@ Future<void> run(
   List<String> arguments, {
   bool runInShell = false,
   Directory? workingDirectory,
+  Map<String, String>? environment,
 }) async {
   final pwdMsg =
       workingDirectory != null ? ' (in ${workingDirectory.path})' : '';
@@ -35,6 +36,7 @@ Future<void> run(
     executable,
     arguments,
     workingDirectory: workingDirectory?.path,
+    environment: environment,
     mode: ProcessStartMode.inheritStdio,
     runInShell: runInShell,
   );
@@ -46,12 +48,29 @@ Future<void> run(
 
 Future<void> verify(File file) async {
   stdout.writeln('> Checking signature of ${file.path}');
-  await run('minisign', [
-    '-P',
-    _libsodiumSigningKey,
-    '-Vm',
-    file.path,
-  ]);
+  if (Platform.environment['MINISIGN_DOCKER'] == 'true') {
+    final filename = file.uri.pathSegments.last;
+    await run('docker', [
+      'run',
+      '--rm',
+      '-v',
+      '${file.path}:/src/$filename:ro',
+      '-v',
+      '${file.path}.minisig:/src/$filename.minisig:ro',
+      'jedisct1/minisign',
+      '-P',
+      _libsodiumSigningKey,
+      '-Vm',
+      '/src/$filename',
+    ]);
+  } else {
+    await run('minisign', [
+      '-P',
+      _libsodiumSigningKey,
+      '-Vm',
+      file.path,
+    ]);
+  }
 }
 
 Future<void> extract({
