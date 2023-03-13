@@ -75,6 +75,11 @@ jobs:
     if: needs.update_binaries.outputs.modified == 'true'
     runs-on: ubuntu-latest
     steps:
+      - name: Debug inputs
+        run: |
+          echo ${{ needs.update_binaries.outputs.modified }}
+          echo ${{ needs.update_binaries.outputs.version }}
+          echo ${{ toJSON(needs) }}
       - name: Download all binary artifacts
         uses: actions/download-artifact@v3
         with:
@@ -83,7 +88,7 @@ jobs:
         run: |
           set -eo pipefail
           for artifact in *; do
-            tar -cavf "../$artifact.tar.zstd" "$artifact"
+            tar -cavf "../$artifact.tar.xz" "$artifact"
           done
         working-directory: artifacts
       - name: Create or update release
@@ -93,5 +98,5 @@ jobs:
           name: "[INTERNAL] Precompiled libsodium binaries v${{ needs.update_binaries.outputs.version }}"
           body: Internal release of precompiled libsodium binaries, required for the sodium_libs package.
           prerelease: true
-          files: libsodium-*.tar.zstd
+          files: libsodium-*.tar.xz
           fail_on_unmatched_files: true
