@@ -24,6 +24,9 @@ Future<void> main(List<String> args) async {
     if (lastModifiedHeader != lastModifiedContent) {
       await GithubEnv.setOutput('modified', true);
       await GithubEnv.setOutput('version', libsodium_version.ffi);
+
+      // debug
+      print(File(Platform.environment['GITHUB_OUTPUT']!).readAsLinesSync());
     }
   } finally {
     httpClient.close(force: true);
