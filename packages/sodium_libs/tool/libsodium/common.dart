@@ -60,7 +60,7 @@ abstract class GithubEnv {
 
 typedef CreateArtifactCb = FutureOr<void> Function(
   CiPlatform platform,
-  Directory archiveContents,
+  Directory extractDir,
   String lastModifiedHeader,
   Directory artifactDir,
 );
@@ -89,7 +89,7 @@ Future<void> buildArtifact(
         .create();
     await createArtifact(
       platform,
-      tmpDir.subDir('libsodium'),
+      tmpDir,
       lastModifiedHeader,
       artifactDir,
     );
