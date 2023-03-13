@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - features/isolates
     paths:
       - packages/sodium_libs/libsodium_version.dart
       - packages/sodium_libs/tool/libsodium/*
