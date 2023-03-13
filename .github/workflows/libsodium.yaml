@@ -93,5 +93,5 @@ jobs:
           name: "[INTERNAL] Precompiled libsodium binaries v${{ needs.update_binaries.outputs.version }}"
           body: Internal release of precompiled libsodium binaries, required for the sodium_libs package.
           prerelease: true
-          files: libsodium-*.tar.xz
+          files: libsodium-*.tar.zstd
           fail_on_unmatched_files: true
