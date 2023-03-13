@@ -61,7 +61,7 @@ abstract class GithubEnv {
     final githubOutputFile = File(githubOutput);
     await githubOutputFile.writeAsString(
       '$name=$value\n',
-      mode: FileMode.writeOnlyAppend,
+      mode: FileMode.append,
     );
   }
 }
