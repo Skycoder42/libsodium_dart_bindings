@@ -8,26 +8,34 @@ export '../../../../tool/util.dart';
 
 enum CiPlatform {
   // ignore: constant_identifier_names
-  android_arm64_v8a('.tar.gz', 'arm64_v8a', 'armv8-a', 'armv8-a+crypto'),
+  android_arm64_v8a(
+    '.tar.gz',
+    'arm64_v8a',
+    'armv8-a',
+    'armv8-a+crypto',
+    'android',
+  ),
   // ignore: constant_identifier_names
-  android_armeabi_v7a('.tar.gz', 'armeabi_v7a', 'armv7-a', null),
+  android_armeabi_v7a('.tar.gz', 'armeabi_v7a', 'armv7-a', null, 'android'),
   // ignore: constant_identifier_names
-  android_x86_64('.tar.gz', 'x86_64', null, 'westmere'),
+  android_x86_64('.tar.gz', 'x86_64', null, 'westmere', 'android'),
   // ignore: constant_identifier_names
-  android_x86('.tar.gz', 'x86', null, 'i686'),
-  windows('-msvc.zip', null, null, null);
+  android_x86('.tar.gz', 'x86', null, 'i686', 'android'),
+  windows('-msvc.zip');
 
   final String _suffix;
   final String? _architecture;
   final String? _buildTarget;
   final String? _installTarget;
+  final String? _installGroup;
 
   const CiPlatform(
-    this._suffix,
+    this._suffix, [
     this._architecture,
     this._buildTarget,
     this._installTarget,
-  );
+    this._installGroup,
+  ]);
 
   Uri get downloadUrl => Uri.https(
         'download.libsodium.org',
@@ -42,6 +50,8 @@ enum CiPlatform {
   String get buildTarget => _buildTarget ?? architecture;
 
   String get installTarget => _installTarget ?? buildTarget;
+
+  String get installGroup => _installGroup ?? name;
 }
 
 abstract class GithubEnv {
@@ -50,6 +60,13 @@ abstract class GithubEnv {
   static Directory get runnerTemp {
     final runnerTemp = Platform.environment['RUNNER_TEMP'];
     return runnerTemp != null ? Directory(runnerTemp) : Directory.systemTemp;
+  }
+
+  static Directory get githubWorkspace {
+    final githubWorkspace = Platform.environment['GITHUB_WORKSPACE'];
+    return githubWorkspace != null
+        ? Directory(githubWorkspace)
+        : Directory.current.subDir('../..');
   }
 
   static Future<void> setOutput(String name, Object? value) async {

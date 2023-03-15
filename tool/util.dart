@@ -73,6 +73,33 @@ Future<void> verify(File file) async {
   }
 }
 
+Future<void> sign(File file, File secretKey) async {
+  stdout.writeln('> Signing ${file.path}');
+  if (Platform.environment['MINISIGN_DOCKER'] == 'true') {
+    final filename = file.uri.pathSegments.last;
+    await run('docker', [
+      'run',
+      '--rm',
+      '-v',
+      '${file.parent.path}:/src/',
+      '-v',
+      '${secretKey.path}:/run/secrets/minisign.key:ro',
+      'jedisct1/minisign',
+      '-Ss',
+      '/run/secrets/minisign.key',
+      '-m',
+      '/src/$filename',
+    ]);
+  } else {
+    await run('minisign', [
+      '-Ss',
+      secretKey.path,
+      '-m',
+      file.path,
+    ]);
+  }
+}
+
 Future<void> extract({
   required File archive,
   required Directory outDir,

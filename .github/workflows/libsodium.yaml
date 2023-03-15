@@ -25,6 +25,8 @@ jobs:
       # and those are all the same
       modified: ${{ steps.check.outputs.modified }}
       version: ${{ steps.check.outputs.version }}
+    env:
+      MINISIGN_DOCKER: true
     strategy:
       fail-fast: false
       matrix:
@@ -38,10 +40,7 @@ jobs:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
       - name: Pull minisign docker image
-        run: |
-          set -eo pipefail
-          docker pull jedisct1/minisign
-          echo "MINISIGN_DOCKER=true" >> "$GITHUB_ENV"
+        run: docker pull jedisct1/minisign
       - name: Checkout Repository
         uses: actions/checkout@v3
       - id: check
@@ -67,26 +66,27 @@ jobs:
       - update_binaries
     if: needs.update_binaries.outputs.modified == 'true'
     runs-on: ubuntu-latest
+    env:
+      MINISIGN_DOCKER: true
     steps:
+      - name: Install Dart-SDK (stable)
+        uses: dart-lang/setup-dart@v1
       - name: Pull minisign docker image
         run: docker pull jedisct1/minisign
-      - name: Create docker secret for minisign
-        run: echo '${{ secrets.MINISIGN_SECRET_KEY }}' > ${{ runner.temp }}/minisign.key
+      - name: Checkout Repository
+        uses: actions/checkout@v3
       - name: Download all binary artifacts
         uses: actions/download-artifact@v3
         with:
           path: artifacts
-      - name: Create release artifacts
-        run: |
-          set -eo pipefail
-          for artifact in *; do
-            tar -cavf "../$artifact.tar.xz" "$artifact"
-            docker run --rm \
-              -v '${{ runner.temp }}/minisign.key:/run/secrets/minisign.key:ro' \
-              -v "$GITHUB_WORKSPACE:/src" \
-              jedisct1/minisign -Ss /run/secrets/minisign.key  -m"/src/$artifact.tar.xz"
-          done
-        working-directory: artifacts
+      - name: Create docker secret for minisign
+        run: echo '${{ secrets.MINISIGN_SECRET_KEY }}' > '${{ runner.temp }}/minisign.key'
+      - name: Build release archives
+        run: dart run tool/libsodium/publish.dart
+        working-directory: packages/sodium_libs
+      - name: Cleanup minisign key
+        if: always()
+        run: shred -fzvu '${{ runner.temp }}/minisign.key'
       - name: Create or update release
         uses: softprops/action-gh-release@v1
         with:
@@ -95,6 +95,6 @@ jobs:
           body: Internal release of precompiled libsodium binaries, required for the sodium_libs package.
           prerelease: true
           files: |
-            libsodium-*.tar.xz
-            libsodium-*.tar.xz.minisig
+            publish/libsodium-*.tar.xz
+            publish/libsodium-*.tar.xz.minisig
           fail_on_unmatched_files: true
