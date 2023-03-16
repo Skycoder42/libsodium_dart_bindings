@@ -18,7 +18,6 @@ env:
 jobs:
   update_binaries:
     name: Update binaries if required
-    runs-on: ubuntu-latest
     outputs:
       # only one of the matrix jobs result gets returned
       # but that is okay, also only positive checks update these variables
@@ -35,7 +34,13 @@ jobs:
           - android_armeabi_v7a
           - android_x86_64
           - android_x86
+          - apple
           - windows
+
+        include:
+          - platform: apple
+            runs-on: macos-latest
+    runs-on: ${{ matrix.runs-on ?? 'ubuntu-latest' }}
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1

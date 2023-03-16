@@ -13,6 +13,9 @@ Future<void> main(List<String> args) async {
     case CiPlatform.android_x86:
       createArtifact = _createAndroidArtifact;
       break;
+    case CiPlatform.apple:
+      createArtifact = _createAppleArtifact;
+      break;
     case CiPlatform.windows:
       createArtifact = _createWindowsArtifact;
       break;
@@ -43,6 +46,32 @@ Future<void> _createAndroidArtifact(
       .subFile('libsodium.so');
   final target =
       artifactDir.subDir(platform.architecture).subFile('libsodium.so');
+  await target.parent.create(recursive: true);
+  await source.rename(target.path);
+}
+
+Future<void> _createAppleArtifact(
+  CiPlatform platform,
+  Directory extractDir,
+  String lastModifiedHeader,
+  Directory artifactDir,
+) async {
+  final buildDir = extractDir.subDir('libsodium-stable');
+  await run(
+    './dist-build/apple-xcframework.sh',
+    const [],
+    workingDirectory: buildDir,
+    environment: const {
+      'LIBSODIUM_FULL_BUILD': '1',
+      'MACOS_VERSION_MIN': '10.11',
+      'IOS_SIMULATOR_VERSION_MIN': '9.0',
+      'IOS_VERSION_MIN': '9.0',
+    },
+  );
+
+  final source =
+      buildDir.subDir('libsodium-apple').subDir('Clibsodium.xcframework');
+  final target = artifactDir.subDir('Clibsodium.xcframework');
   await target.parent.create(recursive: true);
   await source.rename(target.path);
 }
