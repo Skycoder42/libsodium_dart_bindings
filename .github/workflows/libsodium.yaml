@@ -24,8 +24,6 @@ jobs:
       # and those are all the same
       modified: ${{ steps.check.outputs.modified }}
       version: ${{ steps.check.outputs.version }}
-    env:
-      MINISIGN_DOCKER: true
     strategy:
       fail-fast: false
       matrix:
@@ -40,12 +38,19 @@ jobs:
         include:
           - platform: apple
             runs-on: macos-latest
+            minisign-docker: false
     runs-on: ${{ matrix.runs-on || 'ubuntu-latest' }}
+    env:
+      MINISIGN_DOCKER: ${{ matrix.minisign-docker || true }}
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
       - name: Pull minisign docker image
+        if: matrix.minisign-docker
         run: docker pull jedisct1/minisign
+      - name: Install minisign from homebrew
+        if: "!matrix.minisign-docker"
+        run: brew install minisign
       - name: Checkout Repository
         uses: actions/checkout@v3
       - id: check
