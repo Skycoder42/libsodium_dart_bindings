@@ -40,7 +40,7 @@ jobs:
         include:
           - platform: apple
             runs-on: macos-latest
-    runs-on: ${{ matrix.runs-on ?? 'ubuntu-latest' }}
+    runs-on: ${{ matrix.runs-on || 'ubuntu-latest' }}
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
