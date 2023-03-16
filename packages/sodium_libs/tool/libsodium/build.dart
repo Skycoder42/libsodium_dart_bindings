@@ -63,7 +63,7 @@ Future<void> _createDarwinArtifact(
   final buildDir = extractDir.subDir('libsodium-stable');
   final prefixDir = buildDir.subDir('libsodium-${platform.name}');
 
-  final xcodeDir = Directory('xcode-select -p');
+  final xcodeDir = Directory(await _invoke('xcode-select', const ['-p']));
   final baseDir = xcodeDir
       .subDir('Platforms')
       .subDir('${platform.sdk}.platform')
@@ -156,4 +156,12 @@ Future<void> _createWindowsArtifact(
       }
     }
   }
+}
+
+Future<String> _invoke(String executable, List<String> arguments) async {
+  final processResult = await Process.run(executable, arguments);
+  if (processResult.exitCode != 0) {
+    throw ChildErrorException(exitCode);
+  }
+  return (processResult.stdout as String).trimRight();
 }
