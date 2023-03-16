@@ -21,6 +21,7 @@ enum CiPlatform {
   android_x86_64('.tar.gz', 'x86_64', null, 'westmere', 'android'),
   // ignore: constant_identifier_names
   android_x86('.tar.gz', 'x86', null, 'i686', 'android'),
+  apple('.tar.gz'),
   windows('-msvc.zip');
 
   final String _suffix;
