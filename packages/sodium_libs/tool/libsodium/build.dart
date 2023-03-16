@@ -87,7 +87,7 @@ Future<void> _createDarwinArtifact(
   final environment = {
     'LIBSODIUM_FULL_BUILD': '1',
     'PATH': '${binDir.path}:${sbinDir.path}:${Platform.environment['PATH']}',
-    if (sysrootDir != null) 'SDK:': sysrootDir.path,
+    if (sysrootDir != null) 'SDK': sysrootDir.path,
     'CFLAGS': '-O2 $baseFlags',
     'LDFLAGS': baseFlags,
   };
