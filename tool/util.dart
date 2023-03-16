@@ -31,7 +31,13 @@ Future<void> run(
 }) async {
   final pwdMsg =
       workingDirectory != null ? ' (in ${workingDirectory.path})' : '';
-  stdout.writeln('>> Running $executable ${arguments.join(' ')}$pwdMsg');
+  final envMsg = environment != null ? ' with environment:' : '';
+  stdout.writeln('>> Running $executable ${arguments.join(' ')}$pwdMsg$envMsg');
+  if (environment != null) {
+    for (final entry in environment.entries) {
+      stdout.writeln('>>> ${entry.key}: ${entry.value}');
+    }
+  }
   final process = await Process.start(
     executable,
     arguments,
