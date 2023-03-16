@@ -35,7 +35,7 @@ Future<void> _mergeArtifacts({
         .subDir(ciPlatform.installGroup)
         .create(recursive: true);
     await run('rsync', [
-      '-av',
+      '-a',
       '${artifactDir.path}/',
       '${archiveDir.path}/',
     ]);
@@ -60,8 +60,8 @@ Future<void> _archiveAndSignArtifacts({
 
     await run(
       'tar',
-      ['-cJvf', archive.path, dirName],
-      workingDirectory: directory.parent,
+      ['-cJvf', archive.path, '.'],
+      workingDirectory: directory,
     );
 
     await sign(archive, secretKey);
