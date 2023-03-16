@@ -35,7 +35,7 @@ Future<void> _mergeArtifacts({
         .subDir(ciPlatform.installGroup)
         .create(recursive: true);
     await run('rsync', [
-      '-a',
+      '-av',
       '${artifactDir.path}/',
       '${archiveDir.path}/',
     ]);
@@ -48,8 +48,14 @@ Future<void> _archiveAndSignArtifacts({
   required File secretKey,
 }) async {
   await publishDir.create();
-  await for (final directory in archivesDir.list()) {
-    final dirName = directory.uri.pathSegments.last;
+
+  final dirs = archivesDir
+      .list(followLinks: false)
+      .where((e) => e is Directory)
+      .cast<Directory>();
+  await for (final directory in dirs) {
+    // "last" is otherwise the trailing slash
+    final dirName = directory.uri.pathSegments.reversed.skip(1).first;
     final archive = publishDir.subFile('libsodium-$dirName.tar.xz');
 
     await run(
