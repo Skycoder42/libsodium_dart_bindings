@@ -38,19 +38,19 @@ jobs:
         include:
           - platform: apple
             runs-on: macos-latest
-            minisign-docker: false
+            minisign-brew: true
     runs-on: ${{ matrix.runs-on || 'ubuntu-latest' }}
     env:
-      MINISIGN_DOCKER: ${{ matrix.minisign-docker || true }}
+      MINISIGN_DOCKER: ${{ !matrix.minisign-brew }}
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
-      - name: Pull minisign docker image
-        if: matrix.minisign-docker
-        run: docker pull jedisct1/minisign
       - name: Install minisign from homebrew
-        if: "!matrix.minisign-docker"
+        if: matrix.minisign-brew
         run: brew install minisign
+      - name: Pull minisign docker image
+        if: "!matrix.minisign-brew"
+        run: docker pull jedisct1/minisign
       - name: Checkout Repository
         uses: actions/checkout@v3
       - id: check
