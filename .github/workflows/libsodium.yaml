@@ -32,11 +32,27 @@ jobs:
           - android_armeabi_v7a
           - android_x86_64
           - android_x86
-          - apple
+          - ios
+          - ios_simulator_arm64
+          - ios_simulator_x86_64
+          - macos_arm64
+          - macos_x86_64
           - windows
 
         include:
-          - platform: apple
+          - platform: ios
+            runs-on: macos-latest
+            minisign-brew: true
+          - platform: ios_simulator_arm64
+            runs-on: macos-latest
+            minisign-brew: true
+          - platform: ios_simulator_x86_64
+            runs-on: macos-latest
+            minisign-brew: true
+          - platform: macos_arm64
+            runs-on: macos-latest
+            minisign-brew: true
+          - platform: macos_x86_64
             runs-on: macos-latest
             minisign-brew: true
     runs-on: ${{ matrix.runs-on || 'ubuntu-latest' }}

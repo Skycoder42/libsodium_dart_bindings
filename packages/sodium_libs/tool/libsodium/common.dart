@@ -10,33 +10,104 @@ enum CiPlatform {
   // ignore: constant_identifier_names
   android_arm64_v8a(
     '.tar.gz',
-    'arm64_v8a',
-    'armv8-a',
-    'armv8-a+crypto',
-    'android',
+    architecture: 'arm64_v8a',
+    buildTarget: 'armv8-a',
+    installTarget: 'armv8-a+crypto',
+    installGroup: 'android',
   ),
   // ignore: constant_identifier_names
-  android_armeabi_v7a('.tar.gz', 'armeabi_v7a', 'armv7-a', null, 'android'),
+  android_armeabi_v7a(
+    '.tar.gz',
+    architecture: 'armeabi_v7a',
+    buildTarget: 'armv7-a',
+    installGroup: 'android',
+  ),
   // ignore: constant_identifier_names
-  android_x86_64('.tar.gz', 'x86_64', null, 'westmere', 'android'),
+  android_x86_64(
+    '.tar.gz',
+    architecture: 'x86_64',
+    installTarget: 'westmere',
+    installGroup: 'android',
+  ),
   // ignore: constant_identifier_names
-  android_x86('.tar.gz', 'x86', null, 'i686', 'android'),
-  apple('.tar.gz'),
+  android_x86(
+    '.tar.gz',
+    architecture: 'x86',
+    installTarget: 'i686',
+    installGroup: 'android',
+  ),
+  ios(
+    '.tar.gz',
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin10',
+    sdk: 'iPhoneOS',
+    hasSysroot: true,
+    extraFlags: '-mios-version-min=9.0',
+    installGroup: 'ios',
+  ),
+  // ignore: constant_identifier_names
+  ios_simulator_arm64(
+    '.tar.gz',
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin20',
+    sdk: 'iPhoneSimulator',
+    hasSysroot: true,
+    extraFlags: '-mios-simulator-version-min=9.0',
+    installGroup: 'ios',
+  ),
+  // ignore: constant_identifier_names
+  ios_simulator_x86_64(
+    '.tar.gz',
+    architecture: 'x86_64',
+    buildTarget: 'x86_64-apple-darwin10',
+    sdk: 'iPhoneSimulator',
+    hasSysroot: true,
+    extraFlags: '-mios-simulator-version-min=9.0',
+    installGroup: 'ios',
+  ),
+  // ignore: constant_identifier_names
+  macos_arm64(
+    '.tar.gz',
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin20',
+    sdk: 'MacOSX',
+    extraFlags: '-mmacosx-version-min=10.11',
+    installGroup: 'macos',
+  ),
+  // ignore: constant_identifier_names
+  macos_x86_64(
+    '.tar.gz',
+    architecture: 'x86_64',
+    buildTarget: 'x86_64-apple-darwin10',
+    sdk: 'MacOSX',
+    extraFlags: '-mmacosx-version-min=10.11',
+    installGroup: 'macos',
+  ),
   windows('-msvc.zip');
 
   final String _suffix;
   final String? _architecture;
   final String? _buildTarget;
+  final String? _sdk;
+  final bool hasSysroot;
+  final String? extraFlags;
   final String? _installTarget;
   final String? _installGroup;
 
   const CiPlatform(
-    this._suffix, [
-    this._architecture,
-    this._buildTarget,
-    this._installTarget,
-    this._installGroup,
-  ]);
+    this._suffix, {
+    String? architecture,
+    String? buildTarget,
+    String? sdk,
+    this.hasSysroot = false,
+    this.extraFlags,
+    String? installTarget,
+    String? installGroup,
+  })  : _architecture = architecture,
+        _buildTarget = buildTarget,
+        _sdk = sdk,
+        _installTarget = installTarget,
+        _installGroup = installGroup;
 
   Uri get downloadUrl => Uri.https(
         'download.libsodium.org',
@@ -49,6 +120,8 @@ enum CiPlatform {
   String get architecture => _architecture ?? name;
 
   String get buildTarget => _buildTarget ?? architecture;
+
+  String get sdk => _sdk ?? name;
 
   String get installTarget => _installTarget ?? buildTarget;
 
