@@ -76,7 +76,7 @@ Future<void> _createDarwinArtifact(
   Directory? sysrootDir;
   if (platform.hasSysroot) {
     sysrootDir = baseDir.subDir('SDKs').subDir('${platform.sdk}.sdk');
-    baseFlagsBuilder.write(" -isysroot '${sysrootDir.path}'");
+    baseFlagsBuilder.write(' -isysroot ${sysrootDir.path}');
   }
 
   if (platform.extraFlags != null) {
@@ -88,7 +88,7 @@ Future<void> _createDarwinArtifact(
     'LIBSODIUM_FULL_BUILD': '1',
     'PATH': '${binDir.path}:${sbinDir.path}:${Platform.environment['PATH']}',
     if (sysrootDir != null) 'SDK': sysrootDir.path,
-    'CFLAGS': '-O2 $baseFlags',
+    'CFLAGS': '-Ofast $baseFlags',
     'LDFLAGS': baseFlags,
   };
   await run(
