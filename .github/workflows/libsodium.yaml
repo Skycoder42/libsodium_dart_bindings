@@ -12,18 +12,29 @@ on:
     #   - packages/sodium_libs/tool/libsodium/*
     #   - .github/workflows/libsodium.yaml
 
-env:
-  minisignVersion: 0.11
-
 jobs:
-  update_binaries:
-    name: Update binaries if required
+  detect_modified:
+    name: Check if binaries need to be updated
+    runs-on: ubuntu-latest
     outputs:
-      # only one of the matrix jobs result gets returned
-      # but that is okay, also only positive checks update these variables
-      # and those are all the same
       modified: ${{ steps.check.outputs.modified }}
       version: ${{ steps.check.outputs.version }}
+      last-modified-header: ${{ steps.check.outputs.last-modified-header }}
+    steps:
+      - name: Install Dart-SDK (stable)
+        uses: dart-lang/setup-dart@v1
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - id: check
+        name: Check if upstream stable archives have been update
+        run: dart run tool/libsodium/detect_modified.dart
+        working-directory: packages/sodium_libs
+
+  build:
+    name: Update binaries if required
+    needs:
+      - detect_modified
+    if: needs.detect_modified.outputs.modified == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -42,22 +53,15 @@ jobs:
         include:
           - platform: ios
             runs-on: macos-latest
-            minisign-brew: true
           - platform: ios_simulator_arm64
             runs-on: macos-latest
-            minisign-brew: true
           - platform: ios_simulator_x86_64
             runs-on: macos-latest
-            minisign-brew: true
           - platform: macos_arm64
             runs-on: macos-latest
-            minisign-brew: true
           - platform: macos_x86_64
             runs-on: macos-latest
-            minisign-brew: true
     runs-on: ${{ matrix.runs-on || 'ubuntu-latest' }}
-    env:
-      MINISIGN_DOCKER: ${{ !matrix.minisign-brew }}
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
@@ -65,16 +69,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Install minisign
         uses: ./.github/actions/install-minisign
-      - id: check
-        name: Check if upstream stable was updated
-        run: dart run tool/libsodium/detect_modified.dart ${{ matrix.platform }}
-        working-directory: packages/sodium_libs
-      - name: Build updated binaries
-        if: steps.check.outputs.modified == 'true'
+      - name: Build libsodium binaries
         run: dart run tool/libsodium/build.dart ${{ matrix.platform }}
         working-directory: packages/sodium_libs
       - name: Create artifact
-        if: steps.check.outputs.modified == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: libsodium-${{ matrix.platform }}
@@ -85,11 +83,10 @@ jobs:
   update_release:
     name: Update release with new binaries
     needs:
-      - update_binaries
-    if: needs.update_binaries.outputs.modified == 'true'
-    runs-on: ubuntu-latest
-    env:
-      MINISIGN_DOCKER: true
+      - detect_modified
+      - build
+    if: needs.detect_modified.outputs.modified == 'true'
+    runs-on: macos-latest # needed for lipo
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
@@ -101,7 +98,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: artifacts
-      - name: Create docker secret for minisign
+      - name: Create secret key for minisign
         run: echo '${{ secrets.MINISIGN_SECRET_KEY }}' > '${{ runner.temp }}/minisign.key'
       - name: Build release archives
         run: dart run tool/libsodium/publish.dart
