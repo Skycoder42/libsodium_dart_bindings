@@ -10,5 +10,6 @@
     "shorthash",
     "unpad",
     "unpadded"
-  ]
+  ],
+  "dart.runPubGetOnPubspecChanges": "never"
 }

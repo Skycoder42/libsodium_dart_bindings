@@ -19,7 +19,7 @@ jobs:
     outputs:
       modified: ${{ steps.check.outputs.modified }}
       version: ${{ steps.check.outputs.version }}
-      last-modified-header: ${{ steps.check.outputs.last-modified-header }}
+      last-modified-content: ${{ steps.check.outputs.last-modified-content }}
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
