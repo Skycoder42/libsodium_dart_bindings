@@ -61,12 +61,8 @@ jobs:
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
-      - name: Install minisign from homebrew
-        if: matrix.minisign-brew
-        run: brew install minisign
-      - name: Pull minisign docker image
-        if: "!matrix.minisign-brew"
-        run: docker pull jedisct1/minisign
+      - name: Install minisign
+        uses: ./.github/actions/install-minisign
       - name: Checkout Repository
         uses: actions/checkout@v3
       - id: check
@@ -97,8 +93,8 @@ jobs:
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
-      - name: Pull minisign docker image
-        run: docker pull jedisct1/minisign
+      - name: Install minisign
+        uses: ./.github/actions/install-minisign
       - name: Checkout Repository
         uses: actions/checkout@v3
       - name: Download all binary artifacts
