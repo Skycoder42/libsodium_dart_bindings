@@ -6,7 +6,7 @@ import '../../libsodium_version.dart';
 import 'common.dart';
 
 Future<void> main(List<String> args) async {
-  final platform = CiPlatform.values.byName(args.first);
+  final checkUrls = CiPlatform.values.map((p) => p.downloadUrl).toSet();
 
   if (!platform.lastModifiedFile.existsSync()) {
     await _setOutputs();

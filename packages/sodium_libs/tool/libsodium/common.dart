@@ -121,9 +121,6 @@ enum CiPlatform {
         '/libsodium/releases/libsodium-${libsodium_version.ffi}-stable$_suffix',
       );
 
-  File get lastModifiedFile =>
-      File('tool/libsodium/.last-modified/${libsodium_version.ffi}/$name.txt');
-
   String get architecture => _architecture ?? name;
 
   String get buildTarget => _buildTarget ?? architecture;
