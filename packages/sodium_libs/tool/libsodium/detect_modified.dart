@@ -1,41 +1,56 @@
-// ignore_for_file: avoid_print
-
 import 'dart:io';
 
 import '../../libsodium_version.dart';
 import 'common.dart';
+import 'platforms/plugin_targets.dart';
 
-Future<void> main(List<String> args) async {
-  final checkUrls = CiPlatform.values.map((p) => p.downloadUrl).toSet();
+Future<void> main() => GithubEnv.run(() async {
+      final downloadUrls =
+          PluginTargets.values.map((t) => t.downloadUrl).toSet();
 
-  if (!platform.lastModifiedFile.existsSync()) {
-    await _setOutputs();
-    return;
-  }
+      final lastModifiedMap = <Uri, String>{};
+      final httpClient = HttpClient();
+      try {
+        for (final downloadUrl in downloadUrls) {
+          GithubEnv.logNotice('Getting last modified header for: $downloadUrl');
+          final lastModifiedHeader = await httpClient.getHeader(
+            downloadUrl,
+            HttpHeaders.lastModifiedHeader,
+          );
 
-  final lastModifiedContent = await platform.lastModifiedFile.readAsString();
-  final httpClient = HttpClient();
-  try {
-    final lastModifiedHeader = await httpClient.getHeader(
-      platform.downloadUrl,
-      HttpHeaders.lastModifiedHeader,
-    );
+          lastModifiedMap[downloadUrl] = lastModifiedHeader;
+        }
+      } finally {
+        httpClient.close(force: true);
+      }
 
-    if (lastModifiedHeader != lastModifiedContent) {
-      await _setOutputs();
-    }
-  } finally {
-    httpClient.close(force: true);
-  }
-}
+      final newLastModified = _buildLastModifiedFile(lastModifiedMap);
+      final oldLastModified = await getLastModifiedFile().readAsString();
 
-Future<void> _setOutputs() async {
-  await GithubEnv.setOutput('modified', true);
-  await GithubEnv.setOutput('version', libsodium_version.ffi);
+      if (newLastModified != oldLastModified) {
+        GithubEnv.logNotice('At least one upstream archive has been modified!');
+        await GithubEnv.setOutput('modified', true);
+        await GithubEnv.setOutput('version', libsodium_version.ffi);
+        await GithubEnv.setOutput(
+          'last-modified-content',
+          newLastModified,
+          multiline: true,
+        );
+      } else {
+        GithubEnv.logNotice('All upstream archives are unchanged');
+      }
+    });
+
+String _buildLastModifiedFile(Map<Uri, String> lastModifiedMap) {
+  final lines = lastModifiedMap.entries
+      .map((e) => '${e.key} - ${e.value}\n')
+      .toList()
+    ..sort();
+  return lines.join();
 }
 
 extension _HttpClientX on HttpClient {
-  Future<String> getHeader(Uri url, String header) async {
+  Future<String> getHeader(Uri url, String headerName) async {
     final headRequest = await headUrl(url);
     final headResponse = await headRequest.close();
     headResponse.drain<void>().ignore();
@@ -43,7 +58,7 @@ extension _HttpClientX on HttpClient {
       throw StatusCodeException(headResponse.statusCode);
     }
 
-    final header = headResponse.headers[HttpHeaders.lastModifiedHeader];
+    final header = headResponse.headers[headerName];
     if (header == null || header.isEmpty) {
       throw Exception(
         'Unable to get header $header from $url: Header is not set',
