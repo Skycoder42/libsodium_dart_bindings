@@ -61,10 +61,10 @@ jobs:
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
-      - name: Install minisign
-        uses: ./.github/actions/install-minisign
       - name: Checkout Repository
         uses: actions/checkout@v3
+      - name: Install minisign
+        uses: ./.github/actions/install-minisign
       - id: check
         name: Check if upstream stable was updated
         run: dart run tool/libsodium/detect_modified.dart ${{ matrix.platform }}
@@ -93,10 +93,10 @@ jobs:
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
-      - name: Install minisign
-        uses: ./.github/actions/install-minisign
       - name: Checkout Repository
         uses: actions/checkout@v3
+      - name: Install minisign
+        uses: ./.github/actions/install-minisign
       - name: Download all binary artifacts
         uses: actions/download-artifact@v3
         with:
