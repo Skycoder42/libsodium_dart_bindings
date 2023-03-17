@@ -44,6 +44,7 @@ enum CiPlatform {
     hasSysroot: true,
     extraFlags: '-mios-version-min=9.0',
     installGroup: 'ios',
+    useLipo: true,
   ),
   // ignore: constant_identifier_names
   ios_simulator_arm64(
@@ -54,6 +55,7 @@ enum CiPlatform {
     hasSysroot: true,
     extraFlags: '-mios-simulator-version-min=9.0',
     installGroup: 'ios',
+    useLipo: true,
   ),
   // ignore: constant_identifier_names
   ios_simulator_x86_64(
@@ -64,6 +66,7 @@ enum CiPlatform {
     hasSysroot: true,
     extraFlags: '-mios-simulator-version-min=9.0',
     installGroup: 'ios',
+    useLipo: true,
   ),
   // ignore: constant_identifier_names
   macos_arm64(
@@ -73,6 +76,7 @@ enum CiPlatform {
     sdk: 'MacOSX',
     extraFlags: '-mmacosx-version-min=10.11',
     installGroup: 'macos',
+    useLipo: true,
   ),
   // ignore: constant_identifier_names
   macos_x86_64(
@@ -82,6 +86,7 @@ enum CiPlatform {
     sdk: 'MacOSX',
     extraFlags: '-mmacosx-version-min=10.11',
     installGroup: 'macos',
+    useLipo: true,
   ),
   windows('-msvc.zip');
 
@@ -93,6 +98,7 @@ enum CiPlatform {
   final String? extraFlags;
   final String? _installTarget;
   final String? _installGroup;
+  final bool useLipo;
 
   const CiPlatform(
     this._suffix, {
@@ -103,6 +109,7 @@ enum CiPlatform {
     this.extraFlags,
     String? installTarget,
     String? installGroup,
+    this.useLipo = false,
   })  : _architecture = architecture,
         _buildTarget = buildTarget,
         _sdk = sdk,
