@@ -117,7 +117,7 @@ class DarwinTarget extends PluginTarget {
     );
     final target = artifactDir.subFile('libsodium.dylib');
 
-    GithubLogger.logNotice('Installing ${target.path}');
+    GithubLogger.logInfo('Installing ${target.path}');
     await target.parent.create(recursive: true);
     await source.rename(target.path);
   }

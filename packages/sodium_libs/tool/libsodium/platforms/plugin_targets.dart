@@ -3,6 +3,18 @@ import 'darwin_target.dart';
 import 'plugin_target.dart';
 import 'windows_target.dart';
 
+class PluginTargetGroup {
+  final String name;
+  final List<PluginTarget> targets;
+  final bool useLipo;
+
+  const PluginTargetGroup(
+    this.name,
+    this.targets, {
+    this.useLipo = false,
+  });
+}
+
 abstract class PluginTargets {
   PluginTargets._();
 
@@ -58,19 +70,42 @@ abstract class PluginTargets {
   );
   static const windows = WindowsTarget();
 
-  static const values = {
+  static const androidTargets = [
     android_arm64_v8a,
     android_armeabi_v7a,
     android_x86_64,
     android_x86,
+  ];
+
+  static const iosTargets = [
     ios,
     ios_simulator_arm64,
     ios_simulator_x86_64,
+  ];
+
+  static const macosTargets = [
     macos_arm64,
     macos_x86_64,
+  ];
+
+  static const windowsTargets = [
     windows,
-  };
+  ];
+
+  static const allTargets = [
+    ...androidTargets,
+    ...iosTargets,
+    ...macosTargets,
+    ...windowsTargets,
+  ];
+
+  static const targetGroups = [
+    PluginTargetGroup('android', androidTargets),
+    PluginTargetGroup('ios', iosTargets, useLipo: true),
+    PluginTargetGroup('macos', macosTargets, useLipo: true),
+    PluginTargetGroup('windows', windowsTargets),
+  ];
 
   static PluginTarget fromName(String name) =>
-      values.singleWhere((e) => e.name == name);
+      allTargets.singleWhere((e) => e.name == name);
 }
