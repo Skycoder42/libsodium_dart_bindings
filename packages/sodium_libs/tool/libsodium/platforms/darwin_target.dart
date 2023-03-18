@@ -14,9 +14,9 @@ enum DarwinPlatform {
   final bool hasSysroot;
   final String versionParameter;
 
-  // ignore: avoid_positional_boolean_parameters
   const DarwinPlatform(
     this.sdk,
+    // ignore: avoid_positional_boolean_parameters
     this.hasSysroot,
     this.versionParameter,
   );
