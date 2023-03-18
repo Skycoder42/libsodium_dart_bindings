@@ -44,7 +44,7 @@ class AndroidTarget extends PluginTarget {
         .subFile('libsodium.so');
     final target = artifactDir.subDir(_architecture).subFile('libsodium.so');
 
-    GithubLogger.logNotice('Installing ${target.path}');
+    GithubLogger.logInfo('Installing ${target.path}');
     await target.parent.create(recursive: true);
     await source.rename(target.path);
   }

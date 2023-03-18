@@ -43,7 +43,7 @@ class WindowsTarget extends PluginTarget {
           final target =
               artifactDir.subDir(config).subDir(msvcVersion).subFile(file);
 
-          GithubLogger.logNotice('Installing ${target.path}');
+          GithubLogger.logInfo('Installing ${target.path}');
           await target.parent.create(recursive: true);
           await source.rename(target.path);
         }

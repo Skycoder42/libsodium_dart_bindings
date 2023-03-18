@@ -9,13 +9,13 @@ import 'util/util.dart';
 
 Future<void> main() => GithubLogger.runZoned(() async {
       final downloadUrls =
-          PluginTargets.values.map((t) => t.downloadUrl).toSet();
+          PluginTargets.allTargets.map((t) => t.downloadUrl).toSet();
 
       final lastModifiedMap = <Uri, String>{};
       final httpClient = HttpClient();
       try {
         for (final downloadUrl in downloadUrls) {
-          GithubLogger.logNotice(
+          GithubLogger.logInfo(
             'Getting last modified header for: $downloadUrl',
           );
           final lastModifiedHeader = await httpClient.getHeader(

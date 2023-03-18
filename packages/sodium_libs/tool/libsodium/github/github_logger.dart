@@ -8,6 +8,8 @@ class GithubLogger {
 
   static void logDebug(String message) => print('::debug::$message');
 
+  static void logInfo(String message) => print('Info: $message');
+
   static void logNotice(String message) => print('::notice::$message');
 
   static void logWarning(String message) => print('::warning::$message');
