@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import '../../../../tool/util.dart';
 import '../../libsodium_version.dart';
-import 'common.dart';
+import 'github/github_env.dart';
+import 'github/github_logger.dart';
 import 'platforms/plugin_targets.dart';
+import 'util/util.dart';
 
-Future<void> main() => GithubEnv.run(() async {
+Future<void> main() => GithubLogger.runZoned(() async {
       final downloadUrls =
           PluginTargets.values.map((t) => t.downloadUrl).toSet();
 
@@ -12,7 +15,9 @@ Future<void> main() => GithubEnv.run(() async {
       final httpClient = HttpClient();
       try {
         for (final downloadUrl in downloadUrls) {
-          GithubEnv.logNotice('Getting last modified header for: $downloadUrl');
+          GithubLogger.logNotice(
+            'Getting last modified header for: $downloadUrl',
+          );
           final lastModifiedHeader = await httpClient.getHeader(
             downloadUrl,
             HttpHeaders.lastModifiedHeader,
@@ -25,20 +30,26 @@ Future<void> main() => GithubEnv.run(() async {
       }
 
       final newLastModified = _buildLastModifiedFile(lastModifiedMap);
-      final oldLastModified = await getLastModifiedFile().readAsString();
-
-      if (newLastModified != oldLastModified) {
-        GithubEnv.logNotice('At least one upstream archive has been modified!');
-        await GithubEnv.setOutput('modified', true);
-        await GithubEnv.setOutput('version', libsodium_version.ffi);
-        await GithubEnv.setOutput(
-          'last-modified-content',
-          newLastModified,
-          multiline: true,
-        );
-      } else {
-        GithubEnv.logNotice('All upstream archives are unchanged');
+      final lastModifiedFile = getLastModifiedFile();
+      if (lastModifiedFile.existsSync()) {
+        final oldLastModified = await getLastModifiedFile().readAsString();
+        if (newLastModified == oldLastModified) {
+          GithubLogger.logNotice('All upstream archives are unchanged');
+          await GithubEnv.setOutput('modified', false);
+          return;
+        }
       }
+
+      GithubLogger.logNotice(
+        'At least one upstream archive has been modified!',
+      );
+      await GithubEnv.setOutput('modified', true);
+      await GithubEnv.setOutput('version', libsodium_version.ffi);
+      await GithubEnv.setOutput(
+        'last-modified-content',
+        newLastModified,
+        multiline: true,
+      );
     });
 
 String _buildLastModifiedFile(Map<Uri, String> lastModifiedMap) {

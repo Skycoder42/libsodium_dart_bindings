@@ -149,11 +149,9 @@ extension HttpClientX on HttpClient {
     Directory targetDir,
     Uri uri, {
     bool withSignature = false,
-    HeaderExtractor? headerExtractor,
   }) async {
     final request = await getUrl(uri);
     final response = await request.close();
-    headerExtractor?.call(response.headers);
     if (response.statusCode >= 300) {
       throw StatusCodeException(response.statusCode);
     }

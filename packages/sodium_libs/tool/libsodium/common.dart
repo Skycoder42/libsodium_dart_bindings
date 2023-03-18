@@ -203,14 +203,12 @@ Future<void> buildArtifact(
   final httpClient = HttpClient();
   final tmpDir = await GithubEnv.runnerTemp.createTemp();
   try {
-    late String lastModifiedHeader;
+    const lastModifiedHeader = '';
 
     final archive = await httpClient.download(
       tmpDir,
       platform.downloadUrl,
       withSignature: true,
-      headerExtractor: (headers) =>
-          lastModifiedHeader = headers[HttpHeaders.lastModifiedHeader]!.first,
     );
     await verify(archive);
     await extract(archive: archive, outDir: tmpDir);
