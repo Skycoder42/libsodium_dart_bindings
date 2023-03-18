@@ -7,22 +7,55 @@ abstract class PluginTargets {
   PluginTargets._();
 
   // ignore: constant_identifier_names
-  static const android_arm64_v8a = AndroidTarget('arm64_v8a');
+  static const android_arm64_v8a = AndroidTarget(
+    architecture: 'arm64_v8a',
+    buildTarget: 'armv8-a',
+    installTarget: 'armv8-a+crypto',
+  );
   // ignore: constant_identifier_names
-  static const android_armeabi_v7a = AndroidTarget('armeabi_v7a');
+  static const android_armeabi_v7a = AndroidTarget(
+    architecture: 'armeabi_v7a',
+    buildTarget: 'armv7-a',
+  );
   // ignore: constant_identifier_names
-  static const android_x86_64 = AndroidTarget('x86_64');
+  static const android_x86_64 = AndroidTarget(
+    architecture: 'x86_64',
+    installTarget: 'westmere',
+  );
   // ignore: constant_identifier_names
-  static const android_x86 = AndroidTarget('x86');
-  static const ios = DarwinTarget('ios', 'arm64');
+  static const android_x86 = AndroidTarget(
+    architecture: 'x86',
+    installTarget: 'i686',
+  );
+  static const ios = DarwinTarget(
+    platform: DarwinPlatform.ios,
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin10',
+  );
   // ignore: constant_identifier_names
-  static const ios_simulator_arm64 = DarwinTarget('ios_simulator', 'arm64');
+  static const ios_simulator_arm64 = DarwinTarget(
+    platform: DarwinPlatform.ios_simulator,
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin20',
+  );
   // ignore: constant_identifier_names
-  static const ios_simulator_x86_64 = DarwinTarget('ios_simulator', 'x86_64');
+  static const ios_simulator_x86_64 = DarwinTarget(
+    platform: DarwinPlatform.ios_simulator,
+    architecture: 'x86_64',
+    buildTarget: 'x86_64-apple-darwin10',
+  );
   // ignore: constant_identifier_names
-  static const macos_arm64 = DarwinTarget('macos', 'arm64');
+  static const macos_arm64 = DarwinTarget(
+    platform: DarwinPlatform.macos,
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin20',
+  );
   // ignore: constant_identifier_names
-  static const macos_x86_64 = DarwinTarget('macos', 'x86_64');
+  static const macos_x86_64 = DarwinTarget(
+    platform: DarwinPlatform.macos,
+    architecture: 'x86_64',
+    buildTarget: 'x86_64-apple-darwin10',
+  );
   static const windows = WindowsTarget();
 
   static const values = {

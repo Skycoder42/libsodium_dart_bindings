@@ -1,12 +1,9 @@
 import 'dart:io';
 
-import 'package:meta/meta.dart';
-
 import '../../../../../tool/util.dart';
 import '../github/github_logger.dart';
 import 'plugin_target.dart';
 
-@immutable
 class WindowsTarget extends PluginTarget {
   const WindowsTarget();
 
@@ -45,9 +42,9 @@ class WindowsTarget extends PluginTarget {
               .subFile(file);
           final target =
               artifactDir.subDir(config).subDir(msvcVersion).subFile(file);
-          await target.parent.create(recursive: true);
 
           GithubLogger.logNotice('Installing ${target.path}');
+          await target.parent.create(recursive: true);
           await source.rename(target.path);
         }
       }
