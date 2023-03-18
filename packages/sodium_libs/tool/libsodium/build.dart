@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import '../../../../tool/util.dart';
@@ -6,38 +7,54 @@ import 'github/github_logger.dart';
 import 'platforms/plugin_target.dart';
 import 'platforms/plugin_targets.dart';
 
-Future<void> main(List<String> args) async {
-  final platform = PluginTargets.fromName(args.first);
+Future<void> main(List<String> args) => GithubLogger.runZoned(() async {
+      final platform = PluginTargets.fromName(args.first);
 
-  final tmpDir = await _getArchive(platform);
-  final artifactDir =
-      await GithubEnv.runnerTemp.subDir('libsodium-${platform.name}').create();
-
-  await platform.build(
-    extractDir: tmpDir,
-    artifactDir: artifactDir,
-  );
-}
-
-Future<Directory> _getArchive(PluginTarget platform) =>
-    GithubLogger.logGroupAsync('Download, verify and extract archive',
-        () async {
       final tmpDir = await GithubEnv.runnerTemp.createTemp();
-      final httpClient = HttpClient();
       try {
-        final archive = await httpClient.download(
-          tmpDir,
-          platform.downloadUrl,
-          withSignature: true,
-        );
-        await verify(archive);
-        await extract(archive: archive, outDir: tmpDir);
-        return tmpDir;
+        await _getArchive(tmpDir, platform.downloadUrl);
+        await _build(platform, tmpDir);
       } finally {
         await tmpDir.delete(recursive: true);
-        httpClient.close(force: true);
       }
     });
+
+Future<void> _build(PluginTarget platform, Directory tmpDir) =>
+    GithubLogger.logGroupAsync(
+      'Build libsodium-${platform.name} artifact',
+      () async {
+        final artifactDir = await GithubEnv.runnerTemp
+            .subDir('libsodium-${platform.name}')
+            .create();
+
+        await platform.build(
+          extractDir: tmpDir,
+          artifactDir: artifactDir,
+        );
+      },
+    );
+
+Future<void> _getArchive(
+  Directory downloadDir,
+  Uri downloadUrl,
+) =>
+    GithubLogger.logGroupAsync(
+      'Download, verify and extract $downloadUrl',
+      () async {
+        final httpClient = HttpClient();
+        try {
+          final archive = await httpClient.download(
+            downloadDir,
+            downloadUrl,
+            withSignature: true,
+          );
+          await verify(archive);
+          await extract(archive: archive, outDir: downloadDir);
+        } finally {
+          httpClient.close(force: true);
+        }
+      },
+    );
 
 // Future<void> _createAndroidArtifact(
 //   CiPlatform platform,
@@ -130,42 +147,6 @@ Future<Directory> _getArchive(PluginTarget platform) =>
 //   await source.rename(target.path);
 // }
 
-// Future<void> _createWindowsArtifact(
-//   CiPlatform platform,
-//   Directory extractDir,
-//   String lastModifiedHeader,
-//   Directory artifactDir,
-// ) async {
-//   const arch = 'x64';
-//   const libraryType = 'dynamic';
-//   const msvcVersions = ['v142', 'v143'];
-//   const releaseFiles = ['libsodium.dll'];
-//   const debugFiles = [...releaseFiles, 'libsodium.pdb'];
-//   const configurations = {
-//     'Debug': debugFiles,
-//     'Release': releaseFiles,
-//   };
-
-//   for (final configEntry in configurations.entries) {
-//     final config = configEntry.key;
-//     final configFiles = configEntry.value;
-//     for (final msvcVersion in msvcVersions) {
-//       for (final file in configFiles) {
-//         final source = extractDir
-//             .subDir('libsodium')
-//             .subDir(arch)
-//             .subDir(config)
-//             .subDir(msvcVersion)
-//             .subDir(libraryType)
-//             .subFile(file);
-//         final target =
-//             artifactDir.subDir(config).subDir(msvcVersion).subFile(file);
-//         await target.parent.create(recursive: true);
-//         await source.rename(target.path);
-//       }
-//     }
-//   }
-// }
 
 // Future<String> _invoke(String executable, List<String> arguments) async {
 //   final processResult = await Process.run(executable, arguments);

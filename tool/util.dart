@@ -158,12 +158,13 @@ extension HttpClientX on HttpClient {
 
     final outFile = targetDir.subFile(uri.pathSegments.last);
     final outSink = outFile.openWrite();
-    stdout.writeln('> Downloading $uri to ${outFile.path}');
     await response.pipe(outSink);
 
     if (withSignature) {
-      final sigUri = uri.replace(path: uri.path + ".minisig");
-      await download(targetDir, sigUri);
+      await download(
+        targetDir,
+        uri.replace(path: "${uri.path}.minisig"),
+      );
     }
 
     return outFile;
