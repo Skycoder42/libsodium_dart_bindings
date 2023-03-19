@@ -79,6 +79,9 @@ abstract class PluginTargets {
 
   static const iosTargets = [
     ios,
+  ];
+
+  static const iosSimulatorTargets = [
     ios_simulator_arm64,
     ios_simulator_x86_64,
   ];
@@ -95,6 +98,7 @@ abstract class PluginTargets {
   static const allTargets = [
     ...androidTargets,
     ...iosTargets,
+    ...iosSimulatorTargets,
     ...macosTargets,
     ...windowsTargets,
   ];
@@ -102,6 +106,7 @@ abstract class PluginTargets {
   static const targetGroups = [
     PluginTargetGroup('android', androidTargets),
     PluginTargetGroup('ios', iosTargets, useLipo: true),
+    PluginTargetGroup('ios_simulator', iosSimulatorTargets, useLipo: true),
     PluginTargetGroup('macos', macosTargets, useLipo: true),
     PluginTargetGroup('windows', windowsTargets),
   ];

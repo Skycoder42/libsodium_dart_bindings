@@ -105,7 +105,7 @@ jobs:
         working-directory: packages/sodium_libs
       - name: Cleanup minisign key
         if: always()
-        run: shred -fzvu '${{ runner.temp }}/minisign.key'
+        run: rm -f '${{ runner.temp }}/minisign.key'
       - name: Create or update release
         uses: softprops/action-gh-release@v1
         with:
