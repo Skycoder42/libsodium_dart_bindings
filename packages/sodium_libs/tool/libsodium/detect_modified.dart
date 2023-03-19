@@ -5,7 +5,6 @@ import '../../libsodium_version.dart';
 import 'github/github_env.dart';
 import 'github/github_logger.dart';
 import 'platforms/plugin_targets.dart';
-import 'util/util.dart';
 
 Future<void> main() => GithubLogger.runZoned(() async {
       final downloadUrls =
@@ -30,9 +29,9 @@ Future<void> main() => GithubLogger.runZoned(() async {
       }
 
       final newLastModified = _buildLastModifiedFile(lastModifiedMap);
-      final lastModifiedFile = getLastModifiedFile();
+      final lastModifiedFile = _getLastModifiedFile();
       if (lastModifiedFile.existsSync()) {
-        final oldLastModified = await getLastModifiedFile().readAsString();
+        final oldLastModified = await _getLastModifiedFile().readAsString();
         if (newLastModified == oldLastModified) {
           GithubLogger.logNotice('All upstream archives are unchanged');
           await GithubEnv.setOutput('modified', false);
@@ -59,6 +58,8 @@ String _buildLastModifiedFile(Map<Uri, String> lastModifiedMap) {
     ..sort();
   return lines.join();
 }
+
+File _getLastModifiedFile() => File('tool/libsodium/.last-modified.txt');
 
 extension _HttpClientX on HttpClient {
   Future<String> getHeader(Uri url, String headerName) async {

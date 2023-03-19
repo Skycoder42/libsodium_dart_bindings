@@ -117,3 +117,30 @@ jobs:
             publish/libsodium-*.tar.xz
             publish/libsodium-*.tar.xz.minisig
           fail_on_unmatched_files: true
+
+  update_last_modified:
+    name: Update last-modified.txt
+    needs:
+      - detect_modified
+      - update_release
+    if: needs.detect_modified.outputs.modified == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update last-modified.txt
+        run: >-
+          echo '${{ needs.detect_modified.outputs.last-modified-content }}'
+          > tool/libsodium/.last-modified.txt
+        working-directory: packages/sodium_libs
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Update last-modified.txt
+          branch: last-modifed-${{ github.run_id }}
+          delete-branch: true
+          title: Update last-modified.txt to reflect upstream changes
+          body: |
+            Upstream archives have changed. New modified timestamps are:
+
+            ```
+            ${{ needs.detect_modified.outputs.last-modified-content }}
+            ```
