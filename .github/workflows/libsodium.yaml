@@ -127,9 +127,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update last-modified.txt
-        run: >-
-          echo '${{ needs.detect_modified.outputs.last-modified-content }}'
-          > tool/libsodium/.last-modified.txt
+        run: |
+          cat << 'EOF' > tool/libsodium/.last-modified.txt
+          ${{ needs.detect_modified.outputs.last-modified-content }}
+          EOF
         working-directory: packages/sodium_libs
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
