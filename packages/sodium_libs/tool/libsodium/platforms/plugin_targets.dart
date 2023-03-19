@@ -44,12 +44,12 @@ abstract class PluginTargets {
     architecture: 'arm64',
     buildTarget: 'arm-apple-darwin10',
   );
-  // ignore: constant_identifier_names
-  static const ios_simulator_arm64 = DarwinTarget(
-    platform: DarwinPlatform.ios_simulator,
-    architecture: 'arm64',
-    buildTarget: 'arm-apple-darwin20',
-  );
+  // // ignore: constant_identifier_names
+  // static const ios_simulator_arm64 = DarwinTarget(
+  //   platform: DarwinPlatform.ios_simulator,
+  //   architecture: 'arm64',
+  //   buildTarget: 'arm-apple-darwin20',
+  // );
   // ignore: constant_identifier_names
   static const ios_simulator_x86_64 = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
@@ -70,45 +70,40 @@ abstract class PluginTargets {
   );
   static const windows = WindowsTarget();
 
-  static const androidTargets = [
+  static const _androidTargets = [
     android_arm64_v8a,
     android_armeabi_v7a,
     android_x86_64,
     android_x86,
   ];
 
-  static const iosTargets = [
+  static const _iosTargets = [
     ios,
-  ];
-
-  static const iosSimulatorTargets = [
-    ios_simulator_arm64,
+    // ios_simulator_arm64,
     ios_simulator_x86_64,
   ];
 
-  static const macosTargets = [
+  static const _macosTargets = [
     macos_arm64,
     macos_x86_64,
   ];
 
-  static const windowsTargets = [
+  static const _windowsTargets = [
     windows,
   ];
 
   static const allTargets = [
-    ...androidTargets,
-    ...iosTargets,
-    ...iosSimulatorTargets,
-    ...macosTargets,
-    ...windowsTargets,
+    ..._androidTargets,
+    ..._iosTargets,
+    ..._macosTargets,
+    ..._windowsTargets,
   ];
 
   static const targetGroups = [
-    PluginTargetGroup('android', androidTargets),
-    PluginTargetGroup('ios', iosTargets, useLipo: true),
-    PluginTargetGroup('ios_simulator', iosSimulatorTargets, useLipo: true),
-    PluginTargetGroup('macos', macosTargets, useLipo: true),
-    PluginTargetGroup('windows', windowsTargets),
+    PluginTargetGroup('android', _androidTargets),
+    PluginTargetGroup('ios', _iosTargets, useLipo: true),
+    PluginTargetGroup('macos', _macosTargets, useLipo: true),
+    PluginTargetGroup('windows', _windowsTargets),
   ];
 
   static PluginTarget fromName(String name) =>
