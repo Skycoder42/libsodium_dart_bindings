@@ -109,8 +109,8 @@ jobs:
       - name: Create or update release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: libsodium-binaries/v${{ needs.update_binaries.outputs.version }}
-          name: "[INTERNAL] Precompiled libsodium binaries v${{ needs.update_binaries.outputs.version }}"
+          tag_name: libsodium-binaries/v${{ needs.detect_modified.outputs.version }}
+          name: "[INTERNAL] Precompiled libsodium binaries v${{ needs.detect_modified.outputs.version }}"
           body: Internal release of precompiled libsodium binaries, required for the sodium_libs package.
           prerelease: true
           files: |
