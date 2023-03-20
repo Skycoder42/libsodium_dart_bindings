@@ -44,7 +44,7 @@ flutter:
         pluginClass: SodiumLibsPlugin
         dartPluginClass: SodiumLinux
       windows:
-        pluginClass: SodiumLibsPlugin
+        pluginClass: SodiumLibsPluginCApi
         dartPluginClass: SodiumWindows
       macos:
         pluginClass: SodiumLibsPlugin
