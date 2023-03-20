@@ -32,9 +32,7 @@ Future<void> _downloadTarget(PluginTargetGroup targetGroup) =>
 
           await verify(archive, _libsodiumDartBindingsPublicKey);
 
-          final subDir = Directory.current
-              .subDir(targetGroup.name)
-              .subDir(targetGroup.binaryDir);
+          final subDir = Directory.current.subDir(targetGroup.binaryDir);
           await subDir.create(recursive: true);
 
           await extract(

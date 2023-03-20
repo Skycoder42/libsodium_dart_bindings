@@ -116,16 +116,17 @@ abstract class PluginTargets {
   ];
 
   static const targetGroups = [
-    PluginTargetGroup('android', 'src/main/jniLibs', _androidTargets),
-    PluginTargetGroup('ios', 'Libraries/ios', _iosTargets, useLipo: true),
+    PluginTargetGroup('android', 'android/src/main/jniLibs', _androidTargets),
+    PluginTargetGroup('ios', 'ios/Libraries/ios', _iosTargets, useLipo: true),
     PluginTargetGroup(
       'ios_simulator',
-      'Libraries/ios_simulator',
+      'ios/Libraries/ios_simulator',
       _iosSimulatorTargets,
       useLipo: true,
     ),
-    PluginTargetGroup('macos', 'Libraries', _macosTargets, useLipo: true),
-    PluginTargetGroup('windows', 'lib', _windowsTargets, suffix: '.zip'),
+    PluginTargetGroup('macos', 'macos/Libraries', _macosTargets, useLipo: true),
+    PluginTargetGroup('windows', 'windows/lib', _windowsTargets,
+        suffix: '.zip'),
   ];
 
   static PluginTarget fromName(String name) =>
