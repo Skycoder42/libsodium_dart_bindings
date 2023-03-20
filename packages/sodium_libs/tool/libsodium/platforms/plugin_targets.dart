@@ -91,6 +91,9 @@ abstract class PluginTargets {
 
   static const _iosTargets = [
     ios,
+  ];
+
+  static const _iosSimulatorTargets = [
     ios_simulator_arm64,
     ios_simulator_x86_64,
   ];
@@ -107,13 +110,20 @@ abstract class PluginTargets {
   static const allTargets = [
     ..._androidTargets,
     ..._iosTargets,
+    ..._iosSimulatorTargets,
     ..._macosTargets,
     ..._windowsTargets,
   ];
 
   static const targetGroups = [
     PluginTargetGroup('android', 'src/main/jniLibs', _androidTargets),
-    PluginTargetGroup('ios', 'Libraries', _iosTargets, useLipo: true),
+    PluginTargetGroup('ios', 'Libraries/ios', _iosTargets, useLipo: true),
+    PluginTargetGroup(
+      'ios_simulator',
+      'Libraries/ios_simulator',
+      _iosSimulatorTargets,
+      useLipo: true,
+    ),
     PluginTargetGroup('macos', 'Libraries', _macosTargets, useLipo: true),
     PluginTargetGroup('windows', 'lib', _windowsTargets, suffix: '.zip'),
   ];

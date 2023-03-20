@@ -3,7 +3,6 @@ import 'dart:io';
 import '../../../../tool/util.dart';
 import 'github/github_env.dart';
 import 'github/github_logger.dart';
-import 'platforms/darwin_target.dart';
 import 'platforms/plugin_targets.dart';
 
 Future<void> main(List<String> args) async {
@@ -72,33 +71,19 @@ Future<void> _combineDylibs({
     GithubLogger.logGroupAsync(
       'Creating archive for ${group.name} by creating lipo combined binary',
       () async {
-        final lipoTargets = {
-          for (final platform in DarwinPlatform.values) platform: []
-        };
-        for (final target in group.targets.cast<DarwinTarget>()) {
-          lipoTargets[target.platform]!.add(target);
-        }
-
-        for (final entry in lipoTargets.entries) {
-          if (entry.value.isEmpty) {
-            continue;
-          }
-
-          final targetFile =
-              archiveDir.subDir(entry.key.name).subFile('libsodium.dylib');
-          await targetFile.parent.create(recursive: true);
-          await run('lipo', [
-            '-create',
-            ...group.targets.map(
-              (target) => artifactsDir
-                  .subDir('libsodium-${target.name}')
-                  .subFile('libsodium.dylib')
-                  .path,
-            ),
-            '-output',
-            targetFile.path,
-          ]);
-        }
+        final targetFile = archiveDir.subFile('libsodium.dylib');
+        await targetFile.parent.create(recursive: true);
+        await run('lipo', [
+          '-create',
+          ...group.targets.map(
+            (target) => artifactsDir
+                .subDir('libsodium-${target.name}')
+                .subFile('libsodium.dylib')
+                .path,
+          ),
+          '-output',
+          targetFile.path,
+        ]);
       },
     );
 
