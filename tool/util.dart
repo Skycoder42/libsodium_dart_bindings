@@ -119,7 +119,7 @@ Future<void> extract({
   if (archive.path.contains(tarFileRegexp)) {
     await run(
       'tar',
-      ['-xavf', archive.path],
+      ['-xvf', archive.path],
       workingDirectory: outDir,
     );
   } else {
