@@ -7,3 +7,8 @@ choco install minisign
 echo ::endgroup::
 
 dart run tool/libsodium/download.dart "$@"
+
+echo "::group::Build example"
+cd example
+flutter build windows --debug --verbose
+echo ::endgroup::
