@@ -140,7 +140,7 @@ Future<void> compress({
   if (archive.path.contains(tarFileRegexp)) {
     await run(
       'tar',
-      ['-cavf', archive.path],
+      ['-cavf', archive.path, '.'],
       workingDirectory: inDir,
     );
   } else {
