@@ -4,6 +4,8 @@ import 'dart:io';
 const _libsodiumSigningKey =
     'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3';
 
+final tarFileRegexp = RegExp(r'.*\.tar(?:\.\w+)?$');
+
 class ChildErrorException implements Exception {
   final int exitCode;
 
@@ -52,7 +54,10 @@ Future<void> run(
   }
 }
 
-Future<void> verify(File file) async {
+Future<void> verify(
+  File file, [
+  String publicKey = _libsodiumSigningKey,
+]) async {
   stdout.writeln('> Checking signature of ${file.path}');
   if (Platform.environment['MINISIGN_DOCKER'] == 'true') {
     final filename = file.uri.pathSegments.last;
@@ -65,14 +70,14 @@ Future<void> verify(File file) async {
       '${file.path}.minisig:/src/$filename.minisig:ro',
       'jedisct1/minisign',
       '-P',
-      _libsodiumSigningKey,
+      publicKey,
       '-Vm',
       '/src/$filename',
     ]);
   } else {
     await run('minisign', [
       '-P',
-      _libsodiumSigningKey,
+      publicKey,
       '-Vm',
       file.path,
     ]);
@@ -111,11 +116,10 @@ Future<void> extract({
   required Directory outDir,
 }) async {
   stdout.writeln('> Unpacking ${archive.path} to ${outDir.path}');
-  final useTar = archive.path.endsWith('.tar.gz');
-  if (useTar) {
+  if (archive.path.contains(tarFileRegexp)) {
     await run(
       'tar',
-      ['-xzvf', archive.path],
+      ['-xavf', archive.path],
       workingDirectory: outDir,
     );
   } else {
@@ -125,6 +129,26 @@ Future<void> extract({
       '-o${outDir.path}',
       archive.path,
     ]);
+  }
+}
+
+Future<void> compress({
+  required Directory inDir,
+  required File archive,
+}) async {
+  stdout.writeln('> Compression ${inDir.path} into ${archive.path}');
+  if (archive.path.contains(tarFileRegexp)) {
+    await run(
+      'tar',
+      ['-cavf', archive.path],
+      workingDirectory: inDir,
+    );
+  } else {
+    await run(
+      '7z',
+      ['a', '-y', archive.path, '.'],
+      workingDirectory: inDir,
+    );
   }
 }
 
