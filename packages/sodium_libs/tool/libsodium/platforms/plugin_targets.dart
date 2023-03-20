@@ -56,12 +56,12 @@ abstract class PluginTargets {
     architecture: 'arm64',
     buildTarget: 'arm-apple-darwin10',
   );
-  // // ignore: constant_identifier_names
-  // static const ios_simulator_arm64 = DarwinTarget(
-  //   platform: DarwinPlatform.ios_simulator,
-  //   architecture: 'arm64',
-  //   buildTarget: 'arm-apple-darwin20',
-  // );
+  // ignore: constant_identifier_names
+  static const ios_simulator_arm64 = DarwinTarget(
+    platform: DarwinPlatform.ios_simulator,
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin20',
+  );
   // ignore: constant_identifier_names
   static const ios_simulator_x86_64 = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
@@ -91,7 +91,7 @@ abstract class PluginTargets {
 
   static const _iosTargets = [
     ios,
-    // ios_simulator_arm64,
+    ios_simulator_arm64,
     ios_simulator_x86_64,
   ];
 
