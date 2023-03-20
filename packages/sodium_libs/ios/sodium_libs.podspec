@@ -24,8 +24,7 @@ Flutter companion package to sodium that provides the low-level libsodium binari
   # libsodium
   s.preserve_paths = "Libraries/*"
   s.xcconfig = {
-    'LIBRARY_SEARCH_PATHS[sdk=iphoneos*]' => '$(PODS_ROOT)/sodium_libs/Libraries/ios',
-    'LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]' => '$(PODS_ROOT)/sodium_libs/Libraries/ios_simulator',
-    'OTHER_LDFLAGS' => '$(inherited) -lsodium'
+    'OTHER_LDFLAGS[sdk=iphoneos*]' => '$(inherited) -l$(PODS_ROOT)/sodium_libs/Libraries/ios/libsodium.dylib'
+    'OTHER_LDFLAGS[sdk=iphonesimulator*]' => '$(inherited) -l$(PODS_ROOT)/sodium_libs/Libraries/ios_simulator/libsodium.dylib'
   }
 end

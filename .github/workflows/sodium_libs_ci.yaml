@@ -27,7 +27,7 @@ jobs:
       integrationTestSetup: >-
         {
           "android": "tool/setup/macos.sh android",
-          "ios": "tool/setup/macos.sh ios ios_simulator",
+          "ios": "tool/setup/macos.sh ios ios_simulator && cd example && flutter build ios --debug --verbose",
           "linux": "sudo apt-get -y install libsodium-dev",
           "macos": "tool/setup/macos.sh macos",
           "windows": "bash tool/setup/windows.sh windows",
