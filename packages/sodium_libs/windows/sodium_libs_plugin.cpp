@@ -1,5 +1,7 @@
 #include "sodium_libs_plugin.h"
 
+#include <memory>
+
 namespace sodium_libs {
 
 // static

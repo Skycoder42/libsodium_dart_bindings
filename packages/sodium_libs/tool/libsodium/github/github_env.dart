@@ -30,7 +30,7 @@ abstract class GithubEnv {
     final githubOutputFile = File(githubOutput);
     if (multiline) {
       await githubOutputFile.writeAsString(
-        '$name<<EOF\n$value\nEOF\n',
+        '$name<<EOF\n${value}EOF\n',
         mode: FileMode.append,
       );
     } else {

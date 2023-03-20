@@ -27,7 +27,7 @@ jobs:
       integrationTestPaths: "integration_test/app_test.dart"
       integrationTestSetup: >-
         {
-          "android": "tool/setup/linux.sh android",
+          "android": "tool/setup/macos.sh android",
           "ios": "tool/setup/macos.sh ios",
           "linux": "sudo apt-get -y install libsodium-dev",
           "macos": "tool/setup/macos.sh macos",
