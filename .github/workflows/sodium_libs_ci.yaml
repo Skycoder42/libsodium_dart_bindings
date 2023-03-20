@@ -27,10 +27,11 @@ jobs:
       integrationTestPaths: "integration_test/app_test.dart"
       integrationTestSetup: >-
         {
-          "android": "dart run tool/setup_android.dart",
-          "linux": "sudo apt-get -qq install libsodium-dev",
-          "windows": "choco install minisign -y",
-          "macos": "brew install libsodium",
+          "android": "tool/setup/linux.sh android",
+          "ios": "tool/setup/macos.sh ios",
+          "linux": "sudo apt-get -y install libsodium-dev",
+          "macos": "tool/setup/macos.sh macos",
+          "windows": "bash tool/setup/windows.sh windows",
           "web": "cd example && flutter pub run sodium_libs:update_web --sumo"
         }
 

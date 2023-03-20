@@ -5,10 +5,10 @@ import '../github/github_logger.dart';
 import 'plugin_target.dart';
 
 enum DarwinPlatform {
-  ios('iPhoneOS', true, '-mios-version-min=9.0'),
+  ios('iPhoneOS', true, '-mios-version-min=11.0'),
   // ignore: constant_identifier_names
-  ios_simulator('iPhoneSimulator', true, '-mios-simulator-version-min=9.0'),
-  macos('MacOSX', false, '-mmacosx-version-min=10.11');
+  ios_simulator('iPhoneSimulator', true, '-mios-simulator-version-min=11.0'),
+  macos('MacOSX', false, '-mmacosx-version-min=10.14');
 
   final String sdk;
   final bool hasSysroot;

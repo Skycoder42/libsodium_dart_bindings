@@ -20,8 +20,4 @@ class SodiumWindows extends SodiumPlatform {
   Future<SodiumSumo> loadSodiumSumo() => SodiumSumoInit.init2(
         () => DynamicLibrary.open('libsodium.dll'),
       );
-
-  @override
-  String get updateHint => 'Please run `flutter clean` and rebuild the project '
-      'to automatically update the embedded binaries';
 }

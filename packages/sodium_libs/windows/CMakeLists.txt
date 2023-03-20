@@ -1,4 +1,10 @@
-cmake_minimum_required(VERSION 3.19)
+# The Flutter tooling requires that developers have a version of Visual Studio
+# installed that includes CMake 3.14 or later. You should not increase this
+# version, as doing so will cause the plugin to fail to compile for some
+# customers of the plugin.
+cmake_minimum_required(VERSION 3.14)
+
+# Project-level configuration.
 set(PROJECT_NAME "sodium_libs")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
@@ -6,79 +12,46 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-SET(LIBSODIUM_SIGNING_KEY "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3")
-
-set(LIBSODIUM_ARCH "${CMAKE_VS_PLATFORM_NAME}")
-set(LIBSODIUM_CONFIG "${CMAKE_BUILD_TYPE}")
-set(LIBSODIUM_VS_VERSION "${CMAKE_VS_PLATFORM_TOOLSET}")
-
-find_program(DART "dart")
-if(DART)
-  message(DEBUG "Found dart at: ${DART}")
-else()
-  message(FATAL_ERROR "Did not find dart in PATH!")
-endif()
-execute_process(COMMAND cmd /c "${DART}" run
-                "${CMAKE_CURRENT_SOURCE_DIR}/../libsodium_version.dart"
-                OUTPUT_VARIABLE LIBSODIUM_VERSION_JSON
-                COMMAND_ERROR_IS_FATAL ANY
-)
-string(JSON LIBSODIUM_VERSION
-       GET "${LIBSODIUM_VERSION_JSON}"
-       ffi
-)
-
 # This value is used when generating builds using this plugin, so it must
 # not be changed
 set(PLUGIN_NAME "sodium_libs_plugin")
 
-add_library(${PLUGIN_NAME} SHARED
+# Any new source files that you add to the plugin should be added here.
+list(APPEND PLUGIN_SOURCES
   "sodium_libs_plugin.cpp"
+  "sodium_libs_plugin.h"
 )
+
+# Define the plugin library target. Its name must not be changed (see comment
+# on PLUGIN_NAME above).
+add_library(${PLUGIN_NAME} SHARED
+  "include/sodium_libs/sodium_libs_plugin_c_api.h"
+  "sodium_libs_plugin_c_api.cpp"
+  ${PLUGIN_SOURCES}
+)
+
+# Apply a standard set of build settings that are configured in the
+# application-level CMakeLists.txt. This can be removed for plugins that want
+# full control over build settings.
 apply_standard_settings(${PLUGIN_NAME})
+
+# Symbols are hidden by default to reduce the chance of accidental conflicts
+# between plugins. This should not be removed; any symbols that should be
+# exported should be explicitly exported with the FLUTTER_PLUGIN_EXPORT macro.
 set_target_properties(${PLUGIN_NAME} PROPERTIES
   CXX_VISIBILITY_PRESET hidden)
 target_compile_definitions(${PLUGIN_NAME} PRIVATE FLUTTER_PLUGIN_IMPL)
+
+# Source include directories and library dependencies. Add any plugin-specific
+# dependencies here.
 target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
 
-if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}")
-  find_program(MINISIGN "minisign")
-  if(NOT MINISIGN)
-    message(FATAL_ERROR "Did not find minisign in PATH. Please install it. See sodium_libs README")
-  endif()
-
-  file(DOWNLOAD
-       "https://download.libsodium.org/libsodium/releases/libsodium-${LIBSODIUM_VERSION}-stable-msvc.zip"
-       "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}.zip"
-       SHOW_PROGRESS
-  )
-  file(DOWNLOAD
-      "https://download.libsodium.org/libsodium/releases/libsodium-${LIBSODIUM_VERSION}-stable-msvc.zip.minisig"
-      "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}.zip.minisig"
-      SHOW_PROGRESS
-  )
-
-  execute_process(COMMAND "${MINISIGN}" -V
-                  -P "${LIBSODIUM_SIGNING_KEY}"
-                  -m "libsodium-${LIBSODIUM_VERSION}.zip"
-                  WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-                  COMMAND_ERROR_IS_FATAL ANY
-  )
-
-  file(ARCHIVE_EXTRACT
-       INPUT "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}.zip"
-       VERBOSE
-  )
-  file(RENAME
-       "${CMAKE_CURRENT_BINARY_DIR}/libsodium"
-       "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}"
-  )
-endif()
-
-# List of absolute paths to libraries that should be bundled with the plugin
+# List of absolute paths to libraries that should be bundled with the plugin.
+# This list could contain prebuilt libraries, or libraries created by an
+# external build triggered from this build file.
 set(sodium_libs_bundled_libraries
-  "${CMAKE_CURRENT_BINARY_DIR}/libsodium-${LIBSODIUM_VERSION}/${LIBSODIUM_ARCH}/${LIBSODIUM_CONFIG}/${LIBSODIUM_VS_VERSION}/dynamic/libsodium.dll"
+  "${CMAKE_CURRENT_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE}/${CMAKE_VS_PLATFORM_TOOLSET}/libsodium.dll"
   PARENT_SCOPE
 )

@@ -7,5 +7,8 @@ example/windows/flutter/ephemeral/.plugin_symlinks
 !*.freezed.dart
 !*.g.dart
 
-## Android JNI libraries
+## libsodium binaries
 !android/src/main/jniLibs
+!ios/Libraries
+!macos/Libraries
+!windows/lib
