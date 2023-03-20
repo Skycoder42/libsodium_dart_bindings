@@ -54,12 +54,8 @@ Future<void> _mergeArtifacts(
       () async {
         for (final target in group.targets) {
           final artifactDir = artifactsDir.subDir('libsodium-${target.name}');
-          if (artifactDir.existsSync()) {
-            continue;
-          }
-
           await run('rsync', [
-            '-a',
+            '-av',
             '${artifactDir.path}/',
             '${archiveDir.path}/',
           ]);
@@ -101,21 +97,11 @@ Future<void> _archiveAndSignArtifacts({
       () async {
         await publishDir.create();
 
-        final dirs = archivesDir
-            .list(followLinks: false)
-            .where((e) => e is Directory)
-            .cast<Directory>();
-        await for (final directory in dirs) {
-          // "last" is otherwise the trailing slash
-          final dirName = directory.uri.pathSegments.reversed.skip(1).first;
-          final archive = publishDir.subFile('libsodium-$dirName.tar.xz');
+        for (final targetGroup in PluginTargets.targetGroups) {
+          final archiveDir = archivesDir.subDir(targetGroup.name);
+          final archive = publishDir.subFile(targetGroup.artifactName);
 
-          await run(
-            'tar',
-            ['-cJf', archive.path, '.'],
-            workingDirectory: directory,
-          );
-
+          await compress(inDir: archiveDir, archive: archive);
           await sign(archive, secretKey);
         }
       },

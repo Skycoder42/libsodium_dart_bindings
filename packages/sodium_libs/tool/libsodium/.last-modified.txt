@@ -1,3 +1,0 @@
-https://download.libsodium.org/libsodium/releases/libsodium-1.0.18-stable-msvc.zip - Wed, 01 Mar 2023 16:18:29 GMT
-https://download.libsodium.org/libsodium/releases/libsodium-1.0.18-stable.tar.gz - Wed, 01 Mar 2023 16:05:26 GMT
-

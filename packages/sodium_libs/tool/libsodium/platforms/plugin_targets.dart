@@ -1,3 +1,4 @@
+import '../../../libsodium_version.dart';
 import 'android_target.dart';
 import 'darwin_target.dart';
 import 'plugin_target.dart';
@@ -5,14 +6,25 @@ import 'windows_target.dart';
 
 class PluginTargetGroup {
   final String name;
+  final String suffix;
   final List<PluginTarget> targets;
+  final String binaryDir;
   final bool useLipo;
 
   const PluginTargetGroup(
     this.name,
+    this.binaryDir,
     this.targets, {
+    this.suffix = '.tar.xz',
     this.useLipo = false,
   });
+
+  String get artifactName => 'libsodium-${libsodium_version.ffi}-$name$suffix';
+
+  Uri get downloadUrl => Uri.https(
+        'github.com',
+        '/Skycoder42/libsodium_dart_bindings/releases/download/libsodium-binaries/v${libsodium_version.ffi}/$artifactName',
+      );
 }
 
 abstract class PluginTargets {
@@ -100,12 +112,15 @@ abstract class PluginTargets {
   ];
 
   static const targetGroups = [
-    PluginTargetGroup('android', _androidTargets),
-    PluginTargetGroup('ios', _iosTargets, useLipo: true),
-    PluginTargetGroup('macos', _macosTargets, useLipo: true),
-    PluginTargetGroup('windows', _windowsTargets),
+    PluginTargetGroup('android', 'src/main/jniLibs', _androidTargets),
+    PluginTargetGroup('ios', 'Libraries', _iosTargets, useLipo: true),
+    PluginTargetGroup('macos', 'Libraries', _macosTargets, useLipo: true),
+    PluginTargetGroup('windows', 'lib', _windowsTargets, suffix: '.zip'),
   ];
 
   static PluginTarget fromName(String name) =>
       allTargets.singleWhere((e) => e.name == name);
+
+  static PluginTargetGroup groupFromName(String name) =>
+      targetGroups.singleWhere((e) => e.name == name);
 }
