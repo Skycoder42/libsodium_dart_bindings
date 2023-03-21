@@ -83,7 +83,7 @@ Future<void> _createLipoLibrary({
     GithubLogger.logGroupAsync(
       'Creating combined lipo library for ${group.name}',
       () => _createLipoLibraryImpl(
-        outTarget: archiveDir.subDir(group.name).subFile('libsodium.dylib'),
+        outTarget: archiveDir.subFile('libsodium.dylib'),
         artifactsDir: artifactsDir,
         targets: group.targets,
       ),
