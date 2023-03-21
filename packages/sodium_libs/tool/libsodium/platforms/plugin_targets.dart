@@ -121,7 +121,7 @@ abstract class PluginTargets {
     ),
     PluginTargetGroup(
       'ios',
-      'Libraries/ios',
+      'Libraries',
       _iosTargets,
       publishKind: PublishKind.xcFramework,
     ),
