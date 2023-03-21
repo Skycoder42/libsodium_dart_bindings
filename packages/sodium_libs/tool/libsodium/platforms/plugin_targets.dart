@@ -4,19 +4,21 @@ import 'darwin_target.dart';
 import 'plugin_target.dart';
 import 'windows_target.dart';
 
+enum PublishKind { rsync, lipo, xcFramework }
+
 class PluginTargetGroup {
   final String name;
   final String suffix;
   final List<PluginTarget> targets;
   final String binaryDir;
-  final bool useLipo;
+  final PublishKind publishKind;
 
   const PluginTargetGroup(
     this.name,
     this.binaryDir,
     this.targets, {
     this.suffix = '.tar.xz',
-    this.useLipo = false,
+    this.publishKind = PublishKind.rsync,
   });
 
   String get artifactName => 'libsodium-${libsodium_version.ffi}-$name$suffix';
@@ -91,9 +93,6 @@ abstract class PluginTargets {
 
   static const _iosTargets = [
     ios,
-  ];
-
-  static const _iosSimulatorTargets = [
     ios_simulator_arm64,
     ios_simulator_x86_64,
   ];
@@ -110,7 +109,6 @@ abstract class PluginTargets {
   static const allTargets = [
     ..._androidTargets,
     ..._iosTargets,
-    ..._iosSimulatorTargets,
     ..._macosTargets,
     ..._windowsTargets,
   ];
@@ -118,30 +116,24 @@ abstract class PluginTargets {
   static const targetGroups = [
     PluginTargetGroup(
       'android',
-      'android/src/main/jniLibs',
+      'src/main/jniLibs',
       _androidTargets,
     ),
     PluginTargetGroup(
       'ios',
-      'ios/Libraries/ios',
+      'Libraries/ios',
       _iosTargets,
-      useLipo: true,
-    ),
-    PluginTargetGroup(
-      'ios_simulator',
-      'ios/Libraries/ios_simulator',
-      _iosSimulatorTargets,
-      useLipo: true,
+      publishKind: PublishKind.xcFramework,
     ),
     PluginTargetGroup(
       'macos',
-      'macos/Libraries',
+      'Libraries',
       _macosTargets,
-      useLipo: true,
+      publishKind: PublishKind.lipo,
     ),
     PluginTargetGroup(
       'windows',
-      'windows/lib',
+      'lib',
       _windowsTargets,
       suffix: '.zip',
     ),

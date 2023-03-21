@@ -5,20 +5,27 @@ import '../github/github_logger.dart';
 import 'plugin_target.dart';
 
 enum DarwinPlatform {
-  ios('iPhoneOS', true, '-mios-version-min=11.0'),
+  ios('iPhoneOS', true, '-mios-version-min=11.0', 'a'),
   // ignore: constant_identifier_names
-  ios_simulator('iPhoneSimulator', true, '-mios-simulator-version-min=11.0'),
-  macos('MacOSX', false, '-mmacosx-version-min=10.14');
+  ios_simulator(
+    'iPhoneSimulator',
+    true,
+    '-mios-simulator-version-min=11.0',
+    'a',
+  ),
+  macos('MacOSX', false, '-mmacosx-version-min=10.14', 'dylib');
 
   final String sdk;
   final bool hasSysroot;
   final String versionParameter;
+  final String librarySuffix;
 
   const DarwinPlatform(
     this.sdk,
     // ignore: avoid_positional_boolean_parameters
     this.hasSysroot,
     this.versionParameter,
+    this.librarySuffix,
   );
 }
 
@@ -69,7 +76,7 @@ class DarwinTarget extends PluginTarget {
       environment: environment,
     );
 
-    await _installDylib(prefixDir, artifactDir);
+    await _installLibrary(prefixDir, artifactDir);
   }
 
   Future<Map<String, String>> _createBuildEnvironment() async {
@@ -108,14 +115,17 @@ class DarwinTarget extends PluginTarget {
     };
   }
 
-  Future<void> _installDylib(Directory prefixDir, Directory artifactDir) async {
+  Future<void> _installLibrary(
+    Directory prefixDir,
+    Directory artifactDir,
+  ) async {
     final source = File(
       await prefixDir
           .subDir('lib')
-          .subFile('libsodium.dylib')
+          .subFile('libsodium.${platform.librarySuffix}')
           .resolveSymbolicLinks(),
     );
-    final target = artifactDir.subFile('libsodium.dylib');
+    final target = artifactDir.subFile('libsodium.${platform.librarySuffix}');
 
     GithubLogger.logInfo('Installing ${target.path}');
     await target.parent.create(recursive: true);
