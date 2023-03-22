@@ -122,6 +122,10 @@ jobs:
     if: needs.detect_modified.outputs.modified == 'true'
     runs-on: ubuntu-latest
     steps:
+      - name: Install Dart-SDK (stable)
+        uses: dart-lang/setup-dart@v1
+      - name: Install cider
+        run: dart pub global activate cider
       - name: Checkout Repository
         uses: actions/checkout@v3
       - name: Update last-modified.txt
@@ -129,6 +133,9 @@ jobs:
           cat << 'EOF' > tool/libsodium/.last-modified.txt
           ${{ needs.detect_modified.outputs.last-modified-content }}
           EOF
+        working-directory: packages/sodium_libs
+      - name: Bump build number
+        run: dart pub global run cider bump build
         working-directory: packages/sodium_libs
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
@@ -143,3 +150,4 @@ jobs:
             ```
             ${{ needs.detect_modified.outputs.last-modified-content }}
             ```
+          token: ${{ secrets.GH_PAT }}

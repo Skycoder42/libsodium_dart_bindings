@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -41,9 +43,12 @@ class FlutterTestRunner extends SumoTestRunner {
 }
 
 void main() {
+  print(">>> INITIALIZING INTEGRATION TESTS");
+
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   final integrationTestRunner = FlutterTestRunner();
 
+  print(">>> INITIALIZATION COMPLETE. STARTING TESTS");
   ft.testWidgets('reports correct libsodium version', (tester) async {
     runApp(MyApp(preInitSodium: integrationTestRunner.sodium));
     await tester.pumpAndSettle();
