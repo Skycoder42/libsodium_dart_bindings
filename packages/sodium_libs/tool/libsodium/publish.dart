@@ -82,11 +82,20 @@ Future<void> _createLipoLibrary({
 }) =>
     GithubLogger.logGroupAsync(
       'Creating combined lipo library for ${group.name}',
-      () => _createLipoLibraryImpl(
-        outTarget: archiveDir.subFile('libsodium.dylib'),
-        artifactsDir: artifactsDir,
-        targets: group.targets,
-      ),
+      () async {
+        final libsodiumDylib = archiveDir.subFile('libsodium.dylib');
+        await _createLipoLibraryImpl(
+          outTarget: libsodiumDylib,
+          artifactsDir: artifactsDir,
+          targets: group.targets,
+        );
+
+        await run('install_name_tool', [
+          '-id',
+          '@rpath/libsodium.dylib',
+          libsodiumDylib.path,
+        ]);
+      },
     );
 
 Future<void> _createXcframework({
