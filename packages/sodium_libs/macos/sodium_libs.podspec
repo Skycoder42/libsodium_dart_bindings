@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'sodium_libs'
-  s.version          = '1.2.0'
+  s.version          = '2.1.0'
   s.summary          = 'Flutter companion package to sodium that provides the low-level libsodium binaries for easy use.'
   s.description      = <<-DESC
 Flutter companion package to sodium that provides the low-level libsodium binaries for easy use.

@@ -4,9 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2023-03-24
+### Changed
+- macOs and iOs now use embedded libsodium binaries instead of depending on Swift-Sodium
+  - This "unlocks" all libsodium APIs
+  - Upstream changes to libsodium can be updated easier and faster
+- Windows now uses an embedded libsodium instead of downloading it at build time
+  - minisign is not needed anymore for the build
+  - build is more robust and upstream changes can be distributed more easily
+- Improve libsodium integration so stable upstream changes are available faster for the package
+
 ## [2.0.1+1] - 2023-03-09
 ### Fixed
-- Fixed invalid publishing config that prevented android binaries from beeing published
+- Fixed invalid publishing config that prevented android binaries from being published
 
 ## [2.0.1] - 2023-03-09
 ### Changed
@@ -132,6 +142,7 @@ the page
 ### Added
 - Initial stable release
 
+[2.1.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.0.1+1...sodium_libs-v2.1.0
 [2.0.1+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.0.1...sodium_libs-v2.0.1+1
 [2.0.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs%2Fv2.0.0...sodium_libs-v2.0.1
 [2.0.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs%2Fv1.2.5+1...sodium_libs%2Fv2.0.0
