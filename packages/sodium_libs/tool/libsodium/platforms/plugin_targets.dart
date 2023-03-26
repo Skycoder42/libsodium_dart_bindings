@@ -34,13 +34,13 @@ abstract class PluginTargets {
 
   // ignore: constant_identifier_names
   static const android_arm64_v8a = AndroidTarget(
-    architecture: 'arm64_v8a',
+    architecture: 'arm64-v8a',
     buildTarget: 'armv8-a',
     installTarget: 'armv8-a+crypto',
   );
   // ignore: constant_identifier_names
   static const android_armeabi_v7a = AndroidTarget(
-    architecture: 'armeabi_v7a',
+    architecture: 'armeabi-v7a',
     buildTarget: 'armv7-a',
   );
   // ignore: constant_identifier_names
