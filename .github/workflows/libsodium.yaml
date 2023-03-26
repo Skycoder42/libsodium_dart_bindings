@@ -37,8 +37,8 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - android_arm64_v8a
-          - android_armeabi_v7a
+          - android_arm64-v8a
+          - android_armeabi-v7a
           - android_x86_64
           - android_x86
           - ios_arm64

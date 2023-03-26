@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "armeabi",
     "blocksize",
     "generichash",
     "nullptr",
@@ -10,6 +11,5 @@
     "shorthash",
     "unpad",
     "unpadded"
-  ],
-  "dart.runPubGetOnPubspecChanges": "never"
+  ]
 }
