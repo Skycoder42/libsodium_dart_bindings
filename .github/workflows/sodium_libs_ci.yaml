@@ -6,8 +6,9 @@ on:
     branches:
       - "**"
     paths:
-      - "packages/sodium_libs/**"
-      - ".github/workflows/sodium_libs_ci.yaml"
+      - packages/sodium_libs/**
+      - .github/workflows/sodium_libs_ci.yaml
+      - "!packages/sodium_libs/tool/libsodium/**"
 
 jobs:
   ci:
