@@ -24,12 +24,10 @@ jobs:
           "android": "tool/setup/macos.sh android",
           "ios": "tool/setup/macos.sh ios",
           "linux": "sudo apt-get -y install libsodium-dev",
+          "macos": "tool/setup/macos.sh macos",
           "windows": "bash tool/setup/windows.sh windows",
           "web": "cd example && flutter pub run sodium_libs:update_web --sumo"
         }
-      bitriseAppSlug: a56b799b99dac5be
-    secrets:
-      bitrisePat: ${{ secrets.BITRISE_PAT }}
 
   cd:
     name: CD
