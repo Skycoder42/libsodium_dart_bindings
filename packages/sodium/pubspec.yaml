@@ -18,7 +18,7 @@ dev_dependencies:
   cider: ^0.1.4
   collection: ^1.17.1
   coverage: ^1.6.3
-  dart_pre_commit: ^4.1.0
+  dart_pre_commit: ">=4.1.0 <6.0.0"
   dart_test_tools: ^4.8.0
   ffigen: ^7.2.7
   freezed: ^2.3.2
