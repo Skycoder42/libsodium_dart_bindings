@@ -25,7 +25,7 @@ dependencies:
 
 dev_dependencies:
   cider: ^0.1.4
-  dart_pre_commit: ^4.1.0
+  dart_pre_commit: ">=4.1.0 <6.0.0"
   dart_test_tools: ^4.8.0
   flutter_test:
     sdk: flutter
