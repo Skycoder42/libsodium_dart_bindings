@@ -79,6 +79,7 @@ ffigen:
       - sodium.*
       - crypto.*
       - randombytes.*
+  preamble: "// ignore_for_file: type=warning"
 
 cider:
   link_template:
