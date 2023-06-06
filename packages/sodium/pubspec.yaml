@@ -37,6 +37,7 @@ ffigen:
       - "/usr/include/sodium.h"
   compiler-opts:
     - "-I/usr/lib/clang/15.0.7/include/"
+  exclude-all-by-default: true
   macros:
     include:
       - SODIUM_.*
@@ -61,9 +62,6 @@ ffigen:
       - sodium_.*
       - crypto_.*
       - randombytes_.*
-  unnamed-enums:
-    exclude:
-      - .*
   structs:
     include:
       - sodium.*
@@ -79,7 +77,11 @@ ffigen:
       - sodium.*
       - crypto.*
       - randombytes.*
-  preamble: "// ignore_for_file: type=warning"
+  typedefs:
+    include:
+      - sodium.*
+      - crypto.*
+      - randombytes.*
 
 cider:
   link_template:

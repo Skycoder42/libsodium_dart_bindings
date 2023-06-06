@@ -16,6 +16,7 @@ jobs:
     with:
       workingDirectory: packages/sodium
       buildRunner: true
+      panaScoreThreshold: 20
       unitTestPaths: test/unit
       coverageExclude: >-
         "**/*.freezed.dart"
