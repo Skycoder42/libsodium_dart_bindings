@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
-// ignore: test_library_import
+// ignore: no_self_package_imports
 import 'package:sodium/sodium_sumo.dart';
 import 'package:test/test.dart';
 

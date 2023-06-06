@@ -1,7 +1,7 @@
 import '../test_case.dart';
 
 class ScalarMultTestCase extends TestCase {
-  ScalarMultTestCase(super.runner);
+  ScalarMultTestCase(super._runner);
 
   @override
   String get name => 'scalarmult';

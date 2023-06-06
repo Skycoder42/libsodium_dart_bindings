@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] - 2023-06-06
+### Changed
+- Update dependencies
+- Update min dart SDK to 3.0.0
+
+### Removed
+- Remove non libsodium definitions from generated ffi code
+
 ## [2.1.0] - 2023-03-08
 ### Added
 - `SodiumInit.init2` and `SodiumSumoInit.init2` - these methods replace the now deprecated `.init` methods (#24)
@@ -130,6 +138,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial stable release
 
+[2.1.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.1.0...sodium-v2.1.1
 [2.1.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv2.0.1...sodium-v2.1.0
 [2.0.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv2.0.0...sodium%2Fv2.0.1
 [2.0.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv1.2.5...sodium%2Fv2.0.0

@@ -5,7 +5,7 @@ import '../test_case.dart';
 class PwhashTestCase extends TestCase {
   final bool is32Bit;
 
-  PwhashTestCase(super.runner, {this.is32Bit = false});
+  PwhashTestCase(super._runner, {this.is32Bit = false});
 
   @override
   String get name => 'pwhash';

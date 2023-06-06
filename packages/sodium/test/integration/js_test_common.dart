@@ -7,7 +7,7 @@ import 'dart:html';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:meta/meta.dart';
-// ignore: test_library_import
+// ignore: no_self_package_imports
 import 'package:sodium/sodium.js.dart';
 
 @JS()

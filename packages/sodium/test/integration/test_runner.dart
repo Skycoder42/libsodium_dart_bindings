@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-// ignore: test_library_import
+// ignore: no_self_package_imports
 import 'package:sodium/sodium_sumo.dart';
 import 'package:test/test.dart' as t;
 

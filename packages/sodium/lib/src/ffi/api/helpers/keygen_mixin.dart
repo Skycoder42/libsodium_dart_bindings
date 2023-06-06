@@ -81,8 +81,7 @@ mixin KeygenMixin {
       Pointer<UnsignedChar> pk,
       Pointer<UnsignedChar> sk,
       Pointer<UnsignedChar> seed,
-    )
-        implementation,
+    ) implementation,
   }) {
     SecureKeyFFI? secretKey;
     SodiumPointer<UnsignedChar>? publicKeyPtr;

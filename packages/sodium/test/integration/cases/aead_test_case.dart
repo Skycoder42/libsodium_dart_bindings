@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 
-// ignore: test_library_import
+// ignore: no_self_package_imports
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
 
 class AeadTestCase extends TestCase {
-  AeadTestCase(super.runner);
+  AeadTestCase(super._runner);
 
   @override
   String get name => 'aead';

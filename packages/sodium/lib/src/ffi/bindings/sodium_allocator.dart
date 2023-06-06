@@ -66,13 +66,10 @@ class SodiumAllocator implements Allocator {
     switch (memoryProtection) {
       case MemoryProtection.noAccess:
         result = sodium.sodium_mprotect_noaccess(pointer.cast());
-        break;
       case MemoryProtection.readOnly:
         result = sodium.sodium_mprotect_readonly(pointer.cast());
-        break;
       case MemoryProtection.readWrite:
         result = sodium.sodium_mprotect_readwrite(pointer.cast());
-        break;
     }
     return result == 0;
   }

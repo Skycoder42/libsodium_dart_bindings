@@ -150,8 +150,7 @@ void testSeedKeypair({
     Pointer<UnsignedChar> pk,
     Pointer<UnsignedChar> sk,
     Pointer<UnsignedChar> seed,
-  )
-      seedKeypairNative,
+  ) seedKeypairNative,
 }) =>
     group('seedKeypair', () {
       const seedLen = 33;

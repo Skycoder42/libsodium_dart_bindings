@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import '../test_case.dart';
 
 class RandombytesTestCase extends TestCase {
-  RandombytesTestCase(super.runner);
+  RandombytesTestCase(super._runner);
 
   @override
   String get name => 'randombytes';

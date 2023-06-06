@@ -190,13 +190,10 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
     switch (memoryProtection) {
       case MemoryProtection.noAccess:
         result = sodium.sodium_mprotect_noaccess(ptr.cast());
-        break;
       case MemoryProtection.readOnly:
         result = sodium.sodium_mprotect_readonly(ptr.cast());
-        break;
       case MemoryProtection.readWrite:
         result = sodium.sodium_mprotect_readwrite(ptr.cast());
-        break;
     }
     SodiumException.checkSucceededInt(result);
 
@@ -285,7 +282,6 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
         } else if (elementSize <= sizeOf<Int64>()) {
           return ptr.cast<Int64>().asTypedList(count) as List<TNum>;
         }
-        break;
       case _Signage.unsigned:
         if (elementSize <= sizeOf<Uint8>()) {
           return ptr.cast<Uint8>().asTypedList(count) as List<TNum>;
@@ -296,14 +292,12 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
         } else if (elementSize <= sizeOf<Uint64>()) {
           return ptr.cast<Uint64>().asTypedList(count) as List<TNum>;
         }
-        break;
       case _Signage.float:
         if (elementSize <= sizeOf<Float>()) {
           return ptr.cast<Float>().asTypedList(count) as List<TNum>;
         } else if (elementSize <= sizeOf<Double>()) {
           return ptr.cast<Double>().asTypedList(count) as List<TNum>;
         }
-        break;
     }
 
     // coverage:ignore-start

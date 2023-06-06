@@ -1,0 +1,7 @@
+name: libsodium_dart_bindings_melos
+
+environment:
+  sdk: "^3.0.0"
+
+dependencies:
+  melos:

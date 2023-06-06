@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import '../test_case.dart';
 
 class ShortHashTestCase extends TestCase {
-  ShortHashTestCase(super.runner);
+  ShortHashTestCase(super._runner);
 
   @override
   String get name => 'shorthash';

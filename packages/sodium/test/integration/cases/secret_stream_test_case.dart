@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-// ignore: test_library_import
+// ignore: no_self_package_imports
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
 
 class SecretStreamTestCase extends TestCase {
-  SecretStreamTestCase(super.runner);
+  SecretStreamTestCase(super._runner);
 
   @override
   String get name => 'secretstream';

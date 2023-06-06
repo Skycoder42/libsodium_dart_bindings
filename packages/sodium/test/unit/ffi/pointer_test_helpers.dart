@@ -90,17 +90,13 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
       switch (sizeHint) {
         case 8:
           ptrList = ptrBuffer.asUint64List();
-          break;
         case 4:
           ptrList = ptrBuffer.asUint32List();
-          break;
         case 2:
           ptrList = ptrBuffer.asUint16List();
-          break;
         case 1:
         case null:
           ptrList = ptrBuffer.asUint8List();
-          break;
         default:
           matchState[_stateKey] = 'invalid sizeHint $sizeHint';
           return false;

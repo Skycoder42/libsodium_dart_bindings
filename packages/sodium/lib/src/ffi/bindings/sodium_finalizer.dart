@@ -4,7 +4,7 @@ import 'dart:ffi';
 
 import 'package:meta/meta.dart';
 
-import '../../../sodium.ffi.dart';
+import 'libsodium.ffi.dart';
 
 /// @nodoc
 @internal
