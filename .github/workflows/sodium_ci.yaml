@@ -8,6 +8,7 @@ on:
     paths:
       - "packages/sodium/**"
       - ".github/workflows/sodium_ci.yaml"
+      - ".github/workflows/sodium_cd.yaml"
 
 jobs:
   ci:

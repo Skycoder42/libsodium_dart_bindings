@@ -8,6 +8,7 @@ on:
     paths:
       - packages/sodium_libs/**
       - .github/workflows/sodium_libs_ci.yaml
+      - .github/workflows/sodium_libs_cd.yaml
       - "!packages/sodium_libs/tool/libsodium/**"
 
 jobs:
