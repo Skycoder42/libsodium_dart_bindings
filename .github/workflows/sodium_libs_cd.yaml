@@ -10,6 +10,7 @@ jobs:
     name: Publish
     uses: Skycoder42/dart_test_tools/.github/workflows/publish.yml@main
     with:
+      environment: pub-deploy
       tagPrefix: sodium_libs-v
       flutter: true
       workingDirectory: packages/sodium_libs
