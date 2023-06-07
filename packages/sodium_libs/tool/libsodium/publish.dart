@@ -37,21 +37,18 @@ Future<void> _createArchive({
     switch (group.publishKind) {
       case PublishKind.rsync:
         await _mergeArtifacts(group, artifactsDir, archiveDir);
-        break;
       case PublishKind.lipo:
         await _createLipoLibrary(
           group: group,
           artifactsDir: artifactsDir,
           archiveDir: archiveDir,
         );
-        break;
       case PublishKind.xcFramework:
         await _createXcframework(
           group: group,
           artifactsDir: artifactsDir,
           archiveDir: archiveDir,
         );
-        break;
     }
   }
 }
