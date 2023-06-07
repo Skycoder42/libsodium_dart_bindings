@@ -25,6 +25,7 @@ dependencies:
 
 dev_dependencies:
   cider: ^0.1.5
+  custom_lint: ^0.4.0
   dart_pre_commit: ^5.1.0+1
   dart_test_tools: ^5.1.1
   flutter_test:
