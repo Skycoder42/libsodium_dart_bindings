@@ -87,6 +87,8 @@ jobs:
       - build
     if: needs.detect_modified.outputs.modified == 'true'
     runs-on: macos-latest # needed for lipo
+    permissions:
+      contents: write
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
@@ -125,6 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
