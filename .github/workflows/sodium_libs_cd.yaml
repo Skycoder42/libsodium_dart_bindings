@@ -9,6 +9,8 @@ jobs:
   publish:
     name: Publish
     uses: Skycoder42/dart_test_tools/.github/workflows/publish.yml@main
+    permissions:
+      id-token: write
     with:
       environment: pub-deploy
       tagPrefix: sodium_libs-v
