@@ -3,12 +3,14 @@ name: CI/CD for sodium
 on:
   workflow_dispatch:
   push:
-    branches:
-      - "**"
     paths:
       - "packages/sodium/**"
       - ".github/workflows/sodium_ci.yaml"
       - ".github/workflows/sodium_cd.yaml"
+  pull_request:
+    types:
+      - opened
+      - synchronize
 
 jobs:
   ci:
