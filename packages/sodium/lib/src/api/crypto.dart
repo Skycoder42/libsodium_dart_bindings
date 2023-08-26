@@ -26,8 +26,14 @@ abstract class Crypto {
 
   /// An instance of [Aead].
   ///
-  /// This provides all APIs that start with `crypto_aead`.
+  /// This provides all APIs that start with
+  /// `crypto_aead_xchacha20poly1305_ietf`.
   Aead get aead;
+
+  /// An instance of [Aead].
+  ///
+  /// This provides all APIs that start with `crypto_aead_chacha20poly1305`.
+  Aead get aeadChacha20Poly1305;
 
   /// An instance of [Auth].
   ///
