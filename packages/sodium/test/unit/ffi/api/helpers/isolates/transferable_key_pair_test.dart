@@ -126,7 +126,7 @@ void main() {
             ),
         () => mockLibSodiumFFI.sodium_mprotect_noaccess(
               Pointer.fromAddress(testNativeHandle[0]),
-            )
+            ),
       ]);
 
       expect(result.publicKey, testPublicKey);

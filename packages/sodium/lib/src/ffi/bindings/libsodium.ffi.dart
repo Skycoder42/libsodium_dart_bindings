@@ -8088,9 +8088,9 @@ class LibSodiumFFI {
   }
 
   late final _randombytes_bufPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(
-              ffi.Pointer<ffi.Void>, ffi.Size)>>('randombytes_buf');
+          ffi
+          .NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>, ffi.Size)>>(
+      'randombytes_buf');
   late final _randombytes_buf = _randombytes_bufPtr
       .asFunction<void Function(ffi.Pointer<ffi.Void>, int)>();
 
@@ -8336,9 +8336,9 @@ class LibSodiumFFI {
   }
 
   late final _sodium_memzeroPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(
-              ffi.Pointer<ffi.Void>, ffi.Size)>>('sodium_memzero');
+          ffi
+          .NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>, ffi.Size)>>(
+      'sodium_memzero');
   late final _sodium_memzero = _sodium_memzeroPtr
       .asFunction<void Function(ffi.Pointer<ffi.Void>, int)>();
 
@@ -8630,8 +8630,9 @@ class LibSodiumFFI {
   }
 
   late final _sodium_mlockPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>('sodium_mlock');
+          ffi
+          .NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>(
+      'sodium_mlock');
   late final _sodium_mlock =
       _sodium_mlockPtr.asFunction<int Function(ffi.Pointer<ffi.Void>, int)>();
 
@@ -8646,8 +8647,9 @@ class LibSodiumFFI {
   }
 
   late final _sodium_munlockPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>('sodium_munlock');
+          ffi
+          .NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>(
+      'sodium_munlock');
   late final _sodium_munlock =
       _sodium_munlockPtr.asFunction<int Function(ffi.Pointer<ffi.Void>, int)>();
 
@@ -8676,9 +8678,9 @@ class LibSodiumFFI {
   }
 
   late final _sodium_allocarrayPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<ffi.Void> Function(
-              ffi.Size, ffi.Size)>>('sodium_allocarray');
+          ffi
+          .NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.Size, ffi.Size)>>(
+      'sodium_allocarray');
   late final _sodium_allocarray = _sodium_allocarrayPtr
       .asFunction<ffi.Pointer<ffi.Void> Function(int, int)>();
 
@@ -9283,7 +9285,8 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_open_easy_afternmPtr =
       _lookup<
-              ffi.NativeFunction<
+              ffi
+              .NativeFunction<
                   ffi.Int Function(
                       ffi.Pointer<ffi.UnsignedChar>,
                       ffi.Pointer<ffi.UnsignedChar>,
@@ -11054,8 +11057,9 @@ final class randombytes_implementation extends ffi.Struct {
 
   external ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>> stir;
 
-  external ffi.Pointer<
-      ffi.NativeFunction<ffi.Uint32 Function(ffi.Uint32 upper_bound)>> uniform;
+  external ffi
+      .Pointer<ffi.NativeFunction<ffi.Uint32 Function(ffi.Uint32 upper_bound)>>
+      uniform;
 
   external ffi.Pointer<
       ffi.NativeFunction<
