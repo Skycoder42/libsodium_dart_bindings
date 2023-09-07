@@ -11,15 +11,19 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed.
 set(PLUGIN_NAME "sodium_libs_plugin")
 
+# Any new source files that you add to the plugin should be added here.
+list(APPEND PLUGIN_SOURCES
+  "sodium_libs_plugin.cc"
+)
+
+# locale libsodium
 find_package(PkgConfig)
 pkg_check_modules(SODIUM REQUIRED IMPORTED_TARGET libsodium)
 
 # Define the plugin library target. Its name must not be changed (see comment
 # on PLUGIN_NAME above).
-#
-# Any new source files that you add to the plugin should be added here.
 add_library(${PLUGIN_NAME} SHARED
-  "sodium_libs_plugin.cc"
+  ${PLUGIN_SOURCES}
 )
 
 # Apply a standard set of build settings that are configured in the

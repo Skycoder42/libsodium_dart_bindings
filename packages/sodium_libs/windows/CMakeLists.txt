@@ -8,9 +8,9 @@ cmake_minimum_required(VERSION 3.14)
 set(PROJECT_NAME "sodium_libs")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release")
-endif()
+# Explicitly opt in to modern CMake behaviors to avoid warnings with recent
+# versions of CMake.
+cmake_policy(VERSION 3.14...3.25)
 
 # This value is used when generating builds using this plugin, so it must
 # not be changed
