@@ -2,7 +2,8 @@
 library crypto_ffi_test;
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/ffi/api/aead_ffi.dart';
+import 'package:sodium/src/ffi/api/aead_chacha20poly1305_ffi.dart';
+import 'package:sodium/src/ffi/api/aead_xchacha20poly1305ietf_ffi.dart';
 import 'package:sodium/src/ffi/api/auth_ffi.dart';
 import 'package:sodium/src/ffi/api/box_ffi.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
@@ -51,10 +52,33 @@ void main() {
     );
   });
 
-  test('aead returns AeadFFI instance', () {
+  test('aead returns AeadXChaCha20PolyIETFFFI instance', () {
     expect(
       sut.aead,
-      isA<AeadFFI>().having(
+      isA<AeadXChaCha20PolyIETFFFI>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('aeadChaCha20Poly1305 returns AeadChacha20Poly1305FFI instance', () {
+    expect(
+      sut.aeadChaCha20Poly1305,
+      isA<AeadChacha20Poly1305FFI>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('aeadXChaCha20Poly1305IETF returns AeadXChaCha20PolyIETFFFI instance',
+      () {
+    expect(
+      sut.aeadXChaCha20Poly1305IETF,
+      isA<AeadXChaCha20PolyIETFFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

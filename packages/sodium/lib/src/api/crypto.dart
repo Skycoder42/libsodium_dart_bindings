@@ -25,15 +25,19 @@ abstract class Crypto {
   SecretStream get secretStream;
 
   /// An instance of [Aead].
-  ///
-  /// This provides all APIs that start with
-  /// `crypto_aead_xchacha20poly1305_ietf`.
+  @Deprecated(
+      'Use an especific aead instance instead, `aeadChaCha20Poly1305` and `aeadXChaCha20Poly1305IETF` are available')
   Aead get aead;
 
   /// An instance of [Aead].
   ///
   /// This provides all APIs that start with `crypto_aead_chacha20poly1305`.
-  Aead get aeadChacha20Poly1305;
+  Aead get aeadChaCha20Poly1305;
+
+  /// An instance of [Aead].
+  ///
+  /// This provides all APIs that start with `crypto_aead_xchacha20poly1305_ietf`.
+  Aead get aeadXChaCha20Poly1305IETF;
 
   /// An instance of [Auth].
   ///

@@ -9,7 +9,7 @@ import 'dart:typed_data';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/detached_cipher_result.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
-import 'package:sodium/src/ffi/api/aead_ffi.dart';
+import 'package:sodium/src/ffi/api/aead_xchacha20poly1305ietf_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
@@ -24,7 +24,7 @@ class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 void main() {
   final mockSodium = MockSodiumFFI();
 
-  late AeadFFI sut;
+  late AeadXChaCha20PolyIETFFFI sut;
 
   setUpAll(() {
     registerPointers();
@@ -35,7 +35,7 @@ void main() {
 
     mockAllocArray(mockSodium);
 
-    sut = AeadFFI(mockSodium);
+    sut = AeadXChaCha20PolyIETFFFI(mockSodium);
   });
 
   testConstantsMapping([

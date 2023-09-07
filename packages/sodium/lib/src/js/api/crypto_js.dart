@@ -42,10 +42,13 @@ class CryptoJS implements Crypto {
   late final SecretStream secretStream = SecretStreamJS(sodium);
 
   @override
-  late final Aead aead = AeadJS(sodium);
+  late final Aead aead = aeadXChaCha20Poly1305IETF;
 
   @override
-  late final Aead aeadChacha20Poly1305 = AeadChacha20Poly1305JS(sodium);
+  late final Aead aeadChaCha20Poly1305 = AeadChacha20Poly1305JS(sodium);
+
+  @override
+  late final Aead aeadXChaCha20Poly1305IETF = AeadJS(sodium);
 
   @override
   late final Auth auth = AuthJS(sodium);
