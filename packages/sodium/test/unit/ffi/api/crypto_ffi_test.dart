@@ -55,7 +55,7 @@ void main() {
   test('aead returns AeadXChaCha20PolyIETFFFI instance', () {
     expect(
       sut.aead,
-      isA<AeadXChaCha20PolyIETFFFI>().having(
+      isA<AeadXChaCha20Poly1305IETFFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,
@@ -74,11 +74,12 @@ void main() {
     );
   });
 
-  test('aeadXChaCha20Poly1305IETF returns AeadXChaCha20PolyIETFFFI instance',
+  test(
+      'aeadXChaCha20Poly1305IETF returns AeadXChaCha20Poly1305IETFFFI instance',
       () {
     expect(
       sut.aeadXChaCha20Poly1305IETF,
-      isA<AeadXChaCha20PolyIETFFFI>().having(
+      isA<AeadXChaCha20Poly1305IETFFFI>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,

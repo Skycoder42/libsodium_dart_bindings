@@ -48,7 +48,8 @@ class CryptoFFI implements Crypto {
   late final Aead aeadChaCha20Poly1305 = AeadChacha20Poly1305FFI(sodium);
 
   @override
-  late final Aead aeadXChaCha20Poly1305IETF = AeadXChaCha20PolyIETFFFI(sodium);
+  late final Aead aeadXChaCha20Poly1305IETF =
+      AeadXChaCha20Poly1305IETFFFI(sodium);
 
   @override
   late final Auth auth = AuthFFI(sodium);

@@ -24,7 +24,7 @@ class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 void main() {
   final mockSodium = MockSodiumFFI();
 
-  late AeadXChaCha20PolyIETFFFI sut;
+  late AeadXChaCha20Poly1305IETFFFI sut;
 
   setUpAll(() {
     registerPointers();
@@ -35,7 +35,7 @@ void main() {
 
     mockAllocArray(mockSodium);
 
-    sut = AeadXChaCha20PolyIETFFFI(mockSodium);
+    sut = AeadXChaCha20Poly1305IETFFFI(mockSodium);
   });
 
   testConstantsMapping([
