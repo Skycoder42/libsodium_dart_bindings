@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/detached_cipher_result.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
-import 'package:sodium/src/js/api/aead_js.dart';
+import 'package:sodium/src/js/api/aead_xchacha20poly1305ietf_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
@@ -21,7 +21,7 @@ class MockLibSodiumJS extends Mock implements LibSodiumJS {}
 void main() {
   final mockSodium = MockLibSodiumJS();
 
-  late AeadJS sut;
+  late AeadXChaCha20Poly1305IEFTJS sut;
 
   setUpAll(() {
     registerFallbackValue(Uint8List(0));
@@ -30,7 +30,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = AeadJS(mockSodium);
+    sut = AeadXChaCha20Poly1305IEFTJS(mockSodium);
   });
 
   testConstantsMapping([

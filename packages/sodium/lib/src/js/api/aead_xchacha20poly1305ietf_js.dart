@@ -8,42 +8,43 @@ import 'secure_key_js.dart';
 
 /// @nodoc
 @internal
-class AeadChaCha20Poly1305JS extends AeadBaseJS {
+class AeadXChaCha20Poly1305IEFTJS extends AeadBaseJS {
   /// @nodoc
-  AeadChaCha20Poly1305JS(super.sodium);
+  AeadXChaCha20Poly1305IEFTJS(super.sodium);
 
   @override
   int get keyBytes =>
-      sodium.crypto_aead_chacha20poly1305_KEYBYTES.toSafeUInt32();
+      sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES.toSafeUInt32();
 
   @override
   int get nonceBytes =>
-      sodium.crypto_aead_chacha20poly1305_NPUBBYTES.toSafeUInt32();
+      sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES.toSafeUInt32();
 
   @override
-  int get aBytes => sodium.crypto_aead_chacha20poly1305_ABYTES.toSafeUInt32();
+  int get aBytes =>
+      sodium.crypto_aead_xchacha20poly1305_ietf_ABYTES.toSafeUInt32();
 
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
         jsErrorWrap(
-          sodium.crypto_aead_chacha20poly1305_keygen,
+          sodium.crypto_aead_xchacha20poly1305_ietf_keygen,
         ),
       );
 
   @override
   InternalEncrypt get internalEncrypt =>
-      sodium.crypto_aead_chacha20poly1305_encrypt;
+      sodium.crypto_aead_xchacha20poly1305_ietf_encrypt;
 
   @override
   InternalDecrypt get internalDecrypt =>
-      sodium.crypto_aead_chacha20poly1305_decrypt;
+      sodium.crypto_aead_xchacha20poly1305_ietf_decrypt;
 
   @override
   InternalEncryptDetached get internalEncryptDetached =>
-      sodium.crypto_aead_chacha20poly1305_encrypt_detached;
+      sodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached;
 
   @override
   InternalDecryptDetached get internalDecryptDetached =>
-      sodium.crypto_aead_chacha20poly1305_decrypt_detached;
+      sodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached;
 }

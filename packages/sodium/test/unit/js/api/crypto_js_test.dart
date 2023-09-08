@@ -2,7 +2,8 @@
 library crypto_js_test;
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/js/api/aead_js.dart';
+import 'package:sodium/src/js/api/aead_chacha20poly1305_js.dart';
+import 'package:sodium/src/js/api/aead_xchacha20poly1305ietf_js.dart';
 import 'package:sodium/src/js/api/auth_js.dart';
 import 'package:sodium/src/js/api/box_js.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
@@ -51,10 +52,33 @@ void main() {
     );
   });
 
-  test('aead returns AeadJS instance', () {
+  test('aead returns AeadXChaCha20Poly1305IEFTJS instance', () {
     expect(
       sut.aead,
-      isA<AeadJS>().having(
+      isA<AeadXChaCha20Poly1305IEFTJS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('aeadChaCha20Poly1305 returns AeadChacha20Poly1305JS instance', () {
+    expect(
+      sut.aeadChaCha20Poly1305,
+      isA<AeadChaCha20Poly1305JS>().having(
+        (p) => p.sodium,
+        'sodium',
+        mockSodium,
+      ),
+    );
+  });
+
+  test('aeadXChaCha20Poly1305IETF returns AeadXChaCha20Poly1305IEFTJS instance',
+      () {
+    expect(
+      sut.aeadXChaCha20Poly1305IETF,
+      isA<AeadXChaCha20Poly1305IEFTJS>().having(
         (p) => p.sodium,
         'sodium',
         mockSodium,
