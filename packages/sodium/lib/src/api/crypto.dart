@@ -26,17 +26,25 @@ abstract class Crypto {
 
   /// An instance of [Aead].
   @Deprecated(
-      'Use an especific aead instance instead, `aeadChaCha20Poly1305` and `aeadXChaCha20Poly1305IETF` are available')
+    'Use an especific aead instance instead, `aeadChaCha20Poly1305` and '
+    '`aeadXChaCha20Poly1305IETF` are available. Defaults to '
+    '`aeadXChaCha20Poly1305IETF`',
+  )
   Aead get aead;
 
   /// An instance of [Aead].
   ///
   /// This provides all APIs that start with `crypto_aead_chacha20poly1305`.
+  ///
+  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/original_chacha20-poly1305_construction
   Aead get aeadChaCha20Poly1305;
 
   /// An instance of [Aead].
   ///
-  /// This provides all APIs that start with `crypto_aead_xchacha20poly1305_ietf`.
+  /// This provides all APIs that start with
+  /// `crypto_aead_xchacha20poly1305_ietf`.
+  ///
+  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction
   Aead get aeadXChaCha20Poly1305IETF;
 
   /// An instance of [Auth].

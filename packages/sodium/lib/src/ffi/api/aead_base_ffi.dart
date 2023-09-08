@@ -79,15 +79,19 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
   /// @nodoc
   AeadBaseFFI(this.sodium);
 
+  /// @nodoc
   @protected
   InternalEncrypt get internalEncrypt;
 
+  /// @nodoc
   @protected
   InternalDecrypt get internalDecrypt;
 
+  /// @nodoc
   @protected
   InternalEncryptDetached get internalEncryptDetached;
 
+  /// @nodoc
   @protected
   InternalDecryptDetached get internalDecryptDetached;
 

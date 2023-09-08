@@ -8,38 +8,29 @@ import 'secure_key.dart';
 
 /// A meta class that provides access to all libsodium aead APIs.
 ///
-/// Currently, only the crypto_aead_xchacha20poly1305_ietf_* APIs have been
-/// implemented.
+/// Currently, crypto_aead_chacha20poly1305_* and
+/// crypto_aead_xchacha20poly1305_ietf* APIs have been implemented.
 ///
 /// This class provides the dart interface for the crypto operations documented
-/// in https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction.
+/// in https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/original_chacha20-poly1305_construction
+/// or https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Aead {
   const Aead._(); // coverage:ignore-line
 
-  /// Provides crypto_aead_xchacha20poly1305_ietf_KEYBYTES.
-  ///
-  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#constants
+  /// Provides crypto_aead_*chacha20poly1305*_KEYBYTES.
   int get keyBytes;
 
-  /// Provides crypto_aead_xchacha20poly1305_ietf_NPUBBYTES.
-  ///
-  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#constants
+  /// Provides crypto_aead_*chacha20poly1305*_NPUBBYTES.
   int get nonceBytes;
 
-  /// Provides crypto_aead_xchacha20poly1305_ietf_ABYTES.
-  ///
-  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#constants
+  /// Provides crypto_aead_*chacha20poly1305*_ABYTES.
   int get aBytes;
 
-  /// Provides crypto_aead_xchacha20poly1305_ietf_keygen.
-  ///
-  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#detached-mode
+  /// Provides crypto_aead_*chacha20poly1305*_keygen.
   SecureKey keygen();
 
-  /// Provides crypto_aead_xchacha20poly1305_ietf_encrypt.
-  ///
-  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#combined-mode
+  /// Provides crypto_aead_*chacha20poly1305*_encrypt.
   Uint8List encrypt({
     required Uint8List message,
     required Uint8List nonce,
@@ -47,9 +38,7 @@ abstract class Aead {
     Uint8List? additionalData,
   });
 
-  /// Provides crypto_aead_xchacha20poly1305_ietf_decrypt.
-  ///
-  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#combined-mode
+  /// Provides crypto_aead_*chacha20poly1305*_decrypt.
   Uint8List decrypt({
     required Uint8List cipherText,
     required Uint8List nonce,
@@ -57,9 +46,7 @@ abstract class Aead {
     Uint8List? additionalData,
   });
 
-  /// Provides crypto_aead_xchacha20poly1305_ietf_encrypt_detached.
-  ///
-  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#detached-mode
+  /// Provides crypto_aead_*chacha20poly1305*_encrypt_detached.
   DetachedCipherResult encryptDetached({
     required Uint8List message,
     required Uint8List nonce,
@@ -67,9 +54,7 @@ abstract class Aead {
     Uint8List? additionalData,
   });
 
-  /// Provides crypto_aead_xchacha20poly1305_ietf_decrypt_detached.
-  ///
-  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#detached-mode
+  /// Provides crypto_aead_*chacha20poly1305*_decrypt_detached.
   Uint8List decryptDetached({
     required Uint8List cipherText,
     required Uint8List mac,
