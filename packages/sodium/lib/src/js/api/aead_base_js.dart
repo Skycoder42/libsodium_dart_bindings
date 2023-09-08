@@ -58,15 +58,19 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
   /// @nodoc
   AeadBaseJS(this.sodium);
 
+  /// @nodoc
   @protected
   InternalEncrypt get internalEncrypt;
 
+  /// @nodoc
   @protected
   InternalDecrypt get internalDecrypt;
 
+  /// @nodoc
   @protected
   InternalEncryptDetached get internalEncryptDetached;
 
+  /// @nodoc
   @protected
   InternalDecryptDetached get internalDecryptDetached;
 
