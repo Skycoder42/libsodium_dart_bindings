@@ -5,24 +5,24 @@ import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
 
-class AeadTestCase extends TestCase {
-  AeadTestCase(super._runner);
+class AeadChaCha20Poly1305TestCase extends TestCase {
+  AeadChaCha20Poly1305TestCase(super._runner);
 
   @override
-  String get name => 'aead';
+  String get name => 'aead_chacha20poly1305';
 
   @override
   void setupTests() {
     test('constants return correct values', (sodium) {
-      final sut = sodium.crypto.aead;
+      final sut = sodium.crypto.aeadChaCha20Poly1305;
 
       expect(sut.keyBytes, 32, reason: 'keyBytes');
-      expect(sut.nonceBytes, 24, reason: 'nonceBytes');
+      expect(sut.nonceBytes, 8, reason: 'nonceBytes');
       expect(sut.aBytes, 16, reason: 'aBytes');
     });
 
     test('keygen generates different correct length keys', (sodium) {
-      final sut = sodium.crypto.aead;
+      final sut = sodium.crypto.aeadChaCha20Poly1305;
 
       final key1 = sut.keygen();
       final key2 = sut.keygen();
@@ -38,7 +38,7 @@ class AeadTestCase extends TestCase {
 
     group('easy', () {
       test('can encrypt and decrypt data without additional data', (sodium) {
-        final sut = sodium.crypto.aead;
+        final sut = sodium.crypto.aeadChaCha20Poly1305;
 
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
@@ -70,7 +70,7 @@ class AeadTestCase extends TestCase {
       });
 
       test('can encrypt and decrypt data with additional data', (sodium) {
-        final sut = sodium.crypto.aead;
+        final sut = sodium.crypto.aeadChaCha20Poly1305;
 
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
@@ -108,7 +108,7 @@ class AeadTestCase extends TestCase {
       });
 
       test('fails if additional data is different', (sodium) {
-        final sut = sodium.crypto.aead;
+        final sut = sodium.crypto.aeadChaCha20Poly1305;
 
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
@@ -152,7 +152,7 @@ class AeadTestCase extends TestCase {
 
     group('detached', () {
       test('can encrypt and decrypt data without additional data', (sodium) {
-        final sut = sodium.crypto.aead;
+        final sut = sodium.crypto.aeadChaCha20Poly1305;
 
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
@@ -185,7 +185,7 @@ class AeadTestCase extends TestCase {
       });
 
       test('can encrypt and decrypt data with additional data', (sodium) {
-        final sut = sodium.crypto.aead;
+        final sut = sodium.crypto.aeadChaCha20Poly1305;
 
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
@@ -224,7 +224,7 @@ class AeadTestCase extends TestCase {
       });
 
       test('fails if additional data is different', (sodium) {
-        final sut = sodium.crypto.aead;
+        final sut = sodium.crypto.aeadChaCha20Poly1305;
 
         final key = sut.keygen();
         final nonce = sodium.randombytes.buf(sut.nonceBytes);
