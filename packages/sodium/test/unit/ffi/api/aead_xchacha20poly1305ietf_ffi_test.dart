@@ -1,51 +1,56 @@
-@TestOn('js')
-library aead_js_test;
+// ignore_for_file: unnecessary_lambdas
 
+@TestOn('dart-vm')
+library aead_ffi_test;
+
+import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/detached_cipher_result.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
-import 'package:sodium/src/js/api/aead_js.dart';
-import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
+import 'package:sodium/src/ffi/api/aead_xchacha20poly1305ietf_ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
+import '../pointer_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI {}
 
 void main() {
-  final mockSodium = MockLibSodiumJS();
+  final mockSodium = MockSodiumFFI();
 
-  late AeadJS sut;
+  late AeadXChaCha20Poly1305IETFFFI sut;
 
   setUpAll(() {
-    registerFallbackValue(Uint8List(0));
+    registerPointers();
   });
 
   setUp(() {
     reset(mockSodium);
 
-    sut = AeadJS(mockSodium);
+    mockAllocArray(mockSodium);
+
+    sut = AeadXChaCha20Poly1305IETFFFI(mockSodium);
   });
 
   testConstantsMapping([
     Tuple3(
-      () => mockSodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES,
+      () => mockSodium.crypto_aead_xchacha20poly1305_ietf_keybytes(),
       () => sut.keyBytes,
       'keyBytes',
     ),
     Tuple3(
-      () => mockSodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES,
+      () => mockSodium.crypto_aead_xchacha20poly1305_ietf_npubbytes(),
       () => sut.nonceBytes,
       'nonceBytes',
     ),
     Tuple3(
-      () => mockSodium.crypto_aead_xchacha20poly1305_ietf_ABYTES,
+      () => mockSodium.crypto_aead_xchacha20poly1305_ietf_abytes(),
       () => sut.aBytes,
       'aBytes',
     ),
@@ -53,17 +58,18 @@ void main() {
 
   group('methods', () {
     setUp(() {
-      when(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES)
+      when(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_keybytes())
           .thenReturn(5);
-      when(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES)
+      when(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_npubbytes())
           .thenReturn(5);
-      when(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_ABYTES)
+      when(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_abytes())
           .thenReturn(5);
     });
 
     testKeygen(
       mockSodium: mockSodium,
       runKeygen: () => sut.keygen(),
+      keyBytesNative: mockSodium.crypto_aead_xchacha20poly1305_ietf_keybytes,
       keygenNative: mockSodium.crypto_aead_xchacha20poly1305_ietf_keygen,
     );
 
@@ -78,7 +84,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_npubbytes());
       });
 
       test('asserts if key is invalid', () {
@@ -91,7 +97,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_keybytes());
       });
 
       test(
@@ -104,12 +110,17 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(0);
 
         final message = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
         final key = List.generate(5, (index) => index);
+        final mac = List.filled(5, 0);
 
         sut.encrypt(
           message: Uint8List.fromList(message),
@@ -117,15 +128,25 @@ void main() {
           key: SecureKeyFake(key),
         );
 
-        verify(
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(nonce)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(key)),
+              ),
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
-            Uint8List.fromList(message),
-            null,
-            null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
-          ),
-        );
+                any(that: hasRawData<UnsignedChar>(message + mac)),
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(message)),
+                message.length,
+                any(that: equals(nullptr)),
+                0,
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
+              ),
+        ]);
       });
 
       test(
@@ -138,13 +159,18 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(0);
 
         final message = List.generate(20, (index) => index * 2);
         final additionalData = List.generate(30, (index) => index * 3);
         final nonce = List.generate(5, (index) => 10 + index);
         final key = List.generate(5, (index) => index);
+        final mac = List.filled(5, 0);
 
         sut.encrypt(
           message: Uint8List.fromList(message),
@@ -153,15 +179,25 @@ void main() {
           key: SecureKeyFake(key),
         );
 
-        verify(
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(nonce)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(key)),
+              ),
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
-            Uint8List.fromList(message),
-            Uint8List.fromList(additionalData),
-            null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
-          ),
-        );
+                any(that: hasRawData<UnsignedChar>(message + mac)),
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(message)),
+                message.length,
+                any(that: hasRawData<UnsignedChar>(additionalData)),
+                additionalData.length,
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
+              ),
+        ]);
       });
 
       test('returns encrypted data', () {
@@ -173,16 +209,26 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(Uint8List.fromList(cipher));
+        ).thenAnswer((i) {
+          fillPointer(i.positionalArguments.first as Pointer, cipher);
+          return 0;
+        });
 
         final result = sut.encrypt(
           message: Uint8List(20),
+          additionalData: Uint8List(10),
           nonce: Uint8List(5),
           key: SecureKeyFake.empty(5),
         );
 
         expect(result, cipher);
+
+        verify(() => mockSodium.sodium_free(any())).called(4);
       });
 
       test('throws exception on failure', () {
@@ -193,17 +239,24 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenThrow(JsError());
+        ).thenReturn(1);
 
         expect(
           () => sut.encrypt(
             message: Uint8List(10),
+            additionalData: Uint8List(10),
             nonce: Uint8List(5),
             key: SecureKeyFake.empty(5),
           ),
           throwsA(isA<SodiumException>()),
         );
+
+        verify(() => mockSodium.sodium_free(any())).called(4);
       });
     });
 
@@ -218,7 +271,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_ABYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_abytes());
       });
 
       test('asserts if nonce is invalid', () {
@@ -231,7 +284,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_npubbytes());
       });
 
       test('asserts if key is invalid', () {
@@ -244,7 +297,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_keybytes());
       });
 
       test(
@@ -257,8 +310,12 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(0);
 
         final cipherText = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -270,15 +327,25 @@ void main() {
           key: SecureKeyFake(key),
         );
 
-        verify(
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(nonce)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(key)),
+              ),
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
-            null,
-            Uint8List.fromList(cipherText),
-            null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
-          ),
-        );
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                any(that: equals(nullptr)),
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                cipherText.length,
+                any(that: equals(nullptr)),
+                0,
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
+              ),
+        ]);
       });
 
       test(
@@ -291,8 +358,12 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(0);
 
         final cipherText = List.generate(20, (index) => index * 2);
         final additionalData = List.generate(30, (index) => index * 3);
@@ -306,15 +377,28 @@ void main() {
           key: SecureKeyFake(key),
         );
 
-        verify(
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(nonce)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(additionalData)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(key)),
+              ),
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
-            null,
-            Uint8List.fromList(cipherText),
-            Uint8List.fromList(additionalData),
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
-          ),
-        );
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                any(that: equals(nullptr)),
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                cipherText.length,
+                any(that: hasRawData<UnsignedChar>(additionalData)),
+                additionalData.length,
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
+              ),
+        ]);
       });
 
       test('returns decrypted data', () {
@@ -326,16 +410,26 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(Uint8List.fromList(message));
+        ).thenAnswer((i) {
+          fillPointer(i.positionalArguments.first as Pointer, message);
+          return 0;
+        });
 
         final result = sut.decrypt(
           cipherText: Uint8List(13),
+          additionalData: Uint8List(10),
           nonce: Uint8List(5),
           key: SecureKeyFake.empty(5),
         );
 
         expect(result, message);
+
+        verify(() => mockSodium.sodium_free(any())).called(4);
       });
 
       test('throws exception on failure', () {
@@ -346,17 +440,24 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenThrow(JsError());
+        ).thenReturn(1);
 
         expect(
           () => sut.decrypt(
             cipherText: Uint8List(10),
+            additionalData: Uint8List(10),
             nonce: Uint8List(5),
             key: SecureKeyFake.empty(5),
           ),
           throwsA(isA<SodiumException>()),
         );
+
+        verify(() => mockSodium.sodium_free(any())).called(4);
       });
     });
 
@@ -371,7 +472,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_npubbytes());
       });
 
       test('asserts if key is invalid', () {
@@ -384,7 +485,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_keybytes());
       });
 
       test(
@@ -397,13 +498,13 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(
-          CryptoBox(
-            ciphertext: Uint8List(0),
-            mac: Uint8List(0),
-          ),
-        );
+        ).thenReturn(0);
 
         final message = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -415,15 +516,26 @@ void main() {
           key: SecureKeyFake(key),
         );
 
-        verify(
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(nonce)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(key)),
+              ),
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
-            Uint8List.fromList(message),
-            null,
-            null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
-          ),
-        );
+                any(that: hasRawData<UnsignedChar>(message)),
+                any(that: isNot(nullptr)),
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(message)),
+                message.length,
+                any(that: equals(nullptr)),
+                0,
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
+              ),
+        ]);
       });
 
       test(
@@ -436,13 +548,13 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(
-          CryptoBox(
-            ciphertext: Uint8List(0),
-            mac: Uint8List(0),
-          ),
-        );
+        ).thenReturn(0);
 
         final message = List.generate(20, (index) => index * 2);
         final additionalData = List.generate(15, (index) => index * 3);
@@ -456,15 +568,29 @@ void main() {
           key: SecureKeyFake(key),
         );
 
-        verify(
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(nonce)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(additionalData)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(key)),
+              ),
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
-            Uint8List.fromList(message),
-            Uint8List.fromList(additionalData),
-            null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
-          ),
-        );
+                any(that: hasRawData<UnsignedChar>(message)),
+                any(that: isNot(nullptr)),
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(message)),
+                message.length,
+                any(that: hasRawData<UnsignedChar>(additionalData)),
+                additionalData.length,
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
+              ),
+        ]);
       });
 
       test('returns encrypted data and mac', () {
@@ -477,16 +603,24 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(
-          CryptoBox(
-            ciphertext: Uint8List.fromList(cipherText),
-            mac: Uint8List.fromList(mac),
-          ),
-        );
+        ).thenAnswer((i) {
+          fillPointer(
+            i.positionalArguments[0] as Pointer<UnsignedChar>,
+            cipherText,
+          );
+          fillPointer(i.positionalArguments[1] as Pointer<UnsignedChar>, mac);
+          return 0;
+        });
 
         final result = sut.encryptDetached(
           message: Uint8List(10),
+          additionalData: Uint8List(15),
           nonce: Uint8List(5),
           key: SecureKeyFake.empty(5),
         );
@@ -498,6 +632,8 @@ void main() {
             mac: Uint8List.fromList(mac),
           ),
         );
+
+        verify(() => mockSodium.sodium_free(any())).called(5);
       });
 
       test('throws exception on failure', () {
@@ -508,17 +644,25 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenThrow(JsError());
+        ).thenReturn(1);
 
         expect(
           () => sut.encryptDetached(
             message: Uint8List(10),
+            additionalData: Uint8List(15),
             nonce: Uint8List(5),
             key: SecureKeyFake.empty(5),
           ),
           throwsA(isA<SodiumException>()),
         );
+
+        verify(() => mockSodium.sodium_free(any())).called(5);
       });
     });
 
@@ -534,7 +678,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_ABYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_abytes());
       });
 
       test('asserts if nonce is invalid', () {
@@ -548,7 +692,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_npubbytes());
       });
 
       test('asserts if key is invalid', () {
@@ -562,7 +706,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES);
+        verify(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_keybytes());
       });
 
       test(
@@ -576,8 +720,11 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(0);
 
         final cipherText = List.generate(15, (index) => index * 2);
         final mac = List.generate(5, (index) => 20 - index);
@@ -591,16 +738,28 @@ void main() {
           key: SecureKeyFake(key),
         );
 
-        verify(
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(mac)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(nonce)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(key)),
+              ),
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
-            null,
-            Uint8List.fromList(cipherText),
-            Uint8List.fromList(mac),
-            null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
-          ),
-        );
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                cipherText.length,
+                any(that: hasRawData<UnsignedChar>(mac)),
+                any(that: equals(nullptr)),
+                0,
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
+              ),
+        ]);
       });
 
       test(
@@ -614,8 +773,11 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(0);
 
         final cipherText = List.generate(15, (index) => index * 2);
         final mac = List.generate(5, (index) => 20 - index);
@@ -631,16 +793,31 @@ void main() {
           key: SecureKeyFake(key),
         );
 
-        verify(
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(mac)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(nonce)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(additionalData)),
+              ),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(key)),
+              ),
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
-            null,
-            Uint8List.fromList(cipherText),
-            Uint8List.fromList(mac),
-            Uint8List.fromList(additionalData),
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
-          ),
-        );
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                any(that: equals(nullptr)),
+                any(that: hasRawData<UnsignedChar>(cipherText)),
+                cipherText.length,
+                any(that: hasRawData<UnsignedChar>(mac)),
+                any(that: hasRawData<UnsignedChar>(additionalData)),
+                additionalData.length,
+                any(that: hasRawData<UnsignedChar>(nonce)),
+                any(that: hasRawData<UnsignedChar>(key)),
+              ),
+        ]);
       });
 
       test('returns decrypted data', () {
@@ -653,17 +830,26 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenReturn(Uint8List.fromList(message));
+        ).thenAnswer((i) {
+          fillPointer(i.positionalArguments.first as Pointer, message);
+          return 0;
+        });
 
         final result = sut.decryptDetached(
           cipherText: Uint8List(25),
           mac: Uint8List(5),
+          additionalData: Uint8List(15),
           nonce: Uint8List(5),
           key: SecureKeyFake.empty(5),
         );
 
         expect(result, message);
+
+        verify(() => mockSodium.sodium_free(any())).called(5);
       });
 
       test('throws exception on failure', () {
@@ -675,18 +861,24 @@ void main() {
             any(),
             any(),
             any(),
+            any(),
+            any(),
+            any(),
           ),
-        ).thenThrow(JsError());
+        ).thenReturn(1);
 
         expect(
           () => sut.decryptDetached(
             cipherText: Uint8List(10),
             mac: Uint8List(5),
+            additionalData: Uint8List(15),
             nonce: Uint8List(5),
             key: SecureKeyFake.empty(5),
           ),
           throwsA(isA<SodiumException>()),
         );
+
+        verify(() => mockSodium.sodium_free(any())).called(5);
       });
     });
   });

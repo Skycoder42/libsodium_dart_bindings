@@ -7,7 +7,8 @@ import 'package:meta/meta.dart';
 import 'package:sodium/sodium_sumo.dart';
 import 'package:test/test.dart' as t;
 
-import 'cases/aead_test_case.dart';
+import 'cases/aead_chacha20poly1305_test_case.dart';
+import 'cases/aead_xchacha20poly1305ietf_test_case.dart';
 import 'cases/auth_test_case.dart';
 import 'cases/box_test_case.dart';
 import 'cases/generic_hash_test_case.dart';
@@ -53,7 +54,8 @@ abstract class TestRunner {
         RandombytesTestCase(this),
         SecretBoxTestCase(this),
         SecretStreamTestCase(this),
-        AeadTestCase(this),
+        AeadChaCha20Poly1305TestCase(this),
+        AeadXChaCha20Poly1305IETFTestCase(this),
         AuthTestCase(this),
         BoxTestCase(this),
         SignTestCase(this),

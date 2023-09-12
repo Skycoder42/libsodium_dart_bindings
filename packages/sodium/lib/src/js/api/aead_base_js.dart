@@ -7,37 +7,72 @@ import '../../api/detached_cipher_result.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
-import '../bindings/to_safe_int.dart';
-import 'secure_key_js.dart';
 
 /// @nodoc
 @internal
-class AeadJS with AeadValidations implements Aead {
+typedef InternalEncrypt = Uint8List Function(
+  Uint8List message,
+  Uint8List? additionalData,
+  Uint8List? secretNonce,
+  Uint8List publicNonce,
+  Uint8List key,
+);
+
+/// @nodoc
+@internal
+typedef InternalDecrypt = Uint8List Function(
+  Uint8List? secretNonce,
+  Uint8List ciphertext,
+  Uint8List? additionalData,
+  Uint8List publicNonce,
+  Uint8List key,
+);
+
+/// @nodoc
+@internal
+typedef InternalEncryptDetached = CryptoBox Function(
+  Uint8List message,
+  Uint8List? additionalData,
+  Uint8List? secretNonce,
+  Uint8List publicNonce,
+  Uint8List key,
+);
+
+/// @nodoc
+@internal
+typedef InternalDecryptDetached = Uint8List Function(
+  Uint8List? secretNonce,
+  Uint8List ciphertext,
+  Uint8List mac,
+  Uint8List? additionalData,
+  Uint8List publicNonce,
+  Uint8List key,
+);
+
+/// @nodoc
+@internal
+abstract class AeadBaseJS with AeadValidations implements Aead {
   /// @nodoc
   final LibSodiumJS sodium;
 
   /// @nodoc
-  AeadJS(this.sodium);
+  AeadBaseJS(this.sodium);
 
-  @override
-  int get keyBytes =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES.toSafeUInt32();
+  /// @nodoc
+  @protected
+  InternalEncrypt get internalEncrypt;
 
-  @override
-  int get nonceBytes =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES.toSafeUInt32();
+  /// @nodoc
+  @protected
+  InternalDecrypt get internalDecrypt;
 
-  @override
-  int get aBytes =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_ABYTES.toSafeUInt32();
+  /// @nodoc
+  @protected
+  InternalEncryptDetached get internalEncryptDetached;
 
-  @override
-  SecureKey keygen() => SecureKeyJS(
-        sodium,
-        jsErrorWrap(
-          sodium.crypto_aead_xchacha20poly1305_ietf_keygen,
-        ),
-      );
+  /// @nodoc
+  @protected
+  InternalDecryptDetached get internalDecryptDetached;
 
   @override
   Uint8List encrypt({
@@ -51,7 +86,7 @@ class AeadJS with AeadValidations implements Aead {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
+        (keyData) => internalEncrypt(
           message,
           additionalData,
           null,
@@ -75,7 +110,7 @@ class AeadJS with AeadValidations implements Aead {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
+        (keyData) => internalDecrypt(
           null,
           cipherText,
           additionalData,
@@ -98,7 +133,7 @@ class AeadJS with AeadValidations implements Aead {
 
     final cipher = jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
+        (keyData) => internalEncryptDetached(
           message,
           additionalData,
           null,
@@ -128,7 +163,7 @@ class AeadJS with AeadValidations implements Aead {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
+        (keyData) => internalDecryptDetached(
           null,
           cipherText,
           mac,
