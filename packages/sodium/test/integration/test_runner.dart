@@ -88,7 +88,7 @@ abstract class TestRunner {
   void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
       t.test(
         description,
-        () {},
+        () => t.fail('This test only works with the sodium.js sumo variant'),
         skip: 'This test only works with the sodium.js sumo variant',
       );
 
