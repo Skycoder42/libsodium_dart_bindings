@@ -36,24 +36,26 @@ create an issue for it, and I will add it to the list.
 
 API based on libsodium version: *1.0.18*
 
- libsodium API       | VM  | JS | Sumo | Documentation
----------------------|-----|----|------|---------------
- padding             | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/padding
- memory              | ✔️   | ❌ |      | https://libsodium.gitbook.io/doc/memory_management
- randombytes         | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/generating_random_data
- crypto_secretbox    | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox
- crypto_secretstream | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream
- crypto_aead         | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead
- crypto_auth         | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication
- crypto_box          | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption
- crypto_sign         | ✔️   | ✔️  | ➕   | https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures
- crypto_box_seal     | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes
- crypto_generichash  | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/hashing/generic_hashing
- crypto_shorthash    | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/hashing/short-input_hashing
- crypto_pwhash       | ✔️   | ✔️  | ✔️    | https://libsodium.gitbook.io/doc/password_hashing/default_phf
- crypto_kdf          | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/key_derivation
- crypto_kx           | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/key_exchange
- crypto_scalarmult   | ✔️   | ✔️  | ✔️    | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication
+ libsodium API                | VM  | JS | Sumo | Documentation
+---------------------------   |-----|----|------|---------------
+ padding                      | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/padding
+ memory                       | ✔️   | ❌  |      | https://libsodium.gitbook.io/doc/memory_management
+ randombytes                  | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/generating_random_data
+ crypto_secretbox             | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox
+ crypto_secretstream          | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream
+ crypto_aead_...              | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead
+ &gt; _xchacha20poly1305_ietf | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction
+ &gt; _chacha20poly1305       | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/original_chacha20-poly1305_construction
+ crypto_auth                  | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication
+ crypto_box                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption
+ crypto_sign                  | ✔️   | ✔️  | ➕   | https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures
+ crypto_box_seal              | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes
+ crypto_generichash           | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/hashing/generic_hashing
+ crypto_shorthash             | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/hashing/short-input_hashing
+ crypto_pwhash                | ✔️   | ✔️  | ✔️   | https://libsodium.gitbook.io/doc/password_hashing/default_phf
+ crypto_kdf                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/key_derivation
+ crypto_kx                    | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/key_exchange
+ crypto_scalarmult            | ✔️   | ✔️  | ✔️   | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication
 
 **Note:** Memory Management in JS is limited to overwriting the memory with 0. All other Memory-APIs are only available
 in the VM.

@@ -15,28 +15,85 @@ import 'helpers/keygen_mixin.dart';
 
 /// @nodoc
 @internal
-class AeadFFI with AeadValidations, KeygenMixin implements Aead {
+typedef InternalEncrypt = int Function(
+  Pointer<UnsignedChar> c,
+  Pointer<UnsignedLongLong> clenP,
+  Pointer<UnsignedChar> m,
+  int mlen,
+  Pointer<UnsignedChar> ad,
+  int adlen,
+  Pointer<UnsignedChar> nsec,
+  Pointer<UnsignedChar> npub,
+  Pointer<UnsignedChar> k,
+);
+
+/// @nodoc
+@internal
+typedef InternalDecrypt = int Function(
+  Pointer<UnsignedChar> m,
+  Pointer<UnsignedLongLong> mlenP,
+  Pointer<UnsignedChar> nsec,
+  Pointer<UnsignedChar> c,
+  int clen,
+  Pointer<UnsignedChar> ad,
+  int adlen,
+  Pointer<UnsignedChar> npub,
+  Pointer<UnsignedChar> k,
+);
+
+/// @nodoc
+@internal
+typedef InternalEncryptDetached = int Function(
+  Pointer<UnsignedChar> c,
+  Pointer<UnsignedChar> mac,
+  Pointer<UnsignedLongLong> maclenP,
+  Pointer<UnsignedChar> m,
+  int mlen,
+  Pointer<UnsignedChar> ad,
+  int adlen,
+  Pointer<UnsignedChar> nsec,
+  Pointer<UnsignedChar> npub,
+  Pointer<UnsignedChar> k,
+);
+
+/// @nodoc
+@internal
+typedef InternalDecryptDetached = int Function(
+  Pointer<UnsignedChar> m,
+  Pointer<UnsignedChar> nsec,
+  Pointer<UnsignedChar> c,
+  int clen,
+  Pointer<UnsignedChar> mac,
+  Pointer<UnsignedChar> ad,
+  int adlen,
+  Pointer<UnsignedChar> npub,
+  Pointer<UnsignedChar> k,
+);
+
+/// @nodoc
+@internal
+abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
   /// @nodoc
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  AeadFFI(this.sodium);
+  AeadBaseFFI(this.sodium);
 
-  @override
-  int get keyBytes => sodium.crypto_aead_xchacha20poly1305_ietf_keybytes();
+  /// @nodoc
+  @protected
+  InternalEncrypt get internalEncrypt;
 
-  @override
-  int get nonceBytes => sodium.crypto_aead_xchacha20poly1305_ietf_npubbytes();
+  /// @nodoc
+  @protected
+  InternalDecrypt get internalDecrypt;
 
-  @override
-  int get aBytes => sodium.crypto_aead_xchacha20poly1305_ietf_abytes();
+  /// @nodoc
+  @protected
+  InternalEncryptDetached get internalEncryptDetached;
 
-  @override
-  SecureKey keygen() => keygenImpl(
-        sodium: sodium,
-        keyBytes: keyBytes,
-        implementation: sodium.crypto_aead_xchacha20poly1305_ietf_keygen,
-      );
+  /// @nodoc
+  @protected
+  InternalDecryptDetached get internalDecryptDetached;
 
   @override
   Uint8List encrypt({
@@ -72,7 +129,7 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
 
       final result = key.runUnlockedNative(
         sodium,
-        (keyPtr) => sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
+        (keyPtr) => internalEncrypt(
           dataPtr!.ptr,
           nullptr,
           dataPtr.ptr,
@@ -121,7 +178,7 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
 
       final result = key.runUnlockedNative(
         sodium,
-        (keyPtr) => sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
+        (keyPtr) => internalDecrypt(
           dataPtr!.ptr,
           nullptr,
           nullptr,
@@ -173,7 +230,7 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
 
       final result = key.runUnlockedNative(
         sodium,
-        (keyPtr) => sodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
+        (keyPtr) => internalEncryptDetached(
           dataPtr!.ptr,
           macPtr!.ptr,
           nullptr,
@@ -233,7 +290,7 @@ class AeadFFI with AeadValidations, KeygenMixin implements Aead {
 
       final result = key.runUnlockedNative(
         sodium,
-        (keyPtr) => sodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
+        (keyPtr) => internalDecryptDetached(
           dataPtr!.ptr,
           nullptr,
           dataPtr.ptr,

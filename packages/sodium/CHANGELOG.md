@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2023-09-12
+### Added
+- Add implementation for `crypto_aead_chacha20poly1305` as `sodium.crypto.aeadChaCha20Poly1305`. (#61)
+
+### Changed
+- `sodium.crypto.aead` has been renamed to `sodium.crypto.aeadXChaCha20Poly1305IETF`. The implementation has not
+changed, only the name of the getter. (#61)
+
+### Deprecated
+- `sodium.crypto.aead` was renamed and thus deprecated. Use `sodium.crypto.aeadXChaCha20Poly1305IETF` instead. (#61)
+
+## [2.1.2] - 2023-09-06
+### Changed
+- Update min required dart SDK to 3.1.0
+- Update dependencies
+- Update formatting
+
 ## [2.1.1] - 2023-06-06
 ### Changed
 - Update dependencies
@@ -138,6 +155,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial stable release
 
+[2.2.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.1.2...sodium-v2.2.0
+[2.1.2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.1.1...sodium-v2.1.2
 [2.1.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.1.0...sodium-v2.1.1
 [2.1.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv2.0.1...sodium-v2.1.0
 [2.0.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium%2Fv2.0.0...sodium%2Fv2.0.1
