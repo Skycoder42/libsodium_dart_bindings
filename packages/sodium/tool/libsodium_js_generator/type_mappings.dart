@@ -62,6 +62,14 @@ class TypeMappings {
     ),
     'crypto_sign_keypair_result': TypeInfo('KeyPair'),
     'crypto_sign_seed_keypair_result': TypeInfo('KeyPair'),
+    'crypto_aead_aegis128l_encrypt_detached_result': TypeInfo('CryptoBox'),
+    'crypto_aead_aegis256_encrypt_detached_result': TypeInfo('CryptoBox'),
+    'crypto_box_curve25519xchacha20poly1305_detached_result':
+        TypeInfo('CryptoBox'),
+    'crypto_box_curve25519xchacha20poly1305_detached_afternm_result':
+        TypeInfo('CryptoBox'),
+    'crypto_box_curve25519xchacha20poly1305_seed_keypair_result':
+        TypeInfo('KeyPair'),
     // state typedefs
     'secretstream_xchacha20poly1305_state': TypeInfo(
       'SecretstreamXchacha20poly1305State',

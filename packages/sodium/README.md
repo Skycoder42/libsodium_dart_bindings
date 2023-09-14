@@ -34,7 +34,7 @@ with a ✔️ are available *only* in the sumo API, while those marked with ➕ 
 listet yet have either been forgotten or are not planned. If you find one you would like to have made available, please
 create an issue for it, and I will add it to the list.
 
-API based on libsodium version: *1.0.18*
+API based on libsodium version: *1.0.19*
 
  libsodium API                | VM  | JS | Sumo | Documentation
 ---------------------------   |-----|----|------|---------------

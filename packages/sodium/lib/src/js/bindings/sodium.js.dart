@@ -564,6 +564,76 @@ class LibSodiumJS {
 
   external num crypto_verify_64_BYTES;
 
+  external Uint8List crypto_aead_aegis128l_decrypt(
+    Uint8List? secret_nonce,
+    Uint8List ciphertext,
+    Uint8List? additional_data,
+    Uint8List public_nonce,
+    Uint8List key,
+  );
+
+  external Uint8List crypto_aead_aegis128l_decrypt_detached(
+    Uint8List? secret_nonce,
+    Uint8List ciphertext,
+    Uint8List mac,
+    Uint8List? additional_data,
+    Uint8List public_nonce,
+    Uint8List key,
+  );
+
+  external Uint8List crypto_aead_aegis128l_encrypt(
+    Uint8List message,
+    Uint8List? additional_data,
+    Uint8List? secret_nonce,
+    Uint8List public_nonce,
+    Uint8List key,
+  );
+
+  external CryptoBox crypto_aead_aegis128l_encrypt_detached(
+    Uint8List message,
+    Uint8List? additional_data,
+    Uint8List? secret_nonce,
+    Uint8List public_nonce,
+    Uint8List key,
+  );
+
+  external Uint8List crypto_aead_aegis128l_keygen();
+
+  external Uint8List crypto_aead_aegis256_decrypt(
+    Uint8List? secret_nonce,
+    Uint8List ciphertext,
+    Uint8List? additional_data,
+    Uint8List public_nonce,
+    Uint8List key,
+  );
+
+  external Uint8List crypto_aead_aegis256_decrypt_detached(
+    Uint8List? secret_nonce,
+    Uint8List ciphertext,
+    Uint8List mac,
+    Uint8List? additional_data,
+    Uint8List public_nonce,
+    Uint8List key,
+  );
+
+  external Uint8List crypto_aead_aegis256_encrypt(
+    Uint8List message,
+    Uint8List? additional_data,
+    Uint8List? secret_nonce,
+    Uint8List public_nonce,
+    Uint8List key,
+  );
+
+  external CryptoBox crypto_aead_aegis256_encrypt_detached(
+    Uint8List message,
+    Uint8List? additional_data,
+    Uint8List? secret_nonce,
+    Uint8List public_nonce,
+    Uint8List key,
+  );
+
+  external Uint8List crypto_aead_aegis256_keygen();
+
   external Uint8List crypto_aead_chacha20poly1305_decrypt(
     Uint8List? secret_nonce,
     Uint8List ciphertext,
@@ -739,7 +809,67 @@ class LibSodiumJS {
     Uint8List privateKey,
   );
 
+  external Uint8List crypto_box_curve25519xchacha20poly1305_beforenm(
+    Uint8List publicKey,
+    Uint8List privateKey,
+  );
+
+  external CryptoBox crypto_box_curve25519xchacha20poly1305_detached(
+    Uint8List message,
+    Uint8List nonce,
+    Uint8List publicKey,
+    Uint8List privateKey,
+  );
+
+  external CryptoBox crypto_box_curve25519xchacha20poly1305_detached_afternm(
+    Uint8List message,
+    Uint8List nonce,
+    Uint8List sharedKey,
+  );
+
+  external Uint8List crypto_box_curve25519xchacha20poly1305_easy(
+    Uint8List message,
+    Uint8List nonce,
+    Uint8List publicKey,
+    Uint8List privateKey,
+  );
+
+  external Uint8List crypto_box_curve25519xchacha20poly1305_easy_afternm(
+    Uint8List message,
+    Uint8List nonce,
+    Uint8List sharedKey,
+  );
+
   external KeyPair crypto_box_curve25519xchacha20poly1305_keypair();
+
+  external Uint8List crypto_box_curve25519xchacha20poly1305_open_detached(
+    Uint8List ciphertext,
+    Uint8List mac,
+    Uint8List nonce,
+    Uint8List publicKey,
+    Uint8List privateKey,
+  );
+
+  external Uint8List
+      crypto_box_curve25519xchacha20poly1305_open_detached_afternm(
+    Uint8List ciphertext,
+    Uint8List mac,
+    Uint8List nonce,
+    Uint8List sharedKey,
+  );
+
+  external Uint8List crypto_box_curve25519xchacha20poly1305_open_easy(
+    Uint8List ciphertext,
+    Uint8List nonce,
+    Uint8List publicKey,
+    Uint8List privateKey,
+  );
+
+  external Uint8List crypto_box_curve25519xchacha20poly1305_open_easy_afternm(
+    Uint8List ciphertext,
+    Uint8List nonce,
+    Uint8List sharedKey,
+  );
 
   external Uint8List crypto_box_curve25519xchacha20poly1305_seal(
     Uint8List message,
@@ -750,6 +880,10 @@ class LibSodiumJS {
     Uint8List ciphertext,
     Uint8List publicKey,
     Uint8List secretKey,
+  );
+
+  external KeyPair crypto_box_curve25519xchacha20poly1305_seed_keypair(
+    Uint8List seed,
   );
 
   external CryptoBox crypto_box_detached(

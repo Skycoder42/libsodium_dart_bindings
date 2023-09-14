@@ -36,7 +36,7 @@ ffigen:
     entry-points:
       - "/usr/include/sodium.h"
   compiler-opts:
-    - "-I/usr/lib/clang/15.0.7/include/"
+    - "-I/usr/lib/clang/16/include/"
   exclude-all-by-default: true
   macros:
     include:
@@ -87,3 +87,8 @@ cider:
   link_template:
     tag: https://github.com/Skycoder42/libsodium_dart_bindings/releases/tag/sodium-v%tag%
     diff: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v%from%...sodium-v%to%
+
+dart_pre_commit:
+  pull-up-dependencies:
+    allowed:
+      - meta

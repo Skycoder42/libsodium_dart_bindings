@@ -94,6 +94,538 @@ class LibSodiumFFI {
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('sodium_misuse');
   late final _sodium_misuse = _sodium_misusePtr.asFunction<void Function()>();
 
+  int crypto_aead_aegis128l_keybytes() {
+    return _crypto_aead_aegis128l_keybytes();
+  }
+
+  late final _crypto_aead_aegis128l_keybytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis128l_keybytes');
+  late final _crypto_aead_aegis128l_keybytes =
+      _crypto_aead_aegis128l_keybytesPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis128l_nsecbytes() {
+    return _crypto_aead_aegis128l_nsecbytes();
+  }
+
+  late final _crypto_aead_aegis128l_nsecbytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis128l_nsecbytes');
+  late final _crypto_aead_aegis128l_nsecbytes =
+      _crypto_aead_aegis128l_nsecbytesPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis128l_npubbytes() {
+    return _crypto_aead_aegis128l_npubbytes();
+  }
+
+  late final _crypto_aead_aegis128l_npubbytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis128l_npubbytes');
+  late final _crypto_aead_aegis128l_npubbytes =
+      _crypto_aead_aegis128l_npubbytesPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis128l_abytes() {
+    return _crypto_aead_aegis128l_abytes();
+  }
+
+  late final _crypto_aead_aegis128l_abytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis128l_abytes');
+  late final _crypto_aead_aegis128l_abytes =
+      _crypto_aead_aegis128l_abytesPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis128l_messagebytes_max() {
+    return _crypto_aead_aegis128l_messagebytes_max();
+  }
+
+  late final _crypto_aead_aegis128l_messagebytes_maxPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis128l_messagebytes_max');
+  late final _crypto_aead_aegis128l_messagebytes_max =
+      _crypto_aead_aegis128l_messagebytes_maxPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis128l_encrypt(
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedLongLong> clen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    int mlen,
+    ffi.Pointer<ffi.UnsignedChar> ad,
+    int adlen,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis128l_encrypt(
+      c,
+      clen_p,
+      m,
+      mlen,
+      ad,
+      adlen,
+      nsec,
+      npub,
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis128l_encryptPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_aead_aegis128l_encrypt');
+  late final _crypto_aead_aegis128l_encrypt =
+      _crypto_aead_aegis128l_encryptPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_aead_aegis128l_decrypt(
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    int clen,
+    ffi.Pointer<ffi.UnsignedChar> ad,
+    int adlen,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis128l_decrypt(
+      m,
+      mlen_p,
+      nsec,
+      c,
+      clen,
+      ad,
+      adlen,
+      npub,
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis128l_decryptPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_aead_aegis128l_decrypt');
+  late final _crypto_aead_aegis128l_decrypt =
+      _crypto_aead_aegis128l_decryptPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_aead_aegis128l_encrypt_detached(
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedLongLong> maclen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    int mlen,
+    ffi.Pointer<ffi.UnsignedChar> ad,
+    int adlen,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis128l_encrypt_detached(
+      c,
+      mac,
+      maclen_p,
+      m,
+      mlen,
+      ad,
+      adlen,
+      nsec,
+      npub,
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis128l_encrypt_detachedPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_aegis128l_encrypt_detached');
+  late final _crypto_aead_aegis128l_encrypt_detached =
+      _crypto_aead_aegis128l_encrypt_detachedPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_aead_aegis128l_decrypt_detached(
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    int clen,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> ad,
+    int adlen,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis128l_decrypt_detached(
+      m,
+      nsec,
+      c,
+      clen,
+      mac,
+      ad,
+      adlen,
+      npub,
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis128l_decrypt_detachedPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_aegis128l_decrypt_detached');
+  late final _crypto_aead_aegis128l_decrypt_detached =
+      _crypto_aead_aegis128l_decrypt_detachedPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
+
+  void crypto_aead_aegis128l_keygen(
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis128l_keygen(
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis128l_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_aegis128l_keygen');
+  late final _crypto_aead_aegis128l_keygen = _crypto_aead_aegis128l_keygenPtr
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_aead_aegis256_keybytes() {
+    return _crypto_aead_aegis256_keybytes();
+  }
+
+  late final _crypto_aead_aegis256_keybytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis256_keybytes');
+  late final _crypto_aead_aegis256_keybytes =
+      _crypto_aead_aegis256_keybytesPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis256_nsecbytes() {
+    return _crypto_aead_aegis256_nsecbytes();
+  }
+
+  late final _crypto_aead_aegis256_nsecbytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis256_nsecbytes');
+  late final _crypto_aead_aegis256_nsecbytes =
+      _crypto_aead_aegis256_nsecbytesPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis256_npubbytes() {
+    return _crypto_aead_aegis256_npubbytes();
+  }
+
+  late final _crypto_aead_aegis256_npubbytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis256_npubbytes');
+  late final _crypto_aead_aegis256_npubbytes =
+      _crypto_aead_aegis256_npubbytesPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis256_abytes() {
+    return _crypto_aead_aegis256_abytes();
+  }
+
+  late final _crypto_aead_aegis256_abytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis256_abytes');
+  late final _crypto_aead_aegis256_abytes =
+      _crypto_aead_aegis256_abytesPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis256_messagebytes_max() {
+    return _crypto_aead_aegis256_messagebytes_max();
+  }
+
+  late final _crypto_aead_aegis256_messagebytes_maxPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_aead_aegis256_messagebytes_max');
+  late final _crypto_aead_aegis256_messagebytes_max =
+      _crypto_aead_aegis256_messagebytes_maxPtr.asFunction<int Function()>();
+
+  int crypto_aead_aegis256_encrypt(
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedLongLong> clen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    int mlen,
+    ffi.Pointer<ffi.UnsignedChar> ad,
+    int adlen,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis256_encrypt(
+      c,
+      clen_p,
+      m,
+      mlen,
+      ad,
+      adlen,
+      nsec,
+      npub,
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis256_encryptPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_aead_aegis256_encrypt');
+  late final _crypto_aead_aegis256_encrypt =
+      _crypto_aead_aegis256_encryptPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_aead_aegis256_decrypt(
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedLongLong> mlen_p,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    int clen,
+    ffi.Pointer<ffi.UnsignedChar> ad,
+    int adlen,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis256_decrypt(
+      m,
+      mlen_p,
+      nsec,
+      c,
+      clen,
+      ad,
+      adlen,
+      npub,
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis256_decryptPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_aead_aegis256_decrypt');
+  late final _crypto_aead_aegis256_decrypt =
+      _crypto_aead_aegis256_decryptPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_aead_aegis256_encrypt_detached(
+    ffi.Pointer<ffi.UnsignedChar> c,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedLongLong> maclen_p,
+    ffi.Pointer<ffi.UnsignedChar> m,
+    int mlen,
+    ffi.Pointer<ffi.UnsignedChar> ad,
+    int adlen,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis256_encrypt_detached(
+      c,
+      mac,
+      maclen_p,
+      m,
+      mlen,
+      ad,
+      adlen,
+      nsec,
+      npub,
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis256_encrypt_detachedPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedLongLong>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_aegis256_encrypt_detached');
+  late final _crypto_aead_aegis256_encrypt_detached =
+      _crypto_aead_aegis256_encrypt_detachedPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedLongLong>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_aead_aegis256_decrypt_detached(
+    ffi.Pointer<ffi.UnsignedChar> m,
+    ffi.Pointer<ffi.UnsignedChar> nsec,
+    ffi.Pointer<ffi.UnsignedChar> c,
+    int clen,
+    ffi.Pointer<ffi.UnsignedChar> mac,
+    ffi.Pointer<ffi.UnsignedChar> ad,
+    int adlen,
+    ffi.Pointer<ffi.UnsignedChar> npub,
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis256_decrypt_detached(
+      m,
+      nsec,
+      c,
+      clen,
+      mac,
+      ad,
+      adlen,
+      npub,
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis256_decrypt_detachedPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.UnsignedLongLong,
+                  ffi.Pointer<ffi.UnsignedChar>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_aegis256_decrypt_detached');
+  late final _crypto_aead_aegis256_decrypt_detached =
+      _crypto_aead_aegis256_decrypt_detachedPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
+
+  void crypto_aead_aegis256_keygen(
+    ffi.Pointer<ffi.UnsignedChar> k,
+  ) {
+    return _crypto_aead_aegis256_keygen(
+      k,
+    );
+  }
+
+  late final _crypto_aead_aegis256_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_aead_aegis256_keygen');
+  late final _crypto_aead_aegis256_keygen = _crypto_aead_aegis256_keygenPtr
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
+
   int crypto_aead_aes256gcm_is_available() {
     return _crypto_aead_aes256gcm_is_available();
   }
@@ -3294,71 +3826,6 @@ class LibSodiumFFI {
       int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
           int, ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
-  int crypto_core_hsalsa20_outputbytes() {
-    return _crypto_core_hsalsa20_outputbytes();
-  }
-
-  late final _crypto_core_hsalsa20_outputbytesPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_core_hsalsa20_outputbytes');
-  late final _crypto_core_hsalsa20_outputbytes =
-      _crypto_core_hsalsa20_outputbytesPtr.asFunction<int Function()>();
-
-  int crypto_core_hsalsa20_inputbytes() {
-    return _crypto_core_hsalsa20_inputbytes();
-  }
-
-  late final _crypto_core_hsalsa20_inputbytesPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_core_hsalsa20_inputbytes');
-  late final _crypto_core_hsalsa20_inputbytes =
-      _crypto_core_hsalsa20_inputbytesPtr.asFunction<int Function()>();
-
-  int crypto_core_hsalsa20_keybytes() {
-    return _crypto_core_hsalsa20_keybytes();
-  }
-
-  late final _crypto_core_hsalsa20_keybytesPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_core_hsalsa20_keybytes');
-  late final _crypto_core_hsalsa20_keybytes =
-      _crypto_core_hsalsa20_keybytesPtr.asFunction<int Function()>();
-
-  int crypto_core_hsalsa20_constbytes() {
-    return _crypto_core_hsalsa20_constbytes();
-  }
-
-  late final _crypto_core_hsalsa20_constbytesPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_core_hsalsa20_constbytes');
-  late final _crypto_core_hsalsa20_constbytes =
-      _crypto_core_hsalsa20_constbytesPtr.asFunction<int Function()>();
-
-  int crypto_core_hsalsa20(
-    ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
-    ffi.Pointer<ffi.UnsignedChar> k,
-    ffi.Pointer<ffi.UnsignedChar> c,
-  ) {
-    return _crypto_core_hsalsa20(
-      out,
-      in1,
-      k,
-      c,
-    );
-  }
-
-  late final _crypto_core_hsalsa20Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<ffi.UnsignedChar>,
-              ffi.Pointer<ffi.UnsignedChar>,
-              ffi.Pointer<ffi.UnsignedChar>,
-              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_hsalsa20');
-  late final _crypto_core_hsalsa20 = _crypto_core_hsalsa20Ptr.asFunction<
-      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
-          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
-
   int crypto_core_hchacha20_outputbytes() {
     return _crypto_core_hchacha20_outputbytes();
   }
@@ -3421,6 +3888,71 @@ class LibSodiumFFI {
               ffi.Pointer<ffi.UnsignedChar>,
               ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_hchacha20');
   late final _crypto_core_hchacha20 = _crypto_core_hchacha20Ptr.asFunction<
+      int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
+          ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_core_hsalsa20_outputbytes() {
+    return _crypto_core_hsalsa20_outputbytes();
+  }
+
+  late final _crypto_core_hsalsa20_outputbytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_core_hsalsa20_outputbytes');
+  late final _crypto_core_hsalsa20_outputbytes =
+      _crypto_core_hsalsa20_outputbytesPtr.asFunction<int Function()>();
+
+  int crypto_core_hsalsa20_inputbytes() {
+    return _crypto_core_hsalsa20_inputbytes();
+  }
+
+  late final _crypto_core_hsalsa20_inputbytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_core_hsalsa20_inputbytes');
+  late final _crypto_core_hsalsa20_inputbytes =
+      _crypto_core_hsalsa20_inputbytesPtr.asFunction<int Function()>();
+
+  int crypto_core_hsalsa20_keybytes() {
+    return _crypto_core_hsalsa20_keybytes();
+  }
+
+  late final _crypto_core_hsalsa20_keybytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_core_hsalsa20_keybytes');
+  late final _crypto_core_hsalsa20_keybytes =
+      _crypto_core_hsalsa20_keybytesPtr.asFunction<int Function()>();
+
+  int crypto_core_hsalsa20_constbytes() {
+    return _crypto_core_hsalsa20_constbytes();
+  }
+
+  late final _crypto_core_hsalsa20_constbytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_core_hsalsa20_constbytes');
+  late final _crypto_core_hsalsa20_constbytes =
+      _crypto_core_hsalsa20_constbytesPtr.asFunction<int Function()>();
+
+  int crypto_core_hsalsa20(
+    ffi.Pointer<ffi.UnsignedChar> out,
+    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> k,
+    ffi.Pointer<ffi.UnsignedChar> c,
+  ) {
+    return _crypto_core_hsalsa20(
+      out,
+      in1,
+      k,
+      c,
+    );
+  }
+
+  late final _crypto_core_hsalsa20Ptr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_core_hsalsa20');
+  late final _crypto_core_hsalsa20 = _crypto_core_hsalsa20Ptr.asFunction<
       int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>,
           ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
@@ -4318,6 +4850,370 @@ class LibSodiumFFI {
       'crypto_kdf_keygen');
   late final _crypto_kdf_keygen = _crypto_kdf_keygenPtr
       .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_kdf_hkdf_sha256_keybytes() {
+    return _crypto_kdf_hkdf_sha256_keybytes();
+  }
+
+  late final _crypto_kdf_hkdf_sha256_keybytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_kdf_hkdf_sha256_keybytes');
+  late final _crypto_kdf_hkdf_sha256_keybytes =
+      _crypto_kdf_hkdf_sha256_keybytesPtr.asFunction<int Function()>();
+
+  int crypto_kdf_hkdf_sha256_bytes_min() {
+    return _crypto_kdf_hkdf_sha256_bytes_min();
+  }
+
+  late final _crypto_kdf_hkdf_sha256_bytes_minPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_kdf_hkdf_sha256_bytes_min');
+  late final _crypto_kdf_hkdf_sha256_bytes_min =
+      _crypto_kdf_hkdf_sha256_bytes_minPtr.asFunction<int Function()>();
+
+  int crypto_kdf_hkdf_sha256_bytes_max() {
+    return _crypto_kdf_hkdf_sha256_bytes_max();
+  }
+
+  late final _crypto_kdf_hkdf_sha256_bytes_maxPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_kdf_hkdf_sha256_bytes_max');
+  late final _crypto_kdf_hkdf_sha256_bytes_max =
+      _crypto_kdf_hkdf_sha256_bytes_maxPtr.asFunction<int Function()>();
+
+  int crypto_kdf_hkdf_sha256_extract(
+    ffi.Pointer<ffi.UnsignedChar> prk,
+    ffi.Pointer<ffi.UnsignedChar> salt,
+    int salt_len,
+    ffi.Pointer<ffi.UnsignedChar> ikm,
+    int ikm_len,
+  ) {
+    return _crypto_kdf_hkdf_sha256_extract(
+      prk,
+      salt,
+      salt_len,
+      ikm,
+      ikm_len,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha256_extractPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_kdf_hkdf_sha256_extract');
+  late final _crypto_kdf_hkdf_sha256_extract =
+      _crypto_kdf_hkdf_sha256_extractPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int)>();
+
+  void crypto_kdf_hkdf_sha256_keygen(
+    ffi.Pointer<ffi.UnsignedChar> prk,
+  ) {
+    return _crypto_kdf_hkdf_sha256_keygen(
+      prk,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha256_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_kdf_hkdf_sha256_keygen');
+  late final _crypto_kdf_hkdf_sha256_keygen = _crypto_kdf_hkdf_sha256_keygenPtr
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_kdf_hkdf_sha256_expand(
+    ffi.Pointer<ffi.UnsignedChar> out,
+    int out_len,
+    ffi.Pointer<ffi.Char> ctx,
+    int ctx_len,
+    ffi.Pointer<ffi.UnsignedChar> prk,
+  ) {
+    return _crypto_kdf_hkdf_sha256_expand(
+      out,
+      out_len,
+      ctx,
+      ctx_len,
+      prk,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha256_expandPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Pointer<ffi.Char>,
+              ffi.Size,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_kdf_hkdf_sha256_expand');
+  late final _crypto_kdf_hkdf_sha256_expand =
+      _crypto_kdf_hkdf_sha256_expandPtr.asFunction<
+          int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+              ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_kdf_hkdf_sha256_statebytes() {
+    return _crypto_kdf_hkdf_sha256_statebytes();
+  }
+
+  late final _crypto_kdf_hkdf_sha256_statebytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_kdf_hkdf_sha256_statebytes');
+  late final _crypto_kdf_hkdf_sha256_statebytes =
+      _crypto_kdf_hkdf_sha256_statebytesPtr.asFunction<int Function()>();
+
+  int crypto_kdf_hkdf_sha256_extract_init(
+    ffi.Pointer<crypto_kdf_hkdf_sha256_state> state,
+    ffi.Pointer<ffi.UnsignedChar> salt,
+    int salt_len,
+  ) {
+    return _crypto_kdf_hkdf_sha256_extract_init(
+      state,
+      salt,
+      salt_len,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha256_extract_initPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<crypto_kdf_hkdf_sha256_state>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_kdf_hkdf_sha256_extract_init');
+  late final _crypto_kdf_hkdf_sha256_extract_init =
+      _crypto_kdf_hkdf_sha256_extract_initPtr.asFunction<
+          int Function(ffi.Pointer<crypto_kdf_hkdf_sha256_state>,
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
+
+  int crypto_kdf_hkdf_sha256_extract_update(
+    ffi.Pointer<crypto_kdf_hkdf_sha256_state> state,
+    ffi.Pointer<ffi.UnsignedChar> ikm,
+    int ikm_len,
+  ) {
+    return _crypto_kdf_hkdf_sha256_extract_update(
+      state,
+      ikm,
+      ikm_len,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha256_extract_updatePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<crypto_kdf_hkdf_sha256_state>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_kdf_hkdf_sha256_extract_update');
+  late final _crypto_kdf_hkdf_sha256_extract_update =
+      _crypto_kdf_hkdf_sha256_extract_updatePtr.asFunction<
+          int Function(ffi.Pointer<crypto_kdf_hkdf_sha256_state>,
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
+
+  int crypto_kdf_hkdf_sha256_extract_final(
+    ffi.Pointer<crypto_kdf_hkdf_sha256_state> state,
+    ffi.Pointer<ffi.UnsignedChar> prk,
+  ) {
+    return _crypto_kdf_hkdf_sha256_extract_final(
+      state,
+      prk,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha256_extract_finalPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<crypto_kdf_hkdf_sha256_state>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_kdf_hkdf_sha256_extract_final');
+  late final _crypto_kdf_hkdf_sha256_extract_final =
+      _crypto_kdf_hkdf_sha256_extract_finalPtr.asFunction<
+          int Function(ffi.Pointer<crypto_kdf_hkdf_sha256_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_kdf_hkdf_sha512_keybytes() {
+    return _crypto_kdf_hkdf_sha512_keybytes();
+  }
+
+  late final _crypto_kdf_hkdf_sha512_keybytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_kdf_hkdf_sha512_keybytes');
+  late final _crypto_kdf_hkdf_sha512_keybytes =
+      _crypto_kdf_hkdf_sha512_keybytesPtr.asFunction<int Function()>();
+
+  int crypto_kdf_hkdf_sha512_bytes_min() {
+    return _crypto_kdf_hkdf_sha512_bytes_min();
+  }
+
+  late final _crypto_kdf_hkdf_sha512_bytes_minPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_kdf_hkdf_sha512_bytes_min');
+  late final _crypto_kdf_hkdf_sha512_bytes_min =
+      _crypto_kdf_hkdf_sha512_bytes_minPtr.asFunction<int Function()>();
+
+  int crypto_kdf_hkdf_sha512_bytes_max() {
+    return _crypto_kdf_hkdf_sha512_bytes_max();
+  }
+
+  late final _crypto_kdf_hkdf_sha512_bytes_maxPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_kdf_hkdf_sha512_bytes_max');
+  late final _crypto_kdf_hkdf_sha512_bytes_max =
+      _crypto_kdf_hkdf_sha512_bytes_maxPtr.asFunction<int Function()>();
+
+  int crypto_kdf_hkdf_sha512_extract(
+    ffi.Pointer<ffi.UnsignedChar> prk,
+    ffi.Pointer<ffi.UnsignedChar> salt,
+    int salt_len,
+    ffi.Pointer<ffi.UnsignedChar> ikm,
+    int ikm_len,
+  ) {
+    return _crypto_kdf_hkdf_sha512_extract(
+      prk,
+      salt,
+      salt_len,
+      ikm,
+      ikm_len,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha512_extractPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_kdf_hkdf_sha512_extract');
+  late final _crypto_kdf_hkdf_sha512_extract =
+      _crypto_kdf_hkdf_sha512_extractPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int)>();
+
+  void crypto_kdf_hkdf_sha512_keygen(
+    ffi.Pointer<ffi.UnsignedChar> prk,
+  ) {
+    return _crypto_kdf_hkdf_sha512_keygen(
+      prk,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha512_keygenPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_kdf_hkdf_sha512_keygen');
+  late final _crypto_kdf_hkdf_sha512_keygen = _crypto_kdf_hkdf_sha512_keygenPtr
+      .asFunction<void Function(ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_kdf_hkdf_sha512_expand(
+    ffi.Pointer<ffi.UnsignedChar> out,
+    int out_len,
+    ffi.Pointer<ffi.Char> ctx,
+    int ctx_len,
+    ffi.Pointer<ffi.UnsignedChar> prk,
+  ) {
+    return _crypto_kdf_hkdf_sha512_expand(
+      out,
+      out_len,
+      ctx,
+      ctx_len,
+      prk,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha512_expandPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size,
+              ffi.Pointer<ffi.Char>,
+              ffi.Size,
+              ffi.Pointer<ffi.UnsignedChar>)>>('crypto_kdf_hkdf_sha512_expand');
+  late final _crypto_kdf_hkdf_sha512_expand =
+      _crypto_kdf_hkdf_sha512_expandPtr.asFunction<
+          int Function(ffi.Pointer<ffi.UnsignedChar>, int,
+              ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.UnsignedChar>)>();
+
+  int crypto_kdf_hkdf_sha512_statebytes() {
+    return _crypto_kdf_hkdf_sha512_statebytes();
+  }
+
+  late final _crypto_kdf_hkdf_sha512_statebytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_kdf_hkdf_sha512_statebytes');
+  late final _crypto_kdf_hkdf_sha512_statebytes =
+      _crypto_kdf_hkdf_sha512_statebytesPtr.asFunction<int Function()>();
+
+  int crypto_kdf_hkdf_sha512_extract_init(
+    ffi.Pointer<crypto_kdf_hkdf_sha512_state> state,
+    ffi.Pointer<ffi.UnsignedChar> salt,
+    int salt_len,
+  ) {
+    return _crypto_kdf_hkdf_sha512_extract_init(
+      state,
+      salt,
+      salt_len,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha512_extract_initPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<crypto_kdf_hkdf_sha512_state>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_kdf_hkdf_sha512_extract_init');
+  late final _crypto_kdf_hkdf_sha512_extract_init =
+      _crypto_kdf_hkdf_sha512_extract_initPtr.asFunction<
+          int Function(ffi.Pointer<crypto_kdf_hkdf_sha512_state>,
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
+
+  int crypto_kdf_hkdf_sha512_extract_update(
+    ffi.Pointer<crypto_kdf_hkdf_sha512_state> state,
+    ffi.Pointer<ffi.UnsignedChar> ikm,
+    int ikm_len,
+  ) {
+    return _crypto_kdf_hkdf_sha512_extract_update(
+      state,
+      ikm,
+      ikm_len,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha512_extract_updatePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<crypto_kdf_hkdf_sha512_state>,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.Size)>>('crypto_kdf_hkdf_sha512_extract_update');
+  late final _crypto_kdf_hkdf_sha512_extract_update =
+      _crypto_kdf_hkdf_sha512_extract_updatePtr.asFunction<
+          int Function(ffi.Pointer<crypto_kdf_hkdf_sha512_state>,
+              ffi.Pointer<ffi.UnsignedChar>, int)>();
+
+  int crypto_kdf_hkdf_sha512_extract_final(
+    ffi.Pointer<crypto_kdf_hkdf_sha512_state> state,
+    ffi.Pointer<ffi.UnsignedChar> prk,
+  ) {
+    return _crypto_kdf_hkdf_sha512_extract_final(
+      state,
+      prk,
+    );
+  }
+
+  late final _crypto_kdf_hkdf_sha512_extract_finalPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<crypto_kdf_hkdf_sha512_state>,
+                  ffi.Pointer<ffi.UnsignedChar>)>>(
+      'crypto_kdf_hkdf_sha512_extract_final');
+  late final _crypto_kdf_hkdf_sha512_extract_final =
+      _crypto_kdf_hkdf_sha512_extract_finalPtr.asFunction<
+          int Function(ffi.Pointer<crypto_kdf_hkdf_sha512_state>,
+              ffi.Pointer<ffi.UnsignedChar>)>();
 
   int crypto_kx_publickeybytes() {
     return _crypto_kx_publickeybytes();
@@ -8226,6 +9122,16 @@ class LibSodiumFFI {
   late final _sodium_runtime_has_neon =
       _sodium_runtime_has_neonPtr.asFunction<int Function()>();
 
+  int sodium_runtime_has_armcrypto() {
+    return _sodium_runtime_has_armcrypto();
+  }
+
+  late final _sodium_runtime_has_armcryptoPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
+          'sodium_runtime_has_armcrypto');
+  late final _sodium_runtime_has_armcrypto =
+      _sodium_runtime_has_armcryptoPtr.asFunction<int Function()>();
+
   int sodium_runtime_has_sse2() {
     return _sodium_runtime_has_sse2();
   }
@@ -10091,6 +10997,324 @@ class LibSodiumFFI {
           void Function(
               ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)>();
 
+  int crypto_pwhash_scryptsalsa208sha256_bytes_min() {
+    return _crypto_pwhash_scryptsalsa208sha256_bytes_min();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_bytes_minPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_bytes_min');
+  late final _crypto_pwhash_scryptsalsa208sha256_bytes_min =
+      _crypto_pwhash_scryptsalsa208sha256_bytes_minPtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_bytes_max() {
+    return _crypto_pwhash_scryptsalsa208sha256_bytes_max();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_bytes_maxPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_bytes_max');
+  late final _crypto_pwhash_scryptsalsa208sha256_bytes_max =
+      _crypto_pwhash_scryptsalsa208sha256_bytes_maxPtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_passwd_min() {
+    return _crypto_pwhash_scryptsalsa208sha256_passwd_min();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_passwd_minPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_passwd_min');
+  late final _crypto_pwhash_scryptsalsa208sha256_passwd_min =
+      _crypto_pwhash_scryptsalsa208sha256_passwd_minPtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_passwd_max() {
+    return _crypto_pwhash_scryptsalsa208sha256_passwd_max();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_passwd_maxPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_passwd_max');
+  late final _crypto_pwhash_scryptsalsa208sha256_passwd_max =
+      _crypto_pwhash_scryptsalsa208sha256_passwd_maxPtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_saltbytes() {
+    return _crypto_pwhash_scryptsalsa208sha256_saltbytes();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_saltbytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_saltbytes');
+  late final _crypto_pwhash_scryptsalsa208sha256_saltbytes =
+      _crypto_pwhash_scryptsalsa208sha256_saltbytesPtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_strbytes() {
+    return _crypto_pwhash_scryptsalsa208sha256_strbytes();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_strbytesPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_strbytes');
+  late final _crypto_pwhash_scryptsalsa208sha256_strbytes =
+      _crypto_pwhash_scryptsalsa208sha256_strbytesPtr
+          .asFunction<int Function()>();
+
+  ffi.Pointer<ffi.Char> crypto_pwhash_scryptsalsa208sha256_strprefix() {
+    return _crypto_pwhash_scryptsalsa208sha256_strprefix();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_strprefixPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_strprefix');
+  late final _crypto_pwhash_scryptsalsa208sha256_strprefix =
+      _crypto_pwhash_scryptsalsa208sha256_strprefixPtr
+          .asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_opslimit_min() {
+    return _crypto_pwhash_scryptsalsa208sha256_opslimit_min();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_minPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_opslimit_min');
+  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_min =
+      _crypto_pwhash_scryptsalsa208sha256_opslimit_minPtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_opslimit_max() {
+    return _crypto_pwhash_scryptsalsa208sha256_opslimit_max();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_maxPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_opslimit_max');
+  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_max =
+      _crypto_pwhash_scryptsalsa208sha256_opslimit_maxPtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_memlimit_min() {
+    return _crypto_pwhash_scryptsalsa208sha256_memlimit_min();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_minPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_memlimit_min');
+  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_min =
+      _crypto_pwhash_scryptsalsa208sha256_memlimit_minPtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_memlimit_max() {
+    return _crypto_pwhash_scryptsalsa208sha256_memlimit_max();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_maxPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_memlimit_max');
+  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_max =
+      _crypto_pwhash_scryptsalsa208sha256_memlimit_maxPtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_opslimit_interactive() {
+    return _crypto_pwhash_scryptsalsa208sha256_opslimit_interactive();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_interactivePtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_opslimit_interactive');
+  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_interactive =
+      _crypto_pwhash_scryptsalsa208sha256_opslimit_interactivePtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_memlimit_interactive() {
+    return _crypto_pwhash_scryptsalsa208sha256_memlimit_interactive();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_interactivePtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_memlimit_interactive');
+  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_interactive =
+      _crypto_pwhash_scryptsalsa208sha256_memlimit_interactivePtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive() {
+    return _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitivePtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive');
+  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive =
+      _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitivePtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive() {
+    return _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive();
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitivePtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
+          'crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive');
+  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive =
+      _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitivePtr
+          .asFunction<int Function()>();
+
+  int crypto_pwhash_scryptsalsa208sha256(
+    ffi.Pointer<ffi.UnsignedChar> out,
+    int outlen,
+    ffi.Pointer<ffi.Char> passwd,
+    int passwdlen,
+    ffi.Pointer<ffi.UnsignedChar> salt,
+    int opslimit,
+    int memlimit,
+  ) {
+    return _crypto_pwhash_scryptsalsa208sha256(
+      out,
+      outlen,
+      passwd,
+      passwdlen,
+      salt,
+      opslimit,
+      memlimit,
+    );
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256Ptr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.Pointer<ffi.UnsignedChar>,
+              ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_scryptsalsa208sha256');
+  late final _crypto_pwhash_scryptsalsa208sha256 =
+      _crypto_pwhash_scryptsalsa208sha256Ptr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              ffi.Pointer<ffi.Char>,
+              int,
+              ffi.Pointer<ffi.UnsignedChar>,
+              int,
+              int)>();
+
+  int crypto_pwhash_scryptsalsa208sha256_str(
+    ffi.Pointer<ffi.Char> out,
+    ffi.Pointer<ffi.Char> passwd,
+    int passwdlen,
+    int opslimit,
+    int memlimit,
+  ) {
+    return _crypto_pwhash_scryptsalsa208sha256_str(
+      out,
+      passwd,
+      passwdlen,
+      opslimit,
+      memlimit,
+    );
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_strPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.UnsignedLongLong,
+              ffi.UnsignedLongLong,
+              ffi.Size)>>('crypto_pwhash_scryptsalsa208sha256_str');
+  late final _crypto_pwhash_scryptsalsa208sha256_str =
+      _crypto_pwhash_scryptsalsa208sha256_strPtr.asFunction<
+          int Function(
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int, int, int)>();
+
+  int crypto_pwhash_scryptsalsa208sha256_str_verify(
+    ffi.Pointer<ffi.Char> str,
+    ffi.Pointer<ffi.Char> passwd,
+    int passwdlen,
+  ) {
+    return _crypto_pwhash_scryptsalsa208sha256_str_verify(
+      str,
+      passwd,
+      passwdlen,
+    );
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_str_verifyPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
+                  ffi.UnsignedLongLong)>>(
+      'crypto_pwhash_scryptsalsa208sha256_str_verify');
+  late final _crypto_pwhash_scryptsalsa208sha256_str_verify =
+      _crypto_pwhash_scryptsalsa208sha256_str_verifyPtr.asFunction<
+          int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int)>();
+
+  int crypto_pwhash_scryptsalsa208sha256_ll(
+    ffi.Pointer<ffi.Uint8> passwd,
+    int passwdlen,
+    ffi.Pointer<ffi.Uint8> salt,
+    int saltlen,
+    int N,
+    int r,
+    int p,
+    ffi.Pointer<ffi.Uint8> buf,
+    int buflen,
+  ) {
+    return _crypto_pwhash_scryptsalsa208sha256_ll(
+      passwd,
+      passwdlen,
+      salt,
+      saltlen,
+      N,
+      r,
+      p,
+      buf,
+      buflen,
+    );
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_llPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.Uint8>,
+              ffi.Size,
+              ffi.Pointer<ffi.Uint8>,
+              ffi.Size,
+              ffi.Uint64,
+              ffi.Uint32,
+              ffi.Uint32,
+              ffi.Pointer<ffi.Uint8>,
+              ffi.Size)>>('crypto_pwhash_scryptsalsa208sha256_ll');
+  late final _crypto_pwhash_scryptsalsa208sha256_ll =
+      _crypto_pwhash_scryptsalsa208sha256_llPtr.asFunction<
+          int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>, int,
+              int, int, int, ffi.Pointer<ffi.Uint8>, int)>();
+
+  int crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(
+    ffi.Pointer<ffi.Char> str,
+    int opslimit,
+    int memlimit,
+  ) {
+    return _crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(
+      str,
+      opslimit,
+      memlimit,
+    );
+  }
+
+  late final _crypto_pwhash_scryptsalsa208sha256_str_needs_rehashPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.Char>, ffi.UnsignedLongLong, ffi.Size)>>(
+      'crypto_pwhash_scryptsalsa208sha256_str_needs_rehash');
+  late final _crypto_pwhash_scryptsalsa208sha256_str_needs_rehash =
+      _crypto_pwhash_scryptsalsa208sha256_str_needs_rehashPtr
+          .asFunction<int Function(ffi.Pointer<ffi.Char>, int, int)>();
+
   int crypto_scalarmult_ed25519_bytes() {
     return _crypto_scalarmult_ed25519_bytes();
   }
@@ -10451,324 +11675,6 @@ class LibSodiumFFI {
               ffi.Pointer<ffi.UnsignedChar>,
               ffi.Pointer<ffi.UnsignedChar>)>();
 
-  int crypto_pwhash_scryptsalsa208sha256_bytes_min() {
-    return _crypto_pwhash_scryptsalsa208sha256_bytes_min();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_bytes_minPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_bytes_min');
-  late final _crypto_pwhash_scryptsalsa208sha256_bytes_min =
-      _crypto_pwhash_scryptsalsa208sha256_bytes_minPtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_bytes_max() {
-    return _crypto_pwhash_scryptsalsa208sha256_bytes_max();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_bytes_maxPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_bytes_max');
-  late final _crypto_pwhash_scryptsalsa208sha256_bytes_max =
-      _crypto_pwhash_scryptsalsa208sha256_bytes_maxPtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_passwd_min() {
-    return _crypto_pwhash_scryptsalsa208sha256_passwd_min();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_passwd_minPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_passwd_min');
-  late final _crypto_pwhash_scryptsalsa208sha256_passwd_min =
-      _crypto_pwhash_scryptsalsa208sha256_passwd_minPtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_passwd_max() {
-    return _crypto_pwhash_scryptsalsa208sha256_passwd_max();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_passwd_maxPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_passwd_max');
-  late final _crypto_pwhash_scryptsalsa208sha256_passwd_max =
-      _crypto_pwhash_scryptsalsa208sha256_passwd_maxPtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_saltbytes() {
-    return _crypto_pwhash_scryptsalsa208sha256_saltbytes();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_saltbytesPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_saltbytes');
-  late final _crypto_pwhash_scryptsalsa208sha256_saltbytes =
-      _crypto_pwhash_scryptsalsa208sha256_saltbytesPtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_strbytes() {
-    return _crypto_pwhash_scryptsalsa208sha256_strbytes();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_strbytesPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_strbytes');
-  late final _crypto_pwhash_scryptsalsa208sha256_strbytes =
-      _crypto_pwhash_scryptsalsa208sha256_strbytesPtr
-          .asFunction<int Function()>();
-
-  ffi.Pointer<ffi.Char> crypto_pwhash_scryptsalsa208sha256_strprefix() {
-    return _crypto_pwhash_scryptsalsa208sha256_strprefix();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_strprefixPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_strprefix');
-  late final _crypto_pwhash_scryptsalsa208sha256_strprefix =
-      _crypto_pwhash_scryptsalsa208sha256_strprefixPtr
-          .asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_opslimit_min() {
-    return _crypto_pwhash_scryptsalsa208sha256_opslimit_min();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_minPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_opslimit_min');
-  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_min =
-      _crypto_pwhash_scryptsalsa208sha256_opslimit_minPtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_opslimit_max() {
-    return _crypto_pwhash_scryptsalsa208sha256_opslimit_max();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_maxPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_opslimit_max');
-  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_max =
-      _crypto_pwhash_scryptsalsa208sha256_opslimit_maxPtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_memlimit_min() {
-    return _crypto_pwhash_scryptsalsa208sha256_memlimit_min();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_minPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_memlimit_min');
-  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_min =
-      _crypto_pwhash_scryptsalsa208sha256_memlimit_minPtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_memlimit_max() {
-    return _crypto_pwhash_scryptsalsa208sha256_memlimit_max();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_maxPtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_memlimit_max');
-  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_max =
-      _crypto_pwhash_scryptsalsa208sha256_memlimit_maxPtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_opslimit_interactive() {
-    return _crypto_pwhash_scryptsalsa208sha256_opslimit_interactive();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_interactivePtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_opslimit_interactive');
-  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_interactive =
-      _crypto_pwhash_scryptsalsa208sha256_opslimit_interactivePtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_memlimit_interactive() {
-    return _crypto_pwhash_scryptsalsa208sha256_memlimit_interactive();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_interactivePtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_memlimit_interactive');
-  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_interactive =
-      _crypto_pwhash_scryptsalsa208sha256_memlimit_interactivePtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive() {
-    return _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive');
-  late final _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitive =
-      _crypto_pwhash_scryptsalsa208sha256_opslimit_sensitivePtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive() {
-    return _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive();
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitivePtr =
-      _lookup<ffi.NativeFunction<ffi.Size Function()>>(
-          'crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive');
-  late final _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitive =
-      _crypto_pwhash_scryptsalsa208sha256_memlimit_sensitivePtr
-          .asFunction<int Function()>();
-
-  int crypto_pwhash_scryptsalsa208sha256(
-    ffi.Pointer<ffi.UnsignedChar> out,
-    int outlen,
-    ffi.Pointer<ffi.Char> passwd,
-    int passwdlen,
-    ffi.Pointer<ffi.UnsignedChar> salt,
-    int opslimit,
-    int memlimit,
-  ) {
-    return _crypto_pwhash_scryptsalsa208sha256(
-      out,
-      outlen,
-      passwd,
-      passwdlen,
-      salt,
-      opslimit,
-      memlimit,
-    );
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<ffi.UnsignedChar>,
-              ffi.UnsignedLongLong,
-              ffi.Pointer<ffi.Char>,
-              ffi.UnsignedLongLong,
-              ffi.Pointer<ffi.UnsignedChar>,
-              ffi.UnsignedLongLong,
-              ffi.Size)>>('crypto_pwhash_scryptsalsa208sha256');
-  late final _crypto_pwhash_scryptsalsa208sha256 =
-      _crypto_pwhash_scryptsalsa208sha256Ptr.asFunction<
-          int Function(
-              ffi.Pointer<ffi.UnsignedChar>,
-              int,
-              ffi.Pointer<ffi.Char>,
-              int,
-              ffi.Pointer<ffi.UnsignedChar>,
-              int,
-              int)>();
-
-  int crypto_pwhash_scryptsalsa208sha256_str(
-    ffi.Pointer<ffi.Char> out,
-    ffi.Pointer<ffi.Char> passwd,
-    int passwdlen,
-    int opslimit,
-    int memlimit,
-  ) {
-    return _crypto_pwhash_scryptsalsa208sha256_str(
-      out,
-      passwd,
-      passwdlen,
-      opslimit,
-      memlimit,
-    );
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_strPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<ffi.Char>,
-              ffi.Pointer<ffi.Char>,
-              ffi.UnsignedLongLong,
-              ffi.UnsignedLongLong,
-              ffi.Size)>>('crypto_pwhash_scryptsalsa208sha256_str');
-  late final _crypto_pwhash_scryptsalsa208sha256_str =
-      _crypto_pwhash_scryptsalsa208sha256_strPtr.asFunction<
-          int Function(
-              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int, int, int)>();
-
-  int crypto_pwhash_scryptsalsa208sha256_str_verify(
-    ffi.Pointer<ffi.Char> str,
-    ffi.Pointer<ffi.Char> passwd,
-    int passwdlen,
-  ) {
-    return _crypto_pwhash_scryptsalsa208sha256_str_verify(
-      str,
-      passwd,
-      passwdlen,
-    );
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_str_verifyPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
-                  ffi.UnsignedLongLong)>>(
-      'crypto_pwhash_scryptsalsa208sha256_str_verify');
-  late final _crypto_pwhash_scryptsalsa208sha256_str_verify =
-      _crypto_pwhash_scryptsalsa208sha256_str_verifyPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int)>();
-
-  int crypto_pwhash_scryptsalsa208sha256_ll(
-    ffi.Pointer<ffi.Uint8> passwd,
-    int passwdlen,
-    ffi.Pointer<ffi.Uint8> salt,
-    int saltlen,
-    int N,
-    int r,
-    int p,
-    ffi.Pointer<ffi.Uint8> buf,
-    int buflen,
-  ) {
-    return _crypto_pwhash_scryptsalsa208sha256_ll(
-      passwd,
-      passwdlen,
-      salt,
-      saltlen,
-      N,
-      r,
-      p,
-      buf,
-      buflen,
-    );
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_llPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Size,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Size,
-              ffi.Uint64,
-              ffi.Uint32,
-              ffi.Uint32,
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Size)>>('crypto_pwhash_scryptsalsa208sha256_ll');
-  late final _crypto_pwhash_scryptsalsa208sha256_ll =
-      _crypto_pwhash_scryptsalsa208sha256_llPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Uint8>, int,
-              int, int, int, ffi.Pointer<ffi.Uint8>, int)>();
-
-  int crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(
-    ffi.Pointer<ffi.Char> str,
-    int opslimit,
-    int memlimit,
-  ) {
-    return _crypto_pwhash_scryptsalsa208sha256_str_needs_rehash(
-      str,
-      opslimit,
-      memlimit,
-    );
-  }
-
-  late final _crypto_pwhash_scryptsalsa208sha256_str_needs_rehashPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Int Function(
-                  ffi.Pointer<ffi.Char>, ffi.UnsignedLongLong, ffi.Size)>>(
-      'crypto_pwhash_scryptsalsa208sha256_str_needs_rehash');
-  late final _crypto_pwhash_scryptsalsa208sha256_str_needs_rehash =
-      _crypto_pwhash_scryptsalsa208sha256_str_needs_rehashPtr
-          .asFunction<int Function(ffi.Pointer<ffi.Char>, int, int)>();
-
   int crypto_stream_salsa2012_keybytes() {
     return _crypto_stream_salsa2012_keybytes();
   }
@@ -11025,6 +11931,14 @@ final class crypto_generichash_blake2b_state extends ffi.Struct {
 
 typedef crypto_generichash_state = crypto_generichash_blake2b_state;
 
+final class crypto_kdf_hkdf_sha256_state extends ffi.Struct {
+  external crypto_auth_hmacsha256_state st;
+}
+
+final class crypto_kdf_hkdf_sha512_state extends ffi.Struct {
+  external crypto_auth_hmacsha512_state st;
+}
+
 final class crypto_onetimeauth_poly1305_state extends ffi.Struct {
   @ffi.Array.multi([256])
   external ffi.Array<ffi.UnsignedChar> opaque;
@@ -11070,11 +11984,31 @@ final class randombytes_implementation extends ffi.Struct {
 
 const int SODIUM_SIZE_MAX = -1;
 
-const String SODIUM_VERSION_STRING = '1.0.18';
+const String SODIUM_VERSION_STRING = '1.0.19';
 
-const int SODIUM_LIBRARY_VERSION_MAJOR = 10;
+const int SODIUM_LIBRARY_VERSION_MAJOR = 26;
 
-const int SODIUM_LIBRARY_VERSION_MINOR = 3;
+const int SODIUM_LIBRARY_VERSION_MINOR = 1;
+
+const int crypto_aead_aegis128l_KEYBYTES = 16;
+
+const int crypto_aead_aegis128l_NSECBYTES = 0;
+
+const int crypto_aead_aegis128l_NPUBBYTES = 16;
+
+const int crypto_aead_aegis128l_ABYTES = 32;
+
+const int crypto_aead_aegis128l_MESSAGEBYTES_MAX = 2305843009213693951;
+
+const int crypto_aead_aegis256_KEYBYTES = 32;
+
+const int crypto_aead_aegis256_NSECBYTES = 0;
+
+const int crypto_aead_aegis256_NPUBBYTES = 32;
+
+const int crypto_aead_aegis256_ABYTES = 32;
+
+const int crypto_aead_aegis256_MESSAGEBYTES_MAX = 2305843009213693951;
 
 const int crypto_aead_aes256gcm_KEYBYTES = 32;
 
@@ -11204,14 +12138,6 @@ const int crypto_box_ZEROBYTES = 32;
 
 const int crypto_box_BOXZEROBYTES = 16;
 
-const int crypto_core_hsalsa20_OUTPUTBYTES = 32;
-
-const int crypto_core_hsalsa20_INPUTBYTES = 16;
-
-const int crypto_core_hsalsa20_KEYBYTES = 32;
-
-const int crypto_core_hsalsa20_CONSTBYTES = 16;
-
 const int crypto_core_hchacha20_OUTPUTBYTES = 32;
 
 const int crypto_core_hchacha20_INPUTBYTES = 16;
@@ -11219,6 +12145,14 @@ const int crypto_core_hchacha20_INPUTBYTES = 16;
 const int crypto_core_hchacha20_KEYBYTES = 32;
 
 const int crypto_core_hchacha20_CONSTBYTES = 16;
+
+const int crypto_core_hsalsa20_OUTPUTBYTES = 32;
+
+const int crypto_core_hsalsa20_INPUTBYTES = 16;
+
+const int crypto_core_hsalsa20_KEYBYTES = 32;
+
+const int crypto_core_hsalsa20_CONSTBYTES = 16;
 
 const int crypto_core_salsa20_OUTPUTBYTES = 64;
 
@@ -11295,6 +12229,18 @@ const int crypto_kdf_CONTEXTBYTES = 8;
 const int crypto_kdf_KEYBYTES = 32;
 
 const String crypto_kdf_PRIMITIVE = 'blake2b';
+
+const int crypto_kdf_hkdf_sha256_KEYBYTES = 32;
+
+const int crypto_kdf_hkdf_sha256_BYTES_MIN = 0;
+
+const int crypto_kdf_hkdf_sha256_BYTES_MAX = 8160;
+
+const int crypto_kdf_hkdf_sha512_KEYBYTES = 64;
+
+const int crypto_kdf_hkdf_sha512_BYTES_MIN = 0;
+
+const int crypto_kdf_hkdf_sha512_BYTES_MAX = 16320;
 
 const int crypto_kx_PUBLICKEYBYTES = 32;
 
@@ -11608,22 +12554,6 @@ const int crypto_core_ristretto255_SCALARBYTES = 32;
 
 const int crypto_core_ristretto255_NONREDUCEDSCALARBYTES = 64;
 
-const int crypto_scalarmult_ed25519_BYTES = 32;
-
-const int crypto_scalarmult_ed25519_SCALARBYTES = 32;
-
-const int crypto_scalarmult_ristretto255_BYTES = 32;
-
-const int crypto_scalarmult_ristretto255_SCALARBYTES = 32;
-
-const int crypto_secretbox_xchacha20poly1305_KEYBYTES = 32;
-
-const int crypto_secretbox_xchacha20poly1305_NONCEBYTES = 24;
-
-const int crypto_secretbox_xchacha20poly1305_MACBYTES = 16;
-
-const int crypto_secretbox_xchacha20poly1305_MESSAGEBYTES_MAX = -17;
-
 const int crypto_pwhash_scryptsalsa208sha256_BYTES_MIN = 16;
 
 const int crypto_pwhash_scryptsalsa208sha256_BYTES_MAX = 137438953440;
@@ -11653,6 +12583,22 @@ const int crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_INTERACTIVE = 16777216;
 const int crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_SENSITIVE = 33554432;
 
 const int crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_SENSITIVE = 1073741824;
+
+const int crypto_scalarmult_ed25519_BYTES = 32;
+
+const int crypto_scalarmult_ed25519_SCALARBYTES = 32;
+
+const int crypto_scalarmult_ristretto255_BYTES = 32;
+
+const int crypto_scalarmult_ristretto255_SCALARBYTES = 32;
+
+const int crypto_secretbox_xchacha20poly1305_KEYBYTES = 32;
+
+const int crypto_secretbox_xchacha20poly1305_NONCEBYTES = 24;
+
+const int crypto_secretbox_xchacha20poly1305_MACBYTES = 16;
+
+const int crypto_secretbox_xchacha20poly1305_MESSAGEBYTES_MAX = -17;
 
 const int crypto_stream_salsa2012_KEYBYTES = 32;
 
