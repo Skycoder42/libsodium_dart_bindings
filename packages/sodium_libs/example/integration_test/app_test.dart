@@ -54,7 +54,7 @@ void main() {
     await tester.pumpAndSettle();
 
     ft.expect(
-      ft.find.text('Loaded libsodium with version 1.0.18'),
+      ft.find.text('Loaded libsodium with version 1.0.19'),
       ft.findsOneWidget,
     );
   });
