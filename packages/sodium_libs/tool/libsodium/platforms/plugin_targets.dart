@@ -1,6 +1,7 @@
 import '../../../libsodium_version.dart';
 import 'android_target.dart';
 import 'darwin_target.dart';
+import 'linux_target.dart';
 import 'plugin_target.dart';
 import 'windows_target.dart';
 
@@ -32,6 +33,10 @@ class PluginTargetGroup {
 abstract class PluginTargets {
   PluginTargets._();
 
+  // ignore: constant_identifier_names
+  static const linux_x86_64 = LinuxTarget(architecture: 'x86_64');
+  // ignore: constant_identifier_names
+  static const linux_aarch64 = LinuxTarget(architecture: 'aarch64');
   // ignore: constant_identifier_names
   static const android_arm64_v8a = AndroidTarget(
     architecture: 'arm64-v8a',
@@ -106,14 +111,25 @@ abstract class PluginTargets {
     windows,
   ];
 
+  static const _linuxTargets = [
+    linux_x86_64,
+    linux_aarch64,
+  ];
+
   static const allTargets = [
     ..._androidTargets,
     ..._iosTargets,
     ..._macosTargets,
     ..._windowsTargets,
+    ..._linuxTargets,
   ];
 
   static const targetGroups = [
+    PluginTargetGroup(
+      'linux',
+      'lib',
+      _linuxTargets,
+    ),
     PluginTargetGroup(
       'android',
       'src/main/jniLibs',

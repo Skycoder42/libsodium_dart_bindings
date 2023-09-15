@@ -39,6 +39,9 @@ jobs:
       fail-fast: false
       matrix:
         platform:
+          - linux_aarch64
+          - linux_x86_64
+          - android_arm64-v8a
           - android_arm64-v8a
           - android_armeabi-v7a
           - android_x86_64
