@@ -17,7 +17,7 @@ class SodiumTestCase extends TestCase {
     test('reports correct version', (sodium) {
       final version = sodium.version;
 
-      expect(version.major, 16);
+      expect(version.major, 26);
       expect(version.minor, greaterThanOrEqualTo(1));
     });
 
