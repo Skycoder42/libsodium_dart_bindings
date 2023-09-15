@@ -22,6 +22,9 @@ const libsodium_version = _Version(
   js: '0.7.13',
 );
 
+const libsodiumSigningKey =
+    'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3';
+
 void main() {
   stdout.writeln(json.encode(libsodium_version));
 }

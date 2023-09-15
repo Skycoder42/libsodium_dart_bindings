@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:dart_test_tools/tools.dart';
 
-import '../../../tool/util.dart' as util;
 import '../../sodium_libs/libsodium_version.dart' show libsodium_version;
 
 const _defaultOutDir = 'test/integration/binaries/js';
@@ -67,7 +67,7 @@ Future<void> _cloneTo({
 }) async {
   stdout
       .writeln('> Cloning jedisct1/libsodium.js@$version to ${targetDir.path}');
-  await util.run(
+  await Github.exec(
     'git',
     [
       'clone',
@@ -90,8 +90,7 @@ Future<void> _createJsSrc({
 }) async {
   final sodiumJsFile = File.fromUri(
     tmpDir.uri.resolve('dist/$moduleName/sodium.js'),
-  );
-  await sodiumJsFile.assertExists();
+  )..assertExists();
 
   final jsTestDir = Directory(outDir);
   await jsTestDir.create(recursive: true);

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import '../../../../../tool/util.dart';
-import '../github/github_logger.dart';
+import 'package:dart_test_tools/tools.dart';
+
 import 'plugin_target.dart';
 
 class WindowsTarget extends PluginTarget {
@@ -43,7 +43,7 @@ class WindowsTarget extends PluginTarget {
           final target =
               artifactDir.subDir(config).subDir(msvcVersion).subFile(file);
 
-          GithubLogger.logInfo('Installing ${target.path}');
+          Github.logInfo('Installing ${target.path}');
           await target.parent.create(recursive: true);
           await source.rename(target.path);
         }

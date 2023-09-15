@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:dart_test_tools/tools.dart';
 
-import '../../../tool/util.dart' as util;
-import '../../sodium_libs/libsodium_version.dart' show libsodium_version;
+import '../../sodium_libs/libsodium_version.dart';
 
 const _defaultOutDir = 'test/integration/binaries/win';
 const _defaultArch = 'x64';
@@ -72,16 +72,14 @@ Future<void> _run({
     final archive = await httpClient.download(
       tmpDir,
       baseUri,
-      withSignature: true,
     );
-    await util.verify(archive);
-    await util.extract(archive: archive, outDir: tmpDir);
+    await Minisign.verify(archive, libsodiumSigningKey);
+    await Archive.extract(archive: archive, outDir: tmpDir);
 
     final libsodiumDll = File.fromUri(
       tmpDir.uri
           .resolve('libsodium/$arch/$mode/$vsVersion/dynamic/libsodium.dll'),
-    );
-    await libsodiumDll.assertExists();
+    )..assertExists();
 
     final winTestDir = Directory(outDir);
     await winTestDir.create(recursive: true);

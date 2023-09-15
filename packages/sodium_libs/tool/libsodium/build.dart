@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import '../../../../tool/util.dart';
-import 'github/github_env.dart';
-import 'github/github_logger.dart';
+import 'package:dart_test_tools/tools.dart';
+
+import '../../libsodium_version.dart';
 import 'platforms/plugin_target.dart';
 import 'platforms/plugin_targets.dart';
 
-Future<void> main(List<String> args) => GithubLogger.runZoned(() async {
+Future<void> main(List<String> args) => Github.runZoned(() async {
       final platform = PluginTargets.fromName(args.first);
 
-      final tmpDir = await GithubEnv.runnerTemp.createTemp();
+      final tmpDir = await Github.env.runnerTemp.createTemp();
       try {
         await _getArchive(tmpDir, platform.downloadUrl);
         await _build(platform, tmpDir);
@@ -20,10 +20,10 @@ Future<void> main(List<String> args) => GithubLogger.runZoned(() async {
     });
 
 Future<void> _build(PluginTarget platform, Directory tmpDir) =>
-    GithubLogger.logGroupAsync(
+    Github.logGroupAsync(
       'Build libsodium-${platform.name} artifact',
       () async {
-        final artifactDir = await GithubEnv.runnerTemp
+        final artifactDir = await Github.env.runnerTemp
             .subDir('libsodium-${platform.name}')
             .create();
 
@@ -38,7 +38,7 @@ Future<void> _getArchive(
   Directory downloadDir,
   Uri downloadUrl,
 ) =>
-    GithubLogger.logGroupAsync(
+    Github.logGroupAsync(
       'Download, verify and extract $downloadUrl',
       () async {
         final httpClient = HttpClient();
@@ -46,10 +46,9 @@ Future<void> _getArchive(
           final archive = await httpClient.download(
             downloadDir,
             downloadUrl,
-            withSignature: true,
           );
-          await verify(archive);
-          await extract(archive: archive, outDir: downloadDir);
+          await Minisign.verify(archive, libsodiumSigningKey);
+          await Archive.extract(archive: archive, outDir: downloadDir);
         } finally {
           httpClient.close(force: true);
         }

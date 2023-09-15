@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import '../../../../../tool/util.dart';
-import '../github/github_logger.dart';
+import 'package:dart_test_tools/tools.dart';
+
 import 'plugin_target.dart';
 
 enum DarwinPlatform {
@@ -56,7 +56,7 @@ class DarwinTarget extends PluginTarget {
 
     final environment = await _createBuildEnvironment();
 
-    await run(
+    await Github.exec(
       './configure',
       [
         '--host=$buildTarget',
@@ -66,7 +66,7 @@ class DarwinTarget extends PluginTarget {
       environment: environment,
     );
 
-    await run(
+    await Github.exec(
       'make',
       [
         '-j${Platform.numberOfProcessors}',
@@ -81,7 +81,9 @@ class DarwinTarget extends PluginTarget {
 
   Future<Map<String, String>> _createBuildEnvironment() async {
     // path
-    final xcodeDir = Directory(await _invoke('xcode-select', const ['-p']));
+    final xcodeDir = Directory(
+      await Github.execLines('xcode-select', const ['-p']).single,
+    );
     final baseDir = xcodeDir
         .subDir('Platforms')
         .subDir('${platform.sdk}.platform')
@@ -127,16 +129,8 @@ class DarwinTarget extends PluginTarget {
     );
     final target = artifactDir.subFile('libsodium.${platform.librarySuffix}');
 
-    GithubLogger.logInfo('Installing ${target.path}');
+    Github.logInfo('Installing ${target.path}');
     await target.parent.create(recursive: true);
     await source.rename(target.path);
-  }
-
-  Future<String> _invoke(String executable, List<String> arguments) async {
-    final processResult = await Process.run(executable, arguments);
-    if (processResult.exitCode != 0) {
-      throw ChildErrorException(exitCode);
-    }
-    return (processResult.stdout as String).trimRight();
   }
 }

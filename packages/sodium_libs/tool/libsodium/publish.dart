@@ -1,18 +1,17 @@
 import 'dart:io';
 
-import '../../../../tool/util.dart';
-import 'github/github_env.dart';
-import 'github/github_logger.dart';
+import 'package:dart_test_tools/tools.dart';
+
 import 'platforms/darwin_target.dart';
 import 'platforms/plugin_target.dart';
 import 'platforms/plugin_targets.dart';
 
 Future<void> main(List<String> args) async {
-  final workspaceDir = GithubEnv.githubWorkspace;
+  final workspaceDir = Github.env.githubWorkspace;
   final artifactsDir = workspaceDir.subDir('artifacts');
   final archivesDir = workspaceDir.subDir('archive');
   final publishDir = workspaceDir.subDir('publish');
-  final secretKey = GithubEnv.runnerTemp.subFile('minisign.key');
+  final secretKey = Github.env.runnerTemp.subFile('minisign.key');
 
   await _createArchive(
     artifactsDir: artifactsDir,
@@ -58,12 +57,12 @@ Future<void> _mergeArtifacts(
   Directory artifactsDir,
   Directory archiveDir,
 ) =>
-    GithubLogger.logGroupAsync(
+    Github.logGroupAsync(
       'Creating archive for ${group.name} by merging artifacts',
       () async {
         for (final target in group.targets) {
           final artifactDir = artifactsDir.subDir('libsodium-${target.name}');
-          await run('rsync', [
+          await Github.exec('rsync', [
             '-av',
             '${artifactDir.path}/',
             '${archiveDir.path}/',
@@ -77,7 +76,7 @@ Future<void> _createLipoLibrary({
   required Directory artifactsDir,
   required Directory archiveDir,
 }) =>
-    GithubLogger.logGroupAsync(
+    Github.logGroupAsync(
       'Creating combined lipo library for ${group.name}',
       () async {
         final libsodiumDylib = archiveDir.subFile('libsodium.dylib');
@@ -87,7 +86,7 @@ Future<void> _createLipoLibrary({
           targets: group.targets,
         );
 
-        await run('install_name_tool', [
+        await Github.exec('install_name_tool', [
           '-id',
           '@rpath/libsodium.dylib',
           libsodiumDylib.path,
@@ -100,7 +99,7 @@ Future<void> _createXcframework({
   required Directory artifactsDir,
   required Directory archiveDir,
 }) =>
-    GithubLogger.logGroupAsync(
+    Github.logGroupAsync(
       'Creating combined xcframework for ${group.name}',
       () async {
         final platforms = <DarwinPlatform, List<DarwinTarget>>{};
@@ -108,7 +107,7 @@ Future<void> _createXcframework({
           (platforms[target.platform] ??= []).add(target);
         }
 
-        final lipoDir = await GithubEnv.runnerTemp.createTemp();
+        final lipoDir = await Github.env.runnerTemp.createTemp();
         try {
           // create lipo Archives
           for (final entry in platforms.entries) {
@@ -121,7 +120,7 @@ Future<void> _createXcframework({
 
           // create xcframework
           final xcFramework = archiveDir.subDir('libsodium.xcframework');
-          await run('xcodebuild', [
+          await Github.exec('xcodebuild', [
             '-create-xcframework',
             for (final platform in platforms.keys) ...[
               '-library',
@@ -144,7 +143,7 @@ Future<void> _createLipoLibraryImpl({
   final outTargetName = outTarget.uri.pathSegments.last;
 
   await outTarget.parent.create(recursive: true);
-  await run('lipo', [
+  await Github.exec('lipo', [
     '-create',
     ...targets.map(
       (target) => artifactsDir
@@ -162,7 +161,7 @@ Future<void> _archiveAndSignArtifacts({
   required Directory archivesDir,
   required File secretKey,
 }) =>
-    GithubLogger.logGroupAsync(
+    Github.logGroupAsync(
       'Creating and signing archives.',
       () async {
         await publishDir.create();
@@ -171,8 +170,8 @@ Future<void> _archiveAndSignArtifacts({
           final archiveDir = archivesDir.subDir(targetGroup.name);
           final archive = publishDir.subFile(targetGroup.artifactName);
 
-          await compress(inDir: archiveDir, archive: archive);
-          await sign(archive, secretKey);
+          await Archive.compress(inDir: archiveDir, archive: archive);
+          await Minisign.sign(archive, secretKey);
         }
       },
     );

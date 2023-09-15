@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import '../../../../tool/util.dart';
-import 'github/github_logger.dart';
+import 'package:dart_test_tools/tools.dart';
+
 import 'platforms/plugin_targets.dart';
 
 const _libsodiumDartBindingsPublicKey =
     'RWQV/WsoL5F1nbrM9y7gJtszibGirYi+hNUI4P3orTZD8dZBCsBd7D/h';
 
-Future<void> main(List<String> args) => GithubLogger.runZoned(() async {
+Future<void> main(List<String> args) => Github.runZoned(() async {
       final targetGroups = args.isNotEmpty
           ? args.map(PluginTargets.groupFromName)
           : PluginTargets.targetGroups;
@@ -18,7 +18,7 @@ Future<void> main(List<String> args) => GithubLogger.runZoned(() async {
     });
 
 Future<void> _downloadTarget(PluginTargetGroup targetGroup) =>
-    GithubLogger.logGroupAsync(
+    Github.logGroupAsync(
       'Downloading libsodium binaries for ${targetGroup.name}',
       () async {
         final client = HttpClient();
@@ -27,17 +27,16 @@ Future<void> _downloadTarget(PluginTargetGroup targetGroup) =>
           final archive = await client.download(
             tmpDir,
             targetGroup.downloadUrl,
-            withSignature: true,
           );
 
-          await verify(archive, _libsodiumDartBindingsPublicKey);
+          await Minisign.verify(archive, _libsodiumDartBindingsPublicKey);
 
           final subDir = Directory.current
               .subDir(targetGroup.name)
               .subDir(targetGroup.binaryDir);
           await subDir.create(recursive: true);
 
-          await extract(
+          await Archive.extract(
             archive: archive,
             outDir: subDir,
           );

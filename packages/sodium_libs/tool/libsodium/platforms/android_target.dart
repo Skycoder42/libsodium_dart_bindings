@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import '../../../../../tool/util.dart';
-import '../github/github_logger.dart';
+import 'package:dart_test_tools/tools.dart';
+
 import 'plugin_target.dart';
 
 class AndroidTarget extends PluginTarget {
@@ -29,7 +29,7 @@ class AndroidTarget extends PluginTarget {
     required Directory artifactDir,
   }) async {
     final buildDir = extractDir.subDir('libsodium-stable');
-    await run(
+    await Github.exec(
       './dist-build/android-$_buildTarget.sh',
       const [],
       workingDirectory: buildDir,
@@ -44,7 +44,7 @@ class AndroidTarget extends PluginTarget {
         .subFile('libsodium.so');
     final target = artifactDir.subDir(_architecture).subFile('libsodium.so');
 
-    GithubLogger.logInfo('Installing ${target.path}');
+    Github.logInfo('Installing ${target.path}');
     await target.parent.create(recursive: true);
     await source.rename(target.path);
   }
