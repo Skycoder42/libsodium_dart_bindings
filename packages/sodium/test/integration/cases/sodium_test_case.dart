@@ -17,8 +17,8 @@ class SodiumTestCase extends TestCase {
     test('reports correct version', (sodium) {
       final version = sodium.version;
 
-      expect(version.major, 10);
-      expect(version.minor, greaterThanOrEqualTo(3));
+      expect(version.major, 16);
+      expect(version.minor, greaterThanOrEqualTo(1));
     });
 
     group('pad adds expected padding and unpad removes it', () {
