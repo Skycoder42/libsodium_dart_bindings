@@ -25,6 +25,9 @@ jobs:
         uses: dart-lang/setup-dart@v1
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - name: Install dart dependencies
+        run: dart pub get
+        working-directory: packages/sodium_libs
       - id: check
         name: Check if upstream stable archives have been update
         run: dart run tool/libsodium/detect_modified.dart
@@ -46,23 +49,17 @@ jobs:
           - android_armeabi-v7a
           - android_x86_64
           - android_x86
-          - ios_arm64
-          - ios_simulator_arm64
-          - ios_simulator_x86_64
-          - macos_arm64
-          - macos_x86_64
+          - ios
+          - ios_simulator
+          - macos
           - windows
 
         include:
-          - platform: ios_arm64
+          - platform: ios
             runs-on: macos-latest
-          - platform: ios_simulator_arm64
+          - platform: ios_simulator
             runs-on: macos-latest
-          - platform: ios_simulator_x86_64
-            runs-on: macos-latest
-          - platform: macos_arm64
-            runs-on: macos-latest
-          - platform: macos_x86_64
+          - platform: macos
             runs-on: macos-latest
     runs-on: ${{ matrix.runs-on || 'ubuntu-latest' }}
     steps:
