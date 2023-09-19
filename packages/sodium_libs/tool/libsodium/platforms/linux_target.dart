@@ -25,7 +25,7 @@ class LinuxTarget extends PluginTarget {
     final buildDir = extractDir.subDir('libsodium-stable');
 
     await Github.exec(
-      '/home/vscode/zig/zig',
+      'zig',
       [
         'build',
         '-Doptimize=ReleaseFast',
