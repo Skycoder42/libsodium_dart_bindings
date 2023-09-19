@@ -6,7 +6,8 @@ import 'package:dart_test_tools/tools.dart';
 import 'plugin_target.dart';
 
 class LinuxTarget extends PluginTarget {
-  static const _zigPublicKey = 'RWSGOq2NVecA2UPNdBUZykf1CCb147pkmdtYxgb3Ti';
+  static const _zigPublicKey =
+      'RWSGOq2NVecA2UPNdBUZykf1CCb147pkmdtYxgb3Ti+JO/wCYvhbAb/U';
 
   final String _architecture;
 
