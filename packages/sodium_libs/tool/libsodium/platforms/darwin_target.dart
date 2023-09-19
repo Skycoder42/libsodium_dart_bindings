@@ -41,7 +41,7 @@ class DarwinTarget extends PluginTarget {
         .followedBy([
       r'mkdir -p "${PREFIX}/tmp"',
       'echo "Building for $name..."',
-      'build_$platform || exit 1',
+      'yes | build_$platform || exit 1',
     ]);
     await buildScriptFile.writeAsString(modifiedLines.join('\n'), flush: true);
   }

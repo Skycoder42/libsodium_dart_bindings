@@ -72,7 +72,9 @@ class LinuxTarget extends PluginTarget {
       await Minisign.verify(zig, _zigPublicKey);
       await Archive.extract(archive: zig, outDir: zigDir);
 
-      return zigDir.subFile('zig').path;
+      final zigTarballName = Uri.file(zigTarball).pathSegments.last;
+      final zigDirName = zigTarballName.substring(0, zigTarballName.length - 7);
+      return zigDir.subDir(zigDirName).subFile('zig').path;
     } finally {
       client.close();
       await tmpDir.delete(recursive: true);
