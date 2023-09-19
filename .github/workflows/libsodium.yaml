@@ -2,6 +2,12 @@ name: Compile native libsodium binaries
 
 on:
   workflow_dispatch:
+    inputs:
+      force-rebuild:
+        type: boolean
+        description: Force a rebuild
+        required: false
+        default: false
   push:
     branches:
       - main
@@ -21,8 +27,10 @@ jobs:
       version: ${{ steps.check.outputs.version }}
       last-modified-content: ${{ steps.check.outputs.last-modified-content }}
     steps:
-      - name: Install Dart-SDK (stable)
-        uses: dart-lang/setup-dart@v1
+      - name: Install Flutter-SDK (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Install dart dependencies
@@ -37,7 +45,7 @@ jobs:
     name: Update binaries if required
     needs:
       - detect_modified
-    if: needs.detect_modified.outputs.modified == 'true'
+    if: needs.detect_modified.outputs.modified == 'true' || inputs.force-rebuild
     strategy:
       fail-fast: false
       matrix:
@@ -63,8 +71,10 @@ jobs:
             runs-on: macos-latest
     runs-on: ${{ matrix.runs-on || 'ubuntu-latest' }}
     steps:
-      - name: Install Dart-SDK (stable)
-        uses: dart-lang/setup-dart@v1
+      - name: Install Flutter-SDK (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Install minisign
@@ -88,13 +98,15 @@ jobs:
     needs:
       - detect_modified
       - build
-    if: needs.detect_modified.outputs.modified == 'true'
+    if: needs.detect_modified.outputs.modified == 'true' || inputs.force-rebuild
     runs-on: macos-latest # needed for lipo
     permissions:
       contents: write
     steps:
-      - name: Install Dart-SDK (stable)
-        uses: dart-lang/setup-dart@v1
+      - name: Install Flutter-SDK (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Install minisign
@@ -135,8 +147,10 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Install Dart-SDK (stable)
-        uses: dart-lang/setup-dart@v1
+      - name: Install Flutter-SDK (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
       - name: Install cider
         run: dart pub global activate cider
       - name: Checkout Repository
