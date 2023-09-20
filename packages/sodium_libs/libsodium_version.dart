@@ -22,6 +22,7 @@ const libsodium_version = _Version(
   js: '0.7.13',
 );
 
+// ignore: unreachable_from_main
 const libsodiumSigningKey =
     'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3';
 

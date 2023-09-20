@@ -37,7 +37,7 @@ class LinuxTarget extends PluginTarget {
         '-Doptimize=ReleaseFast',
         '-Dtarget=$_architecture-linux',
         '-Dstatic=false',
-        '-Dtests=false',
+        '-Dtest=false',
       ],
       workingDirectory: buildDir,
     );

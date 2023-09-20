@@ -5,7 +5,7 @@ import 'linux_target.dart';
 import 'plugin_target.dart';
 import 'windows_target.dart';
 
-enum PublishKind { rsync, xcFramework }
+enum PublishKind { rsync, lipo, xcFramework }
 
 class PluginTargetGroup {
   final String name;
@@ -59,20 +59,33 @@ abstract class PluginTargets {
     installTarget: 'i686',
   );
   static const ios = DarwinTarget(
-    platform: 'ios',
-    architectures: ['ios64'],
-    libraryType: 'a',
+    platform: DarwinPlatform.ios,
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin10',
   );
   // ignore: constant_identifier_names
-  static const ios_simulator = DarwinTarget(
-    platform: 'ios_simulator',
-    architectures: ['ios-simulator-arm64', 'ios-simulator-x86_64'],
-    libraryType: 'a',
+  static const ios_simulator_arm64 = DarwinTarget(
+    platform: DarwinPlatform.ios_simulator,
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin23',
   );
-  static const macos = DarwinTarget(
-    platform: 'macos',
-    architectures: ['macos-arm64', 'macos-x86_64'],
-    libraryType: 'dylib',
+  // ignore: constant_identifier_names
+  static const ios_simulator_x86_64 = DarwinTarget(
+    platform: DarwinPlatform.ios_simulator,
+    architecture: 'x86_64',
+    buildTarget: 'x86_64-apple-darwin10',
+  );
+  // ignore: constant_identifier_names
+  static const macos_arm64 = DarwinTarget(
+    platform: DarwinPlatform.macos,
+    architecture: 'arm64',
+    buildTarget: 'arm-apple-darwin23',
+  );
+  // ignore: constant_identifier_names
+  static const macos_x86_64 = DarwinTarget(
+    platform: DarwinPlatform.macos,
+    architecture: 'x86_64',
+    buildTarget: 'x86_64-apple-darwin10',
   );
   static const windows = WindowsTarget();
 
@@ -85,11 +98,13 @@ abstract class PluginTargets {
 
   static const _iosTargets = [
     ios,
-    ios_simulator,
+    ios_simulator_arm64,
+    ios_simulator_x86_64,
   ];
 
   static const _macosTargets = [
-    macos,
+    macos_arm64,
+    macos_x86_64,
   ];
 
   static const _windowsTargets = [
@@ -130,6 +145,7 @@ abstract class PluginTargets {
       'macos',
       'Libraries',
       _macosTargets,
+      publishKind: PublishKind.lipo,
     ),
     PluginTargetGroup(
       'windows',
