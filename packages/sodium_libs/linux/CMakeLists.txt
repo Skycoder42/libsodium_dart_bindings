@@ -11,14 +11,23 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed.
 set(PLUGIN_NAME "sodium_libs_plugin")
 
+# add libsodium dependency
+if(DEFINED ENV{LIBSODIUM_USE_PKGCONFIG})
+  find_package(PkgConfig)
+  pkg_check_modules(SODIUM REQUIRED IMPORTED_TARGET libsodium)
+else()
+  add_library(sodium SHARED IMPORTED)
+  set_target_properties(sodium PROPERTIES
+    IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/${CMAKE_SYSTEM_PROCESSOR}/libsodium.so")
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
+  set(CMAKE_INSTALL_RPATH $ORIGIN)
+endif()
+
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
   "sodium_libs_plugin.cc"
 )
-
-# locale libsodium
-find_package(PkgConfig)
-pkg_check_modules(SODIUM REQUIRED IMPORTED_TARGET libsodium)
 
 # Define the plugin library target. Its name must not be changed (see comment
 # on PLUGIN_NAME above).
@@ -44,12 +53,23 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
 target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
-target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::SODIUM)
+if(DEFINED ENV{LIBETEBASE_USE_PKGCONFIG})
+  target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::SODIUM)
+else()
+  target_link_libraries(${PLUGIN_NAME} PRIVATE sodium)
+endif()
 
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
-set(sodium_libs_bundled_libraries
-  ""
-  PARENT_SCOPE
-)
+if(DEFINED ENV{LIBETEBASE_USE_PKGCONFIG})
+  set(sodium_libs_bundled_libraries
+    ""
+    PARENT_SCOPE
+  )
+else()
+  set(sodium_libs_bundled_libraries
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/${CMAKE_SYSTEM_PROCESSOR}/libsodium.so"
+    PARENT_SCOPE
+  )
+endif()
