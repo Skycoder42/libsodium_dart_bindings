@@ -50,8 +50,8 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - linux_aarch64
           - linux_x86_64
+          - linux_aarch64
           - android_arm64-v8a
           - android_armeabi-v7a
           - android_x86_64
@@ -64,6 +64,8 @@ jobs:
           - windows
 
         include:
+          - platform: linux_aarch64
+            install: gcc-aarch64-linux-gnu
           - platform: ios_arm64
             runs-on: macos-latest
           - platform: ios_simulator_arm64
@@ -80,6 +82,9 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           cache: true
+      - name: Install extra tools
+        if: runner.os == 'Linux' && matrix.install
+        run: sudo apt update && sudo apt install -y ${{ matrix.install }}
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Install minisign
