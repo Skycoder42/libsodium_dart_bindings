@@ -6,6 +6,9 @@ import '../../libsodium_version.dart';
 import 'platforms/plugin_targets.dart';
 
 Future<void> main() => Github.runZoned(() async {
+      // always set version, in case of a forced build
+      await Github.env.setOutput('version', libsodium_version.ffi);
+
       final downloadUrls =
           PluginTargets.allTargets.map((t) => t.downloadUrl).toSet();
 
@@ -42,7 +45,6 @@ Future<void> main() => Github.runZoned(() async {
         'At least one upstream archive has been modified!',
       );
       await Github.env.setOutput('modified', true);
-      await Github.env.setOutput('version', libsodium_version.ffi);
       await Github.env.setOutput(
         'last-modified-content',
         newLastModified,
