@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
@@ -6,9 +5,6 @@ import 'package:dart_test_tools/tools.dart';
 import 'plugin_target.dart';
 
 class LinuxTarget extends PluginTarget {
-  static const _zigPublicKey =
-      'RWSGOq2NVecA2UPNdBUZykf1CCb147pkmdtYxgb3Ti+JO/wCYvhbAb/U';
-
   final String _architecture;
 
   const LinuxTarget({
@@ -26,58 +22,60 @@ class LinuxTarget extends PluginTarget {
     required Directory extractDir,
     required Directory artifactDir,
   }) async {
-    final zigPath = await _installZig();
-
     final buildDir = extractDir.subDir('libsodium-stable');
+    final prefixDir = buildDir.subDir('build');
+
+    final environment = await _createBuildEnvironment();
 
     await Github.exec(
-      zigPath,
+      './configure',
       [
-        'build',
-        '-Doptimize=ReleaseFast',
-        '-Dtarget=$_architecture-linux',
-        '-Dstatic=false',
-        '-Dtest=false',
+        '--enable-shared=yes',
+        '--host=$_architecture-unknown-linux-gnu',
+        '--prefix=${prefixDir.path}',
       ],
       workingDirectory: buildDir,
+      environment: environment,
     );
 
-    final source =
-        buildDir.subDir('zig-out').subDir('lib').subFile('libsodium.so');
-    final target = artifactDir.subDir(_architecture).subFile('libsodium.so');
+    await Github.exec(
+      'make',
+      [
+        '-j${Platform.numberOfProcessors}',
+        'install',
+      ],
+      workingDirectory: buildDir,
+      environment: environment,
+    );
+
+    await _installLibrary(prefixDir, artifactDir);
+  }
+
+  Future<Map<String, String>> _createBuildEnvironment() async {
+    // compiler flags
+    final cFlags = ['-Os'];
+
+    // environment
+    return {
+      'CFLAGS': cFlags.join(' '),
+      'CC': '$_architecture-linux-gnu-gcc',
+    };
+  }
+
+  Future<void> _installLibrary(
+    Directory prefixDir,
+    Directory artifactDir,
+  ) async {
+    final source = File(
+      await prefixDir
+          .subDir('lib')
+          .subFile('libsodium.so')
+          .resolveSymbolicLinks(),
+    );
+    final target = artifactDir.subFile('libsodium.so');
 
     Github.logInfo('Installing ${target.path}');
     await target.parent.create(recursive: true);
     await source.rename(target.path);
-  }
-
-  Future<String> _installZig() async {
-    final tmpDir = await Github.env.runnerTemp.createTemp();
-    final zigDir = await Github.env.runnerTemp.subDir('zig').create();
-    final client = HttpClient();
-    try {
-      final zigIndexRequest = await client
-          .getUrl(Uri.parse('https://ziglang.org/download/index.json'));
-      final zigIndexResponse = await zigIndexRequest.close();
-      final zigTarball = await zigIndexResponse
-          .transform(utf8.decoder)
-          .transform(json.decoder)
-          .cast<Map>()
-          .map((map) => map.entries.skip(1).first.value as Map)
-          .map((map) => map['x86_64-linux'] as Map)
-          .map((map) => map['tarball'] as String)
-          .single;
-
-      final zig = await client.download(tmpDir, Uri.parse(zigTarball));
-      await Minisign.verify(zig, _zigPublicKey);
-      await Archive.extract(archive: zig, outDir: zigDir);
-
-      final zigTarballName = Uri.file(zigTarball).pathSegments.last;
-      final zigDirName = zigTarballName.substring(0, zigTarballName.length - 7);
-      return zigDir.subDir(zigDirName).subFile('zig').path;
-    } finally {
-      client.close();
-      await tmpDir.delete(recursive: true);
-    }
   }
 }
