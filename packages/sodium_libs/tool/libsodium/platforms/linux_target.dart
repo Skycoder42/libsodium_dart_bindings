@@ -74,6 +74,12 @@ class LinuxTarget extends PluginTarget {
     );
     final target = artifactDir.subDir(_architecture).subFile('libsodium.so');
 
+    await Github.exec('patchelf', [
+      '--set-soname',
+      'libsodium.so',
+      source.path,
+    ]);
+
     Github.logInfo('Installing ${target.path}');
     await target.parent.create(recursive: true);
     await source.rename(target.path);
