@@ -29,46 +29,10 @@ APIs.
 ## Installation
 Simply add `sodium_libs` to your `pubspec.yaml` and run `pub get` (or `flutter pub get`).
 
-In addition to installing the package, you will also have to install operating system specific tools for some platforms.
-
-### iOS
-Currently, there is a [Bug in the upstream Swift-Sodium package](https://github.com/jedisct1/swift-sodium/issues/251)
-that prevents the library from being run on an iOs simulator with XCode 12 or higher. As a temporary workaround, you
-have to add the following snippet to your `Podfile` in order to make it work. This will overwrite the required settings
-in the dependencies until fixed upstream:
-
-```Podfile
-post_install do |installer|
-  # You might already have code here. Keep that as is
-
-  # Workaround for https://github.com/jedisct1/swift-sodium/issues/251
-  installer.pods_project.build_configurations.each do |config|
-    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-  end
-end
-```
-
-### Linux
-You have to install [libsodium](https://github.com/jedisct1/libsodium) on your system. How you do this depends on your
-distribution:
-- Arch/Manjaro: `[sudo] pacman -S libsodium`
-- Ubuntu/Debian: `[sudo] apt install libsodium-dev`
-- ...
-
-When bundeling the application for release, remember to also include the `libsodium.so` into the deployment package.
-
-### Windows
-Since the plugin downloads the binaries at build time, it needs [minisign](https://jedisct1.github.io/minisign/) to
-validate their integrity. The easiest way to install minisign is via [Chocolatey](https://chocolatey.org/install):
-
-```ps1
-choco install minisign
-```
-
 ### Web
-The web setup differs slightly from the others. Instead of just installing some system library or tool, you need to add
-[`sodium.js`](https://github.com/jedisct1/libsodium.js) to each project. You can do this automatically by running the
-following command in every new project.
+When working with flutter for web, an additional install step is needed, as for web, the JS-library cannot directly be
+bundled with the library. For it to work, [`sodium.js`](https://github.com/jedisct1/libsodium.js) must be added to the
+project. You can do this automatically by running the following command in every new project.
 
 ```.sh
 flutter pub run sodium_libs:update_web [--sumo] [--no-edit-index] [<target_directory>]
@@ -85,6 +49,20 @@ parameter.
 
 Finally, if your web project files are for whatever reason not located in the `web` directory, you can set a custom
 directory.
+
+### Linux
+When working with linux, you can **optionally** decide to use `pkg-config` for resolving libsodium instead of using the
+bundled library. This will cause the linux build to link against the system library instead of the embedded one,
+providing it is installed.
+
+To enable this mode, simply set the `LIBSODIUM_USE_PKGCONFIG` environment variable to anything but an empty value
+before compiling. Example:
+
+```bash
+export LIBSODIUM_USE_PKGCONFIG=1
+flutter clean # recommended to ensure no build artifacts are cached
+flutter build linux
+```
 
 ## Usage
 The API can be consumed in the exact same way as the `sodium` package. The only difference is, that `sodium_libs`

@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2023-09-23
+### Added
+- Added embedded binaries for linux
+  - Optional, pkgconfig build is still supported, but not the default anymore
+  - Currently, `x86_64` and `aarch64` are supported
+
+### Changed
+- Update embedded libsodium to version 1.0.19
+- Update dependencies
+- Update min sodium version to 2.3.0
+- Update tooling for building libsodium in the CI
+
 ## [2.1.2+2] - 2023-09-19
 ### Changed
 - Update embedded libsodium binaries
@@ -182,6 +194,7 @@ the page
 ### Added
 - Initial stable release
 
+[2.2.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.1.2+2...sodium_libs-v2.2.0
 [2.1.2+2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.1.2+1...sodium_libs-v2.1.2+2
 [2.1.2+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.1.2...sodium_libs-v2.1.2+1
 [2.1.2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.1.1+3...sodium_libs-v2.1.2
