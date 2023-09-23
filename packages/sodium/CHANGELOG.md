@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2023-09-23
+### Changed
+- Update supported libsodium version to 1.0.19
+  - The library will still work with older versions, but it is recommended to upgrade your binaries to 1.0.19
+  - Any modifications to the API in future versions may not be compatible with older versions of libsodium
+- Update dependencies
+- Update tooling for building libsodium in the CI
+
 ## [2.2.0] - 2023-09-12
 ### Added
 - Add implementation for `crypto_aead_chacha20poly1305` as `sodium.crypto.aeadChaCha20Poly1305`. (#61)
@@ -155,6 +163,7 @@ changed, only the name of the getter. (#61)
 ### Added
 - Initial stable release
 
+[2.3.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.2.0...sodium-v2.3.0
 [2.2.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.1.2...sodium-v2.2.0
 [2.1.2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.1.1...sodium-v2.1.2
 [2.1.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.1.0...sodium-v2.1.1

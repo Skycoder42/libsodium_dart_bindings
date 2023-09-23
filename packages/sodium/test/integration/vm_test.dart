@@ -31,11 +31,13 @@ class VmTestRunner extends SumoTestRunner {
       fail('Operating system ${Platform.operatingSystem} not supported');
     }
 
-    expect(File(libSodiumPath).existsSync(), isTrue);
+    final libSodiumFile = File(libSodiumPath).absolute;
+
+    expect(libSodiumFile.existsSync(), isTrue);
     // ignore: avoid_print
-    print('Found libsodium at: $libSodiumPath');
+    print('Found libsodium at: ${libSodiumFile.path}');
     return SodiumSumoInit.init2(
-      () => DynamicLibrary.open(libSodiumPath),
+      () => DynamicLibrary.open(libSodiumFile.path),
     );
   }
 }
