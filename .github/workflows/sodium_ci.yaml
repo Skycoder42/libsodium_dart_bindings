@@ -28,9 +28,9 @@ jobs:
       integrationTestPaths: test/integration
       integrationTestSetup: >-
         {
-          "linux": "dart run tool/integration/setup_unix.dart",
+          "linux": "dart run tool/integration/setup_unix.dart linux",
           "windows": "dart run tool/integration/setup_windows.dart",
-          "macos": "dart run tool/integration/setup_unix.dart",
+          "macos": "dart run tool/integration/setup_unix.dart macos",
           "web": "dart run tool/integration/setup_web.dart"
         }
 
