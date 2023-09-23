@@ -61,31 +61,31 @@ abstract class PluginTargets {
   static const ios = DarwinTarget(
     platform: DarwinPlatform.ios,
     architecture: 'arm64',
-    buildTarget: 'arm-apple-darwin10',
+    buildTarget: 'aarch64-apple-darwin23',
   );
   // ignore: constant_identifier_names
   static const ios_simulator_arm64 = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
     architecture: 'arm64',
-    buildTarget: 'arm-apple-darwin23',
+    buildTarget: 'aarch64-apple-darwin23',
   );
   // ignore: constant_identifier_names
   static const ios_simulator_x86_64 = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
     architecture: 'x86_64',
-    buildTarget: 'x86_64-apple-darwin10',
+    buildTarget: 'x86_64-apple-darwin23',
   );
   // ignore: constant_identifier_names
   static const macos_arm64 = DarwinTarget(
     platform: DarwinPlatform.macos,
     architecture: 'arm64',
-    buildTarget: 'arm-apple-darwin23',
+    buildTarget: 'aarch64-apple-darwin23',
   );
   // ignore: constant_identifier_names
   static const macos_x86_64 = DarwinTarget(
     platform: DarwinPlatform.macos,
     architecture: 'x86_64',
-    buildTarget: 'x86_64-apple-darwin10',
+    buildTarget: 'x86_64-apple-darwin23',
   );
   static const windows = WindowsTarget();
 

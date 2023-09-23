@@ -9,11 +9,6 @@ Future<void> main() => Github.runZoned(() async {
       // always set version, in case of a forced build
       await Github.env.setOutput('version', libsodium_version.ffi);
 
-      await Github.logGroupAsync(
-        'Ensure minisign is installed',
-        Minisign.ensureInstalled,
-      );
-
       final downloadUrls =
           PluginTargets.allTargets.map((t) => t.downloadUrl).toSet();
 

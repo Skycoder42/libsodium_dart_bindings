@@ -32,7 +32,7 @@ enum DarwinPlatform {
 class DarwinTarget extends PluginTarget {
   static const _appleXcframeworScriptHash =
       // ignore: lines_longer_than_80_chars
-      '8d612118531ed84c8cbcaccc5be4833eaa55bbe582f63df438f015edf47e1b82592bff433371052b25f723998940197f57b2205350af6ffe522f3d6a2bed289e';
+      '583ba47b7d1a643df366b18b012ea1f08082994e98f70cdd43cef242eaf2ed90cc986ec83205fdb22fc115aab9e72e21cc1bf70956044ad9b3de2984bb24de09';
 
   final DarwinPlatform platform;
   final String architecture;
