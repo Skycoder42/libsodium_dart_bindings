@@ -24,11 +24,11 @@ jobs:
       integrationTestPaths: "integration_test/app_test.dart"
       integrationTestSetup: >-
         {
-          "android": "tool/setup/macos.sh android",
-          "ios": "tool/setup/macos.sh ios",
-          "linux": "tool/setup/linux.sh linux",
-          "macos": "tool/setup/macos.sh macos",
-          "windows": "bash tool/setup/windows.sh windows",
+          "android": "dart run tool/libsodium/download.dart android",
+          "ios": "dart run tool/libsodium/download.dart ios",
+          "linux": "dart run tool/libsodium/download.dart linux",
+          "macos": "dart run tool/libsodium/download.dart macos",
+          "windows": "dart run tool/libsodium/download.dart windows",
           "web": "cd example && flutter pub run sodium_libs:update_web --sumo"
         }
 

@@ -10,6 +10,11 @@ import 'platforms/plugin_targets.dart';
 Future<void> main(List<String> args) => Github.runZoned(() async {
       final platform = PluginTargets.fromName(args.first);
 
+      await Github.logGroupAsync(
+        'Ensure minisign is installed',
+        Minisign.ensureInstalled,
+      );
+
       final tmpDir = await Github.env.runnerTemp.createTemp();
       try {
         await _getArchive(tmpDir, platform.downloadUrl);

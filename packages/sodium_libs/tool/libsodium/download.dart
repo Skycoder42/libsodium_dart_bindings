@@ -12,6 +12,11 @@ Future<void> main(List<String> args) => Github.runZoned(() async {
           ? args.map(PluginTargets.groupFromName)
           : PluginTargets.targetGroups;
 
+      await Github.logGroupAsync(
+        'Ensure minisign is installed',
+        Minisign.ensureInstalled,
+      );
+
       for (final targetGroup in targetGroups) {
         await _downloadTarget(targetGroup);
       }

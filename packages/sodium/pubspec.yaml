@@ -20,7 +20,7 @@ dev_dependencies:
   coverage: ^1.6.3
   custom_lint: ^0.5.3
   dart_pre_commit: ^5.2.1
-  dart_test_tools: ^5.3.0
+  dart_test_tools: ^5.4.0
   ffigen: ^9.0.1
   freezed: ^2.4.2
   mocktail: ^1.0.0

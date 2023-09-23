@@ -28,10 +28,10 @@ jobs:
       integrationTestPaths: test/integration
       integrationTestSetup: >-
         {
-          "linux": "sudo apt-get -qq install libsodium-dev",
-          "windows": "choco install minisign -y && dart run tool/setup_windows_integration_tests.dart",
-          "macos": "brew install libsodium",
-          "web": "dart run tool/setup_web_integration_tests.dart"
+          "linux": "dart run tool/integration/setup_unix.dart",
+          "windows": "dart run tool/integration/setup_windows.dart",
+          "macos": "dart run tool/integration/setup_unix.dart",
+          "web": "dart run tool/integration/setup_web.dart"
         }
 
   cd:

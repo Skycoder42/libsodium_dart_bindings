@@ -17,6 +17,11 @@ Future<void> main(List<String> args) async {
   final publishDir = workspaceDir.subDir('publish');
   final secretKey = Github.env.runnerTemp.subFile('minisign.key');
 
+  await Github.logGroupAsync(
+    'Ensure minisign is installed',
+    Minisign.ensureInstalled,
+  );
+
   await _createArchive(
     targetGroups: targetGroups,
     artifactsDir: artifactsDir,
