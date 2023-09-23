@@ -5,7 +5,9 @@ import 'package:dart_test_tools/tools.dart';
 
 import '../../../sodium_libs/libsodium_version.dart';
 
-Future<void> main() => Github.runZoned(() async {
+Future<void> main(List<String> args) => Github.runZoned(() async {
+      final platform = args.first;
+
       await Github.logGroupAsync(
         'Ensure minisign is installed',
         Minisign.ensureInstalled,
@@ -14,7 +16,7 @@ Future<void> main() => Github.runZoned(() async {
       final tmpDir = await Directory.systemTemp.createTemp();
       try {
         final buildDir = await _downloadAndVerify(tmpDir);
-        await _build(buildDir);
+        await _build(buildDir, platform);
         await _install(buildDir);
       } finally {
         Github.logInfo('Cleaning up');
@@ -41,11 +43,20 @@ Future<Directory> _downloadAndVerify(Directory tmpDir) =>
       return tmpDir.subDir('libsodium-stable');
     });
 
-Future<void> _build(Directory buildDir) =>
+Future<void> _build(Directory buildDir, String platform) =>
     Github.logGroupAsync('Build libsodium', () async {
+      final installDir = Directory.current
+          .subDir('test')
+          .subDir('integration')
+          .subDir('binaries')
+          .subDir(platform);
+
       await Github.exec(
         './configure',
-        const ['--enable-shared=yes'],
+        [
+          '--enable-shared=yes',
+          '--prefix=${installDir.absolute.path}',
+        ],
         workingDirectory: buildDir,
       );
 
@@ -59,8 +70,8 @@ Future<void> _build(Directory buildDir) =>
 Future<void> _install(Directory buildDir) =>
     Github.logGroupAsync('Install libsodium', () async {
       await Github.exec(
-        'sudo',
-        const ['make', 'install'],
+        'make',
+        const ['install'],
         workingDirectory: buildDir,
       );
     });
