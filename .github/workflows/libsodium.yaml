@@ -185,6 +185,8 @@ jobs:
           commit-message: Update last-modified.txt
           branch: last-modified-${{ github.run_id }}
           delete-branch: true
+          assignees: Skycoder42
+          reviewers: Skycoder42
           title: Update last-modified.txt to reflect upstream changes
           body: |
             Upstream archives for libsodium v${{ needs.detect_modified.outputs.version }} have changed.
