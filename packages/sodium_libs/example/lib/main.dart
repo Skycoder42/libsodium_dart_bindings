@@ -11,9 +11,9 @@ class MyApp extends StatelessWidget {
   final Sodium? preInitSodium;
 
   const MyApp({
-    Key? key,
+    super.key,
     this.preInitSodium,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => MaterialApp(
