@@ -30,9 +30,10 @@ enum DarwinPlatform {
 }
 
 class DarwinTarget extends PluginTarget {
+  // last update: 2023-10-20
   static const _appleXcframeworScriptHash =
       // ignore: lines_longer_than_80_chars
-      '583ba47b7d1a643df366b18b012ea1f08082994e98f70cdd43cef242eaf2ed90cc986ec83205fdb22fc115aab9e72e21cc1bf70956044ad9b3de2984bb24de09';
+      '8f4e6ae546490b6270aec1c8602824c6d919c3921b7717e411c2a951c8d0215b3e11d3537efb4d2584c1709e372f41bfbb35cbe88bddb75b68a2470e8bb0f008';
 
   final DarwinPlatform platform;
   final String architecture;
@@ -133,7 +134,7 @@ class DarwinTarget extends PluginTarget {
       ],
       platform.versionParameter,
     ];
-    final cFlags = ['-Ofast', ...ldFlags];
+    final cFlags = ['-O3', ...ldFlags];
 
     // environment
     return {
