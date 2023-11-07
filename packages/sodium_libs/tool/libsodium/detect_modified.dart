@@ -33,7 +33,9 @@ Future<void> main() => Github.runZoned(() async {
       final newLastModified = _buildLastModifiedFile(lastModifiedMap);
       final lastModifiedFile = _getLastModifiedFile();
       if (lastModifiedFile.existsSync()) {
-        final oldLastModified = await _getLastModifiedFile().readAsString();
+        final oldLastModified = await _getLastModifiedFile()
+            .readAsString()
+            .then((content) => content.trim());
         if (newLastModified == oldLastModified) {
           Github.logNotice('All upstream archives are unchanged');
           await Github.env.setOutput('modified', false);
@@ -57,7 +59,7 @@ String _buildLastModifiedFile(Map<Uri, String> lastModifiedMap) {
       .map((e) => '${e.key} - ${e.value}\n')
       .toList()
     ..sort();
-  return lines.join();
+  return lines.join().trim();
 }
 
 File _getLastModifiedFile() => File('tool/libsodium/.last-modified.txt');

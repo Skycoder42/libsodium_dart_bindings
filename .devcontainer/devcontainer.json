@@ -30,5 +30,5 @@
 		},
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {}
 	},
-	"postCreateCommand": "dart --disable-analytics && flutter config --no-analytics && melos run pre-commit:init",
+	"postCreateCommand": "dart --disable-analytics && flutter config --no-analytics && rm -f pubspec.lock && melos run pre-commit:init",
 }
