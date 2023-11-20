@@ -21,7 +21,7 @@ dev_dependencies:
   custom_lint: ^0.5.3
   dart_pre_commit: ^5.2.1
   dart_test_tools: ^5.4.0
-  ffigen: ^9.0.1
+  ffigen: ">=9.0.1 <11.0.0"
   freezed: ^2.4.5
   mocktail: ^1.0.1
   path: ^1.8.3
