@@ -5,7 +5,7 @@ homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
   sdk: ^3.2.0
-  flutter: ^3.16.0
+  flutter: ">=3.16.0"
 
 executables:
   sodium_libs_update_web: update_web
