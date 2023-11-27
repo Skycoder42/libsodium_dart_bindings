@@ -9536,9 +9536,8 @@ class LibSodiumFFI {
   }
 
   late final _sodium_mlockPtr = _lookup<
-          ffi
-          .NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>(
-      'sodium_mlock');
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>('sodium_mlock');
   late final _sodium_mlock =
       _sodium_mlockPtr.asFunction<int Function(ffi.Pointer<ffi.Void>, int)>();
 
@@ -9553,9 +9552,8 @@ class LibSodiumFFI {
   }
 
   late final _sodium_munlockPtr = _lookup<
-          ffi
-          .NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>(
-      'sodium_munlock');
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>>('sodium_munlock');
   late final _sodium_munlock =
       _sodium_munlockPtr.asFunction<int Function(ffi.Pointer<ffi.Void>, int)>();
 
@@ -10191,8 +10189,7 @@ class LibSodiumFFI {
 
   late final _crypto_box_curve25519xchacha20poly1305_open_easy_afternmPtr =
       _lookup<
-              ffi
-              .NativeFunction<
+              ffi.NativeFunction<
                   ffi.Int Function(
                       ffi.Pointer<ffi.UnsignedChar>,
                       ffi.Pointer<ffi.UnsignedChar>,
