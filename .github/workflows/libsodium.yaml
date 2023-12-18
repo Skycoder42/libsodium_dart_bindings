@@ -99,7 +99,7 @@ jobs:
         run: dart run tool/libsodium/build.dart ${{ matrix.platform }}
         working-directory: packages/sodium_libs
       - name: Create artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: libsodium-${{ matrix.platform }}
           path: ${{ runner.temp }}/libsodium-${{ matrix.platform }}
