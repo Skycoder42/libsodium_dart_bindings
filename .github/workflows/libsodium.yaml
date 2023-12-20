@@ -179,14 +179,14 @@ jobs:
           dart pub global run cider bump build
           dart pub global run cider release
         working-directory: packages/sodium_libs
-      - name: Create Pull Request
+      - id: create-pull-request
+        name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           commit-message: Update last-modified.txt
           branch: last-modified-${{ github.run_id }}
           delete-branch: true
-          author: "GitHub Actions[bot] <actions@github.com>"
-          reviewers: Skycoder42
+          assignees: Skycoder42
           title: Update last-modified.txt to reflect upstream changes
           body: |
             Upstream archives for libsodium v${{ needs.detect_modified.outputs.version }} have changed.
@@ -196,3 +196,8 @@ jobs:
             ${{ needs.detect_modified.outputs.last-modified-content }}
             ```
           token: ${{ secrets.GH_PAT }}
+      - name: Mention assignees
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          pr_number: ${{ steps.create-pull-request.outputs.pull-request-number }}
+          message: Your review has been requested @Skycoder42
