@@ -185,6 +185,7 @@ jobs:
           commit-message: Update last-modified.txt
           branch: last-modified-${{ github.run_id }}
           delete-branch: true
+          author: "GitHub Actions[bot] <actions@github.com>"
           reviewers: Skycoder42
           title: Update last-modified.txt to reflect upstream changes
           body: |
