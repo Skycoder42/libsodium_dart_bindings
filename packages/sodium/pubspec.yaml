@@ -1,6 +1,6 @@
 name: sodium
 description: Dart bindings for libsodium, for the Dart-VM and for the Web
-version: 2.3.0+1
+version: 2.3.0+2
 homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
@@ -15,14 +15,14 @@ dependencies:
 dev_dependencies:
   args: ^2.4.2
   build_runner: ^2.4.8
-  cider: ^0.2.5
+  cider: ^0.2.6
   collection: ^1.18.0
   coverage: ^1.7.2
-  custom_lint: ^0.5.11
+  custom_lint: ^0.6.0
   dart_pre_commit: ^5.2.1
-  dart_test_tools: ^5.6.0
+  dart_test_tools: ^5.6.1
   ffigen: ^11.0.0
-  freezed: ^2.4.6
+  freezed: ^2.4.7
   mocktail: ^1.0.3
   path: ^1.9.0
   test: ^1.25.2
