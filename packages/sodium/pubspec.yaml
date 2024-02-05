@@ -18,7 +18,7 @@ dev_dependencies:
   cider: ^0.2.5
   collection: ^1.18.0
   coverage: ^1.7.2
-  custom_lint: ^0.5.11
+  custom_lint: ">=0.5.11 <0.7.0"
   dart_pre_commit: ^5.2.1
   dart_test_tools: ^5.6.0
   ffigen: ^11.0.0
