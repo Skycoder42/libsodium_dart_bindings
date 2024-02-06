@@ -17,7 +17,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   html: ^0.15.4
-  js: ^0.6.7
+  js: ">=0.6.7 <0.8.0"
   meta: ^1.10.0
   plugin_platform_interface: ^2.1.8
   sodium: ^2.3.0+2
