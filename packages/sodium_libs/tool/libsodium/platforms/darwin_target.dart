@@ -5,12 +5,12 @@ import 'package:dart_test_tools/tools.dart';
 import 'plugin_target.dart';
 
 enum DarwinPlatform {
-  ios('iPhoneOS', true, '-mios-version-min=11.0', 'a'),
+  ios('iPhoneOS', true, '-mios-version-min=12.0', 'a'),
   // ignore: constant_identifier_names
   ios_simulator(
     'iPhoneSimulator',
     true,
-    '-mios-simulator-version-min=11.0',
+    '-mios-simulator-version-min=12.0',
     'a',
   ),
   macos('MacOSX', false, '-mmacosx-version-min=10.14', 'dylib');
