@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import '../../../api/secure_key.dart';
 import '../../../api/sodium_exception.dart';
 import '../../../api/sumo/sign_sumo.dart';
+import '../../bindings/memory_protection.dart';
 import '../../bindings/secure_key_native.dart';
 import '../../bindings/sodium_pointer.dart';
 import '../secure_key_ffi.dart';
@@ -46,8 +47,7 @@ class SignSumoFFI extends SignFFI implements SignSumo {
   Uint8List skToPk(SecureKey secretKey) {
     validateSecretKey(secretKey);
 
-    final publicKey =
-        SodiumPointer<UnsignedChar>.alloc(sodium, count: publicKeyBytes);
+    final publicKey = _allocatePublicKey();
     try {
       final result = secretKey.runUnlockedNative(
         sodium,
@@ -63,4 +63,52 @@ class SignSumoFFI extends SignFFI implements SignSumo {
       publicKey.dispose();
     }
   }
+
+  @override
+  Uint8List pkToCurve25519(Uint8List publicKey) {
+    validatePublicKey(publicKey);
+
+    final ed25519PublicKey = publicKey.toSodiumPointer<UnsignedChar>(
+      sodium,
+      memoryProtection: MemoryProtection.readOnly,
+    );
+    final curve25519PublicKey = _allocatePublicKey();
+
+    try {
+      final result = sodium.crypto_sign_ed25519_pk_to_curve25519(
+        curve25519PublicKey.ptr,
+        ed25519PublicKey.ptr,
+      );
+      SodiumException.checkSucceededInt(result);
+
+      return Uint8List.fromList(curve25519PublicKey.asListView());
+    } finally {
+      ed25519PublicKey.dispose();
+      curve25519PublicKey.dispose();
+    }
+  }
+
+  @override
+  Uint8List skToCurve25519(SecureKey secretKey) {
+    validateSecretKey(secretKey);
+
+    final publicKey = _allocatePublicKey();
+    try {
+      final result = secretKey.runUnlockedNative(
+        sodium,
+        (secretKeyPtr) => sodium.crypto_sign_ed25519_sk_to_curve25519(
+          publicKey.ptr,
+          secretKeyPtr.ptr,
+        ),
+      );
+      SodiumException.checkSucceededInt(result);
+
+      return Uint8List.fromList(publicKey.asListView());
+    } finally {
+      publicKey.dispose();
+    }
+  }
+
+  SodiumPointer<UnsignedChar> _allocatePublicKey() =>
+      SodiumPointer<UnsignedChar>.alloc(sodium, count: publicKeyBytes);
 }
