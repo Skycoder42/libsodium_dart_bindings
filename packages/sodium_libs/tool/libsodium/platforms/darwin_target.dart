@@ -30,10 +30,10 @@ enum DarwinPlatform {
 }
 
 class DarwinTarget extends PluginTarget {
-  // last update: 2023-10-20
-  static const _appleXcframeworScriptHash =
+  // last update: 2024-02-29
+  static const _appleXcframeworkScriptHash =
       // ignore: lines_longer_than_80_chars
-      '8f4e6ae546490b6270aec1c8602824c6d919c3921b7717e411c2a951c8d0215b3e11d3537efb4d2584c1709e372f41bfbb35cbe88bddb75b68a2470e8bb0f008';
+      '499e2737381c866129a996baec8f7ae63dae40fcfe5cc173face9a2a248e2b7dbefeb77ce192dd713f5b3394d396a067ceffc0b9e13b52fd3370eaed65496829';
 
   final DarwinPlatform platform;
   final String architecture;
@@ -94,7 +94,7 @@ class DarwinTarget extends PluginTarget {
     try {
       final checksumFile = tmpDir.subFile('checksums.txt');
       await checksumFile
-          .writeAsString('$_appleXcframeworScriptHash  ${scriptFile.path}');
+          .writeAsString('$_appleXcframeworkScriptHash  ${scriptFile.path}');
 
       await Github.exec(
         'b2sum',

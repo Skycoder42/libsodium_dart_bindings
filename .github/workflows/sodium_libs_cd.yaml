@@ -12,7 +12,6 @@ jobs:
     permissions:
       id-token: write
     with:
-      environment: pub-deploy
       tagPrefix: sodium_libs-v
       flutter: true
       workingDirectory: packages/sodium_libs

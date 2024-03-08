@@ -12,7 +12,6 @@ jobs:
     permissions:
       id-token: write
     with:
-      environment: pub-deploy
       tagPrefix: sodium-v
       workingDirectory: packages/sodium
       buildRunner: true
