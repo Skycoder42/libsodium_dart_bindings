@@ -4,10 +4,8 @@ analyzer:
   exclude:
     - "**.freezed.dart"
     - "example/web/**"
-    - "lib/src/ffi/bindings/libsodium.ffi.dart"
 
 linter:
   rules:
     comment_references: false
     avoid_catches_without_on_clauses: false
-    type_literal_in_constant_pattern: false

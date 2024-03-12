@@ -32,6 +32,8 @@ ffigen:
   output: "lib/src/ffi/bindings/libsodium.ffi.dart"
   name: LibSodiumFFI
   description: "Bindings of libsodium"
+  preamble: |
+    // ignore_for_file: unused_field
   headers:
     entry-points:
       - "/usr/include/sodium.h"
