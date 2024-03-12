@@ -140,7 +140,7 @@ jobs:
         if: always()
         run: rm -f '${{ runner.temp }}/minisign.key'
       - name: Create or update release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: libsodium-binaries/v${{ needs.detect_modified.outputs.version }}
           name: "[INTERNAL] Precompiled libsodium binaries v${{ needs.detect_modified.outputs.version }}"
