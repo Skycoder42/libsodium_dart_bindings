@@ -513,56 +513,55 @@ extension _StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
   Pointer<T> dynamicElementAt(int index) {
     switch (T) {
       case Int8:
-        return (this as Pointer<Int8>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Int8>) + index) as Pointer<T>;
       case Int16:
-        return (this as Pointer<Int16>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Int16>) + index) as Pointer<T>;
       case Int32:
-        return (this as Pointer<Int32>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Int32>) + index) as Pointer<T>;
       case Int64:
-        return (this as Pointer<Int64>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Int64>) + index) as Pointer<T>;
       case Uint8:
-        return (this as Pointer<Uint8>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Uint8>) + index) as Pointer<T>;
       case Uint16:
-        return (this as Pointer<Uint16>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Uint16>) + index) as Pointer<T>;
       case Uint32:
-        return (this as Pointer<Uint32>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Uint32>) + index) as Pointer<T>;
       case Uint64:
-        return (this as Pointer<Uint64>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Uint64>) + index) as Pointer<T>;
       case Float:
-        return (this as Pointer<Float>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Float>) + index) as Pointer<T>;
       case Double:
-        return (this as Pointer<Double>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Double>) + index) as Pointer<T>;
       case Char:
-        return (this as Pointer<Char>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Char>) + index) as Pointer<T>;
       case Short:
-        return (this as Pointer<Short>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Short>) + index) as Pointer<T>;
       case Int:
-        return (this as Pointer<Int>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Int>) + index) as Pointer<T>;
       case Long:
-        return (this as Pointer<Long>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Long>) + index) as Pointer<T>;
       case LongLong:
-        return (this as Pointer<LongLong>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<LongLong>) + index) as Pointer<T>;
       case UnsignedChar:
-        return (this as Pointer<UnsignedChar>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<UnsignedChar>) + index) as Pointer<T>;
       case UnsignedShort:
-        return (this as Pointer<UnsignedShort>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<UnsignedShort>) + index) as Pointer<T>;
       case UnsignedInt:
-        return (this as Pointer<UnsignedInt>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<UnsignedInt>) + index) as Pointer<T>;
       case UnsignedLong:
-        return (this as Pointer<UnsignedLong>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<UnsignedLong>) + index) as Pointer<T>;
       case UnsignedLongLong:
-        return (this as Pointer<UnsignedLongLong>).elementAt(index)
-            as Pointer<T>;
+        return ((this as Pointer<UnsignedLongLong>) + index) as Pointer<T>;
       case SignedChar:
-        return (this as Pointer<SignedChar>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<SignedChar>) + index) as Pointer<T>;
       case IntPtr:
-        return (this as Pointer<IntPtr>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<IntPtr>) + index) as Pointer<T>;
       case UintPtr:
-        return (this as Pointer<UintPtr>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<UintPtr>) + index) as Pointer<T>;
       case Size:
-        return (this as Pointer<Size>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<Size>) + index) as Pointer<T>;
       case WChar:
-        return (this as Pointer<WChar>).elementAt(index) as Pointer<T>;
+        return ((this as Pointer<WChar>) + index) as Pointer<T>;
       // coverage:ignore-start
       default:
         throw UnsupportedError(
