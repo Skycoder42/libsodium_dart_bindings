@@ -1,2 +1,2 @@
-https://download.libsodium.org/libsodium/releases/libsodium-1.0.19-stable-msvc.zip - Thu, 02 May 2024 21:44:09 GMT
-https://download.libsodium.org/libsodium/releases/libsodium-1.0.19-stable.tar.gz - Thu, 02 May 2024 21:28:03 GMT
+https://download.libsodium.org/libsodium/releases/libsodium-1.0.19-stable-msvc.zip - Tue, 07 May 2024 14:32:22 GMT
+https://download.libsodium.org/libsodium/releases/libsodium-1.0.19-stable.tar.gz - Tue, 07 May 2024 12:50:25 GMT
