@@ -15,7 +15,7 @@ part 'kx.freezed.dart';
 ///
 /// See https://libsodium.gitbook.io/doc/key_exchange.
 @freezed
-class SessionKeys with _$SessionKeys {
+sealed class SessionKeys with _$SessionKeys {
   const SessionKeys._();
 
   /// Default Constructor

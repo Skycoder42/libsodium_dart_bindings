@@ -17,8 +17,6 @@ class MockSodiumFFI extends Mock implements SodiumFFI {}
 
 class FakeSecureKey extends Fake implements SecureKey {}
 
-class FakeKeyPair extends Fake implements KeyPair {}
-
 void main() {
   setUpAll(() {
     registerFallbackValue(Uint8List(0));
@@ -35,18 +33,6 @@ void main() {
       expect(
         () => IsolateResult<FakeSecureKey>.key(
           TransferableSecureKey.generic(TransferableTypedData.fromList([])),
-        ),
-        throwsA(isA<AssertionError>()),
-      );
-    });
-
-    test('asserts when constructed with a subclass type of KeyPair', () {
-      expect(
-        () => IsolateResult<FakeKeyPair>.keyPair(
-          TransferableKeyPair.generic(
-            publicKeyBytes: TransferableTypedData.fromList([]),
-            secretKeyBytes: TransferableTypedData.fromList([]),
-          ),
         ),
         throwsA(isA<AssertionError>()),
       );

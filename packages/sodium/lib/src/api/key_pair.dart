@@ -9,7 +9,7 @@ part 'key_pair.freezed.dart';
 /// A pair of keys that belong together. Consists of a [secretKey] as well as
 /// the corresponding [publicKey].
 @Freezed(copyWith: false)
-class KeyPair with _$KeyPair {
+sealed class KeyPair with _$KeyPair {
   /// Default constructor.
   factory KeyPair({
     /// The public key of the key pair.

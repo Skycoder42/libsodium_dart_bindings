@@ -13,7 +13,7 @@ part 'isolate_result.freezed.dart';
 /// @nodoc
 @freezed
 @internal
-class IsolateResult<T> with _$IsolateResult<T> {
+sealed class IsolateResult<T> with _$IsolateResult<T> {
   /// @nodoc
   const factory IsolateResult(T result) = _IsolateResult<T>;
 

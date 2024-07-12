@@ -8,7 +8,8 @@ part 'init_push_result.freezed.dart';
 /// @nodoc
 @freezed
 @internal
-class InitPushResult<TState extends Object> with _$InitPushResult<TState> {
+sealed class InitPushResult<TState extends Object>
+    with _$InitPushResult<TState> {
   /// @nodoc
   const factory InitPushResult({
     required Uint8List header,

@@ -11,7 +11,7 @@ import 'secret_push_stream.dart';
 part 'secret_stream_push_transformer.freezed.dart';
 
 @freezed
-class _SinkState<TState extends Object> with _$SinkState<TState> {
+sealed class _SinkState<TState extends Object> with _$SinkState<TState> {
   const factory _SinkState.uninitialized() = _Uninitialized<TState>;
 
   const factory _SinkState.initialized(

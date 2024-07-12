@@ -75,7 +75,7 @@ class InvalidHeaderException implements Exception {
 
 /// A container class for a extended plain message before encryption.
 @freezed
-class SecretStreamPlainMessage with _$SecretStreamPlainMessage {
+sealed class SecretStreamPlainMessage with _$SecretStreamPlainMessage {
   /// Default constructor
   const factory SecretStreamPlainMessage(
     /// The message that should be encrypted.
@@ -95,7 +95,7 @@ class SecretStreamPlainMessage with _$SecretStreamPlainMessage {
 
 /// A container class for a extended cipher message before decryption.
 @freezed
-class SecretStreamCipherMessage with _$SecretStreamCipherMessage {
+sealed class SecretStreamCipherMessage with _$SecretStreamCipherMessage {
   /// Default constructor
   const factory SecretStreamCipherMessage(
     /// The message that should be decrypted.

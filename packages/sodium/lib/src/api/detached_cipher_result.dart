@@ -8,7 +8,7 @@ part 'detached_cipher_result.freezed.dart';
 /// The result of a detached cipher operation. It consists of the actual
 /// [cipherText] as well as the [mac].
 @freezed
-class DetachedCipherResult with _$DetachedCipherResult {
+sealed class DetachedCipherResult with _$DetachedCipherResult {
   /// Default constructor.
   const factory DetachedCipherResult({
     /// The encrypted data.

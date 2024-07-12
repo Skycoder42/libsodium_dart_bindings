@@ -11,7 +11,7 @@ part 'transferable_key_pair.freezed.dart';
 /// @nodoc
 @freezed
 @internal
-class TransferableKeyPair with _$TransferableKeyPair {
+sealed class TransferableKeyPair with _$TransferableKeyPair {
   /// @nodoc
   factory TransferableKeyPair(KeyPair keyPair) => keyPair.secretKey
           is SecureKeyFFI

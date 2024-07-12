@@ -11,7 +11,7 @@ part 'transferable_secure_key.freezed.dart';
 /// @nodoc
 @freezed
 @internal
-class TransferableSecureKey with _$TransferableSecureKey {
+sealed class TransferableSecureKey with _$TransferableSecureKey {
   /// @nodoc
   factory TransferableSecureKey(SecureKey secureKey) =>
       secureKey is SecureKeyFFI
