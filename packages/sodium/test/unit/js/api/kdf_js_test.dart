@@ -138,7 +138,7 @@ void main() {
         verify(
           () => mockSodium.crypto_kdf_derive_from_key(
             subkeyLen,
-            subkeyId,
+            BigInt.from(subkeyId),
             context,
             Uint8List.fromList(masterKey),
           ),

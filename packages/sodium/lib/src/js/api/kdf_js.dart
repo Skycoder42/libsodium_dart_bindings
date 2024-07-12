@@ -51,7 +51,7 @@ class KdfJS with KdfValidations implements Kdf {
         () => masterKey.runUnlockedSync(
           (masterKeyData) => sodium.crypto_kdf_derive_from_key(
             subkeyLen,
-            subkeyId,
+            BigInt.from(subkeyId),
             context,
             masterKeyData,
           ),

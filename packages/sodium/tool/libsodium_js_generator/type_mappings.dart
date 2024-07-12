@@ -22,6 +22,7 @@ class TypeMappings {
     'void': TypeInfo('void'),
     'boolean': TypeInfo('bool'),
     'uint': TypeInfo('num'),
+    'u64': TypeInfo('BigInt'),
     'string': TypeInfo('String'),
     'buf': TypeInfo('Uint8List'),
     'buf_optional': TypeInfo('Uint8List?'),
@@ -91,6 +92,9 @@ class TypeMappings {
     'auth_hmacsha256_state_address': TypeInfo('AuthHmacsha256State'),
     'auth_hmacsha512_state': TypeInfo('AuthHmacsha512State', typeDef: 'num'),
     'auth_hmacsha512_state_address': TypeInfo('AuthHmacsha512State'),
+    'auth_hmacsha512256_state':
+        TypeInfo('AuthHmacsha512256State', typeDef: 'num'),
+    'auth_hmacsha512256_state_address': TypeInfo('AuthHmacsha512256State'),
     // hidden types
     'randombytes_implementation': TypeInfo('Never'),
     'randombytes_set_implementation_result': TypeInfo('Never'),

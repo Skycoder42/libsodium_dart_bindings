@@ -19,7 +19,7 @@ class _Version {
 // ignore: constant_identifier_names
 const libsodium_version = _Version(
   ffi: '1.0.20',
-  js: '0.7.13',
+  js: '0.7.14',
 );
 
 // ignore: unreachable_from_main

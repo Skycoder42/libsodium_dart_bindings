@@ -23,6 +23,8 @@ typedef AuthHmacsha256State = num;
 
 typedef AuthHmacsha512State = num;
 
+typedef AuthHmacsha512256State = num;
+
 @JS()
 @anonymous
 class CryptoBox {
@@ -105,6 +107,36 @@ class LibSodiumJS {
   external num SODIUM_LIBRARY_VERSION_MINOR;
 
   external String SODIUM_VERSION_STRING;
+
+  external num crypto_aead_aegis128l_ABYTES;
+
+  external num crypto_aead_aegis128l_KEYBYTES;
+
+  external num crypto_aead_aegis128l_MESSAGEBYTES_MAX;
+
+  external num crypto_aead_aegis128l_NPUBBYTES;
+
+  external num crypto_aead_aegis128l_NSECBYTES;
+
+  external num crypto_aead_aegis256_ABYTES;
+
+  external num crypto_aead_aegis256_KEYBYTES;
+
+  external num crypto_aead_aegis256_MESSAGEBYTES_MAX;
+
+  external num crypto_aead_aegis256_NPUBBYTES;
+
+  external num crypto_aead_aegis256_NSECBYTES;
+
+  external num crypto_aead_aes256gcm_ABYTES;
+
+  external num crypto_aead_aes256gcm_KEYBYTES;
+
+  external num crypto_aead_aes256gcm_MESSAGEBYTES_MAX;
+
+  external num crypto_aead_aes256gcm_NPUBBYTES;
+
+  external num crypto_aead_aes256gcm_NSECBYTES;
 
   external num crypto_aead_chacha20poly1305_ABYTES;
 
@@ -260,6 +292,14 @@ class LibSodiumJS {
 
   external num crypto_core_salsa2012_OUTPUTBYTES;
 
+  external num crypto_core_salsa208_CONSTBYTES;
+
+  external num crypto_core_salsa208_INPUTBYTES;
+
+  external num crypto_core_salsa208_KEYBYTES;
+
+  external num crypto_core_salsa208_OUTPUTBYTES;
+
   external num crypto_core_salsa20_CONSTBYTES;
 
   external num crypto_core_salsa20_INPUTBYTES;
@@ -317,6 +357,18 @@ class LibSodiumJS {
   external num crypto_kdf_blake2b_CONTEXTBYTES;
 
   external num crypto_kdf_blake2b_KEYBYTES;
+
+  external num crypto_kdf_hkdf_sha256_BYTES_MAX;
+
+  external num crypto_kdf_hkdf_sha256_BYTES_MIN;
+
+  external num crypto_kdf_hkdf_sha256_KEYBYTES;
+
+  external num crypto_kdf_hkdf_sha512_BYTES_MAX;
+
+  external num crypto_kdf_hkdf_sha512_BYTES_MIN;
+
+  external num crypto_kdf_hkdf_sha512_KEYBYTES;
 
   external num crypto_kx_PUBLICKEYBYTES;
 
@@ -378,17 +430,69 @@ class LibSodiumJS {
 
   external num crypto_pwhash_argon2i_BYTES_MIN;
 
+  external num crypto_pwhash_argon2i_MEMLIMIT_INTERACTIVE;
+
+  external num crypto_pwhash_argon2i_MEMLIMIT_MAX;
+
+  external num crypto_pwhash_argon2i_MEMLIMIT_MIN;
+
+  external num crypto_pwhash_argon2i_MEMLIMIT_MODERATE;
+
+  external num crypto_pwhash_argon2i_MEMLIMIT_SENSITIVE;
+
+  external num crypto_pwhash_argon2i_OPSLIMIT_INTERACTIVE;
+
+  external num crypto_pwhash_argon2i_OPSLIMIT_MAX;
+
+  external num crypto_pwhash_argon2i_OPSLIMIT_MIN;
+
+  external num crypto_pwhash_argon2i_OPSLIMIT_MODERATE;
+
+  external num crypto_pwhash_argon2i_OPSLIMIT_SENSITIVE;
+
+  external num crypto_pwhash_argon2i_PASSWD_MAX;
+
+  external num crypto_pwhash_argon2i_PASSWD_MIN;
+
   external num crypto_pwhash_argon2i_SALTBYTES;
 
   external num crypto_pwhash_argon2i_STRBYTES;
+
+  external String crypto_pwhash_argon2i_STRPREFIX;
 
   external num crypto_pwhash_argon2id_BYTES_MAX;
 
   external num crypto_pwhash_argon2id_BYTES_MIN;
 
+  external num crypto_pwhash_argon2id_MEMLIMIT_INTERACTIVE;
+
+  external num crypto_pwhash_argon2id_MEMLIMIT_MAX;
+
+  external num crypto_pwhash_argon2id_MEMLIMIT_MIN;
+
+  external num crypto_pwhash_argon2id_MEMLIMIT_MODERATE;
+
+  external num crypto_pwhash_argon2id_MEMLIMIT_SENSITIVE;
+
+  external num crypto_pwhash_argon2id_OPSLIMIT_INTERACTIVE;
+
+  external num crypto_pwhash_argon2id_OPSLIMIT_MAX;
+
+  external num crypto_pwhash_argon2id_OPSLIMIT_MIN;
+
+  external num crypto_pwhash_argon2id_OPSLIMIT_MODERATE;
+
+  external num crypto_pwhash_argon2id_OPSLIMIT_SENSITIVE;
+
+  external num crypto_pwhash_argon2id_PASSWD_MAX;
+
+  external num crypto_pwhash_argon2id_PASSWD_MIN;
+
   external num crypto_pwhash_argon2id_SALTBYTES;
 
   external num crypto_pwhash_argon2id_STRBYTES;
+
+  external String crypto_pwhash_argon2id_STRPREFIX;
 
   external num crypto_pwhash_scryptsalsa208sha256_BYTES_MAX;
 
@@ -409,6 +513,10 @@ class LibSodiumJS {
   external num crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN;
 
   external num crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_SENSITIVE;
+
+  external num crypto_pwhash_scryptsalsa208sha256_PASSWD_MAX;
+
+  external num crypto_pwhash_scryptsalsa208sha256_PASSWD_MIN;
 
   external num crypto_pwhash_scryptsalsa208sha256_SALTBYTES;
 
@@ -775,6 +883,32 @@ class LibSodiumJS {
     Uint8List key,
   );
 
+  external Uint8List crypto_auth_hmacsha512256(
+    Uint8List message,
+    Uint8List key,
+  );
+
+  external Uint8List crypto_auth_hmacsha512256_final(
+    AuthHmacsha512256State state_address,
+  );
+
+  external AuthHmacsha512256State crypto_auth_hmacsha512256_init(
+    Uint8List? key,
+  );
+
+  external Uint8List crypto_auth_hmacsha512256_keygen();
+
+  external void crypto_auth_hmacsha512256_update(
+    AuthHmacsha512256State state_address,
+    Uint8List message_chunk,
+  );
+
+  external bool crypto_auth_hmacsha512256_verify(
+    Uint8List tag,
+    Uint8List message,
+    Uint8List key,
+  );
+
   external Uint8List crypto_auth_hmacsha512_final(
     AuthHmacsha512State state_address,
   );
@@ -1132,7 +1266,7 @@ class LibSodiumJS {
 
   external Uint8List crypto_kdf_derive_from_key(
     num subkey_len,
-    num subkey_id,
+    BigInt subkey_id,
     String ctx,
     Uint8List key,
   );

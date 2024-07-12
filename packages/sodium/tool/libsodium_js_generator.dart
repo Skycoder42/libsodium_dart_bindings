@@ -7,10 +7,15 @@ import 'libsodium_js_generator/file_loader.dart';
 import 'libsodium_js_generator/generators/constants_generator.dart';
 import 'libsodium_js_generator/generators/library_generator.dart';
 import 'libsodium_js_generator/generators/symbols_generator.dart';
+import 'libsodium_js_generator/repo_loader.dart';
 import 'libsodium_js_generator/type_mappings.dart';
 
-Future<void> main(List<String> args) async {
-  final wrapperDir = Directory(args[0]);
+// ignore: directives_ordering
+import '../../sodium_libs/libsodium_version.dart' show libsodium_version;
+
+Future<void> main() async {
+  final repoLoader = RepoLoader();
+  final wrapperDir = await repoLoader.downloadRepo(libsodium_version.js);
   final fileLoader = FileLoader(wrapperDir);
 
   final typeMappings = TypeMappings();
