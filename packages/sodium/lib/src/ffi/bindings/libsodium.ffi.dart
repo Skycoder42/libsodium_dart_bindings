@@ -11983,11 +11983,11 @@ final class randombytes_implementation extends ffi.Struct {
 
 const int SODIUM_SIZE_MAX = -1;
 
-const String SODIUM_VERSION_STRING = '1.0.19';
+const String SODIUM_VERSION_STRING = '1.0.20';
 
 const int SODIUM_LIBRARY_VERSION_MAJOR = 26;
 
-const int SODIUM_LIBRARY_VERSION_MINOR = 1;
+const int SODIUM_LIBRARY_VERSION_MINOR = 2;
 
 const int crypto_aead_aegis128l_KEYBYTES = 16;
 
@@ -12373,7 +12373,7 @@ const int crypto_pwhash_OPSLIMIT_SENSITIVE = 4;
 
 const int crypto_pwhash_MEMLIMIT_SENSITIVE = 1073741824;
 
-const String crypto_pwhash_PRIMITIVE = 'argon2i';
+const String crypto_pwhash_PRIMITIVE = 'argon2id,argon2i';
 
 const int crypto_scalarmult_curve25519_BYTES = 32;
 

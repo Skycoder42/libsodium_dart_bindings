@@ -7,7 +7,7 @@ import 'sodium_platform.dart';
 /// @nodoc
 @internal
 class VersionCheck {
-  static const _expectedVersion = SodiumVersion(26, 1, '1.0.19');
+  static const _expectedVersion = SodiumVersion(26, 2, '1.0.20');
 
   VersionCheck._();
 

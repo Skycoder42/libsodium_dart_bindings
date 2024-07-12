@@ -38,7 +38,7 @@ ffigen:
     entry-points:
       - "/usr/include/sodium.h"
   compiler-opts:
-    - "-I/usr/lib/clang/16/include/"
+    - "-I/usr/lib/clang/18/include/"
   exclude-all-by-default: true
   macros:
     include:
