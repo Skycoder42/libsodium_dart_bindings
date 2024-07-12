@@ -15,6 +15,8 @@ class LibraryGenerator {
       ..writeln("import 'dart:typed_data';")
       ..writeln()
       ..writeln("import 'package:js/js.dart';")
+      ..writeln()
+      ..writeln("import 'js_big_int.dart';")
       ..writeln();
   }
 

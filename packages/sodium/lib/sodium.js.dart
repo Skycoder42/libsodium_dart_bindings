@@ -1,3 +1,4 @@
+export 'src/js/bindings/js_big_int.dart';
 export 'src/js/bindings/js_error.dart';
 export 'src/js/bindings/sodium.js.dart';
 export 'src/js/bindings/to_safe_int.dart';

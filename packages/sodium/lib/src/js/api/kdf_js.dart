@@ -2,10 +2,13 @@ import 'package:meta/meta.dart';
 
 import '../../api/kdf.dart';
 import '../../api/secure_key.dart';
+import '../bindings/js_big_int.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
+
+// TODO https://github.com/dart-lang/sdk/issues/32399#issuecomment-828790308
 
 /// @nodoc
 @internal
@@ -38,11 +41,12 @@ class KdfJS with KdfValidations implements Kdf {
   SecureKey deriveFromKey({
     required SecureKey masterKey,
     required String context,
-    required int subkeyId,
+    required BigInt subkeyId,
     required int subkeyLen,
   }) {
     validateMasterKey(masterKey);
     validateContext(context);
+    validateSubkeyId(subkeyId);
     validateSubkeyLen(subkeyLen);
 
     return SecureKeyJS(
@@ -51,12 +55,28 @@ class KdfJS with KdfValidations implements Kdf {
         () => masterKey.runUnlockedSync(
           (masterKeyData) => sodium.crypto_kdf_derive_from_key(
             subkeyLen,
-            BigInt.from(subkeyId),
+            JsBigInt.fromDart(subkeyId),
             context,
             masterKeyData,
           ),
         ),
       ),
     );
+  }
+
+  @internal
+  BigInt validateSubkeyIdType(dynamic subkeyId) {
+    switch (subkeyId) {
+      case final int value:
+        return BigInt.from(value);
+      case final BigInt value:
+        return value;
+      default:
+        throw ArgumentError.value(
+          subkeyId.runtimeType,
+          'subkeyId',
+          'Must be of type int or BigInt',
+        );
+    }
   }
 }

@@ -47,4 +47,16 @@ abstract class Validations {
     }
     checkAtLeast(value, 0, name);
   }
+
+  static void checkIsUint64(BigInt value, String name) {
+    if (value.isNegative || value.bitLength > 64) {
+      throw RangeError.range(
+        value.toInt(),
+        0,
+        null,
+        name,
+        'Must be a valid 64bit unsigned integer, but was',
+      );
+    }
+  }
 }

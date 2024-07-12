@@ -24,7 +24,7 @@ class JsError {
 T jsErrorWrap<T>(T Function() callback) {
   try {
     return callback();
-  } on JsError catch (e) {
-    throw SodiumException(e.message);
+  } on JsError catch (e, s) {
+    Error.throwWithStackTrace(SodiumException(e.message), s);
   }
 }

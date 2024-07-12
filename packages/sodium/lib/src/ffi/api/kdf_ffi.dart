@@ -44,7 +44,7 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
   SecureKey deriveFromKey({
     required SecureKey masterKey,
     required String context,
-    required int subkeyId,
+    required BigInt subkeyId,
     required int subkeyLen,
   }) {
     validateMasterKey(masterKey);
@@ -67,7 +67,7 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
           (masterKeyPtr) => sodium.crypto_kdf_derive_from_key(
             subKeyPtr.ptr,
             subKeyPtr.count,
-            subkeyId,
+            subkeyId.toSigned(64).toInt(),
             contextPtr!.ptr,
             masterKeyPtr.ptr,
           ),

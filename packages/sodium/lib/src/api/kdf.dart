@@ -44,33 +44,34 @@ abstract class Kdf {
   SecureKey deriveFromKey({
     required SecureKey masterKey,
     required String context,
-    required int subkeyId,
+    required BigInt subkeyId,
     required int subkeyLen,
   });
 }
 
-/// @nodoc
 @internal
 mixin KdfValidations implements Kdf {
-  /// @nodoc
   void validateMasterKey(SecureKey masterKey) => Validations.checkIsSame(
         masterKey.length,
         keyBytes,
         'masterKey',
       );
 
-  /// @nodoc
   void validateContext(String context) => Validations.checkAtMost(
         utf8.encode(context).length,
         contextBytes,
         'context',
       );
 
-  /// @nodoc
   void validateSubkeyLen(int subkeyLen) => Validations.checkInRange(
         subkeyLen,
         bytesMin,
         bytesMax,
         'subkeyLen',
+      );
+
+  void validateSubkeyId(BigInt subkeyId) => Validations.checkIsUint64(
+        subkeyId,
+        'subkeyId',
       );
 }

@@ -1,5 +1,7 @@
 import '../test_case.dart';
 
+// TODO test intMax
+
 class KdfTestCase extends TestCase {
   KdfTestCase(super._runner);
 
@@ -46,25 +48,25 @@ class KdfTestCase extends TestCase {
         final key1 = sut.deriveFromKey(
           masterKey: masterKey,
           context: context1,
-          subkeyId: 1,
+          subkeyId: BigInt.one,
           subkeyLen: 42,
         );
         final key2 = sut.deriveFromKey(
           masterKey: masterKey,
           context: context1,
-          subkeyId: 2,
+          subkeyId: BigInt.parse('18446744073709551615'), // uint64 max
           subkeyLen: 42,
         );
         final key3 = sut.deriveFromKey(
           masterKey: masterKey,
           context: context2,
-          subkeyId: 1,
+          subkeyId: BigInt.one,
           subkeyLen: 42,
         );
         final key4 = sut.deriveFromKey(
           masterKey: masterKey,
           context: context2,
-          subkeyId: 1,
+          subkeyId: BigInt.one,
           subkeyLen: 42,
         );
 
@@ -97,7 +99,7 @@ class KdfTestCase extends TestCase {
           final subKey = sut.deriveFromKey(
             masterKey: masterKey,
             context: 'test_len',
-            subkeyId: i - sut.bytesMin,
+            subkeyId: BigInt.from(i - sut.bytesMin),
             subkeyLen: i,
           );
 
@@ -119,13 +121,13 @@ class KdfTestCase extends TestCase {
         final subKey1 = sut.deriveFromKey(
           masterKey: masterKey1,
           context: 'master',
-          subkeyId: 42,
+          subkeyId: BigInt.from(42),
           subkeyLen: sut.bytesMax,
         );
         final subKey2 = sut.deriveFromKey(
           masterKey: masterKey2,
           context: 'master',
-          subkeyId: 42,
+          subkeyId: BigInt.from(42),
           subkeyLen: sut.bytesMax,
         );
 

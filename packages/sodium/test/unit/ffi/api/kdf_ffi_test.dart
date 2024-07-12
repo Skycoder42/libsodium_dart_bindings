@@ -81,7 +81,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(10),
             context: 'X' * 5,
-            subkeyId: 0,
+            subkeyId: BigInt.from(0),
             subkeyLen: 10,
           ),
           throwsA(isA<RangeError>()),
@@ -95,7 +95,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(5),
             context: 'X' * 10,
-            subkeyId: 0,
+            subkeyId: BigInt.from(0),
             subkeyLen: 10,
           ),
           throwsA(isA<RangeError>()),
@@ -109,7 +109,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(5),
             context: 'X' * 5,
-            subkeyId: 0,
+            subkeyId: BigInt.from(0),
             subkeyLen: 20,
           ),
           throwsA(isA<RangeError>()),
@@ -138,7 +138,7 @@ void main() {
         sut.deriveFromKey(
           masterKey: SecureKeyFake(masterKey),
           context: context,
-          subkeyId: subkeyId,
+          subkeyId: BigInt.from(subkeyId),
           subkeyLen: subkeyLen,
         );
 
@@ -179,7 +179,7 @@ void main() {
         final result = sut.deriveFromKey(
           masterKey: SecureKeyFake.empty(5),
           context: 'test',
-          subkeyId: 0,
+          subkeyId: BigInt.from(0),
           subkeyLen: 10,
         );
 
@@ -203,7 +203,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(5),
             context: 'test',
-            subkeyId: 0,
+            subkeyId: BigInt.from(0),
             subkeyLen: 10,
           ),
           throwsA(isA<SodiumException>()),

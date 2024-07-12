@@ -22,7 +22,7 @@ class TypeMappings {
     'void': TypeInfo('void'),
     'boolean': TypeInfo('bool'),
     'uint': TypeInfo('num'),
-    'u64': TypeInfo('BigInt'),
+    'u64': TypeInfo('JsBigInt'),
     'string': TypeInfo('String'),
     'buf': TypeInfo('Uint8List'),
     'buf_optional': TypeInfo('Uint8List?'),

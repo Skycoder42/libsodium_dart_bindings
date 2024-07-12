@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/kdf_js.dart';
+import 'package:sodium/src/js/bindings/js_big_int.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
@@ -24,6 +25,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(Uint8List(0));
+    registerFallbackValue(JsBigInt.fromDart(BigInt.zero));
   });
 
   setUp(() {
@@ -75,7 +77,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(10),
             context: 'X' * 5,
-            subkeyId: 0,
+            subkeyId: BigInt.from(0),
             subkeyLen: 10,
           ),
           throwsA(isA<RangeError>()),
@@ -89,7 +91,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(5),
             context: 'X' * 10,
-            subkeyId: 0,
+            subkeyId: BigInt.from(0),
             subkeyLen: 10,
           ),
           throwsA(isA<RangeError>()),
@@ -103,7 +105,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(5),
             context: 'X' * 5,
-            subkeyId: 0,
+            subkeyId: BigInt.from(0),
             subkeyLen: 20,
           ),
           throwsA(isA<RangeError>()),
@@ -131,14 +133,14 @@ void main() {
         sut.deriveFromKey(
           masterKey: SecureKeyFake(masterKey),
           context: context,
-          subkeyId: subkeyId,
+          subkeyId: BigInt.from(subkeyId),
           subkeyLen: subkeyLen,
         );
 
         verify(
           () => mockSodium.crypto_kdf_derive_from_key(
             subkeyLen,
-            BigInt.from(subkeyId),
+            JsBigInt.fromDart(BigInt.from(subkeyId)),
             context,
             Uint8List.fromList(masterKey),
           ),
@@ -159,7 +161,7 @@ void main() {
         final result = sut.deriveFromKey(
           masterKey: SecureKeyFake.empty(5),
           context: 'test',
-          subkeyId: 0,
+          subkeyId: BigInt.from(0),
           subkeyLen: 10,
         );
 
@@ -180,7 +182,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(5),
             context: 'test',
-            subkeyId: 0,
+            subkeyId: BigInt.from(0),
             subkeyLen: 10,
           ),
           throwsA(isA<SodiumException>()),

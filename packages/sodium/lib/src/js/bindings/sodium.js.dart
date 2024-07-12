@@ -7,6 +7,8 @@ import 'dart:typed_data';
 
 import 'package:js/js.dart';
 
+import 'js_big_int.dart';
+
 typedef SecretstreamXchacha20poly1305State = num;
 
 typedef SignState = num;
@@ -1266,7 +1268,7 @@ class LibSodiumJS {
 
   external Uint8List crypto_kdf_derive_from_key(
     num subkey_len,
-    BigInt subkey_id,
+    JsBigInt subkey_id,
     String ctx,
     Uint8List key,
   );
