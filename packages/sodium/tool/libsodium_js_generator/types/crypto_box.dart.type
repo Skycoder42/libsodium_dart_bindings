@@ -1,11 +1,9 @@
-@JS()
-@anonymous
-class CryptoBox {
-  external Uint8List get ciphertext;
-  external Uint8List get mac;
+extension type CryptoBox._(JSObject _) implements JSObject {
+  external JSUint8Array get ciphertext;
+  external JSUint8Array get mac;
 
-  external factory CryptoBox({
-    required Uint8List ciphertext,
-    required Uint8List mac,
+  external CryptoBox({
+    required JSUint8Array ciphertext,
+    required JSUint8Array mac,
   });
 }

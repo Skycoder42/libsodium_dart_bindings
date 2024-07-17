@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -40,10 +41,12 @@ class SignatureConsumerJS
   @override
   Uint8List finalize(SignState state) => jsErrorWrap(
         () => secretKey.runUnlockedSync(
-          (secretKeyData) => sodium.crypto_sign_final_create(
-            state,
-            secretKeyData,
-          ),
+          (secretKeyData) => sodium
+              .crypto_sign_final_create(
+                state,
+                secretKeyData.toJS,
+              )
+              .toDart,
         ),
       );
 }

@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_lambdas
+
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -33,7 +36,7 @@ class RandombytesJS implements Randombytes {
 
   @override
   Uint8List buf(int length) => jsErrorWrap(
-        () => sodium.randombytes_buf(length),
+        () => sodium.randombytes_buf(length).toDart,
       );
 
   @override
@@ -41,17 +44,17 @@ class RandombytesJS implements Randombytes {
     Validations.checkIsSame(seed.length, seedBytes, 'seed');
 
     return jsErrorWrap(
-      () => sodium.randombytes_buf_deterministic(length, seed),
+      () => sodium.randombytes_buf_deterministic(length, seed.toJS).toDart,
     );
   }
 
   @override
   void close() => jsErrorWrap(
-        sodium.randombytes_close,
+        () => sodium.randombytes_close(),
       );
 
   @override
   void stir() => jsErrorWrap(
-        sodium.randombytes_stir,
+        () => sodium.randombytes_stir(),
       );
 }

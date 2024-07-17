@@ -1,3 +1,4 @@
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -37,8 +38,8 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
       jsErrorWrap(
         () => key.runUnlockedSync(
           (keyData) => sodium.crypto_secretstream_xchacha20poly1305_init_pull(
-            header,
-            keyData,
+            header.toJS,
+            keyData.toJS,
           ),
         ),
       );
@@ -57,8 +58,8 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
     final dynamic pullResult = jsErrorWrap<dynamic>(
       () => sodium.crypto_secretstream_xchacha20poly1305_pull(
         cryptoState,
-        event.message,
-        event.additionalData,
+        event.message.toJS,
+        event.additionalData?.toJS,
       ),
     );
 
@@ -67,11 +68,11 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
       throw SodiumException();
     } else if (pullResult is SecretStreamPull) {
       return SecretStreamPlainMessage(
-        pullResult.message,
+        pullResult.message.toDart,
         additionalData: event.additionalData,
         tag: SecretStreamMessageTagJSX.fromValue(
           sodium,
-          pullResult.tag.toSafeUInt32(),
+          pullResult.tag.toDartInt.toSafeUInt32(),
         ),
       );
     } else {

@@ -1,7 +1,4 @@
-@JS()
-library js_error;
-
-import 'package:js/js.dart';
+import 'dart:js_interop';
 
 import '../../api/sodium_exception.dart';
 
@@ -9,22 +6,22 @@ import '../../api/sodium_exception.dart';
 /// [Error](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Error)
 /// type.
 @JS('Error')
-class JsError {
+extension type JSError._(JSObject _) implements JSObject {
   /// @nodoc
   external String get message;
 
   /// @nodoc
-  external factory JsError([String? message]);
+  external JSError([String? message]);
 }
 
-/// Wraps any callback to convert [JsError]s to [SodiumException]s.
+/// Wraps any callback to convert [JSError]s to [SodiumException]s.
 ///
-/// This simply runs the [callback] and catches all instances of [JsError] and
+/// This simply runs the [callback] and catches all instances of [JSError] and
 /// rethrows the error message as [SodiumException].
 T jsErrorWrap<T>(T Function() callback) {
   try {
     return callback();
-  } on JsError catch (e, s) {
+  } on JSError catch (e, s) {
     Error.throwWithStackTrace(SodiumException(e.message), s);
   }
 }

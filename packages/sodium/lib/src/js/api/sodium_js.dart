@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_lambdas
+
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -28,17 +31,17 @@ class SodiumJS implements Sodium {
   SodiumVersion get version => SodiumVersion(
         sodium.SODIUM_LIBRARY_VERSION_MAJOR.toSafeUInt32(),
         sodium.SODIUM_LIBRARY_VERSION_MINOR.toSafeUInt32(),
-        jsErrorWrap(sodium.sodium_version_string),
+        jsErrorWrap(() => sodium.sodium_version_string()),
       );
 
   @override
   Uint8List pad(Uint8List buf, int blocksize) => jsErrorWrap(
-        () => sodium.pad(buf, blocksize),
+        () => sodium.pad(buf.toJS, blocksize).toDart,
       );
 
   @override
   Uint8List unpad(Uint8List buf, int blocksize) => jsErrorWrap(
-        () => sodium.unpad(buf, blocksize),
+        () => sodium.unpad(buf.toJS, blocksize).toDart,
       );
 
   @override
@@ -50,7 +53,7 @@ class SodiumJS implements Sodium {
   @override
   SecureKey secureCopy(Uint8List data) => SecureKeyJS(
         sodium,
-        Uint8List.fromList(data), // force copy the data
+        Uint8List.fromList(data).toJS, // force copy the data
       );
 
   @override

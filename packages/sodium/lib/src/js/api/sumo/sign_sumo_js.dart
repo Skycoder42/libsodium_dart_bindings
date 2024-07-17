@@ -1,3 +1,4 @@
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -22,7 +23,7 @@ class SignSumoJS extends SignJS implements SignSumo {
       () => secretKey.runUnlockedSync(
         (secretKeyData) => SecureKeyJS(
           sodium,
-          sodium.crypto_sign_ed25519_sk_to_seed(secretKeyData),
+          sodium.crypto_sign_ed25519_sk_to_seed(secretKeyData.toJS),
         ),
       ),
     );
@@ -34,7 +35,7 @@ class SignSumoJS extends SignJS implements SignSumo {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        sodium.crypto_sign_ed25519_sk_to_pk,
+        (keyData) => sodium.crypto_sign_ed25519_sk_to_pk(keyData.toJS).toDart,
       ),
     );
   }

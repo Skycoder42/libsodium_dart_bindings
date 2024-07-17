@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_lambdas
+
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -41,9 +44,7 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        jsErrorWrap(
-          sodium.crypto_generichash_keygen,
-        ),
+        jsErrorWrap(() => sodium.crypto_generichash_keygen()),
       );
 
   @override
@@ -61,11 +62,13 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
 
     return jsErrorWrap(
       () => key.runMaybeUnlockedSync(
-        (keyData) => sodium.crypto_generichash(
-          outLen ?? bytes,
-          message,
-          keyData,
-        ),
+        (keyData) => sodium
+            .crypto_generichash(
+              outLen ?? bytes,
+              message.toJS,
+              keyData?.toJS,
+            )
+            .toDart,
       ),
     );
   }

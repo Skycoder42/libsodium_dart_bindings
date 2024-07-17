@@ -1,10 +1,9 @@
-@JS()
-library to_safe_int;
+import 'dart:js_interop';
 
-import 'package:js/js.dart';
+// TODO refactor this
 
 @JS('Number.MAX_SAFE_INTEGER')
-external num _maxSafeInteger;
+external num get _maxSafeInteger;
 
 /// Extension on [num] to allow safe integer conversions.
 extension ToSafeIntX on num {

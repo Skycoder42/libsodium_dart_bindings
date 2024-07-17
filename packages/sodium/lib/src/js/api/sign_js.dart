@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_lambdas
+
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -35,10 +38,10 @@ class SignJS with SignValidations implements Sign {
 
   @override
   KeyPair keyPair() {
-    final keyPair = jsErrorWrap(sodium.crypto_sign_keypair);
+    final keyPair = jsErrorWrap(() => sodium.crypto_sign_keypair());
 
     return KeyPair(
-      publicKey: keyPair.publicKey,
+      publicKey: keyPair.publicKey.toDart,
       secretKey: SecureKeyJS(sodium, keyPair.privateKey),
     );
   }
@@ -49,12 +52,12 @@ class SignJS with SignValidations implements Sign {
 
     final keyPair = jsErrorWrap(
       () => seed.runUnlockedSync(
-        sodium.crypto_sign_seed_keypair,
+        (seedData) => sodium.crypto_sign_seed_keypair(seedData.toJS),
       ),
     );
 
     return KeyPair(
-      publicKey: keyPair.publicKey,
+      publicKey: keyPair.publicKey.toDart,
       secretKey: SecureKeyJS(sodium, keyPair.privateKey),
     );
   }
@@ -68,7 +71,12 @@ class SignJS with SignValidations implements Sign {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium.crypto_sign(message, secretKeyData),
+        (secretKeyData) => sodium
+            .crypto_sign(
+              message.toJS,
+              secretKeyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -82,7 +90,12 @@ class SignJS with SignValidations implements Sign {
     validatePublicKey(publicKey);
 
     return jsErrorWrap(
-      () => sodium.crypto_sign_open(signedMessage, publicKey),
+      () => sodium
+          .crypto_sign_open(
+            signedMessage.toJS,
+            publicKey.toJS,
+          )
+          .toDart,
     );
   }
 
@@ -95,7 +108,12 @@ class SignJS with SignValidations implements Sign {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium.crypto_sign_detached(message, secretKeyData),
+        (secretKeyData) => sodium
+            .crypto_sign_detached(
+              message.toJS,
+              secretKeyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -111,9 +129,9 @@ class SignJS with SignValidations implements Sign {
 
     return jsErrorWrap(
       () => sodium.crypto_sign_verify_detached(
-        signature,
-        message,
-        publicKey,
+        signature.toJS,
+        message.toJS,
+        publicKey.toJS,
       ),
     );
   }

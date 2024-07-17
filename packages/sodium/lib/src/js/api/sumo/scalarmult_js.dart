@@ -1,3 +1,4 @@
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -29,7 +30,9 @@ class ScalarmultJS with ScalarmultValidations implements Scalarmult {
     validateSecretKey(n);
 
     return jsErrorWrap(
-      () => n.runUnlockedSync(sodium.crypto_scalarmult_base),
+      () => n.runUnlockedSync(
+        (nData) => sodium.crypto_scalarmult_base(nData.toJS).toDart,
+      ),
     );
   }
 
@@ -45,7 +48,7 @@ class ScalarmultJS with ScalarmultValidations implements Scalarmult {
       sodium,
       jsErrorWrap(
         () => n.runUnlockedSync(
-          (nData) => sodium.crypto_scalarmult(nData, p),
+          (nData) => sodium.crypto_scalarmult(nData.toJS, p.toJS),
         ),
       ),
     );

@@ -1,13 +1,16 @@
 @TestOn('js')
 library sodium_js_init_test;
 
+import 'dart:js_interop';
+
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/sodium_js.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:sodium/src/js/sodium_js_init.dart';
 import 'package:test/test.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+@JSExport()
+class MockLibSodiumJS extends Mock {}
 
 void main() {
   final mockSodium = MockLibSodiumJS();

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -32,7 +33,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
   }) {
     _state = jsErrorWrap(
       () => key.runMaybeUnlockedSync(
-        (keyData) => sodium.crypto_generichash_init(keyData, outLen),
+        (keyData) => sodium.crypto_generichash_init(keyData?.toJS, outLen),
       ),
     );
   }
@@ -42,7 +43,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
     _ensureNotCompleted();
 
     jsErrorWrap(
-      () => sodium.crypto_generichash_update(_state, data),
+      () => sodium.crypto_generichash_update(_state, data.toJS),
     );
   }
 
@@ -63,7 +64,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
           outLen,
         ),
       );
-      _hashCompleter.complete(result);
+      _hashCompleter.complete(result.toDart);
     } catch (e, s) {
       _hashCompleter.completeError(e, s);
     }

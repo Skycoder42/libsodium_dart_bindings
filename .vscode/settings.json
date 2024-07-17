@@ -12,5 +12,7 @@
     "unpad",
     "unpadded"
   ],
-  "cmake.configureOnOpen": false
+  "files.associations": {
+    "*.dart.type": "dart",
+  },
 }

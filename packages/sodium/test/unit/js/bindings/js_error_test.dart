@@ -20,7 +20,7 @@ void main() {
 
       expect(
         // ignore: only_throw_errors
-        () => jsErrorWrap(() => throw JsError(message)),
+        () => jsErrorWrap(() => throw JSError(message)),
         throwsA(
           isA<SodiumException>().having(
             (e) => e.originalMessage,

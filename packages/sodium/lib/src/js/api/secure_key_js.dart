@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -12,14 +13,14 @@ import '../bindings/sodium.js.dart';
 class SecureKeyJS with SecureKeyEquality implements SecureKey {
   /// @nodoc
   final LibSodiumJS sodium;
-  final Uint8List _raw;
+  final JSUint8Array _raw;
 
   /// @nodoc
   SecureKeyJS(this.sodium, this._raw);
 
   /// @nodoc
   factory SecureKeyJS.alloc(LibSodiumJS sodium, int length) =>
-      SecureKeyJS(sodium, Uint8List(length));
+      SecureKeyJS(sodium, Uint8List(length).toJS);
 
   /// @nodoc
   factory SecureKeyJS.random(LibSodiumJS sodium, int length) => SecureKeyJS(
@@ -28,27 +29,27 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
       );
 
   @override
-  int get length => _raw.length;
+  int get length => _raw.toDart.length;
 
   @override
   T runUnlockedSync<T>(
     SecureCallbackFn<T> callback, {
     bool writable = false,
   }) =>
-      callback(_raw);
+      callback(_raw.toDart);
 
   @override
   FutureOr<T> runUnlockedAsync<T>(
     SecureCallbackFn<FutureOr<T>> callback, {
     bool writable = false,
   }) =>
-      callback(_raw);
+      callback(_raw.toDart);
 
   @override
-  Uint8List extractBytes() => Uint8List.fromList(_raw);
+  Uint8List extractBytes() => Uint8List.fromList(_raw.toDart);
 
   @override
-  SecureKey copy() => SecureKeyJS(sodium, Uint8List.fromList(_raw));
+  SecureKey copy() => SecureKeyJS(sodium, extractBytes().toJS);
 
   @override
   void dispose() {

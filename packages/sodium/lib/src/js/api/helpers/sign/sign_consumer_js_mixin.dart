@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -35,7 +36,7 @@ mixin SignConsumerJSMixin<T extends Object>
     _ensureNotCompleted();
 
     jsErrorWrap(
-      () => sodium.crypto_sign_update(_state, data),
+      () => sodium.crypto_sign_update(_state, data.toJS),
     );
   }
 

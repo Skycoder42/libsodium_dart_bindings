@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_lambdas
+
 import 'package:meta/meta.dart';
 
 import '../../api/helpers/secret_stream/secret_stream_base.dart';
@@ -37,7 +39,7 @@ class SecretStreamJS
   SecureKey keygen() => SecureKeyJS(
         sodium,
         jsErrorWrap(
-          sodium.crypto_secretstream_xchacha20poly1305_keygen,
+          () => sodium.crypto_secretstream_xchacha20poly1305_keygen(),
         ),
       );
 

@@ -1,3 +1,4 @@
+import 'dart:js_interop';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -101,8 +102,8 @@ class PwhashJS with PwHashValidations implements Pwhash {
     final result = jsErrorWrap(
       () => sodium.crypto_pwhash(
         outLen,
-        Uint8List.view(password.buffer),
-        salt,
+        Uint8List.view(password.buffer).toJS,
+        salt.toJS,
         opsLimit,
         memLimit,
         alg.getValue(sodium),
@@ -124,7 +125,7 @@ class PwhashJS with PwHashValidations implements Pwhash {
 
     final result = jsErrorWrap(
       () => sodium.crypto_pwhash_str(
-        passwordChars.unsignedView(),
+        passwordChars.unsignedView().toJS,
         opsLimit,
         memLimit,
       ),
@@ -144,7 +145,7 @@ class PwhashJS with PwHashValidations implements Pwhash {
     return jsErrorWrap(
       () => sodium.crypto_pwhash_str_verify(
         passwordHash,
-        passwordChars.unsignedView(),
+        passwordChars.unsignedView().toJS,
       ),
     );
   }

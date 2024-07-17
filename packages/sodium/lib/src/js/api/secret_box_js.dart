@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_lambdas
+
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -31,7 +34,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        jsErrorWrap(sodium.crypto_secretbox_keygen),
+        jsErrorWrap(() => sodium.crypto_secretbox_keygen()),
       );
 
   @override
@@ -45,11 +48,13 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_secretbox_easy(
-          message,
-          nonce,
-          keyData,
-        ),
+        (keyData) => sodium
+            .crypto_secretbox_easy(
+              message.toJS,
+              nonce.toJS,
+              keyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -66,11 +71,13 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_secretbox_open_easy(
-          cipherText,
-          nonce,
-          keyData,
-        ),
+        (keyData) => sodium
+            .crypto_secretbox_open_easy(
+              cipherText.toJS,
+              nonce.toJS,
+              keyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -87,16 +94,16 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
     final cipher = jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_secretbox_detached(
-          message,
-          nonce,
-          keyData,
+          message.toJS,
+          nonce.toJS,
+          keyData.toJS,
         ),
       ),
     );
 
     return DetachedCipherResult(
-      cipherText: cipher.cipher,
-      mac: cipher.mac,
+      cipherText: cipher.cipher.toDart,
+      mac: cipher.mac.toDart,
     );
   }
 
@@ -113,12 +120,14 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_secretbox_open_detached(
-          cipherText,
-          mac,
-          nonce,
-          keyData,
-        ),
+        (keyData) => sodium
+            .crypto_secretbox_open_detached(
+              cipherText.toJS,
+              mac.toJS,
+              nonce.toJS,
+              keyData.toJS,
+            )
+            .toDart,
       ),
     );
   }

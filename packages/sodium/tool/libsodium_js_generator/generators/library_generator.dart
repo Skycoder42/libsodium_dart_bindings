@@ -9,22 +9,14 @@ class LibraryGenerator {
         '// ignore_for_file: non_constant_identifier_names, public_member_api_docs',
       )
       ..writeln()
-      ..writeln('@JS()')
-      ..writeln('library sodium.js;')
-      ..writeln()
-      ..writeln("import 'dart:typed_data';")
-      ..writeln()
-      ..writeln("import 'package:js/js.dart';")
-      ..writeln()
-      ..writeln("import 'js_big_int.dart';")
+      ..writeln("import 'dart:js_interop';")
       ..writeln();
   }
 
   void writeClassPre(StringSink sink) {
-    sink
-      ..writeln('@JS()')
-      ..writeln('@anonymous')
-      ..writeln('class LibSodiumJS {');
+    sink.writeln(
+      'extension type LibSodiumJS._(JSObject _) implements JSObject {',
+    );
   }
 
   void writeExtraDefinitions(StringSink sink, int intendent) {
@@ -32,11 +24,11 @@ class LibraryGenerator {
       ..writeIntendent(intendent)
       ..writeln('external num randombytes_seedbytes();')
       ..writeln()
-      ..writeln('external void memzero(Uint8List bytes);')
+      ..writeln('external void memzero(JSUint8Array bytes);')
       ..writeln()
-      ..writeln('external Uint8List pad(Uint8List buf, num blocksize);')
+      ..writeln('external JSUint8Array pad(JSUint8Array buf, num blocksize);')
       ..writeln()
-      ..writeln('external Uint8List unpad(Uint8List buf, num blocksize);')
+      ..writeln('external JSUint8Array unpad(JSUint8Array buf, num blocksize);')
       ..writeln();
   }
 

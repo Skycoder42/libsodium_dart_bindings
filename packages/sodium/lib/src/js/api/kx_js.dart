@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_lambdas
+
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -33,10 +36,10 @@ class KxJS with KxValidations implements Kx {
 
   @override
   KeyPair keyPair() {
-    final keyPair = jsErrorWrap(sodium.crypto_kx_keypair);
+    final keyPair = jsErrorWrap(() => sodium.crypto_kx_keypair());
 
     return KeyPair(
-      publicKey: keyPair.publicKey,
+      publicKey: keyPair.publicKey.toDart,
       secretKey: SecureKeyJS(sodium, keyPair.privateKey),
     );
   }
@@ -47,12 +50,12 @@ class KxJS with KxValidations implements Kx {
 
     final keyPair = jsErrorWrap(
       () => seed.runUnlockedSync(
-        sodium.crypto_kx_seed_keypair,
+        (seedData) => sodium.crypto_kx_seed_keypair(seedData.toJS),
       ),
     );
 
     return KeyPair(
-      publicKey: keyPair.publicKey,
+      publicKey: keyPair.publicKey.toDart,
       secretKey: SecureKeyJS(sodium, keyPair.privateKey),
     );
   }
@@ -70,9 +73,9 @@ class KxJS with KxValidations implements Kx {
     final sessionKeys = jsErrorWrap(
       () => clientSecretKey.runUnlockedSync(
         (clientSecretKeyData) => sodium.crypto_kx_client_session_keys(
-          clientPublicKey,
-          clientSecretKeyData,
-          serverPublicKey,
+          clientPublicKey.toJS,
+          clientSecretKeyData.toJS,
+          serverPublicKey.toJS,
         ),
       ),
     );
@@ -96,9 +99,9 @@ class KxJS with KxValidations implements Kx {
     final sessionKeys = jsErrorWrap(
       () => serverSecretKey.runUnlockedSync(
         (serverSecretKeyData) => sodium.crypto_kx_server_session_keys(
-          serverPublicKey,
-          serverSecretKeyData,
-          clientPublicKey,
+          serverPublicKey.toJS,
+          serverSecretKeyData.toJS,
+          clientPublicKey.toJS,
         ),
       ),
     );

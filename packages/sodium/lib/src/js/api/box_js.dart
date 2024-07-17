@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_lambdas
+
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -32,11 +35,13 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
 
     return jsErrorWrap(
       () => sharedKey.runUnlockedSync(
-        (sharedKeyData) => box.sodium.crypto_box_easy_afternm(
-          message,
-          nonce,
-          sharedKeyData,
-        ),
+        (sharedKeyData) => box.sodium
+            .crypto_box_easy_afternm(
+              message.toJS,
+              nonce.toJS,
+              sharedKeyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -52,11 +57,13 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
 
     return jsErrorWrap(
       () => sharedKey.runUnlockedSync(
-        (sharedKeyData) => box.sodium.crypto_box_open_easy_afternm(
-          cipherText,
-          nonce,
-          sharedKeyData,
-        ),
+        (sharedKeyData) => box.sodium
+            .crypto_box_open_easy_afternm(
+              cipherText.toJS,
+              nonce.toJS,
+              sharedKeyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -122,10 +129,10 @@ class BoxJS with BoxValidations implements Box {
 
   @override
   KeyPair keyPair() {
-    final keyPair = jsErrorWrap(sodium.crypto_box_keypair);
+    final keyPair = jsErrorWrap(() => sodium.crypto_box_keypair());
 
     return KeyPair(
-      publicKey: keyPair.publicKey,
+      publicKey: keyPair.publicKey.toDart,
       secretKey: SecureKeyJS(sodium, keyPair.privateKey),
     );
   }
@@ -136,12 +143,12 @@ class BoxJS with BoxValidations implements Box {
 
     final keyPair = jsErrorWrap(
       () => seed.runUnlockedSync(
-        sodium.crypto_box_seed_keypair,
+        (seedData) => sodium.crypto_box_seed_keypair(seedData.toJS),
       ),
     );
 
     return KeyPair(
-      publicKey: keyPair.publicKey,
+      publicKey: keyPair.publicKey.toDart,
       secretKey: SecureKeyJS(sodium, keyPair.privateKey),
     );
   }
@@ -159,12 +166,14 @@ class BoxJS with BoxValidations implements Box {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium.crypto_box_easy(
-          message,
-          nonce,
-          publicKey,
-          secretKeyData,
-        ),
+        (secretKeyData) => sodium
+            .crypto_box_easy(
+              message.toJS,
+              nonce.toJS,
+              publicKey.toJS,
+              secretKeyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -183,12 +192,14 @@ class BoxJS with BoxValidations implements Box {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium.crypto_box_open_easy(
-          cipherText,
-          nonce,
-          publicKey,
-          secretKeyData,
-        ),
+        (secretKeyData) => sodium
+            .crypto_box_open_easy(
+              cipherText.toJS,
+              nonce.toJS,
+              publicKey.toJS,
+              secretKeyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -207,17 +218,17 @@ class BoxJS with BoxValidations implements Box {
     final cipher = jsErrorWrap(
       () => secretKey.runUnlockedSync(
         (secretKeyData) => sodium.crypto_box_detached(
-          message,
-          nonce,
-          publicKey,
-          secretKeyData,
+          message.toJS,
+          nonce.toJS,
+          publicKey.toJS,
+          secretKeyData.toJS,
         ),
       ),
     );
 
     return DetachedCipherResult(
-      cipherText: cipher.ciphertext,
-      mac: cipher.mac,
+      cipherText: cipher.ciphertext.toDart,
+      mac: cipher.mac.toDart,
     );
   }
 
@@ -236,13 +247,15 @@ class BoxJS with BoxValidations implements Box {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium.crypto_box_open_detached(
-          cipherText,
-          mac,
-          nonce,
-          publicKey,
-          secretKeyData,
-        ),
+        (secretKeyData) => sodium
+            .crypto_box_open_detached(
+              cipherText.toJS,
+              mac.toJS,
+              nonce.toJS,
+              publicKey.toJS,
+              secretKeyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -262,8 +275,8 @@ class BoxJS with BoxValidations implements Box {
         jsErrorWrap(
           () => secretKey.runUnlockedSync(
             (secretKeyData) => sodium.crypto_box_beforenm(
-              publicKey,
-              secretKeyData,
+              publicKey.toJS,
+              secretKeyData.toJS,
             ),
           ),
         ),
@@ -279,10 +292,12 @@ class BoxJS with BoxValidations implements Box {
     validatePublicKey(publicKey);
 
     return jsErrorWrap(
-      () => sodium.crypto_box_seal(
-        message,
-        publicKey,
-      ),
+      () => sodium
+          .crypto_box_seal(
+            message.toJS,
+            publicKey.toJS,
+          )
+          .toDart,
     );
   }
 
@@ -298,11 +313,13 @@ class BoxJS with BoxValidations implements Box {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium.crypto_box_seal_open(
-          cipherText,
-          publicKey,
-          secretKeyData,
-        ),
+        (secretKeyData) => sodium
+            .crypto_box_seal_open(
+              cipherText.toJS,
+              publicKey.toJS,
+              secretKeyData.toJS,
+            )
+            .toDart,
       ),
     );
   }

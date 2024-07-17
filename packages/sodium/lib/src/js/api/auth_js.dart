@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_lambdas
+
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -27,7 +30,7 @@ class AuthJS with AuthValidations implements Auth {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        jsErrorWrap(sodium.crypto_auth_keygen),
+        jsErrorWrap(() => sodium.crypto_auth_keygen()),
       );
 
   @override
@@ -39,10 +42,12 @@ class AuthJS with AuthValidations implements Auth {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_auth(
-          message,
-          keyData,
-        ),
+        (keyData) => sodium
+            .crypto_auth(
+              message.toJS,
+              keyData.toJS,
+            )
+            .toDart,
       ),
     );
   }
@@ -59,9 +64,9 @@ class AuthJS with AuthValidations implements Auth {
     return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => sodium.crypto_auth_verify(
-          tag,
-          message,
-          keyData,
+          tag.toJS,
+          message.toJS,
+          keyData.toJS,
         ),
       ),
     );

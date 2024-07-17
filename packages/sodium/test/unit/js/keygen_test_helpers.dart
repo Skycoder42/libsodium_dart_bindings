@@ -1,3 +1,4 @@
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -39,7 +40,7 @@ void testKeygen({
       });
 
       test('throws SodiumException on JsError', () {
-        when(keygenNative).thenThrow(JsError());
+        when(keygenNative).thenThrow(JSError());
 
         expect(() => runKeygen(), throwsA(isA<SodiumException>()));
       });
@@ -59,8 +60,8 @@ void testKeypair({
         when(keypairNative).thenReturn(
           KeyPair(
             keyType: '',
-            publicKey: Uint8List(0),
-            privateKey: Uint8List(0),
+            publicKey: Uint8List(0).toJS,
+            privateKey: Uint8List(0).toJS,
           ),
         );
 
@@ -75,8 +76,8 @@ void testKeypair({
         when(keypairNative).thenReturn(
           KeyPair(
             keyType: '',
-            publicKey: Uint8List.fromList(testPublic),
-            privateKey: Uint8List.fromList(testSecret),
+            publicKey: Uint8List.fromList(testPublic).toJS,
+            privateKey: Uint8List.fromList(testSecret).toJS,
           ),
         );
 
@@ -87,7 +88,7 @@ void testKeypair({
       });
 
       test('disposes allocated key on error', () {
-        when(keypairNative).thenThrow(JsError());
+        when(keypairNative).thenThrow(JSError());
 
         expect(() => runKeypair(), throwsA(isA<Exception>()));
       });
@@ -123,8 +124,8 @@ void testSeedKeypair({
         when(() => seedKeypairNative(any())).thenReturn(
           KeyPair(
             keyType: '',
-            publicKey: Uint8List(0),
-            privateKey: Uint8List(0),
+            publicKey: Uint8List(0).toJS,
+            privateKey: Uint8List(0).toJS,
           ),
         );
 
@@ -142,8 +143,8 @@ void testSeedKeypair({
         when(() => seedKeypairNative(any())).thenReturn(
           KeyPair(
             keyType: '',
-            publicKey: Uint8List.fromList(testPublic),
-            privateKey: Uint8List.fromList(testSecret),
+            publicKey: Uint8List.fromList(testPublic).toJS,
+            privateKey: Uint8List.fromList(testSecret).toJS,
           ),
         );
 
@@ -154,7 +155,7 @@ void testSeedKeypair({
       });
 
       test('disposes allocated key on error', () {
-        when(() => seedKeypairNative(any())).thenThrow(JsError());
+        when(() => seedKeypairNative(any())).thenThrow(JSError());
 
         expect(
           () => runSeedKeypair(SecureKeyFake.empty(seedLen)),

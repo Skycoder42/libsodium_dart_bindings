@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_lambdas
+
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -27,7 +30,7 @@ class ShortHashJS with ShortHashValidations implements ShortHash {
   @override
   SecureKey keygen() => SecureKeyJS(
         sodium,
-        jsErrorWrap(sodium.crypto_shorthash_keygen),
+        jsErrorWrap(() => sodium.crypto_shorthash_keygen()),
       );
 
   @override
@@ -39,7 +42,12 @@ class ShortHashJS with ShortHashValidations implements ShortHash {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_shorthash(message, keyData),
+        (keyData) => sodium
+            .crypto_shorthash(
+              message.toJS,
+              keyData.toJS,
+            )
+            .toDart,
       ),
     );
   }

@@ -1,13 +1,11 @@
-@JS()
-@anonymous
-class KeyPair {
+extension type KeyPair._(JSObject _) implements JSObject {
   external String get keyType;
-  external Uint8List get privateKey;
-  external Uint8List get publicKey;
+  external JSUint8Array get privateKey;
+  external JSUint8Array get publicKey;
 
-  external factory KeyPair({
+  external KeyPair({
     required String keyType,
-    required Uint8List privateKey,
-    required Uint8List publicKey,
+    required JSUint8Array privateKey,
+    required JSUint8Array publicKey,
   });
 }

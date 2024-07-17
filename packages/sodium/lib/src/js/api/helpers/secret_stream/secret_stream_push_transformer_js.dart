@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:meta/meta.dart';
 
 import '../../../../api/helpers/secret_stream/push/init_push_result.dart';
@@ -22,12 +24,13 @@ class SecretStreamPushTransformerSinkJS extends SecretStreamPushTransformerSink<
   InitPushResult<SecretstreamXchacha20poly1305State> initialize(SecureKey key) {
     final initResult = jsErrorWrap(
       () => key.runUnlockedSync(
-        sodium.crypto_secretstream_xchacha20poly1305_init_push,
+        (keyData) => sodium
+            .crypto_secretstream_xchacha20poly1305_init_push(keyData.toJS),
       ),
     );
 
     return InitPushResult(
-      header: initResult.header,
+      header: initResult.header.toDart,
       state: initResult.state,
     );
   }
@@ -46,14 +49,14 @@ class SecretStreamPushTransformerSinkJS extends SecretStreamPushTransformerSink<
     final cipherText = jsErrorWrap(
       () => sodium.crypto_secretstream_xchacha20poly1305_push(
         cryptoState,
-        event.message,
-        event.additionalData,
+        event.message.toJS,
+        event.additionalData?.toJS,
         event.tag.getValue(sodium),
       ),
     );
 
     return SecretStreamCipherMessage(
-      cipherText,
+      cipherText.toDart,
       additionalData: event.additionalData,
     );
   }

@@ -9,7 +9,6 @@ environment:
 dependencies:
   ffi: ^2.1.2
   freezed_annotation: ^2.4.3
-  js: ^0.7.1
   json_annotation: ^4.9.0 # Required until https://github.com/rrousselGit/freezed/issues/1107 is fixed
   meta: ^1.12.0
 

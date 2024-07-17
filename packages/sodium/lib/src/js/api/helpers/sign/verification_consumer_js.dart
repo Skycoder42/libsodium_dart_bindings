@@ -1,3 +1,4 @@
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -37,8 +38,8 @@ class VerificationConsumerJS
   bool finalize(SignState state) => jsErrorWrap(
         () => sodium.crypto_sign_final_verify(
           state,
-          signature,
-          publicKey,
+          signature.toJS,
+          publicKey.toJS,
         ),
       );
 }

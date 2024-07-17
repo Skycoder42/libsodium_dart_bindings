@@ -22,16 +22,16 @@ class TypeMappings {
     'void': TypeInfo('void'),
     'boolean': TypeInfo('bool'),
     'uint': TypeInfo('num'),
-    'u64': TypeInfo('JsBigInt'),
+    'u64': TypeInfo('JSBigInt'),
     'string': TypeInfo('String'),
-    'buf': TypeInfo('Uint8List'),
-    'buf_optional': TypeInfo('Uint8List?'),
-    'unsized_buf': TypeInfo('Uint8List'),
-    'unsized_buf_optional': TypeInfo('Uint8List?'),
-    'minsized_buf': TypeInfo('Uint8List'),
+    'buf': TypeInfo('JSUint8Array'),
+    'buf_optional': TypeInfo('JSUint8Array?'),
+    'unsized_buf': TypeInfo('JSUint8Array'),
+    'unsized_buf_optional': TypeInfo('JSUint8Array?'),
+    'minsized_buf': TypeInfo('JSUint8Array'),
     // simple result mappings
-    'randombytes_random_result': TypeInfo('num'),
-    'randombytes_uniform_result': TypeInfo('num'),
+    'randombytes_random_result': TypeInfo('int'),
+    'randombytes_uniform_result': TypeInfo('int'),
     'sodium_version_string_result': TypeInfo('String'),
     // complex result mappings
     'crypto_aead_chacha20poly1305_encrypt_detached_result': TypeInfo(
@@ -58,7 +58,7 @@ class TypeMappings {
       'SecretStreamInitPush',
     ),
     'crypto_secretstream_xchacha20poly1305_pull_result': TypeInfo(
-      'dynamic',
+      'JSAny',
       force: true,
     ),
     'crypto_sign_keypair_result': TypeInfo('KeyPair'),
@@ -74,30 +74,32 @@ class TypeMappings {
     // state typedefs
     'secretstream_xchacha20poly1305_state': TypeInfo(
       'SecretstreamXchacha20poly1305State',
-      typeDef: 'num',
+      typeDef: 'JSNumber',
     ),
     'secretstream_xchacha20poly1305_state_address':
         TypeInfo('SecretstreamXchacha20poly1305State'),
-    'sign_state': TypeInfo('SignState', typeDef: 'num'),
+    'sign_state': TypeInfo('SignState', typeDef: 'JSNumber'),
     'sign_state_address': TypeInfo('SignState'),
-    'generichash_state': TypeInfo('GenerichashState', typeDef: 'num'),
+    'generichash_state': TypeInfo('GenerichashState', typeDef: 'JSNumber'),
     'generichash_state_address': TypeInfo('GenerichashState'),
-    'hash_sha256_state': TypeInfo('HashSha256State', typeDef: 'num'),
+    'hash_sha256_state': TypeInfo('HashSha256State', typeDef: 'JSNumber'),
     'hash_sha256_state_address': TypeInfo('HashSha256State'),
-    'hash_sha512_state': TypeInfo('HashSha512State', typeDef: 'num'),
+    'hash_sha512_state': TypeInfo('HashSha512State', typeDef: 'JSNumber'),
     'hash_sha512_state_address': TypeInfo('HashSha512State'),
-    'onetimeauth_state': TypeInfo('OnetimeauthState', typeDef: 'num'),
+    'onetimeauth_state': TypeInfo('OnetimeauthState', typeDef: 'JSNumber'),
     'onetimeauth_state_address': TypeInfo('OnetimeauthState'),
-    'auth_hmacsha256_state': TypeInfo('AuthHmacsha256State', typeDef: 'num'),
+    'auth_hmacsha256_state':
+        TypeInfo('AuthHmacsha256State', typeDef: 'JSNumber'),
     'auth_hmacsha256_state_address': TypeInfo('AuthHmacsha256State'),
-    'auth_hmacsha512_state': TypeInfo('AuthHmacsha512State', typeDef: 'num'),
+    'auth_hmacsha512_state':
+        TypeInfo('AuthHmacsha512State', typeDef: 'JSNumber'),
     'auth_hmacsha512_state_address': TypeInfo('AuthHmacsha512State'),
     'auth_hmacsha512256_state':
-        TypeInfo('AuthHmacsha512256State', typeDef: 'num'),
+        TypeInfo('AuthHmacsha512256State', typeDef: 'JSNumber'),
     'auth_hmacsha512256_state_address': TypeInfo('AuthHmacsha512256State'),
     // hidden types
-    'randombytes_implementation': TypeInfo('Never'),
-    'randombytes_set_implementation_result': TypeInfo('Never'),
+    'randombytes_implementation': TypeInfo('JSAny'),
+    'randombytes_set_implementation_result': TypeInfo('JSAny'),
   };
 
   late final fileLoader = FileLoader(

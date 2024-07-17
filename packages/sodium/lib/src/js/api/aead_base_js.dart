@@ -1,3 +1,4 @@
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -10,69 +11,12 @@ import '../bindings/sodium.js.dart';
 
 /// @nodoc
 @internal
-typedef InternalEncrypt = Uint8List Function(
-  Uint8List message,
-  Uint8List? additionalData,
-  Uint8List? secretNonce,
-  Uint8List publicNonce,
-  Uint8List key,
-);
-
-/// @nodoc
-@internal
-typedef InternalDecrypt = Uint8List Function(
-  Uint8List? secretNonce,
-  Uint8List ciphertext,
-  Uint8List? additionalData,
-  Uint8List publicNonce,
-  Uint8List key,
-);
-
-/// @nodoc
-@internal
-typedef InternalEncryptDetached = CryptoBox Function(
-  Uint8List message,
-  Uint8List? additionalData,
-  Uint8List? secretNonce,
-  Uint8List publicNonce,
-  Uint8List key,
-);
-
-/// @nodoc
-@internal
-typedef InternalDecryptDetached = Uint8List Function(
-  Uint8List? secretNonce,
-  Uint8List ciphertext,
-  Uint8List mac,
-  Uint8List? additionalData,
-  Uint8List publicNonce,
-  Uint8List key,
-);
-
-/// @nodoc
-@internal
 abstract class AeadBaseJS with AeadValidations implements Aead {
   /// @nodoc
   final LibSodiumJS sodium;
 
   /// @nodoc
   AeadBaseJS(this.sodium);
-
-  /// @nodoc
-  @protected
-  InternalEncrypt get internalEncrypt;
-
-  /// @nodoc
-  @protected
-  InternalDecrypt get internalDecrypt;
-
-  /// @nodoc
-  @protected
-  InternalEncryptDetached get internalEncryptDetached;
-
-  /// @nodoc
-  @protected
-  InternalDecryptDetached get internalDecryptDetached;
 
   @override
   Uint8List encrypt({
@@ -87,12 +31,12 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
     return jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => internalEncrypt(
-          message,
-          additionalData,
+          message.toJS,
+          additionalData?.toJS,
           null,
-          nonce,
-          keyData,
-        ),
+          nonce.toJS,
+          keyData.toJS,
+        ).toDart,
       ),
     );
   }
@@ -112,11 +56,11 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
       () => key.runUnlockedSync(
         (keyData) => internalDecrypt(
           null,
-          cipherText,
-          additionalData,
-          nonce,
-          keyData,
-        ),
+          cipherText.toJS,
+          additionalData?.toJS,
+          nonce.toJS,
+          keyData.toJS,
+        ).toDart,
       ),
     );
   }
@@ -134,18 +78,18 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
     final cipher = jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) => internalEncryptDetached(
-          message,
-          additionalData,
+          message.toJS,
+          additionalData?.toJS,
           null,
-          nonce,
-          keyData,
+          nonce.toJS,
+          keyData.toJS,
         ),
       ),
     );
 
     return DetachedCipherResult(
-      cipherText: cipher.ciphertext,
-      mac: cipher.mac,
+      cipherText: cipher.ciphertext.toDart,
+      mac: cipher.mac.toDart,
     );
   }
 
@@ -165,13 +109,54 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
       () => key.runUnlockedSync(
         (keyData) => internalDecryptDetached(
           null,
-          cipherText,
-          mac,
-          additionalData,
-          nonce,
-          keyData,
-        ),
+          cipherText.toJS,
+          mac.toJS,
+          additionalData?.toJS,
+          nonce.toJS,
+          keyData.toJS,
+        ).toDart,
       ),
     );
   }
+
+  /// @nodoc
+  @protected
+  JSUint8Array internalEncrypt(
+    JSUint8Array message,
+    JSUint8Array? additionalData,
+    JSUint8Array? secretNonce,
+    JSUint8Array publicNonce,
+    JSUint8Array key,
+  );
+
+  /// @nodoc
+  @protected
+  JSUint8Array internalDecrypt(
+    JSUint8Array? secretNonce,
+    JSUint8Array ciphertext,
+    JSUint8Array? additionalData,
+    JSUint8Array publicNonce,
+    JSUint8Array key,
+  );
+
+  /// @nodoc
+  @protected
+  CryptoBox internalEncryptDetached(
+    JSUint8Array message,
+    JSUint8Array? additionalData,
+    JSUint8Array? secretNonce,
+    JSUint8Array publicNonce,
+    JSUint8Array key,
+  );
+
+  /// @nodoc
+  @protected
+  JSUint8Array internalDecryptDetached(
+    JSUint8Array? secretNonce,
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array? additionalData,
+    JSUint8Array publicNonce,
+    JSUint8Array key,
+  );
 }

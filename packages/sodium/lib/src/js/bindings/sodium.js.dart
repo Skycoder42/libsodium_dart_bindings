@@ -1,109 +1,88 @@
 // ignore_for_file: non_constant_identifier_names, public_member_api_docs
 
-@JS()
-library sodium.js;
+import 'dart:js_interop';
 
-import 'dart:typed_data';
+typedef SecretstreamXchacha20poly1305State = JSNumber;
 
-import 'package:js/js.dart';
+typedef SignState = JSNumber;
 
-import 'js_big_int.dart';
+typedef GenerichashState = JSNumber;
 
-typedef SecretstreamXchacha20poly1305State = num;
+typedef HashSha256State = JSNumber;
 
-typedef SignState = num;
+typedef HashSha512State = JSNumber;
 
-typedef GenerichashState = num;
+typedef OnetimeauthState = JSNumber;
 
-typedef HashSha256State = num;
+typedef AuthHmacsha256State = JSNumber;
 
-typedef HashSha512State = num;
+typedef AuthHmacsha512State = JSNumber;
 
-typedef OnetimeauthState = num;
+typedef AuthHmacsha512256State = JSNumber;
 
-typedef AuthHmacsha256State = num;
+extension type CryptoBox._(JSObject _) implements JSObject {
+  external JSUint8Array get ciphertext;
+  external JSUint8Array get mac;
 
-typedef AuthHmacsha512State = num;
-
-typedef AuthHmacsha512256State = num;
-
-@JS()
-@anonymous
-class CryptoBox {
-  external Uint8List get ciphertext;
-  external Uint8List get mac;
-
-  external factory CryptoBox({
-    required Uint8List ciphertext,
-    required Uint8List mac,
+  external CryptoBox({
+    required JSUint8Array ciphertext,
+    required JSUint8Array mac,
   });
 }
 
-@JS()
-@anonymous
-class CryptoKX {
-  external Uint8List get sharedRx;
-  external Uint8List get sharedTx;
+extension type CryptoKX._(JSObject _) implements JSObject {
+  external JSUint8Array get sharedRx;
+  external JSUint8Array get sharedTx;
 
-  external factory CryptoKX({
-    required Uint8List sharedRx,
-    required Uint8List sharedTx,
+  external CryptoKX({
+    required JSUint8Array sharedRx,
+    required JSUint8Array sharedTx,
   });
 }
 
-@JS()
-@anonymous
-class KeyPair {
+extension type KeyPair._(JSObject _) implements JSObject {
   external String get keyType;
-  external Uint8List get privateKey;
-  external Uint8List get publicKey;
+  external JSUint8Array get privateKey;
+  external JSUint8Array get publicKey;
 
-  external factory KeyPair({
+  external KeyPair({
     required String keyType,
-    required Uint8List privateKey,
-    required Uint8List publicKey,
+    required JSUint8Array privateKey,
+    required JSUint8Array publicKey,
   });
 }
 
-@JS()
-@anonymous
-class SecretBox {
-  external Uint8List get cipher;
-  external Uint8List get mac;
+extension type SecretBox._(JSObject _) implements JSObject {
+  external JSUint8Array get cipher;
+  external JSUint8Array get mac;
 
-  external factory SecretBox({
-    required Uint8List cipher,
-    required Uint8List mac,
+  external SecretBox({
+    required JSUint8Array cipher,
+    required JSUint8Array mac,
   });
 }
 
-@JS()
-@anonymous
-class SecretStreamInitPush {
-  external num get state;
-  external Uint8List get header;
+extension type SecretStreamInitPush._(JSObject _) implements JSObject {
+  external JSNumber get state;
+  external JSUint8Array get header;
 
-  external factory SecretStreamInitPush({
-    required num state,
-    required Uint8List header,
+  external SecretStreamInitPush({
+    required JSNumber state,
+    required JSUint8Array header,
   });
 }
 
-@JS()
-@anonymous
-class SecretStreamPull {
-  external Uint8List get message;
-  external num get tag;
+extension type SecretStreamPull._(JSObject _) implements JSObject {
+  external JSUint8Array get message;
+  external JSNumber get tag;
 
-  external factory SecretStreamPull({
-    required Uint8List message,
-    required num tag,
+  external SecretStreamPull({
+    required JSUint8Array message,
+    required JSNumber tag,
   });
 }
 
-@JS()
-@anonymous
-class LibSodiumJS {
+extension type LibSodiumJS._(JSObject _) implements JSObject {
   external num SODIUM_LIBRARY_VERSION_MAJOR;
 
   external num SODIUM_LIBRARY_VERSION_MINOR;
@@ -674,573 +653,574 @@ class LibSodiumJS {
 
   external num crypto_verify_64_BYTES;
 
-  external Uint8List crypto_aead_aegis128l_decrypt(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_aegis128l_decrypt(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_aegis128l_decrypt_detached(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List mac,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_aegis128l_decrypt_detached(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_aegis128l_encrypt(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_aegis128l_encrypt(
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
   external CryptoBox crypto_aead_aegis128l_encrypt_detached(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_aegis128l_keygen();
+  external JSUint8Array crypto_aead_aegis128l_keygen();
 
-  external Uint8List crypto_aead_aegis256_decrypt(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_aegis256_decrypt(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_aegis256_decrypt_detached(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List mac,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_aegis256_decrypt_detached(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_aegis256_encrypt(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_aegis256_encrypt(
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
   external CryptoBox crypto_aead_aegis256_encrypt_detached(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_aegis256_keygen();
+  external JSUint8Array crypto_aead_aegis256_keygen();
 
-  external Uint8List crypto_aead_chacha20poly1305_decrypt(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_chacha20poly1305_decrypt(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_chacha20poly1305_decrypt_detached(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List mac,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_chacha20poly1305_decrypt_detached(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_chacha20poly1305_encrypt(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_chacha20poly1305_encrypt(
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
   external CryptoBox crypto_aead_chacha20poly1305_encrypt_detached(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_chacha20poly1305_ietf_decrypt(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_chacha20poly1305_ietf_decrypt(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_chacha20poly1305_ietf_decrypt_detached(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List mac,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_chacha20poly1305_ietf_decrypt_detached(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_chacha20poly1305_ietf_encrypt(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_chacha20poly1305_ietf_encrypt(
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
   external CryptoBox crypto_aead_chacha20poly1305_ietf_encrypt_detached(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_chacha20poly1305_ietf_keygen();
+  external JSUint8Array crypto_aead_chacha20poly1305_ietf_keygen();
 
-  external Uint8List crypto_aead_chacha20poly1305_keygen();
+  external JSUint8Array crypto_aead_chacha20poly1305_keygen();
 
-  external Uint8List crypto_aead_xchacha20poly1305_ietf_decrypt(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_xchacha20poly1305_ietf_decrypt(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
-    Uint8List? secret_nonce,
-    Uint8List ciphertext,
-    Uint8List mac,
-    Uint8List? additional_data,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
+    JSUint8Array? secret_nonce,
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array? additional_data,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_xchacha20poly1305_ietf_encrypt(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+  external JSUint8Array crypto_aead_xchacha20poly1305_ietf_encrypt(
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
   external CryptoBox crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
-    Uint8List message,
-    Uint8List? additional_data,
-    Uint8List? secret_nonce,
-    Uint8List public_nonce,
-    Uint8List key,
+    JSUint8Array message,
+    JSUint8Array? additional_data,
+    JSUint8Array? secret_nonce,
+    JSUint8Array public_nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_aead_xchacha20poly1305_ietf_keygen();
+  external JSUint8Array crypto_aead_xchacha20poly1305_ietf_keygen();
 
-  external Uint8List crypto_auth(
-    Uint8List message,
-    Uint8List key,
+  external JSUint8Array crypto_auth(
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_auth_hmacsha256(
-    Uint8List message,
-    Uint8List key,
+  external JSUint8Array crypto_auth_hmacsha256(
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_auth_hmacsha256_final(
+  external JSUint8Array crypto_auth_hmacsha256_final(
     AuthHmacsha256State state_address,
   );
 
   external AuthHmacsha256State crypto_auth_hmacsha256_init(
-    Uint8List? key,
+    JSUint8Array? key,
   );
 
-  external Uint8List crypto_auth_hmacsha256_keygen();
+  external JSUint8Array crypto_auth_hmacsha256_keygen();
 
   external void crypto_auth_hmacsha256_update(
     AuthHmacsha256State state_address,
-    Uint8List message_chunk,
+    JSUint8Array message_chunk,
   );
 
   external bool crypto_auth_hmacsha256_verify(
-    Uint8List tag,
-    Uint8List message,
-    Uint8List key,
+    JSUint8Array tag,
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_auth_hmacsha512(
-    Uint8List message,
-    Uint8List key,
+  external JSUint8Array crypto_auth_hmacsha512(
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_auth_hmacsha512256(
-    Uint8List message,
-    Uint8List key,
+  external JSUint8Array crypto_auth_hmacsha512256(
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_auth_hmacsha512256_final(
+  external JSUint8Array crypto_auth_hmacsha512256_final(
     AuthHmacsha512256State state_address,
   );
 
   external AuthHmacsha512256State crypto_auth_hmacsha512256_init(
-    Uint8List? key,
+    JSUint8Array? key,
   );
 
-  external Uint8List crypto_auth_hmacsha512256_keygen();
+  external JSUint8Array crypto_auth_hmacsha512256_keygen();
 
   external void crypto_auth_hmacsha512256_update(
     AuthHmacsha512256State state_address,
-    Uint8List message_chunk,
+    JSUint8Array message_chunk,
   );
 
   external bool crypto_auth_hmacsha512256_verify(
-    Uint8List tag,
-    Uint8List message,
-    Uint8List key,
+    JSUint8Array tag,
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_auth_hmacsha512_final(
+  external JSUint8Array crypto_auth_hmacsha512_final(
     AuthHmacsha512State state_address,
   );
 
   external AuthHmacsha512State crypto_auth_hmacsha512_init(
-    Uint8List? key,
+    JSUint8Array? key,
   );
 
-  external Uint8List crypto_auth_hmacsha512_keygen();
+  external JSUint8Array crypto_auth_hmacsha512_keygen();
 
   external void crypto_auth_hmacsha512_update(
     AuthHmacsha512State state_address,
-    Uint8List message_chunk,
+    JSUint8Array message_chunk,
   );
 
   external bool crypto_auth_hmacsha512_verify(
-    Uint8List tag,
-    Uint8List message,
-    Uint8List key,
+    JSUint8Array tag,
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_auth_keygen();
+  external JSUint8Array crypto_auth_keygen();
 
   external bool crypto_auth_verify(
-    Uint8List tag,
-    Uint8List message,
-    Uint8List key,
+    JSUint8Array tag,
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_box_beforenm(
-    Uint8List publicKey,
-    Uint8List privateKey,
+  external JSUint8Array crypto_box_beforenm(
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_box_curve25519xchacha20poly1305_beforenm(
-    Uint8List publicKey,
-    Uint8List privateKey,
+  external JSUint8Array crypto_box_curve25519xchacha20poly1305_beforenm(
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
   external CryptoBox crypto_box_curve25519xchacha20poly1305_detached(
-    Uint8List message,
-    Uint8List nonce,
-    Uint8List publicKey,
-    Uint8List privateKey,
+    JSUint8Array message,
+    JSUint8Array nonce,
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
   external CryptoBox crypto_box_curve25519xchacha20poly1305_detached_afternm(
-    Uint8List message,
-    Uint8List nonce,
-    Uint8List sharedKey,
+    JSUint8Array message,
+    JSUint8Array nonce,
+    JSUint8Array sharedKey,
   );
 
-  external Uint8List crypto_box_curve25519xchacha20poly1305_easy(
-    Uint8List message,
-    Uint8List nonce,
-    Uint8List publicKey,
-    Uint8List privateKey,
+  external JSUint8Array crypto_box_curve25519xchacha20poly1305_easy(
+    JSUint8Array message,
+    JSUint8Array nonce,
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_box_curve25519xchacha20poly1305_easy_afternm(
-    Uint8List message,
-    Uint8List nonce,
-    Uint8List sharedKey,
+  external JSUint8Array crypto_box_curve25519xchacha20poly1305_easy_afternm(
+    JSUint8Array message,
+    JSUint8Array nonce,
+    JSUint8Array sharedKey,
   );
 
   external KeyPair crypto_box_curve25519xchacha20poly1305_keypair();
 
-  external Uint8List crypto_box_curve25519xchacha20poly1305_open_detached(
-    Uint8List ciphertext,
-    Uint8List mac,
-    Uint8List nonce,
-    Uint8List publicKey,
-    Uint8List privateKey,
+  external JSUint8Array crypto_box_curve25519xchacha20poly1305_open_detached(
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array nonce,
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List
+  external JSUint8Array
       crypto_box_curve25519xchacha20poly1305_open_detached_afternm(
-    Uint8List ciphertext,
-    Uint8List mac,
-    Uint8List nonce,
-    Uint8List sharedKey,
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array nonce,
+    JSUint8Array sharedKey,
   );
 
-  external Uint8List crypto_box_curve25519xchacha20poly1305_open_easy(
-    Uint8List ciphertext,
-    Uint8List nonce,
-    Uint8List publicKey,
-    Uint8List privateKey,
+  external JSUint8Array crypto_box_curve25519xchacha20poly1305_open_easy(
+    JSUint8Array ciphertext,
+    JSUint8Array nonce,
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_box_curve25519xchacha20poly1305_open_easy_afternm(
-    Uint8List ciphertext,
-    Uint8List nonce,
-    Uint8List sharedKey,
+  external JSUint8Array
+      crypto_box_curve25519xchacha20poly1305_open_easy_afternm(
+    JSUint8Array ciphertext,
+    JSUint8Array nonce,
+    JSUint8Array sharedKey,
   );
 
-  external Uint8List crypto_box_curve25519xchacha20poly1305_seal(
-    Uint8List message,
-    Uint8List publicKey,
+  external JSUint8Array crypto_box_curve25519xchacha20poly1305_seal(
+    JSUint8Array message,
+    JSUint8Array publicKey,
   );
 
-  external Uint8List crypto_box_curve25519xchacha20poly1305_seal_open(
-    Uint8List ciphertext,
-    Uint8List publicKey,
-    Uint8List secretKey,
+  external JSUint8Array crypto_box_curve25519xchacha20poly1305_seal_open(
+    JSUint8Array ciphertext,
+    JSUint8Array publicKey,
+    JSUint8Array secretKey,
   );
 
   external KeyPair crypto_box_curve25519xchacha20poly1305_seed_keypair(
-    Uint8List seed,
+    JSUint8Array seed,
   );
 
   external CryptoBox crypto_box_detached(
-    Uint8List message,
-    Uint8List nonce,
-    Uint8List publicKey,
-    Uint8List privateKey,
+    JSUint8Array message,
+    JSUint8Array nonce,
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_box_easy(
-    Uint8List message,
-    Uint8List nonce,
-    Uint8List publicKey,
-    Uint8List privateKey,
+  external JSUint8Array crypto_box_easy(
+    JSUint8Array message,
+    JSUint8Array nonce,
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_box_easy_afternm(
-    Uint8List message,
-    Uint8List nonce,
-    Uint8List sharedKey,
+  external JSUint8Array crypto_box_easy_afternm(
+    JSUint8Array message,
+    JSUint8Array nonce,
+    JSUint8Array sharedKey,
   );
 
   external KeyPair crypto_box_keypair();
 
-  external Uint8List crypto_box_open_detached(
-    Uint8List ciphertext,
-    Uint8List mac,
-    Uint8List nonce,
-    Uint8List publicKey,
-    Uint8List privateKey,
+  external JSUint8Array crypto_box_open_detached(
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array nonce,
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_box_open_easy(
-    Uint8List ciphertext,
-    Uint8List nonce,
-    Uint8List publicKey,
-    Uint8List privateKey,
+  external JSUint8Array crypto_box_open_easy(
+    JSUint8Array ciphertext,
+    JSUint8Array nonce,
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_box_open_easy_afternm(
-    Uint8List ciphertext,
-    Uint8List nonce,
-    Uint8List sharedKey,
+  external JSUint8Array crypto_box_open_easy_afternm(
+    JSUint8Array ciphertext,
+    JSUint8Array nonce,
+    JSUint8Array sharedKey,
   );
 
-  external Uint8List crypto_box_seal(
-    Uint8List message,
-    Uint8List publicKey,
+  external JSUint8Array crypto_box_seal(
+    JSUint8Array message,
+    JSUint8Array publicKey,
   );
 
-  external Uint8List crypto_box_seal_open(
-    Uint8List ciphertext,
-    Uint8List publicKey,
-    Uint8List privateKey,
+  external JSUint8Array crypto_box_seal_open(
+    JSUint8Array ciphertext,
+    JSUint8Array publicKey,
+    JSUint8Array privateKey,
   );
 
   external KeyPair crypto_box_seed_keypair(
-    Uint8List seed,
+    JSUint8Array seed,
   );
 
-  external Uint8List crypto_core_ed25519_add(
-    Uint8List p,
-    Uint8List q,
+  external JSUint8Array crypto_core_ed25519_add(
+    JSUint8Array p,
+    JSUint8Array q,
   );
 
-  external Uint8List crypto_core_ed25519_from_hash(
-    Uint8List r,
+  external JSUint8Array crypto_core_ed25519_from_hash(
+    JSUint8Array r,
   );
 
-  external Uint8List crypto_core_ed25519_from_uniform(
-    Uint8List r,
+  external JSUint8Array crypto_core_ed25519_from_uniform(
+    JSUint8Array r,
   );
 
   external bool crypto_core_ed25519_is_valid_point(
-    Uint8List repr,
+    JSUint8Array repr,
   );
 
-  external Uint8List crypto_core_ed25519_random();
+  external JSUint8Array crypto_core_ed25519_random();
 
-  external Uint8List crypto_core_ed25519_scalar_add(
-    Uint8List x,
-    Uint8List y,
+  external JSUint8Array crypto_core_ed25519_scalar_add(
+    JSUint8Array x,
+    JSUint8Array y,
   );
 
-  external Uint8List crypto_core_ed25519_scalar_complement(
-    Uint8List s,
+  external JSUint8Array crypto_core_ed25519_scalar_complement(
+    JSUint8Array s,
   );
 
-  external Uint8List crypto_core_ed25519_scalar_invert(
-    Uint8List s,
+  external JSUint8Array crypto_core_ed25519_scalar_invert(
+    JSUint8Array s,
   );
 
-  external Uint8List crypto_core_ed25519_scalar_mul(
-    Uint8List x,
-    Uint8List y,
+  external JSUint8Array crypto_core_ed25519_scalar_mul(
+    JSUint8Array x,
+    JSUint8Array y,
   );
 
-  external Uint8List crypto_core_ed25519_scalar_negate(
-    Uint8List s,
+  external JSUint8Array crypto_core_ed25519_scalar_negate(
+    JSUint8Array s,
   );
 
-  external Uint8List crypto_core_ed25519_scalar_random();
+  external JSUint8Array crypto_core_ed25519_scalar_random();
 
-  external Uint8List crypto_core_ed25519_scalar_reduce(
-    Uint8List sample,
+  external JSUint8Array crypto_core_ed25519_scalar_reduce(
+    JSUint8Array sample,
   );
 
-  external Uint8List crypto_core_ed25519_scalar_sub(
-    Uint8List x,
-    Uint8List y,
+  external JSUint8Array crypto_core_ed25519_scalar_sub(
+    JSUint8Array x,
+    JSUint8Array y,
   );
 
-  external Uint8List crypto_core_ed25519_sub(
-    Uint8List p,
-    Uint8List q,
+  external JSUint8Array crypto_core_ed25519_sub(
+    JSUint8Array p,
+    JSUint8Array q,
   );
 
-  external Uint8List crypto_core_hchacha20(
-    Uint8List input,
-    Uint8List privateKey,
-    Uint8List? constant,
+  external JSUint8Array crypto_core_hchacha20(
+    JSUint8Array input,
+    JSUint8Array privateKey,
+    JSUint8Array? constant,
   );
 
-  external Uint8List crypto_core_hsalsa20(
-    Uint8List input,
-    Uint8List privateKey,
-    Uint8List? constant,
+  external JSUint8Array crypto_core_hsalsa20(
+    JSUint8Array input,
+    JSUint8Array privateKey,
+    JSUint8Array? constant,
   );
 
-  external Uint8List crypto_core_ristretto255_add(
-    Uint8List p,
-    Uint8List q,
+  external JSUint8Array crypto_core_ristretto255_add(
+    JSUint8Array p,
+    JSUint8Array q,
   );
 
-  external Uint8List crypto_core_ristretto255_from_hash(
-    Uint8List r,
+  external JSUint8Array crypto_core_ristretto255_from_hash(
+    JSUint8Array r,
   );
 
   external bool crypto_core_ristretto255_is_valid_point(
-    Uint8List repr,
+    JSUint8Array repr,
   );
 
-  external Uint8List crypto_core_ristretto255_random();
+  external JSUint8Array crypto_core_ristretto255_random();
 
-  external Uint8List crypto_core_ristretto255_scalar_add(
-    Uint8List x,
-    Uint8List y,
+  external JSUint8Array crypto_core_ristretto255_scalar_add(
+    JSUint8Array x,
+    JSUint8Array y,
   );
 
-  external Uint8List crypto_core_ristretto255_scalar_complement(
-    Uint8List s,
+  external JSUint8Array crypto_core_ristretto255_scalar_complement(
+    JSUint8Array s,
   );
 
-  external Uint8List crypto_core_ristretto255_scalar_invert(
-    Uint8List s,
+  external JSUint8Array crypto_core_ristretto255_scalar_invert(
+    JSUint8Array s,
   );
 
-  external Uint8List crypto_core_ristretto255_scalar_mul(
-    Uint8List x,
-    Uint8List y,
+  external JSUint8Array crypto_core_ristretto255_scalar_mul(
+    JSUint8Array x,
+    JSUint8Array y,
   );
 
-  external Uint8List crypto_core_ristretto255_scalar_negate(
-    Uint8List s,
+  external JSUint8Array crypto_core_ristretto255_scalar_negate(
+    JSUint8Array s,
   );
 
-  external Uint8List crypto_core_ristretto255_scalar_random();
+  external JSUint8Array crypto_core_ristretto255_scalar_random();
 
-  external Uint8List crypto_core_ristretto255_scalar_reduce(
-    Uint8List sample,
+  external JSUint8Array crypto_core_ristretto255_scalar_reduce(
+    JSUint8Array sample,
   );
 
-  external Uint8List crypto_core_ristretto255_scalar_sub(
-    Uint8List x,
-    Uint8List y,
+  external JSUint8Array crypto_core_ristretto255_scalar_sub(
+    JSUint8Array x,
+    JSUint8Array y,
   );
 
-  external Uint8List crypto_core_ristretto255_sub(
-    Uint8List p,
-    Uint8List q,
+  external JSUint8Array crypto_core_ristretto255_sub(
+    JSUint8Array p,
+    JSUint8Array q,
   );
 
-  external Uint8List crypto_generichash(
+  external JSUint8Array crypto_generichash(
     num hash_length,
-    Uint8List message,
-    Uint8List? key,
+    JSUint8Array message,
+    JSUint8Array? key,
   );
 
-  external Uint8List crypto_generichash_blake2b_salt_personal(
+  external JSUint8Array crypto_generichash_blake2b_salt_personal(
     num subkey_len,
-    Uint8List? key,
-    Uint8List? id,
-    Uint8List? ctx,
+    JSUint8Array? key,
+    JSUint8Array? id,
+    JSUint8Array? ctx,
   );
 
-  external Uint8List crypto_generichash_final(
+  external JSUint8Array crypto_generichash_final(
     GenerichashState state_address,
     num hash_length,
   );
 
   external GenerichashState crypto_generichash_init(
-    Uint8List? key,
+    JSUint8Array? key,
     num hash_length,
   );
 
-  external Uint8List crypto_generichash_keygen();
+  external JSUint8Array crypto_generichash_keygen();
 
   external void crypto_generichash_update(
     GenerichashState state_address,
-    Uint8List message_chunk,
+    JSUint8Array message_chunk,
   );
 
-  external Uint8List crypto_hash(
-    Uint8List message,
+  external JSUint8Array crypto_hash(
+    JSUint8Array message,
   );
 
-  external Uint8List crypto_hash_sha256(
-    Uint8List message,
+  external JSUint8Array crypto_hash_sha256(
+    JSUint8Array message,
   );
 
-  external Uint8List crypto_hash_sha256_final(
+  external JSUint8Array crypto_hash_sha256_final(
     HashSha256State state_address,
   );
 
@@ -1248,14 +1228,14 @@ class LibSodiumJS {
 
   external void crypto_hash_sha256_update(
     HashSha256State state_address,
-    Uint8List message_chunk,
+    JSUint8Array message_chunk,
   );
 
-  external Uint8List crypto_hash_sha512(
-    Uint8List message,
+  external JSUint8Array crypto_hash_sha512(
+    JSUint8Array message,
   );
 
-  external Uint8List crypto_hash_sha512_final(
+  external JSUint8Array crypto_hash_sha512_final(
     HashSha512State state_address,
   );
 
@@ -1263,82 +1243,82 @@ class LibSodiumJS {
 
   external void crypto_hash_sha512_update(
     HashSha512State state_address,
-    Uint8List message_chunk,
+    JSUint8Array message_chunk,
   );
 
-  external Uint8List crypto_kdf_derive_from_key(
+  external JSUint8Array crypto_kdf_derive_from_key(
     num subkey_len,
-    JsBigInt subkey_id,
+    JSBigInt subkey_id,
     String ctx,
-    Uint8List key,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_kdf_keygen();
+  external JSUint8Array crypto_kdf_keygen();
 
   external CryptoKX crypto_kx_client_session_keys(
-    Uint8List clientPublicKey,
-    Uint8List clientSecretKey,
-    Uint8List serverPublicKey,
+    JSUint8Array clientPublicKey,
+    JSUint8Array clientSecretKey,
+    JSUint8Array serverPublicKey,
   );
 
   external KeyPair crypto_kx_keypair();
 
   external KeyPair crypto_kx_seed_keypair(
-    Uint8List seed,
+    JSUint8Array seed,
   );
 
   external CryptoKX crypto_kx_server_session_keys(
-    Uint8List serverPublicKey,
-    Uint8List serverSecretKey,
-    Uint8List clientPublicKey,
+    JSUint8Array serverPublicKey,
+    JSUint8Array serverSecretKey,
+    JSUint8Array clientPublicKey,
   );
 
-  external Uint8List crypto_onetimeauth(
-    Uint8List message,
-    Uint8List key,
+  external JSUint8Array crypto_onetimeauth(
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_onetimeauth_final(
+  external JSUint8Array crypto_onetimeauth_final(
     OnetimeauthState state_address,
   );
 
   external OnetimeauthState crypto_onetimeauth_init(
-    Uint8List? key,
+    JSUint8Array? key,
   );
 
-  external Uint8List crypto_onetimeauth_keygen();
+  external JSUint8Array crypto_onetimeauth_keygen();
 
   external void crypto_onetimeauth_update(
     OnetimeauthState state_address,
-    Uint8List message_chunk,
+    JSUint8Array message_chunk,
   );
 
   external bool crypto_onetimeauth_verify(
-    Uint8List hash,
-    Uint8List message,
-    Uint8List key,
+    JSUint8Array hash,
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_pwhash(
+  external JSUint8Array crypto_pwhash(
     num keyLength,
-    Uint8List password,
-    Uint8List salt,
+    JSUint8Array password,
+    JSUint8Array salt,
     num opsLimit,
     num memLimit,
     num algorithm,
   );
 
-  external Uint8List crypto_pwhash_scryptsalsa208sha256(
+  external JSUint8Array crypto_pwhash_scryptsalsa208sha256(
     num keyLength,
-    Uint8List password,
-    Uint8List salt,
+    JSUint8Array password,
+    JSUint8Array salt,
     num opsLimit,
     num memLimit,
   );
 
-  external Uint8List crypto_pwhash_scryptsalsa208sha256_ll(
-    Uint8List password,
-    Uint8List salt,
+  external JSUint8Array crypto_pwhash_scryptsalsa208sha256_ll(
+    JSUint8Array password,
+    JSUint8Array salt,
     num opsLimit,
     num r,
     num p,
@@ -1346,18 +1326,18 @@ class LibSodiumJS {
   );
 
   external String crypto_pwhash_scryptsalsa208sha256_str(
-    Uint8List password,
+    JSUint8Array password,
     num opsLimit,
     num memLimit,
   );
 
   external bool crypto_pwhash_scryptsalsa208sha256_str_verify(
     String hashed_password,
-    Uint8List password,
+    JSUint8Array password,
   );
 
   external String crypto_pwhash_str(
-    Uint8List password,
+    JSUint8Array password,
     num opsLimit,
     num memLimit,
   );
@@ -1370,94 +1350,94 @@ class LibSodiumJS {
 
   external bool crypto_pwhash_str_verify(
     String hashed_password,
-    Uint8List password,
+    JSUint8Array password,
   );
 
-  external Uint8List crypto_scalarmult(
-    Uint8List privateKey,
-    Uint8List publicKey,
+  external JSUint8Array crypto_scalarmult(
+    JSUint8Array privateKey,
+    JSUint8Array publicKey,
   );
 
-  external Uint8List crypto_scalarmult_base(
-    Uint8List privateKey,
+  external JSUint8Array crypto_scalarmult_base(
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_scalarmult_ed25519(
-    Uint8List n,
-    Uint8List p,
+  external JSUint8Array crypto_scalarmult_ed25519(
+    JSUint8Array n,
+    JSUint8Array p,
   );
 
-  external Uint8List crypto_scalarmult_ed25519_base(
-    Uint8List scalar,
+  external JSUint8Array crypto_scalarmult_ed25519_base(
+    JSUint8Array scalar,
   );
 
-  external Uint8List crypto_scalarmult_ed25519_base_noclamp(
-    Uint8List scalar,
+  external JSUint8Array crypto_scalarmult_ed25519_base_noclamp(
+    JSUint8Array scalar,
   );
 
-  external Uint8List crypto_scalarmult_ed25519_noclamp(
-    Uint8List n,
-    Uint8List p,
+  external JSUint8Array crypto_scalarmult_ed25519_noclamp(
+    JSUint8Array n,
+    JSUint8Array p,
   );
 
-  external Uint8List crypto_scalarmult_ristretto255(
-    Uint8List scalar,
-    Uint8List element,
+  external JSUint8Array crypto_scalarmult_ristretto255(
+    JSUint8Array scalar,
+    JSUint8Array element,
   );
 
-  external Uint8List crypto_scalarmult_ristretto255_base(
-    Uint8List scalar,
+  external JSUint8Array crypto_scalarmult_ristretto255_base(
+    JSUint8Array scalar,
   );
 
   external SecretBox crypto_secretbox_detached(
-    Uint8List message,
-    Uint8List nonce,
-    Uint8List key,
+    JSUint8Array message,
+    JSUint8Array nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_secretbox_easy(
-    Uint8List message,
-    Uint8List nonce,
-    Uint8List key,
+  external JSUint8Array crypto_secretbox_easy(
+    JSUint8Array message,
+    JSUint8Array nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_secretbox_keygen();
+  external JSUint8Array crypto_secretbox_keygen();
 
-  external Uint8List crypto_secretbox_open_detached(
-    Uint8List ciphertext,
-    Uint8List mac,
-    Uint8List nonce,
-    Uint8List key,
+  external JSUint8Array crypto_secretbox_open_detached(
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_secretbox_open_easy(
-    Uint8List ciphertext,
-    Uint8List nonce,
-    Uint8List key,
+  external JSUint8Array crypto_secretbox_open_easy(
+    JSUint8Array ciphertext,
+    JSUint8Array nonce,
+    JSUint8Array key,
   );
 
   external SecretstreamXchacha20poly1305State
       crypto_secretstream_xchacha20poly1305_init_pull(
-    Uint8List header,
-    Uint8List key,
+    JSUint8Array header,
+    JSUint8Array key,
   );
 
   external SecretStreamInitPush crypto_secretstream_xchacha20poly1305_init_push(
-    Uint8List key,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_secretstream_xchacha20poly1305_keygen();
+  external JSUint8Array crypto_secretstream_xchacha20poly1305_keygen();
 
-  external dynamic crypto_secretstream_xchacha20poly1305_pull(
+  external JSAny crypto_secretstream_xchacha20poly1305_pull(
     SecretstreamXchacha20poly1305State state_address,
-    Uint8List cipher,
-    Uint8List? ad,
+    JSUint8Array cipher,
+    JSUint8Array? ad,
   );
 
-  external Uint8List crypto_secretstream_xchacha20poly1305_push(
+  external JSUint8Array crypto_secretstream_xchacha20poly1305_push(
     SecretstreamXchacha20poly1305State state_address,
-    Uint8List message_chunk,
-    Uint8List? ad,
+    JSUint8Array message_chunk,
+    JSUint8Array? ad,
     num tag,
   );
 
@@ -1465,150 +1445,150 @@ class LibSodiumJS {
     SecretstreamXchacha20poly1305State state_address,
   );
 
-  external Uint8List crypto_shorthash(
-    Uint8List message,
-    Uint8List key,
+  external JSUint8Array crypto_shorthash(
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_shorthash_keygen();
+  external JSUint8Array crypto_shorthash_keygen();
 
-  external Uint8List crypto_shorthash_siphashx24(
-    Uint8List message,
-    Uint8List key,
+  external JSUint8Array crypto_shorthash_siphashx24(
+    JSUint8Array message,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_sign(
-    Uint8List message,
-    Uint8List privateKey,
+  external JSUint8Array crypto_sign(
+    JSUint8Array message,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_sign_detached(
-    Uint8List message,
-    Uint8List privateKey,
+  external JSUint8Array crypto_sign_detached(
+    JSUint8Array message,
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_sign_ed25519_pk_to_curve25519(
-    Uint8List edPk,
+  external JSUint8Array crypto_sign_ed25519_pk_to_curve25519(
+    JSUint8Array edPk,
   );
 
-  external Uint8List crypto_sign_ed25519_sk_to_curve25519(
-    Uint8List edSk,
+  external JSUint8Array crypto_sign_ed25519_sk_to_curve25519(
+    JSUint8Array edSk,
   );
 
-  external Uint8List crypto_sign_ed25519_sk_to_pk(
-    Uint8List privateKey,
+  external JSUint8Array crypto_sign_ed25519_sk_to_pk(
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_sign_ed25519_sk_to_seed(
-    Uint8List privateKey,
+  external JSUint8Array crypto_sign_ed25519_sk_to_seed(
+    JSUint8Array privateKey,
   );
 
-  external Uint8List crypto_sign_final_create(
+  external JSUint8Array crypto_sign_final_create(
     SignState state_address,
-    Uint8List privateKey,
+    JSUint8Array privateKey,
   );
 
   external bool crypto_sign_final_verify(
     SignState state_address,
-    Uint8List signature,
-    Uint8List publicKey,
+    JSUint8Array signature,
+    JSUint8Array publicKey,
   );
 
   external SignState crypto_sign_init();
 
   external KeyPair crypto_sign_keypair();
 
-  external Uint8List crypto_sign_open(
-    Uint8List signedMessage,
-    Uint8List publicKey,
+  external JSUint8Array crypto_sign_open(
+    JSUint8Array signedMessage,
+    JSUint8Array publicKey,
   );
 
   external KeyPair crypto_sign_seed_keypair(
-    Uint8List seed,
+    JSUint8Array seed,
   );
 
   external void crypto_sign_update(
     SignState state_address,
-    Uint8List message_chunk,
+    JSUint8Array message_chunk,
   );
 
   external bool crypto_sign_verify_detached(
-    Uint8List signature,
-    Uint8List message,
-    Uint8List publicKey,
+    JSUint8Array signature,
+    JSUint8Array message,
+    JSUint8Array publicKey,
   );
 
-  external Uint8List crypto_stream_chacha20(
+  external JSUint8Array crypto_stream_chacha20(
     num outLength,
-    Uint8List key,
-    Uint8List nonce,
+    JSUint8Array key,
+    JSUint8Array nonce,
   );
 
-  external Uint8List crypto_stream_chacha20_ietf_xor(
-    Uint8List input_message,
-    Uint8List nonce,
-    Uint8List key,
+  external JSUint8Array crypto_stream_chacha20_ietf_xor(
+    JSUint8Array input_message,
+    JSUint8Array nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_stream_chacha20_ietf_xor_ic(
-    Uint8List input_message,
-    Uint8List nonce,
+  external JSUint8Array crypto_stream_chacha20_ietf_xor_ic(
+    JSUint8Array input_message,
+    JSUint8Array nonce,
     num nonce_increment,
-    Uint8List key,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_stream_chacha20_keygen();
+  external JSUint8Array crypto_stream_chacha20_keygen();
 
-  external Uint8List crypto_stream_chacha20_xor(
-    Uint8List input_message,
-    Uint8List nonce,
-    Uint8List key,
+  external JSUint8Array crypto_stream_chacha20_xor(
+    JSUint8Array input_message,
+    JSUint8Array nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_stream_chacha20_xor_ic(
-    Uint8List input_message,
-    Uint8List nonce,
+  external JSUint8Array crypto_stream_chacha20_xor_ic(
+    JSUint8Array input_message,
+    JSUint8Array nonce,
     num nonce_increment,
-    Uint8List key,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_stream_keygen();
+  external JSUint8Array crypto_stream_keygen();
 
-  external Uint8List crypto_stream_xchacha20_keygen();
+  external JSUint8Array crypto_stream_xchacha20_keygen();
 
-  external Uint8List crypto_stream_xchacha20_xor(
-    Uint8List input_message,
-    Uint8List nonce,
-    Uint8List key,
+  external JSUint8Array crypto_stream_xchacha20_xor(
+    JSUint8Array input_message,
+    JSUint8Array nonce,
+    JSUint8Array key,
   );
 
-  external Uint8List crypto_stream_xchacha20_xor_ic(
-    Uint8List input_message,
-    Uint8List nonce,
+  external JSUint8Array crypto_stream_xchacha20_xor_ic(
+    JSUint8Array input_message,
+    JSUint8Array nonce,
     num nonce_increment,
-    Uint8List key,
+    JSUint8Array key,
   );
 
-  external Uint8List randombytes_buf(
+  external JSUint8Array randombytes_buf(
     num length,
   );
 
-  external Uint8List randombytes_buf_deterministic(
+  external JSUint8Array randombytes_buf_deterministic(
     num length,
-    Uint8List seed,
+    JSUint8Array seed,
   );
 
   external void randombytes_close();
 
-  external num randombytes_random();
+  external int randombytes_random();
 
   external void randombytes_set_implementation(
-    Never implementation,
+    JSAny implementation,
   );
 
   external void randombytes_stir();
 
-  external num randombytes_uniform(
+  external int randombytes_uniform(
     num upper_bound,
   );
 
@@ -1616,9 +1596,9 @@ class LibSodiumJS {
 
   external num randombytes_seedbytes();
 
-  external void memzero(Uint8List bytes);
+  external void memzero(JSUint8Array bytes);
 
-  external Uint8List pad(Uint8List buf, num blocksize);
+  external JSUint8Array pad(JSUint8Array buf, num blocksize);
 
-  external Uint8List unpad(Uint8List buf, num blocksize);
+  external JSUint8Array unpad(JSUint8Array buf, num blocksize);
 }
