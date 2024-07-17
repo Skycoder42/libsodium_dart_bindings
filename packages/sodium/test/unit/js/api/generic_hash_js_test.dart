@@ -16,7 +16,7 @@ import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -30,7 +30,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = GenericHashJS(mockSodium);
+    sut = GenericHashJS(mockSodium.asLibSodiumJS);
   });
 
   testConstantsMapping([

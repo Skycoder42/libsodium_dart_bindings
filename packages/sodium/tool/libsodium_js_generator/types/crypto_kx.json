@@ -1,0 +1,7 @@
+{
+  "name": "CryptoKX",
+  "members": {
+    "sharedRx": "JSUint8Array",
+    "sharedTx": "JSUint8Array"
+  }
+}

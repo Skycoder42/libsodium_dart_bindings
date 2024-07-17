@@ -1,5 +1,8 @@
+import 'package:meta/meta.dart';
+
 import 'constant.dart';
 
+@immutable
 class Symbol extends Constant {
   final List<Constant> inputs;
   final List<Constant> outputs;

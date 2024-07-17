@@ -14,10 +14,9 @@ import 'package:sodium/src/js/api/secret_box_js.dart';
 import 'package:sodium/src/js/api/secret_stream_js.dart';
 import 'package:sodium/src/js/api/short_hash_js.dart';
 import 'package:sodium/src/js/api/sign_js.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -27,7 +26,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = CryptoJS(mockSodium);
+    sut = CryptoJS(mockSodium.asLibSodiumJS);
   });
 
   test('secretBox returns SecretBoxJS instance', () {
@@ -36,7 +35,7 @@ void main() {
       isA<SecretBoxJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -47,7 +46,7 @@ void main() {
       isA<SecretStreamJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -58,7 +57,7 @@ void main() {
       isA<AeadXChaCha20Poly1305IEFTJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -69,7 +68,7 @@ void main() {
       isA<AeadChaCha20Poly1305JS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -81,7 +80,7 @@ void main() {
       isA<AeadXChaCha20Poly1305IEFTJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -92,7 +91,7 @@ void main() {
       isA<AuthJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -103,7 +102,7 @@ void main() {
       isA<BoxJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -114,7 +113,7 @@ void main() {
       isA<SignJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -125,7 +124,7 @@ void main() {
       isA<GenericHashJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -136,7 +135,7 @@ void main() {
       isA<ShortHashJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -147,7 +146,7 @@ void main() {
       isA<KdfJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -158,7 +157,7 @@ void main() {
       isA<KxJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });

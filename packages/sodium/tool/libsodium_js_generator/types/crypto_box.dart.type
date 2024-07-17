@@ -1,9 +1,0 @@
-extension type CryptoBox._(JSObject _) implements JSObject {
-  external JSUint8Array get ciphertext;
-  external JSUint8Array get mac;
-
-  external CryptoBox({
-    required JSUint8Array ciphertext,
-    required JSUint8Array mac,
-  });
-}

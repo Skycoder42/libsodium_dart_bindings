@@ -16,6 +16,7 @@ dev_dependencies:
   args: ^2.5.0
   build_runner: ^2.4.11
   cider: ^0.2.8
+  code_builder: ^4.10.0
   collection: ^1.19.0
   coverage: ^1.8.0
   custom_lint: ^0.6.4

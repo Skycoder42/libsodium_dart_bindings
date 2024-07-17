@@ -1,30 +1,32 @@
+import 'package:code_builder/code_builder.dart';
+import 'package:meta/meta.dart';
+
 import '../json/constant.dart';
-import '../type_mappings.dart';
-import 'generator.dart';
+import '../json/type_mapping.dart';
+import '../types.dart';
+import 'spec_generator.dart';
 
-class ConstantsGenerator implements Generator {
-  final TypeMappings typeMappings;
+@immutable
+final class ConstantsGenerator extends SpecGenerator<Method> {
+  final Constant constant;
+  final TypeMapping typeMapping;
+  final bool external;
 
-  const ConstantsGenerator(this.typeMappings);
+  const ConstantsGenerator({
+    required this.constant,
+    required this.typeMapping,
+    this.external = true,
+  });
 
   @override
-  void writeDefinitions(
-    dynamic wrapperDefinitions,
-    StringSink sink,
-    int intendent,
-  ) {
-    final constants = Constant.fromJsonList(
-      wrapperDefinitions as List<dynamic>,
-    );
-
-    for (final constant in constants) {
-      sink
-        ..writeIntendent(intendent)
-        ..writeSp('external')
-        ..writeSp(typeMappings[constant.type])
-        ..write(constant.name)
-        ..writeln(';')
-        ..writeln();
-    }
-  }
+  Method build() => Method(
+        (b) => b
+          ..name = constant.name
+          ..external = external
+          ..type = MethodType.getter
+          ..returns = typeMapping[constant.type]
+          ..body = external
+              ? null
+              : Types.unimplementedError.newInstance(const []).thrown.code,
+      );
 }

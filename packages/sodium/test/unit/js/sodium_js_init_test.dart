@@ -1,16 +1,12 @@
 @TestOn('js')
 library sodium_js_init_test;
 
-import 'dart:js_interop';
-
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/sodium_js.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:sodium/src/js/sodium_js_init.dart';
 import 'package:test/test.dart';
 
-@JSExport()
-class MockLibSodiumJS extends Mock {}
+import 'sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -20,7 +16,8 @@ void main() {
   });
 
   test('initFromSodiumJS returns SodiumJS instance', () async {
-    final sodium = await SodiumInit.initFromSodiumJS2(() => mockSodium);
+    final sodium =
+        await SodiumInit.initFromSodiumJS2(() => mockSodium.asLibSodiumJS);
 
     expect(
       sodium,

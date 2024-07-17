@@ -1,6 +1,7 @@
 @TestOn('js')
 library aead_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -16,7 +17,7 @@ import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -30,7 +31,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = AeadXChaCha20Poly1305IEFTJS(mockSodium);
+    sut = AeadXChaCha20Poly1305IEFTJS(mockSodium.asLibSodiumJS);
   });
 
   testConstantsMapping([
@@ -105,7 +106,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -119,11 +120,11 @@ void main() {
 
         verify(
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
-            Uint8List.fromList(message),
+            Uint8List.fromList(message).toJS,
             null,
             null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
+            Uint8List.fromList(nonce).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -139,7 +140,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final additionalData = List.generate(30, (index) => index * 3);
@@ -155,11 +156,11 @@ void main() {
 
         verify(
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
-            Uint8List.fromList(message),
-            Uint8List.fromList(additionalData),
+            Uint8List.fromList(message).toJS,
+            Uint8List.fromList(additionalData).toJS,
             null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
+            Uint8List.fromList(nonce).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -174,7 +175,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(cipher));
+        ).thenReturn(Uint8List.fromList(cipher).toJS);
 
         final result = sut.encrypt(
           message: Uint8List(20),
@@ -194,7 +195,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.encrypt(
@@ -258,7 +259,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final cipherText = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -273,10 +274,10 @@ void main() {
         verify(
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
             null,
-            Uint8List.fromList(cipherText),
+            Uint8List.fromList(cipherText).toJS,
             null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
+            Uint8List.fromList(nonce).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -292,7 +293,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final cipherText = List.generate(20, (index) => index * 2);
         final additionalData = List.generate(30, (index) => index * 3);
@@ -309,10 +310,10 @@ void main() {
         verify(
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
             null,
-            Uint8List.fromList(cipherText),
-            Uint8List.fromList(additionalData),
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
+            Uint8List.fromList(cipherText).toJS,
+            Uint8List.fromList(additionalData).toJS,
+            Uint8List.fromList(nonce).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -327,7 +328,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(message));
+        ).thenReturn(Uint8List.fromList(message).toJS);
 
         final result = sut.decrypt(
           cipherText: Uint8List(13),
@@ -347,7 +348,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.decrypt(
@@ -400,8 +401,8 @@ void main() {
           ),
         ).thenReturn(
           CryptoBox(
-            ciphertext: Uint8List(0),
-            mac: Uint8List(0),
+            ciphertext: Uint8List(0).toJS,
+            mac: Uint8List(0).toJS,
           ),
         );
 
@@ -417,11 +418,11 @@ void main() {
 
         verify(
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
-            Uint8List.fromList(message),
+            Uint8List.fromList(message).toJS,
             null,
             null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
+            Uint8List.fromList(nonce).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -439,8 +440,8 @@ void main() {
           ),
         ).thenReturn(
           CryptoBox(
-            ciphertext: Uint8List(0),
-            mac: Uint8List(0),
+            ciphertext: Uint8List(0).toJS,
+            mac: Uint8List(0).toJS,
           ),
         );
 
@@ -458,11 +459,11 @@ void main() {
 
         verify(
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
-            Uint8List.fromList(message),
-            Uint8List.fromList(additionalData),
+            Uint8List.fromList(message).toJS,
+            Uint8List.fromList(additionalData).toJS,
             null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
+            Uint8List.fromList(nonce).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -480,8 +481,8 @@ void main() {
           ),
         ).thenReturn(
           CryptoBox(
-            ciphertext: Uint8List.fromList(cipherText),
-            mac: Uint8List.fromList(mac),
+            ciphertext: Uint8List.fromList(cipherText).toJS,
+            mac: Uint8List.fromList(mac).toJS,
           ),
         );
 
@@ -509,7 +510,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.encryptDetached(
@@ -577,7 +578,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final cipherText = List.generate(15, (index) => index * 2);
         final mac = List.generate(5, (index) => 20 - index);
@@ -594,11 +595,11 @@ void main() {
         verify(
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
             null,
-            Uint8List.fromList(cipherText),
-            Uint8List.fromList(mac),
+            Uint8List.fromList(cipherText).toJS,
+            Uint8List.fromList(mac).toJS,
             null,
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
+            Uint8List.fromList(nonce).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -615,7 +616,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final cipherText = List.generate(15, (index) => index * 2);
         final mac = List.generate(5, (index) => 20 - index);
@@ -634,11 +635,11 @@ void main() {
         verify(
           () => mockSodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
             null,
-            Uint8List.fromList(cipherText),
-            Uint8List.fromList(mac),
-            Uint8List.fromList(additionalData),
-            Uint8List.fromList(nonce),
-            Uint8List.fromList(key),
+            Uint8List.fromList(cipherText).toJS,
+            Uint8List.fromList(mac).toJS,
+            Uint8List.fromList(additionalData).toJS,
+            Uint8List.fromList(nonce).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -654,7 +655,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(message));
+        ).thenReturn(Uint8List.fromList(message).toJS);
 
         final result = sut.decryptDetached(
           cipherText: Uint8List(25),
@@ -676,7 +677,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.decryptDetached(

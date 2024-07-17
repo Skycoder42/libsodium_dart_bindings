@@ -1,6 +1,7 @@
 @TestOn('js')
 library box_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -17,7 +18,7 @@ import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -31,7 +32,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = BoxJS(mockSodium);
+    sut = BoxJS(mockSodium.asLibSodiumJS);
   });
 
   group('BoxJS', () {
@@ -142,7 +143,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List(0));
+          ).thenReturn(Uint8List(0).toJS);
 
           final message = List.generate(20, (index) => index * 2);
           final nonce = List.generate(5, (index) => 10 + index);
@@ -158,10 +159,10 @@ void main() {
 
           verify(
             () => mockSodium.crypto_box_easy(
-              Uint8List.fromList(message),
-              Uint8List.fromList(nonce),
-              Uint8List.fromList(publicKey),
-              Uint8List.fromList(secretKey),
+              Uint8List.fromList(message).toJS,
+              Uint8List.fromList(nonce).toJS,
+              Uint8List.fromList(publicKey).toJS,
+              Uint8List.fromList(secretKey).toJS,
             ),
           );
         });
@@ -175,7 +176,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List.fromList(cipher));
+          ).thenReturn(Uint8List.fromList(cipher).toJS);
 
           final result = sut.easy(
             message: Uint8List(20),
@@ -195,7 +196,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenThrow(JsError());
+          ).thenThrow(JSError());
 
           expect(
             () => sut.easy(
@@ -274,7 +275,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List(0));
+          ).thenReturn(Uint8List(0).toJS);
 
           final cipherText = List.generate(20, (index) => index * 2);
           final nonce = List.generate(5, (index) => 10 + index);
@@ -290,10 +291,10 @@ void main() {
 
           verify(
             () => mockSodium.crypto_box_open_easy(
-              Uint8List.fromList(cipherText),
-              Uint8List.fromList(nonce),
-              Uint8List.fromList(publicKey),
-              Uint8List.fromList(secretKey),
+              Uint8List.fromList(cipherText).toJS,
+              Uint8List.fromList(nonce).toJS,
+              Uint8List.fromList(publicKey).toJS,
+              Uint8List.fromList(secretKey).toJS,
             ),
           );
         });
@@ -307,7 +308,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List.fromList(message));
+          ).thenReturn(Uint8List.fromList(message).toJS);
 
           final result = sut.openEasy(
             cipherText: Uint8List(13),
@@ -327,7 +328,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenThrow(JsError());
+          ).thenThrow(JSError());
 
           expect(
             () => sut.openEasy(
@@ -394,8 +395,8 @@ void main() {
             ),
           ).thenReturn(
             CryptoBox(
-              ciphertext: Uint8List(0),
-              mac: Uint8List(0),
+              ciphertext: Uint8List(0).toJS,
+              mac: Uint8List(0).toJS,
             ),
           );
 
@@ -413,10 +414,10 @@ void main() {
 
           verify(
             () => mockSodium.crypto_box_detached(
-              Uint8List.fromList(message),
-              Uint8List.fromList(nonce),
-              Uint8List.fromList(publicKey),
-              Uint8List.fromList(secretKey),
+              Uint8List.fromList(message).toJS,
+              Uint8List.fromList(nonce).toJS,
+              Uint8List.fromList(publicKey).toJS,
+              Uint8List.fromList(secretKey).toJS,
             ),
           );
         });
@@ -433,8 +434,8 @@ void main() {
             ),
           ).thenReturn(
             CryptoBox(
-              ciphertext: Uint8List.fromList(cipherText),
-              mac: Uint8List.fromList(mac),
+              ciphertext: Uint8List.fromList(cipherText).toJS,
+              mac: Uint8List.fromList(mac).toJS,
             ),
           );
 
@@ -462,7 +463,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenThrow(JsError());
+          ).thenThrow(JSError());
 
           expect(
             () => sut.detached(
@@ -546,7 +547,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List(0));
+          ).thenReturn(Uint8List(0).toJS);
 
           final cipherText = List.generate(15, (index) => index * 2);
           final mac = List.generate(5, (index) => 20 - index);
@@ -564,11 +565,11 @@ void main() {
 
           verify(
             () => mockSodium.crypto_box_open_detached(
-              Uint8List.fromList(cipherText),
-              Uint8List.fromList(mac),
-              Uint8List.fromList(nonce),
-              Uint8List.fromList(publicKey),
-              Uint8List.fromList(secretKey),
+              Uint8List.fromList(cipherText).toJS,
+              Uint8List.fromList(mac).toJS,
+              Uint8List.fromList(nonce).toJS,
+              Uint8List.fromList(publicKey).toJS,
+              Uint8List.fromList(secretKey).toJS,
             ),
           );
         });
@@ -583,7 +584,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List.fromList(message));
+          ).thenReturn(Uint8List.fromList(message).toJS);
 
           final result = sut.openDetached(
             cipherText: Uint8List(25),
@@ -605,7 +606,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenThrow(JsError());
+          ).thenThrow(JSError());
 
           expect(
             () => sut.openDetached(
@@ -651,7 +652,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List(0));
+          ).thenReturn(Uint8List(0).toJS);
 
           final publicKey = List.generate(5, (index) => 20 + index);
           final secretKey = List.generate(5, (index) => 30 + index);
@@ -663,8 +664,8 @@ void main() {
 
           verify(
             () => mockSodium.crypto_box_beforenm(
-              Uint8List.fromList(publicKey),
-              Uint8List.fromList(secretKey),
+              Uint8List.fromList(publicKey).toJS,
+              Uint8List.fromList(secretKey).toJS,
             ),
           );
         });
@@ -676,7 +677,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List.fromList(sharedKey));
+          ).thenReturn(Uint8List.fromList(sharedKey).toJS);
 
           final result = sut.precalculate(
             publicKey: Uint8List(5),
@@ -705,7 +706,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenThrow(JsError());
+          ).thenThrow(JSError());
 
           expect(
             () => sut.precalculate(
@@ -736,7 +737,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List(0));
+          ).thenReturn(Uint8List(0).toJS);
 
           final message = List.generate(20, (index) => index * 2);
           final publicKey = List.generate(5, (index) => 20 + index);
@@ -748,8 +749,8 @@ void main() {
 
           verify(
             () => mockSodium.crypto_box_seal(
-              Uint8List.fromList(message),
-              Uint8List.fromList(publicKey),
+              Uint8List.fromList(message).toJS,
+              Uint8List.fromList(publicKey).toJS,
             ),
           );
         });
@@ -761,7 +762,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List.fromList(cipher));
+          ).thenReturn(Uint8List.fromList(cipher).toJS);
 
           final result = sut.seal(
             message: Uint8List(20),
@@ -777,7 +778,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenThrow(JsError());
+          ).thenThrow(JSError());
 
           expect(
             () => sut.seal(
@@ -836,7 +837,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List(0));
+          ).thenReturn(Uint8List(0).toJS);
 
           final cipherText = List.generate(20, (index) => index * 2);
           final publicKey = List.generate(5, (index) => 20 + index);
@@ -850,9 +851,9 @@ void main() {
 
           verify(
             () => mockSodium.crypto_box_seal_open(
-              Uint8List.fromList(cipherText),
-              Uint8List.fromList(publicKey),
-              Uint8List.fromList(secretKey),
+              Uint8List.fromList(cipherText).toJS,
+              Uint8List.fromList(publicKey).toJS,
+              Uint8List.fromList(secretKey).toJS,
             ),
           );
         });
@@ -865,7 +866,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenReturn(Uint8List.fromList(message));
+          ).thenReturn(Uint8List.fromList(message).toJS);
 
           final result = sut.sealOpen(
             cipherText: Uint8List(13),
@@ -883,7 +884,7 @@ void main() {
               any(),
               any(),
             ),
-          ).thenThrow(JsError());
+          ).thenThrow(JSError());
 
           expect(
             () => sut.sealOpen(
@@ -906,7 +907,7 @@ void main() {
     setUp(() {
       preSut = PrecalculatedBoxJS(
         sut,
-        SecureKeyJS(mockSodium, sharedKey),
+        SecureKeyJS(mockSodium.asLibSodiumJS, sharedKey.toJS),
       );
 
       when(() => mockSodium.crypto_box_MACBYTES).thenReturn(5);
@@ -933,7 +934,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -945,9 +946,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_box_easy_afternm(
-            Uint8List.fromList(message),
-            Uint8List.fromList(nonce),
-            sharedKey,
+            Uint8List.fromList(message).toJS,
+            Uint8List.fromList(nonce).toJS,
+            sharedKey.toJS,
           ),
         );
       });
@@ -960,7 +961,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(cipher));
+        ).thenReturn(Uint8List.fromList(cipher).toJS);
 
         final result = preSut.easy(
           message: Uint8List(20),
@@ -977,7 +978,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => preSut.easy(
@@ -1021,7 +1022,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final cipherText = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -1033,9 +1034,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_box_open_easy_afternm(
-            Uint8List.fromList(cipherText),
-            Uint8List.fromList(nonce),
-            sharedKey,
+            Uint8List.fromList(cipherText).toJS,
+            Uint8List.fromList(nonce).toJS,
+            sharedKey.toJS,
           ),
         );
       });
@@ -1048,7 +1049,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(message));
+        ).thenReturn(Uint8List.fromList(message).toJS);
 
         final result = preSut.openEasy(
           cipherText: Uint8List(13),
@@ -1065,7 +1066,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => preSut.openEasy(
@@ -1085,7 +1086,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(10));
+        ).thenReturn(Uint8List(10).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -1097,9 +1098,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_box_easy_afternm(
-            Uint8List.fromList(message),
-            Uint8List.fromList(nonce),
-            sharedKey,
+            Uint8List.fromList(message).toJS,
+            Uint8List.fromList(nonce).toJS,
+            sharedKey.toJS,
           ),
         );
       });
@@ -1112,7 +1113,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(cipher));
+        ).thenReturn(Uint8List.fromList(cipher).toJS);
 
         final result = preSut.detached(
           message: Uint8List(20),
@@ -1132,7 +1133,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final cipherText = List.generate(15, (index) => index * 2);
         final mac = List.generate(5, (index) => 20 - index);
@@ -1146,9 +1147,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_box_open_easy_afternm(
-            Uint8List.fromList(mac + cipherText),
-            Uint8List.fromList(nonce),
-            sharedKey,
+            Uint8List.fromList(mac + cipherText).toJS,
+            Uint8List.fromList(nonce).toJS,
+            sharedKey.toJS,
           ),
         );
       });
@@ -1161,7 +1162,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(message));
+        ).thenReturn(Uint8List.fromList(message).toJS);
 
         final result = preSut.openDetached(
           cipherText: Uint8List(13),
@@ -1175,7 +1176,7 @@ void main() {
       test('dispose zeros key memory', () {
         preSut.dispose();
 
-        verify(() => mockSodium.memzero(sharedKey));
+        verify(() => mockSodium.memzero(sharedKey.toJS));
       });
     });
   });

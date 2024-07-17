@@ -11,19 +11,17 @@ import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
 import '../../secure_key_fake.dart';
+import 'sodium_js_mock.dart';
 
 @isTestGroup
 void testKeygen({
-  required LibSodiumJS mockSodium,
+  required MockLibSodiumJS mockSodium,
   required SecureKey Function() runKeygen,
-  required Uint8List Function() keygenNative,
+  required JSUint8Array Function() keygenNative,
 }) =>
     group('keygen', () {
-      // ignore: prefer_asserts_with_message
-      assert(mockSodium is Mock);
-
       test('calls native implementation on generated key', () {
-        when(keygenNative).thenReturn(Uint8List(0));
+        when(keygenNative).thenReturn(Uint8List(0).toJS);
 
         runKeygen();
 
@@ -32,7 +30,7 @@ void testKeygen({
 
       test('returns generated key', () {
         final testData = List.generate(11, (index) => index);
-        when(keygenNative).thenReturn(Uint8List.fromList(testData));
+        when(keygenNative).thenReturn(Uint8List.fromList(testData).toJS);
 
         final res = runKeygen();
 
@@ -48,14 +46,11 @@ void testKeygen({
 
 @isTestGroup
 void testKeypair({
-  required LibSodiumJS mockSodium,
+  required MockLibSodiumJS mockSodium,
   required api.KeyPair Function() runKeypair,
   required KeyPair Function() keypairNative,
 }) =>
     group('keypair', () {
-      // ignore: prefer_asserts_with_message
-      assert(mockSodium is Mock);
-
       test('calls native implementation to allocate keys', () {
         when(keypairNative).thenReturn(
           KeyPair(
@@ -96,16 +91,13 @@ void testKeypair({
 
 @isTestGroup
 void testSeedKeypair({
-  required LibSodiumJS mockSodium,
+  required MockLibSodiumJS mockSodium,
   required api.KeyPair Function(SecureKey seed) runSeedKeypair,
-  required num Function() seedBytesNative,
-  required KeyPair Function(Uint8List seed) seedKeypairNative,
+  required int Function() seedBytesNative,
+  required KeyPair Function(JSUint8Array seed) seedKeypairNative,
 }) =>
     group('seedKeypair', () {
       const seedLen = 33;
-
-      // ignore: prefer_asserts_with_message
-      assert(mockSodium is Mock);
 
       setUp(() {
         when(seedBytesNative).thenReturn(seedLen);
@@ -133,7 +125,7 @@ void testSeedKeypair({
         runSeedKeypair(SecureKeyFake(seed));
 
         verify(
-          () => seedKeypairNative(Uint8List.fromList(seed)),
+          () => seedKeypairNative(Uint8List.fromList(seed).toJS),
         );
       });
 

@@ -1,27 +1,29 @@
-import 'dart:io';
-
-import 'package:path/path.dart';
-
+import '../json/struct.dart';
+import '../json/type_info.dart';
+import '../json/type_mapping.dart';
 import 'file_loader.dart';
 
-class TypeInfo {
-  final String dartType;
-  final String? typeDef;
-  final bool force;
+class TypeMappingsLoader {
+  final FileLoader _sourceLoader;
 
-  const TypeInfo(
-    this.dartType, {
-    this.typeDef,
-    this.force = false,
-  });
-}
+  TypeMappingsLoader(this._sourceLoader);
 
-class TypeMappings {
+  TypeMapping get typeMapping => const TypeMapping(_mappings);
+
+  Iterable<DartTypeDef> get dartTypeDefs =>
+      _mappings.values.map((m) => m.dartTypeDef).nonNulls;
+
+  Stream<Struct> get jsCustomStructs => _sourceLoader.loadFilesJson(
+        'types',
+        (file) => file.path.endsWith('.json'),
+        Struct.fromJson,
+      );
+
   static const _mappings = <String, TypeInfo>{
     // simple types
     'void': TypeInfo('void'),
     'boolean': TypeInfo('bool'),
-    'uint': TypeInfo('num'),
+    'uint': TypeInfo('int'),
     'u64': TypeInfo('JSBigInt'),
     'string': TypeInfo('String'),
     'buf': TypeInfo('JSUint8Array'),
@@ -29,10 +31,12 @@ class TypeMappings {
     'unsized_buf': TypeInfo('JSUint8Array'),
     'unsized_buf_optional': TypeInfo('JSUint8Array?'),
     'minsized_buf': TypeInfo('JSUint8Array'),
+
     // simple result mappings
     'randombytes_random_result': TypeInfo('int'),
     'randombytes_uniform_result': TypeInfo('int'),
     'sodium_version_string_result': TypeInfo('String'),
+
     // complex result mappings
     'crypto_aead_chacha20poly1305_encrypt_detached_result': TypeInfo(
       'CryptoBox',
@@ -71,6 +75,7 @@ class TypeMappings {
         TypeInfo('CryptoBox'),
     'crypto_box_curve25519xchacha20poly1305_seed_keypair_result':
         TypeInfo('KeyPair'),
+
     // state typedefs
     'secretstream_xchacha20poly1305_state': TypeInfo(
       'SecretstreamXchacha20poly1305State',
@@ -97,49 +102,9 @@ class TypeMappings {
     'auth_hmacsha512256_state':
         TypeInfo('AuthHmacsha512256State', typeDef: 'JSNumber'),
     'auth_hmacsha512256_state_address': TypeInfo('AuthHmacsha512256State'),
+
     // hidden types
     'randombytes_implementation': TypeInfo('JSAny'),
     'randombytes_set_implementation_result': TypeInfo('JSAny'),
   };
-
-  late final fileLoader = FileLoader(
-    Directory(
-      join(
-        FileLoader.scriptDir.path,
-        'libsodium_js_generator',
-        'types',
-      ),
-    ),
-  );
-
-  TypeMappings();
-
-  String operator [](String type) {
-    final mappedType = _mappings[type];
-    if (mappedType == null) {
-      stderr.writeln('Missing type-mapping: $type');
-      exitCode = 1;
-      return 'dynamic';
-    } else {
-      return mappedType.dartType;
-    }
-  }
-
-  bool isForced(String type) => _mappings[type]?.force ?? false;
-
-  Future<void> writeTypeDefinitions(StringSink sink) async {
-    for (final info in _mappings.values) {
-      if (info.typeDef != null) {
-        sink.writeln('typedef ${info.dartType} = ${info.typeDef};\n');
-      }
-    }
-
-    final typeFiles = await fileLoader.listFilesSorted(
-      '.',
-      (file) => file.path.endsWith('.dart.type'),
-    );
-    for (final typeFile in typeFiles) {
-      sink.writeln(await typeFile.readAsString());
-    }
-  }
 }

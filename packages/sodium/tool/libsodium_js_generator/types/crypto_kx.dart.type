@@ -1,9 +1,0 @@
-extension type CryptoKX._(JSObject _) implements JSObject {
-  external JSUint8Array get sharedRx;
-  external JSUint8Array get sharedTx;
-
-  external CryptoKX({
-    required JSUint8Array sharedRx,
-    required JSUint8Array sharedTx,
-  });
-}
