@@ -11,7 +11,6 @@ import 'package:sodium/src/api/string_x.dart';
 import 'package:sodium/src/ffi/api/kdf_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -38,22 +37,22 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_kdf_bytes_min(),
       () => sut.bytesMin,
       'bytesMin',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_kdf_bytes_max(),
       () => sut.bytesMax,
       'bytesMax',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_kdf_contextbytes(),
       () => sut.contextBytes,
       'contextBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_kdf_keybytes(),
       () => sut.keyBytes,
       'keyBytes',

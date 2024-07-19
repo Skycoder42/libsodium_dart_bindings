@@ -13,7 +13,6 @@ import 'package:sodium/src/js/api/helpers/sign/verification_consumer_js.dart';
 import 'package:sodium/src/js/api/sign_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -37,22 +36,22 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_sign_PUBLICKEYBYTES,
       () => sut.publicKeyBytes,
       'publicKeyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_sign_SECRETKEYBYTES,
       () => sut.secretKeyBytes,
       'secretKeyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_sign_BYTES,
       () => sut.bytes,
       'bytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_sign_SEEDBYTES,
       () => sut.seedBytes,
       'seedBytes',

@@ -11,7 +11,6 @@ import 'package:sodium/src/js/api/secret_box_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -35,17 +34,17 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_secretbox_KEYBYTES,
       () => sut.keyBytes,
       'keyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_secretbox_MACBYTES,
       () => sut.macBytes,
       'macBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_secretbox_NONCEBYTES,
       () => sut.nonceBytes,
       'nonceBytes',

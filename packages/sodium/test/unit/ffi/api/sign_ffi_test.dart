@@ -13,7 +13,6 @@ import 'package:sodium/src/ffi/api/helpers/sign/verification_consumer_ffi.dart';
 import 'package:sodium/src/ffi/api/sign_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -41,22 +40,22 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_sign_publickeybytes(),
       () => sut.publicKeyBytes,
       'publicKeyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_sign_secretkeybytes(),
       () => sut.secretKeyBytes,
       'secretKeyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_sign_bytes(),
       () => sut.bytes,
       'bytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_sign_seedbytes(),
       () => sut.seedBytes,
       'seedBytes',

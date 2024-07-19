@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sumo/pwhash.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../test_data.dart';
 import '../../../test_validator.dart';
@@ -31,14 +30,14 @@ void main() {
       sut: (value) => sutMock.validatePasswordHash(Int8List(value)),
     );
 
-    testData<Tuple2<int, bool>>(
+    testData<(int, bool)>(
       'validatePasswordHashStr asserts if value is not in range',
       const [
-        Tuple2(3, false),
-        Tuple2(5, false),
-        Tuple2(1, false),
-        Tuple2(0, true),
-        Tuple2(6, true),
+        (3, false),
+        (5, false),
+        (1, false),
+        (0, true),
+        (6, true),
       ],
       (fixture) {
         when(() => sutMock.strBytes).thenReturn(5);
@@ -46,9 +45,9 @@ void main() {
         final exceptionMatcher = throwsA(isA<RangeError>());
         expect(
           () => sutMock.validatePasswordHashStr(
-            'x' * fixture.item1,
+            'x' * fixture.$1,
           ),
-          fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+          fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
         verify(() => sutMock.strBytes);
       },

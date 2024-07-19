@@ -1,25 +1,24 @@
 import 'package:meta/meta.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import 'test_data.dart';
 
 @isTestGroup
 void testConstantsMapping(
-  List<Tuple3<num Function(), int Function(), String>> data,
+  List<(num Function(), int Function(), String)> data,
 ) =>
-    testData<Tuple3<num Function(), int Function(), String>>(
+    testData<(num Function(), int Function(), String)>(
       'maps integer constant correctly:',
       data,
       (fixture) {
         const value = 10;
-        when(fixture.item1).thenReturn(value);
+        when(fixture.$1).thenReturn(value);
 
-        final res = fixture.item2();
+        final res = fixture.$2();
 
         expect(res, value);
-        verify(fixture.item1);
+        verify(fixture.$1);
       },
-      fixtureToString: (fixture) => fixture.item3,
+      fixtureToString: (fixture) => fixture.$3,
     );

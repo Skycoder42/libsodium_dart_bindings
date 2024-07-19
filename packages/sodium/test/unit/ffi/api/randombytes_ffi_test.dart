@@ -11,7 +11,6 @@ import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../test_constants_mapping.dart';
 import '../pointer_test_helpers.dart';
@@ -36,7 +35,7 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.randombytes_seedbytes(),
       () => sut.seedBytes,
       'seedBytes',

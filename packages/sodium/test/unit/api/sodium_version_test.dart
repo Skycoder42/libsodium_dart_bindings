@@ -1,6 +1,5 @@
 import 'package:sodium/src/api/sodium_version.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../test_data.dart';
 
@@ -17,97 +16,97 @@ void main() {
     expect(version.toString(), str);
   });
 
-  testData<Tuple3<SodiumVersion, Object?, bool>>(
+  testData<(SodiumVersion, Object?, bool)>(
     'equals and hashcode work correctly',
     const [
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), true),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2-fake'), true),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), '1.2', false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), null, true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2-fake'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), false),
+      (SodiumVersion(1, 2, '1.2'), '1.2', false),
+      (SodiumVersion(1, 2, '1.2'), null, true),
     ],
     (fixture) {
-      expect(fixture.item1 == (fixture.item2 ?? fixture.item1), fixture.item3);
+      expect(fixture.$1 == (fixture.$2 ?? fixture.$1), fixture.$3);
       expect(
-        fixture.item1.hashCode == (fixture.item2 ?? fixture.item1).hashCode,
-        fixture.item3,
+        fixture.$1.hashCode == (fixture.$2 ?? fixture.$1).hashCode,
+        fixture.$3,
       );
     },
     fixtureToString: (fixture) =>
-        '[${fixture.item1} == ${fixture.item2} -> ${fixture.item3}]',
+        '[${fixture.$1} == ${fixture.$2} -> ${fixture.$3}]',
   );
 
-  testData<Tuple3<SodiumVersion, SodiumVersion, bool>>(
+  testData<(SodiumVersion, SodiumVersion, bool)>(
     'operator< works correctly',
     const [
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), true),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), true),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), true),
-      Tuple3(SodiumVersion(1, 3, '1.3'), SodiumVersion(1, 2, '1.2'), false),
-      Tuple3(SodiumVersion(2, 2, '2.2'), SodiumVersion(1, 2, '1.2'), false),
-      Tuple3(SodiumVersion(2, 3, '2.3'), SodiumVersion(1, 2, '1.2'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), true),
+      (SodiumVersion(1, 3, '1.3'), SodiumVersion(1, 2, '1.2'), false),
+      (SodiumVersion(2, 2, '2.2'), SodiumVersion(1, 2, '1.2'), false),
+      (SodiumVersion(2, 3, '2.3'), SodiumVersion(1, 2, '1.2'), false),
     ],
     (fixture) {
-      expect(fixture.item1 < fixture.item2, fixture.item3);
+      expect(fixture.$1 < fixture.$2, fixture.$3);
     },
     fixtureToString: (fixture) =>
-        '[${fixture.item1} < ${fixture.item2} -> ${fixture.item3}]',
+        '[${fixture.$1} < ${fixture.$2} -> ${fixture.$3}]',
   );
 
-  testData<Tuple3<SodiumVersion, SodiumVersion, bool>>(
+  testData<(SodiumVersion, SodiumVersion, bool)>(
     'operator<= works correctly',
     const [
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), true),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), true),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), true),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), true),
-      Tuple3(SodiumVersion(1, 3, '1.3'), SodiumVersion(1, 2, '1.2'), false),
-      Tuple3(SodiumVersion(2, 2, '2.2'), SodiumVersion(1, 2, '1.2'), false),
-      Tuple3(SodiumVersion(2, 3, '2.3'), SodiumVersion(1, 2, '1.2'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), true),
+      (SodiumVersion(1, 3, '1.3'), SodiumVersion(1, 2, '1.2'), false),
+      (SodiumVersion(2, 2, '2.2'), SodiumVersion(1, 2, '1.2'), false),
+      (SodiumVersion(2, 3, '2.3'), SodiumVersion(1, 2, '1.2'), false),
     ],
     (fixture) {
-      expect(fixture.item1 <= fixture.item2, fixture.item3);
+      expect(fixture.$1 <= fixture.$2, fixture.$3);
     },
     fixtureToString: (fixture) =>
-        '[${fixture.item1} <= ${fixture.item2} -> ${fixture.item3}]',
+        '[${fixture.$1} <= ${fixture.$2} -> ${fixture.$3}]',
   );
 
-  testData<Tuple3<SodiumVersion, SodiumVersion, bool>>(
+  testData<(SodiumVersion, SodiumVersion, bool)>(
     'operator> works correctly',
     const [
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), false),
-      Tuple3(SodiumVersion(1, 3, '1.3'), SodiumVersion(1, 2, '1.2'), true),
-      Tuple3(SodiumVersion(2, 2, '2.2'), SodiumVersion(1, 2, '1.2'), true),
-      Tuple3(SodiumVersion(2, 3, '2.3'), SodiumVersion(1, 2, '1.2'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), false),
+      (SodiumVersion(1, 3, '1.3'), SodiumVersion(1, 2, '1.2'), true),
+      (SodiumVersion(2, 2, '2.2'), SodiumVersion(1, 2, '1.2'), true),
+      (SodiumVersion(2, 3, '2.3'), SodiumVersion(1, 2, '1.2'), true),
     ],
     (fixture) {
-      expect(fixture.item1 > fixture.item2, fixture.item3);
+      expect(fixture.$1 > fixture.$2, fixture.$3);
     },
     fixtureToString: (fixture) =>
-        '[${fixture.item1} > ${fixture.item2} -> ${fixture.item3}]',
+        '[${fixture.$1} > ${fixture.$2} -> ${fixture.$3}]',
   );
 
-  testData<Tuple3<SodiumVersion, SodiumVersion, bool>>(
+  testData<(SodiumVersion, SodiumVersion, bool)>(
     'operator>= works correctly',
     const [
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), true),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), false),
-      Tuple3(SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), false),
-      Tuple3(SodiumVersion(1, 3, '1.3'), SodiumVersion(1, 2, '1.2'), true),
-      Tuple3(SodiumVersion(2, 2, '2.2'), SodiumVersion(1, 2, '1.2'), true),
-      Tuple3(SodiumVersion(2, 3, '2.3'), SodiumVersion(1, 2, '1.2'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 2, '1.2'), true),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(1, 3, '1.3'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 2, '2.2'), false),
+      (SodiumVersion(1, 2, '1.2'), SodiumVersion(2, 3, '2.3'), false),
+      (SodiumVersion(1, 3, '1.3'), SodiumVersion(1, 2, '1.2'), true),
+      (SodiumVersion(2, 2, '2.2'), SodiumVersion(1, 2, '1.2'), true),
+      (SodiumVersion(2, 3, '2.3'), SodiumVersion(1, 2, '1.2'), true),
     ],
     (fixture) {
-      expect(fixture.item1 >= fixture.item2, fixture.item3);
+      expect(fixture.$1 >= fixture.$2, fixture.$3);
     },
     fixtureToString: (fixture) =>
-        '[${fixture.item1} >= ${fixture.item2} -> ${fixture.item3}]',
+        '[${fixture.$1} >= ${fixture.$2} -> ${fixture.$3}]',
   );
 }

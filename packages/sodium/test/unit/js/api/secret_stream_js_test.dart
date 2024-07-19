@@ -8,7 +8,6 @@ import 'package:sodium/src/js/api/helpers/secret_stream/secret_stream_pull_trans
 import 'package:sodium/src/js/api/helpers/secret_stream/secret_stream_push_transformer_js.dart';
 import 'package:sodium/src/js/api/secret_stream_js.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -32,17 +31,17 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_secretstream_xchacha20poly1305_ABYTES,
       () => sut.aBytes,
       'aBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES,
       () => sut.headerBytes,
       'headerBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_secretstream_xchacha20poly1305_KEYBYTES,
       () => sut.keyBytes,
       'keyBytes',

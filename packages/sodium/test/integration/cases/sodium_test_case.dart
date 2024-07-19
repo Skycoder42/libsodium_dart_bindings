@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 // ignore: no_self_package_imports
 import 'package:sodium/sodium.dart';
-import 'package:tuple/tuple.dart';
 
 import '../test_case.dart';
 
@@ -23,22 +22,22 @@ class SodiumTestCase extends TestCase {
 
     group('pad adds expected padding and unpad removes it', () {
       const fixtures = [
-        Tuple2(14, 16),
-        Tuple2(15, 16),
-        Tuple2(16, 32),
-        Tuple2(17, 32),
-        Tuple2(18, 32),
+        (14, 16),
+        (15, 16),
+        (16, 32),
+        (17, 32),
+        (18, 32),
       ];
 
       for (final fixture in fixtures) {
         test('(Variant: $fixture)', (sodium) {
           const blockSize = 16;
-          final baseBuf = Uint8List(fixture.item1);
+          final baseBuf = Uint8List(fixture.$1);
 
           final paddedBuf = sodium.pad(baseBuf, blockSize);
           printOnFailure('Padded buf: $paddedBuf');
 
-          expect(paddedBuf, hasLength(fixture.item2));
+          expect(paddedBuf, hasLength(fixture.$2));
           expect(paddedBuf.sublist(0, baseBuf.length), baseBuf);
 
           final unpaddedBuf = sodium.unpad(paddedBuf, blockSize);

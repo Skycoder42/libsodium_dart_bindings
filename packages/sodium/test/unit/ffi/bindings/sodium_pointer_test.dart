@@ -14,7 +14,6 @@ import 'package:sodium/src/ffi/bindings/memory_protection.dart';
 import 'package:sodium/src/ffi/bindings/sodium_finalizer.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
@@ -98,115 +97,115 @@ void main() {
         );
       });
 
-      testData<Tuple2<SodiumPointer<dynamic> Function(), int>>(
+      testData<(SodiumPointer<dynamic> Function(), int)>(
         'allocates correct element size for supported types',
         [
-          Tuple2(
+          (
             () => SodiumPointer<Uint8>.alloc(mockSodium, count: 2),
             sizeOf<Uint8>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Uint16>.alloc(mockSodium, count: 2),
             sizeOf<Uint16>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Uint32>.alloc(mockSodium, count: 2),
             sizeOf<Uint32>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Uint64>.alloc(mockSodium, count: 2),
             sizeOf<Uint64>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Int8>.alloc(mockSodium, count: 2),
             sizeOf<Int8>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Int16>.alloc(mockSodium, count: 2),
             sizeOf<Int16>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Int32>.alloc(mockSodium, count: 2),
             sizeOf<Int32>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Int64>.alloc(mockSodium, count: 2),
             sizeOf<Int64>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Float>.alloc(mockSodium, count: 2),
             sizeOf<Float>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Double>.alloc(mockSodium, count: 2),
             sizeOf<Double>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Char>.alloc(mockSodium, count: 2),
             sizeOf<Char>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Short>.alloc(mockSodium, count: 2),
             sizeOf<Short>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Int>.alloc(mockSodium, count: 2),
             sizeOf<Int>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Long>.alloc(mockSodium, count: 2),
             sizeOf<Long>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<LongLong>.alloc(mockSodium, count: 2),
             sizeOf<LongLong>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<UnsignedChar>.alloc(mockSodium, count: 2),
             sizeOf<UnsignedChar>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<UnsignedShort>.alloc(mockSodium, count: 2),
             sizeOf<UnsignedShort>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<UnsignedInt>.alloc(mockSodium, count: 2),
             sizeOf<UnsignedInt>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<UnsignedLong>.alloc(mockSodium, count: 2),
             sizeOf<UnsignedLong>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<UnsignedLongLong>.alloc(mockSodium, count: 2),
             sizeOf<UnsignedLongLong>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<SignedChar>.alloc(mockSodium, count: 2),
             sizeOf<SignedChar>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<IntPtr>.alloc(mockSodium, count: 2),
             sizeOf<IntPtr>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<UintPtr>.alloc(mockSodium, count: 2),
             sizeOf<UintPtr>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<Size>.alloc(mockSodium, count: 2),
             sizeOf<Size>(),
           ),
-          Tuple2(
+          (
             () => SodiumPointer<WChar>.alloc(mockSodium, count: 2),
             sizeOf<WChar>(),
           ),
         ],
         (fixture) {
-          final sut = fixture.item1();
-          expect(sut.elementSize, fixture.item2);
+          final sut = fixture.$1();
+          expect(sut.elementSize, fixture.$2);
           expect(sut.count, 2);
-          expect(sut.byteLength, 2 * fixture.item2);
+          expect(sut.byteLength, 2 * fixture.$2);
         },
       );
 
@@ -517,25 +516,25 @@ void main() {
         );
       });
 
-      testData<Tuple4<int, int?, int, int>>(
+      testData<(int, int?, int, int)>(
         'returns expected view address and length',
         const [
-          Tuple4(0, null, 1234, 3),
-          Tuple4(1, null, 1235, 2),
-          Tuple4(2, null, 1236, 1),
-          Tuple4(3, null, 1237, 0),
-          Tuple4(0, 2, 1234, 2),
-          Tuple4(1, 1, 1235, 1),
+          (0, null, 1234, 3),
+          (1, null, 1235, 2),
+          (2, null, 1236, 1),
+          (3, null, 1237, 0),
+          (0, 2, 1234, 2),
+          (1, 1, 1235, 1),
         ],
         (fixture) {
-          final view = sut.viewAt(fixture.item1, fixture.item2);
+          final view = sut.viewAt(fixture.$1, fixture.$2);
 
-          expect(view.ptr, Pointer.fromAddress(fixture.item3));
-          expect(view.count, fixture.item4);
+          expect(view.ptr, Pointer.fromAddress(fixture.$3));
+          expect(view.count, fixture.$4);
         },
         fixtureToString: (fixture) =>
-            '(offset: ${fixture.item1}, length: ${fixture.item2}) '
-            '-> (address: ${fixture.item3}, count: ${fixture.item4})',
+            '(offset: ${fixture.$1}, length: ${fixture.$2}) '
+            '-> (address: ${fixture.$3}, count: ${fixture.$4})',
       );
 
       test('dispose does not free views and does not detach', () {
@@ -579,14 +578,14 @@ void main() {
         );
       });
 
-      testData<Tuple3<List<int>, int, List<int>>>(
+      testData<(List<int>, int, List<int>)>(
         'fills correct parts of memory',
         const [
-          Tuple3([], 3, [1, 2, 3, 4, 5]),
-          Tuple3([7, 8, 9], 0, [7, 8, 9, 4, 5]),
-          Tuple3([7, 8], 2, [1, 2, 7, 8, 5]),
-          Tuple3([9], 4, [1, 2, 3, 4, 9]),
-          Tuple3([6, 7, 8, 9, 0], 0, [6, 7, 8, 9, 0]),
+          ([], 3, [1, 2, 3, 4, 5]),
+          ([7, 8, 9], 0, [7, 8, 9, 4, 5]),
+          ([7, 8], 2, [1, 2, 7, 8, 5]),
+          ([9], 4, [1, 2, 3, 4, 9]),
+          ([6, 7, 8, 9, 0], 0, [6, 7, 8, 9, 0]),
         ],
         (fixture) {
           const testData = [1, 2, 3, 4, 5];
@@ -595,13 +594,13 @@ void main() {
           final sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
 
           // ignore: cascade_invocations
-          sut.fill(fixture.item1, offset: fixture.item2);
+          sut.fill(fixture.$1, offset: fixture.$2);
 
-          expect(sut.asListView(), fixture.item3);
+          expect(sut.asListView(), fixture.$3);
         },
         fixtureToString: (fixture) =>
-            '(data: ${fixture.item1}, offset: ${fixture.item2}) '
-            '-> ${fixture.item3}',
+            '(data: ${fixture.$1}, offset: ${fixture.$2}) '
+            '-> ${fixture.$3}',
       );
     });
 

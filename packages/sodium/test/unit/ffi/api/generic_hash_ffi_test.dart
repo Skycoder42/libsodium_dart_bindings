@@ -12,7 +12,6 @@ import 'package:sodium/src/ffi/api/generic_hash_ffi.dart';
 import 'package:sodium/src/ffi/api/helpers/generic_hash/generic_hash_consumer_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -40,32 +39,32 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_bytes(),
       () => sut.bytes,
       'bytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_bytes_min(),
       () => sut.bytesMin,
       'bytesMin',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_bytes_max(),
       () => sut.bytesMax,
       'bytesMax',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_keybytes(),
       () => sut.keyBytes,
       'keyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_keybytes_min(),
       () => sut.keyBytesMin,
       'keyBytesMin',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_keybytes_max(),
       () => sut.keyBytesMax,
       'keyBytesMax',

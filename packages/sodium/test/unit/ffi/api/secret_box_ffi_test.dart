@@ -12,7 +12,6 @@ import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/secret_box_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -39,17 +38,17 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_secretbox_keybytes(),
       () => sut.keyBytes,
       'keyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_secretbox_macbytes(),
       () => sut.macBytes,
       'macBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_secretbox_noncebytes(),
       () => sut.nonceBytes,
       'nonceBytes',

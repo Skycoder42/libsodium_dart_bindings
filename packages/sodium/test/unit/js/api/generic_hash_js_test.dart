@@ -10,7 +10,6 @@ import 'package:sodium/src/js/api/generic_hash_js.dart';
 import 'package:sodium/src/js/api/helpers/generic_hash/generic_hash_consumer_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -34,32 +33,32 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_BYTES,
       () => sut.bytes,
       'bytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_BYTES_MIN,
       () => sut.bytesMin,
       'bytesMin',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_BYTES_MAX,
       () => sut.bytesMax,
       'bytesMax',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_KEYBYTES,
       () => sut.keyBytes,
       'keyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_KEYBYTES_MIN,
       () => sut.keyBytesMin,
       'keyBytesMin',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_generichash_KEYBYTES_MAX,
       () => sut.keyBytesMax,
       'keyBytesMax',

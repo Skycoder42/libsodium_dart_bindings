@@ -11,7 +11,6 @@ import 'package:sodium/src/ffi/bindings/memory_protection.dart';
 import 'package:sodium/src/ffi/bindings/secure_key_native.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
@@ -90,11 +89,11 @@ void main() {
             return callback(data);
           });
 
-      testData<Tuple2<bool, MemoryProtection>>(
+      testData<(bool, MemoryProtection)>(
         'creates temporary pointer from data',
         const [
-          Tuple2(false, MemoryProtection.readOnly),
-          Tuple2(true, MemoryProtection.readWrite),
+          (false, MemoryProtection.readOnly),
+          (true, MemoryProtection.readWrite),
         ],
         (fixture) {
           final testData = List.generate(20, (index) => index);
@@ -105,10 +104,10 @@ void main() {
             (pointer) {
               expect(pointer.count, testData.length);
               expect(pointer.ptr, hasRawData<UnsignedChar>(testData));
-              expect(pointer.memoryProtection, fixture.item2);
+              expect(pointer.memoryProtection, fixture.$2);
               return true;
             },
-            writable: fixture.item1,
+            writable: fixture.$1,
           );
           expect(result, isTrue);
 

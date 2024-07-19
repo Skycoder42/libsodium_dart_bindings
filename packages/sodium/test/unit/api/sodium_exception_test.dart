@@ -1,6 +1,5 @@
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../test_data.dart';
 
@@ -11,51 +10,51 @@ void main() {
     expect(sut.originalMessage, message);
   });
 
-  testData<Tuple2<int, bool>>(
+  testData<(int, bool)>(
     'checkSucceededInt asserts for non zero values',
     const [
-      Tuple2(0, false),
-      Tuple2(1, true),
-      Tuple2(-1, true),
-      Tuple2(666, true),
+      (0, false),
+      (1, true),
+      (-1, true),
+      (666, true),
     ],
     (fixture) {
       final exceptionMatcher = throwsA(isA<SodiumException>());
       expect(
-        () => SodiumException.checkSucceededInt(fixture.item1),
-        fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+        () => SodiumException.checkSucceededInt(fixture.$1),
+        fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
       );
     },
   );
 
-  testData<Tuple2<int, bool>>(
+  testData<(int, bool)>(
     'checkSucceededInitInt asserts for non zero and non one values',
     const [
-      Tuple2(0, false),
-      Tuple2(1, false),
-      Tuple2(-1, true),
-      Tuple2(666, true),
+      (0, false),
+      (1, false),
+      (-1, true),
+      (666, true),
     ],
     (fixture) {
       final exceptionMatcher = throwsA(isA<SodiumException>());
       expect(
-        () => SodiumException.checkSucceededInitInt(fixture.item1),
-        fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+        () => SodiumException.checkSucceededInitInt(fixture.$1),
+        fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
       );
     },
   );
 
-  testData<Tuple2<bool, bool>>(
+  testData<(bool, bool)>(
     'checkSucceededBool asserts for false value',
     const [
-      Tuple2(true, false),
-      Tuple2(false, true),
+      (true, false),
+      (false, true),
     ],
     (fixture) {
       final exceptionMatcher = throwsA(isA<SodiumException>());
       expect(
-        () => SodiumException.checkSucceededBool(fixture.item1),
-        fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+        () => SodiumException.checkSucceededBool(fixture.$1),
+        fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
       );
     },
   );

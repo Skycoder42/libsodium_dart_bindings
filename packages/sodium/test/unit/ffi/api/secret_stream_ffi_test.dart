@@ -9,7 +9,6 @@ import 'package:sodium/src/ffi/api/helpers/secret_stream/secret_stream_push_tran
 import 'package:sodium/src/ffi/api/secret_stream_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -36,17 +35,17 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_secretstream_xchacha20poly1305_abytes(),
       () => sut.aBytes,
       'aBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_secretstream_xchacha20poly1305_headerbytes(),
       () => sut.headerBytes,
       'headerBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_secretstream_xchacha20poly1305_keybytes(),
       () => sut.keyBytes,
       'keyBytes',

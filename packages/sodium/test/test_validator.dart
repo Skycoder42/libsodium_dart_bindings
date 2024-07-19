@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import 'test_data.dart';
 
@@ -11,20 +10,20 @@ void testCheckIsSame(
   required int Function() source,
   required void Function(int value) sut,
 }) =>
-    testData<Tuple2<int, bool>>(
+    testData<(int, bool)>(
       '$name asserts if value is not as expected',
       const [
-        Tuple2(5, false),
-        Tuple2(4, true),
-        Tuple2(6, true),
+        (5, false),
+        (4, true),
+        (6, true),
       ],
       (fixture) {
         when(source).thenReturn(5);
 
         final exceptionMatcher = throwsA(isA<RangeError>());
         expect(
-          () => sut(fixture.item1),
-          fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+          () => sut(fixture.$1),
+          fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
 
         verify(source);
@@ -37,21 +36,21 @@ void testCheckAtLeast(
   required int Function() source,
   required void Function(int value) sut,
 }) =>
-    testData<Tuple2<int, bool>>(
+    testData<(int, bool)>(
       '$name asserts if value is not as expected',
       const [
-        Tuple2(5, false),
-        Tuple2(6, false),
-        Tuple2(100000, false),
-        Tuple2(4, true),
+        (5, false),
+        (6, false),
+        (100000, false),
+        (4, true),
       ],
       (fixture) {
         when(source).thenReturn(5);
 
         final exceptionMatcher = throwsA(isA<RangeError>());
         expect(
-          () => sut(fixture.item1),
-          fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+          () => sut(fixture.$1),
+          fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
 
         verify(source);
@@ -64,21 +63,21 @@ void testCheckAtMost(
   required int Function() source,
   required void Function(int value) sut,
 }) =>
-    testData<Tuple2<int, bool>>(
+    testData<(int, bool)>(
       '$name asserts if value is not as expected',
       const [
-        Tuple2(5, false),
-        Tuple2(4, false),
-        Tuple2(0, false),
-        Tuple2(6, true),
+        (5, false),
+        (4, false),
+        (0, false),
+        (6, true),
       ],
       (fixture) {
         when(source).thenReturn(5);
 
         final exceptionMatcher = throwsA(isA<RangeError>());
         expect(
-          () => sut(fixture.item1),
-          fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+          () => sut(fixture.$1),
+          fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
 
         verify(source);
@@ -92,14 +91,14 @@ void testCheckInRange(
   required int Function() maxSource,
   required void Function(int value) sut,
 }) =>
-    testData<Tuple2<int, bool>>(
+    testData<(int, bool)>(
       '$name asserts if value is not as expected',
       const [
-        Tuple2(5, false),
-        Tuple2(10, false),
-        Tuple2(15, false),
-        Tuple2(4, true),
-        Tuple2(16, true),
+        (5, false),
+        (10, false),
+        (15, false),
+        (4, true),
+        (16, true),
       ],
       (fixture) {
         when(minSource).thenReturn(5);
@@ -107,8 +106,8 @@ void testCheckInRange(
 
         final exceptionMatcher = throwsA(isA<RangeError>());
         expect(
-          () => sut(fixture.item1),
-          fixture.item2 ? exceptionMatcher : isNot(exceptionMatcher),
+          () => sut(fixture.$1),
+          fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
 
         verify(minSource);

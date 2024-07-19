@@ -13,7 +13,6 @@ import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:sodium/src/ffi/bindings/memory_protection.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
@@ -136,20 +135,20 @@ void main() {
     });
 
     group('runUnlockedRaw', () {
-      testData<Tuple2<bool, MemoryProtection>>(
+      testData<(bool, MemoryProtection)>(
         'sets memory protection levels before running the callback',
         const [
-          Tuple2(false, MemoryProtection.readOnly),
-          Tuple2(true, MemoryProtection.readWrite),
+          (false, MemoryProtection.readOnly),
+          (true, MemoryProtection.readWrite),
         ],
         (fixture) {
           final res = sut.runUnlockedNative(
             (pointer) {
               expect(pointer, mockSodiumPointer);
-              verify(() => mockSodiumPointer.memoryProtection = fixture.item2);
+              verify(() => mockSodiumPointer.memoryProtection = fixture.$2);
               return true;
             },
-            writable: fixture.item1,
+            writable: fixture.$1,
           );
           expect(res, isTrue);
         },
@@ -183,20 +182,20 @@ void main() {
     });
 
     group('runUnlockedSync', () {
-      testData<Tuple2<bool, MemoryProtection>>(
+      testData<(bool, MemoryProtection)>(
         'sets memory protection levels before running the callback',
         const [
-          Tuple2(false, MemoryProtection.readOnly),
-          Tuple2(true, MemoryProtection.readWrite),
+          (false, MemoryProtection.readOnly),
+          (true, MemoryProtection.readWrite),
         ],
         (fixture) {
           final res = sut.runUnlockedSync(
             (data) {
               expect(data, testList);
-              verify(() => mockSodiumPointer.memoryProtection = fixture.item2);
+              verify(() => mockSodiumPointer.memoryProtection = fixture.$2);
               return true;
             },
-            writable: fixture.item1,
+            writable: fixture.$1,
           );
           expect(res, isTrue);
         },
@@ -230,20 +229,20 @@ void main() {
     });
 
     group('runUnlockedAsync', () {
-      testData<Tuple2<bool, MemoryProtection>>(
+      testData<(bool, MemoryProtection)>(
         'sets memory protection levels before running the callback',
         const [
-          Tuple2(false, MemoryProtection.readOnly),
-          Tuple2(true, MemoryProtection.readWrite),
+          (false, MemoryProtection.readOnly),
+          (true, MemoryProtection.readWrite),
         ],
         (fixture) async {
           final res = await sut.runUnlockedAsync(
             (data) {
               expect(data, testList);
-              verify(() => mockSodiumPointer.memoryProtection = fixture.item2);
+              verify(() => mockSodiumPointer.memoryProtection = fixture.$2);
               return true;
             },
-            writable: fixture.item1,
+            writable: fixture.$1,
           );
           expect(res, isTrue);
         },

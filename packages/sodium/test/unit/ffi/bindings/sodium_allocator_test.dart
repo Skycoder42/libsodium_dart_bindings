@@ -10,7 +10,6 @@ import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:sodium/src/ffi/bindings/memory_protection.dart';
 import 'package:sodium/src/ffi/bindings/sodium_allocator.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
@@ -80,21 +79,21 @@ void main() {
       verify(() => mockSodium.sodium_mlock(testPtr.cast(), ptrLen));
     });
 
-    testData<Tuple2<int, bool>>(
+    testData<(int, bool)>(
       'result result of native operation',
       const [
-        Tuple2(0, true),
-        Tuple2(1, false),
-        Tuple2(10, false),
-        Tuple2(-1, false),
+        (0, true),
+        (1, false),
+        (10, false),
+        (-1, false),
       ],
       (fixture) {
         when(() => mockSodium.sodium_mlock(any(), any()))
-            .thenReturn(fixture.item1);
+            .thenReturn(fixture.$1);
 
         final res = sut.lock(nullptr, 0);
 
-        expect(res, fixture.item2);
+        expect(res, fixture.$2);
       },
     );
   });
@@ -111,21 +110,21 @@ void main() {
       verify(() => mockSodium.sodium_munlock(testPtr.cast(), ptrLen));
     });
 
-    testData<Tuple2<int, bool>>(
+    testData<(int, bool)>(
       'result result of native operation',
       const [
-        Tuple2(0, true),
-        Tuple2(1, false),
-        Tuple2(10, false),
-        Tuple2(-1, false),
+        (0, true),
+        (1, false),
+        (10, false),
+        (-1, false),
       ],
       (fixture) {
         when(() => mockSodium.sodium_munlock(any(), any()))
-            .thenReturn(fixture.item1);
+            .thenReturn(fixture.$1);
 
         final res = sut.unlock(nullptr, 0);
 
-        expect(res, fixture.item2);
+        expect(res, fixture.$2);
       },
     );
   });
@@ -142,21 +141,21 @@ void main() {
         verify(() => mockSodium.sodium_mprotect_noaccess(testPtr.cast()));
       });
 
-      testData<Tuple2<int, bool>>(
+      testData<(int, bool)>(
         'result result of native operation',
         const [
-          Tuple2(0, true),
-          Tuple2(1, false),
-          Tuple2(10, false),
-          Tuple2(-1, false),
+          (0, true),
+          (1, false),
+          (10, false),
+          (-1, false),
         ],
         (fixture) {
           when(() => mockSodium.sodium_mprotect_noaccess(any()))
-              .thenReturn(fixture.item1);
+              .thenReturn(fixture.$1);
 
           final res = sut.memoryProtect(nullptr, MemoryProtection.noAccess);
 
-          expect(res, fixture.item2);
+          expect(res, fixture.$2);
         },
       );
     });
@@ -172,21 +171,21 @@ void main() {
         verify(() => mockSodium.sodium_mprotect_readonly(testPtr.cast()));
       });
 
-      testData<Tuple2<int, bool>>(
+      testData<(int, bool)>(
         'result result of native operation',
         const [
-          Tuple2(0, true),
-          Tuple2(1, false),
-          Tuple2(10, false),
-          Tuple2(-1, false),
+          (0, true),
+          (1, false),
+          (10, false),
+          (-1, false),
         ],
         (fixture) {
           when(() => mockSodium.sodium_mprotect_readonly(any()))
-              .thenReturn(fixture.item1);
+              .thenReturn(fixture.$1);
 
           final res = sut.memoryProtect(nullptr, MemoryProtection.readOnly);
 
-          expect(res, fixture.item2);
+          expect(res, fixture.$2);
         },
       );
     });
@@ -202,21 +201,21 @@ void main() {
         verify(() => mockSodium.sodium_mprotect_readwrite(testPtr.cast()));
       });
 
-      testData<Tuple2<int, bool>>(
+      testData<(int, bool)>(
         'result result of native operation',
         const [
-          Tuple2(0, true),
-          Tuple2(1, false),
-          Tuple2(10, false),
-          Tuple2(-1, false),
+          (0, true),
+          (1, false),
+          (10, false),
+          (-1, false),
         ],
         (fixture) {
           when(() => mockSodium.sodium_mprotect_readwrite(any()))
-              .thenReturn(fixture.item1);
+              .thenReturn(fixture.$1);
 
           final res = sut.memoryProtect(nullptr, MemoryProtection.readWrite);
 
-          expect(res, fixture.item2);
+          expect(res, fixture.$2);
         },
       );
     });

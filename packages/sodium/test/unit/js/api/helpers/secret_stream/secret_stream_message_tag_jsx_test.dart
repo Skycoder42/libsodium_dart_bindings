@@ -5,7 +5,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/secret_stream.dart';
 import 'package:sodium/src/js/api/helpers/secret_stream/secret_stream_message_tag_jsx.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../../../test_data.dart';
 
@@ -18,34 +17,34 @@ void main() {
     reset(mockSodium);
   });
 
-  testData<Tuple2<SecretStreamMessageTag, num Function()>>(
+  testData<(SecretStreamMessageTag, num Function())>(
     'getValue returns correct message tag value',
     [
-      Tuple2(
+      (
         SecretStreamMessageTag.message,
         () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_MESSAGE,
       ),
-      Tuple2(
+      (
         SecretStreamMessageTag.push,
         () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH,
       ),
-      Tuple2(
+      (
         SecretStreamMessageTag.rekey,
         () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_REKEY,
       ),
-      Tuple2(
+      (
         SecretStreamMessageTag.finalPush,
         () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_FINAL,
       ),
     ],
     (fixture) {
       const value = 12;
-      when(fixture.item2).thenReturn(value);
+      when(fixture.$2).thenReturn(value);
 
-      final result = fixture.item1.getValue(mockSodium.asLibSodiumJS);
+      final result = fixture.$1.getValue(mockSodium.asLibSodiumJS);
 
       expect(result, value);
-      verify(fixture.item2);
+      verify(fixture.$2);
     },
   );
 
@@ -61,37 +60,37 @@ void main() {
           .thenReturn(0);
     });
 
-    testData<Tuple2<SecretStreamMessageTag, num Function()>>(
+    testData<(SecretStreamMessageTag, num Function())>(
       'returns correct tag for value',
       [
-        Tuple2(
+        (
           SecretStreamMessageTag.message,
           () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_MESSAGE,
         ),
-        Tuple2(
+        (
           SecretStreamMessageTag.push,
           () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH,
         ),
-        Tuple2(
+        (
           SecretStreamMessageTag.rekey,
           () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_REKEY,
         ),
-        Tuple2(
+        (
           SecretStreamMessageTag.finalPush,
           () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_FINAL,
         ),
       ],
       (fixture) {
         const value = 12;
-        when(fixture.item2).thenReturn(value);
+        when(fixture.$2).thenReturn(value);
 
         final result = SecretStreamMessageTagJSX.fromValue(
           mockSodium.asLibSodiumJS,
           value,
         );
 
-        expect(result, fixture.item1);
-        verify(fixture.item2);
+        expect(result, fixture.$1);
+        verify(fixture.$2);
       },
     );
 

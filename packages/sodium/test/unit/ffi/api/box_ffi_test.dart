@@ -14,7 +14,6 @@ import 'package:sodium/src/ffi/api/secure_key_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -40,32 +39,32 @@ void main() {
 
   group('BoxFFI', () {
     testConstantsMapping([
-      Tuple3(
+      (
         () => mockSodium.crypto_box_publickeybytes(),
         () => sut.publicKeyBytes,
         'publicKeyBytes',
       ),
-      Tuple3(
+      (
         () => mockSodium.crypto_box_secretkeybytes(),
         () => sut.secretKeyBytes,
         'secretKeyBytes',
       ),
-      Tuple3(
+      (
         () => mockSodium.crypto_box_macbytes(),
         () => sut.macBytes,
         'macBytes',
       ),
-      Tuple3(
+      (
         () => mockSodium.crypto_box_noncebytes(),
         () => sut.nonceBytes,
         'nonceBytes',
       ),
-      Tuple3(
+      (
         () => mockSodium.crypto_box_seedbytes(),
         () => sut.seedBytes,
         'seedBytes',
       ),
-      Tuple3(
+      (
         () => mockSodium.crypto_box_sealbytes(),
         () => sut.sealBytes,
         'sealBytes',

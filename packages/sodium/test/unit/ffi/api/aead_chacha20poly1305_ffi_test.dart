@@ -12,7 +12,6 @@ import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/aead_chacha20poly1305_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -39,17 +38,17 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_aead_chacha20poly1305_keybytes(),
       () => sut.keyBytes,
       'keyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_aead_chacha20poly1305_npubbytes(),
       () => sut.nonceBytes,
       'nonceBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_aead_chacha20poly1305_abytes(),
       () => sut.aBytes,
       'aBytes',

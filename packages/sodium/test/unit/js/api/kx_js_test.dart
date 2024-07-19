@@ -10,7 +10,6 @@ import 'package:sodium/src/js/api/kx_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
@@ -34,22 +33,22 @@ void main() {
   });
 
   testConstantsMapping([
-    Tuple3(
+    (
       () => mockSodium.crypto_kx_PUBLICKEYBYTES,
       () => sut.publicKeyBytes,
       'publicKeyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_kx_SECRETKEYBYTES,
       () => sut.secretKeyBytes,
       'secretKeyBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_kx_SEEDBYTES,
       () => sut.seedBytes,
       'seedBytes',
     ),
-    Tuple3(
+    (
       () => mockSodium.crypto_kx_SESSIONKEYBYTES,
       () => sut.sessionKeyBytes,
       'sessionKeyBytes',
