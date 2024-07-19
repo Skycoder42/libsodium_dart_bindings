@@ -32,11 +32,11 @@ class SodiumWeb extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium() => SodiumInit.initFromSodiumJS2(_loadLibSodiumJS);
+  Future<Sodium> loadSodium() => SodiumInit.initFromSodiumJS(_loadLibSodiumJS);
 
   @override
   Future<SodiumSumo> loadSodiumSumo() =>
-      SodiumSumoInit.initFromSodiumJS2(() async {
+      SodiumSumoInit.initFromSodiumJS(() async {
         final libSodiumJs = await _loadLibSodiumJS();
         // ignore: avoid_dynamic_calls
         if (hasProperty(libSodiumJs, 'crypto_sign_ed25519_sk_to_seed')) {

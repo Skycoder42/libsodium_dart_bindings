@@ -15,18 +15,6 @@ import 'api/sumo/sodium_sumo.dart';
 abstract class SodiumSumoInit {
   const SodiumSumoInit._(); // coverage:ignore-line
 
-  // coverage:ignore-start
-  /// Creates a [SodiumSumo] instance for the loaded libsodium.
-  ///
-  /// The [libsodium] parameter must be a loaded sumo variant of
-  /// `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on your platform. Please
-  /// refer to the README for more details on loading the library.
-  @Deprecated('Use SodiumSumoInit.init2 instead')
-  static Future<SodiumSumo> init(dynamic libsodium) => throw UnsupportedError(
-        'The current platform does support neither dart:ffi nor dart:js',
-      );
-  // coverage:ignore-end
-
   /// Creates a [SodiumSumo] instance for the loaded libsodium returned by the
   /// callback.
   ///
@@ -34,10 +22,7 @@ abstract class SodiumSumoInit {
   /// loaded sumo variant of `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on
   /// your platform. Please refer to the README for more details on loading the
   /// library.
-  ///
-  /// Unlike the [init] method, this one enables the use of
-  /// [SodiumSumo.runIsolated]. Use it preferably.
-  static Future<SodiumSumo> init2(dynamic Function() getLibsodium) =>
+  static Future<SodiumSumo> init(dynamic Function() getLibsodium) =>
       throw UnsupportedError(
         'The current platform does support neither dart:ffi nor dart:js',
       );

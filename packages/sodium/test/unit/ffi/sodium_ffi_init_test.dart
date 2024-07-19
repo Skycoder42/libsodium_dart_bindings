@@ -22,7 +22,7 @@ void main() {
   test('calls sodium_init', () async {
     when(() => mockSodium.sodium_init()).thenReturn(0);
 
-    await SodiumInit.initFromSodiumFFI2(() => mockSodium);
+    await SodiumInit.initFromSodiumFFI(() => mockSodium);
 
     verify(() => mockSodium.sodium_init());
   });
@@ -31,7 +31,7 @@ void main() {
     when(() => mockSodium.sodium_init()).thenReturn(-1);
 
     expect(
-      () async => SodiumInit.initFromSodiumFFI2(() => mockSodium),
+      () async => SodiumInit.initFromSodiumFFI(() => mockSodium),
       throwsA(isA<SodiumException>()),
     );
   });
@@ -39,7 +39,7 @@ void main() {
   test('returns SodiumFFI instance', () async {
     when(() => mockSodium.sodium_init()).thenReturn(0);
 
-    final sodium = await SodiumInit.initFromSodiumFFI2(() => mockSodium);
+    final sodium = await SodiumInit.initFromSodiumFFI(() => mockSodium);
     expect(
       sodium,
       isA<SodiumFFI>().having(

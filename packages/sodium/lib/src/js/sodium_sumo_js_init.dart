@@ -19,26 +19,6 @@ import 'bindings/sodium.js.dart';
 abstract class SodiumSumoInit {
   const SodiumSumoInit._(); // coverage:ignore-line
 
-  // coverage:ignore-start
-  /// Creates a [SodiumSumo] instance for the loaded libsodium.
-  ///
-  /// The [libsodium] parameter must be a loaded sumo variant of
-  /// `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on your platform. Please
-  /// refer to the README for more details on loading the library.
-  @Deprecated('Use SodiumSumoInit.init2 instead')
-  static Future<SodiumSumo> init(dynamic libsodium) =>
-      initFromSodiumJS(libsodium as LibSodiumJS);
-
-  /// Creates a [SodiumSumo] instance for the loaded libsodium as [LibSodiumJS].
-  ///
-  /// The [libsodium] parameter must be a loaded sumo variant of
-  /// `sodium.js`. Please refer to the README for more details on loading the
-  /// library.
-  @Deprecated('Use SodiumSumoInit.initFromSodiumJS2 instead')
-  static Future<SodiumSumo> initFromSodiumJS(LibSodiumJS libsodium) =>
-      Future.value(SodiumSumoJS(libsodium));
-  // coverage:ignore-end
-
   /// Creates a [SodiumSumo] instance for the loaded libsodium returned by the
   /// callback.
   ///
@@ -46,13 +26,10 @@ abstract class SodiumSumoInit {
   /// loaded sumo variant of `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on
   /// your platform. Please refer to the README for more details on loading the
   /// library.
-  ///
-  /// Unlike the [init] method, this one enables the use of
-  /// [SodiumSumo.runIsolated]. Use it preferably.
-  static Future<SodiumSumo> init2(
+  static Future<SodiumSumo> init(
     FutureOr<dynamic> Function() getLibsodium,
   ) async =>
-      initFromSodiumJS2(
+      initFromSodiumJS(
         () async => (await getLibsodium()) as LibSodiumJS,
       );
 
@@ -62,10 +39,7 @@ abstract class SodiumSumoInit {
   /// The [getLibsodium] parameter must be a factory method that returns a
   /// loaded sumo variant of `sodium.js`. Please refer to the README for more
   /// details on loading the library.
-  ///
-  /// Unlike the [initFromSodiumJS] method, this one enables the use of
-  /// [SodiumSumo.runIsolated]. Use it preferably.
-  static Future<SodiumSumo> initFromSodiumJS2(
+  static Future<SodiumSumo> initFromSodiumJS(
     FutureOr<LibSodiumJS> Function() getLibsodium,
   ) async =>
       SodiumSumoJS(await getLibsodium());

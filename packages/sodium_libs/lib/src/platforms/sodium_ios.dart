@@ -12,9 +12,9 @@ class SodiumIos extends SodiumPlatform {
   }
 
   @override
-  Future<Sodium> loadSodium() => SodiumInit.init2(DynamicLibrary.process);
+  Future<Sodium> loadSodium() => SodiumInit.init(DynamicLibrary.process);
 
   @override
   Future<SodiumSumo> loadSodiumSumo() =>
-      SodiumSumoInit.init2(DynamicLibrary.process);
+      SodiumSumoInit.init(DynamicLibrary.process);
 }

@@ -17,7 +17,7 @@ void main() {
 
   test('initFromSodiumJS returns SodiumJS instance', () async {
     final libSodium = mockSodium.asLibSodiumJS;
-    final sodium = await SodiumSumoInit.initFromSodiumJS2(() => libSodium);
+    final sodium = await SodiumSumoInit.initFromSodiumJS(() => libSodium);
 
     expect(
       sodium,
@@ -31,7 +31,7 @@ void main() {
 
   test('init returns SodiumJS instance', () async {
     final libSodium = mockSodium.asLibSodiumJS;
-    final sodium = await SodiumSumoInit.init2(() => libSodium);
+    final sodium = await SodiumSumoInit.init(() => libSodium);
 
     expect(
       sodium,

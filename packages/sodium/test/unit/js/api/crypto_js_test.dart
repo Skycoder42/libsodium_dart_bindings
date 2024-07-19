@@ -51,17 +51,6 @@ void main() {
     );
   });
 
-  test('aead returns AeadXChaCha20Poly1305IEFTJS instance', () {
-    expect(
-      sut.aead,
-      isA<AeadXChaCha20Poly1305IEFTJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
-    );
-  });
-
   test('aeadChaCha20Poly1305 returns AeadChacha20Poly1305JS instance', () {
     expect(
       sut.aeadChaCha20Poly1305,
