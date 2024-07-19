@@ -1,6 +1,7 @@
 @TestOn('js')
 library generic_hash_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -8,7 +9,6 @@ import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/generic_hash_js.dart';
 import 'package:sodium/src/js/api/helpers/generic_hash/generic_hash_consumer_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
@@ -116,7 +116,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
 
@@ -125,7 +125,7 @@ void main() {
         verify(
           () => mockSodium.crypto_generichash(
             hashBytes,
-            Uint8List.fromList(message),
+            Uint8List.fromList(message).toJS,
             null,
           ),
         );
@@ -138,7 +138,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         const outLen = 5;
         final key = List.generate(5, (index) => index * 10);
@@ -153,8 +153,8 @@ void main() {
         verify(
           () => mockSodium.crypto_generichash(
             outLen,
-            Uint8List.fromList(message),
-            Uint8List.fromList(key),
+            Uint8List.fromList(message).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -168,7 +168,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(hash));
+        ).thenReturn(Uint8List.fromList(hash).toJS);
 
         final result = sut(message: Uint8List(10));
 
@@ -183,7 +183,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut(
@@ -228,14 +228,14 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(0);
+        ).thenReturn(0.toJS);
 
         final result = sut.createConsumer();
 
         expect(
           result,
           isA<GenericHashConsumerJS>()
-              .having((c) => c.sodium, 'sodium', mockSodium)
+              .having((c) => c.sodium, 'sodium', sut.sodium)
               .having(
                 (c) => c.outLen,
                 'outLen',
@@ -250,7 +250,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(0);
+        ).thenReturn(0.toJS);
 
         const outLen = 5;
         final secretKey = List.generate(5, (index) => index * index);
@@ -263,7 +263,7 @@ void main() {
         expect(
           result,
           isA<GenericHashConsumerJS>()
-              .having((c) => c.sodium, 'sodium', mockSodium)
+              .having((c) => c.sodium, 'sodium', sut.sodium)
               .having(
                 (c) => c.outLen,
                 'outLen',

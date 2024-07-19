@@ -1,13 +1,13 @@
 @TestOn('js')
 library short_hash_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/short_hash_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
@@ -15,7 +15,7 @@ import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -29,7 +29,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = ShortHashJS(mockSodium);
+    sut = ShortHashJS(mockSodium.asLibSodiumJS);
   });
 
   testConstantsMapping([
@@ -75,7 +75,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final key = List.generate(5, (index) => index * 10);
         final message = List.generate(20, (index) => index * 2);
@@ -87,8 +87,8 @@ void main() {
 
         verify(
           () => mockSodium.crypto_shorthash(
-            Uint8List.fromList(message),
-            Uint8List.fromList(key),
+            Uint8List.fromList(message).toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -100,7 +100,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(hash));
+        ).thenReturn(Uint8List.fromList(hash).toJS);
 
         final result = sut(
           message: Uint8List(10),
@@ -116,7 +116,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut(

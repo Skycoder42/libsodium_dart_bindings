@@ -4,13 +4,12 @@ library secret_stream_message_tag_jsx_test;
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/secret_stream.dart';
 import 'package:sodium/src/js/api/helpers/secret_stream/secret_stream_message_tag_jsx.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../../../test_data.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../../../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -43,7 +42,7 @@ void main() {
       const value = 12;
       when(fixture.item2).thenReturn(value);
 
-      final result = fixture.item1.getValue(mockSodium);
+      final result = fixture.item1.getValue(mockSodium.asLibSodiumJS);
 
       expect(result, value);
       verify(fixture.item2);
@@ -86,7 +85,10 @@ void main() {
         const value = 12;
         when(fixture.item2).thenReturn(value);
 
-        final result = SecretStreamMessageTagJSX.fromValue(mockSodium, value);
+        final result = SecretStreamMessageTagJSX.fromValue(
+          mockSodium.asLibSodiumJS,
+          value,
+        );
 
         expect(result, fixture.item1);
         verify(fixture.item2);
@@ -95,7 +97,7 @@ void main() {
 
     test('throws for invalid value', () {
       expect(
-        () => SecretStreamMessageTagJSX.fromValue(mockSodium, 42),
+        () => SecretStreamMessageTagJSX.fromValue(mockSodium.asLibSodiumJS, 42),
         throwsA(isA<ArgumentError>()),
       );
 

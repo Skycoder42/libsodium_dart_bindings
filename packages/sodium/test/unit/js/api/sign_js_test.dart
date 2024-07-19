@@ -3,6 +3,7 @@
 @TestOn('js')
 library sign_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -11,7 +12,6 @@ import 'package:sodium/src/js/api/helpers/sign/signature_consumer_js.dart';
 import 'package:sodium/src/js/api/helpers/sign/verification_consumer_js.dart';
 import 'package:sodium/src/js/api/sign_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
@@ -19,7 +19,7 @@ import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -33,7 +33,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SignJS(mockSodium);
+    sut = SignJS(mockSodium.asLibSodiumJS);
   });
 
   testConstantsMapping([
@@ -98,7 +98,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final secretKey = List.generate(5, (index) => 30 + index);
@@ -110,8 +110,8 @@ void main() {
 
         verify(
           () => mockSodium.crypto_sign(
-            Uint8List.fromList(message),
-            Uint8List.fromList(secretKey),
+            Uint8List.fromList(message).toJS,
+            Uint8List.fromList(secretKey).toJS,
           ),
         );
       });
@@ -123,7 +123,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(signedMessage));
+        ).thenReturn(Uint8List.fromList(signedMessage).toJS);
 
         final result = sut(
           message: Uint8List(20),
@@ -139,7 +139,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut(
@@ -182,7 +182,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final signedMessage = List.generate(20, (index) => index * 2);
         final publicKey = List.generate(5, (index) => 30 + index);
@@ -194,8 +194,8 @@ void main() {
 
         verify(
           () => mockSodium.crypto_sign_open(
-            Uint8List.fromList(signedMessage),
-            Uint8List.fromList(publicKey),
+            Uint8List.fromList(signedMessage).toJS,
+            Uint8List.fromList(publicKey).toJS,
           ),
         );
       });
@@ -207,7 +207,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(message));
+        ).thenReturn(Uint8List.fromList(message).toJS);
 
         final result = sut.open(
           signedMessage: Uint8List(25),
@@ -223,7 +223,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.open(
@@ -254,7 +254,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final secretKey = List.generate(5, (index) => 30 + index);
@@ -266,8 +266,8 @@ void main() {
 
         verify(
           () => mockSodium.crypto_sign_detached(
-            Uint8List.fromList(message),
-            Uint8List.fromList(secretKey),
+            Uint8List.fromList(message).toJS,
+            Uint8List.fromList(secretKey).toJS,
           ),
         );
       });
@@ -279,7 +279,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(signature));
+        ).thenReturn(Uint8List.fromList(signature).toJS);
 
         final result = sut.detached(
           message: Uint8List(20),
@@ -295,7 +295,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.detached(
@@ -355,9 +355,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_sign_verify_detached(
-            Uint8List.fromList(signature),
-            Uint8List.fromList(message),
-            Uint8List.fromList(publicKey),
+            Uint8List.fromList(signature).toJS,
+            Uint8List.fromList(message).toJS,
+            Uint8List.fromList(publicKey).toJS,
           ),
         );
       });
@@ -387,7 +387,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.verifyDetached(
@@ -413,7 +413,7 @@ void main() {
       });
 
       test('returns SignatureConsumerFFI', () {
-        when(() => mockSodium.crypto_sign_init()).thenReturn(0);
+        when(() => mockSodium.crypto_sign_init()).thenReturn(0.toJS);
 
         final secretKey = List.generate(5, (index) => index * index);
 
@@ -424,7 +424,7 @@ void main() {
         expect(
           result,
           isA<SignatureConsumerJS>()
-              .having((c) => c.sodium, 'sodium', mockSodium)
+              .having((c) => c.sodium, 'sodium', sut.sodium)
               .having(
                 (c) => c.secretKey.extractBytes(),
                 'secretKey',
@@ -460,7 +460,7 @@ void main() {
       });
 
       test('returns VerificationConsumerFFI', () {
-        when(() => mockSodium.crypto_sign_init()).thenReturn(0);
+        when(() => mockSodium.crypto_sign_init()).thenReturn(0.toJS);
 
         final signature = List.generate(5, (index) => index + 100);
         final publicKey = List.generate(5, (index) => index * index);
@@ -473,7 +473,7 @@ void main() {
         expect(
           result,
           isA<VerificationConsumerJS>()
-              .having((c) => c.sodium, 'sodium', mockSodium)
+              .having((c) => c.sodium, 'sodium', sut.sodium)
               .having(
                 (c) => c.signature,
                 'signature',

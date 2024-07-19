@@ -7,7 +7,6 @@ import 'package:meta/meta.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
-import '../bindings/to_safe_int.dart';
 import 'aead_base_js.dart';
 import 'secure_key_js.dart';
 
@@ -18,16 +17,13 @@ class AeadXChaCha20Poly1305IEFTJS extends AeadBaseJS {
   AeadXChaCha20Poly1305IEFTJS(super.sodium);
 
   @override
-  int get keyBytes =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES.toSafeUInt32();
+  int get keyBytes => sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES;
 
   @override
-  int get nonceBytes =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES.toSafeUInt32();
+  int get nonceBytes => sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
 
   @override
-  int get aBytes =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_ABYTES.toSafeUInt32();
+  int get aBytes => sodium.crypto_aead_xchacha20poly1305_ietf_ABYTES;
 
   @override
   SecureKey keygen() => SecureKeyJS(

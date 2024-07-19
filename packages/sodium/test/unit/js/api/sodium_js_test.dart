@@ -3,6 +3,7 @@
 @TestOn('js')
 library sodium_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -13,10 +14,9 @@ import 'package:sodium/src/js/api/randombytes_js.dart';
 import 'package:sodium/src/js/api/secure_key_js.dart';
 import 'package:sodium/src/js/api/sodium_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart' hide KeyPair;
 import 'package:test/test.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -30,7 +30,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SodiumJS(mockSodium);
+    sut = SodiumJS(mockSodium.asLibSodiumJS);
   });
 
   group('version', () {
@@ -51,10 +51,10 @@ void main() {
       verify(() => mockSodium.sodium_version_string());
     });
 
-    test('throws SodiumException on JsError', () {
+    test('throws SodiumException on JSError', () {
       when(() => mockSodium.SODIUM_LIBRARY_VERSION_MAJOR).thenReturn(1);
       when(() => mockSodium.SODIUM_LIBRARY_VERSION_MINOR).thenReturn(2);
-      when(() => mockSodium.sodium_version_string()).thenThrow(JsError());
+      when(() => mockSodium.sodium_version_string()).thenThrow(JSError());
 
       expect(() => sut.version, throwsA(isA<SodiumException>()));
     });
@@ -66,16 +66,16 @@ void main() {
       final outBuf = Uint8List.fromList(const [1, 2, 3, 4, 5]);
       const blocksize = 10;
 
-      when(() => mockSodium.pad(any(), any())).thenReturn(outBuf);
+      when(() => mockSodium.pad(any(), any())).thenReturn(outBuf.toJS);
 
       final res = sut.pad(inBuf, blocksize);
 
       expect(res, outBuf);
-      verify(() => mockSodium.pad(inBuf, blocksize));
+      verify(() => mockSodium.pad(inBuf.toJS, blocksize));
     });
 
-    test('throws SodiumException on JsError', () {
-      when(() => mockSodium.pad(any(), any())).thenThrow(JsError());
+    test('throws SodiumException on JSError', () {
+      when(() => mockSodium.pad(any(), any())).thenThrow(JSError());
 
       expect(
         () => sut.pad(Uint8List(0), 10),
@@ -90,16 +90,16 @@ void main() {
       final outBuf = Uint8List.fromList(const [1, 2, 3]);
       const blocksize = 10;
 
-      when(() => mockSodium.unpad(any(), any())).thenReturn(outBuf);
+      when(() => mockSodium.unpad(any(), any())).thenReturn(outBuf.toJS);
 
       final res = sut.unpad(inBuf, blocksize);
 
       expect(res, outBuf);
-      verify(() => mockSodium.unpad(inBuf, blocksize));
+      verify(() => mockSodium.unpad(inBuf.toJS, blocksize));
     });
 
-    test('throws SodiumException on JsError', () {
-      when(() => mockSodium.unpad(any(), any())).thenThrow(JsError());
+    test('throws SodiumException on JSError', () {
+      when(() => mockSodium.unpad(any(), any())).thenThrow(JSError());
 
       expect(
         () => sut.unpad(Uint8List(0), 10),
@@ -117,7 +117,8 @@ void main() {
 
   test('secureRandom creates random SecureKey instance', () {
     const length = 10;
-    when(() => mockSodium.randombytes_buf(any())).thenReturn(Uint8List(length));
+    when(() => mockSodium.randombytes_buf(any()))
+        .thenReturn(Uint8List(length).toJS);
 
     final res = sut.secureRandom(length);
 
@@ -139,7 +140,7 @@ void main() {
       isA<RandombytesJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
@@ -150,21 +151,21 @@ void main() {
       isA<CryptoJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });
 
   test('runIsolated prints warning and runs callback synchronously', () async {
     final secureKey = SecureKeyJS(
-      mockSodium,
-      Uint8List.fromList(List.filled(10, 10)),
+      mockSodium.asLibSodiumJS,
+      Uint8List.fromList(List.filled(10, 10)).toJS,
     );
     final keyPair = KeyPair(
       publicKey: Uint8List.fromList(List.filled(20, 20)),
       secretKey: SecureKeyJS(
-        mockSodium,
-        Uint8List.fromList(List.filled(30, 30)),
+        mockSodium.asLibSodiumJS,
+        Uint8List.fromList(List.filled(30, 30)).toJS,
       ),
     );
 

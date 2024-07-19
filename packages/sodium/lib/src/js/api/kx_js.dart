@@ -10,7 +10,6 @@ import '../../api/kx.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart' hide KeyPair;
-import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
 /// @nodoc
@@ -23,16 +22,16 @@ class KxJS with KxValidations implements Kx {
   KxJS(this.sodium);
 
   @override
-  int get publicKeyBytes => sodium.crypto_kx_PUBLICKEYBYTES.toSafeUInt32();
+  int get publicKeyBytes => sodium.crypto_kx_PUBLICKEYBYTES;
 
   @override
-  int get secretKeyBytes => sodium.crypto_kx_SECRETKEYBYTES.toSafeUInt32();
+  int get secretKeyBytes => sodium.crypto_kx_SECRETKEYBYTES;
 
   @override
-  int get seedBytes => sodium.crypto_kx_SEEDBYTES.toSafeUInt32();
+  int get seedBytes => sodium.crypto_kx_SEEDBYTES;
 
   @override
-  int get sessionKeyBytes => sodium.crypto_kx_SESSIONKEYBYTES.toSafeUInt32();
+  int get sessionKeyBytes => sodium.crypto_kx_SESSIONKEYBYTES;
 
   @override
   KeyPair keyPair() {

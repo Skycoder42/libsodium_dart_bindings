@@ -10,7 +10,6 @@ import '../../api/secret_box.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart' hide SecretBox;
-import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
 /// @nodoc
@@ -23,13 +22,13 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
   SecretBoxJS(this.sodium);
 
   @override
-  int get keyBytes => sodium.crypto_secretbox_KEYBYTES.toSafeUInt32();
+  int get keyBytes => sodium.crypto_secretbox_KEYBYTES;
 
   @override
-  int get macBytes => sodium.crypto_secretbox_MACBYTES.toSafeUInt32();
+  int get macBytes => sodium.crypto_secretbox_MACBYTES;
 
   @override
-  int get nonceBytes => sodium.crypto_secretbox_NONCEBYTES.toSafeUInt32();
+  int get nonceBytes => sodium.crypto_secretbox_NONCEBYTES;
 
   @override
   SecureKey keygen() => SecureKeyJS(

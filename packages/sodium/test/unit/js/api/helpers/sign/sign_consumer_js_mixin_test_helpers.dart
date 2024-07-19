@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -7,19 +8,17 @@ import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/helpers/sign/sign_consumer_js_mixin.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
+
+import '../../../sodium_js_mock.dart';
 
 @isTestGroup
 void addStreamTests({
-  required LibSodiumJS mockSodium,
+  required MockLibSodiumJS mockSodium,
   required num state,
   required SignConsumerJSMixin Function() createSut,
   void Function()? setUpVerify,
 }) {
-  // ignore: prefer_asserts_with_message
-  assert(mockSodium is Mock);
-
   group('add', () {
     late SignConsumerJSMixin sut;
 
@@ -34,8 +33,8 @@ void addStreamTests({
 
       verify(
         () => mockSodium.crypto_sign_update(
-          state,
-          Uint8List.fromList(message),
+          state.toJS,
+          Uint8List.fromList(message).toJS,
         ),
       );
     });
@@ -66,15 +65,15 @@ void addStreamTests({
 
       verify(
         () => mockSodium.crypto_sign_update(
-          state,
-          Uint8List.fromList(message),
+          state.toJS,
+          Uint8List.fromList(message).toJS,
         ),
       );
     });
 
     test('throws exception and cancels addStream on error', () async {
       when(() => mockSodium.crypto_sign_update(any(), any()))
-          .thenThrow(JsError());
+          .thenThrow(JSError());
 
       final message = List.generate(25, (index) => index * 3);
 

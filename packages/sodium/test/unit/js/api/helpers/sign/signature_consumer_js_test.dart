@@ -3,6 +3,7 @@
 @TestOn('js')
 library signature_consumer_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -10,18 +11,16 @@ import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/helpers/sign/signature_consumer_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
 import '../../../../../secure_key_fake.dart';
+import '../../../sodium_js_mock.dart';
 import 'sign_consumer_js_mixin_test_helpers.dart';
-
-class MockSodiumJS extends Mock implements LibSodiumJS {}
 
 class MockSecureKey extends Mock implements SecureKey {}
 
 void main() {
-  final mockSodium = MockSodiumJS();
+  final mockSodium = MockLibSodiumJS();
 
   setUpAll(() {
     registerFallbackValue(Uint8List(0));
@@ -42,10 +41,10 @@ void main() {
 
     test('creates copy of secretKey and calls crypto_sign_init', () {
       when(() => mockSecretKey.copy()).thenReturn(SecureKeyFake.empty(0));
-      when(() => mockSodium.crypto_sign_init()).thenReturn(0);
+      when(() => mockSodium.crypto_sign_init()).thenReturn(0.toJS);
 
       SignatureConsumerJS(
-        sodium: mockSodium,
+        sodium: mockSodium.asLibSodiumJS,
         secretKey: mockSecretKey,
       );
 
@@ -56,11 +55,11 @@ void main() {
     test('disposes copy of secretKey if crypto_sign_init fails', () {
       final mockKeyCopy = MockSecureKey();
       when(() => mockSecretKey.copy()).thenReturn(mockKeyCopy);
-      when(() => mockSodium.crypto_sign_init()).thenThrow(JsError());
+      when(() => mockSodium.crypto_sign_init()).thenThrow(JSError());
 
       expect(
         () => SignatureConsumerJS(
-          sodium: mockSodium,
+          sodium: mockSodium.asLibSodiumJS,
           secretKey: mockSecretKey,
         ),
         throwsA(isA<SodiumException>()),
@@ -77,10 +76,10 @@ void main() {
     late SignatureConsumerJS sut;
 
     setUp(() {
-      when(() => mockSodium.crypto_sign_init()).thenReturn(stateAddress);
+      when(() => mockSodium.crypto_sign_init()).thenReturn(stateAddress.toJS);
 
       sut = SignatureConsumerJS(
-        sodium: mockSodium,
+        sodium: mockSodium.asLibSodiumJS,
         secretKey: secretKey,
       );
 
@@ -97,7 +96,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
       },
     );
 
@@ -108,14 +107,14 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
         verify(
           () => mockSodium.crypto_sign_final_create(
-            stateAddress,
-            secretKey.data,
+            stateAddress.toJS,
+            secretKey.data.toJS,
           ),
         );
       });
@@ -128,7 +127,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(signature));
+        ).thenReturn(Uint8List.fromList(signature).toJS);
 
         final result = await sut.close();
 
@@ -141,7 +140,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         await expectLater(
           () => sut.close(),
@@ -155,7 +154,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
@@ -171,7 +170,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final signature = sut.signature;
 

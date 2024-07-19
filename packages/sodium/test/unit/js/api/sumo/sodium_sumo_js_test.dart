@@ -6,10 +6,9 @@ import 'dart:typed_data';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/sumo/crypto_sumo_js.dart';
 import 'package:sodium/src/js/api/sumo/sodium_sumo_js.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -23,7 +22,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SodiumSumoJS(mockSodium);
+    sut = SodiumSumoJS(mockSodium.asLibSodiumJS);
   });
 
   test('crypto returns CryptoSumoJS instance', () {
@@ -32,7 +31,7 @@ void main() {
       isA<CryptoSumoJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        sut.sodium,
       ),
     );
   });

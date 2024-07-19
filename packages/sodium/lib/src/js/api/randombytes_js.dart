@@ -9,7 +9,6 @@ import '../../api/helpers/validations.dart';
 import '../../api/randombytes.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
-import '../bindings/to_safe_int.dart';
 
 /// @nodoc
 @internal
@@ -26,12 +25,12 @@ class RandombytesJS implements Randombytes {
 
   @override
   int random() => jsErrorWrap(
-        () => sodium.randombytes_random().toSafeUInt32(),
+        () => sodium.randombytes_random(),
       );
 
   @override
   int uniform(int upperBound) => jsErrorWrap(
-        () => sodium.randombytes_uniform(upperBound).toSafeUInt32(),
+        () => sodium.randombytes_uniform(upperBound),
       );
 
   @override

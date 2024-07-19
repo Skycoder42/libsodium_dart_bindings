@@ -1,20 +1,20 @@
 @TestOn('js')
 library scalarmult_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/sumo/scalarmult_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../../secure_key_fake.dart';
 import '../../../../test_constants_mapping.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -28,7 +28,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = ScalarmultJS(mockSodium);
+    sut = ScalarmultJS(mockSodium.asLibSodiumJS);
   });
 
   testConstantsMapping([
@@ -65,13 +65,15 @@ void main() {
           () => mockSodium.crypto_scalarmult_base(
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final n = List.generate(10, (index) => index);
 
         sut.base(n: SecureKeyFake(n));
 
-        verify(() => mockSodium.crypto_scalarmult_base(Uint8List.fromList(n)));
+        verify(
+          () => mockSodium.crypto_scalarmult_base(Uint8List.fromList(n).toJS),
+        );
       });
 
       test('returns public key data', () {
@@ -80,7 +82,7 @@ void main() {
           () => mockSodium.crypto_scalarmult_base(
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(q));
+        ).thenReturn(Uint8List.fromList(q).toJS);
 
         final result = sut.base(
           n: SecureKeyFake.empty(10),
@@ -94,7 +96,7 @@ void main() {
           () => mockSodium.crypto_scalarmult_base(
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.base(
@@ -139,7 +141,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final n = List.generate(10, (index) => index);
         final p = List.generate(5, (index) => index * 2);
@@ -151,8 +153,8 @@ void main() {
 
         verify(
           () => mockSodium.crypto_scalarmult(
-            Uint8List.fromList(n),
-            Uint8List.fromList(p),
+            Uint8List.fromList(n).toJS,
+            Uint8List.fromList(p).toJS,
           ),
         );
       });
@@ -164,7 +166,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(q));
+        ).thenReturn(Uint8List.fromList(q).toJS);
 
         final result = sut(
           n: SecureKeyFake.empty(10),
@@ -180,7 +182,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut(

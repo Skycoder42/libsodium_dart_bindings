@@ -1,6 +1,7 @@
 @TestOn('js')
 library secret_stream_push_transformer_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -13,7 +14,7 @@ import 'package:test/test.dart';
 
 import '../../../../../secure_key_fake.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../../../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -36,13 +37,13 @@ void main() {
       when(() => mockSodium.crypto_secretstream_xchacha20poly1305_ABYTES)
           .thenReturn(7);
 
-      sut = SecretStreamPushTransformerSinkJS(mockSodium);
+      sut = SecretStreamPushTransformerSinkJS(mockSodium.asLibSodiumJS);
     });
 
     group('initialize', () {
       final fakeResult = SecretStreamInitPush(
-        header: Uint8List(0),
-        state: 0,
+        header: Uint8List(0).toJS,
+        state: 0.toJS,
       );
 
       test('calls init_push with correct arguments', () {
@@ -57,7 +58,7 @@ void main() {
 
         verify(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
-            Uint8List.fromList(keyData),
+            Uint8List.fromList(keyData).toJS,
           ),
         );
       });
@@ -71,8 +72,8 @@ void main() {
           ),
         ).thenReturn(
           SecretStreamInitPush(
-            state: state,
-            header: Uint8List.fromList(headerData),
+            state: state.toJS,
+            header: Uint8List.fromList(headerData).toJS,
           ),
         );
 
@@ -87,7 +88,7 @@ void main() {
           () => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.initialize(SecureKeyFake.empty(0)),
@@ -104,20 +105,21 @@ void main() {
 
         const state = 23;
 
-        sut.rekey(state);
+        sut.rekey(state.toJS);
 
         verify(
-          () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(state),
+          () => mockSodium
+              .crypto_secretstream_xchacha20poly1305_rekey(state.toJS),
         );
       });
 
-      test('throws SodiumException on JsError', () {
+      test('throws SodiumException on JSError', () {
         when(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
-          () => sut.rekey(1),
+          () => sut.rekey(1.toJS),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -140,7 +142,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final messageData = List.generate(20, (index) => index + 10);
         final additionalData = List.generate(5, (index) => index * index);
@@ -148,7 +150,7 @@ void main() {
         const state = 12;
 
         sut.encryptMessage(
-          state,
+          state.toJS,
           SecretStreamPlainMessage(
             Uint8List.fromList(messageData),
             additionalData: Uint8List.fromList(additionalData),
@@ -158,9 +160,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-            state,
-            Uint8List.fromList(messageData),
-            Uint8List.fromList(additionalData),
+            state.toJS,
+            Uint8List.fromList(messageData).toJS,
+            Uint8List.fromList(additionalData).toJS,
             42,
           ),
         );
@@ -174,20 +176,20 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final messageData = List.generate(20, (index) => index + 10);
         const state = 13;
 
         sut.encryptMessage(
-          state,
+          state.toJS,
           SecretStreamPlainMessage(Uint8List.fromList(messageData)),
         );
 
         verify(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-            state,
-            Uint8List.fromList(messageData),
+            state.toJS,
+            Uint8List.fromList(messageData).toJS,
             null,
             0,
           ),
@@ -203,11 +205,11 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(cipherData));
+        ).thenReturn(Uint8List.fromList(cipherData).toJS);
 
         final additionalData = List.generate(10, (index) => index * index);
         final result = sut.encryptMessage(
-          0,
+          0.toJS,
           SecretStreamPlainMessage(
             Uint8List(5),
             additionalData: Uint8List.fromList(additionalData),
@@ -227,10 +229,10 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(cipherData));
+        ).thenReturn(Uint8List.fromList(cipherData).toJS);
 
         final result = sut.encryptMessage(
-          0,
+          0.toJS,
           SecretStreamPlainMessage(Uint8List(5)),
         );
 
@@ -246,11 +248,11 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.encryptMessage(
-            11,
+            11.toJS,
             SecretStreamPlainMessage(
               Uint8List(0),
               additionalData: Uint8List(0),
@@ -262,7 +264,7 @@ void main() {
     });
 
     test('disposeState does nothing', () {
-      sut.disposeState(22);
+      sut.disposeState(22.toJS);
 
       verifyZeroInteractions(mockSodium);
     });
@@ -272,7 +274,10 @@ void main() {
     late SecretStreamPushTransformerJS sut;
 
     setUp(() {
-      sut = SecretStreamPushTransformerJS(mockSodium, SecureKeyFake.empty(0));
+      sut = SecretStreamPushTransformerJS(
+        mockSodium.asLibSodiumJS,
+        SecureKeyFake.empty(0),
+      );
     });
 
     test('createSink creates SecretStreamPushTransformerSinkJS', () {
@@ -281,7 +286,7 @@ void main() {
       expect(
         sink,
         isA<SecretStreamPushTransformerSinkJS>()
-            .having((s) => s.sodium, 'sodium', mockSodium),
+            .having((s) => s.sodium, 'sodium', sut.sodium),
       );
     });
   });

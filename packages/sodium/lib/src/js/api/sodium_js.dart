@@ -13,7 +13,6 @@ import '../../api/sodium.dart';
 import '../../api/sodium_version.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart' hide KeyPair;
-import '../bindings/to_safe_int.dart';
 import 'crypto_js.dart';
 import 'randombytes_js.dart';
 import 'secure_key_js.dart';
@@ -29,8 +28,8 @@ class SodiumJS implements Sodium {
 
   @override
   SodiumVersion get version => SodiumVersion(
-        sodium.SODIUM_LIBRARY_VERSION_MAJOR.toSafeUInt32(),
-        sodium.SODIUM_LIBRARY_VERSION_MINOR.toSafeUInt32(),
+        sodium.SODIUM_LIBRARY_VERSION_MAJOR,
+        sodium.SODIUM_LIBRARY_VERSION_MINOR,
         jsErrorWrap(() => sodium.sodium_version_string()),
       );
 

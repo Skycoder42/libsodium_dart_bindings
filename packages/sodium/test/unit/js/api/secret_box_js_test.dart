@@ -1,6 +1,7 @@
 @TestOn('js')
 library secret_box_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -16,7 +17,7 @@ import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -30,7 +31,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SecretBoxJS(mockSodium);
+    sut = SecretBoxJS(mockSodium.asLibSodiumJS);
   });
 
   testConstantsMapping([
@@ -98,7 +99,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final message = Uint8List.fromList(
           List.generate(20, (index) => index * 2),
@@ -117,7 +118,11 @@ void main() {
         );
 
         verify(
-          () => mockSodium.crypto_secretbox_easy(message, nonce, key),
+          () => mockSodium.crypto_secretbox_easy(
+            message.toJS,
+            nonce.toJS,
+            key.toJS,
+          ),
         );
       });
 
@@ -131,7 +136,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(cipher);
+        ).thenReturn(cipher.toJS);
 
         final result = sut.easy(
           message: Uint8List(20),
@@ -142,14 +147,14 @@ void main() {
         expect(result, cipher);
       });
 
-      test('throws SodiumException on JsError', () {
+      test('throws SodiumException on JSError', () {
         when(
           () => mockSodium.crypto_secretbox_easy(
             any(),
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.easy(
@@ -209,7 +214,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final cipherText = Uint8List.fromList(
           List.generate(20, (index) => index * 2),
@@ -227,9 +232,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_secretbox_open_easy(
-            cipherText,
-            nonce,
-            Uint8List.fromList(key),
+            cipherText.toJS,
+            nonce.toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -244,7 +249,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(message);
+        ).thenReturn(message.toJS);
 
         final result = sut.openEasy(
           cipherText: Uint8List(13),
@@ -262,7 +267,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.openEasy(
@@ -309,7 +314,12 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(SecretBox(cipher: Uint8List(0), mac: Uint8List(0)));
+        ).thenReturn(
+          SecretBox(
+            cipher: Uint8List(0).toJS,
+            mac: Uint8List(0).toJS,
+          ),
+        );
 
         final message = Uint8List.fromList(
           List.generate(20, (index) => index * 2),
@@ -327,9 +337,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_secretbox_detached(
-            message,
-            nonce,
-            Uint8List.fromList(key),
+            message.toJS,
+            nonce.toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -347,7 +357,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(SecretBox(cipher: cipherText, mac: mac));
+        ).thenReturn(SecretBox(cipher: cipherText.toJS, mac: mac.toJS));
 
         final result = sut.detached(
           message: Uint8List(10),
@@ -371,7 +381,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.detached(
@@ -435,7 +445,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final cipherText = Uint8List.fromList(
           List.generate(15, (index) => index * 2),
@@ -457,10 +467,10 @@ void main() {
 
         verify(
           () => mockSodium.crypto_secretbox_open_detached(
-            cipherText,
-            mac,
-            nonce,
-            Uint8List.fromList(key),
+            cipherText.toJS,
+            mac.toJS,
+            nonce.toJS,
+            Uint8List.fromList(key).toJS,
           ),
         );
       });
@@ -474,7 +484,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(message);
+        ).thenReturn(message.toJS);
 
         final result = sut.openDetached(
           cipherText: Uint8List(25),
@@ -494,7 +504,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.openDetached(

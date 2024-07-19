@@ -16,28 +16,29 @@ void main() {
   });
 
   test('initFromSodiumJS returns SodiumJS instance', () async {
-    final sodium =
-        await SodiumInit.initFromSodiumJS2(() => mockSodium.asLibSodiumJS);
+    final libSodium = mockSodium.asLibSodiumJS;
+    final sodium = await SodiumInit.initFromSodiumJS2(() => libSodium);
 
     expect(
       sodium,
       isA<SodiumJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        libSodium,
       ),
     );
   });
 
   test('init returns SodiumJS instance', () async {
-    final sodium = await SodiumInit.init2(() => mockSodium);
+    final libSodium = mockSodium.asLibSodiumJS;
+    final sodium = await SodiumInit.init2(() => libSodium);
 
     expect(
       sodium,
       isA<SodiumJS>().having(
         (p) => p.sodium,
         'sodium',
-        mockSodium,
+        libSodium,
       ),
     );
   });

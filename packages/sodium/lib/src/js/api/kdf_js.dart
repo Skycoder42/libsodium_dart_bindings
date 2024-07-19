@@ -9,7 +9,6 @@ import '../../api/secure_key.dart';
 import '../bindings/js_big_int_x.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
-import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
 /// @nodoc
@@ -22,16 +21,16 @@ class KdfJS with KdfValidations implements Kdf {
   KdfJS(this.sodium);
 
   @override
-  int get bytesMin => sodium.crypto_kdf_BYTES_MIN.toSafeUInt32();
+  int get bytesMin => sodium.crypto_kdf_BYTES_MIN;
 
   @override
-  int get bytesMax => sodium.crypto_kdf_BYTES_MAX.toSafeUInt32();
+  int get bytesMax => sodium.crypto_kdf_BYTES_MAX;
 
   @override
-  int get contextBytes => sodium.crypto_kdf_CONTEXTBYTES.toSafeUInt32();
+  int get contextBytes => sodium.crypto_kdf_CONTEXTBYTES;
 
   @override
-  int get keyBytes => sodium.crypto_kdf_KEYBYTES.toSafeUInt32();
+  int get keyBytes => sodium.crypto_kdf_KEYBYTES;
 
   @override
   SecureKey keygen() => SecureKeyJS(

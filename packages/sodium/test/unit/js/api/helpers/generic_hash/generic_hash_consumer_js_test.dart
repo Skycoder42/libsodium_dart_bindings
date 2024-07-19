@@ -1,24 +1,24 @@
 @TestOn('js')
 library generic_hash_consumer_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/helpers/generic_hash/generic_hash_consumer_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
 import '../../../../../secure_key_fake.dart';
 
-class MockSodiumJS extends Mock implements LibSodiumJS {}
+import '../../../sodium_js_mock.dart';
 
 void main() {
   const state = 234;
   const outLen = 42;
 
-  final mockSodium = MockSodiumJS();
+  final mockSodium = MockLibSodiumJS();
 
   setUpAll(() {
     registerFallbackValue(Uint8List(0));
@@ -37,10 +37,10 @@ void main() {
           any(),
           any(),
         ),
-      ).thenReturn(state);
+      ).thenReturn(state.toJS);
 
       GenericHashConsumerJS(
-        sodium: mockSodium,
+        sodium: mockSodium.asLibSodiumJS,
         outLen: outLen,
       );
 
@@ -58,19 +58,19 @@ void main() {
           any(),
           any(),
         ),
-      ).thenReturn(state);
+      ).thenReturn(state.toJS);
 
       final key = List.generate(15, (index) => index + 5);
 
       GenericHashConsumerJS(
-        sodium: mockSodium,
+        sodium: mockSodium.asLibSodiumJS,
         outLen: outLen,
         key: SecureKeyFake(key),
       );
 
       verify(
         () => mockSodium.crypto_generichash_init(
-          Uint8List.fromList(key),
+          Uint8List.fromList(key).toJS,
           outLen,
         ),
       );
@@ -82,11 +82,11 @@ void main() {
           any(),
           any(),
         ),
-      ).thenThrow(JsError());
+      ).thenThrow(JSError());
 
       expect(
         () => GenericHashConsumerJS(
-          sodium: mockSodium,
+          sodium: mockSodium.asLibSodiumJS,
           outLen: outLen,
         ),
         throwsA(isA<SodiumException>()),
@@ -103,10 +103,10 @@ void main() {
           any(),
           any(),
         ),
-      ).thenReturn(state);
+      ).thenReturn(state.toJS);
 
       sut = GenericHashConsumerJS(
-        sodium: mockSodium,
+        sodium: mockSodium.asLibSodiumJS,
         outLen: outLen,
       );
 
@@ -121,15 +121,15 @@ void main() {
 
         verify(
           () => mockSodium.crypto_generichash_update(
-            state,
-            Uint8List.fromList(message),
+            state.toJS,
+            Uint8List.fromList(message).toJS,
           ),
         );
       });
 
       test('throws StateError when adding data after completition', () async {
         when(() => mockSodium.crypto_generichash_final(any(), any()))
-            .thenReturn(Uint8List(0));
+            .thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
@@ -148,15 +148,15 @@ void main() {
 
         verify(
           () => mockSodium.crypto_generichash_update(
-            state,
-            Uint8List.fromList(message),
+            state.toJS,
+            Uint8List.fromList(message).toJS,
           ),
         );
       });
 
       test('throws exception and cancels addStream on error', () async {
         when(() => mockSodium.crypto_generichash_update(any(), any()))
-            .thenThrow(JsError());
+            .thenThrow(JSError());
 
         final message = List.generate(25, (index) => index * 3);
 
@@ -169,7 +169,7 @@ void main() {
       test('throws StateError when adding a stream after completition',
           () async {
         when(() => mockSodium.crypto_generichash_final(any(), any()))
-            .thenReturn(Uint8List(0));
+            .thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
@@ -187,13 +187,13 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
         verify(
           () => mockSodium.crypto_generichash_final(
-            state,
+            state.toJS,
             outLen,
           ),
         );
@@ -207,7 +207,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(hash));
+        ).thenReturn(Uint8List.fromList(hash).toJS);
 
         final result = await sut.close();
 
@@ -220,7 +220,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         await expectLater(
           () => sut.close(),
@@ -234,7 +234,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
@@ -250,7 +250,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final hash = sut.hash;
         final closed = sut.close();

@@ -11,7 +11,6 @@ import '../../api/key_pair.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart' hide KeyPair;
-import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
 /// @nodoc
@@ -110,22 +109,22 @@ class BoxJS with BoxValidations implements Box {
   BoxJS(this.sodium);
 
   @override
-  int get publicKeyBytes => sodium.crypto_box_PUBLICKEYBYTES.toSafeUInt32();
+  int get publicKeyBytes => sodium.crypto_box_PUBLICKEYBYTES;
 
   @override
-  int get secretKeyBytes => sodium.crypto_box_SECRETKEYBYTES.toSafeUInt32();
+  int get secretKeyBytes => sodium.crypto_box_SECRETKEYBYTES;
 
   @override
-  int get macBytes => sodium.crypto_box_MACBYTES.toSafeUInt32();
+  int get macBytes => sodium.crypto_box_MACBYTES;
 
   @override
-  int get nonceBytes => sodium.crypto_box_NONCEBYTES.toSafeUInt32();
+  int get nonceBytes => sodium.crypto_box_NONCEBYTES;
 
   @override
-  int get seedBytes => sodium.crypto_box_SEEDBYTES.toSafeUInt32();
+  int get seedBytes => sodium.crypto_box_SEEDBYTES;
 
   @override
-  int get sealBytes => sodium.crypto_box_SEALBYTES.toSafeUInt32();
+  int get sealBytes => sodium.crypto_box_SEALBYTES;
 
   @override
   KeyPair keyPair() {

@@ -7,7 +7,6 @@ import '../../api/secret_stream.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
-import '../bindings/to_safe_int.dart';
 import 'helpers/secret_stream/secret_stream_pull_transformer_js.dart';
 import 'helpers/secret_stream/secret_stream_push_transformer_js.dart';
 import 'secure_key_js.dart';
@@ -24,16 +23,14 @@ class SecretStreamJS
   SecretStreamJS(this.sodium);
 
   @override
-  int get aBytes =>
-      sodium.crypto_secretstream_xchacha20poly1305_ABYTES.toSafeUInt32();
+  int get aBytes => sodium.crypto_secretstream_xchacha20poly1305_ABYTES;
 
   @override
   int get headerBytes =>
-      sodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES.toSafeUInt32();
+      sodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES;
 
   @override
-  int get keyBytes =>
-      sodium.crypto_secretstream_xchacha20poly1305_KEYBYTES.toSafeUInt32();
+  int get keyBytes => sodium.crypto_secretstream_xchacha20poly1305_KEYBYTES;
 
   @override
   SecureKey keygen() => SecureKeyJS(

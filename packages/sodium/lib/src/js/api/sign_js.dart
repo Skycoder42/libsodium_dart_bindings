@@ -10,7 +10,6 @@ import '../../api/secure_key.dart';
 import '../../api/sign.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart' hide KeyPair;
-import '../bindings/to_safe_int.dart';
 import 'helpers/sign/signature_consumer_js.dart';
 import 'helpers/sign/verification_consumer_js.dart';
 import 'secure_key_js.dart';
@@ -25,16 +24,16 @@ class SignJS with SignValidations implements Sign {
   SignJS(this.sodium);
 
   @override
-  int get publicKeyBytes => sodium.crypto_sign_PUBLICKEYBYTES.toSafeUInt32();
+  int get publicKeyBytes => sodium.crypto_sign_PUBLICKEYBYTES;
 
   @override
-  int get secretKeyBytes => sodium.crypto_sign_SECRETKEYBYTES.toSafeUInt32();
+  int get secretKeyBytes => sodium.crypto_sign_SECRETKEYBYTES;
 
   @override
-  int get bytes => sodium.crypto_sign_BYTES.toSafeUInt32();
+  int get bytes => sodium.crypto_sign_BYTES;
 
   @override
-  int get seedBytes => sodium.crypto_sign_SEEDBYTES.toSafeUInt32();
+  int get seedBytes => sodium.crypto_sign_SEEDBYTES;
 
   @override
   KeyPair keyPair() {

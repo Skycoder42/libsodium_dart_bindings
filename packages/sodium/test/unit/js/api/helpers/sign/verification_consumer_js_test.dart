@@ -3,18 +3,17 @@
 @TestOn('js')
 library verification_consumer_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/helpers/sign/verification_consumer_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 
+import '../../../sodium_js_mock.dart';
 import 'sign_consumer_js_mixin_test_helpers.dart';
-
-class MockSodiumJS extends Mock implements LibSodiumJS {}
 
 void main() {
   final publicKey = Uint8List.fromList(
@@ -24,7 +23,7 @@ void main() {
     List.generate(10, (index) => index + 100),
   );
 
-  final mockSodium = MockSodiumJS();
+  final mockSodium = MockLibSodiumJS();
 
   setUpAll(() {
     registerFallbackValue(Uint8List(0));
@@ -38,10 +37,10 @@ void main() {
 
   group('constructor', () {
     test('calls crypto_sign_init', () {
-      when(() => mockSodium.crypto_sign_init()).thenReturn(0);
+      when(() => mockSodium.crypto_sign_init()).thenReturn(0.toJS);
 
       VerificationConsumerJS(
-        sodium: mockSodium,
+        sodium: mockSodium.asLibSodiumJS,
         publicKey: publicKey,
         signature: signature,
       );
@@ -50,11 +49,11 @@ void main() {
     });
 
     test('throws SodiumException if crypto_sign_init fails', () {
-      when(() => mockSodium.crypto_sign_init()).thenThrow(JsError());
+      when(() => mockSodium.crypto_sign_init()).thenThrow(JSError());
 
       expect(
         () => VerificationConsumerJS(
-          sodium: mockSodium,
+          sodium: mockSodium.asLibSodiumJS,
           publicKey: publicKey,
           signature: signature,
         ),
@@ -68,10 +67,10 @@ void main() {
     late VerificationConsumerJS sut;
 
     setUp(() {
-      when(() => mockSodium.crypto_sign_init()).thenReturn(stateAddress);
+      when(() => mockSodium.crypto_sign_init()).thenReturn(stateAddress.toJS);
 
       sut = VerificationConsumerJS(
-        sodium: mockSodium,
+        sodium: mockSodium.asLibSodiumJS,
         publicKey: publicKey,
         signature: signature,
       );
@@ -108,9 +107,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_sign_final_verify(
-            stateAddress,
-            signature,
-            publicKey,
+            stateAddress.toJS,
+            signature.toJS,
+            publicKey.toJS,
           ),
         );
       });
@@ -136,7 +135,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         await expectLater(
           () => sut.close(),

@@ -7,7 +7,6 @@ import '../../../api/secure_key.dart';
 import '../../../api/sumo/scalarmult.dart';
 import '../../bindings/js_error.dart';
 import '../../bindings/sodium.js.dart';
-import '../../bindings/to_safe_int.dart';
 import '../secure_key_js.dart';
 
 /// @nodoc
@@ -20,10 +19,10 @@ class ScalarmultJS with ScalarmultValidations implements Scalarmult {
   ScalarmultJS(this.sodium);
 
   @override
-  int get bytes => sodium.crypto_scalarmult_BYTES.toSafeUInt32();
+  int get bytes => sodium.crypto_scalarmult_BYTES;
 
   @override
-  int get scalarBytes => sodium.crypto_scalarmult_SCALARBYTES.toSafeUInt32();
+  int get scalarBytes => sodium.crypto_scalarmult_SCALARBYTES;
 
   @override
   Uint8List base({required SecureKey n}) {

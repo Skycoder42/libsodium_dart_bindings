@@ -61,11 +61,11 @@ extension type SecretStreamInitPush._(JSObject _) implements JSObject {
 extension type SecretStreamPull._(JSObject _) implements JSObject {
   external SecretStreamPull({
     required JSUint8Array message,
-    required JSNumber tag,
+    required int tag,
   });
 
   external JSUint8Array get message;
-  external JSNumber get tag;
+  external int get tag;
 }
 extension type LibSodiumJS._(JSObject _) implements JSObject {
   external int get SODIUM_LIBRARY_VERSION_MAJOR;

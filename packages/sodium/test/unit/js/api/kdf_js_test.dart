@@ -1,14 +1,14 @@
 @TestOn('js')
 library kdf_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/kdf_js.dart';
-import 'package:sodium/src/js/bindings/js_big_int.dart';
+import 'package:sodium/src/js/bindings/js_big_int_x.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
@@ -16,7 +16,7 @@ import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -25,13 +25,13 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(Uint8List(0));
-    registerFallbackValue(JsBigInt.fromDart(JsBigInt.zero));
+    registerFallbackValue(BigInt.zero.toJS);
   });
 
   setUp(() {
     reset(mockSodium);
 
-    sut = KdfJS(mockSodium);
+    sut = KdfJS(mockSodium.asLibSodiumJS);
   });
 
   testConstantsMapping([
@@ -77,7 +77,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(10),
             context: 'X' * 5,
-            subkeyId: JsBigInt.from(0),
+            subkeyId: BigInt.zero,
             subkeyLen: 10,
           ),
           throwsA(isA<RangeError>()),
@@ -91,7 +91,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(5),
             context: 'X' * 10,
-            subkeyId: JsBigInt.from(0),
+            subkeyId: BigInt.zero,
             subkeyLen: 10,
           ),
           throwsA(isA<RangeError>()),
@@ -105,7 +105,7 @@ void main() {
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(5),
             context: 'X' * 5,
-            subkeyId: JsBigInt.from(0),
+            subkeyId: BigInt.zero,
             subkeyLen: 20,
           ),
           throwsA(isA<RangeError>()),
@@ -123,26 +123,26 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List(0));
+        ).thenReturn(Uint8List(0).toJS);
 
         final masterKey = List.generate(5, (index) => index * 2);
         const context = 'TEST';
-        const subkeyId = 42;
+        final subkeyId = BigInt.from(42);
         const subkeyLen = 10;
 
         sut.deriveFromKey(
           masterKey: SecureKeyFake(masterKey),
           context: context,
-          subkeyId: JsBigInt.from(subkeyId),
+          subkeyId: subkeyId,
           subkeyLen: subkeyLen,
         );
 
         verify(
           () => mockSodium.crypto_kdf_derive_from_key(
             subkeyLen,
-            JsBigInt.fromDart(JsBigInt.from(subkeyId)),
+            subkeyId.toJS,
             context,
-            Uint8List.fromList(masterKey),
+            Uint8List.fromList(masterKey).toJS,
           ),
         );
       });
@@ -156,12 +156,12 @@ void main() {
             any(),
             any(),
           ),
-        ).thenReturn(Uint8List.fromList(subkey));
+        ).thenReturn(Uint8List.fromList(subkey).toJS);
 
         final result = sut.deriveFromKey(
           masterKey: SecureKeyFake.empty(5),
           context: 'test',
-          subkeyId: JsBigInt.from(0),
+          subkeyId: BigInt.zero,
           subkeyLen: 10,
         );
 
@@ -176,13 +176,13 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.deriveFromKey(
             masterKey: SecureKeyFake.empty(5),
             context: 'test',
-            subkeyId: JsBigInt.from(0),
+            subkeyId: BigInt.zero,
             subkeyLen: 10,
           ),
           throwsA(isA<SodiumException>()),

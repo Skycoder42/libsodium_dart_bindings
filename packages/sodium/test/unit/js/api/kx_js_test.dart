@@ -1,6 +1,7 @@
 @TestOn('js')
 library kx_js_test;
 
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -15,7 +16,7 @@ import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -29,7 +30,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = KxJS(mockSodium);
+    sut = KxJS(mockSodium.asLibSodiumJS);
   });
 
   testConstantsMapping([
@@ -125,8 +126,8 @@ void main() {
           ),
         ).thenReturn(
           CryptoKX(
-            sharedRx: Uint8List(0),
-            sharedTx: Uint8List(0),
+            sharedRx: Uint8List(0).toJS,
+            sharedTx: Uint8List(0).toJS,
           ),
         );
 
@@ -142,9 +143,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_kx_client_session_keys(
-            Uint8List.fromList(clientPublicKey),
-            Uint8List.fromList(clientSecretKey),
-            Uint8List.fromList(serverPublicKey),
+            Uint8List.fromList(clientPublicKey).toJS,
+            Uint8List.fromList(clientSecretKey).toJS,
+            Uint8List.fromList(serverPublicKey).toJS,
           ),
         );
       });
@@ -160,8 +161,8 @@ void main() {
           ),
         ).thenReturn(
           CryptoKX(
-            sharedRx: Uint8List.fromList(rx),
-            sharedTx: Uint8List.fromList(tx),
+            sharedRx: Uint8List.fromList(rx).toJS,
+            sharedTx: Uint8List.fromList(tx).toJS,
           ),
         );
 
@@ -182,7 +183,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.clientSessionKeys(
@@ -244,8 +245,8 @@ void main() {
           ),
         ).thenReturn(
           CryptoKX(
-            sharedRx: Uint8List(0),
-            sharedTx: Uint8List(0),
+            sharedRx: Uint8List(0).toJS,
+            sharedTx: Uint8List(0).toJS,
           ),
         );
 
@@ -261,9 +262,9 @@ void main() {
 
         verify(
           () => mockSodium.crypto_kx_server_session_keys(
-            Uint8List.fromList(serverPublicKey),
-            Uint8List.fromList(serverSecretKey),
-            Uint8List.fromList(clientPublicKey),
+            Uint8List.fromList(serverPublicKey).toJS,
+            Uint8List.fromList(serverSecretKey).toJS,
+            Uint8List.fromList(clientPublicKey).toJS,
           ),
         );
       });
@@ -279,8 +280,8 @@ void main() {
           ),
         ).thenReturn(
           CryptoKX(
-            sharedRx: Uint8List.fromList(rx),
-            sharedTx: Uint8List.fromList(tx),
+            sharedRx: Uint8List.fromList(rx).toJS,
+            sharedTx: Uint8List.fromList(tx).toJS,
           ),
         );
 
@@ -301,7 +302,7 @@ void main() {
             any(),
             any(),
           ),
-        ).thenThrow(JsError());
+        ).thenThrow(JSError());
 
         expect(
           () => sut.serverSessionKeys(

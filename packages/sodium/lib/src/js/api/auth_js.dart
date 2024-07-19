@@ -9,7 +9,6 @@ import '../../api/auth.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
-import '../bindings/to_safe_int.dart';
 import 'secure_key_js.dart';
 
 /// @nodoc
@@ -22,10 +21,10 @@ class AuthJS with AuthValidations implements Auth {
   AuthJS(this.sodium);
 
   @override
-  int get bytes => sodium.crypto_auth_BYTES.toSafeUInt32();
+  int get bytes => sodium.crypto_auth_BYTES;
 
   @override
-  int get keyBytes => sodium.crypto_auth_KEYBYTES.toSafeUInt32();
+  int get keyBytes => sodium.crypto_auth_KEYBYTES;
 
   @override
   SecureKey keygen() => SecureKeyJS(

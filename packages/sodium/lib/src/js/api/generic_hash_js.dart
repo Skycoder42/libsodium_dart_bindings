@@ -10,7 +10,6 @@ import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/secure_key_nullable_x.dart';
 import '../bindings/sodium.js.dart';
-import '../bindings/to_safe_int.dart';
 import 'helpers/generic_hash/generic_hash_consumer_js.dart';
 import 'secure_key_js.dart';
 
@@ -24,22 +23,22 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
   GenericHashJS(this.sodium);
 
   @override
-  int get bytes => sodium.crypto_generichash_BYTES.toSafeUInt32();
+  int get bytes => sodium.crypto_generichash_BYTES;
 
   @override
-  int get bytesMin => sodium.crypto_generichash_BYTES_MIN.toSafeUInt32();
+  int get bytesMin => sodium.crypto_generichash_BYTES_MIN;
 
   @override
-  int get bytesMax => sodium.crypto_generichash_BYTES_MAX.toSafeUInt32();
+  int get bytesMax => sodium.crypto_generichash_BYTES_MAX;
 
   @override
-  int get keyBytes => sodium.crypto_generichash_KEYBYTES.toSafeUInt32();
+  int get keyBytes => sodium.crypto_generichash_KEYBYTES;
 
   @override
-  int get keyBytesMin => sodium.crypto_generichash_KEYBYTES_MIN.toSafeUInt32();
+  int get keyBytesMin => sodium.crypto_generichash_KEYBYTES_MIN;
 
   @override
-  int get keyBytesMax => sodium.crypto_generichash_KEYBYTES_MAX.toSafeUInt32();
+  int get keyBytesMax => sodium.crypto_generichash_KEYBYTES_MAX;
 
   @override
   SecureKey keygen() => SecureKeyJS(

@@ -9,7 +9,6 @@ import '../../../../api/secure_key.dart';
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
-import '../../../bindings/to_safe_int.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
 /// @nodoc
@@ -28,7 +27,7 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
 
   @override
   int get headerBytes =>
-      sodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES.toSafeUInt32();
+      sodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES;
 
   @override
   SecretstreamXchacha20poly1305State initialize(
@@ -55,7 +54,7 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
     SecretstreamXchacha20poly1305State cryptoState,
     SecretStreamCipherMessage event,
   ) {
-    final dynamic pullResult = jsErrorWrap<dynamic>(
+    final pullResult = jsErrorWrap(
       () => sodium.crypto_secretstream_xchacha20poly1305_pull(
         cryptoState,
         event.message.toJS,
@@ -63,8 +62,11 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
       ),
     );
 
-    if (pullResult is bool) {
-      assert(!pullResult, 'unexpected boolean value for SecretStreamPull');
+    if (pullResult is JSBoolean) {
+      assert(
+        !pullResult.toDart,
+        'unexpected true value for SecretStreamPull',
+      );
       throw SodiumException();
     } else if (pullResult is SecretStreamPull) {
       return SecretStreamPlainMessage(
@@ -72,7 +74,7 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
         additionalData: event.additionalData,
         tag: SecretStreamMessageTagJSX.fromValue(
           sodium,
-          pullResult.tag.toDartInt.toSafeUInt32(),
+          pullResult.tag,
         ),
       );
     } else {

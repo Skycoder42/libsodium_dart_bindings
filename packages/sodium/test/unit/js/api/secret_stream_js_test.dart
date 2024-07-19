@@ -7,7 +7,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/helpers/secret_stream/secret_stream_pull_transformer_js.dart';
 import 'package:sodium/src/js/api/helpers/secret_stream/secret_stream_push_transformer_js.dart';
 import 'package:sodium/src/js/api/secret_stream_js.dart';
-import 'package:sodium/src/js/bindings/sodium.js.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
@@ -15,7 +14,7 @@ import '../../../secure_key_fake.dart';
 import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 
-class MockLibSodiumJS extends Mock implements LibSodiumJS {}
+import '../sodium_js_mock.dart';
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -29,7 +28,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SecretStreamJS(mockSodium);
+    sut = SecretStreamJS(mockSodium.asLibSodiumJS);
   });
 
   testConstantsMapping([
@@ -82,7 +81,7 @@ void main() {
         expect(
           result,
           isA<SecretStreamPushTransformerJS>()
-              .having((t) => t.sodium, 'sodium', mockSodium)
+              .having((t) => t.sodium, 'sodium', sut.sodium)
               .having((t) => t.key, 'key', key),
         );
       });
@@ -108,7 +107,7 @@ void main() {
         expect(
           result,
           isA<SecretStreamPullTransformerJS>()
-              .having((t) => t.sodium, 'sodium', mockSodium)
+              .having((t) => t.sodium, 'sodium', sut.sodium)
               .having((t) => t.key, 'key', key)
               .having((t) => t.requireFinalized, 'requireFinalized', isFalse),
         );
