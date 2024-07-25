@@ -13,7 +13,7 @@ class TypeMappingsLoader {
   Iterable<DartTypeDef> get dartTypeDefs =>
       _mappings.values.map((m) => m.dartTypeDef).nonNulls;
 
-  Stream<Struct> get jsCustomStructs => _sourceLoader.loadFilesJson(
+  Stream<Struct> loadStructs() => _sourceLoader.loadFilesJson(
         'types',
         (file) => file.path.endsWith('.json'),
         Struct.fromJson,

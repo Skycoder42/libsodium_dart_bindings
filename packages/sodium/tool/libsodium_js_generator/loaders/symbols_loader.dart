@@ -6,11 +6,9 @@ class SymbolsLoader {
 
   SymbolsLoader(this._wrapperLoader);
 
-  Future<List<Symbol>> loadSymbols() async => await _wrapperLoader
-      .loadFilesJson(
+  Stream<Symbol> loadSymbols() => _wrapperLoader.loadFilesJson(
         'symbols',
         (file) => file.path.endsWith('.json'),
         Symbol.fromJson,
-      )
-      .toList();
+      );
 }

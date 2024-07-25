@@ -8,8 +8,7 @@ environment:
 
 dependencies:
   ffi: ^2.1.2
-  freezed_annotation: ^2.4.3
-  json_annotation: ^4.9.0 # Required until https://github.com/rrousselGit/freezed/issues/1107 is fixed
+  freezed_annotation: ^2.4.4
   meta: ^1.12.0
 
 dev_dependencies:
@@ -22,11 +21,12 @@ dev_dependencies:
   custom_lint: ^0.6.4
   dart_pre_commit: ^5.3.0
   dart_test_tools: ^5.11.4
-  ffigen: ^12.0.0
-  freezed: ^2.5.6
+  ffigen: ^13.0.0
+  freezed: ^2.5.7
   mocktail: ^1.0.4
   path: ^1.9.0
   test: ^1.25.8
+  web: ^1.0.0
 
 ffigen:
   output: "lib/src/ffi/bindings/libsodium.ffi.dart"
@@ -36,7 +36,7 @@ ffigen:
     // ignore_for_file: unused_field
   headers:
     entry-points:
-      - "/usr/include/sodium.h"
+      - "/workspaces/libsodium_dart_bindings/packages/sodium/test/integration/binaries/linux/include/sodium.h"
   compiler-opts:
     - "-I/usr/lib/clang/18/include/"
   exclude-all-by-default: true
@@ -94,4 +94,3 @@ dart_pre_commit:
   pull-up-dependencies:
     allowed:
       - meta
-      - js

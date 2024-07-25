@@ -6,9 +6,11 @@ class ConstantsLoader {
 
   ConstantsLoader(this._wrapperLoader);
 
-  Future<Iterable<Constant>> loadConstants() async =>
-      await _wrapperLoader.loadFileJson(
-        'constants.json',
-        Constant.fromJsonList,
-      );
+  Stream<Constant> loadConstants() async* {
+    final constants = await _wrapperLoader.loadFileJson(
+      'constants.json',
+      Constant.fromJsonList,
+    );
+    yield* Stream.fromIterable(constants);
+  }
 }

@@ -1,52 +1,40 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:meta/meta.dart';
 
-import '../loaders/constants_loader.dart';
-import '../loaders/symbols_loader.dart';
-import '../loaders/type_mappings_loader.dart';
+import '../json/library_info.dart';
 import 'lib_sodium_js_generator.dart';
+import 'spec_generator.dart';
 import 'struct_generator.dart';
 import 'typedef_generator.dart';
 
 @immutable
-class LibraryGenerator {
-  final TypeMappingsLoader _typeMappingsLoader;
-  final ConstantsLoader _constantsLoader;
-  final SymbolsLoader _symbolsLoader;
+final class LibraryGenerator extends SpecGenerator<Library> {
+  final LibraryInfo libraryInfo;
 
-  const LibraryGenerator(
-    this._typeMappingsLoader,
-    this._constantsLoader,
-    this._symbolsLoader,
-  );
+  const LibraryGenerator(this.libraryInfo);
 
-  Future<Library> build() async {
-    final builder = LibraryBuilder()
-      ..ignoreForFile.add('non_constant_identifier_names')
-      ..ignoreForFile.add('public_member_api_docs')
-      ..directives.add(Directive.import('dart:js_interop'));
+  @override
+  Library build() => Library(
+        (b) => b
+          ..ignoreForFile.add('non_constant_identifier_names')
+          ..ignoreForFile.add('public_member_api_docs')
+          ..directives.add(Directive.import('dart:js_interop'))
+          ..body.addAll(_buildBody()),
+      );
 
-    await _buildBody().forEach(builder.body.add);
-
-    return builder.build();
-  }
-
-  Stream<Spec> _buildBody() async* {
-    for (final (name: name, type: type) in _typeMappingsLoader.dartTypeDefs) {
+  Iterable<Spec> _buildBody() sync* {
+    for (final (name: name, type: type) in libraryInfo.typeDefs) {
       yield TypedefGenerator(name: name, type: type);
     }
 
-    await for (final struct in _typeMappingsLoader.jsCustomStructs) {
+    for (final struct in libraryInfo.structs) {
       yield StructGenerator(struct);
     }
 
-    final constants = await _constantsLoader.loadConstants();
-    final symbols = await _symbolsLoader.loadSymbols();
-
     yield LibSodiumJsGenerator(
-      typeMapping: _typeMappingsLoader.typeMapping,
-      constants: constants,
-      symbols: symbols,
+      typeMapping: libraryInfo.typeMapping,
+      constants: libraryInfo.constants,
+      symbols: libraryInfo.symbols,
     );
   }
 }

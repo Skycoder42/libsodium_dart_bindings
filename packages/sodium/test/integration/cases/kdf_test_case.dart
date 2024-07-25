@@ -1,7 +1,5 @@
 import '../test_case.dart';
 
-// TODO test intMax
-
 class KdfTestCase extends TestCase {
   KdfTestCase(super._runner);
 

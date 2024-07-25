@@ -1,24 +1,24 @@
-@JS()
-library js_test;
-
 import 'dart:async';
-import 'dart:html';
+import 'dart:js_interop';
 
-import 'package:js/js.dart';
-import 'package:js/js_util.dart';
 import 'package:meta/meta.dart';
 // ignore: no_self_package_imports
 import 'package:sodium/sodium.js.dart';
+import 'package:web/web.dart';
 
-@JS()
-@anonymous
-class SodiumBrowserInit {
-  external void Function(dynamic sodium) get onload;
+extension type SodiumBrowserInit._(JSObject _) implements JSObject {
+  external JSFunction get onload;
 
-  external factory SodiumBrowserInit({
-    void Function(LibSodiumJS sodium) onload,
+  external SodiumBrowserInit({
+    JSFunction onload,
   });
 }
+
+@JS()
+external SodiumBrowserInit? get sodium;
+
+@JS()
+external set sodium(SodiumBrowserInit? value);
 
 mixin JsLoaderMixin {
   String get sodiumJsSrc;
@@ -27,15 +27,13 @@ mixin JsLoaderMixin {
   Future<LibSodiumJS> loadSodiumJs() async {
     final completer = Completer<LibSodiumJS>();
 
-    setProperty(
-      window,
-      'sodium',
-      SodiumBrowserInit(
-        onload: allowInterop(completer.complete),
-      ),
+    void onload(LibSodiumJS sodium) => completer.complete(sodium);
+
+    sodium = SodiumBrowserInit(
+      onload: onload.toJS,
     );
 
-    final script = ScriptElement()..text = sodiumJsSrc;
+    final script = HTMLScriptElement()..text = sodiumJsSrc;
     document.head!.append(script);
 
     return completer.future;

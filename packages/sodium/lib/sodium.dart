@@ -19,9 +19,6 @@ export 'src/api/sodium_exception.dart';
 export 'src/api/sodium_version.dart';
 export 'src/api/string_x.dart';
 
-// TODO deprecated
-export 'src/api/sumo/pwhash.dart' hide PwHashValidations;
-
 export 'src/sodium_init_fallback.dart'
     if (dart.library.ffi) 'src/ffi/sodium_ffi_init.dart'
     if (dart.library.js) 'src/js/sodium_js_init.dart';
