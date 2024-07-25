@@ -28,7 +28,7 @@ jobs:
       - package_sodium
     with:
       workingDirectory: packages/sodium_libs
-      artifactDependencies: package_sodium
+      artifactDependencies: sodium
       unitTestPaths: ""
       integrationTestProject: example
       integrationTestPaths: integration_test
