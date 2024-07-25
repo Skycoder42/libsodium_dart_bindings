@@ -14,14 +14,24 @@ on:
       - synchronize
 
 jobs:
+  package_sodium:
+    name: Package sodium
+    uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
+    with:
+      workingDirectory: packages/sodium
+      buildRunner: true
+
   ci:
     name: CI
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
+    needs:
+      - package_sodium
     with:
       workingDirectory: packages/sodium_libs
+      artifactDependencies: package_sodium
       unitTestPaths: ""
-      integrationTestProject: "example"
-      integrationTestPaths: "integration_test/app_test.dart"
+      integrationTestProject: example
+      integrationTestPaths: integration_test
       integrationTestSetup: >-
         {
           "android": "dart run tool/libsodium/download.dart android",
@@ -29,7 +39,7 @@ jobs:
           "linux": "dart run tool/libsodium/download.dart linux",
           "macos": "dart run tool/libsodium/download.dart macos",
           "windows": "dart run tool/libsodium/download.dart windows",
-          "web": "cd example && flutter pub run sodium_libs:update_web --sumo"
+          "web": "cd example && dart run sodium_libs:update_web --sumo"
         }
 
   cd:

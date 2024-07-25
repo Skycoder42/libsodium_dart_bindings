@@ -6,9 +6,29 @@ on:
       - "sodium_libs-v*"
 
 jobs:
+  ci:
+    name: CI
+    uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
+    with:
+      workingDirectory: packages/sodium_libs
+      unitTestPaths: ""
+      integrationTestProject: example
+      integrationTestPaths: integration_test
+      integrationTestSetup: >-
+        {
+          "android": "dart run tool/libsodium/download.dart android",
+          "ios": "dart run tool/libsodium/download.dart ios",
+          "linux": "dart run tool/libsodium/download.dart linux",
+          "macos": "dart run tool/libsodium/download.dart macos",
+          "windows": "dart run tool/libsodium/download.dart windows",
+          "web": "cd example && dart run sodium_libs:update_web --sumo"
+        }
+
   publish:
     name: Publish
     uses: Skycoder42/dart_test_tools/.github/workflows/publish.yml@main
+    needs:
+      - ci
     permissions:
       id-token: write
     with:
