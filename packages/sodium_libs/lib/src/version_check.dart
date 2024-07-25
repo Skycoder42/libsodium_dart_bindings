@@ -13,8 +13,7 @@ class VersionCheck {
 
   /// @nodoc
   static void check(SodiumPlatform platform, Sodium instance) {
-    // ignore: prefer_asserts_with_message
-    assert(!kReleaseMode);
+    assert(kDebugMode, 'Version check should only be run in debug mode!');
 
     if (instance.version < _expectedVersion) {
       // ignore: avoid_print

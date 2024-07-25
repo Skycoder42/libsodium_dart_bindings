@@ -1,28 +1,29 @@
-@JS()
-library sodium_libs_plugin_web;
-
 import 'dart:async';
-import 'dart:html';
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:js/js.dart';
-import 'package:js/js_util.dart';
 import 'package:sodium/sodium.dart' show Sodium;
 import 'package:sodium/sodium.js.dart';
 import 'package:sodium/sodium_sumo.dart' show SodiumSumo;
+import 'package:web/web.dart';
 
 import '../sodium_platform.dart';
 import '../sodium_sumo_unavailable.dart';
 
-@JS()
-@anonymous
-class _SodiumBrowserInit {
-  external void Function(LibSodiumJS sodium) get onload;
+extension type _SodiumBrowserInit._(JSObject _) implements JSObject {
+  external JSFunction get onload;
 
-  external factory _SodiumBrowserInit({
-    void Function(LibSodiumJS sodium) onload,
+  external _SodiumBrowserInit({
+    JSFunction onload,
   });
 }
+
+@JS('sodium')
+external _SodiumBrowserInit? get _sodium;
+
+@JS('sodium')
+external set _sodium(_SodiumBrowserInit? value);
 
 /// Web platform implementation of SodiumPlatform
 class SodiumWeb extends SodiumPlatform {
@@ -39,7 +40,7 @@ class SodiumWeb extends SodiumPlatform {
       SodiumSumoInit.initFromSodiumJS(() async {
         final libSodiumJs = await _loadLibSodiumJS();
         // ignore: avoid_dynamic_calls
-        if (hasProperty(libSodiumJs, 'crypto_sign_ed25519_sk_to_seed')) {
+        if (libSodiumJs.has('crypto_sign_ed25519_sk_to_seed')) {
           return libSodiumJs;
         } else {
           throw SodiumSumoUnavailable(
@@ -51,26 +52,21 @@ class SodiumWeb extends SodiumPlatform {
 
   Future<LibSodiumJS> _loadLibSodiumJS() {
     // check if sodium was already loaded
-    final sodium = getProperty<LibSodiumJS?>(window, 'sodium');
-    if (sodium != null) {
+    if (_sodium case final LibSodiumJS sodium) {
       return Future.value(sodium);
     }
 
     // if not, overwrite sodium window property with custom onload
     final completer = Completer<LibSodiumJS>();
-    setProperty(
-      window,
-      'sodium',
-      _SodiumBrowserInit(
-        onload: allowInterop(completer.complete),
-      ),
+    void onload(LibSodiumJS sodium) => completer.complete(sodium);
+    _sodium = _SodiumBrowserInit(
+      onload: onload.toJS,
     );
 
     // ... and add the sodium script to the page
-    final script = ScriptElement()
+    final script = HTMLScriptElement()
       ..type = 'text/javascript'
       ..async = true
-      // ignore: unsafe_html
       ..src = 'sodium.js';
     document.body!.append(script);
 

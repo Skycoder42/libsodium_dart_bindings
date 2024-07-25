@@ -37,7 +37,7 @@ abstract class SodiumSumoInit {
 
         _instance = await SodiumPlatform.instance.loadSodiumSumo();
 
-        if (!kReleaseMode) {
+        if (kDebugMode) {
           VersionCheck.check(SodiumPlatform.instance, _instance!);
         }
 

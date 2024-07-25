@@ -34,7 +34,7 @@ abstract class SodiumInit {
 
         _instance = await SodiumPlatform.instance.loadSodium();
 
-        if (!kReleaseMode) {
+        if (kDebugMode) {
           VersionCheck.check(SodiumPlatform.instance, _instance!);
         }
 
