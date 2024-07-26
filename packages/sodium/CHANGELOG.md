@@ -4,17 +4,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2024-07-26
+### Changed
+- Updated min required dart SDK to 3.4.0
+- Updated dependencies
+- Updated expected libsodium version 1.0.20
+- **\[BREAKING\]** Use `BigInt` for `crypto.kdf.deriveFromKey`s `subKeyId`
+  - This ensure that 64bit integers can be used safely in the VM and JS
+- Refactor JS implementation to use the new `dart:js\_interop` and `package:web` libraries
+  - This ensures compatibility with WASM and modern dart/flutter
+- Seal all data types
+
+### Removed
+- **\[BREAKING\]** Removed deprecations
+  - Removed `pwhash` and `aead` from the non-sumo API
+    - They still exist in the sumo API
+  - Removed old `SodiumInit.init*` methods
+    - The  `SodiumInit.init*2` methods have been renamed to remove the `2`
+
 ## [2.3.1+1] - 2024-03-12
 ### Fixed
 - Fix pana linter issues
 
 ## [2.3.1] - 2024-03-12
 ### Changed
-- Update min required dart SDK to 3.3.0
-- Update dependencies
+- Updated min required dart SDK to 3.3.0
+- Updated dependencies
 
 ### Fixed
-- fixed deprecations
+- Fixed deprecations
 
 ## [2.3.0+2] - 2024-02-05
 ### Fixed
@@ -183,6 +201,7 @@ changed, only the name of the getter. (#61)
 ### Added
 - Initial stable release
 
+[3.0.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.3.1+1...sodium-v3.0.0
 [2.3.1+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.3.1...sodium-v2.3.1+1
 [2.3.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.3.0+2...sodium-v2.3.1
 [2.3.0+2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.3.0+1...sodium-v2.3.0+2
