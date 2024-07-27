@@ -14,21 +14,11 @@ on:
       - synchronize
 
 jobs:
-  package_sodium:
-    name: Package sodium
-    uses: Skycoder42/dart_test_tools/.github/workflows/package.yml@main
-    with:
-      workingDirectory: packages/sodium
-      buildRunner: true
-
   ci:
     name: CI
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter.yml@main
-    needs:
-      - package_sodium
     with:
       workingDirectory: packages/sodium_libs
-      artifactDependencies: sodium
       unitTestPaths: ""
       integrationTestProject: example
       integrationTestPaths: integration_test
