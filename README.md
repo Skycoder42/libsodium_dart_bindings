@@ -19,3 +19,5 @@ the VM and JS without flutter dependencies.
 - **[sodium_libs](packages/sodium_libs)**: Flutter companion package to 
 [sodium](packages/sodium) that provides the low-level libsodium binaries for 
 easy use.
+
+This project is tested with BrowserStack.
