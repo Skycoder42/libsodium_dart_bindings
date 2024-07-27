@@ -1,4 +1,7 @@
 # libsodium_dart_bindings
+
+This project is tested with BrowserStack
+
 [![Continous Integration for package sodium](https://github.com/Skycoder42/libsodium_dart_bindings/actions/workflows/sodium_ci.yaml/badge.svg)](https://github.com/Skycoder42/libsodium_dart_bindings/actions/workflows/sodium_ci.yaml)
 [![Pub Version](https://img.shields.io/pub/v/sodium)](https://pub.dev/packages/sodium)
 
@@ -19,5 +22,3 @@ the VM and JS without flutter dependencies.
 - **[sodium_libs](packages/sodium_libs)**: Flutter companion package to 
 [sodium](packages/sodium) that provides the low-level libsodium binaries for 
 easy use.
-
-This project is tested with BrowserStack.
