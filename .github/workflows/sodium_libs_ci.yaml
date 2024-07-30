@@ -31,7 +31,7 @@ jobs:
           "windows": "dart run tool/libsodium/download.dart windows",
           "web": "cd example && dart run sodium_libs:update_web --sumo"
         }
-      browserStackDevices: >-
+      browserStackAndroidDevices: >-
         [
           { "device": ".*", "os_version": "14(\\..*)?" },
           { "device": ".*", "os_version": "7(\\..*)?" },
