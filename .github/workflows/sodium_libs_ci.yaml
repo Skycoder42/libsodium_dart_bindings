@@ -21,7 +21,7 @@ jobs:
       workingDirectory: packages/sodium_libs
       unitTestPaths: ""
       integrationTestProject: example
-      integrationTestPaths: integration_test
+      integrationTestPaths: integration_test/app_test.dart
       integrationTestSetup: >-
         {
           "android": "dart run tool/libsodium/download.dart android",
@@ -31,6 +31,14 @@ jobs:
           "windows": "dart run tool/libsodium/download.dart windows",
           "web": "cd example && dart run sodium_libs:update_web --sumo"
         }
+      browserStackDevices: >-
+        [
+          { "device": ".*", "os_version": "14(\\..*)?" },
+          { "device": ".*", "os_version": "7(\\..*)?" },
+          { "device": ".*", "os_version": "(8|9|10|11|12|13)(\\..*)?" }
+        ]
+    secrets:
+      browserStackCredentials: ${{ secrets.BROWSER_STACK_CREDENTIALS }}
 
   cd:
     name: CD
