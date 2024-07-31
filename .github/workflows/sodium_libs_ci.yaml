@@ -40,8 +40,8 @@ jobs:
       browserStackIosDevices: >-
         [
           { "device": ".*", "os_version": "17(\\..*)?" },
-          { "device": ".*", "os_version": "12(\\..*)?" },
-          { "device": ".*", "os_version": "(13|14|15|16)(\\..*)?" }
+          { "device": ".*", "os_version": "13(\\..*)?" },
+          { "device": ".*", "os_version": "(14|15|16)(\\..*)?" }
         ]
     secrets:
       browserStackCredentials: ${{ secrets.BROWSER_STACK_CREDENTIALS }}
