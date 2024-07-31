@@ -13,8 +13,8 @@ scripts:
 
   upgrade:
     run: >-
-      dart pub global run melos exec --no-flutter -- dart pub upgrade &&
-      dart pub global run melos exec --flutter -- flutter pub upgrade
+      dart pub global run melos exec --no-flutter -- dart pub upgrade --major-versions --tighten &&
+      dart pub global run melos exec --flutter -- flutter pub upgrade --major-versions --tighten
     description: Run 'pub upgrade' in all projects
 
   analyze:
