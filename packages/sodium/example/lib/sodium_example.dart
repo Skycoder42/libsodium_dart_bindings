@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, public_member_api_docs
 import 'dart:typed_data';
 
 import 'package:sodium/sodium.dart';
