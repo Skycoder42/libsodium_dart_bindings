@@ -2,30 +2,29 @@ import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
 
+import '../../../libsodium_version.dart' show libsodium_version;
 import 'plugin_target.dart';
+import 'plugin_targets.dart';
 
 enum DarwinPlatform {
-  ios('iPhoneOS', true, '-mios-version-min=12.0', 'a'),
+  ios('iPhoneOS', true, '-mios-version-min=12.0'),
   // ignore: constant_identifier_names
   ios_simulator(
     'iPhoneSimulator',
     true,
     '-mios-simulator-version-min=12.0',
-    'a',
   ),
-  macos('MacOSX', false, '-mmacosx-version-min=10.14', 'dylib');
+  macos('MacOSX', false, '-mmacosx-version-min=10.14');
 
   final String sdk;
   final bool hasSysroot;
   final String versionParameter;
-  final String librarySuffix;
 
   const DarwinPlatform(
     this.sdk,
     // ignore: avoid_positional_boolean_parameters
     this.hasSysroot,
     this.versionParameter,
-    this.librarySuffix,
   );
 }
 
@@ -34,6 +33,35 @@ class DarwinTarget extends PluginTarget {
   static const _appleXcframeworkScriptHash =
       // ignore: lines_longer_than_80_chars
       'daf0879d2e15453aed06ff542b09026ab992d8674141e58b6987c41a36118bb8ebf5d4808ed6a414d68b15bf74305f2cfbdcfc1d4a138dfe961c0dfbeb24e4ff';
+
+  static final _frameworkInfoPlist = '''
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>en</string>
+  <key>CFBundleExecutable</key>
+  <string>libsodium</string>
+  <key>CFBundleIdentifier</key>
+  <string>org.libsodium.libsodium</string>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundleName</key>
+  <string>libsodium</string>
+  <key>CFBundlePackageType</key>
+  <string>FMWK</string>
+  <key>CFBundleShortVersionString</key>
+  <string>${libsodium_version.ffi}</string>
+  <key>CFBundleSignature</key>
+  <string>????</string>
+  <key>CFBundleVersion</key>
+  <string>${libsodium_version.ffi}</string>
+  <key>MinimumOSVersion</key>
+  <string>12.0</string>
+</dict>
+</plist>
+''';
 
   final DarwinPlatform platform;
   final String architecture;
@@ -83,7 +111,7 @@ class DarwinTarget extends PluginTarget {
       environment: environment,
     );
 
-    await _installLibrary(prefixDir, artifactDir);
+    await _installLibraryWithHeaders(prefixDir, artifactDir);
   }
 
   Future<void> _validateBuildScriptHasNotChanged(Directory buildDir) async {
@@ -145,20 +173,142 @@ class DarwinTarget extends PluginTarget {
     };
   }
 
-  Future<void> _installLibrary(
+  Future<void> _installLibraryWithHeaders(
     Directory prefixDir,
     Directory artifactDir,
   ) async {
-    final source = File(
+    final sourceIncludes = prefixDir.subDir('include');
+    final targetIncludes = artifactDir.subDir('include');
+
+    final sourceLib = File(
       await prefixDir
           .subDir('lib')
-          .subFile('libsodium.${platform.librarySuffix}')
+          .subFile('libsodium.dylib')
           .resolveSymbolicLinks(),
     );
-    final target = artifactDir.subFile('libsodium.${platform.librarySuffix}');
+    final targetLib = artifactDir.subFile('libsodium.dylib');
 
-    Github.logInfo('Installing ${target.path}');
-    await target.parent.create(recursive: true);
-    await source.rename(target.path);
+    await targetLib.parent.create(recursive: true);
+    Github.logInfo('Installing ${targetIncludes.path}');
+    await sourceIncludes.rename(targetIncludes.path);
+    Github.logInfo('Installing ${targetLib.path}');
+    await sourceLib.rename(targetLib.path);
+  }
+
+  static Future<void> createXcFramework({
+    required PluginTargetGroup group,
+    required Directory artifactsDir,
+    required Directory archiveDir,
+  }) =>
+      Github.logGroupAsync('Creating combined xcframework for ${group.name}',
+          () async {
+        const frameworkName = 'libsodium';
+
+        final platforms = <DarwinPlatform, List<DarwinTarget>>{};
+        for (final target in group.targets.cast<DarwinTarget>()) {
+          (platforms[target.platform] ??= []).add(target);
+        }
+
+        final tmpDir = await Github.env.runnerTemp.createTemp();
+        try {
+          // create frameworks
+          final frameworks = <Directory>[];
+          for (final MapEntry(key: platform, value: targets)
+              in platforms.entries) {
+            frameworks.add(
+              await _createFramework(
+                name: frameworkName,
+                artifactsDir: artifactsDir,
+                targets: targets,
+                outDir: tmpDir.subDir(platform.name),
+              ),
+            );
+          }
+
+          // create xcframework
+          await _createXcFramework(
+            name: frameworkName,
+            frameworks: frameworks,
+            outDir: archiveDir,
+          );
+        } finally {
+          await tmpDir.delete(recursive: true);
+        }
+      });
+
+  static Directory _dirForTarget(Directory artifactsDir, DarwinTarget target) =>
+      artifactsDir.subDir('libsodium-${target.name}');
+
+  static Future<File> _createLipoLibrary({
+    required String name,
+    required String rpath,
+    required Directory artifactsDir,
+    required List<DarwinTarget> targets,
+    required Directory outDir,
+  }) async {
+    final library = outDir.subFile(name);
+    await Github.exec('lipo', [
+      '-create',
+      ...targets.map(
+        (target) =>
+            _dirForTarget(artifactsDir, target).subFile('$name.dylib').path,
+      ),
+      '-output',
+      library.path,
+    ]);
+
+    await Github.exec('install_name_tool', [
+      '-id',
+      '@rpath/$rpath',
+      library.path,
+    ]);
+
+    return library;
+  }
+
+  static Future<Directory> _createFramework({
+    required String name,
+    required Directory artifactsDir,
+    required List<DarwinTarget> targets,
+    required Directory outDir,
+  }) async {
+    final framework =
+        await outDir.subDir('$name.framework').create(recursive: true);
+
+    await framework
+        .subFile('Info.plist')
+        .writeAsString(DarwinTarget._frameworkInfoPlist);
+
+    final headersDir =
+        _dirForTarget(artifactsDir, targets.first).subDir('include');
+    await headersDir.rename(framework.subDir('Headers').path);
+
+    await _createLipoLibrary(
+      name: name,
+      rpath: '$name.framework/$name',
+      artifactsDir: artifactsDir,
+      targets: targets,
+      outDir: framework,
+    );
+
+    return framework;
+  }
+
+  static Future<Directory> _createXcFramework({
+    required String name,
+    required Iterable<Directory> frameworks,
+    required Directory outDir,
+  }) async {
+    final xcFramework = outDir.subDir('$name.xcframework');
+    await Github.exec('xcodebuild', [
+      '-create-xcframework',
+      for (final framework in frameworks) ...[
+        '-framework',
+        framework.path,
+      ],
+      '-output',
+      xcFramework.path,
+    ]);
+    return xcFramework;
   }
 }

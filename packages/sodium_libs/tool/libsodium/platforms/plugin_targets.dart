@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../libsodium_version.dart';
 import 'android_target.dart';
 import 'darwin_target.dart';
@@ -5,21 +7,25 @@ import 'linux_target.dart';
 import 'plugin_target.dart';
 import 'windows_target.dart';
 
-enum PublishKind { rsync, lipo, xcFramework }
+typedef PublishCallback = Future<void> Function({
+  required PluginTargetGroup group,
+  required Directory artifactsDir,
+  required Directory archiveDir,
+});
 
 class PluginTargetGroup {
   final String name;
   final String suffix;
   final List<PluginTarget> targets;
   final String binaryDir;
-  final PublishKind publishKind;
+  final PublishCallback? publish;
 
   const PluginTargetGroup(
     this.name,
     this.binaryDir,
     this.targets, {
     this.suffix = '.tar.xz',
-    this.publishKind = PublishKind.rsync,
+    this.publish,
   });
 
   String get artifactName => 'libsodium-${libsodium_version.ffi}-$name$suffix';
@@ -126,11 +132,6 @@ abstract class PluginTargets {
 
   static const targetGroups = [
     PluginTargetGroup(
-      'linux',
-      'lib',
-      _linuxTargets,
-    ),
-    PluginTargetGroup(
       'android',
       'src/main/jniLibs',
       _androidTargets,
@@ -139,13 +140,18 @@ abstract class PluginTargets {
       'ios',
       'Libraries',
       _iosTargets,
-      publishKind: PublishKind.xcFramework,
+      publish: DarwinTarget.createXcFramework,
+    ),
+    PluginTargetGroup(
+      'linux',
+      'lib',
+      _linuxTargets,
     ),
     PluginTargetGroup(
       'macos',
       'Libraries',
       _macosTargets,
-      publishKind: PublishKind.lipo,
+      publish: DarwinTarget.createXcFramework,
     ),
     PluginTargetGroup(
       'windows',

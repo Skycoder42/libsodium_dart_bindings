@@ -14,10 +14,12 @@ Flutter companion package to sodium that provides the low-level libsodium binari
   s.author           = { 'Skycoder42' => 'skycoder42@users.noreply.github.com' }
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
-  s.vendored_libraries = 'Libraries/libsodium.dylib'
   s.dependency 'FlutterMacOS'
 
   s.platform = :osx, '10.14'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
+
+  # libsodium
+  s.vendored_frameworks = "Libraries/libsodium.xcframework"
 end

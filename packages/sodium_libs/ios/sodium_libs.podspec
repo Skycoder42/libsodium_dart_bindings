@@ -23,8 +23,4 @@ Flutter companion package to sodium that provides the low-level libsodium binari
 
   # libsodium
   s.vendored_frameworks = "Libraries/libsodium.xcframework"
-  s.xcconfig = {
-    'OTHER_LDFLAGS[sdk=iphoneos*]' => '$(inherited) -force_load "$(PODS_ROOT)/../.symlinks/plugins/sodium_libs/ios/Libraries/libsodium.xcframework/ios-arm64/libsodium.a"',
-    'OTHER_LDFLAGS[sdk=iphonesimulator*]' => '$(inherited) -force_load "$(PODS_ROOT)/../.symlinks/plugins/sodium_libs/ios/Libraries/libsodium.xcframework/ios-arm64_x86_64-simulator/libsodium.a"',
-  }
 end
