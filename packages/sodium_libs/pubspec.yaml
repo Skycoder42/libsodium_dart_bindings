@@ -41,6 +41,7 @@ flutter:
       ios:
         pluginClass: SodiumLibsPlugin
         dartPluginClass: SodiumIos
+        sharedDarwinSource: true
       linux:
         pluginClass: SodiumLibsPlugin
         dartPluginClass: SodiumLinux
@@ -50,6 +51,7 @@ flutter:
       macos:
         pluginClass: SodiumLibsPlugin
         dartPluginClass: SodiumMacos
+        sharedDarwinSource: true
       web:
         fileName: src/platforms/sodium_web.dart
         pluginClass: SodiumWeb

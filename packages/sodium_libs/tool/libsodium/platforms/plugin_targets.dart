@@ -113,6 +113,11 @@ abstract class PluginTargets {
     macos_x86_64,
   ];
 
+  static const _darwinTargets = [
+    ..._iosTargets,
+    ..._macosTargets,
+  ];
+
   static const _windowsTargets = [
     windows,
   ];
@@ -124,8 +129,7 @@ abstract class PluginTargets {
 
   static const allTargets = [
     ..._androidTargets,
-    ..._iosTargets,
-    ..._macosTargets,
+    ..._darwinTargets,
     ..._windowsTargets,
     ..._linuxTargets,
   ];
@@ -137,21 +141,15 @@ abstract class PluginTargets {
       _androidTargets,
     ),
     PluginTargetGroup(
-      'ios',
+      'darwin',
       'Libraries',
-      _iosTargets,
+      _darwinTargets,
       publish: DarwinTarget.createXcFramework,
     ),
     PluginTargetGroup(
       'linux',
       'lib',
       _linuxTargets,
-    ),
-    PluginTargetGroup(
-      'macos',
-      'Libraries',
-      _macosTargets,
-      publish: DarwinTarget.createXcFramework,
     ),
     PluginTargetGroup(
       'windows',

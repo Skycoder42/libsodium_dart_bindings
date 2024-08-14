@@ -9,7 +9,6 @@ example/windows/flutter/ephemeral/.plugin_symlinks
 
 ## libsodium binaries
 !android/src/main/jniLibs
-!ios/Libraries
+!darwin/Libraries
 !linux/lib
-!macos/Libraries
 !windows/lib

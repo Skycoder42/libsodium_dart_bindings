@@ -14,8 +14,12 @@ Flutter companion package to sodium that provides the low-level libsodium binari
   s.author           = { 'Skycoder42' => 'skycoder42@users.noreply.github.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
-  s.dependency 'Flutter'
-  s.platform = :ios, '12.0'
+
+  s.ios.dependency 'Flutter'
+  s.ios.deployment_target = '12.0'
+
+  s.osx.dependency 'FlutterMacOS'
+  s.osx.deployment_target = '10.14'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
