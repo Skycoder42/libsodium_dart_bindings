@@ -10,8 +10,7 @@ Future<void> main(List<String> args) async {
       : PluginTargets.targetGroups;
 
   final workspaceDir = Github.env.githubWorkspace;
-  final artifactsDir =
-      Github.env.runnerTemp; //workspaceDir.subDir('artifacts');
+  final artifactsDir = workspaceDir.subDir('artifacts');
   final archivesDir = workspaceDir.subDir('archive');
   final publishDir = workspaceDir.subDir('publish');
   final secretKey = Github.env.runnerTemp.subFile('minisign.key');
