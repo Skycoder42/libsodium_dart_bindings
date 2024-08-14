@@ -34,6 +34,7 @@ class AndroidTarget extends PluginTarget {
       const [],
       workingDirectory: buildDir,
       environment: const {
+        'NDK_PLATFORM': 'android-21',
         'LIBSODIUM_FULL_BUILD': '1',
       },
     );

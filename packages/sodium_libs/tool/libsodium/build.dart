@@ -32,10 +32,20 @@ Future<void> _build(PluginTarget platform, Directory tmpDir) =>
             .subDir('libsodium-${platform.name}')
             .create();
 
-        await platform.build(
-          extractDir: tmpDir,
-          artifactDir: artifactDir,
-        );
+        try {
+          await platform.build(
+            extractDir: tmpDir,
+            artifactDir: artifactDir,
+          );
+        } on Exception {
+          final logFile =
+              tmpDir.subDir('libsodium-stable').subFile('config.log');
+          if (logFile.existsSync()) {
+            final lines = await logFile.readAsLines();
+            lines.forEach(Github.logError);
+          }
+          rethrow;
+        }
       },
     );
 
