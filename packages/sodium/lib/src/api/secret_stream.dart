@@ -258,7 +258,7 @@ abstract class SecretStream {
   /// generate the stream state from the [key] and the header, which is expected
   /// to be the first message that is added into [cipherStream]. After that, any
   /// cipher message (optionally with additional data) that is passed in the
-  /// stream is encrypted with crypto_secretstream_xchacha20poly1305_pull and
+  /// stream is decrypted with crypto_secretstream_xchacha20poly1305_pull and
   /// the result returned as [SecretExStream].
   ///
   /// The stream also handles it's internal state gracefully and can react
