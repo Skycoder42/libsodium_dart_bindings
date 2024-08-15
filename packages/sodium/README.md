@@ -15,6 +15,7 @@ Dart bindings for libsodium, supporting both the VM and JS without flutter depen
     + [Transpiled JavaScript - loading the JavaScript code.](#transpiled-javascript---loading-the-javascript-code)
       - [Loading sodium.js into the browser via dart.](#loading-sodiumjs-into-the-browser-via-dart)
   * [Using the API](#using-the-api)
+  * [Running computations in a separate isolate](#running-computations-in-a-separate-isolate)
 - [Documentation](#documentation)
   * [Example for the dart VM](#example-for-the-dart-vm)
   * [Example in the browser](#example-in-the-browser)
