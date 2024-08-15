@@ -1,5 +1,5 @@
 group = "de.skycoder42.sodium_libs"
-version = "1.0-SNAPSHOT"
+version = "3.0.0"
 
 buildscript {
     ext.kotlin_version = "1.7.10"

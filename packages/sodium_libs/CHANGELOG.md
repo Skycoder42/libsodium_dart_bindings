@@ -4,13 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.2.1+8] - 2024-08-14
+## [3.0.0] - 2024-08-15
 ### Changed
-- Update embedded libsodium binaries
-
-## [2.2.1+7] - 2024-07-12
-### Changed
-- Update embedded libsodium binaries
+- Updated dependencies
+- Updated min dart sdk to 3.5.0
+- Updated min flutter sdk to 3.24.0
+- Updated min sodium version to 3.0.1
+- Updated embedded libsodium to version 1.0.20 (0.7.14 for JS)
+- **\[BREAKING\]** Updated min Android SDK level to 21
+- Unified iOS and macOS plugin code
+  - Uses xcframwork with embedded frameworks for both
+  - Supported platforms have not changed
+- Run Android/iOS Integration tests via https://www.browserstack.com/
+  - Special thanks to BrowserStack for sponsoring this project with a free subscription to App Automate!
 
 ## [2.2.1+6] - 2024-06-11
 ### Changed
@@ -278,8 +284,7 @@ the page
 ### Added
 - Initial stable release
 
-[2.2.1+8]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.2.1+7...sodium_libs-v2.2.1+8
-[2.2.1+7]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.2.1+6...sodium_libs-v2.2.1+7
+[3.0.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.2.1+6...sodium_libs-v3.0.0
 [2.2.1+6]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.2.1+5...sodium_libs-v2.2.1+6
 [2.2.1+5]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.2.1+4...sodium_libs-v2.2.1+5
 [2.2.1+4]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v2.2.1+3...sodium_libs-v2.2.1+4
