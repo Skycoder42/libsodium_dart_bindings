@@ -25,9 +25,9 @@ jobs:
       integrationTestSetup: >-
         {
           "android": "dart run tool/libsodium/download.dart android",
-          "ios": "dart run tool/libsodium/download.dart ios",
+          "ios": "dart run tool/libsodium/download.dart darwin",
           "linux": "dart run tool/libsodium/download.dart linux",
-          "macos": "dart run tool/libsodium/download.dart macos",
+          "macos": "dart run tool/libsodium/download.dart darwin",
           "windows": "dart run tool/libsodium/download.dart windows",
           "web": "cd example && dart run sodium_libs:update_web --sumo"
         }
