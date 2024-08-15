@@ -248,6 +248,38 @@ native memory, thus providing a secure way of keeping your keys in memory. You c
 **Note:** Since these keys wrap native memory, it is mandatory that you dispose of them after you are done with a key,
 as otherwise they will leak memory.
 
+### Running computations in a separate isolate
+Some operations with libsodium (like password hashing) can take multiple seconds to execute. In such a case, running the
+computation on a separate isolate is mandatory to not block the UI. However, the standard
+[compute](https://api.flutter.dev/flutter/foundation/compute.html) or
+[Isolate.run](https://api.flutter.dev/flutter/dart-isolate/Isolate/run.html) methods will not work, as it is not
+possible to pass a `Sodium` instance between isolates. For this reason, the library has a helper method:
+[Sodium.runIsolated](https://pub.dev/documentation/sodium/latest/sodium/Sodium/runIsolated.html)
+
+The usage is pretty straight forward: It is a compute callback, but any `SecretKey` or `KeyPair` values must be passed
+as addition parameters, as they need special intervention to be transferred to the isolate. Returning however works and
+allows you to simply pass back a key (or pair) if needed. A simple example that runs a key derivation would look like
+this:
+
+```dart
+final subkeyId = BigInt.from(42);
+final masterKey = sodium.crypto.kdf.keygen();
+final derivedKey = await sodium.runIsolated(
+  secureKeys: [masterKey],
+  // keyPairs: use if a KeyPair needs to be passed to the isolate
+  (sodium, secureKeys, keyPairs) {
+    final [masterKey] = secureKeys;
+    final derivedKey = sodium.crypto.kdf.deriveFromKey(
+      masterKey: masterKey, // keys must be passed via the extra parameters
+      context: 'computed',
+      subkeyId: subkeyId, // normal values can be used as usual
+      subkeyLen: 64,
+    );
+    return derivedKey; // keys can be returned
+  }
+);
+```
+
 ## Documentation
 The documentation is available at https://pub.dev/documentation/sodium/latest/. A full example can be found at
 https://pub.dev/packages/sodium/example.
