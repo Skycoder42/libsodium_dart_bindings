@@ -87,7 +87,7 @@ abstract class TestRunner {
   @visibleForOverriding
   void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
       t.test(
-        description,
+        '[sumo] $description',
         () => t.fail('This test only works with the sodium.js sumo variant'),
         skip: 'This test only works with the sodium.js sumo variant',
       );
@@ -132,7 +132,7 @@ abstract class SumoTestRunner extends TestRunner {
   @visibleForOverriding
   void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
       t.test(
-        description,
+        '[sumo] $description',
         () => body(sodium),
       );
 }

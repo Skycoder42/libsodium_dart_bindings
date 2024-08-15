@@ -186,5 +186,33 @@ class SodiumTestCase extends TestCase {
 
       expect(plain1, message);
     });
+
+    testSumo('runIsolated', (sodium) async {
+      final secureKey = sodium.crypto.secretBox.keygen();
+      final keyPair = sodium.crypto.box.keyPair();
+
+      final result = await sodium.runIsolated(
+        secureKeys: [secureKey],
+        keyPairs: [keyPair],
+        (sodium, secureKeys, keyPairs) {
+          final [secureKey] = secureKeys;
+          final [keyPair] = keyPairs;
+
+          final base = sodium.crypto.scalarmult.base(n: secureKey);
+
+          return sodium.crypto.scalarmult.call(
+            n: keyPair.secretKey,
+            p: base,
+          );
+        },
+      );
+
+      final expected = sodium.crypto.scalarmult.call(
+        n: secureKey,
+        p: keyPair.publicKey,
+      );
+
+      expect(result, expected);
+    });
   }
 }

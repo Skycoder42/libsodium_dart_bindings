@@ -1,0 +1,8 @@
+presets:
+  unit:
+    paths:
+      - test/unit
+
+  integration:
+    paths:
+      - test/integration

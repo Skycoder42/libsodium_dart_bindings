@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_lambdas
 
+import 'dart:async';
 import 'dart:js_interop';
 import 'dart:typed_data';
 
@@ -16,6 +17,15 @@ import '../bindings/sodium.js.dart' hide KeyPair;
 import 'crypto_js.dart';
 import 'randombytes_js.dart';
 import 'secure_key_js.dart';
+
+/// @nodoc
+@internal
+typedef SodiumJSIsolateCallback<TResult, TSodium extends SodiumJS>
+    = FutureOr<TResult> Function(
+  TSodium sodium,
+  List<SecureKey> secureKeys,
+  List<KeyPair> keyPairs,
+);
 
 /// @nodoc
 @internal
@@ -66,17 +76,31 @@ class SodiumJS implements Sodium {
     SodiumIsolateCallback<T> callback, {
     List<SecureKey> secureKeys = const [],
     List<KeyPair> keyPairs = const [],
-  }) async {
+  }) async =>
+      await runIsolatedWithInstance<T, SodiumJS>(
+        this,
+        callback,
+        secureKeys,
+        keyPairs,
+      );
+
+  @protected
+  Future<TResult> runIsolatedWithInstance<TResult, TSodiumJS extends SodiumJS>(
+    TSodiumJS sodium,
+    SodiumJSIsolateCallback<TResult, TSodiumJS> callback,
+    List<SecureKey> secureKeys,
+    List<KeyPair> keyPairs,
+  ) async {
     // ignore: prefer_asserts_with_message
     assert(() {
       // ignore: avoid_print
       print(
-        'WARNING: Sodium.runIsolated does not actually run use parallel '
-        'execution on the web. Code is run on the same thread.',
+        'WARNING: Sodium.runIsolated does not actually use parallel '
+        'execution on the web. Use service workers if needed!',
       );
       return true;
     }());
 
-    return await callback(this, secureKeys, keyPairs);
+    return await callback(sodium, secureKeys, keyPairs);
   }
 }

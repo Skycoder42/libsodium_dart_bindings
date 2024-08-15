@@ -26,22 +26,28 @@ import 'secure_key_ffi.dart';
 
 /// @nodoc
 @internal
-class SodiumFFI implements Sodium {
-  // coverage:ignore-start
-  static LibSodiumFFI _unsupportedFactory() => throw UnsupportedError(
-        'Sodium instance was not created with isolate support. '
-        'Please use SodiumInit.initWithIsolates or '
-        'SodiumInit.initFromSodiumFFIWithIsolates to initialize your instance.',
-      );
-  // coverage:ignore-end
+typedef SodiumFFIIsolateCallback<TResult, TSodium extends SodiumFFI>
+    = FutureOr<TResult> Function(
+  TSodium sodium,
+  List<SecureKey> secureKeys,
+  List<KeyPair> keyPairs,
+);
 
+/// @nodoc
+@internal
+typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> = Future<TSodiumFFI>
+    Function(LibSodiumFFIFactory factory);
+
+/// @nodoc
+@internal
+class SodiumFFI implements Sodium {
   final LibSodiumFFIFactory _sodiumFactory;
 
   /// @nodoc
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SodiumFFI(this.sodium, [this._sodiumFactory = _unsupportedFactory]);
+  SodiumFFI(this.sodium, this._sodiumFactory);
 
   /// @nodoc
   static Future<SodiumFFI> fromFactory(LibSodiumFFIFactory factory) async =>
@@ -133,9 +139,24 @@ class SodiumFFI implements Sodium {
     SodiumIsolateCallback<T> callback, {
     List<SecureKey> secureKeys = const [],
     List<KeyPair> keyPairs = const [],
-  }) async {
-    final isolateResult = await _isolateRun(
+  }) async =>
+      await runIsolatedWithFactory<T, SodiumFFI>(
+        SodiumFFI.fromFactory,
+        callback,
+        secureKeys,
+        keyPairs,
+      );
+
+  @protected
+  Future<TResult> runIsolatedWithFactory<TResult, TSodiumFFI extends SodiumFFI>(
+    SodiumFFIFactory<TSodiumFFI> fromFactory,
+    SodiumFFIIsolateCallback<TResult, TSodiumFFI> callback,
+    List<SecureKey> secureKeys,
+    List<KeyPair> keyPairs,
+  ) async {
+    final isolateResult = await _isolateRun<TResult, TSodiumFFI>(
       _sodiumFactory,
+      fromFactory,
       secureKeys.map(TransferableSecureKey.new).toList(),
       keyPairs.map(TransferableKeyPair.new).toList(),
       callback,
@@ -143,16 +164,18 @@ class SodiumFFI implements Sodium {
     return isolateResult.extract(this);
   }
 
-  static Future<IsolateResult<T>> _isolateRun<T>(
+  static Future<IsolateResult<TResult>>
+      _isolateRun<TResult, TSodiumFFI extends SodiumFFI>(
     LibSodiumFFIFactory sodiumFactory,
+    SodiumFFIFactory<TSodiumFFI> fromFactory,
     List<TransferableSecureKey> transferableSecureKeys,
     List<TransferableKeyPair> transferableKeyPairs,
-    SodiumIsolateCallback<T> callback,
+    SodiumFFIIsolateCallback<TResult, TSodiumFFI> callback,
   ) async {
     final isolateResult = await Isolate.run(
       debugName: 'SodiumFFI.runIsolated',
       () async {
-        final sodium = await SodiumFFI.fromFactory(sodiumFactory);
+        final sodium = await fromFactory(sodiumFactory);
         final restoredSecureKeys = transferableSecureKeys
             .map((transferKey) => transferKey.toSecureKey(sodium))
             .toList();
@@ -167,11 +190,11 @@ class SodiumFFI implements Sodium {
         );
 
         if (result is SecureKey) {
-          return IsolateResult<T>.key(TransferableSecureKey(result));
+          return IsolateResult<TResult>.key(TransferableSecureKey(result));
         } else if (result is KeyPair) {
-          return IsolateResult<T>.keyPair(TransferableKeyPair(result));
+          return IsolateResult<TResult>.keyPair(TransferableKeyPair(result));
         } else {
-          return IsolateResult<T>(result);
+          return IsolateResult<TResult>(result);
         }
       },
     );

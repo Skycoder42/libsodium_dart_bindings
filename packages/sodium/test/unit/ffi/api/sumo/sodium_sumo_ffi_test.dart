@@ -25,7 +25,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SodiumSumoFFI(mockSodium);
+    sut = SodiumSumoFFI(mockSodium, () => mockSodium);
   });
 
   test('fromFactory returns instance created by the factory', () async {
@@ -42,5 +42,15 @@ void main() {
         mockSodium,
       ),
     );
+  });
+
+  group('runIsolated', () {
+    test('invokes the given callback with a sodium sumo instance', () async {
+      final isSodiumSumo = await sut.runIsolated(
+        (sodium, secureKeys, keyPairs) => sodium is SodiumSumoFFI,
+      );
+
+      expect(isSodiumSumo, isTrue);
+    });
   });
 }

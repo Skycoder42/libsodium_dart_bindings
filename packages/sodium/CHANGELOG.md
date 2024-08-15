@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2024-08-15
+### Fixed
+- Added override for SodiumSumo.runIsolated that passes a SodiumSumo instance to the callback (#116)
+
 ## [3.0.1] - 2024-08-15
 ### Changed
 - Updated min required dart SDK to 3.5.0
@@ -206,6 +210,7 @@ changed, only the name of the getter. (#61)
 ### Added
 - Initial stable release
 
+[3.1.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.0.1...sodium-v3.1.0
 [3.0.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.0.0...sodium-v3.0.1
 [3.0.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.3.1+1...sodium-v3.0.0
 [2.3.1+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.3.1...sodium-v2.3.1+1

@@ -266,6 +266,14 @@ void main() {
       expect(callbackIsolateName, isNot(currentIsolateName));
     });
 
+    test('invokes the given callback with a sodium instance', () async {
+      final isSodium = await sut.runIsolated(
+        (sodium, secureKeys, keyPairs) => sodium is SodiumFFI,
+      );
+
+      expect(isSodium, isTrue);
+    });
+
     test('passes over keys via the transferable secure key', () async {
       mockAllocArray(mockSodium);
 

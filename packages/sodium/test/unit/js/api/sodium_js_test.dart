@@ -156,36 +156,46 @@ void main() {
     );
   });
 
-  test('runIsolated prints warning and runs callback synchronously', () async {
-    final secureKey = SecureKeyJS(
-      mockSodium.asLibSodiumJS,
-      Uint8List.fromList(List.filled(10, 10)).toJS,
-    );
-    final keyPair = KeyPair(
-      publicKey: Uint8List.fromList(List.filled(20, 20)),
-      secretKey: SecureKeyJS(
+  group('runIsolated', () {
+    test('invokes the given callback with a sodium instance', () async {
+      final isSodium = await sut.runIsolated(
+        (sodium, secureKeys, keyPairs) => sodium is SodiumJS,
+      );
+
+      expect(isSodium, isTrue);
+    });
+
+    test('prints warning and runs callback synchronously', () async {
+      final secureKey = SecureKeyJS(
         mockSodium.asLibSodiumJS,
-        Uint8List.fromList(List.filled(30, 30)).toJS,
-      ),
-    );
+        Uint8List.fromList(List.filled(10, 10)).toJS,
+      );
+      final keyPair = KeyPair(
+        publicKey: Uint8List.fromList(List.filled(20, 20)),
+        secretKey: SecureKeyJS(
+          mockSodium.asLibSodiumJS,
+          Uint8List.fromList(List.filled(30, 30)).toJS,
+        ),
+      );
 
-    expect(
-      () async {
-        final result = await sut.runIsolated(
-          secureKeys: [secureKey],
-          keyPairs: [keyPair],
-          (sodium, secureKeys, keyPairs) {
-            expect(secureKeys, hasLength(1));
-            expect(secureKeys.single, same(secureKey));
-            expect(keyPairs, hasLength(1));
-            expect(keyPairs.single, same(keyPair));
-            return secureKeys.single;
-          },
-        );
+      expect(
+        () async {
+          final result = await sut.runIsolated(
+            secureKeys: [secureKey],
+            keyPairs: [keyPair],
+            (sodium, secureKeys, keyPairs) {
+              expect(secureKeys, hasLength(1));
+              expect(secureKeys.single, same(secureKey));
+              expect(keyPairs, hasLength(1));
+              expect(keyPairs.single, same(keyPair));
+              return secureKeys.single;
+            },
+          );
 
-        expect(result, same(secureKey));
-      },
-      prints(startsWith('WARNING: Sodium.runIsolated')),
-    );
+          expect(result, same(secureKey));
+        },
+        prints(startsWith('WARNING: Sodium.runIsolated')),
+      );
+    });
   });
 }

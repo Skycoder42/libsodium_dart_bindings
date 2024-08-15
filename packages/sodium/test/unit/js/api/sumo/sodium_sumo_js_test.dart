@@ -35,4 +35,14 @@ void main() {
       ),
     );
   });
+
+  group('runIsolated', () {
+    test('invokes the given callback with a sodium sumo instance', () async {
+      final isSodium = await sut.runIsolated(
+        (sodium, secureKeys, keyPairs) => sodium is SodiumSumoJS,
+      );
+
+      expect(isSodium, isTrue);
+    });
+  });
 }
