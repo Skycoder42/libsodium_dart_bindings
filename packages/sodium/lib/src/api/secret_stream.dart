@@ -160,6 +160,31 @@ abstract class SecretStream {
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#encryption
   SecureKey keygen();
 
+  /// @nodoc
+  @Deprecated('Use pushChunked or pushEx instead')
+  Stream<Uint8List> push({
+    required Stream<Uint8List> messageStream,
+    required SecureKey key,
+  });
+
+  /// @nodoc
+  @Deprecated('Use pullChunked or pullEx instead')
+  Stream<Uint8List> pull({
+    required Stream<Uint8List> cipherStream,
+    required SecureKey key,
+  });
+
+  /// @nodoc
+  @Deprecated('Use createPushChunked or createPushEx instead')
+  StreamTransformer<Uint8List, Uint8List> createPush(SecureKey key);
+
+  /// @nodoc
+  @Deprecated('Use createPullChunked or createPullEx instead')
+  StreamTransformer<Uint8List, Uint8List> createPull(
+    SecureKey key, {
+    bool requireFinalized = true,
+  });
+
   /// Provides crypto_secretstream_xchacha20poly1305_(init_)push.
   ///
   /// Transforms the [messageStream] of plaintext messages to an encrypted
@@ -168,9 +193,10 @@ abstract class SecretStream {
   /// messages and don't care about additional data or tags.
   ///
   /// See [pushEx] for more details on then encryption process.
-  Stream<Uint8List> push({
-    required Stream<Uint8List> messageStream,
+  Stream<List<int>> pushChunked({
+    required Stream<List<int>> messageStream,
     required SecureKey key,
+    required int chunkSize,
   });
 
   /// Provides crypto_secretstream_xchacha20poly1305_(init_)pull.
@@ -181,33 +207,38 @@ abstract class SecretStream {
   /// messages and don't care about additional data or tags.
   ///
   /// See [pullEx] for more details on then decryption process.
-  Stream<Uint8List> pull({
-    required Stream<Uint8List> cipherStream,
+  Stream<List<int>> pullChunked({
+    required Stream<List<int>> cipherStream,
     required SecureKey key,
+    required int chunkSize,
   });
 
   /// Provides crypto_secretstream_xchacha20poly1305_(init_)push.
   ///
-  /// Works just like [push], but instead of creating a stream, it creates a
-  /// [StreamTransformer] with [key], which can then be used to create push
-  /// encryption streams from it.
+  /// Works just like [pushChunked], but instead of creating a stream, it
+  /// creates a [StreamTransformer] with [key], which can then be used to create
+  /// push encryption streams from it.
   ///
   /// See [createPushEx] for more details on then encryption process.
-  StreamTransformer<Uint8List, Uint8List> createPush(SecureKey key);
+  StreamTransformer<List<int>, List<int>> createPushChunked({
+    required SecureKey key,
+    required int chunkSize,
+  });
 
   /// Provides crypto_secretstream_xchacha20poly1305_(init_)pull.
   ///
-  /// Works just like [pull], but instead of creating a stream, it creates a
-  /// [StreamTransformer] with [key], which can then be used to create pull
-  /// decryption streams from it. In addition, you can specify
+  /// Works just like [pullChunked], but instead of creating a stream, it
+  /// creates a [StreamTransformer] with [key], which can then be used to create
+  /// pull decryption streams from it. In addition, you can specify
   /// [requireFinalized] to control if the stream needs to receive the
   /// [SecretStreamMessageTag.finalPush] to be closed gracefully. If enabled
   /// (the default) and the last message does not have this tag, an error will
   /// be added to the stream before it is closed.
   ///
   /// See [createPullEx] for more details on then decryption process.
-  StreamTransformer<Uint8List, Uint8List> createPull(
-    SecureKey key, {
+  StreamTransformer<List<int>, List<int>> createPullChunked({
+    required SecureKey key,
+    required int chunkSize,
     bool requireFinalized = true,
   });
 

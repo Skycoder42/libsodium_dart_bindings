@@ -19,13 +19,13 @@ dependencies:
   html: ^0.15.4
   meta: ^1.15.0
   plugin_platform_interface: ^2.1.8
-  sodium: ^3.0.1
+  sodium: ^3.1.0
   synchronized: ^3.2.0
   web: ^1.0.0
 
 dev_dependencies:
   cider: ^0.2.8
-  custom_lint: ^0.6.4
+  custom_lint: ^0.6.5
   dart_pre_commit: ^5.3.0
   dart_test_tools: ^5.11.5
   flutter_test:

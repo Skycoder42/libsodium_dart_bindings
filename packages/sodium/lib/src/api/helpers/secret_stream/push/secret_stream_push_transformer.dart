@@ -17,6 +17,7 @@ sealed class _SinkState<TState extends Object> with _$SinkState<TState> {
   const factory _SinkState.initialized(
     EventSink<SecretStreamCipherMessage> outSink,
     TState cryptoState,
+    Uint8List? pendingHeader,
   ) = _Initialized<TState>;
 
   const factory _SinkState.finalized(
@@ -62,7 +63,7 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
   /// @nodoc
   @nonVirtual
   void triggerRekey() => _state.when(
-        initialized: (_, cryptoState) => rekey(cryptoState),
+        initialized: (_, cryptoState, __) => rekey(cryptoState),
         uninitialized: _throwUninitialized,
         finalized: _throwFinalized,
         closed: _throwClosed,
@@ -71,9 +72,10 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
   @override
   @nonVirtual
   void add(SecretStreamPlainMessage event) => _state.when(
-        initialized: (outSink, cryptoState) => _addImpl(
+        initialized: (outSink, cryptoState, pendingHeader) => _addImpl(
           outSink,
           cryptoState,
+          pendingHeader,
           event,
         ),
         uninitialized: _throwUninitialized,
@@ -85,7 +87,7 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
   @nonVirtual
   void addError(Object error, [StackTrace? stackTrace]) => _state
       .maybeWhen(
-        initialized: (outSink, _) => outSink,
+        initialized: (outSink, _, __) => outSink,
         finalized: (outSink) => outSink,
         orElse: () => null,
       )
@@ -95,11 +97,12 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
   @nonVirtual
   void close({bool withFinalize = true}) {
     _state.when(
-      initialized: (outSink, cryptoState) {
+      initialized: (outSink, cryptoState, pendingHeader) {
         if (withFinalize) {
           _addImpl(
             outSink,
             cryptoState,
+            pendingHeader,
             SecretStreamPlainMessage(
               Uint8List(0),
               tag: SecretStreamMessageTag.finalPush,
@@ -127,11 +130,10 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
     InitPushResult<TState>? initResult;
     try {
       initResult = initialize(key);
-      outSink.add(SecretStreamCipherMessage(initResult.header));
-
       _state = _SinkState.initialized(
         outSink,
         initResult.state,
+        initResult.header,
       );
     } catch (e, s) {
       if (initResult != null) {
@@ -145,9 +147,14 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
   void _addImpl(
     EventSink<SecretStreamCipherMessage> outSink,
     TState cryptoState,
+    Uint8List? pendingHeader,
     SecretStreamPlainMessage event,
   ) {
     try {
+      if (pendingHeader != null) {
+        outSink.add(SecretStreamCipherMessage(pendingHeader));
+        _state = _SinkState.initialized(outSink, cryptoState, null);
+      }
       outSink.add(encryptMessage(cryptoState, event));
 
       if (event.tag == SecretStreamMessageTag.finalPush) {
