@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 // ignore: no_self_package_imports
@@ -37,32 +39,59 @@ class SecretStreamTestCase extends TestCase {
       expect(key1, isNot(key2));
     });
 
-    test('simple correctly transforms simple datastream', (sodium) async {
+    test('chunked correctly transforms simple filestream', (sodium) async {
       final sut = sodium.crypto.secretStream;
+      final rand = Random.secure();
 
+      final testDir = await Directory.systemTemp.createTemp();
+      addTearDown(() => testDir.delete(recursive: true));
+      final plainFile = File.fromUri(testDir.uri.resolve('plain.bin'));
+      final cipherFile = File.fromUri(testDir.uri.resolve('cipher.bin'));
+      final restoredFile = File.fromUri(testDir.uri.resolve('restored.bin'));
+
+      await plainFile.writeAsBytes(
+        List.generate(
+          10 * 1024 * 1024 + 3, // 10 MB
+          (_) => rand.nextInt(256),
+        ),
+        flush: true,
+      );
+
+      const chunkSize = 4094; // 4 KB
       final key = sut.keygen();
-      final plainEvents = [
-        Uint8List.fromList(const [1, 2, 3]),
-        Uint8List.fromList(const [4, 5]),
-        Uint8List.fromList(const [6, 7, 8, 9]),
-      ];
 
-      final cipherStream = sut.push(
-        messageStream: Stream.fromIterable(plainEvents),
+      final cipherStream = sut.pushChunked(
+        messageStream: plainFile.openRead(),
+        chunkSize: chunkSize,
         key: key,
       );
+      final cipherSink = cipherFile.openWrite();
+      try {
+        await cipherStream.pipe(cipherSink);
+        await cipherSink.flush();
+      } finally {
+        await cipherSink.close();
+      }
 
-      final cipherEvents = await cipherStream.toList();
-      printOnFailure(cipherEvents.toString());
-      expect(cipherEvents, hasLength(plainEvents.length + 2));
+      expect(cipherFile.lengthSync(), 10529341);
 
-      final restoredStream = sut.pull(
-        cipherStream: Stream.fromIterable(cipherEvents),
+      final restoredStream = sut.pullChunked(
+        cipherStream: cipherFile.openRead(),
+        chunkSize: chunkSize,
         key: key,
       );
+      final restoredSink = restoredFile.openWrite();
+      try {
+        await restoredStream.pipe(restoredSink);
+        await restoredSink.flush();
+      } finally {
+        await restoredSink.close();
+      }
 
-      final result = await restoredStream.toList();
-      expect(result, plainEvents);
+      expect(
+        await restoredFile.readAsBytes(),
+        await plainFile.readAsBytes(),
+      );
     });
 
     group('extended', () {
