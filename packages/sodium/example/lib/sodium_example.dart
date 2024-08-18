@@ -49,8 +49,8 @@ Future<void> simpleFileEncryption(
 
   // decryption
   await sodium.crypto.secretStream
-      .pushChunked(
-        messageStream: File(cipher).openRead(),
+      .pullChunked(
+        cipherStream: File(cipher).openRead(),
         key: secretKey,
         chunkSize: chunkSize,
       )
