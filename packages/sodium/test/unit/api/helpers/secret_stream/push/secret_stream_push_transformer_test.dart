@@ -76,7 +76,7 @@ void main() {
 
       when(() => mockSut.initialize(any())).thenReturn(
         InitPushResult(
-          header: Uint8List(0),
+          header: Uint8List(3),
           state: state,
         ),
       );
@@ -98,7 +98,8 @@ void main() {
           verify(() => mockSut.initialize(key));
         });
 
-        test('adds created header to stream', () {
+        test('adds created header to stream after first message is processed',
+            () {
           final initRes = InitPushResult<int>(
             header: Uint8List.fromList(List.generate(10, (index) => index)),
             state: 0,
@@ -107,11 +108,19 @@ void main() {
 
           sut.init(mockSink, key);
 
-          final message = verify(() => mockSink.add(captureAny()))
-              .captured
-              .single as SecretStreamCipherMessage;
+          verifyNever(() => mockSink.add(any()));
+
+          sut.add(SecretStreamPlainMessage(Uint8List(0)));
+
+          final message = verifyInOrder([
+            () => mockSink.add(captureAny()),
+            () => mockSink.add(any(that: isA<SecretStreamCipherMessage>())),
+          ]).captured[0].single as SecretStreamCipherMessage;
+
           expect(message.message, initRes.header);
           expect(message.additionalData, isNull);
+
+          verifyNoMoreInteractions(mockSink);
         });
 
         test('moves to initialized state after succeeding', () {
@@ -123,27 +132,22 @@ void main() {
           );
         });
 
-        test('disposes state and logs error on an exception', () {
-          final initRes = InitPushResult<int>(
-            header: Uint8List(0),
-            state: 42,
-          );
-          when(() => mockSut.initialize(any())).thenReturn(initRes);
-          when(() => mockSink.add(any())).thenThrow(Exception());
+        test('logs error on an exception', () {
+          when(() => mockSut.initialize(any())).thenThrow(Exception());
 
           sut.init(mockSink, key);
 
-          verify(() => mockSut.disposeState(initRes.state));
           verify(
             () => mockSink.addError(
               any(that: isA<Exception>()),
               any(),
             ),
           );
+          verifyNoMoreInteractions(mockSink);
         });
 
         test('moves to finalized state after failing', () {
-          when(() => mockSink.add(any())).thenThrow(Exception());
+          when(() => mockSut.initialize(any())).thenThrow(Exception());
 
           sut.init(mockSink, key);
 
@@ -228,6 +232,27 @@ void main() {
           verify(() => mockSink.add(cipher));
         });
 
+        test('adds header to stream once', () {
+          final cipher = SecretStreamCipherMessage(
+            Uint8List.fromList(List.generate(7, (index) => index)),
+            additionalData: Uint8List.fromList(
+              List.generate(5, (index) => index - 5),
+            ),
+          );
+          when(() => mockSut.encryptMessage(any(), any())).thenReturn(cipher);
+
+          sut
+            ..add(SecretStreamPlainMessage(Uint8List(3)))
+            ..add(SecretStreamPlainMessage(Uint8List(4)));
+
+          verifyInOrder([
+            () => mockSink.add(SecretStreamCipherMessage(Uint8List(3))),
+            () => mockSink.add(cipher),
+            () => mockSink.add(cipher),
+          ]);
+          verifyNoMoreInteractions(mockSink);
+        });
+
         test('moves to finalized state for final push messages', () {
           sut.add(
             SecretStreamPlainMessage(
@@ -250,12 +275,14 @@ void main() {
 
           sut.add(SecretStreamPlainMessage(Uint8List(0)));
 
-          verify(
+          verifyInOrder([
+            () => mockSink.add(SecretStreamCipherMessage(Uint8List(3))),
             () => mockSink.addError(
-              any(that: isA<Exception>()),
-              any(),
-            ),
-          );
+                  any(that: isA<Exception>()),
+                  any(),
+                ),
+          ]);
+          verifyNoMoreInteractions(mockSink);
         });
       });
 
@@ -272,6 +299,7 @@ void main() {
             any(),
           ),
         );
+        verifyNoMoreInteractions(mockSink);
       });
 
       group('close', () {
@@ -281,6 +309,7 @@ void main() {
 
             verify(() => mockSut.disposeState(state));
             verify(() => mockSink.close());
+            verifyNoMoreInteractions(mockSink);
           });
 
           test('moves to closed state', () {
@@ -297,6 +326,9 @@ void main() {
           test(
               'sends finalizing cipher message, '
               'then disposes state and closes stream', () {
+            sut.add(SecretStreamPlainMessage(Uint8List(0)));
+            clearInteractions(mockSink);
+
             sut.close();
 
             verifyInOrder([
@@ -311,6 +343,28 @@ void main() {
               () => mockSut.disposeState(state),
               () => mockSink.close(),
             ]);
+            verifyNoMoreInteractions(mockSink);
+          });
+
+          test(
+              'sends header if no other messages where sent, '
+              'then disposes state and closes stream', () {
+            sut.close();
+
+            verifyInOrder([
+              () => mockSink.add(SecretStreamCipherMessage(Uint8List(3))),
+              () => mockSut.encryptMessage(
+                    state,
+                    SecretStreamPlainMessage(
+                      Uint8List(0),
+                      tag: SecretStreamMessageTag.finalPush,
+                    ),
+                  ),
+              () => mockSink.add(any()),
+              () => mockSut.disposeState(state),
+              () => mockSink.close(),
+            ]);
+            verifyNoMoreInteractions(mockSink);
           });
 
           test('moves to closed state', () {

@@ -140,6 +140,146 @@ void main() {
     verify(() => mockPullTransformer.bind(cipherStream));
   });
 
+  group('pushChunked', () {
+    test('creates transformer that wraps createPushEx', () {
+      const chunkSize = 10;
+      final key = SecureKeyFake.empty(10);
+      final messageData = [
+        Uint8List(5),
+        Uint8List(0),
+        Uint8List(10),
+        Uint8List(7),
+      ];
+      final messageDataEx = [
+        SecretStreamPlainMessage(Uint8List(10)),
+        SecretStreamPlainMessage(Uint8List(10)),
+        SecretStreamPlainMessage(
+          Uint8List(2),
+          tag: SecretStreamMessageTag.finalPush,
+        ),
+      ];
+      final resultData = [
+        Uint8List(3),
+        Uint8List(0),
+        Uint8List(5),
+      ];
+      final resultDataEx = [
+        SecretStreamCipherMessage(Uint8List(3)),
+        SecretStreamCipherMessage(Uint8List(0)),
+        SecretStreamCipherMessage(Uint8List(5)),
+      ];
+
+      mockPush(resultDataEx);
+
+      final res = sutMock.pushChunked(
+        messageStream: Stream.fromIterable(messageData),
+        chunkSize: chunkSize,
+        key: key,
+      );
+
+      expect(res, emitsInOrder(resultData));
+
+      verify(() => sutMock.createPushEx(key));
+      verify(
+        () => mockPushTransformer.bind(
+          any(that: emitsInOrder(messageDataEx)),
+        ),
+      );
+    });
+
+    test('does not add final tag if input matches chunks', () {
+      const chunkSize = 10;
+      final key = SecureKeyFake.empty(10);
+      final messageData = [
+        Uint8List(5),
+        Uint8List(10),
+        Uint8List(15),
+      ];
+      final messageDataEx = [
+        SecretStreamPlainMessage(Uint8List(10)),
+        SecretStreamPlainMessage(Uint8List(10)),
+        SecretStreamPlainMessage(Uint8List(10)),
+      ];
+      final resultData = [
+        Uint8List(3),
+        Uint8List(0),
+        Uint8List(5),
+      ];
+      final resultDataEx = [
+        SecretStreamCipherMessage(Uint8List(3)),
+        SecretStreamCipherMessage(Uint8List(0)),
+        SecretStreamCipherMessage(Uint8List(5)),
+      ];
+
+      mockPush(resultDataEx);
+
+      final res = sutMock.pushChunked(
+        messageStream: Stream.fromIterable(messageData),
+        chunkSize: chunkSize,
+        key: key,
+      );
+
+      expect(res, emitsInOrder(resultData));
+
+      verify(() => sutMock.createPushEx(key));
+      verify(
+        () => mockPushTransformer.bind(
+          any(that: emitsInOrder(messageDataEx)),
+        ),
+      );
+    });
+  });
+
+  test('pullChunked creates transformer that wraps createPullEx', () {
+    const chunkSize = 10;
+    const aBytes = 3;
+    const headerBytes = 7;
+    final key = SecureKeyFake.empty(10);
+    final cipherData = [
+      Uint8List(5),
+      Uint8List(0),
+      Uint8List(10),
+      Uint8List(7),
+      Uint8List(8),
+      Uint8List(8),
+    ];
+    final cipherDataEx = [
+      SecretStreamCipherMessage(Uint8List(headerBytes)),
+      SecretStreamCipherMessage(Uint8List(13)),
+      SecretStreamCipherMessage(Uint8List(13)),
+      SecretStreamCipherMessage(Uint8List(5)),
+    ];
+    final resultData = [
+      Uint8List(3),
+      Uint8List(0),
+      Uint8List(5),
+    ];
+    final resultDataEx = [
+      SecretStreamPlainMessage(Uint8List(3)),
+      SecretStreamPlainMessage(Uint8List(0)),
+      SecretStreamPlainMessage(Uint8List(5)),
+    ];
+
+    when(() => sutMock.headerBytes).thenReturn(headerBytes);
+    when(() => sutMock.aBytes).thenReturn(aBytes);
+    mockPull(resultDataEx);
+
+    final res = sutMock.pullChunked(
+      cipherStream: Stream.fromIterable(cipherData),
+      chunkSize: chunkSize,
+      key: key,
+    );
+
+    expect(res, emitsInOrder(resultData));
+
+    verify(() => sutMock.createPullEx(key));
+    verify(
+      () => mockPullTransformer.bind(
+        any(that: emitsInOrder(cipherDataEx)),
+      ),
+    );
+  });
+
   test('push creates transformer that wraps createPushEx', () {
     final key = SecureKeyFake.empty(10);
     final messageData = [

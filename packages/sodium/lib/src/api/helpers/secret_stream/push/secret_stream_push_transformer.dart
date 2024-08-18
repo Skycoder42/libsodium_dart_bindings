@@ -127,18 +127,14 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
   }
 
   void _initImpl(EventSink<SecretStreamCipherMessage> outSink, SecureKey key) {
-    InitPushResult<TState>? initResult;
     try {
-      initResult = initialize(key);
+      final initResult = initialize(key);
       _state = _SinkState.initialized(
         outSink,
         initResult.state,
         initResult.header,
       );
     } catch (e, s) {
-      if (initResult != null) {
-        disposeState(initResult.state);
-      }
       outSink.addError(e, s);
       _state = _SinkState.finalized(outSink);
     }
