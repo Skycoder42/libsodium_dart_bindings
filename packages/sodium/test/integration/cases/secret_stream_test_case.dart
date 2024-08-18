@@ -39,9 +39,9 @@ class SecretStreamTestCase extends TestCase {
       expect(key1, isNot(key2));
     });
 
-    test('chunked correctly transforms simple filestream', (sodium) async {
+    test('chunked correctly transforms simple file stream', (sodium) async {
       final sut = sodium.crypto.secretStream;
-      final rand = Random.secure();
+      final rand = Random(Random.secure().nextInt(1 << 32));
 
       final testDir = await Directory.systemTemp.createTemp();
       addTearDown(() => testDir.delete(recursive: true));
