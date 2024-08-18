@@ -1,11 +1,12 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
 // ignore: no_self_package_imports
 import 'package:sodium/sodium.dart';
 
+import '../helpers/file_helper_web.dart'
+    if (dart.library.io) '../helpers/file_helper_io.dart';
 import '../test_case.dart';
 
 class SecretStreamTestCase extends TestCase {
@@ -41,56 +42,53 @@ class SecretStreamTestCase extends TestCase {
 
     test('chunked correctly transforms simple file stream', (sodium) async {
       final sut = sodium.crypto.secretStream;
-      final rand = Random(Random.secure().nextInt(1 << 32));
+      final rand = Random(Random.secure().nextInt(4294967296));
 
-      final testDir = await Directory.systemTemp.createTemp();
-      addTearDown(() => testDir.delete(recursive: true));
-      final plainFile = File.fromUri(testDir.uri.resolve('plain.bin'));
-      final cipherFile = File.fromUri(testDir.uri.resolve('cipher.bin'));
-      final restoredFile = File.fromUri(testDir.uri.resolve('restored.bin'));
+      final fileHelper = await FileHelper.instance();
+      const plainFile = 'plain.bin';
+      const cipherFile = 'cipher.bin';
+      const restoredFile = 'restored.bin';
 
-      await plainFile.writeAsBytes(
+      await fileHelper.writeBytes(
+        plainFile,
         List.generate(
           10 * 1024 * 1024 + 3, // 10 MB
           (_) => rand.nextInt(256),
         ),
-        flush: true,
       );
 
       const chunkSize = 4094; // 4 KB
       final key = sut.keygen();
 
       final cipherStream = sut.pushChunked(
-        messageStream: plainFile.openRead(),
+        messageStream: fileHelper.read(plainFile),
         chunkSize: chunkSize,
         key: key,
       );
-      final cipherSink = cipherFile.openWrite();
+      final cipherSink = fileHelper.write(cipherFile);
       try {
         await cipherStream.pipe(cipherSink);
-        await cipherSink.flush();
       } finally {
         await cipherSink.close();
       }
 
-      expect(cipherFile.lengthSync(), 10529341);
+      expect(fileHelper.length(cipherFile), 10529341);
 
       final restoredStream = sut.pullChunked(
-        cipherStream: cipherFile.openRead(),
+        cipherStream: fileHelper.read(cipherFile),
         chunkSize: chunkSize,
         key: key,
       );
-      final restoredSink = restoredFile.openWrite();
+      final restoredSink = fileHelper.write(restoredFile);
       try {
         await restoredStream.pipe(restoredSink);
-        await restoredSink.flush();
       } finally {
         await restoredSink.close();
       }
 
       expect(
-        await restoredFile.readAsBytes(),
-        await plainFile.readAsBytes(),
+        await fileHelper.readBytes(restoredFile),
+        await fileHelper.readBytes(plainFile),
       );
     });
 
