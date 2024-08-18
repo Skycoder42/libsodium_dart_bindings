@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2024-08-18
+### Added
+- Added `crypto.secretStream.pushChunked` and `crypto.secretStream.pullChunked`
+  - Serve as a replacement for the deprecated `push` and `pull` APIs
+  - Allow for a secure and bug-free encryption of files and other binary streams
+  by requiring a `chunkSize` that is used to partition the incoming binary
+  data into fix-sized chunks, just as the API expects.
+- Added file encryption/decryption example
+
+### Deprecated
+- Deprecated  `crypto.secretStream.push` and `crypto.secretStream.pull`
+  - These methods where error prone and hard to use, as the API assumes that
+  the stream events are pre-chunked and "separate" from each other, while
+  `Stream<List<int>>` in dart typically means an "arbitrary binary stream"
+  - Use `pushChunked` and `pullChunked` as replacement
+  - Related: #114, #52, #26
+
 ## [3.1.0] - 2024-08-15
 ### Fixed
 - Added override for SodiumSumo.runIsolated that passes a SodiumSumo instance to the callback (#116)
@@ -210,6 +227,7 @@ changed, only the name of the getter. (#61)
 ### Added
 - Initial stable release
 
+[3.2.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.1.0...sodium-v3.2.0
 [3.1.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.0.1...sodium-v3.1.0
 [3.0.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.0.0...sodium-v3.0.1
 [3.0.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v2.3.1+1...sodium-v3.0.0
