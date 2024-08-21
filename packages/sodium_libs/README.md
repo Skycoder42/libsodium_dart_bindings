@@ -94,6 +94,9 @@ final sodium = await SodiumSumoInit.init();
 // You now have a SodiumSumo instance, see sodium package to continue
 ```
 
+See (Sodium vs SodiumSumo)[https://github.com/Skycoder42/libsodium_dart_bindings/blob/main/packages/sodium/README.md#sodium-vs-sodiumsumo]
+for more details on the differences between those two variants.
+
 ## Documentation
 The documentation is available at https://pub.dev/documentation/sodium_libs/latest/. A full example can be found at
 https://pub.dev/packages/sodium_libs/example.
