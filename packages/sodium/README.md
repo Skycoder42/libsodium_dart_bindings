@@ -10,6 +10,7 @@ Dart bindings for libsodium, supporting both the VM and JS without flutter depen
     + [Considered for the future](#considered-for-the-future)
 - [Installation](#installation)
 - [Usage](#usage)
+  * [Sodium vs SodiumSumo](#sodium-vs-sodiumsumo)
   * [Loading libsodium](#loading-libsodium)
     + [VM - loading the dynamic library](#vm---loading-the-dynamic-library)
     + [Transpiled JavaScript - loading the JavaScript code.](#transpiled-javascript---loading-the-javascript-code)
