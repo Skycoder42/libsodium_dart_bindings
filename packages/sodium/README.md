@@ -80,6 +80,21 @@ Simply add `sodium` to your `pubspec.yaml` and run `pub get` (or `flutter pub ge
 The usage can be split into two parts. The first one is about loading the native libsodium into dart, the second one
 about using the API.
 
+### Sodium vs SodiumSumo
+As this library aims to support both native and JavaScript targets, it needs to unify both APIs under one single dart
+API. This comes with one major consideration: The separation between a "normal" and a "sumo" variant of the library.
+These terms are absent in the C-library, but have been introduced in the JS-Variant (See
+https://github.com/jedisct1/libsodium.js/?tab=readme-ov-file#standard-vs-sumo-version).
+
+In order support both library variants in this library, the APIs have been split here as well. However, this **only**
+affects the JS part of the code, as for the native implementation there is no differentiation between the two. What
+this means for you as a consumer of the library is the following:
+
+- If you only ever intend to use the native variante (i. e. your application will not be transpiled to JS), you can
+simply always use the sumo variant.
+- If you want to support bith, native and web, you have to check wich of the APIs you need are available in which
+version. The Sumo-Variant is more complete, but has a bigger binary size, which might matter depending on the usecase.
+
 ### Loading libsodium
 How you load the library depends on whether you are running in the dart VM or as transpiled JS code.
 
