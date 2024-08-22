@@ -1,5 +1,5 @@
 @TestOn('js')
-library js_test;
+library;
 
 // ignore: no_self_package_imports
 import 'package:sodium/sodium.dart';

@@ -1,5 +1,5 @@
 @TestOn('js')
-library secret_stream_js_test;
+library;
 
 import 'dart:typed_data';
 

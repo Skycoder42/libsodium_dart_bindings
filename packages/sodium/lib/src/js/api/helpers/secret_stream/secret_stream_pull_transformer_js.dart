@@ -62,19 +62,21 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
       ),
     );
 
-    if (pullResult is JSBoolean) {
+    if (pullResult.isA<JSBoolean>()) {
+      final boolResult = pullResult as JSBoolean;
       assert(
-        !pullResult.toDart,
+        !boolResult.toDart,
         'unexpected true value for SecretStreamPull',
       );
       throw SodiumException();
-    } else if (pullResult is SecretStreamPull) {
+    } else if (pullResult.isA<SecretStreamPull>()) {
+      final streamResult = pullResult as SecretStreamPull;
       return SecretStreamPlainMessage(
-        pullResult.message.toDart,
+        streamResult.message.toDart,
         additionalData: event.additionalData,
         tag: SecretStreamMessageTagJSX.fromValue(
           sodium,
-          pullResult.tag,
+          streamResult.tag,
         ),
       );
     } else {

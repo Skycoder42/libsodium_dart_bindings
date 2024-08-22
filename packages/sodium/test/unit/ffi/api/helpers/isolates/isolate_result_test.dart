@@ -1,5 +1,5 @@
 @TestOn('dart-vm')
-library isolate_result_test;
+library;
 
 import 'dart:isolate';
 import 'dart:typed_data';

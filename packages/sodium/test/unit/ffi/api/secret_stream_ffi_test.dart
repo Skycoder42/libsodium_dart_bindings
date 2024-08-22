@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_lambdas
 
 @TestOn('dart-vm')
-library secret_stream_ffi_test;
+library;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/helpers/secret_stream/secret_stream_pull_transformer_ffi.dart';

@@ -1,5 +1,5 @@
 @TestOn('js')
-library secret_stream_message_tag_jsx_test;
+library;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/secret_stream.dart';

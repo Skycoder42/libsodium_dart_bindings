@@ -347,7 +347,7 @@ extension CharSodiumPtr on SodiumPointer<Char> {
 
 /// Extensions on String to add sodium pointer operations
 extension SodiumString on String {
-  /// Converts the string to a [SodiumPointer<Int8>]
+  /// Converts the string to a [SodiumPointer&lt;Int8&gt;]
   ///
   /// This simply combines [StringX.toCharArray] with
   /// [Int8SodiumList.toSodiumPointer].

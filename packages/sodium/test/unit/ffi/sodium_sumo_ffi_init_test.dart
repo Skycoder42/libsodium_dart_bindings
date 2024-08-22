@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_lambdas
 
 @TestOn('dart-vm')
-library sodium_sumo_ffi_init_test;
+library;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';

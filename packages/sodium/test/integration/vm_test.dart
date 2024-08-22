@@ -1,5 +1,5 @@
 @TestOn('dart-vm')
-library vm_test;
+library;
 
 import 'dart:async';
 import 'dart:ffi';

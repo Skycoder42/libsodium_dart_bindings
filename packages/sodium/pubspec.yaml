@@ -19,8 +19,8 @@ dev_dependencies:
   collection: ^1.19.0
   coverage: ^1.9.0
   custom_lint: ^0.6.5
-  dart_pre_commit: ^5.3.0
-  dart_test_tools: ^5.11.5
+  dart_pre_commit: ^5.3.1
+  dart_test_tools: ^5.11.7
   ffigen: ^13.0.0
   freezed: ^2.5.7
   mocktail: ^1.0.4

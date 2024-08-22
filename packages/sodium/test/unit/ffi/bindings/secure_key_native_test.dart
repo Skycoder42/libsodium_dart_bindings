@@ -1,5 +1,5 @@
 @TestOn('dart-vm')
-library secure_key_native_test;
+library;
 
 import 'dart:ffi';
 import 'dart:typed_data';

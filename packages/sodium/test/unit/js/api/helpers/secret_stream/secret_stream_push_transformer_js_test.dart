@@ -1,5 +1,5 @@
 @TestOn('js')
-library secret_stream_push_transformer_js_test;
+library;
 
 import 'dart:js_interop';
 import 'dart:typed_data';

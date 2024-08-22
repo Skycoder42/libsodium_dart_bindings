@@ -1,5 +1,5 @@
 @TestOn('js')
-library js_error_test;
+library;
 
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';

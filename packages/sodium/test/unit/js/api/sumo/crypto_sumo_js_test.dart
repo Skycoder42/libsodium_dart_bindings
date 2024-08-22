@@ -1,5 +1,5 @@
 @TestOn('js')
-library crypto_sumo_js_test;
+library;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/sumo/crypto_sumo_js.dart';

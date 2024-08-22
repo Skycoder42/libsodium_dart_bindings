@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_lambdas
 
 @TestOn('dart-vm')
-library sodium_allocator_test;
+library;
 
 import 'dart:ffi';
 

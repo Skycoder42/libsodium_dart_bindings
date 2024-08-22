@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_lambdas, type_literal_in_constant_pattern
 
 @TestOn('dart-vm')
-library sodium_pointer_test;
+library;
 
 import 'dart:ffi';
 import 'dart:typed_data';

@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_lambdas
 
 @TestOn('dart-vm')
-library secure_key_ffi_test;
+library;
 
 import 'dart:ffi';
 import 'dart:typed_data';

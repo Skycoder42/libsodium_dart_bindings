@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_lambdas, invalid_use_of_protected_member
 
 @TestOn('dart-vm')
-library secret_stream_pull_transformer_ffi_test;
+library;
 
 import 'dart:ffi';
 import 'dart:typed_data';

@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_lambdas, prefer_asserts_with_message
 
 @TestOn('dart-vm')
-library sodium_ffi_test;
+library;
 
 import 'dart:ffi';
 import 'dart:isolate';

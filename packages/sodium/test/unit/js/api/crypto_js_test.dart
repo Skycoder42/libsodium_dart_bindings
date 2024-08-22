@@ -1,5 +1,5 @@
 @TestOn('js')
-library crypto_js_test;
+library;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/aead_chacha20poly1305_js.dart';

@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_lambdas
 
 @TestOn('dart-vm')
-library transferable_key_pair_test;
+library;
 
 import 'dart:ffi';
 import 'dart:isolate';

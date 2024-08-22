@@ -1,5 +1,5 @@
 @TestOn('js')
-library sodium_js_init_test;
+library;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/api/sodium_js.dart';

@@ -1,5 +1,5 @@
 @TestOn('dart-vm')
-library crypto_sumo_ffi_test;
+library;
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/ffi/api/sumo/crypto_sumo_ffi.dart';

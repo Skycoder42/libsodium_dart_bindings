@@ -1,5 +1,5 @@
 @TestOn('js')
-library sign_sumo_js_test;
+library;
 
 import 'dart:js_interop';
 import 'dart:typed_data';

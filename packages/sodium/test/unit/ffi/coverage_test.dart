@@ -1,5 +1,5 @@
 @TestOn('dart-vm')
-library coverage_test;
+library;
 
 // ignore: no_self_package_imports
 import 'package:sodium/sodium.ffi.dart';
