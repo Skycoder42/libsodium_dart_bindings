@@ -69,14 +69,14 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
         'unexpected true value for SecretStreamPull',
       );
       throw SodiumException();
-    } else if (pullResult.isA<SecretStreamPull>()) {
-      final streamResult = pullResult as SecretStreamPull;
+      // ignore: invalid_runtime_check_with_js_interop_types because SecretStreamPull is an anonymous type
+    } else if (pullResult is SecretStreamPull) {
       return SecretStreamPlainMessage(
-        streamResult.message.toDart,
+        pullResult.message.toDart,
         additionalData: event.additionalData,
         tag: SecretStreamMessageTagJSX.fromValue(
           sodium,
-          streamResult.tag,
+          pullResult.tag,
         ),
       );
     } else {
