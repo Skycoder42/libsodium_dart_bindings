@@ -39,4 +39,24 @@ class SignSumoJS extends SignJS implements SignSumo {
       ),
     );
   }
+
+  @override
+  Uint8List pkToCurve25519(Uint8List publicKey) {
+    validatePublicKey(publicKey);
+
+    return jsErrorWrap(
+      () => sodium.crypto_sign_ed25519_pk_to_curve25519(publicKey),
+    );
+  }
+
+  @override
+  Uint8List skToCurve25519(SecureKey secretKey) {
+    validateSecretKey(secretKey);
+
+    return jsErrorWrap(
+      () => secretKey.runUnlockedSync(
+        sodium.crypto_sign_ed25519_sk_to_curve25519,
+      ),
+    );
+  }
 }

@@ -4,6 +4,7 @@
 library;
 
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
@@ -176,6 +177,157 @@ void main() {
 
         expect(
           () => sut.skToPk(SecureKeyFake.empty(5)),
+          throwsA(isA<SodiumException>()),
+        );
+
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      });
+    });
+
+    group('pkToCurve25519', () {
+      test('asserts if publicKey is invalid', () {
+        expect(
+          () => sut.pkToCurve25519(Uint8List.fromList(const [])),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_sign_publickeybytes());
+      });
+
+      test('calls crypto_sign_ed25519_pk_to_curve25519 with correct arguments',
+          () {
+        when(
+          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
+
+        final publicKey = Uint8List.fromList(
+          List.generate(5, (index) => 30 + index),
+        );
+
+        sut.pkToCurve25519(publicKey);
+
+        verifyInOrder([
+          () => mockSodium.sodium_allocarray(5, 1),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(publicKey)),
+              ),
+          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
+                any(that: isNot(nullptr)),
+                any(that: hasRawData<UnsignedChar>(publicKey)),
+              ),
+        ]);
+      });
+
+      test('returns the curve25519 public key of the ed25519 public key', () {
+        final curve25519PublicKey = Uint8List.fromList(
+          List.generate(5, (index) => 30 + index),
+        );
+        when(
+          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
+            any(),
+            any(),
+          ),
+        ).thenAnswer((i) {
+          fillPointer(
+            i.positionalArguments.first as Pointer,
+            curve25519PublicKey,
+          );
+          return 0;
+        });
+
+        final result = sut.pkToCurve25519(curve25519PublicKey);
+
+        expect(result, curve25519PublicKey);
+
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      });
+
+      test('throws exception on failure', () {
+        when(
+          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
+            any(),
+            any(),
+          ),
+        ).thenReturn(1);
+
+        expect(
+          () => sut.pkToCurve25519(
+            Uint8List.fromList(List.generate(5, (index) => 30 + index)),
+          ),
+          throwsA(isA<SodiumException>()),
+        );
+
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      });
+    });
+
+    group('skToCurve25519', () {
+      test('asserts if secretKey is invalid', () {
+        expect(
+          () => sut.skToCurve25519(SecureKeyFake.empty(10)),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_sign_secretkeybytes());
+      });
+
+      test('calls crypto_sign_ed25519_sk_to_curve25519 with correct arguments',
+          () {
+        when(
+          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
+            any(),
+            any(),
+          ),
+        ).thenReturn(0);
+
+        final secretKey = List.generate(5, (index) => 30 + index);
+
+        sut.skToCurve25519(SecureKeyFake(secretKey));
+
+        verifyInOrder([
+          () => mockSodium.sodium_allocarray(5, 1),
+          () => mockSodium.sodium_mprotect_readonly(
+                any(that: hasRawData(secretKey)),
+              ),
+          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
+                any(that: isNot(nullptr)),
+                any(that: hasRawData<UnsignedChar>(secretKey)),
+              ),
+        ]);
+      });
+
+      test('returns the public key of the secret key', () {
+        final publicKey = List.generate(5, (index) => 100 - index);
+        when(
+          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
+            any(),
+            any(),
+          ),
+        ).thenAnswer((i) {
+          fillPointer(i.positionalArguments.first as Pointer, publicKey);
+          return 0;
+        });
+
+        final result = sut.skToCurve25519(SecureKeyFake.empty(5));
+
+        expect(result, publicKey);
+
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      });
+
+      test('throws exception on failure', () {
+        when(
+          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
+            any(),
+            any(),
+          ),
+        ).thenReturn(1);
+
+        expect(
+          () => sut.skToCurve25519(SecureKeyFake.empty(5)),
           throwsA(isA<SodiumException>()),
         );
 
