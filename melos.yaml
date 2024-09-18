@@ -6,39 +6,47 @@ packages:
 
 scripts:
   get:
-    run: >-
-      dart pub global run melos exec --no-flutter -- dart pub get &&
-      dart pub global run melos exec --flutter -- flutter pub get
-    description: Run 'pub get' in all projects
+    steps:
+      - get:dart
+      - get:flutter
+
+  get:dart:
+    packageFilters:
+      flutter: false
+    exec: dart pub get
+
+  get:flutter:
+    packageFilters:
+      flutter: true
+    exec: flutter pub get
 
   upgrade:
-    run: >-
-      dart pub global run melos exec --no-flutter -- dart pub upgrade --major-versions --tighten &&
-      dart pub global run melos exec --flutter -- flutter pub upgrade --major-versions --tighten
-    description: Run 'pub upgrade' in all projects
+    steps:
+      - upgrade:dart
+      - upgrade:flutter
 
-  analyze:
-    run: >-
-      dart pub global run melos exec --no-flutter -- dart analyze --fatal-infos &&
-      dart pub global run melos exec --flutter -- flutter analyze
-    description: Run 'analyze' in all projects
+  upgrade:dart:
+    packageFilters:
+      flutter: false
+    exec: dart pub upgrade --major-versions --tighten
 
-  outdated:
-    run: >-
-      dart pub global run melos exec --no-flutter -- dart pub outdated &&
-      dart pub global run melos exec --flutter -- flutter pub outdated
-    description: Run 'pub outdated' in all projects
+  upgrade:flutter:
+    packageFilters:
+      flutter: true
+    exec: flutter pub upgrade --major-versions --tighten
 
   build:
-    run: >-
-      dart pub global run melos exec --depends-on=build_runner
-      -- dart run build_runner build
+    packageFilters:
+      dependsOn:
+        - build_runner
+    exec: dart run build_runner build
     description: Run the build runner in all projects
 
   build:clean:
-    run: >-
-      dart pub global run melos exec --depends-on=build_runner
-      -- dart run build_runner build --delete-conflicting-outputs
+    packageFilters:
+      dependsOn:
+        - build_runner
+    exec: dart run build_runner build --delete-conflicting-outputs
     description: Run the build runner in all projects, discarding the previous state
 
   pre-commit:init:
@@ -53,7 +61,5 @@ scripts:
     description: Remove pre commit hooks
 
   pre-commit:run:
-    run: >-
-      dart pub global run melos exec -c1 --no-flutter -- dart run dart_pre_commit &&
-      dart pub global run melos exec -c1 --flutter -- flutter pub run dart_pre_commit
+    exec: dart run dart_pre_commit
     description: Run pre commit hooks in all projects

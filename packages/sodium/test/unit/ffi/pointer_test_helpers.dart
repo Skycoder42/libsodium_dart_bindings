@@ -69,7 +69,7 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
   Description describeMismatch(
     dynamic item,
     Description mismatchDescription,
-    Map matchState,
+    Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
     if (matchState.containsKey(_stateKey)) {
@@ -80,7 +80,7 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
   }
 
   @override
-  bool matches(dynamic item, Map matchState) {
+  bool matches(dynamic item, Map<dynamic, dynamic> matchState) {
     try {
       expect(item, isA<Pointer<T>>());
 

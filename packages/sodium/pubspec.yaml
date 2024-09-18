@@ -17,11 +17,11 @@ dev_dependencies:
   cider: ^0.2.8
   code_builder: ^4.10.0
   collection: ^1.19.0
-  coverage: ^1.9.0
-  custom_lint: ^0.6.5
-  dart_pre_commit: ^5.3.1
-  dart_test_tools: ^5.11.7
-  ffigen: ^13.0.0
+  coverage: ^1.9.2
+  custom_lint: ^0.6.7
+  dart_pre_commit: ^5.4.0
+  dart_test_tools: ^6.0.0
+  ffigen: ^14.0.1
   freezed: ^2.5.7
   mocktail: ^1.0.4
   path: ^1.9.0

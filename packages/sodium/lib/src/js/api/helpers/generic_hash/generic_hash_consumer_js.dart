@@ -48,9 +48,9 @@ class GenericHashConsumerJS implements GenericHashConsumer {
   }
 
   @override
-  Future addStream(Stream<Uint8List> stream) {
+  Future<void> addStream(Stream<Uint8List> stream) {
     _ensureNotCompleted();
-    return stream.map(add).drain<void>();
+    return stream.map(add).drain();
   }
 
   @override

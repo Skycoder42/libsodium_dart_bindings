@@ -6,11 +6,11 @@ class _ProxySink implements StreamConsumer<List<int>> {
   const _ProxySink(this._buffer);
 
   @override
-  Future addStream(Stream<List<int>> stream) =>
+  Future<void> addStream(Stream<List<int>> stream) =>
       stream.listen(_buffer.addAll).asFuture();
 
   @override
-  Future close() async {}
+  Future<void> close() async {}
 }
 
 class FileHelper {
