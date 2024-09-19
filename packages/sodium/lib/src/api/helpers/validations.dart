@@ -26,6 +26,17 @@ abstract class Validations {
   }
 
   /// @nodoc
+  static void checkIsAny(int value, List<int> expected, String name) {
+    if (!expected.contains(value)) {
+      throw RangeError.value(
+        value,
+        name,
+        'Only allowed values are $expected, but was',
+      );
+    }
+  }
+
+  /// @nodoc
   static void checkAtLeast(int value, int minValue, String name) {
     if (value < minValue) {
       throw RangeError.value(

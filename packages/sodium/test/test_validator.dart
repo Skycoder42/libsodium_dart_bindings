@@ -114,3 +114,38 @@ void testCheckInRange(
         verify(maxSource);
       },
     );
+
+@isTestGroup
+void testCheckIsAny2(
+  String name, {
+  required int Function() source1,
+  required int Function() source2,
+  required void Function(int value) sut,
+}) =>
+    testData<(int, int, bool)>(
+      '$name asserts if value is none of the expected',
+      const [
+        (5, 5, false),
+        (4, 5, false),
+        (5, 4, false),
+        (6, 5, false),
+        (5, 6, false),
+        (4, 4, true),
+        (6, 6, true),
+        (4, 6, true),
+        (6, 4, true),
+      ],
+      (fixture) {
+        when(source1).thenReturn(fixture.$1);
+        when(source2).thenReturn(fixture.$2);
+
+        final exceptionMatcher = throwsA(isA<RangeError>());
+        expect(
+          () => sut(5),
+          fixture.$3 ? exceptionMatcher : isNot(exceptionMatcher),
+        );
+
+        verify(source1);
+        verify(source2);
+      },
+    );

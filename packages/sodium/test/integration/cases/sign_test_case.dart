@@ -306,5 +306,24 @@ class SignTestCase extends TestCase {
       final restoredPk = sut.skToPk(keyPair.secretKey);
       expect(restoredPk, keyPair.publicKey);
     });
+
+    testSumo('Can convert ed25519 keys to curve25519 keys', (sodium) {
+      final sut = sodium.crypto.sign;
+
+      final seed = sodium.secureRandom(sut.seedBytes);
+      final keyPair = sut.seedKeyPair(seed);
+
+      final curvePk = sut.pkToCurve25519(keyPair.publicKey);
+      final curveSk = sut.skToCurve25519(keyPair.secretKey);
+      final seedSk = sut.skToCurve25519(seed);
+
+      expect(curvePk.length, sodium.crypto.scalarmult.bytes);
+      expect(curveSk.length, sodium.crypto.scalarmult.bytes);
+      expect(seedSk.length, sodium.crypto.scalarmult.bytes);
+      expect(seedSk, curveSk);
+
+      final pkFromSk = sodium.crypto.scalarmult.base(n: curveSk);
+      expect(pkFromSk, curvePk);
+    });
   }
 }

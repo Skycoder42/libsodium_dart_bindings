@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import '../../../api/secure_key.dart';
 import '../../../api/sodium_exception.dart';
 import '../../../api/sumo/sign_sumo.dart';
+import '../../bindings/memory_protection.dart';
 import '../../bindings/secure_key_native.dart';
 import '../../bindings/sodium_pointer.dart';
 import '../secure_key_ffi.dart';
@@ -13,7 +14,7 @@ import '../sign_ffi.dart';
 
 /// @nodoc
 @internal
-class SignSumoFFI extends SignFFI implements SignSumo {
+class SignSumoFFI extends SignFFI with SignSumoValidations implements SignSumo {
   /// @nodoc
   SignSumoFFI(super.sodium);
 
@@ -61,6 +62,62 @@ class SignSumoFFI extends SignFFI implements SignSumo {
       return Uint8List.fromList(publicKey.asListView());
     } finally {
       publicKey.dispose();
+    }
+  }
+
+  @override
+  Uint8List pkToCurve25519(Uint8List publicKey) {
+    validatePublicKey(publicKey);
+
+    SodiumPointer<UnsignedChar>? x25519PublicKeyPtr;
+    SodiumPointer<UnsignedChar>? ed25519PublicKeyPtr;
+    try {
+      x25519PublicKeyPtr = SodiumPointer<UnsignedChar>.alloc(
+        sodium,
+        count: sodium.crypto_scalarmult_curve25519_bytes(),
+      );
+      ed25519PublicKeyPtr = publicKey.toSodiumPointer(
+        sodium,
+        memoryProtection: MemoryProtection.readOnly,
+      );
+      final result = sodium.crypto_sign_ed25519_pk_to_curve25519(
+        x25519PublicKeyPtr.ptr,
+        ed25519PublicKeyPtr.ptr,
+      );
+      SodiumException.checkSucceededInt(result);
+
+      return Uint8List.fromList(x25519PublicKeyPtr.asListView());
+    } finally {
+      ed25519PublicKeyPtr?.dispose();
+      x25519PublicKeyPtr?.dispose();
+    }
+  }
+
+  @override
+  SecureKey skToCurve25519(SecureKey secretKey) {
+    validateSecretKeyOrSeed(secretKey);
+
+    final x25519SecretKey = SecureKeyFFI.alloc(
+      sodium,
+      sodium.crypto_scalarmult_curve25519_bytes(),
+    );
+    try {
+      final result = x25519SecretKey.runUnlockedNative(
+        (x25519SecretKeyPtr) => secretKey.runUnlockedNative(
+          sodium,
+          (secretKeyPtr) => sodium.crypto_sign_ed25519_sk_to_curve25519(
+            x25519SecretKeyPtr.ptr,
+            secretKeyPtr.ptr,
+          ),
+        ),
+        writable: true,
+      );
+      SodiumException.checkSucceededInt(result);
+
+      return x25519SecretKey;
+    } catch (e) {
+      x25519SecretKey.dispose();
+      rethrow;
     }
   }
 }
