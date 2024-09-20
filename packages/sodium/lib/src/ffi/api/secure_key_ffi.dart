@@ -18,7 +18,7 @@ typedef SecureFFICallbackFn<T> = T Function(
 
 /// @nodoc
 @internal
-typedef SecureKeyFFINativeHandle = List<int>;
+typedef SecureKeyFFINativeHandle = (int address, int count);
 
 /// @nodoc
 @internal
@@ -58,23 +58,14 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   factory SecureKeyFFI.attach(
     LibSodiumFFI sodium,
     SecureKeyFFINativeHandle nativeHandle,
-  ) {
-    if (nativeHandle.length != 2) {
-      throw ArgumentError.value(
-        nativeHandle,
-        'nativeHandle',
-        'Must be two integers',
+  ) =>
+      SecureKeyFFI(
+        SodiumPointer.raw(
+          sodium,
+          Pointer.fromAddress(nativeHandle.$1),
+          nativeHandle.$2,
+        ),
       );
-    }
-
-    return SecureKeyFFI(
-      SodiumPointer.raw(
-        sodium,
-        Pointer.fromAddress(nativeHandle[0]),
-        nativeHandle[1],
-      ),
-    );
-  }
 
   @override
   int get length => _raw.count;
@@ -138,5 +129,6 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
 
   /// @nodoc
   @internal
-  SecureKeyFFINativeHandle detach() => [_raw.detach().address, _raw.count];
+  @useResult
+  SecureKeyFFINativeHandle detach() => (_raw.detach().address, _raw.count);
 }

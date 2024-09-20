@@ -62,7 +62,13 @@ void main() {
       expect(sut.count, 4);
       expect(sut.byteLength, 4 * sizeOf<Uint16>());
 
-      verify(() => mockSodiumFinalizer.attach(sut, fakePtr.cast()));
+      verify(
+        () => mockSodiumFinalizer.attach(
+          sut,
+          fakePtr.cast(),
+          4 * sizeOf<Uint16>(),
+        ),
+      );
     });
 
     group('alloc', () {
@@ -75,7 +81,13 @@ void main() {
         expect(sut.byteLength, sizeOf<Uint16>());
 
         verify(() => mockSodium.sodium_malloc(sizeOf<Uint16>()));
-        verify(() => mockSodiumFinalizer.attach(sut, sut.ptr.cast()));
+        verify(
+          () => mockSodiumFinalizer.attach(
+            sut,
+            sut.ptr.cast(),
+            sizeOf<Uint16>(),
+          ),
+        );
       });
 
       test('allocates memory for multiple elements', () {
@@ -87,7 +99,13 @@ void main() {
         expect(sut.byteLength, 10 * sizeOf<Uint16>());
 
         verify(() => mockSodium.sodium_allocarray(10, sizeOf<Uint16>()));
-        verify(() => mockSodiumFinalizer.attach(sut, sut.ptr.cast()));
+        verify(
+          () => mockSodiumFinalizer.attach(
+            sut,
+            sut.ptr.cast(),
+            10 * sizeOf<Uint16>(),
+          ),
+        );
       });
 
       test('asserts for a negative number of elements', () {
@@ -268,7 +286,11 @@ void main() {
 
         final captured = verifyInOrder([
           () => mockSodium.sodium_allocarray(10, 1),
-          () => mockSodiumFinalizer.attach(captureAny(), fakePtr.cast()),
+          () => mockSodiumFinalizer.attach(
+                captureAny(),
+                fakePtr.cast(),
+                sizeOf<Uint8>() * 10,
+              ),
           () => mockSodium.sodium_mprotect_noaccess(fakePtr.cast()),
           () => mockSodiumFinalizer.detach(captureAny()),
           () => mockSodium.sodium_free(fakePtr.cast()),
@@ -293,7 +315,13 @@ void main() {
         verify(
           () => mockSodium.sodium_allocarray(rawList.length, sizeOf<Uint16>()),
         );
-        verify(() => mockSodiumFinalizer.attach(sut, sut.ptr.cast()));
+        verify(
+          () => mockSodiumFinalizer.attach(
+            sut,
+            sut.ptr.cast(),
+            sizeOf<Uint16>() * rawList.length,
+          ),
+        );
       });
 
       test('copies list bytes to new array', () {

@@ -50,7 +50,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
       : _viewParent = null,
         _locked = true,
         _memoryProtection = MemoryProtection.readWrite {
-    _getFinalizer(sodium).attach(this, ptr.cast());
+    _getFinalizer(sodium).attach(this, ptr.cast(), byteLength);
   }
 
   /// Allocates new memory using the libsodium APIs.
@@ -324,6 +324,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
 
   /// @nodoc
   @internal
+  @useResult
   Pointer<T> detach() {
     if (_isView) {
       throw UnsupportedError('Cannot transfer a memory view between isolates');

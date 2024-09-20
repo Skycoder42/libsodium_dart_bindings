@@ -16,8 +16,8 @@ class SodiumFinalizer {
       : _nativeFinalizer = NativeFinalizer(sodium.sodium_freePtr);
 
   /// @nodoc
-  void attach(Finalizable value, Pointer<Void> token) =>
-      _nativeFinalizer.attach(value, token, detach: value);
+  void attach(Finalizable value, Pointer<Void> token, int size) =>
+      _nativeFinalizer.attach(value, token, detach: value, externalSize: size);
 
   /// @nodoc
   void detach(Object detach) => _nativeFinalizer.detach(detach);

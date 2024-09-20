@@ -45,7 +45,7 @@ void main() {
 
   group('$TransferableKeyPair', () {
     final testPublicKey = Uint8List.fromList(List.filled(64, 0x42));
-    const testNativeHandle = [1234, 56];
+    const testNativeHandle = (1234, 56);
     final testFfiKeyMock1 = MockSecureKeyFFI();
     final testFfiKeyMock2 = MockSecureKeyFFI();
     final testGenericSecretKey =
@@ -122,10 +122,11 @@ void main() {
       verifyInOrder([
         () => mockSodiumFinalizer.attach(
               any(),
-              Pointer.fromAddress(testNativeHandle[0]),
+              Pointer.fromAddress(testNativeHandle.$1),
+              testNativeHandle.$2,
             ),
         () => mockLibSodiumFFI.sodium_mprotect_noaccess(
-              Pointer.fromAddress(testNativeHandle[0]),
+              Pointer.fromAddress(testNativeHandle.$1),
             ),
       ]);
 

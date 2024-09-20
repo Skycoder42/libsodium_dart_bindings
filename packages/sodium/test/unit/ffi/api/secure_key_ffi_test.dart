@@ -89,15 +89,8 @@ void main() {
     });
 
     group('attach', () {
-      test('throws if nativeHandle has invalid length', () {
-        expect(
-          () => SecureKeyFFI.attach(mockSodium, [1, 2, 3]),
-          throwsA(isArgumentError),
-        );
-      });
-
       test('creates key from valid native handle', () {
-        final key = SecureKeyFFI.attach(mockSodium, [1, 2]);
+        final key = SecureKeyFFI.attach(mockSodium, (1, 2));
 
         expect(key.length, 2);
         verifyNever(() => mockSodium.sodium_allocarray(any(), any()));
@@ -324,14 +317,14 @@ void main() {
       verify(() => mockSodiumPointer.dispose());
     });
 
-    test('detach returns list with detached address and count', () {
+    test('detach returns tuple with detached address and count', () {
       when(() => mockSodiumPointer.detach()).thenReturn(testPtr);
 
       final nativeHandle = sut.detach();
 
-      expect(nativeHandle, hasLength(2));
-      expect(nativeHandle[0], testPtr.address);
-      expect(nativeHandle[1], testList.length);
+      expect(nativeHandle, isA<(int, int)>());
+      expect(nativeHandle.$1, testPtr.address);
+      expect(nativeHandle.$2, testList.length);
 
       verify(() => mockSodiumPointer.detach());
     });
