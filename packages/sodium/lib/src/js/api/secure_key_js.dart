@@ -7,16 +7,32 @@ import 'package:meta/meta.dart';
 import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
+import '../bindings/sodium_finalizer.dart';
 
 /// @nodoc
 @internal
 class SecureKeyJS with SecureKeyEquality implements SecureKey {
+  static final _sodiumFinalizerCache = Expando<SodiumFinalizer>();
+
+  static SodiumFinalizer _getFinalizer(LibSodiumJS sodium) =>
+      _sodiumFinalizerCache[sodium] ??= SodiumFinalizer(sodium);
+
+  /// @nodoc
+  @visibleForTesting
+  static void debugOverwriteFinalizer(
+    LibSodiumJS sodium,
+    SodiumFinalizer finalizer,
+  ) =>
+      _sodiumFinalizerCache[sodium] = finalizer;
+
   /// @nodoc
   final LibSodiumJS sodium;
   final JSUint8Array _raw;
 
   /// @nodoc
-  SecureKeyJS(this.sodium, this._raw);
+  SecureKeyJS(this.sodium, this._raw) {
+    _getFinalizer(sodium).attach(this, _raw);
+  }
 
   /// @nodoc
   factory SecureKeyJS.alloc(LibSodiumJS sodium, int length) =>
@@ -53,6 +69,7 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
 
   @override
   void dispose() {
+    _getFinalizer(sodium).detach(this);
     jsErrorWrap(() => sodium.memzero(_raw));
   }
 }

@@ -8,12 +8,19 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/js/api/secure_key_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
+import 'package:sodium/src/js/bindings/sodium.js.dart';
+import 'package:sodium/src/js/bindings/sodium_finalizer.dart';
 import 'package:test/test.dart';
 
 import '../sodium_js_mock.dart';
 
+class MockSodiumFinalizer extends Mock implements SodiumFinalizer {}
+
 void main() {
   final mockSodium = MockLibSodiumJS();
+  final mockSodiumFinalizer = MockSodiumFinalizer();
+
+  late LibSodiumJS mockSodiumJS;
 
   setUpAll(() {
     registerFallbackValue(Uint8List(0));
@@ -21,19 +28,25 @@ void main() {
 
   setUp(() {
     reset(mockSodium);
+    reset(mockSodiumFinalizer);
+
+    mockSodiumJS = mockSodium.asLibSodiumJS;
+    SecureKeyJS.debugOverwriteFinalizer(mockSodiumJS, mockSodiumFinalizer);
   });
 
   group('construction', () {
-    test('raw initializes members', () {
-      final libSodium = mockSodium.asLibSodiumJS;
-      final sut = SecureKeyJS(libSodium, Uint8List(3).toJS);
+    test('raw initializes members and attaches to finalizer', () {
+      final jsArray = Uint8List(3).toJS;
+      final sut = SecureKeyJS(mockSodiumJS, jsArray);
 
-      expect(sut.sodium, libSodium);
+      expect(sut.sodium, mockSodiumJS);
+
+      verify(() => mockSodiumFinalizer.attach(sut, jsArray)).called(1);
     });
 
     test('alloc allocates new memory', () {
       const length = 42;
-      final sut = SecureKeyJS.alloc(mockSodium.asLibSodiumJS, length);
+      final sut = SecureKeyJS.alloc(mockSodiumJS, length);
 
       expect(sut.extractBytes().length, length);
     });
@@ -45,7 +58,7 @@ void main() {
         when(() => mockSodium.randombytes_buf(any()))
             .thenReturn(Uint8List(length).toJS);
 
-        SecureKeyJS.random(mockSodium.asLibSodiumJS, length);
+        SecureKeyJS.random(mockSodiumJS, length);
 
         verify(() => mockSodium.randombytes_buf(length));
       });
@@ -54,7 +67,7 @@ void main() {
         when(() => mockSodium.randombytes_buf(any())).thenThrow(JSError());
 
         expect(
-          () => SecureKeyJS.random(mockSodium.asLibSodiumJS, 10),
+          () => SecureKeyJS.random(mockSodiumJS, 10),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -68,7 +81,7 @@ void main() {
 
     setUp(() {
       sut = SecureKeyJS(
-        mockSodium.asLibSodiumJS,
+        mockSodiumJS,
         Uint8List.fromList(testList).toJS,
       );
     });
@@ -115,10 +128,13 @@ void main() {
     });
 
     group('dispose', () {
-      test('clears the memory', () {
+      test('detaches from finalizer and clears the memory', () {
         sut.dispose();
 
-        verify(() => mockSodium.memzero(Uint8List.fromList(testList).toJS));
+        verifyInOrder([
+          () => mockSodiumFinalizer.detach(sut),
+          () => mockSodium.memzero(Uint8List.fromList(testList).toJS),
+        ]);
       });
 
       test('throws SodiumException on JSError', () {
