@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2024-09-20
+### Added
+- Added `crypto_sign_ed25519_pk_to_curve25519` and `crypto_sign_ed25519_sk_to_curve25519` sumo functions (#123)
+
+### Changed
+- Updated dependencies
+- Improved isolate transfers for FFI secure keys
+- Add finalization to JS secure keys if forgotten to dispose
+- Exposed `ready` property on `LibSodiumJS`
+
 ## [3.2.0+1] - 2024-08-22
 ### Changed
 - Improved documentation
@@ -233,6 +243,7 @@ changed, only the name of the getter. (#61)
 ### Added
 - Initial stable release
 
+[3.3.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.2.0+1...sodium-v3.3.0
 [3.2.0+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.2.0...sodium-v3.2.0+1
 [3.2.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.1.0...sodium-v3.2.0
 [3.1.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.0.1...sodium-v3.1.0
