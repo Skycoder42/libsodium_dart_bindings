@@ -13,5 +13,7 @@ sealed class Types {
 
   static final TypeReference jsObject = named('JSObject');
 
+  static final TypeReference jsPromise = named('JSPromise');
+
   static final TypeReference unimplementedError = named('UnimplementedError');
 }

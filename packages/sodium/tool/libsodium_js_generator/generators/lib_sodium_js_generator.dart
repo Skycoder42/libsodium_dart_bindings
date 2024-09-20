@@ -38,6 +38,14 @@ final class LibSodiumJsGenerator extends SpecGenerator<ExtensionType>
       );
 
   Iterable<Method> _buildMethods() sync* {
+    yield Method(
+      (b) => b
+        ..name = 'ready'
+        ..external = external
+        ..type = MethodType.getter
+        ..returns = Types.jsPromise,
+    );
+
     for (final constant in constants) {
       yield ConstantsGenerator(
         constant: constant,

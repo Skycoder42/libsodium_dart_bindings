@@ -68,6 +68,7 @@ extension type SecretStreamPull._(JSObject _) implements JSObject {
   external int get tag;
 }
 extension type LibSodiumJS._(JSObject _) implements JSObject {
+  external JSPromise get ready;
   external int get SODIUM_LIBRARY_VERSION_MAJOR;
   external int get SODIUM_LIBRARY_VERSION_MINOR;
   external String get SODIUM_VERSION_STRING;
