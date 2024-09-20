@@ -52,8 +52,12 @@ class SodiumWeb extends SodiumPlatform {
 
   Future<LibSodiumJS> _loadLibSodiumJS() {
     // check if sodium was already loaded
-    if (_sodium case final LibSodiumJS sodium) {
-      return Future.value(sodium);
+    if (_sodium.isA<JSObject>()) {
+      final sodiumObj = _sodium! as JSObject;
+      if (sodiumObj.has('ready')) {
+        final sodium = sodiumObj as LibSodiumJS;
+        return sodium.ready.toDart.then((_) => sodium);
+      }
     }
 
     // if not, overwrite sodium window property with custom onload
