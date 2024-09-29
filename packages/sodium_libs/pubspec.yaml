@@ -20,8 +20,8 @@ dependencies:
   meta: ^1.15.0
   plugin_platform_interface: ^2.1.8
   sodium: ^3.3.0
-  synchronized: ^3.3.0+2
-  web: ^1.0.0
+  synchronized: ^3.3.0+3
+  web: ^1.1.0
 
 dev_dependencies:
   cider: ^0.2.8

@@ -29,4 +29,7 @@ class SodiumSumoJS extends SodiumJS implements SodiumSumo {
         secureKeys,
         keyPairs,
       );
+
+  @override
+  SodiumSumoFactory get isolateFactory => () => Future.value(this);
 }

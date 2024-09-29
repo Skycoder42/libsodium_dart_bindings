@@ -28,7 +28,11 @@ scripts:
   upgrade:dart:
     packageFilters:
       flutter: false
-    exec: dart pub upgrade --major-versions --tighten
+    exec: >-
+      dart pub add 'dev:flutter:{"sdk":"flutter"}' &&
+      dart pub upgrade --major-versions --tighten &&
+      dart pub remove flutter &&
+      dart pub upgrade
 
   upgrade:flutter:
     packageFilters:

@@ -41,13 +41,14 @@ typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> = Future<TSodiumFFI>
 /// @nodoc
 @internal
 class SodiumFFI implements Sodium {
-  final LibSodiumFFIFactory _sodiumFactory;
+  @protected
+  final LibSodiumFFIFactory sodiumFactory;
 
   /// @nodoc
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SodiumFFI(this.sodium, this._sodiumFactory);
+  SodiumFFI(this.sodium, this.sodiumFactory);
 
   /// @nodoc
   static Future<SodiumFFI> fromFactory(LibSodiumFFIFactory factory) async =>
@@ -155,7 +156,7 @@ class SodiumFFI implements Sodium {
     List<KeyPair> keyPairs,
   ) async {
     final isolateResult = await _isolateRun<TResult, TSodiumFFI>(
-      _sodiumFactory,
+      sodiumFactory,
       fromFactory,
       secureKeys.map(TransferableSecureKey.new).toList(),
       keyPairs.map(TransferableKeyPair.new).toList(),
@@ -200,4 +201,8 @@ class SodiumFFI implements Sodium {
     );
     return isolateResult;
   }
+
+  @override
+  SodiumFactory get isolateFactory =>
+      () async => await fromFactory(sodiumFactory);
 }

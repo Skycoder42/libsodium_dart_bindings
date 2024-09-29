@@ -103,4 +103,7 @@ class SodiumJS implements Sodium {
 
     return await callback(sodium, secureKeys, keyPairs);
   }
+
+  @override
+  SodiumFactory get isolateFactory => () => Future.value(this);
 }

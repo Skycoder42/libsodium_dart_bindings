@@ -18,6 +18,11 @@ typedef SodiumIsolateCallback<T> = FutureOr<T> Function(
   List<KeyPair> keyPairs,
 );
 
+/// A factory method that creates new [Sodium] instances. This factory can be
+/// passed between isolates and can be used if custom isolate handling is
+/// required.
+typedef SodiumFactory = Future<Sodium> Function();
+
 /// A meta class that provides access to all toplevel libsodium API groups.
 abstract class Sodium {
   const Sodium._(); // coverage:ignore-line
@@ -66,9 +71,22 @@ abstract class Sodium {
   /// the `secureKeys` and `keyPairs` arguments of the callback. They will be
   /// passed to the callback in the same order in that they were passed to the
   /// arguments of this method.
+  ///
+  /// In case you need more control over the isolates, you can use
+  /// [isolateFactory] to get a factory method that can be passed between
+  /// isolates.
   Future<T> runIsolated<T>(
     SodiumIsolateCallback<T> callback, {
     List<SecureKey> secureKeys = const [],
     List<KeyPair> keyPairs = const [],
   });
+
+  /// Retrieves a factory method to create new sodium instances that use the
+  /// same native binaries.
+  ///
+  /// This is meant to be used to obtain a factory that can be passed between
+  /// isolates. Usually, you would use [runIsolated] for isolated computation.
+  /// However, sometimes you need more control over the isolates. In this case
+  /// you can use this method to get a [Sodium] instance on a separate isolate.
+  SodiumFactory get isolateFactory;
 }

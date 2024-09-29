@@ -109,7 +109,7 @@ abstract class SecureKey {
   /// Disposes the key.
   ///
   /// This will zero the memory of the key and then free any resources. This is
-  /// veriy important not to forget, as otherwise it can lead to memory leaks
+  /// verify important not to forget, as otherwise it can lead to memory leaks
   /// in the dart VM.
   void dispose();
 }

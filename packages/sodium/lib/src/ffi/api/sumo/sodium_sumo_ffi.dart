@@ -12,7 +12,7 @@ import 'crypto_sumo_ffi.dart';
 @internal
 class SodiumSumoFFI extends SodiumFFI implements SodiumSumo {
   /// @nodoc
-  SodiumSumoFFI(super.sodium, super._sodiumFactory);
+  SodiumSumoFFI(super.sodium, super.sodiumFactory);
 
   /// @nodoc
   static Future<SodiumSumoFFI> fromFactory(LibSodiumFFIFactory factory) async =>
@@ -37,4 +37,8 @@ class SodiumSumoFFI extends SodiumFFI implements SodiumSumo {
         secureKeys,
         keyPairs,
       );
+
+  @override
+  SodiumSumoFactory get isolateFactory =>
+      () async => await fromFactory(sodiumFactory);
 }
