@@ -39,6 +39,8 @@ class SodiumSumoFFI extends SodiumFFI implements SodiumSumo {
       );
 
   @override
-  SodiumSumoFactory get isolateFactory =>
-      () async => await fromFactory(sodiumFactory);
+  SodiumSumoFactory get isolateFactory {
+    final factory = sodiumFactory;
+    return () async => await fromFactory(factory);
+  }
 }

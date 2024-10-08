@@ -28,9 +28,14 @@ class FlutterTestRunner extends SumoTestRunner {
   GroupFn get group => ft.group;
 
   @override
-  void test(String description, dynamic Function(Sodium sodium) body) =>
+  void test(
+    String description,
+    dynamic Function(Sodium sodium) body, {
+    bool? skip,
+  }) =>
       ft.testWidgets(
         description,
+        skip: skip,
         (tester) async => body(sodium),
       );
 

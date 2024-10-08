@@ -30,8 +30,9 @@ typedef SetupFn = void Function(dynamic Function(Sodium sodium) body);
 typedef GroupFn = void Function(String description, dynamic Function() body);
 typedef TestFn = void Function(
   String description,
-  dynamic Function(Sodium sodium) body,
-);
+  dynamic Function(Sodium sodium) body, {
+  bool? skip,
+});
 typedef TestSumoFn = void Function(
   String description,
   dynamic Function(SodiumSumo sodium) body,
@@ -79,8 +80,14 @@ abstract class TestRunner {
       t.setUp(() => body(_sodium));
 
   @visibleForOverriding
-  void test(String description, dynamic Function(Sodium sodium) body) => t.test(
+  void test(
+    String description,
+    dynamic Function(Sodium sodium) body, {
+    bool? skip,
+  }) =>
+      t.test(
         description,
+        skip: skip,
         () => body(_sodium),
       );
 

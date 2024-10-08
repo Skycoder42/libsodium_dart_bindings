@@ -9,7 +9,7 @@ import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/secure_key.dart';
-import 'package:sodium/src/ffi/api/helpers/isolates/transferable_secure_key.dart';
+import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_secure_key_ffi.dart';
 import 'package:sodium/src/ffi/api/secure_key_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
@@ -42,7 +42,7 @@ void main() {
     registerFallbackValue(Uint8List(0));
   });
 
-  group('$TransferableSecureKey', () {
+  group('$TransferrableSecureKeyFFI', () {
     const testNativeHandle = (1234, 56);
     final testFfiKeyMock1 = MockSecureKeyFFI();
     final testFfiKeyMock2 = MockSecureKeyFFI();
@@ -71,7 +71,7 @@ void main() {
     });
 
     test('can wrap ffi secure key for transfer', () {
-      final sut = TransferableSecureKey(testFfiKeyMock1);
+      final sut = TransferrableSecureKeyFFI(testFfiKeyMock1);
       sut.maybeWhen(
         ffi: (nativeHandle) {
           expect(nativeHandle, testNativeHandle);
@@ -86,7 +86,7 @@ void main() {
     });
 
     test('can wrap generic secure key for transfer', () {
-      final sut = TransferableSecureKey(testGenericKey);
+      final sut = TransferrableSecureKeyFFI(testGenericKey);
       sut.maybeWhen(
         generic: (keyBytes) {
           expect(keyBytes.materialize().asUint8List(), testGenericKey.bytes);
@@ -99,7 +99,7 @@ void main() {
       when(() => mockLibSodiumFFI.sodium_mprotect_noaccess(any()))
           .thenReturn(0);
 
-      final result = const TransferableSecureKey.ffi(testNativeHandle)
+      final result = const TransferrableSecureKeyFFI.ffi(testNativeHandle)
           .toSecureKey(mockSodiumFFI) as SecureKeyFFI;
 
       verifyInOrder([
@@ -119,7 +119,7 @@ void main() {
     test('can reconstruct a generic key', () {
       when(() => mockSodiumFFI.secureCopy(any())).thenReturn(testGenericKey);
 
-      final result = TransferableSecureKey.generic(
+      final result = TransferrableSecureKeyFFI.generic(
         TransferableTypedData.fromList([testGenericKey.bytes]),
       ).toSecureKey(mockSodiumFFI);
 

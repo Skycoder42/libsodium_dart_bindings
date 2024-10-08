@@ -9,14 +9,22 @@ import 'dart:typed_data';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/key_pair.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
+import 'package:sodium/src/api/transferrable_secure_key.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
 import 'package:sodium/src/js/api/randombytes_js.dart';
 import 'package:sodium/src/js/api/secure_key_js.dart';
 import 'package:sodium/src/js/api/sodium_js.dart';
+import 'package:sodium/src/js/api/transferrable_secure_key_js.dart';
 import 'package:sodium/src/js/bindings/js_error.dart';
 import 'package:test/test.dart';
 
+import '../../../secure_key_fake.dart';
 import '../sodium_js_mock.dart';
+
+class FakeTransferrableSecureKey extends Fake
+    implements TransferrableSecureKey {}
+
+class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair {}
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -196,6 +204,89 @@ void main() {
         },
         prints(startsWith('WARNING: Sodium.runIsolated')),
       );
+    });
+
+    test('isolateFactory creates factory that returns this', () async {
+      expect(sut.isolateFactory(), completion(same(sut)));
+    });
+
+    test('createTransferrableSecureKey returns wrapped secure key', () {
+      final key = SecureKeyFake.empty(10);
+      final transferrableKey = sut.createTransferrableSecureKey(key);
+
+      expect(transferrableKey, isA<TransferrableSecureKeyJS>());
+      final jsKey = transferrableKey as TransferrableSecureKeyJS;
+
+      expect(jsKey.secureKey, same(key));
+    });
+
+    group('materializeTransferrableSecureKey', () {
+      test('unwraps transferrable key', () {
+        final key = SecureKeyFake.empty(10);
+        final transferrableKey = TransferrableSecureKeyJS(key);
+
+        final restored = sut.materializeTransferrableSecureKey(
+          transferrableKey,
+        );
+
+        expect(restored, same(key));
+      });
+
+      test('throws exception if not a JS key', () {
+        expect(
+          () => sut
+              .materializeTransferrableSecureKey(FakeTransferrableSecureKey()),
+          throwsA(
+            isA<SodiumException>().having(
+              (m) => m.originalMessage,
+              'originalMessage',
+              contains('$FakeTransferrableSecureKey'),
+            ),
+          ),
+        );
+      });
+    });
+
+    test('createTransferrableKeyPair returns wrapped key pair', () {
+      final keyPair = KeyPair(
+        publicKey: Uint8List(5),
+        secretKey: SecureKeyFake.empty(10),
+      );
+      final transferrableKeyPair = sut.createTransferrableKeyPair(keyPair);
+
+      expect(transferrableKeyPair, isA<TransferrableKeyPairJS>());
+      final jsKey = transferrableKeyPair as TransferrableKeyPairJS;
+
+      expect(jsKey.keyPair, same(keyPair));
+    });
+
+    group('materializeTransferrableKeyPair', () {
+      test('unwraps transferrable key pair', () {
+        final keyPair = KeyPair(
+          publicKey: Uint8List(5),
+          secretKey: SecureKeyFake.empty(10),
+        );
+        final transferrableKeyPair = TransferrableKeyPairJS(keyPair);
+
+        final restored = sut.materializeTransferrableKeyPair(
+          transferrableKeyPair,
+        );
+
+        expect(restored, same(keyPair));
+      });
+
+      test('throws exception if not a JS key', () {
+        expect(
+          () => sut.materializeTransferrableKeyPair(FakeTransferrableKeyPair()),
+          throwsA(
+            isA<SodiumException>().having(
+              (m) => m.originalMessage,
+              'originalMessage',
+              contains('$FakeTransferrableKeyPair'),
+            ),
+          ),
+        );
+      });
     });
   });
 }

@@ -18,6 +18,7 @@ export 'src/api/sodium.dart';
 export 'src/api/sodium_exception.dart';
 export 'src/api/sodium_version.dart';
 export 'src/api/string_x.dart';
+export 'src/api/transferrable_secure_key.dart';
 
 export 'src/sodium_init_fallback.dart'
     if (dart.library.ffi) 'src/ffi/sodium_ffi_init.dart'

@@ -97,6 +97,7 @@ abstract class SecureKey {
   ///
   /// This copies the bytes from native to dart memory. The resulting data is
   /// independent of the key, but also not protected as well anymore.
+  @useResult
   Uint8List extractBytes();
 
   /// Creates a secure copy of the key.
@@ -104,6 +105,7 @@ abstract class SecureKey {
   /// The resulting key is an independent copy of the original key, but with the
   /// same memory protection as before. The copying is done on native memory,
   /// without exposing the data to dart when using the dart VM.
+  @useResult
   SecureKey copy();
 
   /// Disposes the key.

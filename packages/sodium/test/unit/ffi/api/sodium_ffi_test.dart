@@ -11,8 +11,12 @@ import 'package:collection/collection.dart';
 import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/key_pair.dart';
+import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
+import 'package:sodium/src/api/transferrable_secure_key.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
+import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_key_pair_ffi.dart';
+import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_secure_key_ffi.dart';
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
@@ -22,6 +26,11 @@ import '../../../secure_key_fake.dart';
 import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+
+class FakeTransferrableSecureKey extends Fake
+    implements TransferrableSecureKey {}
+
+class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair {}
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -329,6 +338,142 @@ void main() {
       );
 
       expect(result, testKeyPair);
+    });
+  });
+
+  test(
+    'isolateFactory returns a factory that '
+    'can create a sodium instance with a different ffi reference',
+    () async {
+      when(() => mockSodium.sodium_library_version_major()).thenReturn(1);
+      when(() => mockSodium.sodium_library_version_minor()).thenReturn(2);
+      when(() => mockSodium.sodium_version_string()).thenReturn(nullptr);
+
+      final factory = sut.isolateFactory;
+
+      final newSodium = await factory();
+
+      expect(
+        newSodium,
+        isA<SodiumFFI>().having(
+          (m) => m.sodium,
+          'sodium',
+          isNot(same(mockSodium)),
+        ),
+      );
+      expect(
+        newSodium.secureAlloc(10),
+        isA<SecureKey>().having((m) => m.length, 'length', 10),
+      );
+    },
+  );
+
+  test(
+    'createTransferrableSecureKey creates a transferrable key',
+    () async {
+      mockAllocArray(mockSodium);
+
+      final testBytes = [1, 3, 5, 7];
+      final result = sut.createTransferrableSecureKey(SecureKeyFake(testBytes));
+
+      expect(result, isA<TransferrableSecureKeyFFI>());
+      final transferrableKey = result as TransferrableSecureKeyFFI;
+
+      final restored = transferrableKey.toSecureKey(sut);
+      expect(restored.extractBytes(), testBytes);
+    },
+  );
+
+  group('materializeTransferrableSecureKey', () {
+    test(
+      'restores the original key',
+      () async {
+        mockAllocArray(mockSodium);
+
+        final transferBytes = Uint8List.fromList([2, 4, 6, 8]);
+
+        final result = sut.materializeTransferrableSecureKey(
+          TransferrableSecureKeyFFI.generic(
+            TransferableTypedData.fromList([transferBytes]),
+          ),
+        );
+
+        expect(result.extractBytes(), transferBytes);
+      },
+    );
+
+    test('throws if not an FFI key', () {
+      expect(
+        () =>
+            sut.materializeTransferrableSecureKey(FakeTransferrableSecureKey()),
+        throwsA(
+          isA<SodiumException>().having(
+            (m) => m.originalMessage,
+            'originalMessage',
+            contains('$FakeTransferrableSecureKey'),
+          ),
+        ),
+      );
+    });
+  });
+
+  test(
+    'createTransferrableKeyPair creates a transferrable key pair',
+    () async {
+      mockAllocArray(mockSodium);
+
+      final testPublicBytes = [1, 3, 5, 7];
+      final testSecretBytes = [1, 2, 3, 4];
+      final result = sut.createTransferrableKeyPair(
+        KeyPair(
+          publicKey: Uint8List.fromList(testPublicBytes),
+          secretKey: SecureKeyFake(testSecretBytes),
+        ),
+      );
+
+      expect(result, isA<TransferrableKeyPairFFI>());
+      final transferrableKeyPair = result as TransferrableKeyPairFFI;
+
+      final restored = transferrableKeyPair.toKeyPair(sut);
+      expect(restored.publicKey, testPublicBytes);
+      expect(restored.secretKey.extractBytes(), testSecretBytes);
+    },
+  );
+
+  group('materializeTransferrableKeyPair', () {
+    test(
+      'restores the original key pair',
+      () async {
+        mockAllocArray(mockSodium);
+
+        final transferPublicBytes = Uint8List.fromList([2, 4, 6, 8]);
+        final transferSecureBytes = Uint8List.fromList([5, 6, 7, 8]);
+
+        final result = sut.materializeTransferrableKeyPair(
+          TransferrableKeyPairFFI.generic(
+            publicKeyBytes:
+                TransferableTypedData.fromList([transferPublicBytes]),
+            secretKeyBytes:
+                TransferableTypedData.fromList([transferSecureBytes]),
+          ),
+        );
+
+        expect(result.publicKey, transferPublicBytes);
+        expect(result.secretKey.extractBytes(), transferSecureBytes);
+      },
+    );
+
+    test('throws if not an FFI key', () {
+      expect(
+        () => sut.materializeTransferrableKeyPair(FakeTransferrableKeyPair()),
+        throwsA(
+          isA<SodiumException>().having(
+            (m) => m.originalMessage,
+            'originalMessage',
+            contains('$FakeTransferrableKeyPair'),
+          ),
+        ),
+      );
     });
   });
 }

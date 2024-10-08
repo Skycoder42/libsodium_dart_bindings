@@ -5,8 +5,8 @@ import '../../../../api/key_pair.dart';
 // ignore: unused_import
 import '../../../../api/secure_key.dart';
 import '../../sodium_ffi.dart';
-import 'transferable_key_pair.dart';
-import 'transferable_secure_key.dart';
+import 'transferrable_key_pair_ffi.dart';
+import 'transferrable_secure_key_ffi.dart';
 
 part 'isolate_result.freezed.dart';
 
@@ -23,7 +23,7 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
     'Cannot return subclasses of SecureKey from an isolate. '
         'Use SecureKey as return type instead.',
   )
-  const factory IsolateResult.key(TransferableSecureKey key) =
+  const factory IsolateResult.key(TransferrableSecureKeyFFI key) =
       _SecureKeyIsolateResult<T>;
 
   /// @nodoc
@@ -32,7 +32,7 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
     'Cannot return subclasses of KeyPair from an isolate. '
         'Use KeyPair as return type instead.',
   )
-  const factory IsolateResult.keyPair(TransferableKeyPair keyPair) =
+  const factory IsolateResult.keyPair(TransferrableKeyPairFFI keyPair) =
       _KeyPairIsolateResult<T>;
 
   const IsolateResult._();

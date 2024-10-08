@@ -15,4 +15,5 @@
   "files.associations": {
     "*.dart.type": "dart",
   },
+  "cmake.ignoreCMakeListsMissing": true,
 }

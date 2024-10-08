@@ -3,7 +3,10 @@
 @TestOn('dart-vm')
 library;
 
+import 'dart:ffi';
+
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/ffi/api/sumo/crypto_sumo_ffi.dart';
 import 'package:sodium/src/ffi/api/sumo/sodium_sumo_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
@@ -25,7 +28,15 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SodiumSumoFFI(mockSodium, () => mockSodium);
+    sut = SodiumSumoFFI(
+      mockSodium,
+      () {
+        registerPointers();
+        final sodium = MockSodiumFFI();
+        mockAllocArray(sodium);
+        return sodium;
+      },
+    );
   });
 
   test('fromFactory returns instance created by the factory', () async {
@@ -53,4 +64,31 @@ void main() {
       expect(isSodiumSumo, isTrue);
     });
   });
+
+  test(
+    'isolateFactory returns a factory that '
+    'can create a sodium sumo instance with a different ffi reference',
+    () async {
+      when(() => mockSodium.sodium_library_version_major()).thenReturn(1);
+      when(() => mockSodium.sodium_library_version_minor()).thenReturn(2);
+      when(() => mockSodium.sodium_version_string()).thenReturn(nullptr);
+
+      final factory = sut.isolateFactory;
+
+      final newSodium = await factory();
+
+      expect(
+        newSodium,
+        isA<SodiumSumoFFI>().having(
+          (m) => m.sodium,
+          'sodium',
+          isNot(same(mockSodium)),
+        ),
+      );
+      expect(
+        newSodium.secureAlloc(10),
+        isA<SecureKey>().having((m) => m.length, 'length', 10),
+      );
+    },
+  );
 }

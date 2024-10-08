@@ -1,3 +1,4 @@
+import 'dart:isolate';
 import 'dart:typed_data';
 
 // ignore: no_self_package_imports
@@ -213,6 +214,70 @@ class SodiumTestCase extends TestCase {
       );
 
       expect(result, expected);
+    });
+
+    test('custom isolates',
+        // ignore: do_not_use_environment is the same as "kIsWeb"
+        skip: const bool.fromEnvironment('dart.library.js_util'),
+        (sodium) async {
+      final secureKey = sodium.crypto.secretBox.keygen();
+      final keyPair1 = sodium.crypto.box.keyPair();
+      final keyPair2 = sodium.crypto.box.keyPair();
+
+      final message = 'Hello, World!'.toCharArray().unsignedView();
+      final nonce1 = sodium.randombytes.buf(sodium.crypto.secretBox.nonceBytes);
+      final nonce2 = sodium.randombytes.buf(sodium.crypto.box.nonceBytes);
+
+      final isolateFactory = sodium.isolateFactory;
+      final transferrableSecureKey =
+          sodium.createTransferrableSecureKey(secureKey);
+      final transferrableKeyPair1 = sodium.createTransferrableKeyPair(keyPair1);
+      final transferrableKeyPair2 = sodium.createTransferrableKeyPair(keyPair2);
+
+      final transferrableResult = await Isolate.run(() async {
+        final sodium = await isolateFactory();
+        final secureKey =
+            sodium.materializeTransferrableSecureKey(transferrableSecureKey);
+        final keyPair1 =
+            sodium.materializeTransferrableKeyPair(transferrableKeyPair1);
+        final keyPair2 =
+            sodium.materializeTransferrableKeyPair(transferrableKeyPair2);
+
+        final cipher1 = sodium.crypto.secretBox.easy(
+          message: message,
+          nonce: nonce1,
+          key: secureKey,
+        );
+
+        final cipher2 = sodium.crypto.box.easy(
+          message: cipher1,
+          nonce: nonce2,
+          publicKey: keyPair2.publicKey,
+          secretKey: keyPair1.secretKey,
+        );
+
+        final cipherKey = sodium.secureCopy(cipher2);
+
+        return sodium.createTransferrableSecureKey(cipherKey);
+      });
+
+      final result =
+          sodium.materializeTransferrableSecureKey(transferrableResult);
+
+      final plain2 = sodium.crypto.box.openEasy(
+        cipherText: result.extractBytes(),
+        nonce: nonce2,
+        publicKey: keyPair1.publicKey,
+        secretKey: keyPair2.secretKey,
+      );
+
+      final plain1 = sodium.crypto.secretBox.openEasy(
+        cipherText: plain2,
+        nonce: nonce1,
+        key: secureKey,
+      );
+
+      expect(plain1, message);
     });
   }
 }

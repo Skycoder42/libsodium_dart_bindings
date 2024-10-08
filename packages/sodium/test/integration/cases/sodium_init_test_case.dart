@@ -21,6 +21,7 @@ class SodiumInitTestCase extends TestCase {
         final sodium = await runner.loadSodium();
 
         // Ensure this new reference to sodium actually works
+        // ignore: unused_result
         sodium.secureRandom(1);
       }
     });

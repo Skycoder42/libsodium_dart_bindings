@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import 'crypto.dart';
 import 'key_pair.dart';
 import 'randombytes.dart';
 import 'secure_key.dart';
 import 'sodium_version.dart';
+import 'transferrable_secure_key.dart';
 
 /// A callback to be executed on a separate isolate.
 ///
@@ -41,13 +44,16 @@ abstract class Sodium {
   Uint8List unpad(Uint8List buf, int blocksize);
 
   /// Allocates new memory for a [SecureKey] of [length] bytes.
+  @useResult
   SecureKey secureAlloc(int length);
 
   /// Allocates new memory for a [SecureKey] and fills it with [length] bytes of
   /// random data.
+  @useResult
   SecureKey secureRandom(int length);
 
   /// Allocates new memory for a [SecureKey] and copies the data from [data].
+  @useResult
   SecureKey secureCopy(Uint8List data);
 
   /// An instance of [Randombytes].
@@ -81,6 +87,8 @@ abstract class Sodium {
     List<KeyPair> keyPairs = const [],
   });
 
+  // The following are the raw isolate APIs
+
   /// Retrieves a factory method to create new sodium instances that use the
   /// same native binaries.
   ///
@@ -89,4 +97,48 @@ abstract class Sodium {
   /// However, sometimes you need more control over the isolates. In this case
   /// you can use this method to get a [Sodium] instance on a separate isolate.
   SodiumFactory get isolateFactory;
+
+  /// Creates a boxed copy of the [secureKey] that can be transferred between
+  /// isolates.
+  ///
+  /// **DANGEROUS**: This method is dangerous, as it leaves you with raw native
+  /// handles! See [TransferrableSecureKey] for more details on how to use this
+  /// API.
+  @useResult
+  TransferrableSecureKey createTransferrableSecureKey(SecureKey secureKey);
+
+  /// Extracts the [SecureKey] from the [transferrableSecureKey].
+  ///
+  /// After calling this method, the [TransferrableSecureKey] becomes invalid
+  /// and cannot be used again.
+  ///
+  /// **DANGEROUS**: This method is dangerous, as it leaves you with raw native
+  /// handles! See [TransferrableSecureKey] for more details on how to use this
+  /// API.
+  @useResult
+  SecureKey materializeTransferrableSecureKey(
+    TransferrableSecureKey transferrableSecureKey,
+  );
+
+  /// Creates a boxed copy of the [keyPair] that can be transferred between
+  /// isolates.
+  ///
+  /// **DANGEROUS**: This method is dangerous, as it leaves you with raw native
+  /// handles! See [TransferrableKeyPair] for more details on how to use this
+  /// API.
+  @useResult
+  TransferrableKeyPair createTransferrableKeyPair(KeyPair keyPair);
+
+  /// Extracts the [KeyPair] from the [transferrableKeyPair].
+  ///
+  /// After calling this method, the [TransferrableKeyPair] becomes invalid
+  /// and cannot be used again.
+  ///
+  /// **DANGEROUS**: This method is dangerous, as it leaves you with raw native
+  /// handles! See [TransferrableKeyPair] for more details on how to use this
+  /// API.
+  @useResult
+  KeyPair materializeTransferrableKeyPair(
+    TransferrableKeyPair transferrableKeyPair,
+  );
 }

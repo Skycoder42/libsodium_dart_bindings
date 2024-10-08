@@ -8,8 +8,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/key_pair.dart';
 import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/ffi/api/helpers/isolates/isolate_result.dart';
-import 'package:sodium/src/ffi/api/helpers/isolates/transferable_key_pair.dart';
-import 'package:sodium/src/ffi/api/helpers/isolates/transferable_secure_key.dart';
+import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_key_pair_ffi.dart';
+import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_secure_key_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
 import 'package:test/test.dart';
 
@@ -32,7 +32,7 @@ void main() {
     test('asserts when constructed with a subclass type of SecureKey', () {
       expect(
         () => IsolateResult<FakeSecureKey>.key(
-          TransferableSecureKey.generic(TransferableTypedData.fromList([])),
+          TransferrableSecureKeyFFI.generic(TransferableTypedData.fromList([])),
         ),
         throwsA(isA<AssertionError>()),
       );
@@ -51,7 +51,7 @@ void main() {
         when(() => mockSodiumFFI.secureCopy(any())).thenReturn(testSecureKey);
 
         final sut = IsolateResult<SecureKey>.key(
-          TransferableSecureKey.generic(
+          TransferrableSecureKeyFFI.generic(
             TransferableTypedData.fromList([testData]),
           ),
         );
@@ -68,7 +68,7 @@ void main() {
         when(() => mockSodiumFFI.secureCopy(any())).thenReturn(testSecureKey);
 
         final sut = IsolateResult<KeyPair>.keyPair(
-          TransferableKeyPair.generic(
+          TransferrableKeyPairFFI.generic(
             publicKeyBytes: TransferableTypedData.fromList([testPublicKey]),
             secretKeyBytes: TransferableTypedData.fromList([testSecretData]),
           ),

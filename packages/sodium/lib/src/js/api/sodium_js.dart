@@ -11,12 +11,15 @@ import '../../api/key_pair.dart';
 import '../../api/randombytes.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium.dart';
+import '../../api/sodium_exception.dart';
 import '../../api/sodium_version.dart';
+import '../../api/transferrable_secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart' hide KeyPair;
 import 'crypto_js.dart';
 import 'randombytes_js.dart';
 import 'secure_key_js.dart';
+import 'transferrable_secure_key_js.dart';
 
 /// @nodoc
 @internal
@@ -106,4 +109,40 @@ class SodiumJS implements Sodium {
 
   @override
   SodiumFactory get isolateFactory => () => Future.value(this);
+
+  @override
+  TransferrableSecureKey createTransferrableSecureKey(SecureKey secureKey) =>
+      TransferrableSecureKeyJS(secureKey);
+
+  @override
+  SecureKey materializeTransferrableSecureKey(
+    TransferrableSecureKey transferrableSecureKey,
+  ) {
+    if (transferrableSecureKey case TransferrableSecureKeyJS()) {
+      return transferrableSecureKey.secureKey;
+    } else {
+      throw SodiumException(
+        'Cannot materialize instance of type: '
+        '${transferrableSecureKey.runtimeType}',
+      );
+    }
+  }
+
+  @override
+  TransferrableKeyPair createTransferrableKeyPair(KeyPair keyPair) =>
+      TransferrableKeyPairJS(keyPair);
+
+  @override
+  KeyPair materializeTransferrableKeyPair(
+    TransferrableKeyPair transferrableKeyPair,
+  ) {
+    if (transferrableKeyPair case TransferrableKeyPairJS()) {
+      return transferrableKeyPair.keyPair;
+    } else {
+      throw SodiumException(
+        'Cannot materialize instance of type: '
+        '${transferrableKeyPair.runtimeType}',
+      );
+    }
+  }
 }

@@ -3,33 +3,37 @@ import 'dart:isolate';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../api/secure_key.dart';
+import '../../../../api/transferrable_secure_key.dart';
 import '../../secure_key_ffi.dart';
 import '../../sodium_ffi.dart';
 
-part 'transferable_secure_key.freezed.dart';
+part 'transferrable_secure_key_ffi.freezed.dart';
 
 /// @nodoc
 @freezed
 @internal
-sealed class TransferableSecureKey with _$TransferableSecureKey {
+sealed class TransferrableSecureKeyFFI
+    with _$TransferrableSecureKeyFFI
+    implements TransferrableSecureKey {
   /// @nodoc
-  factory TransferableSecureKey(SecureKey secureKey) =>
+  factory TransferrableSecureKeyFFI(SecureKey secureKey) =>
       secureKey is SecureKeyFFI
-          ? TransferableSecureKey.ffi(secureKey.copy().detach())
-          : TransferableSecureKey.generic(
+          ? TransferrableSecureKeyFFI.ffi(secureKey.copy().detach())
+          : TransferrableSecureKeyFFI.generic(
               TransferableTypedData.fromList([secureKey.extractBytes()]),
             );
 
   /// @nodoc
-  const factory TransferableSecureKey.ffi(
+  const factory TransferrableSecureKeyFFI.ffi(
     SecureKeyFFINativeHandle nativeHandle,
-  ) = _TransferableSecureKeyFFI;
+  ) = _TransferrableSecureKeyFFINative;
 
   /// @nodoc
-  const factory TransferableSecureKey.generic(TransferableTypedData keyBytes) =
-      _TransferableSecureKeyGeneric;
+  const factory TransferrableSecureKeyFFI.generic(
+    TransferableTypedData keyBytes,
+  ) = _TransferrableSecureKeyFFIGeneric;
 
-  const TransferableSecureKey._();
+  const TransferrableSecureKeyFFI._();
 
   /// @nodoc
   SecureKey toSecureKey(SodiumFFI sodium) => when(

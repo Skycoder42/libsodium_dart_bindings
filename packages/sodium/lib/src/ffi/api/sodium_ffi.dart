@@ -13,14 +13,15 @@ import '../../api/secure_key.dart';
 import '../../api/sodium.dart';
 import '../../api/sodium_exception.dart';
 import '../../api/sodium_version.dart';
+import '../../api/transferrable_secure_key.dart';
 import '../bindings/libsodium.ffi.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/sodium_pointer.dart';
 import 'crypto_ffi.dart';
 import 'helpers/isolates/isolate_result.dart';
 import 'helpers/isolates/libsodiumffi_factory.dart';
-import 'helpers/isolates/transferable_key_pair.dart';
-import 'helpers/isolates/transferable_secure_key.dart';
+import 'helpers/isolates/transferrable_key_pair_ffi.dart';
+import 'helpers/isolates/transferrable_secure_key_ffi.dart';
 import 'randombytes_ffi.dart';
 import 'secure_key_ffi.dart';
 
@@ -148,6 +149,48 @@ class SodiumFFI implements Sodium {
         keyPairs,
       );
 
+  @override
+  SodiumFactory get isolateFactory {
+    final factory = sodiumFactory;
+    return () async => await fromFactory(factory);
+  }
+
+  @override
+  TransferrableSecureKey createTransferrableSecureKey(SecureKey secureKey) =>
+      TransferrableSecureKeyFFI(secureKey);
+
+  @override
+  SecureKey materializeTransferrableSecureKey(
+    TransferrableSecureKey transferrableSecureKey,
+  ) {
+    if (transferrableSecureKey case TransferrableSecureKeyFFI()) {
+      return transferrableSecureKey.toSecureKey(this);
+    } else {
+      throw SodiumException(
+        'Cannot materialize instance of type: '
+        '${transferrableSecureKey.runtimeType}',
+      );
+    }
+  }
+
+  @override
+  TransferrableKeyPair createTransferrableKeyPair(KeyPair keyPair) =>
+      TransferrableKeyPairFFI(keyPair);
+
+  @override
+  KeyPair materializeTransferrableKeyPair(
+    TransferrableKeyPair transferrableKeyPair,
+  ) {
+    if (transferrableKeyPair case TransferrableKeyPairFFI()) {
+      return transferrableKeyPair.toKeyPair(this);
+    } else {
+      throw SodiumException(
+        'Cannot materialize instance of type: '
+        '${transferrableKeyPair.runtimeType}',
+      );
+    }
+  }
+
   @protected
   Future<TResult> runIsolatedWithFactory<TResult, TSodiumFFI extends SodiumFFI>(
     SodiumFFIFactory<TSodiumFFI> fromFactory,
@@ -158,8 +201,8 @@ class SodiumFFI implements Sodium {
     final isolateResult = await _isolateRun<TResult, TSodiumFFI>(
       sodiumFactory,
       fromFactory,
-      secureKeys.map(TransferableSecureKey.new).toList(),
-      keyPairs.map(TransferableKeyPair.new).toList(),
+      secureKeys.map(TransferrableSecureKeyFFI.new).toList(),
+      keyPairs.map(TransferrableKeyPairFFI.new).toList(),
       callback,
     );
     return isolateResult.extract(this);
@@ -169,40 +212,38 @@ class SodiumFFI implements Sodium {
       _isolateRun<TResult, TSodiumFFI extends SodiumFFI>(
     LibSodiumFFIFactory sodiumFactory,
     SodiumFFIFactory<TSodiumFFI> fromFactory,
-    List<TransferableSecureKey> transferableSecureKeys,
-    List<TransferableKeyPair> transferableKeyPairs,
+    List<TransferrableSecureKeyFFI> transferableSecureKeys,
+    List<TransferrableKeyPairFFI> transferableKeyPairs,
     SodiumFFIIsolateCallback<TResult, TSodiumFFI> callback,
-  ) async {
-    final isolateResult = await Isolate.run(
-      debugName: 'SodiumFFI.runIsolated',
-      () async {
-        final sodium = await fromFactory(sodiumFactory);
-        final restoredSecureKeys = transferableSecureKeys
-            .map((transferKey) => transferKey.toSecureKey(sodium))
-            .toList();
-        final restoredKeyPairs = transferableKeyPairs
-            .map((transferKeyPair) => transferKeyPair.toKeyPair(sodium))
-            .toList();
+  ) async =>
+          await Isolate.run(
+            debugName: 'SodiumFFI.runIsolated',
+            () async {
+              final sodium = await fromFactory(sodiumFactory);
+              final restoredSecureKeys = transferableSecureKeys
+                  .map((transferKey) => transferKey.toSecureKey(sodium))
+                  .toList();
+              final restoredKeyPairs = transferableKeyPairs
+                  .map((transferKeyPair) => transferKeyPair.toKeyPair(sodium))
+                  .toList();
 
-        final result = await callback(
-          sodium,
-          restoredSecureKeys,
-          restoredKeyPairs,
-        );
+              final result = await callback(
+                sodium,
+                restoredSecureKeys,
+                restoredKeyPairs,
+              );
 
-        if (result is SecureKey) {
-          return IsolateResult<TResult>.key(TransferableSecureKey(result));
-        } else if (result is KeyPair) {
-          return IsolateResult<TResult>.keyPair(TransferableKeyPair(result));
-        } else {
-          return IsolateResult<TResult>(result);
-        }
-      },
-    );
-    return isolateResult;
-  }
-
-  @override
-  SodiumFactory get isolateFactory =>
-      () async => await fromFactory(sodiumFactory);
+              if (result is SecureKey) {
+                return IsolateResult<TResult>.key(
+                  TransferrableSecureKeyFFI(result),
+                );
+              } else if (result is KeyPair) {
+                return IsolateResult<TResult>.keyPair(
+                  TransferrableKeyPairFFI(result),
+                );
+              } else {
+                return IsolateResult<TResult>(result);
+              }
+            },
+          );
 }
