@@ -11,7 +11,7 @@ executables:
   sodium_libs_update_web: update_web
 
 dependencies:
-  args: ^2.5.0
+  args: ^2.6.0
   flutter:
     sdk: flutter
   flutter_web_plugins:
@@ -25,7 +25,7 @@ dependencies:
 
 dev_dependencies:
   cider: ^0.2.8
-  custom_lint: ^0.6.7
+  custom_lint: ^0.6.8
   dart_pre_commit: ^5.4.0
   dart_test_tools: ^6.0.0
   flutter_test:

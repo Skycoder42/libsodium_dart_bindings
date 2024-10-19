@@ -31,20 +31,12 @@ jobs:
           "windows": "dart run tool/libsodium/download.dart windows",
           "web": "cd example && dart run sodium_libs:update_web --sumo"
         }
-      browserStackAndroidDevices: >-
-        [
-          { "device": ".*", "os_version": "14(\\..*)?" },
-          { "device": ".*", "os_version": "7(\\..*)?" },
-          { "device": ".*", "os_version": "(8|9|10|11|12|13)(\\..*)?" }
-        ]
-      browserStackIosDevices: >-
-        [
-          { "device": ".*", "os_version": "17(\\..*)?" },
-          { "device": ".*", "os_version": "13(\\..*)?" },
-          { "device": ".*", "os_version": "(14|15|16)(\\..*)?" }
-        ]
+      firebaseProjectId: libsodium-dart-bindings-9b953
     secrets:
-      browserStackCredentials: ${{ secrets.BROWSER_STACK_CREDENTIALS }}
+      firebaseCredentials: ${{ secrets.FIREBASE_CREDENTIALS }}
+      # provisioningProfile: ${{ secrets.PROVISIONING_PROFILE }}
+      # signingIdentity: ${{ secrets.SIGNING_IDENTITY }}
+      # signingIdentityPassphrase: ${{ secrets.SIGNING_IDENTITY_PASSPHRASE }}
 
   cd:
     name: CD
