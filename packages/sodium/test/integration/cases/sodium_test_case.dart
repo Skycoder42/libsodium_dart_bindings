@@ -228,38 +228,18 @@ class SodiumTestCase extends TestCase {
       final nonce1 = sodium.randombytes.buf(sodium.crypto.secretBox.nonceBytes);
       final nonce2 = sodium.randombytes.buf(sodium.crypto.box.nonceBytes);
 
-      final isolateFactory = sodium.isolateFactory;
-      final transferrableSecureKey =
-          sodium.createTransferrableSecureKey(secureKey);
-      final transferrableKeyPair1 = sodium.createTransferrableKeyPair(keyPair1);
-      final transferrableKeyPair2 = sodium.createTransferrableKeyPair(keyPair2);
-
-      final transferrableResult = await Isolate.run(() async {
-        final sodium = await isolateFactory();
-        final secureKey =
-            sodium.materializeTransferrableSecureKey(transferrableSecureKey);
-        final keyPair1 =
-            sodium.materializeTransferrableKeyPair(transferrableKeyPair1);
-        final keyPair2 =
-            sodium.materializeTransferrableKeyPair(transferrableKeyPair2);
-
-        final cipher1 = sodium.crypto.secretBox.easy(
-          message: message,
-          nonce: nonce1,
-          key: secureKey,
-        );
-
-        final cipher2 = sodium.crypto.box.easy(
-          message: cipher1,
-          nonce: nonce2,
-          publicKey: keyPair2.publicKey,
-          secretKey: keyPair1.secretKey,
-        );
-
-        final cipherKey = sodium.secureCopy(cipher2);
-
-        return sodium.createTransferrableSecureKey(cipherKey);
-      });
+      final transferrableResult = await ioCompute(
+        _compute,
+        (
+          sodium.isolateFactory,
+          sodium.createTransferrableSecureKey(secureKey),
+          sodium.createTransferrableKeyPair(keyPair1),
+          sodium.createTransferrableKeyPair(keyPair2),
+          TransferableTypedData.fromList([message]),
+          TransferableTypedData.fromList([nonce1]),
+          TransferableTypedData.fromList([nonce2]),
+        ),
+      );
 
       final result =
           sodium.materializeTransferrableSecureKey(transferrableResult);
@@ -280,4 +260,51 @@ class SodiumTestCase extends TestCase {
       expect(plain1, message);
     });
   }
+}
+
+Future<TransferrableSecureKey> _compute(
+  (
+    SodiumFactory,
+    TransferrableSecureKey,
+    TransferrableKeyPair,
+    TransferrableKeyPair,
+    TransferableTypedData,
+    TransferableTypedData,
+    TransferableTypedData,
+  ) computeMessage,
+) async {
+  final (
+    isolateFactory,
+    transferrableSecureKey,
+    transferrableKeyPair1,
+    transferrableKeyPair2,
+    message,
+    nonce1,
+    nonce2,
+  ) = computeMessage;
+
+  final sodium = await isolateFactory();
+  final secureKey =
+      sodium.materializeTransferrableSecureKey(transferrableSecureKey);
+  final keyPair1 =
+      sodium.materializeTransferrableKeyPair(transferrableKeyPair1);
+  final keyPair2 =
+      sodium.materializeTransferrableKeyPair(transferrableKeyPair2);
+
+  final cipher1 = sodium.crypto.secretBox.easy(
+    message: message.materialize().asUint8List(),
+    nonce: nonce1.materialize().asUint8List(),
+    key: secureKey,
+  );
+
+  final cipher2 = sodium.crypto.box.easy(
+    message: cipher1,
+    nonce: nonce2.materialize().asUint8List(),
+    publicKey: keyPair2.publicKey,
+    secretKey: keyPair1.secretKey,
+  );
+
+  final cipherKey = sodium.secureCopy(cipher2);
+
+  return sodium.createTransferrableSecureKey(cipherKey);
 }

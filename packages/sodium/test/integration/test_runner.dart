@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_lambdas
 
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:meta/meta.dart';
 // ignore: no_self_package_imports
@@ -121,6 +122,12 @@ abstract class TestRunner {
       });
     }
   }
+
+  Future<T> ioCompute<T, M>(
+    FutureOr<T> Function(M message) callback,
+    M message,
+  ) =>
+      Isolate.run(() => callback(message));
 }
 
 abstract class SumoTestRunner extends TestRunner {

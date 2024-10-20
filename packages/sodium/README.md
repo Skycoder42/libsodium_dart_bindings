@@ -17,6 +17,7 @@ Dart bindings for libsodium, supporting both the VM and JS without flutter depen
       - [Loading sodium.js into the browser via dart.](#loading-sodiumjs-into-the-browser-via-dart)
   * [Using the API](#using-the-api)
   * [Running computations in a separate isolate](#running-computations-in-a-separate-isolate)
+    + [Using custom isolates](#using-custom-isolates)
 - [Documentation](#documentation)
   * [Example for the dart VM](#example-for-the-dart-vm)
   * [Example in the browser](#example-in-the-browser)
@@ -295,6 +296,64 @@ final derivedKey = await sodium.runIsolated(
     return derivedKey; // keys can be returned
   }
 );
+```
+
+#### Using custom isolates
+While the example above works fine if you simply want to run an asynchronous computation, it might not be sufficient for
+more complex scenarios. For example, if you want to use an isolate pool, you would want to execute sodium methods on an
+existing isolate and not create a new one every time. For this, the library provides low-level isolate APIs that allow
+you to do exactly this.
+
+**Warning:** These APIs are low-level and can lead to memory leaks and hard crashes if used incorrectly. So read the
+following with care!
+
+The first is `Sodium.isolateFactory`. That property returns a factory method to create new `Sodium` instances for the
+same native library and can easily be transferred between different isolates. The second are the create/materialize
+methods. They allow you to make a secure key "transferrable". This is needed, as dart does not allow the transfer of
+pointers between isolates. The `Sodium.createTransferrableSecureKey` and `createTransferrableKeyPair` will create a
+special *copy* of the original key/key pair that can be transferred. You can then call
+`Sodium.materializeTransferrableSecureKey` or `Sodium.materializeTransferrableKeyPair` on the target isolate to get a
+normal key/key pair back. This is preferred over simply sending the keys as `Uint8List`, as the transferrable keys will
+still apply all the advanced security measures that `SecureKey` uses as well.
+
+**IMPORTANT:** As the transferrable variants do work around darts pointer management, they will **not** be automatically
+garbage collected if left dangling. You **MUST** materialize every transferrable key/key pair *exactly* once, or you
+will create memory leaks for sensitive data! If you need to send keys to multiple isolates, create one per isolate.
+
+For other data, like public keys or plain/cipher text, you can simply send the `Uint8List`, however, if performance is
+relevant, you should instead use the
+[TransferableTypedData](https://api.flutter.dev/flutter/dart-isolate/TransferableTypedData-class.html), as it will
+reduce the number of times data has to be copied.
+
+Here is a simple variant of the above example that uses the low level APIs instead.
+
+```dart
+Future<SecureKey> deriveKey() {
+  final subkeyId = BigInt.from(42);
+  final masterKey = sodium.crypto.kdf.keygen();
+
+  final sodiumFactory = sodium.isolateFactory;
+  final transferrableMasterKey = sodium.createTransferrableSecureKey(masterKey);
+
+  final result = compute(_deriveKey, (sodiumFactory, transferrableMasterKey, subkeyId));
+
+  return sodium.materializeTransferrableSecureKey(result);
+}
+
+// at the end of the file
+Future<TransferrableSecureKey> _deriveKey((SodiumFactory, TransferrableSecureKey, BigInt) message) async {
+  final (sodiumFactory, transferrableMasterKey, subkeyId) = message;
+  final sodium = await sodiumFactory();
+  final masterKey = sodium.materializeTransferrableSecureKey(transferrableMasterKey);
+  final derivedKey = sodium.crypto.kdf.deriveFromKey(
+    masterKey: masterKey, // keys must be passed via the extra parameters
+    context: 'computed',
+    subkeyId: subkeyId, // normal values can be used as usual
+    subkeyLen: 64,
+  );
+  final transferrableDerivedKey = sodium.createTransferrableSecureKey(derivedKey);
+  return transferrableDerivedKey;
+}
 ```
 
 ## Documentation

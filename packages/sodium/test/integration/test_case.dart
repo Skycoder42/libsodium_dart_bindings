@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import 'test_runner.dart';
@@ -31,4 +33,10 @@ abstract class TestCase {
   String get name;
 
   void setupTests();
+
+  Future<T> ioCompute<T, M>(
+    FutureOr<T> Function(M message) callback,
+    M message,
+  ) =>
+      _runner.ioCompute(callback, message);
 }
