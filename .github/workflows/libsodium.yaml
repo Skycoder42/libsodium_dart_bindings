@@ -197,7 +197,7 @@ jobs:
             ```
           token: ${{ secrets.GH_PAT }}
       - name: Mention assignees
-        uses: thollander/actions-comment-pull-request@v2
+        uses: thollander/actions-comment-pull-request@v3
         with:
           pr_number: ${{ steps.create-pull-request.outputs.pull-request-number }}
           message: Your review has been requested @Skycoder42
