@@ -34,9 +34,9 @@ jobs:
       firebaseProjectId: libsodium-dart-bindings-9b953
     secrets:
       firebaseCredentials: ${{ secrets.FIREBASE_CREDENTIALS }}
-      # provisioningProfile: ${{ secrets.PROVISIONING_PROFILE }}
-      # signingIdentity: ${{ secrets.SIGNING_IDENTITY }}
-      # signingIdentityPassphrase: ${{ secrets.SIGNING_IDENTITY_PASSPHRASE }}
+      provisioningProfile: ${{ secrets.PROVISIONING_PROFILE }}
+      signingIdentity: ${{ secrets.SIGNING_IDENTITY }}
+      signingIdentityPassphrase: ${{ secrets.SIGNING_IDENTITY_PASSPHRASE }}
 
   cd:
     name: CD
