@@ -19,7 +19,7 @@ dependencies:
   html: ^0.15.5
   meta: ^1.15.0
   plugin_platform_interface: ^2.1.8
-  sodium: ^3.4.0
+  sodium: ^3.4.1
   synchronized: ^3.3.0+3
   web: ^1.1.0
 

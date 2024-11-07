@@ -49,7 +49,7 @@ void main() {
       () {
         registerPointers();
         final sodium = MockSodiumFFI();
-        mockAllocArray(sodium);
+        mockAllocArray(sodium, delayedFree: false);
         return sodium;
       },
     );
@@ -133,7 +133,7 @@ void main() {
 
       expect(res, hasLength(resultSize));
       expect(Uint8List.view(res.buffer, 0, testData.length), testData);
-      verify(() => mockSodium.sodium_free(any())).called(2);
+      verify(() => mockSodium.sodium_free(any())).called(1);
     });
 
     test('throws if sodium_pad fails', () {
@@ -201,7 +201,7 @@ void main() {
       final res = sut.unpad(testData, 3);
 
       expect(res, testData.sublist(0, resultSize));
-      verify(() => mockSodium.sodium_free(any())).called(2);
+      verify(() => mockSodium.sodium_free(any())).called(1);
     });
 
     test('throws if sodium_unpad fails', () {

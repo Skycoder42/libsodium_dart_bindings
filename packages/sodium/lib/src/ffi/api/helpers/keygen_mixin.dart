@@ -1,5 +1,4 @@
 import 'dart:ffi';
-import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
@@ -60,13 +59,12 @@ mixin KeygenMixin {
 
       return KeyPair(
         secretKey: secretKey,
-        publicKey: Uint8List.fromList(publicKeyPtr.asListView()),
+        publicKey: publicKeyPtr.asListView(owned: true),
       );
     } catch (e) {
       secretKey?.dispose();
-      rethrow;
-    } finally {
       publicKeyPtr?.dispose();
+      rethrow;
     }
   }
 
@@ -104,13 +102,12 @@ mixin KeygenMixin {
 
       return KeyPair(
         secretKey: secretKey,
-        publicKey: Uint8List.fromList(publicKeyPtr.asListView()),
+        publicKey: publicKeyPtr.asListView(owned: true),
       );
     } catch (e) {
       secretKey?.dispose();
-      rethrow;
-    } finally {
       publicKeyPtr?.dispose();
+      rethrow;
     }
   }
 }

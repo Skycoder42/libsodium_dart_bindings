@@ -60,9 +60,10 @@ class SignatureConsumerFFI
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(signaturePtr.asListView());
-    } finally {
+      return signaturePtr.asListView(owned: true);
+    } catch (_) {
       signaturePtr.dispose();
+      rethrow;
     }
   }
 }

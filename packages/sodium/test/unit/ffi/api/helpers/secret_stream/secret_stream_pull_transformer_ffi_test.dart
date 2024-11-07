@@ -280,7 +280,7 @@ void main() {
         expect(result.tag, SecretStreamMessageTag.push);
         verify(
           () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(4);
+        ).called(3);
       });
 
       test('throws SodiumException if pull fails', () {

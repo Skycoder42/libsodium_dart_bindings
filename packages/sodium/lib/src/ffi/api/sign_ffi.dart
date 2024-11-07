@@ -88,9 +88,10 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
     }
   }
 
@@ -120,9 +121,14 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.viewAt(bytes).asListView());
-    } finally {
+      return Uint8List.sublistView(
+        dataPtr.asListView<Uint8List>(owned: true),
+        bytes,
+      );
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       publicKeyPtr?.dispose();
     }
   }
@@ -158,10 +164,12 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(signaturePtr.asListView());
+      return signaturePtr.asListView(owned: true);
+    } catch (_) {
+      signaturePtr?.dispose();
+      rethrow;
     } finally {
       messagePtr?.dispose();
-      signaturePtr?.dispose();
     }
   }
 

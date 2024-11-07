@@ -62,10 +62,12 @@ class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(outPtr.asListView());
+      return outPtr.asListView(owned: true);
+    } catch (_) {
+      outPtr?.dispose();
+      rethrow;
     } finally {
       messagePtr?.dispose();
-      outPtr?.dispose();
     }
   }
 }

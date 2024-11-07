@@ -112,8 +112,18 @@ void main() {
 
       when(() => mockSodiumPointer.count).thenReturn(testList.length);
       when(() => mockSodiumPointer.ptr).thenReturn(testPtr);
-      when(() => mockSodiumPointer.asListView()).thenReturn(testList);
-      when(() => mockSodiumPointer.asListView<int>()).thenReturn(testList);
+      when(() => mockSodiumPointer.asListView(owned: any(named: 'owned')))
+          .thenReturn(testList);
+      when(
+        () => mockSodiumPointer.asListView<Uint8List>(
+          owned: any(named: 'owned'),
+        ),
+      ).thenReturn(testList);
+      when(
+        () => mockSodiumPointer.asListView<List<int>>(
+          owned: any(named: 'owned'),
+        ),
+      ).thenReturn(testList);
 
       sut = SecureKeyFFI(mockSodiumPointer);
       clearInteractions(mockSodiumPointer);

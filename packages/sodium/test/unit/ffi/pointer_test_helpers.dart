@@ -16,9 +16,24 @@ void registerPointers() {
   registerFallbackValue(FakeFinalizable());
 }
 
-void mockAllocArray(LibSodiumFFI mockSodium) {
+void mockFree(LibSodiumFFI mockSodium, {bool delayedFree = true}) {
+  final toDispose = <Pointer>[];
+  if (delayedFree) {
+    // addTearDown(() => toDispose.forEach(calloc.free));
+  }
+
+  when(() => mockSodium.sodium_free(any())).thenAnswer(
+    (i) => delayedFree
+        ? toDispose.add(i.positionalArguments.first as Pointer)
+        : calloc.free(i.positionalArguments.first as Pointer),
+  );
+  when(() => mockSodium.sodium_freePtr).thenReturn(calloc.nativeFree);
+}
+
+void mockAllocArray(LibSodiumFFI mockSodium, {bool delayedFree = true}) {
   // ignore: prefer_asserts_with_message
   assert(mockSodium is Mock);
+
   when(() => mockSodium.sodium_allocarray(any(), any())).thenAnswer((i) {
     final totalSize =
         (i.positionalArguments[0] as int) * (i.positionalArguments[1] as int);
@@ -27,6 +42,7 @@ void mockAllocArray(LibSodiumFFI mockSodium) {
   when(() => mockSodium.sodium_mprotect_readwrite(any())).thenReturn(0);
   when(() => mockSodium.sodium_mprotect_readonly(any())).thenReturn(0);
   when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
+  mockFree(mockSodium, delayedFree: delayedFree);
   SodiumPointer.debugOverwriteFinalizer(mockSodium, MockSodiumFinalizer());
 }
 
@@ -37,7 +53,6 @@ void mockAlloc(LibSodiumFFI mockSodium, int value) {
     final ptr = calloc<Uint64>()..value = value;
     return ptr.cast();
   });
-  when(() => mockSodium.sodium_freePtr).thenReturn(nullptr);
   SodiumPointer.debugOverwriteFinalizer(mockSodium, MockSodiumFinalizer());
 }
 
@@ -82,6 +97,7 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
   @override
   bool matches(dynamic item, Map<dynamic, dynamic> matchState) {
     try {
+      printOnFailure('##### Matching $item to $data #####');
       expect(item, isA<Pointer<T>>());
 
       final ptr = (item as Pointer<T>).cast<Uint8>();
@@ -98,20 +114,22 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
         case null:
           ptrList = ptrBuffer.asUint8List();
         default:
+          printOnFailure('>> invalid sizeHint $sizeHint');
           matchState[_stateKey] = 'invalid sizeHint $sizeHint';
           return false;
       }
 
       for (var i = 0; i < data.length; ++i) {
         matchState[_stateKey] =
-            'has different value at index $i: ${ptrList[i]}';
+            'has different value at index $i: ${ptrList[i]}!=${data[i]}';
         expect(ptrList[i], data[i]);
         matchState.remove(_stateKey);
       }
 
+      printOnFailure('>> SUCCESS');
       return true;
     } catch (e) {
-      printOnFailure('HasRawDataMatcher failed with: $e');
+      printOnFailure('>> FAILURE: ${matchState[_stateKey]}');
       return false;
     }
   }

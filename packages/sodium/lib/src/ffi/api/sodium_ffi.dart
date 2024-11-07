@@ -81,11 +81,15 @@ class SodiumFFI implements Sodium {
         maxLen,
       );
       SodiumException.checkSucceededInt(result);
-      return Uint8List.fromList(
-        extendedBuffer.viewAt(0, paddedLength.ptr.value).asListView(),
+      return Uint8List.sublistView(
+        extendedBuffer.asListView<Uint8List>(owned: true),
+        0,
+        paddedLength.ptr.value,
       );
-    } finally {
+    } catch (_) {
       extendedBuffer?.dispose();
+      rethrow;
+    } finally {
       paddedLength?.dispose();
     }
   }
@@ -107,11 +111,15 @@ class SodiumFFI implements Sodium {
         blocksize,
       );
       SodiumException.checkSucceededInt(result);
-      return Uint8List.fromList(
-        extendedBuffer.viewAt(0, unpaddedLength.ptr.value).asListView(),
+      return Uint8List.sublistView(
+        extendedBuffer.asListView<Uint8List>(owned: true),
+        0,
+        unpaddedLength.ptr.value,
       );
-    } finally {
+    } catch (_) {
       extendedBuffer?.dispose();
+      rethrow;
+    } finally {
       unpaddedLength?.dispose();
     }
   }

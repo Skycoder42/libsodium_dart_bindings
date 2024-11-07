@@ -284,7 +284,7 @@ void main() {
         final result = await sut.close();
 
         expect(result, Uint8List.fromList(hash));
-        verify(() => mockSodium.sodium_free(any())).called(2);
+        verify(() => mockSodium.sodium_free(any())).called(1);
       });
 
       test('throws exception if hashing fails', () async {

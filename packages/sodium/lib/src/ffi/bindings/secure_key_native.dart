@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
@@ -64,7 +65,7 @@ extension SecureKeySafeCastX on SecureKey {
           try {
             final result = callback(ptr);
             if (writable) {
-              data.setRange(0, data.length, ptr.asListView());
+              data.setRange(0, data.length, ptr.asListView<Uint8List>());
             }
             return result;
           } finally {

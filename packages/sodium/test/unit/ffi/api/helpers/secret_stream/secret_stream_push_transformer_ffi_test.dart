@@ -94,7 +94,7 @@ void main() {
         expect(res.state.ptr, hasRawData<UnsignedChar>(stateData));
         expect(res.header, headerData);
 
-        verify(() => mockSodium.sodium_free(any())).called(2);
+        verify(() => mockSodium.sodium_free(any())).called(1);
         verifyNever(
           () => mockSodium
               .sodium_free(any(that: hasRawData<UnsignedChar>(stateData))),
@@ -252,7 +252,7 @@ void main() {
         expect(result.additionalData, additionalData);
         verify(
           () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(3);
+        ).called(2);
       });
 
       test('throws SodiumException if push fails', () {

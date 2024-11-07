@@ -88,9 +88,11 @@ class GenericHashFFI
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(outPtr.asListView());
-    } finally {
+      return outPtr.asListView(owned: true);
+    } catch (_) {
       outPtr?.dispose();
+      rethrow;
+    } finally {
       inPtr?.dispose();
     }
   }

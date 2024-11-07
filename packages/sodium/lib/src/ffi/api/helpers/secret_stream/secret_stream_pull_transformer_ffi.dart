@@ -112,14 +112,16 @@ class SecretStreamPullTransformerSinkFFI
       SodiumException.checkSucceededInt(result);
 
       return SecretStreamPlainMessage(
-        Uint8List.fromList(messagePtr.asListView()),
+        messagePtr.asListView(owned: true),
         additionalData: event.additionalData,
         tag: SecretStreamMessageTagFFIX.fromValue(sodium, tagPtr.ptr.value),
       );
+    } catch (_) {
+      messagePtr?.dispose();
+      rethrow;
     } finally {
       cipherPtr?.dispose();
       adPtr?.dispose();
-      messagePtr?.dispose();
       tagPtr?.dispose();
     }
   }

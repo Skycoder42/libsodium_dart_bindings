@@ -125,7 +125,7 @@ void testKeypair({
         expect(res.publicKey, testPublic);
         expect(res.secretKey.extractBytes(), testSecret);
 
-        verify(() => mockSodium.sodium_free(any(that: hasRawData(testPublic))));
+        verifyNever(() => mockSodium.sodium_free(any()));
       });
 
       test('disposes allocated key on error', () {
@@ -224,7 +224,9 @@ void testSeedKeypair({
         expect(res.publicKey, testPublic);
         expect(res.secretKey.extractBytes(), testSecret);
 
-        verify(() => mockSodium.sodium_free(any(that: hasRawData(testPublic))));
+        verifyNever(
+          () => mockSodium.sodium_free(any(that: hasRawData(testPublic))),
+        );
       });
 
       test('disposes allocated key on error', () {

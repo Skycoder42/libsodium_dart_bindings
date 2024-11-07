@@ -62,10 +62,12 @@ class AuthFFI with AuthValidations, KeygenMixin implements Auth {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(tagPtr.asListView());
+      return tagPtr.asListView(owned: true);
+    } catch (_) {
+      tagPtr?.dispose();
+      rethrow;
     } finally {
       messagePtr?.dispose();
-      tagPtr?.dispose();
     }
   }
 

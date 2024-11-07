@@ -143,9 +143,11 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
       adPtr?.dispose();
     }
@@ -192,11 +194,15 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(
-        dataPtr.viewAt(0, dataPtr.count - aBytes).asListView(),
+      return Uint8List.sublistView(
+        dataPtr.asListView<Uint8List>(owned: true),
+        0,
+        dataPtr.count - aBytes,
       );
-    } finally {
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
       adPtr?.dispose();
     }
@@ -246,14 +252,16 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: Uint8List.fromList(dataPtr.asListView()),
-        mac: Uint8List.fromList(macPtr.asListView()),
+        cipherText: dataPtr.asListView(owned: true),
+        mac: macPtr.asListView(owned: true),
       );
-    } finally {
+    } catch (_) {
       dataPtr?.dispose();
+      macPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
       adPtr?.dispose();
-      macPtr?.dispose();
     }
   }
 
@@ -304,9 +312,11 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       macPtr?.dispose();
       noncePtr?.dispose();
       adPtr?.dispose();

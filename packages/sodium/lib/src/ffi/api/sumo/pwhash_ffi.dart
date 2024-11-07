@@ -133,7 +133,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      validatePassword(passwordPtr.asListView() as Int8List);
+      validatePassword(passwordPtr.asListView());
 
       passwordHashPtr = SodiumPointer<Char>.alloc(
         sodium,
@@ -169,14 +169,14 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      validatePassword(passwordPtr.asListView() as Int8List);
+      validatePassword(passwordPtr.asListView());
 
       passwordHashPtr = passwordHash.toSodiumPointer(
         sodium,
         memoryWidth: strBytes,
         memoryProtection: MemoryProtection.readOnly,
       );
-      validatePasswordHash(passwordHashPtr.asListView() as Int8List);
+      validatePasswordHash(passwordHashPtr.asListView());
 
       final result = sodium.crypto_pwhash_str_verify(
         passwordHashPtr.ptr,
@@ -207,7 +207,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         memoryWidth: strBytes,
         memoryProtection: MemoryProtection.readOnly,
       );
-      validatePasswordHash(passwordHashPtr.asListView() as Int8List);
+      validatePasswordHash(passwordHashPtr.asListView());
 
       final result = sodium.crypto_pwhash_str_needs_rehash(
         passwordHashPtr.ptr,

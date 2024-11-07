@@ -164,7 +164,7 @@ void main() {
 
         expect(result, publicKey);
 
-        verify(() => mockSodium.sodium_free(any())).called(2);
+        verify(() => mockSodium.sodium_free(any())).called(1);
       });
 
       test('throws exception on failure', () {
@@ -241,7 +241,7 @@ void main() {
 
         expect(result, publicKey);
 
-        verify(() => mockSodium.sodium_free(any())).called(2);
+        verify(() => mockSodium.sodium_free(any())).called(1);
       });
 
       test('throws exception on failure', () {

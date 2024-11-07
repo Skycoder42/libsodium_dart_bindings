@@ -33,9 +33,10 @@ class RandombytesFFI implements Randombytes {
     final ptr = SodiumPointer<UnsignedChar>.alloc(sodium, count: size);
     try {
       sodium.randombytes_buf(ptr.ptr.cast(), ptr.byteLength);
-      return Uint8List.fromList(ptr.asListView());
-    } finally {
+      return ptr.asListView(owned: true);
+    } catch (_) {
       ptr.dispose();
+      rethrow;
     }
   }
 
@@ -56,9 +57,11 @@ class RandombytesFFI implements Randombytes {
         resultPtr.byteLength,
         seedPtr.ptr,
       );
-      return Uint8List.fromList(resultPtr.asListView());
-    } finally {
+      return resultPtr.asListView(owned: true);
+    } catch (_) {
       resultPtr?.dispose();
+      rethrow;
+    } finally {
       seedPtr?.dispose();
     }
   }

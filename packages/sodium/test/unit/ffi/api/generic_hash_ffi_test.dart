@@ -214,7 +214,7 @@ void main() {
 
         expect(result, hash);
 
-        verify(() => mockSodium.sodium_free(any())).called(2);
+        verify(() => mockSodium.sodium_free(any())).called(1);
       });
 
       test('returns calculated custom hash', () {
@@ -244,7 +244,7 @@ void main() {
 
         expect(result, hash);
 
-        verify(() => mockSodium.sodium_free(any())).called(3);
+        verify(() => mockSodium.sodium_free(any())).called(2);
       });
 
       test('throws exception on failure', () {

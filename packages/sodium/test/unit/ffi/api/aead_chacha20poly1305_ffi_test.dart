@@ -171,7 +171,8 @@ void main() {
         final key = List.generate(5, (index) => index);
         final mac = List.filled(5, 0);
 
-        sut.encrypt(
+        // ignore: unused_local_variable
+        final result = sut.encrypt(
           message: Uint8List.fromList(message),
           additionalData: Uint8List.fromList(additionalData),
           nonce: Uint8List.fromList(nonce),
@@ -227,7 +228,7 @@ void main() {
 
         expect(result, cipher);
 
-        verify(() => mockSodium.sodium_free(any())).called(4);
+        verify(() => mockSodium.sodium_free(any())).called(3);
       });
 
       test('throws exception on failure', () {
@@ -428,7 +429,7 @@ void main() {
 
         expect(result, message);
 
-        verify(() => mockSodium.sodium_free(any())).called(4);
+        verify(() => mockSodium.sodium_free(any())).called(3);
       });
 
       test('throws exception on failure', () {
@@ -560,7 +561,8 @@ void main() {
         final nonce = List.generate(5, (index) => 10 + index);
         final key = List.generate(5, (index) => index);
 
-        sut.encryptDetached(
+        // ignore: unused_local_variable
+        final resut = sut.encryptDetached(
           message: Uint8List.fromList(message),
           additionalData: Uint8List.fromList(additionalData),
           nonce: Uint8List.fromList(nonce),
@@ -632,7 +634,7 @@ void main() {
           ),
         );
 
-        verify(() => mockSodium.sodium_free(any())).called(5);
+        verify(() => mockSodium.sodium_free(any())).called(3);
       });
 
       test('throws exception on failure', () {
@@ -848,7 +850,7 @@ void main() {
 
         expect(result, message);
 
-        verify(() => mockSodium.sodium_free(any())).called(5);
+        verify(() => mockSodium.sodium_free(any())).called(4);
       });
 
       test('throws exception on failure', () {

@@ -59,9 +59,10 @@ class SignSumoFFI extends SignFFI with SignSumoValidations implements SignSumo {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(publicKey.asListView());
-    } finally {
+      return publicKey.asListView(owned: true);
+    } catch (_) {
       publicKey.dispose();
+      rethrow;
     }
   }
 
@@ -86,10 +87,12 @@ class SignSumoFFI extends SignFFI with SignSumoValidations implements SignSumo {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(x25519PublicKeyPtr.asListView());
+      return x25519PublicKeyPtr.asListView(owned: true);
+    } catch (_) {
+      x25519PublicKeyPtr?.dispose();
+      rethrow;
     } finally {
       ed25519PublicKeyPtr?.dispose();
-      x25519PublicKeyPtr?.dispose();
     }
   }
 

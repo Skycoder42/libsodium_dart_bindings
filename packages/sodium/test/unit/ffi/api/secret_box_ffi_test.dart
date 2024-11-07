@@ -161,7 +161,7 @@ void main() {
 
         expect(result, cipher);
 
-        verify(() => mockSodium.sodium_free(any())).called(3);
+        verify(() => mockSodium.sodium_free(any())).called(2);
       });
 
       test('throws exception on failure', () {
@@ -292,7 +292,7 @@ void main() {
 
         expect(result, message);
 
-        verify(() => mockSodium.sodium_free(any())).called(3);
+        verify(() => mockSodium.sodium_free(any())).called(2);
       });
 
       test('throws exception on failure', () {
@@ -421,7 +421,7 @@ void main() {
           ),
         );
 
-        verify(() => mockSodium.sodium_free(any())).called(4);
+        verify(() => mockSodium.sodium_free(any())).called(2);
       });
 
       test('throws exception on failure', () {
@@ -565,7 +565,7 @@ void main() {
 
         expect(result, message);
 
-        verify(() => mockSodium.sodium_free(any())).called(4);
+        verify(() => mockSodium.sodium_free(any())).called(3);
       });
 
       test('throws exception on failure', () {

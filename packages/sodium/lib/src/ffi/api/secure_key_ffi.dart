@@ -90,7 +90,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     bool writable = false,
   }) =>
       runUnlockedNative(
-        (pointer) => callback(pointer.asListView() as Uint8List),
+        (pointer) => callback(pointer.asListView()),
         writable: writable,
       );
 
@@ -102,15 +102,16 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     try {
       _raw.memoryProtection =
           writable ? MemoryProtection.readWrite : MemoryProtection.readOnly;
-      return await callback(_raw.asListView() as Uint8List);
+      return await callback(_raw.asListView());
     } finally {
       _raw.memoryProtection = MemoryProtection.noAccess;
     }
   }
 
   @override
-  Uint8List extractBytes() =>
-      runUnlockedNative((pointer) => Uint8List.fromList(pointer.asListView()));
+  Uint8List extractBytes() => runUnlockedNative(
+        (pointer) => Uint8List.fromList(pointer.asListView()),
+      );
 
   @override
   SecureKeyFFI copy() => runUnlockedNative(

@@ -73,9 +73,11 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
     }
   }
@@ -111,9 +113,14 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.viewAt(macBytes).asListView());
-    } finally {
+      return Uint8List.sublistView(
+        dataPtr.asListView<Uint8List>(owned: true),
+        macBytes,
+      );
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
     }
   }
@@ -152,13 +159,15 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: Uint8List.fromList(dataPtr.asListView()),
-        mac: Uint8List.fromList(macPtr.asListView()),
+        cipherText: dataPtr.asListView(owned: true),
+        mac: macPtr.asListView(owned: true),
       );
-    } finally {
+    } catch (_) {
       dataPtr?.dispose();
-      noncePtr?.dispose();
       macPtr?.dispose();
+      rethrow;
+    } finally {
+      noncePtr?.dispose();
     }
   }
 
@@ -200,9 +209,11 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       macPtr?.dispose();
       noncePtr?.dispose();
     }

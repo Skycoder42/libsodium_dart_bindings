@@ -134,7 +134,7 @@ void main() {
 
         expect(result, tag);
 
-        verify(() => mockSodium.sodium_free(any())).called(3);
+        verify(() => mockSodium.sodium_free(any())).called(2);
       });
 
       test('throws exception on failure', () {

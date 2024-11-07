@@ -162,7 +162,7 @@ void main() {
         final result = await sut.close();
 
         expect(result, Uint8List.fromList(signature));
-        verify(() => mockSodium.sodium_free(any())).called(3);
+        verify(() => mockSodium.sodium_free(any())).called(2);
       });
 
       test('throws exception if signing fails', () async {

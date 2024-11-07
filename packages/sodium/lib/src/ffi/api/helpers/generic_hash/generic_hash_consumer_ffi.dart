@@ -102,11 +102,11 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
       );
       SodiumException.checkSucceededInt(result);
 
-      _hashCompleter.complete(Uint8List.fromList(outPtr.asListView()));
+      _hashCompleter.complete(outPtr.asListView(owned: true));
     } catch (e, s) {
+      outPtr?.dispose();
       _hashCompleter.completeError(e, s);
     } finally {
-      outPtr?.dispose();
       _state.dispose();
     }
 

@@ -44,9 +44,10 @@ class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(qPtr.asListView());
-    } finally {
+      return qPtr.asListView(owned: true);
+    } catch (_) {
       qPtr?.dispose();
+      rethrow;
     }
   }
 

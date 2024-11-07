@@ -15,7 +15,14 @@ extension StringX on String {
   /// the middle of it. If [zeroTerminated] is set to true, this method stops
   /// encoding this string as soon as the first 0 is reached and the rest of the
   /// string gets dropped.
-  Int8List toCharArray({int? memoryWidth, bool zeroTerminated = false}) {
+  ///
+  /// You can optionally pass an [allocator], if you want to construct the
+  /// [Int8List] in a special way (for example, backed by a raw pointer).
+  Int8List toCharArray({
+    int? memoryWidth,
+    bool zeroTerminated = false,
+    Int8List Function(int length)? allocator,
+  }) {
     final List<int> chars;
     if (zeroTerminated) {
       chars = utf8.encode(this).takeWhile((value) => value != 0).toList();
@@ -33,9 +40,11 @@ extension StringX on String {
         );
       }
 
-      return Int8List(memoryWidth)
+      return allocator?.call(memoryWidth) ?? Int8List(memoryWidth)
         ..setRange(0, chars.length, chars)
         ..fillRange(chars.length, memoryWidth, 0);
+    } else if (allocator != null) {
+      return allocator(chars.length)..setRange(0, chars.length, chars);
     } else {
       return Int8List.fromList(chars);
     }

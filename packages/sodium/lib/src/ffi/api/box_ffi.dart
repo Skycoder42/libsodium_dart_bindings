@@ -59,9 +59,11 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
     }
   }
@@ -95,9 +97,14 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.viewAt(box.macBytes).asListView());
-    } finally {
+      return Uint8List.sublistView(
+        dataPtr.asListView<Uint8List>(owned: true),
+        box.macBytes,
+      );
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
     }
   }
@@ -133,13 +140,15 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: Uint8List.fromList(dataPtr.asListView()),
-        mac: Uint8List.fromList(macPtr.asListView()),
+        cipherText: dataPtr.asListView(owned: true),
+        mac: macPtr.asListView(owned: true),
       );
-    } finally {
+    } catch (_) {
       dataPtr?.dispose();
-      noncePtr?.dispose();
       macPtr?.dispose();
+      rethrow;
+    } finally {
+      noncePtr?.dispose();
     }
   }
 
@@ -179,9 +188,11 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       macPtr?.dispose();
       noncePtr?.dispose();
     }
@@ -281,9 +292,11 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
       publicKeyPtr?.dispose();
     }
@@ -328,9 +341,14 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.viewAt(macBytes).asListView());
-    } finally {
+      return Uint8List.sublistView(
+        dataPtr.asListView<Uint8List>(owned: true),
+        macBytes,
+      );
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
       publicKeyPtr?.dispose();
     }
@@ -378,14 +396,16 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: Uint8List.fromList(dataPtr.asListView()),
-        mac: Uint8List.fromList(macPtr.asListView()),
+        cipherText: dataPtr.asListView(owned: true),
+        mac: macPtr.asListView(owned: true),
       );
-    } finally {
+    } catch (_) {
       dataPtr?.dispose();
+      macPtr?.dispose();
+      rethrow;
+    } finally {
       noncePtr?.dispose();
       publicKeyPtr?.dispose();
-      macPtr?.dispose();
     }
   }
 
@@ -435,9 +455,11 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       macPtr?.dispose();
       noncePtr?.dispose();
       publicKeyPtr?.dispose();
@@ -515,9 +537,11 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.asListView());
-    } finally {
+      return dataPtr.asListView(owned: true);
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       publicKeyPtr?.dispose();
     }
   }
@@ -553,9 +577,14 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.fromList(dataPtr.viewAt(sealBytes).asListView());
-    } finally {
+      return Uint8List.sublistView(
+        dataPtr.asListView<Uint8List>(owned: true),
+        sealBytes,
+      );
+    } catch (_) {
       dataPtr?.dispose();
+      rethrow;
+    } finally {
       publicKeyPtr?.dispose();
     }
   }

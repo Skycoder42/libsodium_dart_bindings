@@ -33,7 +33,7 @@ void main() {
       () {
         registerPointers();
         final sodium = MockSodiumFFI();
-        mockAllocArray(sodium);
+        mockAllocArray(sodium, delayedFree: false);
         return sodium;
       },
     );

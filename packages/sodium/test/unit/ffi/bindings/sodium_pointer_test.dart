@@ -632,8 +632,6 @@ void main() {
       );
     });
 
-    // TODO test asListView
-
     test('dispose detaches and frees the pointer', () {
       sut.dispose();
 
@@ -727,6 +725,19 @@ void main() {
         sut.fill([20, 21], offset: 2);
         expect(list[2], 20);
         expect(list[3], 21);
+      });
+
+      test('asListView returns list that owns the pointer if true', () {
+        SodiumPointer.debugOverwriteFinalizer(mockSodium, mockSodiumFinalizer);
+        sut.memoryProtection = MemoryProtection.noAccess;
+        clearInteractions(mockSodium);
+
+        sut.asListView(owned: true);
+        verifyInOrder([
+          () => mockSodium.sodium_mprotect_readwrite(sut.ptr.cast()),
+          () => mockSodiumFinalizer.detach(sut),
+          () => mockSodium.sodium_freePtr,
+        ]);
       });
 
       test('toSodiumPointer copies list to pointer', () {

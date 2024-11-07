@@ -1,5 +1,4 @@
 import 'dart:ffi';
-import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
@@ -50,14 +49,13 @@ class SecretStreamPushTransformerSinkFFI
       SodiumException.checkSucceededInt(result);
 
       return InitPushResult(
-        header: Uint8List.fromList(headerPtr.asListView()),
+        header: headerPtr.asListView(owned: true),
         state: statePtr,
       );
     } catch (e) {
+      headerPtr?.dispose();
       statePtr?.dispose();
       rethrow;
-    } finally {
-      headerPtr?.dispose();
     }
   }
 
@@ -105,13 +103,15 @@ class SecretStreamPushTransformerSinkFFI
       SodiumException.checkSucceededInt(result);
 
       return SecretStreamCipherMessage(
-        Uint8List.fromList(cipherPtr.asListView()),
+        cipherPtr.asListView(owned: true),
         additionalData: event.additionalData,
       );
+    } catch (_) {
+      cipherPtr?.dispose();
+      rethrow;
     } finally {
       messagePtr?.dispose();
       adPtr?.dispose();
-      cipherPtr?.dispose();
     }
   }
 
