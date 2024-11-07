@@ -121,7 +121,8 @@ void main() {
         final key = List.generate(5, (index) => index);
         final mac = List.filled(5, 0);
 
-        sut.encrypt(
+        // ignore: unused_local_variable
+        final result = sut.encrypt(
           message: Uint8List.fromList(message),
           nonce: Uint8List.fromList(nonce),
           key: SecureKeyFake(key),
