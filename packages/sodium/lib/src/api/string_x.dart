@@ -70,7 +70,8 @@ extension Int8ListX on Int8List {
   /// Casts this signed byte array to an unsigned [Uint8List].
   ///
   /// The returned list referres the the same underlying data.
-  Uint8List unsignedView() => Uint8List.view(buffer);
+  // ignore: use_to_and_as_if_applicable
+  Uint8List unsignedView() => Uint8List.sublistView(this);
 }
 
 /// Extensions on [Uint8List]
@@ -78,5 +79,6 @@ extension Uint8ListX on Uint8List {
   /// Casts this unsigned byte array to a signed [Int8List].
   ///
   /// The returned list referres the the same underlying data.
-  Int8List signedView() => Int8List.view(buffer);
+  // ignore: use_to_and_as_if_applicable
+  Int8List signedView() => Int8List.sublistView(this);
 }

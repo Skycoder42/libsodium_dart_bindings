@@ -96,7 +96,7 @@ class PwhashJS with PwHashValidations implements Pwhash {
     final result = jsErrorWrap(
       () => sodium.crypto_pwhash(
         outLen,
-        Uint8List.view(password.buffer).toJS,
+        password.unsignedView().toJS,
         salt.toJS,
         opsLimit,
         memLimit,

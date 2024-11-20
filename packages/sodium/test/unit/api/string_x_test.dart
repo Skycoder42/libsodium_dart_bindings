@@ -67,33 +67,55 @@ void main() {
     });
   });
 
-  test('unsignedView returns a buffer view', () {
-    const testData = [1, 2, 3];
+  group('unsignedView', () {
+    test('returns a buffer view', () {
+      const testData = [-1, 0, 1];
 
-    final sut = Int8List.fromList(testData);
-    final view = sut.unsignedView();
+      final sut = Int8List.fromList(testData);
+      final view = sut.unsignedView();
 
-    expect(view, testData);
+      expect(view, const [255, 0, 1]);
 
-    sut[0] = 10;
-    expect(view[0], 10);
+      sut[0] = 10;
+      expect(view[0], 10);
 
-    view[1] = 20;
-    expect(sut[1], 20);
+      view[1] = 20;
+      expect(sut[1], 20);
+    });
+
+    test('retains subviews on the original data', () {
+      final testData = List.generate(100, (i) => i);
+
+      final sut = Int8List.view(Int8List.fromList(testData).buffer, 25, 20);
+      final view = sut.unsignedView();
+
+      expect(view, testData.sublist(25, 45));
+    });
   });
 
-  test('signedView returns a buffer view', () {
-    const testData = [1, 2, 3];
+  group('signedView', () {
+    test('returns a buffer view', () {
+      const testData = [127, 128, 129];
 
-    final sut = Uint8List.fromList(testData);
-    final view = sut.signedView();
+      final sut = Uint8List.fromList(testData);
+      final view = sut.signedView();
 
-    expect(view, testData);
+      expect(view, const [127, -128, -127]);
 
-    sut[0] = 10;
-    expect(view[0], 10);
+      sut[0] = 10;
+      expect(view[0], 10);
 
-    view[1] = 20;
-    expect(sut[1], 20);
+      view[1] = 20;
+      expect(sut[1], 20);
+    });
+
+    test('retains subviews on the original data', () {
+      final testData = List.generate(100, (i) => i);
+
+      final sut = Uint8List.view(Uint8List.fromList(testData).buffer, 25, 20);
+      final view = sut.signedView();
+
+      expect(view, testData.sublist(25, 45));
+    });
   });
 }

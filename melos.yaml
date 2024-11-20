@@ -29,9 +29,11 @@ scripts:
     packageFilters:
       flutter: false
     exec: >-
+      dart pub remove collection &&
       dart pub add 'dev:flutter:{"sdk":"flutter"}' &&
       dart pub upgrade --major-versions --tighten &&
       dart pub remove flutter &&
+      dart pub add 'dev:collection' &&
       dart pub upgrade
 
   upgrade:flutter:

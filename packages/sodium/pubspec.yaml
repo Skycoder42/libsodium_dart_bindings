@@ -1,6 +1,6 @@
 name: sodium
 description: Dart bindings for libsodium, for the Dart-VM and for the Web
-version: 3.4.1
+version: 3.4.2
 homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
@@ -17,11 +17,11 @@ dev_dependencies:
   cider: ^0.2.8
   code_builder: ^4.10.1
   collection: ^1.19.1
-  coverage: ^1.10.0
+  coverage: ^1.11.0
   custom_lint: ^0.6.8
   dart_pre_commit: ^5.4.0
   dart_test_tools: ^6.0.0
-  ffigen: ^15.0.0
+  ffigen: ^16.0.0
   freezed: ^2.5.7
   mocktail: ^1.0.4
   path: ^1.9.1
@@ -36,7 +36,7 @@ ffigen:
     // ignore_for_file: unused_field
   headers:
     entry-points:
-      - "/workspaces/libsodium_dart_bindings/packages/sodium/test/integration/binaries/linux/include/sodium.h"
+      - "test/integration/binaries/linux/include/sodium.h"
   compiler-opts:
     - "-I/usr/lib/clang/18/include/"
   exclude-all-by-default: true
