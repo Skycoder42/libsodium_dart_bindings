@@ -8,7 +8,7 @@
 PRODUCT_NAME = sodium_libs_example
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = de.skycoder42.sodiumLibsExample
+PRODUCT_BUNDLE_IDENTIFIER = de.skycoder42.sodiumLibs.example
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 de.skycoder42. All rights reserved.
