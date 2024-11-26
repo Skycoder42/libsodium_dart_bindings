@@ -632,13 +632,32 @@ void main() {
       );
     });
 
-    test('dispose detaches and frees the pointer', () {
-      sut.dispose();
+    group('dispose', () {
+      test('detaches and frees the pointer', () {
+        sut.dispose();
 
-      verifyInOrder([
-        () => mockSodiumFinalizer.detach(sut),
-        () => mockSodium.sodium_free(sut.ptr.cast()),
-      ]);
+        verifyInOrder([
+          () => mockSodiumFinalizer.detach(sut),
+          () => mockSodium.sodium_free(sut.ptr.cast()),
+        ]);
+      });
+
+      test('can be invoked multiple times safely', () {
+        sut.dispose();
+
+        verifyInOrder([
+          () => mockSodiumFinalizer.detach(sut),
+          () => mockSodium.sodium_free(sut.ptr.cast()),
+        ]);
+
+        clearInteractions(mockSodiumFinalizer);
+        clearInteractions(mockSodium);
+
+        sut.dispose();
+
+        verifyZeroInteractions(mockSodiumFinalizer);
+        verifyZeroInteractions(mockSodium);
+      });
     });
 
     test('detach returns the detached address without freeing it', () {

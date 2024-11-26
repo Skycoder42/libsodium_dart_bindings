@@ -44,6 +44,8 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
   bool _locked;
   MemoryProtection _memoryProtection;
 
+  var _disposed = false;
+
   /// Constructs the pointer from the lib[sodium] API, the raw [ptr] and the
   /// element [count].
   SodiumPointer.raw(this.sodium, this.ptr, this.count)
@@ -352,9 +354,10 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
   ///
   /// See https://libsodium.gitbook.io/doc/memory_management#guarded-heap-allocations
   void dispose() {
-    if (_isView) {
+    if (_isView || _disposed) {
       return;
     }
+    _disposed = true;
     _getFinalizer(sodium).detach(this);
     sodium.sodium_free(ptr.cast());
   }
@@ -363,12 +366,13 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
   @internal
   @useResult
   Pointer<T> detach() {
-    if (_isView) {
+    if (_isView || _disposed) {
       throw UnsupportedError(
         'Cannot detach a view to another pointer. '
         'Call detach on the original pointer instead.',
       );
     }
+    _disposed = true;
     _getFinalizer(sodium).detach(this);
     return ptr;
   }
