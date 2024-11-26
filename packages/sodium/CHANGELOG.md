@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow SecureKeys and KeyPairs to be disposed more then once
 
 ### Fixed
-- Fixed crash when Uint8Lists are returned as isolate result
+- Fixed crash when Uint8Lists are returned as isolate result (#134)
 - Ensure keys are diposed as early as possible on isolates
 
 ## [3.4.2] - 2024-11-20
