@@ -235,26 +235,40 @@ class SodiumFFI implements Sodium {
                   .map((transferKeyPair) => transferKeyPair.toKeyPair(sodium))
                   .toList();
 
-              final result = await callback(
-                sodium,
-                restoredSecureKeys,
-                restoredKeyPairs,
-              );
+              try {
+                final result = await callback(
+                  sodium,
+                  restoredSecureKeys,
+                  restoredKeyPairs,
+                );
 
-              if (result is SecureKey) {
-                return IsolateResult<TResult>.key(
-                  TransferrableSecureKeyFFI(result),
-                );
-              } else if (result is KeyPair) {
-                return IsolateResult<TResult>.keyPair(
-                  TransferrableKeyPairFFI(result),
-                );
-              } else if (result is Uint8List) {
-                return IsolateResult<TResult>.bytes(
-                  TransferableTypedData.fromList([result]),
-                );
-              } else {
-                return IsolateResult<TResult>(result);
+                IsolateResult<TResult> isolateResult;
+                switch (result) {
+                  case SecureKey():
+                    isolateResult = IsolateResult<TResult>.key(
+                      TransferrableSecureKeyFFI(result),
+                    );
+                    result.dispose();
+                  case KeyPair():
+                    isolateResult = IsolateResult<TResult>.keyPair(
+                      TransferrableKeyPairFFI(result),
+                    );
+                    result.dispose();
+                  case Uint8List():
+                    isolateResult = IsolateResult<TResult>.bytes(
+                      TransferableTypedData.fromList([result]),
+                    );
+                  default:
+                    isolateResult = IsolateResult<TResult>(result);
+                }
+                return isolateResult;
+              } finally {
+                for (final key in restoredSecureKeys) {
+                  key.dispose();
+                }
+                for (final keyPair in restoredKeyPairs) {
+                  keyPair.dispose();
+                }
               }
             },
           );

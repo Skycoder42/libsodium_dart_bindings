@@ -305,6 +305,7 @@ void main() {
       );
 
       expect(result, testSecureKey);
+      expect(testSecureKey.disposed, isFalse);
     });
 
     test('passes over key pairs via the transferable key key', () async {
