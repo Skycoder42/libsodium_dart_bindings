@@ -249,6 +249,10 @@ class SodiumFFI implements Sodium {
                 return IsolateResult<TResult>.keyPair(
                   TransferrableKeyPairFFI(result),
                 );
+              } else if (result is Uint8List) {
+                return IsolateResult<TResult>.bytes(
+                  TransferableTypedData.fromList([result]),
+                );
               } else {
                 return IsolateResult<TResult>(result);
               }

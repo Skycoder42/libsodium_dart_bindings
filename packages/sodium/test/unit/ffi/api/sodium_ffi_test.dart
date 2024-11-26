@@ -339,6 +339,19 @@ void main() {
 
       expect(result, testKeyPair);
     });
+
+    test('passes over byte arrays via the transferable typed data', () async {
+      mockAllocArray(mockSodium);
+
+      final testData = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      final result = await sut.runIsolated(
+        (sodium, _, __) => testData,
+      );
+
+      expect(result, testData);
+      expect(result, isNot(same(testData)));
+    });
   });
 
   test(

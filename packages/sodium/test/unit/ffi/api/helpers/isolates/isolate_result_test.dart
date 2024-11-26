@@ -29,11 +29,30 @@ void main() {
       reset(mockSodiumFFI);
     });
 
-    test('asserts when constructed with a subclass type of SecureKey', () {
+    test('key asserts when constructed with anything by a SecureKey', () {
       expect(
-        () => IsolateResult<FakeSecureKey>.key(
+        () => IsolateResult<int>.key(
           TransferrableSecureKeyFFI.generic(TransferableTypedData.fromList([])),
         ),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
+    test('keyPair asserts when constructed with anything by a SecureKey', () {
+      expect(
+        () => IsolateResult<int>.keyPair(
+          TransferrableKeyPairFFI.generic(
+            publicKeyBytes: TransferableTypedData.fromList([]),
+            secretKeyBytes: TransferableTypedData.fromList([]),
+          ),
+        ),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
+    test('bytes asserts when constructed with anything by a Uint8List', () {
+      expect(
+        () => IsolateResult<int>.bytes(TransferableTypedData.fromList([])),
         throwsA(isA<AssertionError>()),
       );
     });
@@ -79,6 +98,16 @@ void main() {
         expect(result.secretKey, same(testSecureKey));
 
         verify(() => mockSodiumFFI.secureCopy(testSecretData));
+      });
+
+      test('returns transported bytes', () {
+        final testData = Uint8List.fromList(List.filled(10, 10));
+
+        final sut = IsolateResult<Uint8List>.bytes(
+          TransferableTypedData.fromList([testData]),
+        );
+
+        expect(sut.extract(mockSodiumFFI), testData);
       });
     });
   });

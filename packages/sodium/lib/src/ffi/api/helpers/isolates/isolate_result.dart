@@ -1,3 +1,6 @@
+import 'dart:isolate';
+import 'dart:typed_data';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 // ignore: unused_import
@@ -35,6 +38,14 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
   const factory IsolateResult.keyPair(TransferrableKeyPairFFI keyPair) =
       _KeyPairIsolateResult<T>;
 
+  @Assert(
+    'T == Uint8List',
+    'Cannot return subclasses of Uint8List from an isolate. '
+        'Use Uint8List as return type instead.',
+  )
+  const factory IsolateResult.bytes(TransferableTypedData data) =
+      _BytesIsolateResult<T>;
+
   const IsolateResult._();
 
   /// @nodoc
@@ -42,5 +53,6 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
         (result) => result,
         key: (key) => key.toSecureKey(sodium) as T,
         keyPair: (keyPair) => keyPair.toKeyPair(sodium) as T,
+        bytes: (bytes) => bytes.materialize().asUint8List() as T,
       );
 }
