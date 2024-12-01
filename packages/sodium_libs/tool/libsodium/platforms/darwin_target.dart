@@ -286,7 +286,7 @@ class DarwinTarget extends PluginTarget {
       final versions = await framework.subDir('Versions').create();
       final version = await versions.subDir(frameworkVersion).create();
       resourceDir = await version.subDir('Resources').create();
-      await versions.subLink('Current').create(frameworkVersion);
+      await versions.createLink('Current', to: frameworkVersion);
       dataDir = version;
     }
 
@@ -307,9 +307,9 @@ class DarwinTarget extends PluginTarget {
     );
 
     if (addSymlinks) {
-      await framework.subLink(name).create('Versions/Current/$name');
-      await framework.subLink('Headers').create('Versions/Current/Headers');
-      await framework.subLink('Resources').create('Versions/Current/Resources');
+      await framework.createLink(name, to: 'Versions/Current/$name');
+      await framework.createLink('Headers', to: 'Versions/Current/Headers');
+      await framework.createLink('Resources', to: 'Versions/Current/Resources');
     }
 
     return framework;
@@ -332,4 +332,9 @@ class DarwinTarget extends PluginTarget {
     ]);
     return xcFramework;
   }
+}
+
+extension on Directory {
+  Future<Link> createLink(String path, {required String to}) =>
+      Link.fromUri(uri.resolve(path)).create(to);
 }
