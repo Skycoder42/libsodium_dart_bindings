@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0+4] - 2024-12-01
+### Fixed
+- Fixed invalid framework anatomy for macOS framework (#135)
+
 ## [3.3.0+3] - 2024-11-26
 ### Changed
 - Updated dependencies
@@ -327,6 +331,7 @@ the page
 ### Added
 - Initial stable release
 
+[3.3.0+4]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.3.0+3...sodium_libs-v3.3.0+4
 [3.3.0+3]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.3.0+2...sodium_libs-v3.3.0+3
 [3.3.0+2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.3.0+1...sodium_libs-v3.3.0+2
 [3.3.0+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.3.0...sodium_libs-v3.3.0+1

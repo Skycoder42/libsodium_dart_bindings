@@ -13,12 +13,12 @@ scripts:
   get:dart:
     packageFilters:
       flutter: false
-    exec: dart pub get
+    exec: dart pub upgrade
 
   get:flutter:
     packageFilters:
       flutter: true
-    exec: flutter pub get
+    exec: flutter pub upgrade
 
   upgrade:
     steps:
