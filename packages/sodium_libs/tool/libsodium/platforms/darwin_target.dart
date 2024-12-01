@@ -14,18 +14,20 @@ enum DarwinPlatform {
     true,
     '-mios-simulator-version-min=12.0',
   ),
-  macos('MacOSX', false, '-mmacosx-version-min=10.14');
+  macos('MacOSX', false, '-mmacosx-version-min=10.14', 'A');
 
   final String sdk;
   final bool hasSysroot;
   final String versionParameter;
+  final String? frameworkVersion;
 
   const DarwinPlatform(
     this.sdk,
     // ignore: avoid_positional_boolean_parameters
     this.hasSysroot,
-    this.versionParameter,
-  );
+    this.versionParameter, [
+    this.frameworkVersion,
+  ]);
 }
 
 class DarwinTarget extends PluginTarget {
@@ -275,21 +277,40 @@ class DarwinTarget extends PluginTarget {
     final framework =
         await outDir.subDir('$name.framework').create(recursive: true);
 
-    await framework
+    var addSymlinks = false;
+    var dataDir = framework;
+    var resourceDir = framework;
+    if (targets.first.platform.frameworkVersion
+        case final String frameworkVersion) {
+      addSymlinks = true;
+      final versions = await framework.subDir('Versions').create();
+      final version = await versions.subDir(frameworkVersion).create();
+      resourceDir = await version.subDir('Resources').create();
+      await versions.subLink('Current').create(frameworkVersion);
+      dataDir = version;
+    }
+
+    await resourceDir
         .subFile('Info.plist')
         .writeAsString(DarwinTarget._frameworkInfoPlist);
 
     final headersDir =
         _dirForTarget(artifactsDir, targets.first).subDir('include');
-    await headersDir.rename(framework.subDir('Headers').path);
+    await headersDir.rename(dataDir.subDir('Headers').path);
 
     await _createLipoLibrary(
       name: name,
       rpath: '$name.framework/$name',
       artifactsDir: artifactsDir,
       targets: targets,
-      outDir: framework,
+      outDir: dataDir,
     );
+
+    if (addSymlinks) {
+      await framework.subLink(name).create('Versions/Current/$name');
+      await framework.subLink('Headers').create('Versions/Current/Headers');
+      await framework.subLink('Resources').create('Versions/Current/Resources');
+    }
 
     return framework;
   }
