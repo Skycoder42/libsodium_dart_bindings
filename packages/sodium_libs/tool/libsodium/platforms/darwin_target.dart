@@ -203,8 +203,8 @@ class DarwinTarget extends PluginTarget {
     required Directory targetDir,
   }) async {
     final archiveName = verifiedArchive.uri.pathSegments.last;
-    final shaFile =
-        targetDir.subDir('Libraries').subFile('$archiveName.sha512');
+    final librariesDir = await targetDir.subDir('Libraries').create();
+    final shaFile = librariesDir.subFile('$archiveName.sha512');
     await Github.execLines(
       'shasum',
       ['-a512', archiveName],
