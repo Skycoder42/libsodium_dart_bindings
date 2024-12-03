@@ -74,7 +74,7 @@ Future<void> _extract(File archive, Directory outDir) async {
       await _run([
         'powershell',
         '-command',
-        'Expand-Archive "${archive.path}" "${outDir.path}',
+        'Expand-Archive "${archive.path}" "${outDir.path}"',
       ]);
     } else {
       await _run(['unzip', archive.path, '-d', outDir.path]);
