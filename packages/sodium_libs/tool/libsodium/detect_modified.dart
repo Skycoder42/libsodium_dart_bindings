@@ -31,6 +31,12 @@ Future<void> main() => Github.runZoned(() async {
       }
 
       final newLastModified = _buildLastModifiedFile(lastModifiedMap);
+      await Github.env.setOutput(
+        'last-modified-content',
+        newLastModified,
+        multiline: true,
+      );
+
       final lastModifiedFile = _getLastModifiedFile();
       if (lastModifiedFile.existsSync()) {
         final oldLastModified = await _getLastModifiedFile()
@@ -47,11 +53,6 @@ Future<void> main() => Github.runZoned(() async {
         'At least one upstream archive has been modified!',
       );
       await Github.env.setOutput('modified', true);
-      await Github.env.setOutput(
-        'last-modified-content',
-        newLastModified,
-        multiline: true,
-      );
     });
 
 String _buildLastModifiedFile(Map<Uri, String> lastModifiedMap) {
