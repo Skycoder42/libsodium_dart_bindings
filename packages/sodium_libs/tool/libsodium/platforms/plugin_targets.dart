@@ -13,12 +13,18 @@ typedef PublishCallback = Future<void> Function({
   required Directory archiveDir,
 });
 
+typedef ExtractCallback = Future<void> Function({
+  required File verifiedArchive,
+  required Directory targetDir,
+});
+
 class PluginTargetGroup {
   final String name;
   final String suffix;
   final List<PluginTarget> targets;
   final String binaryDir;
   final PublishCallback? publish;
+  final ExtractCallback? extract;
 
   const PluginTargetGroup(
     this.name,
@@ -26,6 +32,7 @@ class PluginTargetGroup {
     this.targets, {
     this.suffix = '.tar.xz',
     this.publish,
+    this.extract,
   });
 
   String get artifactName => 'libsodium-${libsodium_version.ffi}-$name$suffix';
@@ -145,6 +152,7 @@ abstract class PluginTargets {
       'Libraries',
       _darwinTargets,
       publish: DarwinTarget.createXcFramework,
+      extract: DarwinTarget.createChecksum,
     ),
     PluginTargetGroup(
       'linux',

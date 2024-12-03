@@ -36,15 +36,22 @@ Future<void> _downloadTarget(PluginTargetGroup targetGroup) =>
 
           await Minisign.verify(archive, _libsodiumDartBindingsPublicKey);
 
-          final subDir = Directory.current
-              .subDir(targetGroup.name)
-              .subDir(targetGroup.binaryDir);
-          await subDir.create(recursive: true);
+          if (targetGroup.extract case final ExtractCallback extract) {
+            await extract(
+              verifiedArchive: archive,
+              targetDir: Directory.current.subDir(targetGroup.name),
+            );
+          } else {
+            final subDir = Directory.current
+                .subDir(targetGroup.name)
+                .subDir(targetGroup.binaryDir);
+            await subDir.create(recursive: true);
 
-          await Archive.extract(
-            archive: archive,
-            outDir: subDir,
-          );
+            await Archive.extract(
+              archive: archive,
+              outDir: subDir,
+            );
+          }
         } finally {
           client.close(force: true);
           await tmpDir.delete(recursive: true);

@@ -162,8 +162,8 @@ jobs:
     steps:
       - name: Install Dart-SDK (stable)
         uses: dart-lang/setup-dart@v1
-      - name: Install cider
-        run: dart pub global activate cider
+      - name: Install dart_test_tools
+        run: dart pub global activate dart_test_tools
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Update last-modified.txt
@@ -175,9 +175,10 @@ jobs:
       - name: Update changelog and bump build number
         run: |
           set -eo pipefail
-          dart pub global run cider log changed 'Update embedded libsodium binaries'
-          dart pub global run cider bump build
-          dart pub global run cider release
+          dart pub global run dart_test_tools:cider log changed 'Update embedded libsodium binaries'
+          dart pub global run dart_test_tools:cider bump build
+          dart pub global run dart_test_tools:cider release
+          dart pub global run dart_test_tools:cider version-sync
         working-directory: packages/sodium_libs
       - id: create-pull-request
         name: Create Pull Request

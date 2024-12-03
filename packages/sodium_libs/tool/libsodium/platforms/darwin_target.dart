@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
@@ -195,6 +196,20 @@ class DarwinTarget extends PluginTarget {
     await sourceIncludes.rename(targetIncludes.path);
     Github.logInfo('Installing ${targetLib.path}');
     await sourceLib.rename(targetLib.path);
+  }
+
+  static Future<void> createChecksum({
+    required File verifiedArchive,
+    required Directory targetDir,
+  }) async {
+    final archiveName = verifiedArchive.uri.pathSegments.last;
+    final shaFile =
+        targetDir.subDir('Libraries').subFile('$archiveName.sha512');
+    await Github.execLines(
+      'shasum',
+      ['-a512', archiveName],
+      workingDirectory: verifiedArchive.parent,
+    ).transform(utf8.encoder).pipe(shaFile.openWrite());
   }
 
   static Future<void> createXcFramework({
