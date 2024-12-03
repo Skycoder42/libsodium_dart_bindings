@@ -12,8 +12,8 @@ enum ArchiveType {
 enum PluginPlatform {
   android('android', 'src/main/jniLibs'),
   darwin('darwin', 'Libraries'),
-  linux('linux', 'libs'),
-  windows('windows', 'libs', archiveType: ArchiveType.zip);
+  linux('linux', 'lib'),
+  windows('windows', 'lib', archiveType: ArchiveType.zip);
 
   final String name;
   final String binaryDir;
