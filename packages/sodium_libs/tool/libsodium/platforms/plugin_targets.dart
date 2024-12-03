@@ -144,7 +144,7 @@ abstract class PluginTargets {
   static const targetGroups = [
     PluginTargetGroup(
       'android',
-      'src/main/jniLibs',
+      'libsodium',
       _androidTargets,
     ),
     PluginTargetGroup(

@@ -117,6 +117,7 @@ jobs:
       contents: write
     outputs:
       hash-sums: ${{ steps.publish.outputs.hash-sums }}
+      release-assets: ${{ steps.release.outputs.assets }}
     steps:
       - name: Install Flutter-SDK (stable)
         uses: subosito/flutter-action@v2
@@ -142,7 +143,8 @@ jobs:
       - name: Cleanup minisign key
         if: always()
         run: rm -f '${{ runner.temp }}/minisign.key'
-      - name: Create or update release
+      - id: release
+        name: Create or update release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: libsodium-binaries/v${{ needs.detect_modified.outputs.version }}+${{ github.run_id}}
@@ -168,8 +170,10 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Install Dart-SDK (stable)
-        uses: dart-lang/setup-dart@v1
+      - name: Install Flutter-SDK (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
       - name: Install dart_test_tools
         run: dart pub global activate dart_test_tools
       - name: Checkout Repository
@@ -178,8 +182,16 @@ jobs:
         run: dart pub get
         working-directory: packages/sodium_libs
       - name: Update hashsums
-        run: dart run tool/libsodium/update.dart '${{ needs.create_release.outputs.hash-sums }}'
+        run: >-
+          dart run tool/libsodium/update.dart
+          '${{ needs.create_release.outputs.hash-sums }}'
+          '${{ needs.create_release.outputs.release-assets }}'
         working-directory: packages/sodium_libs
+      - name: Update last-modified.txt
+        run: |
+          cat << 'EOF' > tool/libsodium/.last-modified.txt
+          ${{ needs.detect_modified.outputs.last-modified-content }}
+          EOF
       - name: Update changelog and bump build number
         run: |
           set -eo pipefail

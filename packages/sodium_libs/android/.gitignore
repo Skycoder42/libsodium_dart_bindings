@@ -7,3 +7,5 @@
 /build
 /captures
 .cxx
+
+libsodium/libsodium-*-android.tar.xz

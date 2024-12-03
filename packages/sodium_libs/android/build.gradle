@@ -47,4 +47,9 @@ android {
     defaultConfig {
         minSdk = 21
     }
+
+    task downloadLibsodium(type: Exec) {
+        commandLine 'libsodium/setup.sh'
+    }
+    preBuild.dependsOn downloadLibsodium
 }
