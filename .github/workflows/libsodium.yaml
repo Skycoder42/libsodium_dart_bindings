@@ -192,6 +192,7 @@ jobs:
           cat << 'EOF' > tool/libsodium/.last-modified.txt
           ${{ needs.detect_modified.outputs.last-modified-content }}
           EOF
+        working-directory: packages/sodium_libs
       - name: Update changelog and bump build number
         run: |
           set -eo pipefail
