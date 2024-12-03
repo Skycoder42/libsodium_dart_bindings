@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
 
-import 'platforms/plugin_targets.dart';
+import 'platforms/plugin_platform.dart';
 
 Future<void> main(List<String> args) async {
   final targetHashsums = _getHashSums(args[0]);
@@ -15,21 +15,21 @@ Future<void> main(List<String> args) async {
         .subDir('libsodium')
         .create(recursive: true);
     await targetDir
-        .subFile('${target.artifactName}.sha512')
+        .subFile(target.hashFilePath)
         .writeAsString('$digest  ${target.artifactName}');
 
     final url = releaseAssets
         .where((a) => a['name'] == target.artifactName)
         .map((a) => a['browser_download_url'] as String)
         .single;
-    await targetDir.subFile('${target.artifactName}.url').writeAsString(url);
+    await targetDir.subFile(target.urlFilePath).writeAsString(url);
   }
 }
 
-Map<PluginTargetGroup, String> _getHashSums(String arg) =>
+Map<PluginPlatform, String> _getHashSums(String arg) =>
     (json.decode(arg) as Map)
         .cast<String, String>()
-        .map((k, v) => MapEntry(PluginTargets.groupFromName(k), v));
+        .map((k, v) => MapEntry(PluginPlatform.values.byName(k), v));
 
 List<Map<String, dynamic>> _getReleaseAssets(String arg) =>
     (json.decode(arg) as List).cast<Map<String, dynamic>>();

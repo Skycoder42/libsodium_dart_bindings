@@ -49,7 +49,8 @@ android {
     }
 
     task downloadLibsodium(type: Exec) {
-        commandLine 'libsodium/setup.sh'
+        executable "dart"
+        args "run", "../tool/libsodium/download.dart", "android", "src/main/jniLibs"
     }
     preBuild.dependsOn downloadLibsodium
 }

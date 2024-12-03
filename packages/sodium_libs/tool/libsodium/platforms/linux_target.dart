@@ -5,6 +5,11 @@ import 'package:dart_test_tools/tools.dart';
 import 'plugin_target.dart';
 
 class LinuxTarget extends PluginTarget {
+  // ignore: constant_identifier_names
+  static const x86_64 = LinuxTarget(architecture: 'x86_64');
+  static const aarch64 = LinuxTarget(architecture: 'aarch64');
+  static const values = [x86_64, aarch64];
+
   final String _architecture;
 
   const LinuxTarget({

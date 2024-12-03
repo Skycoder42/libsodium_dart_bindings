@@ -17,7 +17,7 @@ if(DEFINED ENV{LIBSODIUM_USE_PKGCONFIG})
   pkg_check_modules(SODIUM REQUIRED IMPORTED_TARGET libsodium)
 else()
   execute_process(
-    COMMAND libsodium/setup.sh
+    COMMAND dart run ../tool/libsodium/download.dart linux lib
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     COMMAND_ERROR_IS_FATAL ANY
   )

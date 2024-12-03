@@ -1,25 +1,24 @@
 import 'dart:io';
 
-import '../../libsodium_version.dart';
+import 'platforms/plugin_platform.dart';
 
 Future<void> main(List<String> args) async {
-  final [platform, outPath] = args;
-  final suffix = platform == 'windows' ? '.zip' : '.tar.xz';
-  final name = 'libsodium-${libsodium_version.ffi}-$platform$suffix';
-  final outDir = Directory(outPath);
+  final platform = PluginPlatform.values.byName(args.single);
+
+  final outDir = Directory(platform.binaryDir).absolute;
 
   Directory.current = 'libsodium';
-  final archiveFile = File(name);
-  final urlFile = File('$name.url');
-  final hashFile = File('$name.sha512');
+  final archiveFile = File(platform.artifactName);
+  final urlFile = File(platform.urlFilePath);
+  final hashFile = File(platform.hashFilePath);
 
   final client = HttpClient();
   try {
-    if (hashFile.existsSync()) {
+    if (archiveFile.existsSync()) {
       if (await _sha512sum(hashFile)) {
         return;
       }
-      await archiveFile.delete();
+      await archiveFile.rimRaf();
     }
 
     final urlLines = await urlFile.readAsLines();
@@ -28,11 +27,11 @@ Future<void> main(List<String> args) async {
       throw Exception('SHA512 validation for ${archiveFile.path} failed!');
     }
 
-    await outDir.delete(recursive: true);
+    await outDir.rimRaf();
     await outDir.create(recursive: true);
     await _extract(archiveFile, outDir);
   } on Exception {
-    await archiveFile.delete();
+    await archiveFile.rimRaf();
     rethrow;
   } finally {
     client.close(force: true);
@@ -81,7 +80,7 @@ Future<void> _extract(File archive, Directory outDir) async {
       await _run(['unzip', archive.path, '-d', outDir.path]);
     }
   } else {
-    await _run(['tar', '-xvf', archive.path, '-C', outDir.path]);
+    await _run(['tar', '-xf', archive.path, '-C', outDir.path]);
   }
 }
 
@@ -100,4 +99,12 @@ Future<int> _exec(List<String> command) async {
   );
 
   return await process.exitCode;
+}
+
+extension on FileSystemEntity {
+  Future<void> rimRaf() async {
+    if (existsSync()) {
+      await delete(recursive: true);
+    }
+  }
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:dart_test_tools/tools.dart';
 
+import 'platforms/plugin_platform.dart';
 import 'platforms/plugin_targets.dart';
 
 Future<void> main(List<String> args) async {
@@ -29,7 +30,7 @@ Future<void> main(List<String> args) async {
   );
 
   await _archiveAndSignArtifacts(
-    targetGroups: targetGroups,
+    targetPlatforms: targetGroups.map((g) => g.platform),
     publishDir: publishDir,
     archivesDir: archivesDir,
     secretKey: secretKey,
@@ -81,7 +82,7 @@ Future<void> _mergeArtifacts({
     );
 
 Future<void> _archiveAndSignArtifacts({
-  required List<PluginTargetGroup> targetGroups,
+  required Iterable<PluginPlatform> targetPlatforms,
   required Directory publishDir,
   required Directory archivesDir,
   required File secretKey,
@@ -92,7 +93,7 @@ Future<void> _archiveAndSignArtifacts({
         await publishDir.create();
 
         final hashSums = <String, String>{};
-        for (final targetGroup in targetGroups) {
+        for (final targetGroup in targetPlatforms) {
           final archiveDir = archivesDir.subDir(targetGroup.name);
           final archive = publishDir.subFile(targetGroup.artifactName);
 

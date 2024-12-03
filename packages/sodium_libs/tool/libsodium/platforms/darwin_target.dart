@@ -32,6 +32,39 @@ enum DarwinPlatform {
 }
 
 class DarwinTarget extends PluginTarget {
+  static const ios = DarwinTarget(
+    platform: DarwinPlatform.ios,
+    architecture: 'arm64',
+    buildTarget: 'aarch64-apple-darwin23',
+  );
+  // ignore: constant_identifier_names
+  static const ios_simulator_arm64 = DarwinTarget(
+    platform: DarwinPlatform.ios_simulator,
+    architecture: 'arm64',
+    buildTarget: 'aarch64-apple-darwin23',
+  );
+  // ignore: constant_identifier_names
+  static const ios_simulator_x86_64 = DarwinTarget(
+    platform: DarwinPlatform.ios_simulator,
+    architecture: 'x86_64',
+    buildTarget: 'x86_64-apple-darwin23',
+  );
+  // ignore: constant_identifier_names
+  static const macos_arm64 = DarwinTarget(
+    platform: DarwinPlatform.macos,
+    architecture: 'arm64',
+    buildTarget: 'aarch64-apple-darwin23',
+  );
+  // ignore: constant_identifier_names
+  static const macos_x86_64 = DarwinTarget(
+    platform: DarwinPlatform.macos,
+    architecture: 'x86_64',
+    buildTarget: 'x86_64-apple-darwin23',
+  );
+  static const iosValues = [ios, ios_simulator_arm64, ios_simulator_x86_64];
+  static const macosValues = [macos_arm64, macos_x86_64];
+  static const values = [...iosValues, ...macosValues];
+
   // last update: 2024-02-29
   static const _appleXcframeworkScriptHash =
       // ignore: lines_longer_than_80_chars

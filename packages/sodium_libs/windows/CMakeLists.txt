@@ -54,13 +54,8 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
 
-find_program(BASH_EXECUTABLE bash
-  NAMES bash
-  HINTS "C:/Program Files/Git/bin"
-  REQUIRED
-)
 execute_process(
-  COMMAND libsodium/setup.sh
+  COMMAND dart run ../tool/libsodium/download.dart windows lib
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
   COMMAND_ERROR_IS_FATAL ANY
 )

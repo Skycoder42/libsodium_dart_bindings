@@ -5,6 +5,9 @@ import 'package:dart_test_tools/tools.dart';
 import 'plugin_target.dart';
 
 class WindowsTarget extends PluginTarget {
+  static const windows = WindowsTarget();
+  static const values = [windows];
+
   const WindowsTarget();
 
   @override

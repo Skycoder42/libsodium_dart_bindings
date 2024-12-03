@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import '../../../libsodium_version.dart';
 import 'android_target.dart';
 import 'darwin_target.dart';
 import 'linux_target.dart';
+import 'plugin_platform.dart';
 import 'plugin_target.dart';
 import 'windows_target.dart';
 
@@ -14,137 +14,46 @@ typedef PublishCallback = Future<void> Function({
 });
 
 class PluginTargetGroup {
-  final String name;
-  final String suffix;
+  final PluginPlatform platform;
   final List<PluginTarget> targets;
   final PublishCallback? publish;
 
   const PluginTargetGroup(
-    this.name,
+    this.platform,
     this.targets, {
-    this.suffix = '.tar.xz',
     this.publish,
   });
 
-  String get artifactName => 'libsodium-${libsodium_version.ffi}-$name$suffix';
+  String get name => platform.name;
 }
 
 abstract class PluginTargets {
   PluginTargets._();
 
-  // ignore: constant_identifier_names
-  static const linux_x86_64 = LinuxTarget(architecture: 'x86_64');
-  // ignore: constant_identifier_names
-  static const linux_aarch64 = LinuxTarget(architecture: 'aarch64');
-  // ignore: constant_identifier_names
-  static const android_arm64_v8a = AndroidTarget(
-    architecture: 'arm64-v8a',
-    buildTarget: 'armv8-a',
-    installTarget: 'armv8-a+crypto',
-  );
-  // ignore: constant_identifier_names
-  static const android_armeabi_v7a = AndroidTarget(
-    architecture: 'armeabi-v7a',
-    buildTarget: 'armv7-a',
-  );
-  // ignore: constant_identifier_names
-  static const android_x86_64 = AndroidTarget(
-    architecture: 'x86_64',
-    installTarget: 'westmere',
-  );
-  // ignore: constant_identifier_names
-  static const android_x86 = AndroidTarget(
-    architecture: 'x86',
-    installTarget: 'i686',
-  );
-  static const ios = DarwinTarget(
-    platform: DarwinPlatform.ios,
-    architecture: 'arm64',
-    buildTarget: 'aarch64-apple-darwin23',
-  );
-  // ignore: constant_identifier_names
-  static const ios_simulator_arm64 = DarwinTarget(
-    platform: DarwinPlatform.ios_simulator,
-    architecture: 'arm64',
-    buildTarget: 'aarch64-apple-darwin23',
-  );
-  // ignore: constant_identifier_names
-  static const ios_simulator_x86_64 = DarwinTarget(
-    platform: DarwinPlatform.ios_simulator,
-    architecture: 'x86_64',
-    buildTarget: 'x86_64-apple-darwin23',
-  );
-  // ignore: constant_identifier_names
-  static const macos_arm64 = DarwinTarget(
-    platform: DarwinPlatform.macos,
-    architecture: 'arm64',
-    buildTarget: 'aarch64-apple-darwin23',
-  );
-  // ignore: constant_identifier_names
-  static const macos_x86_64 = DarwinTarget(
-    platform: DarwinPlatform.macos,
-    architecture: 'x86_64',
-    buildTarget: 'x86_64-apple-darwin23',
-  );
-  static const windows = WindowsTarget();
-
-  static const _androidTargets = [
-    android_arm64_v8a,
-    android_armeabi_v7a,
-    android_x86_64,
-    android_x86,
-  ];
-
-  static const _iosTargets = [
-    ios,
-    ios_simulator_arm64,
-    ios_simulator_x86_64,
-  ];
-
-  static const _macosTargets = [
-    macos_arm64,
-    macos_x86_64,
-  ];
-
-  static const _darwinTargets = [
-    ..._iosTargets,
-    ..._macosTargets,
-  ];
-
-  static const _windowsTargets = [
-    windows,
-  ];
-
-  static const _linuxTargets = [
-    linux_x86_64,
-    linux_aarch64,
-  ];
-
   static const allTargets = [
-    ..._androidTargets,
-    ..._darwinTargets,
-    ..._windowsTargets,
-    ..._linuxTargets,
+    ...AndroidTarget.values,
+    ...DarwinTarget.values,
+    ...LinuxTarget.values,
+    ...WindowsTarget.values,
   ];
 
   static const targetGroups = [
     PluginTargetGroup(
-      'android',
-      _androidTargets,
+      PluginPlatform.android,
+      AndroidTarget.values,
     ),
     PluginTargetGroup(
-      'darwin',
-      _darwinTargets,
+      PluginPlatform.darwin,
+      DarwinTarget.values,
       publish: DarwinTarget.createXcFramework,
     ),
     PluginTargetGroup(
-      'linux',
-      _linuxTargets,
+      PluginPlatform.linux,
+      LinuxTarget.values,
     ),
     PluginTargetGroup(
-      'windows',
-      _windowsTargets,
-      suffix: '.zip',
+      PluginPlatform.windows,
+      WindowsTarget.values,
     ),
   ];
 
@@ -152,5 +61,5 @@ abstract class PluginTargets {
       allTargets.singleWhere((e) => e.name == name);
 
   static PluginTargetGroup groupFromName(String name) =>
-      targetGroups.singleWhere((e) => e.name == name);
+      targetGroups.singleWhere((e) => e.platform.name == name);
 }
