@@ -115,6 +115,8 @@ jobs:
     runs-on: macos-latest # needed for lipo
     permissions:
       contents: write
+    outputs:
+      hash-sums: ${{ steps.publish.outputs.hash-sums }}
     steps:
       - name: Install Flutter-SDK (stable)
         uses: subosito/flutter-action@v2
@@ -133,7 +135,8 @@ jobs:
           path: artifacts
       - name: Create secret key for minisign
         run: echo '${{ secrets.MINISIGN_SECRET_KEY }}' > '${{ runner.temp }}/minisign.key'
-      - name: Build release archives
+      - id: publish
+        name: Build release archives
         run: dart run tool/libsodium/publish.dart
         working-directory: packages/sodium_libs
       - name: Cleanup minisign key
@@ -142,9 +145,18 @@ jobs:
       - name: Create or update release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: libsodium-binaries/v${{ needs.detect_modified.outputs.version }}
+          tag_name: libsodium-binaries/v${{ needs.detect_modified.outputs.version }}+${{ github.run_id}}
           name: "[INTERNAL] Precompiled libsodium binaries v${{ needs.detect_modified.outputs.version }}"
-          body: Internal release of precompiled libsodium binaries, required for the sodium_libs package.
+          body: |
+            Internal release of precompiled libsodium binaries, required for the sodium_libs package.
+
+            ```
+            ${{ needs.detect_modified.outputs.last-modified-content }}
+            ```
+
+            ```
+            ${{ steps.publish.outputs.hash-sums }}
+            ```
           prerelease: true
           files: publish/*
           fail_on_unmatched_files: true

@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:dart_test_tools/tools.dart';
 
 import 'platforms/plugin_targets.dart';
@@ -89,12 +91,22 @@ Future<void> _archiveAndSignArtifacts({
       () async {
         await publishDir.create();
 
+        final hashSums = <String, String>{};
         for (final targetGroup in targetGroups) {
           final archiveDir = archivesDir.subDir(targetGroup.name);
           final archive = publishDir.subFile(targetGroup.artifactName);
 
           await Archive.compress(inDir: archiveDir, archive: archive);
           await Minisign.sign(archive, secretKey);
+          hashSums[targetGroup.name] = await _sha512sum(archive);
         }
+
+        await Github.env.setOutput('hash-sums', json.encode(hashSums));
       },
     );
+
+Future<String> _sha512sum(File target) => target
+    .openRead()
+    .transform(sha512)
+    .map((digest) => digest.toString())
+    .single;
