@@ -164,7 +164,7 @@ jobs:
     needs:
       - detect_modified
       - create_release
-    if: needs.detect_modified.outputs.modified == 'true'
+    if: needs.detect_modified.outputs.modified == 'true' || inputs.force-rebuild
     runs-on: ubuntu-latest
     permissions:
       contents: write
