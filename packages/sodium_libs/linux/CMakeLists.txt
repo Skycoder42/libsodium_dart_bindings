@@ -16,6 +16,12 @@ if(DEFINED ENV{LIBSODIUM_USE_PKGCONFIG})
   find_package(PkgConfig)
   pkg_check_modules(SODIUM REQUIRED IMPORTED_TARGET libsodium)
 else()
+  execute_process(
+    COMMAND libsodium/setup.sh
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    COMMAND_ERROR_IS_FATAL ANY
+  )
+
   add_library(sodium SHARED IMPORTED)
   set_target_properties(sodium PROPERTIES
     IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/${CMAKE_SYSTEM_PROCESSOR}/libsodium.so")

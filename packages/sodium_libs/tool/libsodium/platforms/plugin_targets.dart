@@ -156,7 +156,7 @@ abstract class PluginTargets {
     ),
     PluginTargetGroup(
       'linux',
-      'lib',
+      'libsodium',
       _linuxTargets,
     ),
     PluginTargetGroup(
