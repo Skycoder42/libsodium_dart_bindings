@@ -55,7 +55,7 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
 
 execute_process(
-  COMMAND dart run ../tool/libsodium/download.dart windows lib
+  COMMAND dart run ../tool/libsodium/download.dart windows
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
   COMMAND_ERROR_IS_FATAL ANY
 )
