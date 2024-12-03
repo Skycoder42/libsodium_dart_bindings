@@ -12,7 +12,7 @@ Future<void> main(List<String> args) async {
   for (final MapEntry(key: target, value: digest) in targetHashsums.entries) {
     final targetDir = await Directory.current
         .subDir(target.name)
-        .subDir(target.binaryDir)
+        .subDir('libsodium')
         .create(recursive: true);
     await targetDir
         .subFile('${target.artifactName}.sha512')

@@ -13,34 +13,20 @@ typedef PublishCallback = Future<void> Function({
   required Directory archiveDir,
 });
 
-typedef ExtractCallback = Future<void> Function({
-  required File verifiedArchive,
-  required Directory targetDir,
-});
-
 class PluginTargetGroup {
   final String name;
   final String suffix;
   final List<PluginTarget> targets;
-  final String binaryDir;
   final PublishCallback? publish;
-  final ExtractCallback? extract;
 
   const PluginTargetGroup(
     this.name,
-    this.binaryDir,
     this.targets, {
     this.suffix = '.tar.xz',
     this.publish,
-    this.extract,
   });
 
   String get artifactName => 'libsodium-${libsodium_version.ffi}-$name$suffix';
-
-  Uri get downloadUrl => Uri.https(
-        'github.com',
-        '/Skycoder42/libsodium_dart_bindings/releases/download/libsodium-binaries/v${libsodium_version.ffi}/$artifactName',
-      );
 }
 
 abstract class PluginTargets {
@@ -144,24 +130,19 @@ abstract class PluginTargets {
   static const targetGroups = [
     PluginTargetGroup(
       'android',
-      'libsodium',
       _androidTargets,
     ),
     PluginTargetGroup(
       'darwin',
-      'libsodium',
       _darwinTargets,
       publish: DarwinTarget.createXcFramework,
-      extract: DarwinTarget.createChecksum,
     ),
     PluginTargetGroup(
       'linux',
-      'libsodium',
       _linuxTargets,
     ),
     PluginTargetGroup(
       'windows',
-      'lib',
       _windowsTargets,
       suffix: '.zip',
     ),
