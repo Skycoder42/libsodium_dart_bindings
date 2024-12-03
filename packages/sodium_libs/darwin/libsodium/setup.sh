@@ -3,8 +3,8 @@ set -e
 
 cd libsodium
 
-jni_libs_dir=../src/main/jniLibs
-archive_file=libsodium-1.0.20-android.tar.xz
+output_dir=../Libraries
+archive_file=libsodium-1.0.20-darwin.tar.xz
 archive_hash_file=$archive_file.sha512
 archive_url_file=$archive_file.url
 archive_url=$(cat "$archive_url_file")
@@ -14,13 +14,8 @@ cleanup() {
 }
 
 validate_checksum() {
-  if [ "$(uname)" = "Darwin" ]; then
-    shasum -a512 -c "$archive_hash_file"
-    return $?
-  else
-    sha512sum -c "$archive_hash_file"
-    return $?
-  fi
+  shasum -a512 -c "$archive_hash_file"
+  return $?
 }
 
 if [ -f "$archive_file" ]; then
@@ -36,8 +31,8 @@ trap cleanup EXIT
 curl -sSLfo "$archive_file" "$archive_url"
 validate_checksum
 
-rm -rf "$jni_libs_dir"
-mkdir -p "$jni_libs_dir"
-tar -xf "$archive_file" -C "$jni_libs_dir"
+rm -rf "$output_dir"
+mkdir -p "$output_dir"
+tar -xf "$archive_file" -C "$output_dir"
 
 trap '' EXIT

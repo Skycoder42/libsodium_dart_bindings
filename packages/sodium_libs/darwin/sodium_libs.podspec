@@ -26,6 +26,6 @@ Flutter companion package to sodium that provides the low-level libsodium binari
   s.swift_version = '5.0'
 
   # libsodium
-  s.prepare_command = './download_libsodium.sh'
+  s.prepare_command = 'libsodium/setup.sh'
   s.vendored_frameworks = "Libraries/libsodium.xcframework"
 end

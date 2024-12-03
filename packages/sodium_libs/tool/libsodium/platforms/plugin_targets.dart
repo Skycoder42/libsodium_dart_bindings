@@ -149,7 +149,7 @@ abstract class PluginTargets {
     ),
     PluginTargetGroup(
       'darwin',
-      'Libraries',
+      'libsodium',
       _darwinTargets,
       publish: DarwinTarget.createXcFramework,
       extract: DarwinTarget.createChecksum,
