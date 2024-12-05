@@ -1,14 +1,3 @@
 # Ignore
 ## Recursive Windows symlink
 example/windows/flutter/ephemeral/.plugin_symlinks
-
-# Unignore
-## Generated build files
-!*.freezed.dart
-!*.g.dart
-
-## libsodium binaries
-!android/src/main/jniLibs
-!darwin/Libraries
-!linux/lib
-!windows/lib

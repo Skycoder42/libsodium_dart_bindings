@@ -9,3 +9,4 @@
 .cxx
 
 libsodium/libsodium-*-android.tar.xz
+src/main/jniLibs/

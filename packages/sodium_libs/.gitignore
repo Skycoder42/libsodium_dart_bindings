@@ -1,5 +1,1 @@
 # libsodium binaries
-android/src/main/jniLibs
-darwin/Libraries
-linux/lib
-windows/lib
