@@ -15,4 +15,3 @@ jobs:
       tagPrefix: sodium_libs-v
       flutter: true
       workingDirectory: packages/sodium_libs
-      prePublish: dart run tool/libsodium/download.dart
