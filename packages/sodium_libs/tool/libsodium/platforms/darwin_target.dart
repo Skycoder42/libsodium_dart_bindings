@@ -65,11 +65,11 @@ class DarwinTarget extends PluginTarget {
   static const macosValues = [macos_arm64, macos_x86_64];
   static const values = [...iosValues, ...macosValues];
 
-  // get hash: curl -sSL https://github.com/jedisct1/libsodium/blob/master/dist-build/apple-xcframework.sh | b2sum
+  // get hash: curl -sSL https://raw.githubusercontent.com/jedisct1/libsodium/refs/heads/master/dist-build/apple-xcframework.sh | b2sum
   // last update: 2024-12-21
   static const _appleXcframeworkScriptHash =
       // ignore: lines_longer_than_80_chars
-      '1117f1b0b1ff35dc5e74d7595b916a474d653534bb025178ab9a18236427646b31c7a0ceb9990be5d52f7224f13cfa3d53e9a051b5e49be4f365d5dd67415666';
+      'd972951f1c00eb4c6a2ec8bb37c0b09860b0a136dd034e084889b0f89fac520ef51808d05d098d8b9bc63d168bd145555ceda61ffda803aabe4035348ff9337d';
 
   static final _frameworkInfoPlist = '''
 <?xml version="1.0" encoding="UTF-8"?>
