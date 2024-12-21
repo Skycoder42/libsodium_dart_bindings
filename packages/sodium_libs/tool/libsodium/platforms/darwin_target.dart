@@ -65,10 +65,11 @@ class DarwinTarget extends PluginTarget {
   static const macosValues = [macos_arm64, macos_x86_64];
   static const values = [...iosValues, ...macosValues];
 
-  // last update: 2024-02-29
+  // get hash: curl -sSL https://github.com/jedisct1/libsodium/blob/master/dist-build/apple-xcframework.sh | b2sum
+  // last update: 2024-12-21
   static const _appleXcframeworkScriptHash =
       // ignore: lines_longer_than_80_chars
-      'daf0879d2e15453aed06ff542b09026ab992d8674141e58b6987c41a36118bb8ebf5d4808ed6a414d68b15bf74305f2cfbdcfc1d4a138dfe961c0dfbeb24e4ff';
+      '1117f1b0b1ff35dc5e74d7595b916a474d653534bb025178ab9a18236427646b31c7a0ceb9990be5d52f7224f13cfa3d53e9a051b5e49be4f365d5dd67415666';
 
   static final _frameworkInfoPlist = '''
 <?xml version="1.0" encoding="UTF-8"?>
@@ -202,7 +203,6 @@ class DarwinTarget extends PluginTarget {
 
     // environment
     return {
-      'LIBSODIUM_FULL_BUILD': '1',
       'PATH': path.join(':'),
       'CFLAGS': cFlags.join(' '),
       'LDFLAGS': ldFlags.join(' '),
