@@ -1,0 +1,22 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dart",
+			"command": "dart",
+			"cwd": "packages/sodium",
+			"args": [
+				"run",
+				"build_runner",
+				"watch"
+			],
+			"problemMatcher": [],
+			"label": "dart: dart run build_runner watch",
+			"detail": "packages/sodium",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}

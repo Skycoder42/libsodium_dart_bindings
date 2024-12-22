@@ -1,7 +1,9 @@
-name: libsodium_dart_bindings_melos
+name: _
+publish_to: none
 
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.6.0
 
-dependencies:
-  melos:
+workspace:
+  - packages/sodium
+  - packages/sodium_libs
