@@ -13,7 +13,8 @@ Flutter companion package to sodium that provides the low-level libsodium binari
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Skycoder42' => 'skycoder42@users.noreply.github.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files     = 'sodium_libs/Sources/sodium_libs/**/*.swift'
+  s.resource_bundles = {'plugin_name_privacy' => ['sodium_libs/Sources/sodium_libs/PrivacyInfo.xcprivacy']}
 
   s.ios.dependency 'Flutter'
   s.ios.deployment_target = '12.0'
