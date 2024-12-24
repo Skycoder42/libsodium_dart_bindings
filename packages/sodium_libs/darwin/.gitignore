@@ -40,4 +40,5 @@ Icon?
 /Flutter/flutter_export_environment.sh
 
 libsodium/libsodium-*-darwin.tar.xz
+libsodium/libsodium-*-darwin.zip
 Libraries/
