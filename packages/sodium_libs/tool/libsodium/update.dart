@@ -58,8 +58,10 @@ List<Map<String, dynamic>> _getReleaseAssets(String arg) =>
 
 Future<void> _updateSwiftPackage(String url, String digest) async {
   final pluginName = Directory.current.uri.pathSegments.last;
-  final packageFile =
-      Directory.current.subDir(pluginName).subFile('Package.swift');
+  final packageFile = Directory.current
+      .subDir(PluginPlatform.darwin.name)
+      .subDir(pluginName)
+      .subFile('Package.swift');
 
   var packageContents = await packageFile.readAsString();
   packageContents = packageContents

@@ -7,12 +7,12 @@ cat << EOF > .git/hooks/pre-commit
 #!/bin/bash
 set -eo pipefail
 
-pushd packages/sodium
+pushd packages/sodium > /dev/null
 dart run dart_pre_commit
-popd
+popd > /dev/null
 
-pushd packages/sodium_libs
-flutter pub run dart_pre_commit
-popd
+pushd packages/sodium_libs > /dev/null
+dart run dart_pre_commit
+popd > /dev/null
 EOF
 chmod a+x .git/hooks/pre-commit
