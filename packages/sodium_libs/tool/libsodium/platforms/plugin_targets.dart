@@ -13,15 +13,22 @@ typedef PublishCallback = Future<void> Function({
   required Directory archiveDir,
 });
 
+typedef ComputeHashCallback = Future<Object> Function(
+  File archive,
+  String originalHash,
+);
+
 class PluginTargetGroup {
   final PluginPlatform platform;
   final List<PluginTarget> targets;
   final PublishCallback? publish;
+  final ComputeHashCallback? hash;
 
   const PluginTargetGroup(
     this.platform,
     this.targets, {
     this.publish,
+    this.hash,
   });
 
   String get name => platform.name;
@@ -46,6 +53,7 @@ abstract class PluginTargets {
       PluginPlatform.darwin,
       DarwinTarget.values,
       publish: DarwinTarget.createXcFramework,
+      hash: DarwinTarget.computeHash,
     ),
     PluginTargetGroup(
       PluginPlatform.linux,

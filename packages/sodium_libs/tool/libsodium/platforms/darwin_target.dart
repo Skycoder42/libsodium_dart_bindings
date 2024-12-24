@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
@@ -231,20 +230,6 @@ class DarwinTarget extends PluginTarget {
     await sourceLib.rename(targetLib.path);
   }
 
-  static Future<void> createChecksum({
-    required File verifiedArchive,
-    required Directory targetDir,
-  }) async {
-    final archiveName = verifiedArchive.uri.pathSegments.last;
-    final librariesDir = await targetDir.subDir('Libraries').create();
-    final shaFile = librariesDir.subFile('$archiveName.sha512');
-    await Github.execLines(
-      'shasum',
-      ['-a512', archiveName],
-      workingDirectory: verifiedArchive.parent,
-    ).transform(utf8.encoder).pipe(shaFile.openWrite());
-  }
-
   static Future<void> createXcFramework({
     required PluginTargetGroup group,
     required Directory artifactsDir,
@@ -379,6 +364,21 @@ class DarwinTarget extends PluginTarget {
       xcFramework.path,
     ]);
     return xcFramework;
+  }
+
+  static Future<List<String>> computeHash(
+    File archive,
+    String originalHash,
+  ) async {
+    final archiveDir = archive.parent;
+    final package = await archiveDir.subFile('Package.swift').create();
+    final checksum = await Github.execLines(
+      'swift',
+      ['package', 'compute-checksum', archive.path],
+      workingDirectory: archiveDir,
+    ).single;
+    await package.delete();
+    return [originalHash, checksum];
   }
 }
 

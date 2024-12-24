@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:dart_test_tools/tools.dart';
 
-import 'platforms/plugin_platform.dart';
 import 'platforms/plugin_targets.dart';
 
 Future<void> main(List<String> args) async {
@@ -30,7 +29,7 @@ Future<void> main(List<String> args) async {
   );
 
   await _archiveAndSignArtifacts(
-    targetPlatforms: targetGroups.map((g) => g.platform),
+    targetGroups: targetGroups,
     publishDir: publishDir,
     archivesDir: archivesDir,
     secretKey: secretKey,
@@ -82,7 +81,7 @@ Future<void> _mergeArtifacts({
     );
 
 Future<void> _archiveAndSignArtifacts({
-  required Iterable<PluginPlatform> targetPlatforms,
+  required Iterable<PluginTargetGroup> targetGroups,
   required Directory publishDir,
   required Directory archivesDir,
   required File secretKey,
@@ -92,14 +91,18 @@ Future<void> _archiveAndSignArtifacts({
       () async {
         await publishDir.create();
 
-        final hashSums = <String, String>{};
-        for (final targetGroup in targetPlatforms) {
+        final hashSums = <String, Object>{};
+        for (final targetGroup in targetGroups) {
           final archiveDir = archivesDir.subDir(targetGroup.name);
-          final archive = publishDir.subFile(targetGroup.artifactName);
+          final archive = publishDir.subFile(targetGroup.platform.artifactName);
 
           await Archive.compress(inDir: archiveDir, archive: archive);
           await Minisign.sign(archive, secretKey);
-          hashSums[targetGroup.name] = await _sha512sum(archive);
+          final hashSum = await _sha512sum(archive);
+          hashSums[targetGroup.name] = switch (targetGroup.hash) {
+            final ComputeHashCallback hash => await hash(archive, hashSum),
+            _ => hashSum,
+          };
         }
 
         await Github.env.setOutput('hash-sums', json.encode(hashSums));
