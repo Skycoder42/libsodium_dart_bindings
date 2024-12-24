@@ -57,7 +57,9 @@ List<Map<String, dynamic>> _getReleaseAssets(String arg) =>
     (json.decode(arg) as List).cast<Map<String, dynamic>>();
 
 Future<void> _updateSwiftPackage(String url, String digest) async {
-  final pluginName = Directory.current.uri.pathSegments.last;
+  final pluginName = Directory.current.uri.pathSegments.reversed
+      .skipWhile((s) => s.isEmpty)
+      .first;
   final packageFile = Directory.current
       .subDir(PluginPlatform.darwin.name)
       .subDir(pluginName)
