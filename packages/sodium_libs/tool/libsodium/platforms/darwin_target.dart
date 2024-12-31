@@ -31,15 +31,28 @@ enum DarwinPlatform {
 }
 
 class DarwinTarget extends PluginTarget {
-  static const ios = DarwinTarget(
+  // ignore: constant_identifier_names
+  static const ios_arm64 = DarwinTarget(
     platform: DarwinPlatform.ios,
     architecture: 'arm64',
+    buildTarget: 'aarch64-apple-darwin23',
+  );
+  // ignore: constant_identifier_names
+  static const ios_arm64e = DarwinTarget(
+    platform: DarwinPlatform.ios,
+    architecture: 'arm64e',
     buildTarget: 'aarch64-apple-darwin23',
   );
   // ignore: constant_identifier_names
   static const ios_simulator_arm64 = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
     architecture: 'arm64',
+    buildTarget: 'aarch64-apple-darwin23',
+  );
+  // ignore: constant_identifier_names
+  static const ios_simulator_arm64e = DarwinTarget(
+    platform: DarwinPlatform.ios_simulator,
+    architecture: 'arm64e',
     buildTarget: 'aarch64-apple-darwin23',
   );
   // ignore: constant_identifier_names
@@ -55,20 +68,32 @@ class DarwinTarget extends PluginTarget {
     buildTarget: 'aarch64-apple-darwin23',
   );
   // ignore: constant_identifier_names
+  static const macos_arm64e = DarwinTarget(
+    platform: DarwinPlatform.macos,
+    architecture: 'arm64e',
+    buildTarget: 'aarch64-apple-darwin23',
+  );
+  // ignore: constant_identifier_names
   static const macos_x86_64 = DarwinTarget(
     platform: DarwinPlatform.macos,
     architecture: 'x86_64',
     buildTarget: 'x86_64-apple-darwin23',
   );
-  static const iosValues = [ios, ios_simulator_arm64, ios_simulator_x86_64];
-  static const macosValues = [macos_arm64, macos_x86_64];
+  static const iosValues = [
+    ios_arm64,
+    ios_arm64e,
+    ios_simulator_arm64,
+    ios_simulator_arm64e,
+    ios_simulator_x86_64,
+  ];
+  static const macosValues = [macos_arm64, macos_arm64e, macos_x86_64];
   static const values = [...iosValues, ...macosValues];
 
   // get hash: curl -sSL https://raw.githubusercontent.com/jedisct1/libsodium/refs/heads/master/dist-build/apple-xcframework.sh | b2sum
-  // last update: 2024-12-21
+  // last update: 2024-12-31
   static const _appleXcframeworkScriptHash =
       // ignore: lines_longer_than_80_chars
-      'd972951f1c00eb4c6a2ec8bb37c0b09860b0a136dd034e084889b0f89fac520ef51808d05d098d8b9bc63d168bd145555ceda61ffda803aabe4035348ff9337d';
+      '5aa4efd30f914f85da881e4cb4eeeeb8cc65864c0ecfaba854e96326e790e6151ee53f962c25532548c1f2ecbc2d9c514a4238750e74ee57c5eaee0e603bbe38';
 
   static final _frameworkInfoPlist = '''
 <?xml version="1.0" encoding="UTF-8"?>
