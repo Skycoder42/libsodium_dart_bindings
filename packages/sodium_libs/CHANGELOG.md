@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.4.1+2] - 2025-01-02
 ### Changed
-- Updated embedded libsodium binaries
+- Switched to zip archives for embedded libsodium binaries to ensure windows compatibility (#142)
 
 ## [3.4.1+1] - 2024-12-31
 ### Changed
