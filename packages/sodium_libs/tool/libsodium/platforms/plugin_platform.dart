@@ -10,10 +10,10 @@ enum ArchiveType {
 }
 
 enum PluginPlatform {
-  android('android', 'src/main/jniLibs'),
-  darwin('darwin', 'Libraries', archiveType: ArchiveType.zip),
-  linux('linux', 'lib'),
-  windows('windows', 'lib', archiveType: ArchiveType.zip);
+  android('android', 'src/main/jniLibs', ArchiveType.zip),
+  darwin('darwin', 'Libraries', ArchiveType.zip),
+  linux('linux', 'lib', ArchiveType.tarXz),
+  windows('windows', 'lib', ArchiveType.zip);
 
   final String name;
   final String binaryDir;
@@ -21,9 +21,9 @@ enum PluginPlatform {
 
   const PluginPlatform(
     this.name,
-    this.binaryDir, {
-    this.archiveType = ArchiveType.tarXz,
-  });
+    this.binaryDir,
+    this.archiveType,
+  );
 
   String get artifactName =>
       'libsodium-${libsodium_version.ffi}-$name${archiveType.suffix}';
