@@ -58,7 +58,7 @@ include("${FLUTTER_MANAGED_DIR}/ephemeral/generated_config.cmake")
 find_program(DART dart PATHS "${FLUTTER_ROOT}/bin" REQUIRED)
 
 execute_process(
-  COMMAND dart run ../tool/libsodium/download.dart windows
+  COMMAND ${DART} run ../tool/libsodium/download.dart windows
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
   COMMAND_ERROR_IS_FATAL ANY
 )
