@@ -55,7 +55,7 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
 
 include("${FLUTTER_MANAGED_DIR}/ephemeral/generated_config.cmake")
-find_program(DART dart PATHS "${FLUTTER_ROOT}/bin" REQUIRED)
+find_program(DART dart.bat PATHS "${FLUTTER_ROOT}/bin" REQUIRED)
 
 execute_process(
   COMMAND ${DART} run ../tool/libsodium/download.dart windows

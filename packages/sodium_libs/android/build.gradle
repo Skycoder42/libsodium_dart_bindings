@@ -24,6 +24,11 @@ allprojects {
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def sdkDir = properties.getProperty('flutter.sdk')
+OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem;
+
 android {
     namespace = "de.skycoder42.sodium_libs"
 
@@ -47,7 +52,11 @@ android {
     }
 
     task downloadLibsodium(type: Exec) {
-        executable "dart"
+        if (os.isWindows()) {
+            executable sdkDir + "\\bin\\dart.bat"
+        } else {
+            executable sdkDir + "/bin/dart"
+        }
         args "run", "../tool/libsodium/download.dart", "android"
     }
     preBuild.dependsOn downloadLibsodium
