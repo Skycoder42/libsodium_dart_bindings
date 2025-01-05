@@ -8,5 +8,5 @@
 /captures
 .cxx
 
-libsodium/libsodium-*-android.tar.xz
+libsodium/libsodium-*-android.zip
 src/main/jniLibs/
