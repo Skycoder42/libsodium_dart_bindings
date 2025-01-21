@@ -23,8 +23,8 @@ let package = Package(
         ),
         .binaryTarget(
             name: "libsodium",
-            url: "https://github.com/Skycoder42/libsodium_dart_bindings/releases/download/libsodium-binaries/v1.0.20%2B12580569327/libsodium-1.0.20-darwin.zip",
-            checksum: "d9ca0fdd0a15b2425f951b220b6c88a13bf48865bd7f4fa995a8b83955be043d"
+            url: "https://github.com/Skycoder42/libsodium_dart_bindings/releases/download/libsodium-binaries/v1.0.20%2B12879260574/libsodium-1.0.20-darwin.zip",
+            checksum: "930bd879c116eabf9be27a86940b210312d0dd7c4d6c12517ce8bd56ea1a4004"
         ),
     ]
 )
