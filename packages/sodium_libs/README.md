@@ -5,6 +5,11 @@
 Flutter companion package to [sodium](https://pub.dev/packages/sodium) that provides the low-level libsodium binaries
 for easy use.
 
+> **⚠️ &nbsp;iOS Build cache issues**<br>
+> Due to the recent changes in how the libsodium binaries are deployed, it is possible that the iOS build cache gets
+> confused and produces broken builds (See #146). This can be solved by simply clearing the build folders and XCode
+> caches (via `flutter clean`). I recommend doing that if you update to `3.4.0` or above versions for the first time.
+
 ## Table of contents
 - [Features](#features)
 - [Installation](#installation)
