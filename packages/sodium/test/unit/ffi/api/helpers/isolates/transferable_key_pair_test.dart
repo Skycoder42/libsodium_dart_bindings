@@ -48,8 +48,9 @@ void main() {
     const testNativeHandle = (1234, 56);
     final testFfiKeyMock1 = MockSecureKeyFFI();
     final testFfiKeyMock2 = MockSecureKeyFFI();
-    final testGenericSecretKey =
-        FakeSecureKey(Uint8List.fromList(List.generate(32, (index) => index)));
+    final testGenericSecretKey = FakeSecureKey(
+      Uint8List.fromList(List.generate(32, (index) => index)),
+    );
     final testFfiKeyPair = KeyPair(
       publicKey: testPublicKey,
       secretKey: testFfiKeyMock1,
@@ -82,13 +83,15 @@ void main() {
 
     test('can wrap ffi secure key for transfer', () {
       final sut = TransferrableKeyPairFFI(testFfiKeyPair);
-      sut.maybeWhen(
-        ffi: (publicKeyBytes, secretKeyNativeHandle) {
-          expect(publicKeyBytes.materialize().asUint8List(), testPublicKey);
-          expect(secretKeyNativeHandle, testNativeHandle);
-        },
-        orElse: () => fail(sut.toString()),
-      );
+      if (sut case TransferrableKeyPairFFINative(
+        :final publicKeyBytes,
+        :final secretKeyNativeHandle,
+      )) {
+        expect(publicKeyBytes.materialize().asUint8List(), testPublicKey);
+        expect(secretKeyNativeHandle, testNativeHandle);
+      } else {
+        fail(sut.toString());
+      }
 
       verifyInOrder([
         () => testFfiKeyMock1.copy(),
@@ -98,21 +101,24 @@ void main() {
 
     test('can wrap generic secure key for transfer', () {
       final sut = TransferrableKeyPairFFI(testGenericKeyPair);
-      sut.maybeWhen(
-        generic: (publicKeyBytes, secretKeyBytes) {
-          expect(publicKeyBytes.materialize().asUint8List(), testPublicKey);
-          expect(
-            secretKeyBytes.materialize().asUint8List(),
-            testGenericSecretKey.bytes,
-          );
-        },
-        orElse: () => fail(sut.toString()),
-      );
+      if (sut case TransferrableKeyPairFFIGeneric(
+        :final publicKeyBytes,
+        :final secretKeyBytes,
+      )) {
+        expect(publicKeyBytes.materialize().asUint8List(), testPublicKey);
+        expect(
+          secretKeyBytes.materialize().asUint8List(),
+          testGenericSecretKey.bytes,
+        );
+      } else {
+        fail(sut.toString());
+      }
     });
 
     test('can reconstruct an ffi key', () {
-      when(() => mockLibSodiumFFI.sodium_mprotect_noaccess(any()))
-          .thenReturn(0);
+      when(
+        () => mockLibSodiumFFI.sodium_mprotect_noaccess(any()),
+      ).thenReturn(0);
 
       final result = TransferrableKeyPairFFI.ffi(
         publicKeyBytes: TransferableTypedData.fromList([testPublicKey]),
@@ -121,13 +127,13 @@ void main() {
 
       verifyInOrder([
         () => mockSodiumFinalizer.attach(
-              any(),
-              Pointer.fromAddress(testNativeHandle.$1),
-              testNativeHandle.$2,
-            ),
+          any(),
+          Pointer.fromAddress(testNativeHandle.$1),
+          testNativeHandle.$2,
+        ),
         () => mockLibSodiumFFI.sodium_mprotect_noaccess(
-              Pointer.fromAddress(testNativeHandle.$1),
-            ),
+          Pointer.fromAddress(testNativeHandle.$1),
+        ),
       ]);
 
       expect(result.publicKey, testPublicKey);
@@ -135,14 +141,15 @@ void main() {
     });
 
     test('can reconstruct a generic key', () {
-      when(() => mockSodiumFFI.secureCopy(any()))
-          .thenReturn(testGenericSecretKey);
+      when(
+        () => mockSodiumFFI.secureCopy(any()),
+      ).thenReturn(testGenericSecretKey);
 
       final result = TransferrableKeyPairFFI.generic(
         publicKeyBytes: TransferableTypedData.fromList([testPublicKey]),
-        secretKeyBytes: TransferableTypedData.fromList(
-          [testGenericSecretKey.bytes],
-        ),
+        secretKeyBytes: TransferableTypedData.fromList([
+          testGenericSecretKey.bytes,
+        ]),
       ).toKeyPair(mockSodiumFFI);
 
       expect(result.publicKey, testPublicKey);

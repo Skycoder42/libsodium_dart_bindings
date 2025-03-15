@@ -49,10 +49,10 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
   const IsolateResult._();
 
   /// @nodoc
-  T extract(SodiumFFI sodium) => when(
-        (result) => result,
-        key: (key) => key.toSecureKey(sodium) as T,
-        keyPair: (keyPair) => keyPair.toKeyPair(sodium) as T,
-        bytes: (bytes) => bytes.materialize().asUint8List() as T,
-      );
+  T extract(SodiumFFI sodium) => switch (this) {
+    _IsolateResult(:final result) => result,
+    _SecureKeyIsolateResult(:final key) => key.toSecureKey(sodium) as T,
+    _KeyPairIsolateResult(:final keyPair) => keyPair.toKeyPair(sodium) as T,
+    _BytesIsolateResult(:final data) => data.materialize().asUint8List() as T,
+  };
 }

@@ -46,8 +46,9 @@ void main() {
     const testNativeHandle = (1234, 56);
     final testFfiKeyMock1 = MockSecureKeyFFI();
     final testFfiKeyMock2 = MockSecureKeyFFI();
-    final testGenericKey =
-        FakeSecureKey(Uint8List.fromList(List.generate(32, (index) => index)));
+    final testGenericKey = FakeSecureKey(
+      Uint8List.fromList(List.generate(32, (index) => index)),
+    );
 
     final mockSodiumFFI = MockSodiumFFI();
     final mockLibSodiumFFI = MockLibSodiumFFI();
@@ -72,12 +73,11 @@ void main() {
 
     test('can wrap ffi secure key for transfer', () {
       final sut = TransferrableSecureKeyFFI(testFfiKeyMock1);
-      sut.maybeWhen(
-        ffi: (nativeHandle) {
-          expect(nativeHandle, testNativeHandle);
-        },
-        orElse: () => fail(sut.toString()),
-      );
+      if (sut case TransferrableSecureKeyFFINative(:final nativeHandle)) {
+        expect(nativeHandle, testNativeHandle);
+      } else {
+        fail(sut.toString());
+      }
 
       verifyInOrder([
         () => testFfiKeyMock1.copy(),
@@ -87,30 +87,33 @@ void main() {
 
     test('can wrap generic secure key for transfer', () {
       final sut = TransferrableSecureKeyFFI(testGenericKey);
-      sut.maybeWhen(
-        generic: (keyBytes) {
-          expect(keyBytes.materialize().asUint8List(), testGenericKey.bytes);
-        },
-        orElse: () => fail(sut.toString()),
-      );
+      if (sut case TransferrableSecureKeyFFIGeneric(:final keyBytes)) {
+        expect(keyBytes.materialize().asUint8List(), testGenericKey.bytes);
+      } else {
+        fail(sut.toString());
+      }
     });
 
     test('can reconstruct an ffi key', () {
-      when(() => mockLibSodiumFFI.sodium_mprotect_noaccess(any()))
-          .thenReturn(0);
+      when(
+        () => mockLibSodiumFFI.sodium_mprotect_noaccess(any()),
+      ).thenReturn(0);
 
-      final result = const TransferrableSecureKeyFFI.ffi(testNativeHandle)
-          .toSecureKey(mockSodiumFFI) as SecureKeyFFI;
+      final result =
+          const TransferrableSecureKeyFFI.ffi(
+                testNativeHandle,
+              ).toSecureKey(mockSodiumFFI)
+              as SecureKeyFFI;
 
       verifyInOrder([
         () => mockSodiumFinalizer.attach(
-              any(),
-              Pointer.fromAddress(testNativeHandle.$1),
-              testNativeHandle.$2,
-            ),
+          any(),
+          Pointer.fromAddress(testNativeHandle.$1),
+          testNativeHandle.$2,
+        ),
         () => mockLibSodiumFFI.sodium_mprotect_noaccess(
-              Pointer.fromAddress(testNativeHandle.$1),
-            ),
+          Pointer.fromAddress(testNativeHandle.$1),
+        ),
       ]);
 
       expect(result.detach(), testNativeHandle);

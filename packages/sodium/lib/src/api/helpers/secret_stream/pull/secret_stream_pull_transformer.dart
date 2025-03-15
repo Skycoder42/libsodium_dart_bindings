@@ -59,10 +59,7 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
 
   /// @nodoc
   @protected
-  TState initialize(
-    SecureKey key,
-    Uint8List header,
-  );
+  TState initialize(SecureKey key, Uint8List header);
 
   /// @nodoc
   @protected
@@ -74,75 +71,71 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
   /// @nodoc
   @nonVirtual
   void init(EventSink<SecretStreamPlainMessage> sink, SecureKey key) =>
-      _state.maybeWhen(
-        uninitialized: () {
-          _state = _SinkState.preInit(sink, key.copy());
-          return null;
-        },
-        orElse: _throwInitialized,
-      );
+      switch (_state) {
+        _Uninitialized() => _state = _SinkState.preInit(sink, key.copy()),
+        _ => _throwInitialized(),
+      };
 
   /// @nodoc
   @nonVirtual
-  void triggerRekey() => _state.when(
-        postInit: (_, cryptoState) => rekey(cryptoState),
-        uninitialized: _throwUninitialized,
-        preInit: _throwPreInit,
-        finalized: _throwFinalized,
-        closed: _throwClosed,
-      );
+  void triggerRekey() => switch (_state) {
+    _PostInit(:final cryptoState) => rekey(cryptoState),
+    _Uninitialized() => _throwUninitialized(),
+    _PreInit() => _throwPreInit(),
+    _Finalized() => _throwFinalized(),
+    _Closed() => _throwClosed(),
+  };
 
   @override
   @nonVirtual
-  void add(SecretStreamCipherMessage event) => _state.when(
-        preInit: (outSink, key) => _addHeader(outSink, key, event.message),
-        postInit: (outSink, cryptoState) => _addMessage(
-          outSink,
-          cryptoState,
-          event,
-        ),
-        uninitialized: _throwUninitialized,
-        finalized: _throwFinalized,
-        closed: _throwClosed,
-      );
+  void add(SecretStreamCipherMessage event) => switch (_state) {
+    _PreInit(:final outSink, :final key) => _addHeader(
+      outSink,
+      key,
+      event.message,
+    ),
+    _PostInit(:final outSink, :final cryptoState) => _addMessage(
+      outSink,
+      cryptoState,
+      event,
+    ),
+    _Uninitialized() => _throwUninitialized(),
+    _Finalized() => _throwFinalized(),
+    _Closed() => _throwClosed(),
+  };
 
   @override
   @nonVirtual
-  void addError(Object error, [StackTrace? stackTrace]) => _state
-      .maybeWhen(
-        preInit: (outSink, _) => outSink,
-        postInit: (outSink, _) => outSink,
-        finalized: (outSink) => outSink,
-        orElse: () => null,
-      )
-      ?.addError(error, stackTrace);
+  void addError(Object error, [StackTrace? stackTrace]) => switch (_state) {
+    _PreInit(:final outSink) ||
+    _PostInit(:final outSink) ||
+    _Finalized(:final outSink) => outSink.addError(error, stackTrace),
+    _ => null,
+  };
 
   @override
   @nonVirtual
   void close() {
-    _state.when(
-      preInit: (outSink, key) {
+    switch (_state) {
+      case _PreInit(:final outSink, :final key):
         key.dispose();
         outSink.close();
         _state = const _SinkState.closed();
-      },
-      postInit: (outSink, cryptoState) {
+      case _PostInit(:final outSink, :final cryptoState):
         if (requireFinalized) {
           outSink.addError(StreamClosedEarlyException());
         }
         disposeState(cryptoState);
         outSink.close();
         _state = const _SinkState.closed();
-      },
-      finalized: (outSink) {
+      case _Finalized(:final outSink):
         outSink.close();
         _state = const _SinkState.closed();
-      },
-      uninitialized: () {
+      case _Uninitialized():
         _state = const _SinkState.closed();
-      },
-      closed: () {},
-    );
+      case _Closed():
+        break;
+    }
   }
 
   void _addHeader(
@@ -188,25 +181,20 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
     }
   }
 
-  Never _throwInitialized() => throw StateError(
-        'Transformer has already been initialized',
-      );
+  Never _throwInitialized() =>
+      throw StateError('Transformer has already been initialized');
 
-  Never _throwUninitialized() => throw StateError(
-        'Transformer has not been initialized',
-      );
+  Never _throwUninitialized() =>
+      throw StateError('Transformer has not been initialized');
 
-  Never _throwPreInit(EventSink<SecretStreamPlainMessage> _, SecureKey __) =>
+  Never _throwPreInit() =>
+      throw StateError('Transformer has not received the header yet');
+
+  Never _throwFinalized() =>
+      throw StateError('Transformer has already received the final message');
+
+  Never _throwClosed() =>
       throw StateError(
-        'Transformer has not received the header yet',
-      );
-
-  Never _throwFinalized(EventSink<SecretStreamPlainMessage> _) =>
-      throw StateError(
-        'Transformer has already received the final message',
-      );
-
-  Never _throwClosed() => throw StateError(
         'Transformer has not been initialized or was already closed',
       );
 }
@@ -215,8 +203,10 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
 @internal
 abstract class SecretStreamPullTransformer<TState extends Object>
     implements
-        SecretExStreamTransformer<SecretStreamCipherMessage,
-            SecretStreamPlainMessage> {
+        SecretExStreamTransformer<
+          SecretStreamCipherMessage,
+          SecretStreamPlainMessage
+        > {
   /// @nodoc
   final SecureKey key;
 
@@ -250,5 +240,9 @@ abstract class SecretStreamPullTransformer<TState extends Object>
 
   @override
   StreamTransformer<RS, RT> cast<RS, RT>() => StreamTransformer.castFrom<
-      SecretStreamCipherMessage, SecretStreamPlainMessage, RS, RT>(this);
+    SecretStreamCipherMessage,
+    SecretStreamPlainMessage,
+    RS,
+    RT
+  >(this);
 }

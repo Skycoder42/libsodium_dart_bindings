@@ -16,45 +16,53 @@ sealed class TransferrableKeyPairFFI
     with _$TransferrableKeyPairFFI
     implements TransferrableKeyPair {
   /// @nodoc
-  factory TransferrableKeyPairFFI(KeyPair keyPair) => keyPair.secretKey
-          is SecureKeyFFI
-      ? TransferrableKeyPairFFI.ffi(
-          publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
-          secretKeyNativeHandle:
-              (keyPair.secretKey as SecureKeyFFI).copy().detach(),
-        )
-      : TransferrableKeyPairFFI.generic(
-          publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
-          secretKeyBytes: TransferableTypedData.fromList(
-            [keyPair.secretKey.extractBytes()],
-          ),
-        );
+  factory TransferrableKeyPairFFI(KeyPair keyPair) =>
+      keyPair.secretKey is SecureKeyFFI
+          ? TransferrableKeyPairFFI.ffi(
+            publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
+            secretKeyNativeHandle:
+                (keyPair.secretKey as SecureKeyFFI).copy().detach(),
+          )
+          : TransferrableKeyPairFFI.generic(
+            publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
+            secretKeyBytes: TransferableTypedData.fromList([
+              keyPair.secretKey.extractBytes(),
+            ]),
+          );
 
   /// @nodoc
   const factory TransferrableKeyPairFFI.ffi({
     required TransferableTypedData publicKeyBytes,
     required SecureKeyFFINativeHandle secretKeyNativeHandle,
-  }) = _TransferrableKeyPairFFINative;
+  }) = TransferrableKeyPairFFINative;
 
   /// @nodoc
   const factory TransferrableKeyPairFFI.generic({
     required TransferableTypedData publicKeyBytes,
     required TransferableTypedData secretKeyBytes,
-  }) = _TransferrableKeyPairFFIGeneric;
+  }) = TransferrableKeyPairFFIGeneric;
 
   const TransferrableKeyPairFFI._();
 
   /// @nodoc
-  KeyPair toKeyPair(SodiumFFI sodium) => when(
-        ffi: (publicKeyData, secretKeyHandle) => KeyPair(
-          publicKey: publicKeyData.materialize().asUint8List(),
-          secretKey: SecureKeyFFI.attach(sodium.sodium, secretKeyHandle),
+  KeyPair toKeyPair(SodiumFFI sodium) => switch (this) {
+    TransferrableKeyPairFFINative(
+      :final publicKeyBytes,
+      :final secretKeyNativeHandle,
+    ) =>
+      KeyPair(
+        publicKey: publicKeyBytes.materialize().asUint8List(),
+        secretKey: SecureKeyFFI.attach(sodium.sodium, secretKeyNativeHandle),
+      ),
+    TransferrableKeyPairFFIGeneric(
+      :final publicKeyBytes,
+      :final secretKeyBytes,
+    ) =>
+      KeyPair(
+        publicKey: publicKeyBytes.materialize().asUint8List(),
+        secretKey: sodium.secureCopy(
+          secretKeyBytes.materialize().asUint8List(),
         ),
-        generic: (publicKeyData, secretKeyData) => KeyPair(
-          publicKey: publicKeyData.materialize().asUint8List(),
-          secretKey: sodium.secureCopy(
-            secretKeyData.materialize().asUint8List(),
-          ),
-        ),
-      );
+      ),
+  };
 }

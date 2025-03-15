@@ -20,24 +20,29 @@ sealed class TransferrableSecureKeyFFI
       secureKey is SecureKeyFFI
           ? TransferrableSecureKeyFFI.ffi(secureKey.copy().detach())
           : TransferrableSecureKeyFFI.generic(
-              TransferableTypedData.fromList([secureKey.extractBytes()]),
-            );
+            TransferableTypedData.fromList([secureKey.extractBytes()]),
+          );
 
   /// @nodoc
   const factory TransferrableSecureKeyFFI.ffi(
     SecureKeyFFINativeHandle nativeHandle,
-  ) = _TransferrableSecureKeyFFINative;
+  ) = TransferrableSecureKeyFFINative;
 
   /// @nodoc
   const factory TransferrableSecureKeyFFI.generic(
     TransferableTypedData keyBytes,
-  ) = _TransferrableSecureKeyFFIGeneric;
+  ) = TransferrableSecureKeyFFIGeneric;
 
   const TransferrableSecureKeyFFI._();
 
   /// @nodoc
-  SecureKey toSecureKey(SodiumFFI sodium) => when(
-        ffi: (handle) => SecureKeyFFI.attach(sodium.sodium, handle),
-        generic: (data) => sodium.secureCopy(data.materialize().asUint8List()),
-      );
+  SecureKey toSecureKey(SodiumFFI sodium) => switch (this) {
+    TransferrableSecureKeyFFINative(:final nativeHandle) => SecureKeyFFI.attach(
+      sodium.sodium,
+      nativeHandle,
+    ),
+    TransferrableSecureKeyFFIGeneric(:final keyBytes) => sodium.secureCopy(
+      keyBytes.materialize().asUint8List(),
+    ),
+  };
 }

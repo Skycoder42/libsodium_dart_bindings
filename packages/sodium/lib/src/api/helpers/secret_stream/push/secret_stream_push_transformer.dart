@@ -55,75 +55,70 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
   /// @nodoc
   @nonVirtual
   void init(EventSink<SecretStreamCipherMessage> outSink, SecureKey key) =>
-      _state.maybeWhen(
-        uninitialized: () => _initImpl(outSink, key),
-        orElse: _throwInitialized,
-      );
+      switch (_state) {
+        _Uninitialized() => _initImpl(outSink, key),
+        _ => _throwInitialized(),
+      };
 
   /// @nodoc
   @nonVirtual
-  void triggerRekey() => _state.when(
-        initialized: (_, cryptoState, __) => rekey(cryptoState),
-        uninitialized: _throwUninitialized,
-        finalized: _throwFinalized,
-        closed: _throwClosed,
-      );
+  void triggerRekey() => switch (_state) {
+    _Initialized(:final cryptoState) => rekey(cryptoState),
+    _Uninitialized() => _throwUninitialized(),
+    _Finalized() => _throwFinalized(),
+    _Closed() => _throwClosed(),
+  };
 
   @override
   @nonVirtual
-  void add(SecretStreamPlainMessage event) => _state.when(
-        initialized: (outSink, cryptoState, pendingHeader) => _addImpl(
-          outSink,
-          cryptoState,
-          pendingHeader,
-          event,
-        ),
-        uninitialized: _throwUninitialized,
-        finalized: _throwFinalized,
-        closed: _throwClosed,
-      );
+  void add(SecretStreamPlainMessage event) => switch (_state) {
+    _Initialized(:final outSink, :final cryptoState, :final pendingHeader) =>
+      _addImpl(outSink, cryptoState, pendingHeader, event),
+    _Uninitialized() => _throwUninitialized(),
+    _Finalized() => _throwFinalized(),
+    _Closed() => _throwClosed(),
+  };
 
   @override
   @nonVirtual
-  void addError(Object error, [StackTrace? stackTrace]) => _state
-      .maybeWhen(
-        initialized: (outSink, _, __) => outSink,
-        finalized: (outSink) => outSink,
-        orElse: () => null,
-      )
-      ?.addError(error, stackTrace);
+  void addError(Object error, [StackTrace? stackTrace]) => switch (_state) {
+    _Initialized(:final outSink) ||
+    _Finalized(:final outSink) => outSink.addError(error, stackTrace),
+    _ => null,
+  };
 
   @override
   @nonVirtual
   void close({bool withFinalize = true}) {
-    _state.when(
-      initialized: (outSink, cryptoState, pendingHeader) {
-        if (withFinalize) {
-          _addImpl(
-            outSink,
-            cryptoState,
-            pendingHeader,
-            SecretStreamPlainMessage(
-              Uint8List(0),
-              tag: SecretStreamMessageTag.finalPush,
-            ),
-          );
-          close(withFinalize: false);
-        } else {
-          disposeState(cryptoState);
-          outSink.close();
-          _state = const _SinkState.closed();
-        }
-      },
-      finalized: (outSink) {
+    switch (_state) {
+      case _Initialized(
+            :final outSink,
+            :final cryptoState,
+            :final pendingHeader,
+          )
+          when withFinalize:
+        _addImpl(
+          outSink,
+          cryptoState,
+          pendingHeader,
+          SecretStreamPlainMessage(
+            Uint8List(0),
+            tag: SecretStreamMessageTag.finalPush,
+          ),
+        );
+        close(withFinalize: false);
+      case _Initialized(:final outSink, :final cryptoState):
+        disposeState(cryptoState);
         outSink.close();
         _state = const _SinkState.closed();
-      },
-      uninitialized: () {
+      case _Finalized(:final outSink):
+        outSink.close();
         _state = const _SinkState.closed();
-      },
-      closed: () {},
-    );
+      case _Uninitialized():
+        _state = const _SinkState.closed();
+      case _Closed():
+        break;
+    }
   }
 
   void _initImpl(EventSink<SecretStreamCipherMessage> outSink, SecureKey key) {
@@ -162,20 +157,17 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
     }
   }
 
-  Never _throwInitialized() => throw StateError(
-        'Transformer has already been initialized',
-      );
+  Never _throwInitialized() =>
+      throw StateError('Transformer has already been initialized');
 
-  Never _throwUninitialized() => throw StateError(
-        'Transformer has not been initialized',
-      );
+  Never _throwUninitialized() =>
+      throw StateError('Transformer has not been initialized');
 
-  Never _throwFinalized(EventSink<SecretStreamCipherMessage> _) =>
+  Never _throwFinalized() =>
+      throw StateError('Transformer has already received the final message');
+
+  Never _throwClosed() =>
       throw StateError(
-        'Transformer has already received the final message',
-      );
-
-  Never _throwClosed() => throw StateError(
         'Transformer has not been initialized or was already closed',
       );
 }
@@ -184,8 +176,10 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
 @internal
 abstract class SecretStreamPushTransformer<TState extends Object>
     implements
-        SecretExStreamTransformer<SecretStreamPlainMessage,
-            SecretStreamCipherMessage> {
+        SecretExStreamTransformer<
+          SecretStreamPlainMessage,
+          SecretStreamCipherMessage
+        > {
   /// @nodoc
   final SecureKey key;
 
@@ -211,5 +205,9 @@ abstract class SecretStreamPushTransformer<TState extends Object>
 
   @override
   StreamTransformer<RS, RT> cast<RS, RT>() => StreamTransformer.castFrom<
-      SecretStreamPlainMessage, SecretStreamCipherMessage, RS, RT>(this);
+    SecretStreamPlainMessage,
+    SecretStreamCipherMessage,
+    RS,
+    RT
+  >(this);
 }
