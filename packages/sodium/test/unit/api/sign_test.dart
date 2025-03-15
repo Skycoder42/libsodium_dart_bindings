@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:dart_test_tools/test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sign.dart';
 import 'package:test/test.dart';
@@ -72,8 +73,8 @@ void main() {
       when(
         () => sutMock.createConsumer(secretKey: any(named: 'secretKey')),
       ).thenReturn(mockConsumer);
-      when<dynamic>(() => mockConsumer.addStream(any())).thenAnswer((i) {});
-      when(() => mockConsumer.close()).thenAnswer((i) async => signature);
+      when(() => mockConsumer.addStream(any())).thenReturnAsync(null);
+      when(() => mockConsumer.close()).thenReturnAsync(signature);
 
       final res = await sutMock.stream(
         messages: messageStream,
@@ -103,8 +104,8 @@ void main() {
           signature: any(named: 'signature'),
         ),
       ).thenReturn(mockConsumer);
-      when<dynamic>(() => mockConsumer.addStream(any())).thenAnswer((i) {});
-      when(() => mockConsumer.close()).thenAnswer((i) async => true);
+      when(() => mockConsumer.addStream(any())).thenReturnAsync(null);
+      when(() => mockConsumer.close()).thenReturnAsync(true);
 
       final res = await sutMock.verifyStream(
         messages: messageStream,

@@ -2,6 +2,7 @@
 
 import 'dart:typed_data';
 
+import 'package:dart_test_tools/test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/generic_hash.dart';
 import 'package:test/test.dart';
@@ -55,8 +56,8 @@ void main() {
           key: any(named: 'key'),
         ),
       ).thenReturn(mockConsumer);
-      when<dynamic>(() => mockConsumer.addStream(any())).thenAnswer((i) {});
-      when(() => mockConsumer.close()).thenAnswer((i) async => hash);
+      when(() => mockConsumer.addStream(any())).thenReturnAsync(null);
+      when(() => mockConsumer.close()).thenReturnAsync(hash);
 
       final res = await sutMock.stream(
         messages: messageStream,
