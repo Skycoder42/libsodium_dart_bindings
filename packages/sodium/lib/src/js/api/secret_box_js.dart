@@ -31,10 +31,8 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
   int get nonceBytes => sodium.crypto_secretbox_NONCEBYTES;
 
   @override
-  SecureKey keygen() => SecureKeyJS(
-        sodium,
-        jsErrorWrap(() => sodium.crypto_secretbox_keygen()),
-      );
+  SecureKey keygen() =>
+      SecureKeyJS(sodium, jsErrorWrap(() => sodium.crypto_secretbox_keygen()));
 
   @override
   Uint8List easy({
@@ -47,13 +45,10 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium
-            .crypto_secretbox_easy(
-              message.toJS,
-              nonce.toJS,
-              keyData.toJS,
-            )
-            .toDart,
+        (keyData) =>
+            sodium
+                .crypto_secretbox_easy(message.toJS, nonce.toJS, keyData.toJS)
+                .toDart,
       ),
     );
   }
@@ -70,13 +65,14 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium
-            .crypto_secretbox_open_easy(
-              cipherText.toJS,
-              nonce.toJS,
-              keyData.toJS,
-            )
-            .toDart,
+        (keyData) =>
+            sodium
+                .crypto_secretbox_open_easy(
+                  cipherText.toJS,
+                  nonce.toJS,
+                  keyData.toJS,
+                )
+                .toDart,
       ),
     );
   }
@@ -119,14 +115,15 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium
-            .crypto_secretbox_open_detached(
-              cipherText.toJS,
-              mac.toJS,
-              nonce.toJS,
-              keyData.toJS,
-            )
-            .toDart,
+        (keyData) =>
+            sodium
+                .crypto_secretbox_open_detached(
+                  cipherText.toJS,
+                  mac.toJS,
+                  nonce.toJS,
+                  keyData.toJS,
+                )
+                .toDart,
       ),
     );
   }

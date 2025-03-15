@@ -50,11 +50,7 @@ void main() {
       () => sut.secretKeyBytes,
       'secretKeyBytes',
     ),
-    (
-      () => mockSodium.crypto_sign_bytes(),
-      () => sut.bytes,
-      'bytes',
-    ),
+    (() => mockSodium.crypto_sign_bytes(), () => sut.bytes, 'bytes'),
     (
       () => mockSodium.crypto_sign_seedbytes(),
       () => sut.seedBytes,
@@ -90,10 +86,7 @@ void main() {
     group('call', () {
       test('asserts if secretKey is invalid', () {
         expect(
-          () => sut(
-            message: Uint8List(20),
-            secretKey: SecureKeyFake.empty(10),
-          ),
+          () => sut(message: Uint8List(20), secretKey: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -102,13 +95,7 @@ void main() {
 
       test('calls crypto_sign with correct arguments', () {
         when(
-          () => mockSodium.crypto_sign(
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign(any(), any(), any(), any(), any()),
         ).thenReturn(0);
 
         final message = List.generate(20, (index) => index * 2);
@@ -122,28 +109,22 @@ void main() {
 
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(secretKey)),
-              ),
+            any(that: hasRawData(secretKey)),
+          ),
           () => mockSodium.crypto_sign(
-                any(that: hasRawData<UnsignedChar>(signature + message)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: hasRawData<UnsignedChar>(secretKey)),
-              ),
+            any(that: hasRawData<UnsignedChar>(signature + message)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: hasRawData<UnsignedChar>(secretKey)),
+          ),
         ]);
       });
 
       test('returns signed message', () {
         final signedMessage = List.generate(25, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_sign(
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign(any(), any(), any(), any(), any()),
         ).thenAnswer((i) {
           fillPointer(i.positionalArguments.first as Pointer, signedMessage);
           return 0;
@@ -161,20 +142,11 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_sign(
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign(any(), any(), any(), any(), any()),
         ).thenReturn(1);
 
         expect(
-          () => sut(
-            message: Uint8List(10),
-            secretKey: SecureKeyFake.empty(5),
-          ),
+          () => sut(message: Uint8List(10), secretKey: SecureKeyFake.empty(5)),
           throwsA(isA<SodiumException>()),
         );
 
@@ -185,10 +157,7 @@ void main() {
     group('open', () {
       test('asserts if signedMessage is invalid', () {
         expect(
-          () => sut.open(
-            signedMessage: Uint8List(3),
-            publicKey: Uint8List(5),
-          ),
+          () => sut.open(signedMessage: Uint8List(3), publicKey: Uint8List(5)),
           throwsA(isA<RangeError>()),
         );
 
@@ -197,10 +166,7 @@ void main() {
 
       test('asserts if publicKey is invalid', () {
         expect(
-          () => sut.open(
-            signedMessage: Uint8List(5),
-            publicKey: Uint8List(10),
-          ),
+          () => sut.open(signedMessage: Uint8List(5), publicKey: Uint8List(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -209,13 +175,7 @@ void main() {
 
       test('calls crypto_sign_open with correct arguments', () {
         when(
-          () => mockSodium.crypto_sign_open(
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_open(any(), any(), any(), any(), any()),
         ).thenReturn(0);
 
         final signedMessage = List.generate(20, (index) => index * 2);
@@ -228,28 +188,22 @@ void main() {
 
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(publicKey)),
-              ),
+            any(that: hasRawData(publicKey)),
+          ),
           () => mockSodium.crypto_sign_open(
-                any(that: hasRawData<UnsignedChar>(signedMessage.sublist(5))),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(signedMessage)),
-                signedMessage.length,
-                any(that: hasRawData<UnsignedChar>(publicKey)),
-              ),
+            any(that: hasRawData<UnsignedChar>(signedMessage.sublist(5))),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(signedMessage)),
+            signedMessage.length,
+            any(that: hasRawData<UnsignedChar>(publicKey)),
+          ),
         ]);
       });
 
       test('returns validated message', () {
         final message = List.generate(20, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_sign_open(
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_open(any(), any(), any(), any(), any()),
         ).thenAnswer((i) {
           fillPointer(i.positionalArguments.first as Pointer, message);
           return 0;
@@ -267,20 +221,11 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_sign_open(
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_open(any(), any(), any(), any(), any()),
         ).thenReturn(1);
 
         expect(
-          () => sut.open(
-            signedMessage: Uint8List(25),
-            publicKey: Uint8List(5),
-          ),
+          () => sut.open(signedMessage: Uint8List(25), publicKey: Uint8List(5)),
           throwsA(isA<SodiumException>()),
         );
 
@@ -322,18 +267,18 @@ void main() {
 
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(message)),
-              ),
+            any(that: hasRawData(message)),
+          ),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(secretKey)),
-              ),
+            any(that: hasRawData(secretKey)),
+          ),
           () => mockSodium.crypto_sign_detached(
-                any(that: isNot(nullptr)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: hasRawData<UnsignedChar>(secretKey)),
-              ),
+            any(that: isNot(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: hasRawData<UnsignedChar>(secretKey)),
+          ),
         ]);
       });
 
@@ -434,20 +379,20 @@ void main() {
 
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(message)),
-              ),
+            any(that: hasRawData(message)),
+          ),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(signature)),
-              ),
+            any(that: hasRawData(signature)),
+          ),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(publicKey)),
-              ),
+            any(that: hasRawData(publicKey)),
+          ),
           () => mockSodium.crypto_sign_verify_detached(
-                any(that: hasRawData<UnsignedChar>(signature)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: hasRawData<UnsignedChar>(publicKey)),
-              ),
+            any(that: hasRawData<UnsignedChar>(signature)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: hasRawData<UnsignedChar>(publicKey)),
+          ),
         ]);
       });
 
@@ -519,9 +464,7 @@ void main() {
     group('createConsumer', () {
       test('asserts if secretKey is invalid', () {
         expect(
-          () => sut.createConsumer(
-            secretKey: SecureKeyFake.empty(10),
-          ),
+          () => sut.createConsumer(secretKey: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -533,9 +476,7 @@ void main() {
 
         final secretKey = List.generate(5, (index) => index * index);
 
-        final result = sut.createConsumer(
-          secretKey: SecureKeyFake(secretKey),
-        );
+        final result = sut.createConsumer(secretKey: SecureKeyFake(secretKey));
 
         expect(
           result,

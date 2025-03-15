@@ -22,13 +22,7 @@ class SodiumTestCase extends TestCase {
     });
 
     group('pad adds expected padding and unpad removes it', () {
-      const fixtures = [
-        (14, 16),
-        (15, 16),
-        (16, 32),
-        (17, 32),
-        (18, 32),
-      ];
+      const fixtures = [(14, 16), (15, 16), (16, 32), (17, 32), (18, 32)];
 
       for (final fixture in fixtures) {
         test('(Variant: $fixture)', (sodium) {
@@ -61,8 +55,9 @@ class SodiumTestCase extends TestCase {
         }
       });
 
-      test('secureRandom creates secure key of correct size with random data',
-          (sodium) {
+      test('secureRandom creates secure key of correct size with random data', (
+        sodium,
+      ) {
         const length = 42;
         final secureKey1 = sodium.secureRandom(length);
         final secureKey2 = sodium.secureRandom(length);
@@ -83,14 +78,11 @@ class SodiumTestCase extends TestCase {
         final secureKey = sodium.secureAlloc(testData.length);
         try {
           // write data
-          final resLen = secureKey.runUnlockedSync(
-            (data) {
-              expect(data, hasLength(testData.length));
-              data.setAll(0, testData);
-              return data.length;
-            },
-            writable: true,
-          );
+          final resLen = secureKey.runUnlockedSync((data) {
+            expect(data, hasLength(testData.length));
+            data.setAll(0, testData);
+            return data.length;
+          }, writable: true);
 
           expect(resLen, testData.length);
           expect(secureKey.extractBytes(), testData);
@@ -109,14 +101,11 @@ class SodiumTestCase extends TestCase {
         final secureKey = sodium.secureAlloc(testData.length);
         try {
           // write data
-          final resLen = await secureKey.runUnlockedAsync(
-            (data) {
-              expect(data, hasLength(testData.length));
-              data.setAll(0, testData);
-              return data.length;
-            },
-            writable: true,
-          );
+          final resLen = await secureKey.runUnlockedAsync((data) {
+            expect(data, hasLength(testData.length));
+            data.setAll(0, testData);
+            return data.length;
+          }, writable: true);
 
           expect(resLen, testData.length);
           expect(secureKey.extractBytes(), testData);
@@ -124,10 +113,7 @@ class SodiumTestCase extends TestCase {
           // read data
           final resAsync = await secureKey.runUnlockedAsync((data) {
             expect(data, testData);
-            return Future.delayed(
-              const Duration(milliseconds: 1),
-              () => 42,
-            );
+            return Future.delayed(const Duration(milliseconds: 1), () => 42);
           });
           expect(resAsync, 42);
         } finally {
@@ -143,8 +129,9 @@ class SodiumTestCase extends TestCase {
         final keyPair2 = sodium.crypto.box.keyPair();
 
         final message = 'Hello, World!'.toCharArray().unsignedView();
-        final nonce1 =
-            sodium.randombytes.buf(sodium.crypto.secretBox.nonceBytes);
+        final nonce1 = sodium.randombytes.buf(
+          sodium.crypto.secretBox.nonceBytes,
+        );
 
         final result = await sodium.runIsolated(
           secureKeys: [secureKey],
@@ -170,10 +157,7 @@ class SodiumTestCase extends TestCase {
 
             final cipherKey = sodium.secureCopy(cipher2);
 
-            return KeyPair(
-              publicKey: nonce2,
-              secretKey: cipherKey,
-            );
+            return KeyPair(publicKey: nonce2, secretKey: cipherKey);
           },
         );
 
@@ -206,10 +190,7 @@ class SodiumTestCase extends TestCase {
 
             final base = sodium.crypto.scalarmult.base(n: secureKey);
 
-            return sodium.crypto.scalarmult.call(
-              n: keyPair.secretKey,
-              p: base,
-            );
+            return sodium.crypto.scalarmult.call(n: keyPair.secretKey, p: base);
           },
         );
 
@@ -223,32 +204,34 @@ class SodiumTestCase extends TestCase {
 
       testSumo('with byte array as result', (sodium) async {
         final keyPair = sodium.crypto.box.keyPair();
-        final base = await sodium.runIsolated(
-          secureKeys: [keyPair.secretKey],
-          (sodium, secureKeys, _) {
-            final [secureKey] = secureKeys;
-            return sodium.crypto.scalarmult.base(n: secureKey);
-          },
-        );
+        final base = await sodium.runIsolated(secureKeys: [keyPair.secretKey], (
+          sodium,
+          secureKeys,
+          _,
+        ) {
+          final [secureKey] = secureKeys;
+          return sodium.crypto.scalarmult.base(n: secureKey);
+        });
         expect(base, keyPair.publicKey);
       });
     });
 
-    test('custom isolates',
-        // ignore: do_not_use_environment is the same as "kIsWeb"
-        skip: const bool.fromEnvironment('dart.library.js_util'),
-        (sodium) async {
-      final secureKey = sodium.crypto.secretBox.keygen();
-      final keyPair1 = sodium.crypto.box.keyPair();
-      final keyPair2 = sodium.crypto.box.keyPair();
+    test(
+      'custom isolates',
+      // ignore: do_not_use_environment is the same as "kIsWeb"
+      skip: const bool.fromEnvironment('dart.library.js_util'),
+      (sodium) async {
+        final secureKey = sodium.crypto.secretBox.keygen();
+        final keyPair1 = sodium.crypto.box.keyPair();
+        final keyPair2 = sodium.crypto.box.keyPair();
 
-      final message = 'Hello, World!'.toCharArray().unsignedView();
-      final nonce1 = sodium.randombytes.buf(sodium.crypto.secretBox.nonceBytes);
-      final nonce2 = sodium.randombytes.buf(sodium.crypto.box.nonceBytes);
+        final message = 'Hello, World!'.toCharArray().unsignedView();
+        final nonce1 = sodium.randombytes.buf(
+          sodium.crypto.secretBox.nonceBytes,
+        );
+        final nonce2 = sodium.randombytes.buf(sodium.crypto.box.nonceBytes);
 
-      final transferrableResult = await ioCompute(
-        _compute,
-        (
+        final transferrableResult = await ioCompute(_compute, (
           sodium.isolateFactory,
           sodium.createTransferrableSecureKey(secureKey),
           sodium.createTransferrableKeyPair(keyPair1),
@@ -256,27 +239,28 @@ class SodiumTestCase extends TestCase {
           TransferableTypedData.fromList([message]),
           TransferableTypedData.fromList([nonce1]),
           TransferableTypedData.fromList([nonce2]),
-        ),
-      );
+        ));
 
-      final result =
-          sodium.materializeTransferrableSecureKey(transferrableResult);
+        final result = sodium.materializeTransferrableSecureKey(
+          transferrableResult,
+        );
 
-      final plain2 = sodium.crypto.box.openEasy(
-        cipherText: result.extractBytes(),
-        nonce: nonce2,
-        publicKey: keyPair1.publicKey,
-        secretKey: keyPair2.secretKey,
-      );
+        final plain2 = sodium.crypto.box.openEasy(
+          cipherText: result.extractBytes(),
+          nonce: nonce2,
+          publicKey: keyPair1.publicKey,
+          secretKey: keyPair2.secretKey,
+        );
 
-      final plain1 = sodium.crypto.secretBox.openEasy(
-        cipherText: plain2,
-        nonce: nonce1,
-        key: secureKey,
-      );
+        final plain1 = sodium.crypto.secretBox.openEasy(
+          cipherText: plain2,
+          nonce: nonce1,
+          key: secureKey,
+        );
 
-      expect(plain1, message);
-    });
+        expect(plain1, message);
+      },
+    );
   }
 }
 
@@ -289,7 +273,8 @@ Future<TransferrableSecureKey> _compute(
     TransferableTypedData,
     TransferableTypedData,
     TransferableTypedData,
-  ) computeMessage,
+  )
+  computeMessage,
 ) async {
   final (
     isolateFactory,
@@ -302,12 +287,15 @@ Future<TransferrableSecureKey> _compute(
   ) = computeMessage;
 
   final sodium = await isolateFactory();
-  final secureKey =
-      sodium.materializeTransferrableSecureKey(transferrableSecureKey);
-  final keyPair1 =
-      sodium.materializeTransferrableKeyPair(transferrableKeyPair1);
-  final keyPair2 =
-      sodium.materializeTransferrableKeyPair(transferrableKeyPair2);
+  final secureKey = sodium.materializeTransferrableSecureKey(
+    transferrableSecureKey,
+  );
+  final keyPair1 = sodium.materializeTransferrableKeyPair(
+    transferrableKeyPair1,
+  );
+  final keyPair2 = sodium.materializeTransferrableKeyPair(
+    transferrableKeyPair2,
+  );
 
   final cipher1 = sodium.crypto.secretBox.easy(
     message: message.materialize().asUint8List(),

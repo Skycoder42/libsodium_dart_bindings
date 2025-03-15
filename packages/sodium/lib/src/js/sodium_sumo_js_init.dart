@@ -26,12 +26,8 @@ abstract class SodiumSumoInit {
   /// loaded sumo variant of `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on
   /// your platform. Please refer to the README for more details on loading the
   /// library.
-  static Future<SodiumSumo> init(
-    FutureOr<dynamic> Function() getLibsodium,
-  ) =>
-      initFromSodiumJS(
-        () async => (await getLibsodium()) as LibSodiumJS,
-      );
+  static Future<SodiumSumo> init(FutureOr<dynamic> Function() getLibsodium) =>
+      initFromSodiumJS(() async => (await getLibsodium()) as LibSodiumJS);
 
   /// Creates a [SodiumSumo] instance for the loaded libsodium returned by the
   /// callback as [LibSodiumJS].
@@ -41,6 +37,5 @@ abstract class SodiumSumoInit {
   /// details on loading the library.
   static Future<SodiumSumo> initFromSodiumJS(
     FutureOr<LibSodiumJS> Function() getLibsodium,
-  ) async =>
-      SodiumSumoJS(await getLibsodium());
+  ) async => SodiumSumoJS(await getLibsodium());
 }

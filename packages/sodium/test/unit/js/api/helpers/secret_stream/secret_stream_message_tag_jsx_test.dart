@@ -50,14 +50,18 @@ void main() {
 
   group('fromValue', () {
     setUp(() {
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_MESSAGE)
-          .thenReturn(0);
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH)
-          .thenReturn(0);
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_REKEY)
-          .thenReturn(0);
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_FINAL)
-          .thenReturn(0);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_MESSAGE,
+      ).thenReturn(0);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH,
+      ).thenReturn(0);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_REKEY,
+      ).thenReturn(0);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_FINAL,
+      ).thenReturn(0);
     });
 
     testData<(SecretStreamMessageTag, num Function())>(
@@ -103,15 +107,9 @@ void main() {
       verify(
         () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_MESSAGE,
       );
-      verify(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH,
-      );
-      verify(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_REKEY,
-      );
-      verify(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_FINAL,
-      );
+      verify(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH);
+      verify(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_REKEY);
+      verify(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_FINAL);
     });
   });
 }

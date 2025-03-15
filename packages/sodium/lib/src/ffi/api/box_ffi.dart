@@ -28,21 +28,16 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
   PrecalculatedBoxFFI(this.box, this.sharedKey);
 
   @override
-  Uint8List easy({
-    required Uint8List message,
-    required Uint8List nonce,
-  }) {
+  Uint8List easy({required Uint8List message, required Uint8List nonce}) {
     box.validateNonce(nonce);
 
     SodiumPointer<UnsignedChar>? dataPtr;
     SodiumPointer<UnsignedChar>? noncePtr;
     try {
-      dataPtr = SodiumPointer.alloc(
-        box.sodium,
-        count: message.length + box.macBytes,
-      )
-        ..fill(List<int>.filled(box.macBytes, 0))
-        ..fill(message, offset: box.macBytes);
+      dataPtr =
+          SodiumPointer.alloc(box.sodium, count: message.length + box.macBytes)
+            ..fill(List<int>.filled(box.macBytes, 0))
+            ..fill(message, offset: box.macBytes);
       noncePtr = nonce.toSodiumPointer(
         box.sodium,
         memoryProtection: MemoryProtection.readOnly,
@@ -231,11 +226,11 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
 
   @override
   KeyPair keyPair() => keyPairImpl(
-        sodium: sodium,
-        secretKeyBytes: secretKeyBytes,
-        publicKeyBytes: publicKeyBytes,
-        implementation: sodium.crypto_box_keypair,
-      );
+    sodium: sodium,
+    secretKeyBytes: secretKeyBytes,
+    publicKeyBytes: publicKeyBytes,
+    implementation: sodium.crypto_box_keypair,
+  );
 
   @override
   KeyPair seedKeyPair(SecureKey seed) {
@@ -264,12 +259,10 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     SodiumPointer<UnsignedChar>? noncePtr;
     SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
-      dataPtr = SodiumPointer.alloc(
-        sodium,
-        count: message.length + macBytes,
-      )
-        ..fill(List<int>.filled(macBytes, 0))
-        ..fill(message, offset: macBytes);
+      dataPtr =
+          SodiumPointer.alloc(sodium, count: message.length + macBytes)
+            ..fill(List<int>.filled(macBytes, 0))
+            ..fill(message, offset: macBytes);
       noncePtr = nonce.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
@@ -481,10 +474,7 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      sharedKey = SecureKeyFFI.alloc(
-        sodium,
-        sodium.crypto_box_beforenmbytes(),
-      );
+      sharedKey = SecureKeyFFI.alloc(sodium, sodium.crypto_box_beforenmbytes());
 
       final result = sharedKey.runUnlockedNative(
         (sharedKeyPtr) => secretKey.runUnlockedNative(
@@ -509,21 +499,16 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
   }
 
   @override
-  Uint8List seal({
-    required Uint8List message,
-    required Uint8List publicKey,
-  }) {
+  Uint8List seal({required Uint8List message, required Uint8List publicKey}) {
     validatePublicKey(publicKey);
 
     SodiumPointer<UnsignedChar>? dataPtr;
     SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
-      dataPtr = SodiumPointer.alloc(
-        sodium,
-        count: message.length + sealBytes,
-      )
-        ..fill(List<int>.filled(sealBytes, 0))
-        ..fill(message, offset: sealBytes);
+      dataPtr =
+          SodiumPointer.alloc(sodium, count: message.length + sealBytes)
+            ..fill(List<int>.filled(sealBytes, 0))
+            ..fill(message, offset: sealBytes);
       publicKeyPtr = publicKey.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,

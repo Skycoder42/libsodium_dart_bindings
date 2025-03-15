@@ -9,9 +9,7 @@ import 'package:web/web.dart';
 extension type SodiumBrowserInit._(JSObject _) implements JSObject {
   external JSFunction get onload;
 
-  external SodiumBrowserInit({
-    JSFunction onload,
-  });
+  external SodiumBrowserInit({JSFunction onload});
 }
 
 @JS()
@@ -29,9 +27,7 @@ mixin JsLoaderMixin {
 
     void onload(LibSodiumJS sodium) => completer.complete(sodium);
 
-    sodium = SodiumBrowserInit(
-      onload: onload.toJS,
-    );
+    sodium = SodiumBrowserInit(onload: onload.toJS);
 
     final script = HTMLScriptElement()..text = sodiumJsSrc;
     document.head!.append(script);

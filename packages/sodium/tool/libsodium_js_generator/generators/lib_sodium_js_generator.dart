@@ -25,25 +25,28 @@ final class LibSodiumJsGenerator extends SpecGenerator<ExtensionType>
 
   @override
   ExtensionType build() => ExtensionType(
-        (b) => b
+    (b) =>
+        b
           ..name = 'LibSodiumJS'
           ..representationDeclaration = RepresentationDeclaration(
-            (b) => b
-              ..declaredRepresentationType = Types.jsObject
-              ..name = '_',
+            (b) =>
+                b
+                  ..declaredRepresentationType = Types.jsObject
+                  ..name = '_',
           )
           ..primaryConstructorName = '_'
           ..implements.add(Types.jsObject)
           ..methods.addAll(_buildMethods()),
-      );
+  );
 
   Iterable<Method> _buildMethods() sync* {
     yield Method(
-      (b) => b
-        ..name = 'ready'
-        ..external = external
-        ..type = MethodType.getter
-        ..returns = Types.jsPromise,
+      (b) =>
+          b
+            ..name = 'ready'
+            ..external = external
+            ..type = MethodType.getter
+            ..returns = Types.jsPromise,
     );
 
     for (final constant in constants) {
@@ -53,10 +56,7 @@ final class LibSodiumJsGenerator extends SpecGenerator<ExtensionType>
       ).build();
     }
     for (final symbol in symbols) {
-      yield SymbolsGenerator(
-        symbol: symbol,
-        typeMapping: typeMapping,
-      ).build();
+      yield SymbolsGenerator(symbol: symbol, typeMapping: typeMapping).build();
     }
 
     yield* buildExtraMethods();
@@ -70,71 +70,96 @@ base mixin LibSodiumJsExtraMethodsMixin<T extends Spec> on SpecGenerator<T> {
 
   Iterable<Method> buildExtraMethods() sync* {
     yield Method(
-      (b) => b
-        ..name = 'randombytes_seedbytes'
-        ..external = external
-        ..returns = typeMapping['uint']
-        ..body = external
-            ? null
-            : Types.unimplementedError.newInstance(const []).thrown.code,
+      (b) =>
+          b
+            ..name = 'randombytes_seedbytes'
+            ..external = external
+            ..returns = typeMapping['uint']
+            ..body =
+                external
+                    ? null
+                    : Types.unimplementedError
+                        .newInstance(const [])
+                        .thrown
+                        .code,
     );
     yield Method(
-      (b) => b
-        ..name = 'memzero'
-        ..external = external
-        ..returns = typeMapping['void']
-        ..requiredParameters.add(
-          Parameter(
-            (b) => b
-              ..name = 'bytes'
-              ..type = typeMapping['buf'],
-          ),
-        )
-        ..body = external
-            ? null
-            : Types.unimplementedError.newInstance(const []).thrown.code,
+      (b) =>
+          b
+            ..name = 'memzero'
+            ..external = external
+            ..returns = typeMapping['void']
+            ..requiredParameters.add(
+              Parameter(
+                (b) =>
+                    b
+                      ..name = 'bytes'
+                      ..type = typeMapping['buf'],
+              ),
+            )
+            ..body =
+                external
+                    ? null
+                    : Types.unimplementedError
+                        .newInstance(const [])
+                        .thrown
+                        .code,
     );
     yield Method(
-      (b) => b
-        ..name = 'pad'
-        ..external = external
-        ..returns = typeMapping['buf']
-        ..requiredParameters.addAll([
-          Parameter(
-            (b) => b
-              ..name = 'buf'
-              ..type = typeMapping['buf'],
-          ),
-          Parameter(
-            (b) => b
-              ..name = 'blocksize'
-              ..type = typeMapping['uint'],
-          ),
-        ])
-        ..body = external
-            ? null
-            : Types.unimplementedError.newInstance(const []).thrown.code,
+      (b) =>
+          b
+            ..name = 'pad'
+            ..external = external
+            ..returns = typeMapping['buf']
+            ..requiredParameters.addAll([
+              Parameter(
+                (b) =>
+                    b
+                      ..name = 'buf'
+                      ..type = typeMapping['buf'],
+              ),
+              Parameter(
+                (b) =>
+                    b
+                      ..name = 'blocksize'
+                      ..type = typeMapping['uint'],
+              ),
+            ])
+            ..body =
+                external
+                    ? null
+                    : Types.unimplementedError
+                        .newInstance(const [])
+                        .thrown
+                        .code,
     );
     yield Method(
-      (b) => b
-        ..name = 'unpad'
-        ..external = external
-        ..returns = typeMapping['buf']
-        ..requiredParameters.addAll([
-          Parameter(
-            (b) => b
-              ..name = 'buf'
-              ..type = typeMapping['buf'],
-          ),
-          Parameter(
-            (b) => b
-              ..name = 'blocksize'
-              ..type = typeMapping['uint'],
-          ),
-        ])
-        ..body = external
-            ? null
-            : Types.unimplementedError.newInstance(const []).thrown.code,
+      (b) =>
+          b
+            ..name = 'unpad'
+            ..external = external
+            ..returns = typeMapping['buf']
+            ..requiredParameters.addAll([
+              Parameter(
+                (b) =>
+                    b
+                      ..name = 'buf'
+                      ..type = typeMapping['buf'],
+              ),
+              Parameter(
+                (b) =>
+                    b
+                      ..name = 'blocksize'
+                      ..type = typeMapping['uint'],
+              ),
+            ])
+            ..body =
+                external
+                    ? null
+                    : Types.unimplementedError
+                        .newInstance(const [])
+                        .thrown
+                        .code,
     );
   }
 }

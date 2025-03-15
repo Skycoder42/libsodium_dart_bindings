@@ -16,10 +16,7 @@ class SodiumSumoFFI extends SodiumFFI implements SodiumSumo {
 
   /// @nodoc
   static Future<SodiumSumoFFI> fromFactory(LibSodiumFFIFactory factory) async =>
-      SodiumSumoFFI(
-        await factory(),
-        factory,
-      );
+      SodiumSumoFFI(await factory(), factory);
 
   @override
   // ignore: overridden_fields
@@ -30,13 +27,12 @@ class SodiumSumoFFI extends SodiumFFI implements SodiumSumo {
     SodiumSumoIsolateCallback<T> callback, {
     List<SecureKey> secureKeys = const [],
     List<KeyPair> keyPairs = const [],
-  }) async =>
-      await runIsolatedWithFactory<T, SodiumSumoFFI>(
-        SodiumSumoFFI.fromFactory,
-        callback,
-        secureKeys,
-        keyPairs,
-      );
+  }) async => await runIsolatedWithFactory<T, SodiumSumoFFI>(
+    SodiumSumoFFI.fromFactory,
+    callback,
+    secureKeys,
+    keyPairs,
+  );
 
   @override
   SodiumSumoFactory get isolateFactory {

@@ -71,10 +71,7 @@ abstract class SecureKey {
   ///
   /// The return value of the method is the same as the one returned from the
   /// callback.
-  T runUnlockedSync<T>(
-    SecureCallbackFn<T> callback, {
-    bool writable = false,
-  });
+  T runUnlockedSync<T>(SecureCallbackFn<T> callback, {bool writable = false});
 
   /// Runs the given callback with the unlocked key data.
   ///
@@ -129,16 +126,14 @@ mixin SecureKeyEquality implements SecureKey {
       return false;
     } else {
       return runUnlockedSync(
-        (thisData) => other.runUnlockedSync(
-          (otherData) {
-            for (var i = 0; i < thisData.length; ++i) {
-              if (thisData[i] != otherData[i]) {
-                return false;
-              }
+        (thisData) => other.runUnlockedSync((otherData) {
+          for (var i = 0; i < thisData.length; ++i) {
+            if (thisData[i] != otherData[i]) {
+              return false;
             }
-            return true;
-          },
-        ),
+          }
+          return true;
+        }),
       );
     }
   }

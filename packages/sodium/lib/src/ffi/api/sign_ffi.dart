@@ -38,11 +38,11 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
 
   @override
   KeyPair keyPair() => keyPairImpl(
-        sodium: sodium,
-        secretKeyBytes: secretKeyBytes,
-        publicKeyBytes: publicKeyBytes,
-        implementation: sodium.crypto_sign_keypair,
-      );
+    sodium: sodium,
+    secretKeyBytes: secretKeyBytes,
+    publicKeyBytes: publicKeyBytes,
+    implementation: sodium.crypto_sign_keypair,
+  );
 
   @override
   KeyPair seedKeyPair(SecureKey seed) {
@@ -58,23 +58,15 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
 
   @override
   @pragma('vm:entry-point')
-  Uint8List call({
-    required Uint8List message,
-    required SecureKey secretKey,
-  }) {
+  Uint8List call({required Uint8List message, required SecureKey secretKey}) {
     validateSecretKey(secretKey);
 
     SodiumPointer<UnsignedChar>? dataPtr;
     try {
-      dataPtr = SodiumPointer.alloc(
-        sodium,
-        count: message.length + bytes,
-      )
-        ..fill(List<int>.filled(bytes, 0))
-        ..fill(
-          message,
-          offset: bytes,
-        );
+      dataPtr =
+          SodiumPointer.alloc(sodium, count: message.length + bytes)
+            ..fill(List<int>.filled(bytes, 0))
+            ..fill(message, offset: bytes);
 
       final result = secretKey.runUnlockedNative(
         sodium,
@@ -147,10 +139,7 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
         sodium,
         memoryProtection: MemoryProtection.readOnly,
       );
-      signaturePtr = SodiumPointer.alloc(
-        sodium,
-        count: bytes,
-      );
+      signaturePtr = SodiumPointer.alloc(sodium, count: bytes);
 
       final result = secretKey.runUnlockedNative(
         sodium,
@@ -215,15 +204,10 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
   }
 
   @override
-  SignatureConsumer createConsumer({
-    required SecureKey secretKey,
-  }) {
+  SignatureConsumer createConsumer({required SecureKey secretKey}) {
     validateSecretKey(secretKey);
 
-    return SignatureConsumerFFI(
-      sodium: sodium,
-      secretKey: secretKey,
-    );
+    return SignatureConsumerFFI(sodium: sodium, secretKey: secretKey);
   }
 
   @override

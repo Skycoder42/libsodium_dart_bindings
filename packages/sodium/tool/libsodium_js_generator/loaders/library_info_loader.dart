@@ -15,10 +15,10 @@ class LibraryInfoLoader {
   );
 
   Future<LibraryInfo> load() async => LibraryInfo(
-        typeMapping: _typeMappingsLoader.typeMapping,
-        typeDefs: _typeMappingsLoader.dartTypeDefs.toList(),
-        structs: await _typeMappingsLoader.loadStructs().toList(),
-        constants: await _constantsLoader.loadConstants().toList(),
-        symbols: await _symbolsLoader.loadSymbols().toList(),
-      );
+    typeMapping: _typeMappingsLoader.typeMapping,
+    typeDefs: _typeMappingsLoader.dartTypeDefs.toList(),
+    structs: await _typeMappingsLoader.loadStructs().toList(),
+    constants: await _constantsLoader.loadConstants().toList(),
+    symbols: await _symbolsLoader.loadSymbols().toList(),
+  );
 }

@@ -24,33 +24,21 @@ void main() {
   test('sign returns SignSumoJS instance', () {
     expect(
       sut.sign,
-      isA<SignSumoJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<SignSumoJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
   test('pwhash returns PwhashJS instance', () {
     expect(
       sut.pwhash,
-      isA<PwhashJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<PwhashJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
   test('scalarmult returns ScalarmultSumoJS instance', () {
     expect(
       sut.scalarmult,
-      isA<ScalarmultJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<ScalarmultJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 }

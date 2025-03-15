@@ -39,11 +39,7 @@ void main() {
   });
 
   testConstantsMapping([
-    (
-      () => mockSodium.crypto_generichash_bytes(),
-      () => sut.bytes,
-      'bytes',
-    ),
+    (() => mockSodium.crypto_generichash_bytes(), () => sut.bytes, 'bytes'),
     (
       () => mockSodium.crypto_generichash_bytes_min(),
       () => sut.bytesMin,
@@ -90,10 +86,7 @@ void main() {
     group('call', () {
       test('asserts if outLen is invalid', () {
         expect(
-          () => sut(
-            message: Uint8List(0),
-            outLen: 10,
-          ),
+          () => sut(message: Uint8List(0), outLen: 10),
           throwsA(isA<RangeError>()),
         );
 
@@ -103,10 +96,7 @@ void main() {
 
       test('asserts if key is invalid', () {
         expect(
-          () => sut(
-            message: Uint8List(0),
-            key: SecureKeyFake.empty(10),
-          ),
+          () => sut(message: Uint8List(0), key: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -135,16 +125,16 @@ void main() {
         verifyInOrder([
           () => mockSodium.sodium_allocarray(hashBytes, 1),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(message)),
-              ),
+            any(that: hasRawData(message)),
+          ),
           () => mockSodium.crypto_generichash(
-                any(that: isNot(nullptr)),
-                hashBytes,
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: equals(nullptr)),
-                0,
-              ),
+            any(that: isNot(nullptr)),
+            hashBytes,
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: equals(nullptr)),
+            0,
+          ),
         ]);
       });
 
@@ -173,26 +163,25 @@ void main() {
         verifyInOrder([
           () => mockSodium.sodium_allocarray(outLen, 1),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(message)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+            any(that: hasRawData(message)),
+          ),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_generichash(
-                any(that: isNot(nullptr)),
-                outLen,
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: hasRawData<UnsignedChar>(key)),
-                key.length,
-              ),
+            any(that: isNot(nullptr)),
+            outLen,
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: hasRawData<UnsignedChar>(key)),
+            key.length,
+          ),
         ]);
       });
 
       test('returns calculated default hash', () {
         final hash = List.generate(25, (index) => 10 + index);
-        when(() => mockSodium.crypto_generichash_bytes())
-            .thenReturn(hash.length);
+        when(
+          () => mockSodium.crypto_generichash_bytes(),
+        ).thenReturn(hash.length);
         when(
           () => mockSodium.crypto_generichash(
             any(),
@@ -261,10 +250,7 @@ void main() {
         ).thenReturn(1);
 
         expect(
-          () => sut(
-            message: Uint8List(15),
-            key: SecureKeyFake.empty(5),
-          ),
+          () => sut(message: Uint8List(15), key: SecureKeyFake.empty(5)),
           throwsA(isA<SodiumException>()),
         );
 
@@ -275,9 +261,7 @@ void main() {
     group('createConsumer', () {
       test('asserts if outLen is invalid', () {
         expect(
-          () => sut.createConsumer(
-            outLen: 10,
-          ),
+          () => sut.createConsumer(outLen: 10),
           throwsA(isA<RangeError>()),
         );
 
@@ -287,9 +271,7 @@ void main() {
 
       test('asserts if key is invalid', () {
         expect(
-          () => sut.createConsumer(
-            key: SecureKeyFake.empty(10),
-          ),
+          () => sut.createConsumer(key: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -301,12 +283,7 @@ void main() {
         const outLen = 55;
         when(() => mockSodium.crypto_generichash_bytes()).thenReturn(outLen);
         when(
-          () => mockSodium.crypto_generichash_init(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_generichash_init(any(), any(), any(), any()),
         ).thenReturn(0);
 
         final result = sut.createConsumer();
@@ -315,22 +292,13 @@ void main() {
           result,
           isA<GenericHashConsumerFFI>()
               .having((c) => c.sodium, 'sodium', mockSodium)
-              .having(
-                (c) => c.outLen,
-                'outLen',
-                outLen,
-              ),
+              .having((c) => c.outLen, 'outLen', outLen),
         );
       });
 
       test('returns GenericHashConsumerFFI with key', () {
         when(
-          () => mockSodium.crypto_generichash_init(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_generichash_init(any(), any(), any(), any()),
         ).thenReturn(0);
 
         const outLen = 5;
@@ -345,11 +313,7 @@ void main() {
           result,
           isA<GenericHashConsumerFFI>()
               .having((c) => c.sodium, 'sodium', mockSodium)
-              .having(
-                (c) => c.outLen,
-                'outLen',
-                outLen,
-              ),
+              .having((c) => c.outLen, 'outLen', outLen),
         );
       });
     });

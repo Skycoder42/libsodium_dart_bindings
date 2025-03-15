@@ -40,12 +40,15 @@ void main() {
       mockAllocArray(mockSodium);
       mockAlloc(mockSodium, 0);
 
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_statebytes())
-          .thenReturn(5);
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_headerbytes())
-          .thenReturn(10);
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_abytes())
-          .thenReturn(3);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_statebytes(),
+      ).thenReturn(5);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_headerbytes(),
+      ).thenReturn(10);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_abytes(),
+      ).thenReturn(3);
 
       sut = SecretStreamPushTransformerSinkFFI(mockSodium);
     });
@@ -66,10 +69,10 @@ void main() {
         verifyInOrder([
           () => mockSodium.sodium_memzero(any(that: isNot(nullptr)), 5),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
-                any(that: isNot(nullptr)),
-                any(that: isNot(nullptr)),
-                any(that: hasRawData(keyData)),
-              ),
+            any(that: isNot(nullptr)),
+            any(that: isNot(nullptr)),
+            any(that: hasRawData(keyData)),
+          ),
         ]);
       });
 
@@ -96,8 +99,9 @@ void main() {
 
         verify(() => mockSodium.sodium_free(any())).called(1);
         verifyNever(
-          () => mockSodium
-              .sodium_free(any(that: hasRawData<UnsignedChar>(stateData))),
+          () => mockSodium.sodium_free(
+            any(that: hasRawData<UnsignedChar>(stateData)),
+          ),
         );
       });
 
@@ -139,8 +143,9 @@ void main() {
       });
 
       test('calls push with correct arguments', () {
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_tag_push())
-            .thenReturn(42);
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_tag_push(),
+        ).thenReturn(42);
         when(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
             any(),
@@ -172,15 +177,15 @@ void main() {
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-                state.ptr.cast(),
-                any(that: isNot(nullptr)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(messageData)),
-                messageData.length,
-                any(that: hasRawData<UnsignedChar>(additionalData)),
-                additionalData.length,
-                42,
-              ),
+            state.ptr.cast(),
+            any(that: isNot(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(messageData)),
+            messageData.length,
+            any(that: hasRawData<UnsignedChar>(additionalData)),
+            additionalData.length,
+            42,
+          ),
         ]);
       });
 
@@ -209,15 +214,15 @@ void main() {
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
-                state.ptr.cast(),
-                any(that: isNot(nullptr)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(messageData)),
-                messageData.length,
-                nullptr.cast(),
-                0,
-                0,
-              ),
+            state.ptr.cast(),
+            any(that: isNot(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(messageData)),
+            messageData.length,
+            nullptr.cast(),
+            0,
+            0,
+          ),
         ]);
       });
 
@@ -306,8 +311,11 @@ void main() {
 
       expect(
         sink,
-        isA<SecretStreamPushTransformerSinkFFI>()
-            .having((s) => s.sodium, 'sodium', mockSodium),
+        isA<SecretStreamPushTransformerSinkFFI>().having(
+          (s) => s.sodium,
+          'sodium',
+          mockSodium,
+        ),
       );
     });
   });

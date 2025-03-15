@@ -32,16 +32,8 @@ void main() {
   });
 
   testConstantsMapping([
-    (
-      () => mockSodium.crypto_pwhash_BYTES_MIN,
-      () => sut.bytesMin,
-      'bytesMin',
-    ),
-    (
-      () => mockSodium.crypto_pwhash_BYTES_MAX,
-      () => sut.bytesMax,
-      'bytesMax',
-    ),
+    (() => mockSodium.crypto_pwhash_BYTES_MIN, () => sut.bytesMin, 'bytesMin'),
+    (() => mockSodium.crypto_pwhash_BYTES_MAX, () => sut.bytesMax, 'bytesMax'),
     (
       () => mockSodium.crypto_pwhash_MEMLIMIT_MIN,
       () => sut.memLimitMin,
@@ -107,11 +99,7 @@ void main() {
       () => sut.saltBytes,
       'saltBytes',
     ),
-    (
-      () => mockSodium.crypto_pwhash_STRBYTES,
-      () => sut.strBytes,
-      'strBytes',
-    ),
+    (() => mockSodium.crypto_pwhash_STRBYTES, () => sut.strBytes, 'strBytes'),
     (
       () => mockSodium.crypto_pwhash_ALG_DEFAULT,
       () => CryptoPwhashAlgorithm.defaultAlg.getValue(mockSodium.asLibSodiumJS),
@@ -342,11 +330,7 @@ void main() {
     group('str', () {
       test('asserts if password is invalid', () {
         expect(
-          () => sut.str(
-            password: 'x' * 20,
-            opsLimit: 0,
-            memLimit: 0,
-          ),
+          () => sut.str(password: 'x' * 20, opsLimit: 0, memLimit: 0),
           throwsA(isA<RangeError>()),
         );
 
@@ -356,11 +340,7 @@ void main() {
 
       test('asserts if opsLimit is invalid', () {
         expect(
-          () => sut.str(
-            password: '',
-            opsLimit: 20,
-            memLimit: 0,
-          ),
+          () => sut.str(password: '', opsLimit: 20, memLimit: 0),
           throwsA(isA<RangeError>()),
         );
 
@@ -370,11 +350,7 @@ void main() {
 
       test('asserts if memLimit is invalid', () {
         expect(
-          () => sut.str(
-            password: '',
-            opsLimit: 0,
-            memLimit: 20,
-          ),
+          () => sut.str(password: '', opsLimit: 0, memLimit: 20),
           throwsA(isA<RangeError>()),
         );
 
@@ -384,18 +360,10 @@ void main() {
 
       test('calls crypto_pwhash_str with correct arguments', () {
         when(
-          () => mockSodium.crypto_pwhash_str(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_pwhash_str(any(), any(), any()),
         ).thenReturn('');
 
-        sut.str(
-          password: 'ABC',
-          opsLimit: 5,
-          memLimit: 2,
-        );
+        sut.str(password: 'ABC', opsLimit: 5, memLimit: 2);
 
         verify(
           () => mockSodium.crypto_pwhash_str(
@@ -409,37 +377,21 @@ void main() {
       test('returns password hash ', () {
         const testHashStr = 'ABC';
         when(
-          () => mockSodium.crypto_pwhash_str(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_pwhash_str(any(), any(), any()),
         ).thenReturn(testHashStr);
 
-        final result = sut.str(
-          password: 'abc123',
-          opsLimit: 5,
-          memLimit: 2,
-        );
+        final result = sut.str(password: 'abc123', opsLimit: 5, memLimit: 2);
 
         expect(result, 'ABC');
       });
 
       test('throws SodiumException on JSError', () {
         when(
-          () => mockSodium.crypto_pwhash_str(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_pwhash_str(any(), any(), any()),
         ).thenThrow(JSError());
 
         expect(
-          () => sut.str(
-            password: 'abc123',
-            opsLimit: 5,
-            memLimit: 2,
-          ),
+          () => sut.str(password: 'abc123', opsLimit: 5, memLimit: 2),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -447,16 +399,14 @@ void main() {
 
     group('strVerify', () {
       setUp(() {
-        when(() => mockSodium.crypto_pwhash_str_verify(any(), any()))
-            .thenReturn(true);
+        when(
+          () => mockSodium.crypto_pwhash_str_verify(any(), any()),
+        ).thenReturn(true);
       });
 
       test('asserts if passwordHash is invalid', () {
         expect(
-          () => sut.strVerify(
-            passwordHash: 'x' * 20,
-            password: '',
-          ),
+          () => sut.strVerify(passwordHash: 'x' * 20, password: ''),
           throwsA(isA<ArgumentError>()),
         );
 
@@ -465,10 +415,7 @@ void main() {
 
       test('asserts if password is invalid', () {
         expect(
-          () => sut.strVerify(
-            passwordHash: 'x' * 5,
-            password: 'x' * 20,
-          ),
+          () => sut.strVerify(passwordHash: 'x' * 5, password: 'x' * 20),
           throwsA(isA<RangeError>()),
         );
 
@@ -495,17 +442,11 @@ void main() {
 
       test('throws SodiumException on JSError', () {
         when(
-          () => mockSodium.crypto_pwhash_str_verify(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_pwhash_str_verify(any(), any()),
         ).thenThrow(JSError());
 
         expect(
-          () => sut.strVerify(
-            password: 'abc123',
-            passwordHash: 'xyz89',
-          ),
+          () => sut.strVerify(password: 'abc123', passwordHash: 'xyz89'),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -569,21 +510,13 @@ void main() {
 
         expect(result, isTrue);
         verify(
-          () => mockSodium.crypto_pwhash_str_needs_rehash(
-            passwordHash,
-            9,
-            8,
-          ),
+          () => mockSodium.crypto_pwhash_str_needs_rehash(passwordHash, 9, 8),
         );
       });
 
       test('throws SodiumException on JSError', () {
         when(
-          () => mockSodium.crypto_pwhash_str_needs_rehash(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_pwhash_str_needs_rehash(any(), any(), any()),
         ).thenThrow(JSError());
 
         expect(

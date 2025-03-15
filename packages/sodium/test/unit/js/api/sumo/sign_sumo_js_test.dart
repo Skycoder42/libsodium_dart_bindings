@@ -145,22 +145,24 @@ void main() {
         verify(() => mockSodium.crypto_sign_PUBLICKEYBYTES);
       });
 
-      test('calls crypto_sign_ed25519_pk_to_curve25519 with correct arguments',
-          () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(any()),
-        ).thenReturn(Uint8List(0).toJS);
+      test(
+        'calls crypto_sign_ed25519_pk_to_curve25519 with correct arguments',
+        () {
+          when(
+            () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(any()),
+          ).thenReturn(Uint8List(0).toJS);
 
-        final publicKey = List.generate(5, (index) => 30 + index);
+          final publicKey = List.generate(5, (index) => 30 + index);
 
-        sut.pkToCurve25519(Uint8List.fromList(publicKey));
+          sut.pkToCurve25519(Uint8List.fromList(publicKey));
 
-        verify(
-          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
-            Uint8List.fromList(publicKey).toJS,
-          ),
-        );
-      });
+          verify(
+            () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
+              Uint8List.fromList(publicKey).toJS,
+            ),
+          );
+        },
+      );
 
       test('returns the converted public key', () {
         final publicKey = List.generate(5, (index) => 100 - index);
@@ -200,22 +202,24 @@ void main() {
         verify(() => mockSodium.crypto_sign_SEEDBYTES);
       });
 
-      test('calls crypto_sign_ed25519_sk_to_curve25519 with correct arguments',
-          () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any()),
-        ).thenReturn(Uint8List(0).toJS);
+      test(
+        'calls crypto_sign_ed25519_sk_to_curve25519 with correct arguments',
+        () {
+          when(
+            () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any()),
+          ).thenReturn(Uint8List(0).toJS);
 
-        final secretKey = List.generate(5, (index) => 30 + index);
+          final secretKey = List.generate(5, (index) => 30 + index);
 
-        sut.skToCurve25519(SecureKeyFake(secretKey));
+          sut.skToCurve25519(SecureKeyFake(secretKey));
 
-        verify(
-          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
-            Uint8List.fromList(secretKey).toJS,
-          ),
-        );
-      });
+          verify(
+            () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
+              Uint8List.fromList(secretKey).toJS,
+            ),
+          );
+        },
+      );
 
       test('returns the converted secret key', () {
         final seed = List.generate(5, (index) => 100 - index);
@@ -244,68 +248,74 @@ void main() {
       });
 
       group(
-          'workaround for https://github.com/jedisct1/libsodium.js/issues/347',
-          () {
-        late KeyPair testKeyPair;
+        'workaround for https://github.com/jedisct1/libsodium.js/issues/347',
+        () {
+          late KeyPair testKeyPair;
 
-        setUp(() {
-          testKeyPair = KeyPair(
-            keyType: '',
-            publicKey: Uint8List(0).toJS,
-            privateKey: Uint8List.fromList(
-              List.generate(5, (index) => 20 + index),
-            ).toJS,
-          );
+          setUp(() {
+            testKeyPair = KeyPair(
+              keyType: '',
+              publicKey: Uint8List(0).toJS,
+              privateKey:
+                  Uint8List.fromList(
+                    List.generate(5, (index) => 20 + index),
+                  ).toJS,
+            );
 
-          when(
-            () => mockSodium.crypto_sign_seed_keypair(any()),
-          ).thenReturn(testKeyPair);
-        });
+            when(
+              () => mockSodium.crypto_sign_seed_keypair(any()),
+            ).thenReturn(testKeyPair);
+          });
 
-        test('converts seed to keyPair and then converts the secret key', () {
-          when(
-            () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any()),
-          ).thenReturn(Uint8List(0).toJS);
+          test('converts seed to keyPair and then converts the secret key', () {
+            when(
+              () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any()),
+            ).thenReturn(Uint8List(0).toJS);
 
-          final secretKey = List.generate(8, (index) => 30 + index);
+            final secretKey = List.generate(8, (index) => 30 + index);
 
-          sut.skToCurve25519(SecureKeyFake(secretKey));
+            sut.skToCurve25519(SecureKeyFake(secretKey));
 
-          verifyInOrder([
-            () => mockSodium
-                .crypto_sign_seed_keypair(Uint8List.fromList(secretKey).toJS),
-            () => mockSodium
-                .crypto_sign_ed25519_sk_to_curve25519(testKeyPair.privateKey),
-          ]);
-        });
+            verifyInOrder([
+              () => mockSodium.crypto_sign_seed_keypair(
+                Uint8List.fromList(secretKey).toJS,
+              ),
+              () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
+                testKeyPair.privateKey,
+              ),
+            ]);
+          });
 
-        test('returns the converted secret key and disposes the temporary one',
+          test(
+            'returns the converted secret key and disposes the temporary one',
             () {
-          final seed = List.generate(5, (index) => 100 - index);
-          when(
-            () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any()),
-          ).thenReturn(Uint8List.fromList(seed).toJS);
+              final seed = List.generate(5, (index) => 100 - index);
+              when(
+                () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any()),
+              ).thenReturn(Uint8List.fromList(seed).toJS);
 
-          final result = sut.skToCurve25519(SecureKeyFake.empty(8));
+              final result = sut.skToCurve25519(SecureKeyFake.empty(8));
 
-          expect(result.extractBytes(), seed);
+              expect(result.extractBytes(), seed);
 
-          verify(() => mockSodium.memzero(testKeyPair.privateKey));
-        });
-
-        test('throws exception on failure', () {
-          when(
-            () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any()),
-          ).thenThrow(JSError());
-
-          expect(
-            () => sut.skToCurve25519(SecureKeyFake.empty(8)),
-            throwsA(isA<SodiumException>()),
+              verify(() => mockSodium.memzero(testKeyPair.privateKey));
+            },
           );
 
-          verify(() => mockSodium.memzero(testKeyPair.privateKey));
-        });
-      });
+          test('throws exception on failure', () {
+            when(
+              () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any()),
+            ).thenThrow(JSError());
+
+            expect(
+              () => sut.skToCurve25519(SecureKeyFake.empty(8)),
+              throwsA(isA<SodiumException>()),
+            );
+
+            verify(() => mockSodium.memzero(testKeyPair.privateKey));
+          });
+        },
+      );
     });
   });
 }

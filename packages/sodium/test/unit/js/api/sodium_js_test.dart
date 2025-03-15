@@ -85,10 +85,7 @@ void main() {
     test('throws SodiumException on JSError', () {
       when(() => mockSodium.pad(any(), any())).thenThrow(JSError());
 
-      expect(
-        () => sut.pad(Uint8List(0), 10),
-        throwsA(isA<SodiumException>()),
-      );
+      expect(() => sut.pad(Uint8List(0), 10), throwsA(isA<SodiumException>()));
     });
   });
 
@@ -125,8 +122,9 @@ void main() {
 
   test('secureRandom creates random SecureKey instance', () {
     const length = 10;
-    when(() => mockSodium.randombytes_buf(any()))
-        .thenReturn(Uint8List(length).toJS);
+    when(
+      () => mockSodium.randombytes_buf(any()),
+    ).thenReturn(Uint8List(length).toJS);
 
     final res = sut.secureRandom(length);
 
@@ -145,22 +143,14 @@ void main() {
   test('randombytes returns RandombytesJS instance', () {
     expect(
       sut.randombytes,
-      isA<RandombytesJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<RandombytesJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
   test('crypto returns CryptoJS instance', () {
     expect(
       sut.crypto,
-      isA<CryptoJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<CryptoJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
@@ -186,24 +176,21 @@ void main() {
         ),
       );
 
-      expect(
-        () async {
-          final result = await sut.runIsolated(
-            secureKeys: [secureKey],
-            keyPairs: [keyPair],
-            (sodium, secureKeys, keyPairs) {
-              expect(secureKeys, hasLength(1));
-              expect(secureKeys.single, same(secureKey));
-              expect(keyPairs, hasLength(1));
-              expect(keyPairs.single, same(keyPair));
-              return secureKeys.single;
-            },
-          );
+      expect(() async {
+        final result = await sut.runIsolated(
+          secureKeys: [secureKey],
+          keyPairs: [keyPair],
+          (sodium, secureKeys, keyPairs) {
+            expect(secureKeys, hasLength(1));
+            expect(secureKeys.single, same(secureKey));
+            expect(keyPairs, hasLength(1));
+            expect(keyPairs.single, same(keyPair));
+            return secureKeys.single;
+          },
+        );
 
-          expect(result, same(secureKey));
-        },
-        prints(startsWith('WARNING: Sodium.runIsolated')),
-      );
+        expect(result, same(secureKey));
+      }, prints(startsWith('WARNING: Sodium.runIsolated')));
     });
 
     test('isolateFactory creates factory that returns this', () {
@@ -235,8 +222,9 @@ void main() {
 
       test('throws exception if not a JS key', () {
         expect(
-          () => sut
-              .materializeTransferrableSecureKey(FakeTransferrableSecureKey()),
+          () => sut.materializeTransferrableSecureKey(
+            FakeTransferrableSecureKey(),
+          ),
           throwsA(
             isA<SodiumException>().having(
               (m) => m.originalMessage,

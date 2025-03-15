@@ -22,8 +22,7 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
   static void debugOverwriteFinalizer(
     LibSodiumJS sodium,
     SodiumFinalizer finalizer,
-  ) =>
-      _sodiumFinalizerCache[sodium] = finalizer;
+  ) => _sodiumFinalizerCache[sodium] = finalizer;
 
   /// @nodoc
   final LibSodiumJS sodium;
@@ -39,27 +38,21 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
       SecureKeyJS(sodium, Uint8List(length).toJS);
 
   /// @nodoc
-  factory SecureKeyJS.random(LibSodiumJS sodium, int length) => SecureKeyJS(
-        sodium,
-        jsErrorWrap(() => sodium.randombytes_buf(length)),
-      );
+  factory SecureKeyJS.random(LibSodiumJS sodium, int length) =>
+      SecureKeyJS(sodium, jsErrorWrap(() => sodium.randombytes_buf(length)));
 
   @override
   int get length => _raw.toDart.length;
 
   @override
-  T runUnlockedSync<T>(
-    SecureCallbackFn<T> callback, {
-    bool writable = false,
-  }) =>
+  T runUnlockedSync<T>(SecureCallbackFn<T> callback, {bool writable = false}) =>
       callback(_raw.toDart);
 
   @override
   FutureOr<T> runUnlockedAsync<T>(
     SecureCallbackFn<FutureOr<T>> callback, {
     bool writable = false,
-  }) =>
-      callback(_raw.toDart);
+  }) => callback(_raw.toDart);
 
   @override
   Uint8List extractBytes() => Uint8List.fromList(_raw.toDart);

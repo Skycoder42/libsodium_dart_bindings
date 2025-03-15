@@ -22,13 +22,12 @@ class SodiumSumoJS extends SodiumJS implements SodiumSumo {
     SodiumSumoIsolateCallback<T> callback, {
     List<SecureKey> secureKeys = const [],
     List<KeyPair> keyPairs = const [],
-  }) async =>
-      await runIsolatedWithInstance<T, SodiumSumoJS>(
-        this,
-        callback,
-        secureKeys,
-        keyPairs,
-      );
+  }) async => await runIsolatedWithInstance<T, SodiumSumoJS>(
+    this,
+    callback,
+    secureKeys,
+    keyPairs,
+  );
 
   @override
   SodiumSumoFactory get isolateFactory => () => Future.value(this);

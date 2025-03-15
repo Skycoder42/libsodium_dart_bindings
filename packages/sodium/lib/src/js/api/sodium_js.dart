@@ -23,12 +23,12 @@ import 'transferrable_secure_key_js.dart';
 
 /// @nodoc
 @internal
-typedef SodiumJSIsolateCallback<TResult, TSodium extends SodiumJS>
-    = FutureOr<TResult> Function(
-  TSodium sodium,
-  List<SecureKey> secureKeys,
-  List<KeyPair> keyPairs,
-);
+typedef SodiumJSIsolateCallback<TResult, TSodium extends SodiumJS> =
+    FutureOr<TResult> Function(
+      TSodium sodium,
+      List<SecureKey> secureKeys,
+      List<KeyPair> keyPairs,
+    );
 
 /// @nodoc
 @internal
@@ -41,20 +41,18 @@ class SodiumJS implements Sodium {
 
   @override
   SodiumVersion get version => SodiumVersion(
-        sodium.SODIUM_LIBRARY_VERSION_MAJOR,
-        sodium.SODIUM_LIBRARY_VERSION_MINOR,
-        jsErrorWrap(() => sodium.sodium_version_string()),
-      );
+    sodium.SODIUM_LIBRARY_VERSION_MAJOR,
+    sodium.SODIUM_LIBRARY_VERSION_MINOR,
+    jsErrorWrap(() => sodium.sodium_version_string()),
+  );
 
   @override
-  Uint8List pad(Uint8List buf, int blocksize) => jsErrorWrap(
-        () => sodium.pad(buf.toJS, blocksize).toDart,
-      );
+  Uint8List pad(Uint8List buf, int blocksize) =>
+      jsErrorWrap(() => sodium.pad(buf.toJS, blocksize).toDart);
 
   @override
-  Uint8List unpad(Uint8List buf, int blocksize) => jsErrorWrap(
-        () => sodium.unpad(buf.toJS, blocksize).toDart,
-      );
+  Uint8List unpad(Uint8List buf, int blocksize) =>
+      jsErrorWrap(() => sodium.unpad(buf.toJS, blocksize).toDart);
 
   @override
   SecureKey secureAlloc(int length) => SecureKeyJS.alloc(sodium, length);
@@ -64,9 +62,9 @@ class SodiumJS implements Sodium {
 
   @override
   SecureKey secureCopy(Uint8List data) => SecureKeyJS(
-        sodium,
-        Uint8List.fromList(data).toJS, // force copy the data
-      );
+    sodium,
+    Uint8List.fromList(data).toJS, // force copy the data
+  );
 
   @override
   late final Randombytes randombytes = RandombytesJS(sodium);
@@ -79,13 +77,12 @@ class SodiumJS implements Sodium {
     SodiumIsolateCallback<T> callback, {
     List<SecureKey> secureKeys = const [],
     List<KeyPair> keyPairs = const [],
-  }) async =>
-      await runIsolatedWithInstance<T, SodiumJS>(
-        this,
-        callback,
-        secureKeys,
-        keyPairs,
-      );
+  }) async => await runIsolatedWithInstance<T, SodiumJS>(
+    this,
+    callback,
+    secureKeys,
+    keyPairs,
+  );
 
   @protected
   Future<TResult> runIsolatedWithInstance<TResult, TSodiumJS extends SodiumJS>(

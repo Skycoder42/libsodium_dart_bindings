@@ -66,10 +66,8 @@ class SecretStreamPullTransformerSinkFFI
   }
 
   @override
-  void rekey(SodiumPointer<UnsignedChar> cryptoState) =>
-      sodium.crypto_secretstream_xchacha20poly1305_rekey(
-        cryptoState.ptr.cast(),
-      );
+  void rekey(SodiumPointer<UnsignedChar> cryptoState) => sodium
+      .crypto_secretstream_xchacha20poly1305_rekey(cryptoState.ptr.cast());
 
   @override
   SecretStreamPlainMessage decryptMessage(
@@ -91,13 +89,11 @@ class SecretStreamPullTransformerSinkFFI
       );
       messagePtr = SodiumPointer.alloc(
         sodium,
-        count: cipherPtr.count -
+        count:
+            cipherPtr.count -
             sodium.crypto_secretstream_xchacha20poly1305_abytes(),
       );
-      tagPtr = SodiumPointer.alloc(
-        sodium,
-        zeroMemory: true,
-      );
+      tagPtr = SodiumPointer.alloc(sodium, zeroMemory: true);
 
       final result = sodium.crypto_secretstream_xchacha20poly1305_pull(
         cryptoState.ptr.cast(),
@@ -149,6 +145,5 @@ class SecretStreamPullTransformerFFI
   @override
   SecretStreamPullTransformerSink<SodiumPointer<UnsignedChar>> createSink(
     bool requireFinalized,
-  ) =>
-      SecretStreamPullTransformerSinkFFI(sodium, requireFinalized);
+  ) => SecretStreamPullTransformerSinkFFI(sodium, requireFinalized);
 }

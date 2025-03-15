@@ -45,8 +45,9 @@ class BoxTestCase extends TestCase {
     });
 
     group('seedKeypair', () {
-      test('generates different correct length keys for different seeds',
-          (sodium) {
+      test('generates different correct length keys for different seeds', (
+        sodium,
+      ) {
         final sut = sodium.crypto.box;
 
         final seed1 = sodium.secureRandom(sut.seedBytes);
@@ -304,10 +305,7 @@ class BoxTestCase extends TestCase {
           printOnFailure('nonce: $nonce');
           printOnFailure('message: $message');
 
-          final cipherText = senderPreBox.easy(
-            message: message,
-            nonce: nonce,
-          );
+          final cipherText = senderPreBox.easy(message: message, nonce: nonce);
 
           printOnFailure('cipherText: $cipherText');
 
@@ -337,10 +335,8 @@ class BoxTestCase extends TestCase {
           cipherText[0] = cipherText[0] ^ 0xFF;
 
           expect(
-            () => recipientPreBox.openEasy(
-              cipherText: cipherText,
-              nonce: nonce,
-            ),
+            () =>
+                recipientPreBox.openEasy(cipherText: cipherText, nonce: nonce),
             throwsA(isA<SodiumException>()),
           );
         });
@@ -358,10 +354,7 @@ class BoxTestCase extends TestCase {
           printOnFailure('nonce: $nonce');
           printOnFailure('message: $message');
 
-          final cipher = senderPreBox.detached(
-            message: message,
-            nonce: nonce,
-          );
+          final cipher = senderPreBox.detached(message: message, nonce: nonce);
 
           printOnFailure('cipher: $cipher');
 

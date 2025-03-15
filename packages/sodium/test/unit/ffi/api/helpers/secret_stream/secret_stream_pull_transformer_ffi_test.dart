@@ -41,12 +41,15 @@ void main() {
       mockAllocArray(mockSodium);
       mockAlloc(mockSodium, 0);
 
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_statebytes())
-          .thenReturn(5);
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_headerbytes())
-          .thenReturn(10);
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_abytes())
-          .thenReturn(3);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_statebytes(),
+      ).thenReturn(5);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_headerbytes(),
+      ).thenReturn(10);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_abytes(),
+      ).thenReturn(3);
 
       sut = SecretStreamPullTransformerSinkFFI(mockSodium, false);
     });
@@ -72,22 +75,16 @@ void main() {
         final keyData = List.generate(7, (index) => index * 4);
         final headerData = List.generate(10, (index) => index + 1);
 
-        sut.initialize(
-          SecureKeyFake(keyData),
-          Uint8List.fromList(headerData),
-        );
+        sut.initialize(SecureKeyFake(keyData), Uint8List.fromList(headerData));
 
         verifyInOrder([
-          () => mockSodium.sodium_memzero(
-                any(that: isNot(nullptr)),
-                5,
-              ),
+          () => mockSodium.sodium_memzero(any(that: isNot(nullptr)), 5),
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<UnsignedChar>(headerData)),
-                any(that: hasRawData<UnsignedChar>(keyData)),
-              ),
+            any(that: isNot(nullptr)),
+            any(that: hasRawData<UnsignedChar>(headerData)),
+            any(that: hasRawData<UnsignedChar>(keyData)),
+          ),
         ]);
       });
 
@@ -110,8 +107,9 @@ void main() {
         expect(state.ptr, hasRawData<UnsignedChar>(stateData));
         verify(() => mockSodium.sodium_free(any())).called(2);
         verifyNever(
-          () => mockSodium
-              .sodium_free(any(that: hasRawData<UnsignedChar>(stateData))),
+          () => mockSodium.sodium_free(
+            any(that: hasRawData<UnsignedChar>(stateData)),
+          ),
         );
       });
 
@@ -182,21 +180,19 @@ void main() {
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
           () => mockSodium.sodium_memzero(
-                any(that: isNot(nullptr)),
-                sizeOf<UnsignedChar>(),
-              ),
+            any(that: isNot(nullptr)),
+            sizeOf<UnsignedChar>(),
+          ),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                state.ptr.cast(),
-                any(that: isNot(nullptr)),
-                any(that: equals(nullptr)),
-                any(
-                  that: predicate<Pointer<UnsignedChar>>((p) => p.value == 0),
-                ),
-                any(that: hasRawData<UnsignedChar>(cipherData)),
-                cipherData.length,
-                any(that: hasRawData<UnsignedChar>(additionalData)),
-                additionalData.length,
-              ),
+            state.ptr.cast(),
+            any(that: isNot(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: predicate<Pointer<UnsignedChar>>((p) => p.value == 0)),
+            any(that: hasRawData<UnsignedChar>(cipherData)),
+            cipherData.length,
+            any(that: hasRawData<UnsignedChar>(additionalData)),
+            additionalData.length,
+          ),
         ]);
       });
 
@@ -225,29 +221,28 @@ void main() {
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
           () => mockSodium.sodium_memzero(
-                any(that: isNot(nullptr)),
-                sizeOf<UnsignedChar>(),
-              ),
+            any(that: isNot(nullptr)),
+            sizeOf<UnsignedChar>(),
+          ),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-                state.ptr.cast(),
-                any(that: isNot(nullptr)),
-                any(that: equals(nullptr)),
-                any(
-                  that: predicate<Pointer<UnsignedChar>>((p) => p.value == 0),
-                ),
-                any(that: hasRawData<UnsignedChar>(cipherData)),
-                cipherData.length,
-                nullptr.cast(),
-                0,
-              ),
+            state.ptr.cast(),
+            any(that: isNot(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: predicate<Pointer<UnsignedChar>>((p) => p.value == 0)),
+            any(that: hasRawData<UnsignedChar>(cipherData)),
+            cipherData.length,
+            nullptr.cast(),
+            0,
+          ),
         ]);
       });
 
       test('returns decrypted plain message', () {
         const tagValue = 77;
         final plainData = List.generate(13, (index) => index + 1);
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_tag_push())
-            .thenReturn(tagValue);
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_tag_push(),
+        ).thenReturn(tagValue);
         when(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
             any(),

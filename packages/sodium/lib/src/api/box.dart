@@ -24,18 +24,12 @@ abstract class PrecalculatedBox {
   /// Provides crypto_box_easy_afternm.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface
-  Uint8List easy({
-    required Uint8List message,
-    required Uint8List nonce,
-  });
+  Uint8List easy({required Uint8List message, required Uint8List nonce});
 
   /// Provides crypto_box_open_easy_afternm.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface
-  Uint8List openEasy({
-    required Uint8List cipherText,
-    required Uint8List nonce,
-  });
+  Uint8List openEasy({required Uint8List cipherText, required Uint8List nonce});
 
   /// Provides crypto_box_detached_afternm.
   ///
@@ -165,10 +159,7 @@ abstract class Box {
   /// Provides crypto_box_seal.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes#usage
-  Uint8List seal({
-    required Uint8List message,
-    required Uint8List publicKey,
-  });
+  Uint8List seal({required Uint8List message, required Uint8List publicKey});
 
   /// Provides crypto_box_seal_open.
   ///
@@ -184,51 +175,30 @@ abstract class Box {
 @internal
 mixin BoxValidations implements Box {
   /// @nodoc
-  void validatePublicKey(Uint8List publicKey) => Validations.checkIsSame(
-        publicKey.length,
-        publicKeyBytes,
-        'publicKey',
-      );
+  void validatePublicKey(Uint8List publicKey) =>
+      Validations.checkIsSame(publicKey.length, publicKeyBytes, 'publicKey');
 
   /// @nodoc
-  void validateSecretKey(SecureKey secretKey) => Validations.checkIsSame(
-        secretKey.length,
-        secretKeyBytes,
-        'secretKey',
-      );
+  void validateSecretKey(SecureKey secretKey) =>
+      Validations.checkIsSame(secretKey.length, secretKeyBytes, 'secretKey');
 
   /// @nodoc
-  void validateMac(Uint8List mac) => Validations.checkIsSame(
-        mac.length,
-        macBytes,
-        'mac',
-      );
+  void validateMac(Uint8List mac) =>
+      Validations.checkIsSame(mac.length, macBytes, 'mac');
 
   /// @nodoc
-  void validateNonce(Uint8List nonce) => Validations.checkIsSame(
-        nonce.length,
-        nonceBytes,
-        'nonce',
-      );
+  void validateNonce(Uint8List nonce) =>
+      Validations.checkIsSame(nonce.length, nonceBytes, 'nonce');
 
   /// @nodoc
-  void validateSeed(SecureKey seed) => Validations.checkIsSame(
-        seed.length,
-        seedBytes,
-        'seed',
-      );
+  void validateSeed(SecureKey seed) =>
+      Validations.checkIsSame(seed.length, seedBytes, 'seed');
 
   /// @nodoc
-  void validateEasyCipherText(Uint8List cipherText) => Validations.checkAtLeast(
-        cipherText.length,
-        macBytes,
-        'cipherText',
-      );
+  void validateEasyCipherText(Uint8List cipherText) =>
+      Validations.checkAtLeast(cipherText.length, macBytes, 'cipherText');
 
   /// @nodoc
-  void validateSealCipherText(Uint8List cipherText) => Validations.checkAtLeast(
-        cipherText.length,
-        sealBytes,
-        'cipherText',
-      );
+  void validateSealCipherText(Uint8List cipherText) =>
+      Validations.checkAtLeast(cipherText.length, sealBytes, 'cipherText');
 }

@@ -64,17 +64,13 @@ void main() {
       final mockConsumer = MockSignatureConsumer();
 
       const messageStream = Stream<Uint8List>.empty();
-      final secretKey = SecureKeyFake(
-        List.generate(15, (index) => index),
-      );
+      final secretKey = SecureKeyFake(List.generate(15, (index) => index));
       final signature = Uint8List.fromList(
         List.generate(5, (index) => 100 + index),
       );
 
       when(
-        () => sutMock.createConsumer(
-          secretKey: any(named: 'secretKey'),
-        ),
+        () => sutMock.createConsumer(secretKey: any(named: 'secretKey')),
       ).thenReturn(mockConsumer);
       when<dynamic>(() => mockConsumer.addStream(any())).thenAnswer((i) {});
       when(() => mockConsumer.close()).thenAnswer((i) async => signature);
@@ -96,9 +92,7 @@ void main() {
       final mockConsumer = MockVerificationConsumer();
 
       const messageStream = Stream<Uint8List>.empty();
-      final publicKey = Uint8List.fromList(
-        List.generate(15, (index) => index),
-      );
+      final publicKey = Uint8List.fromList(List.generate(15, (index) => index));
       final signature = Uint8List.fromList(
         List.generate(5, (index) => 100 + index),
       );
@@ -121,9 +115,9 @@ void main() {
       expect(res, isTrue);
       verifyInOrder([
         () => sutMock.createVerifyConsumer(
-              publicKey: publicKey,
-              signature: signature,
-            ),
+          publicKey: publicKey,
+          signature: signature,
+        ),
         () => mockConsumer.addStream(messageStream),
         () => mockConsumer.close(),
       ]);

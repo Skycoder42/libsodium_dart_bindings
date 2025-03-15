@@ -4,10 +4,11 @@ sealed class Types {
   Types._();
 
   static TypeReference named(String symbol, [String? url]) => TypeReference(
-        (b) => b
+    (b) =>
+        b
           ..symbol = symbol
           ..url = url,
-      );
+  );
 
   static final TypeReference jsAny = named('JSAny');
 

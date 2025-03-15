@@ -80,6 +80,7 @@ sealed class SecretStreamPlainMessage with _$SecretStreamPlainMessage {
   const factory SecretStreamPlainMessage(
     /// The message that should be encrypted.
     Uint8List message, {
+
     /// Additional data, that should be used to generate authentication data.
     ///
     /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#encryption
@@ -100,6 +101,7 @@ sealed class SecretStreamCipherMessage with _$SecretStreamCipherMessage {
   const factory SecretStreamCipherMessage(
     /// The message that should be decrypted.
     Uint8List message, {
+
     /// Additional data, that should be used to generate authentication data.
     ///
     /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#decryption
@@ -322,7 +324,7 @@ abstract class SecretStream {
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#encryption
   SecretExStreamTransformer<SecretStreamPlainMessage, SecretStreamCipherMessage>
-      createPushEx(SecureKey key);
+  createPushEx(SecureKey key);
 
   /// Provides crypto_secretstream_xchacha20poly1305_(init_)pull.
   ///
@@ -336,19 +338,13 @@ abstract class SecretStream {
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#decryption
   SecretExStreamTransformer<SecretStreamCipherMessage, SecretStreamPlainMessage>
-      createPullEx(
-    SecureKey key, {
-    bool requireFinalized = true,
-  });
+  createPullEx(SecureKey key, {bool requireFinalized = true});
 }
 
 /// @nodoc
 @internal
 mixin SecretStreamValidations implements SecretStream {
   /// @nodoc
-  void validateKey(SecureKey key) => Validations.checkIsSame(
-        key.length,
-        keyBytes,
-        'key',
-      );
+  void validateKey(SecureKey key) =>
+      Validations.checkIsSame(key.length, keyBytes, 'key');
 }

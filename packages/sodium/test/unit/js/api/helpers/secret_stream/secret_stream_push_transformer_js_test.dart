@@ -32,10 +32,12 @@ void main() {
     late SecretStreamPushTransformerSinkJS sut;
 
     setUp(() {
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES)
-          .thenReturn(5);
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_ABYTES)
-          .thenReturn(7);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES,
+      ).thenReturn(5);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_ABYTES,
+      ).thenReturn(7);
 
       sut = SecretStreamPushTransformerSinkJS(mockSodium.asLibSodiumJS);
     });
@@ -49,9 +51,8 @@ void main() {
       test('calls init_push with correct arguments', () {
         final keyData = List.generate(7, (index) => index * 3);
         when(
-          () => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
-            any(),
-          ),
+          () =>
+              mockSodium.crypto_secretstream_xchacha20poly1305_init_push(any()),
         ).thenReturn(fakeResult);
 
         sut.initialize(SecureKeyFake(keyData));
@@ -67,9 +68,8 @@ void main() {
         const state = 42;
         final headerData = List.generate(10, (index) => 15 + index);
         when(
-          () => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
-            any(),
-          ),
+          () =>
+              mockSodium.crypto_secretstream_xchacha20poly1305_init_push(any()),
         ).thenReturn(
           SecretStreamInitPush(
             state: state.toJS,
@@ -85,9 +85,8 @@ void main() {
 
       test('throws SodiumException if init_push fails', () {
         when(
-          () => mockSodium.crypto_secretstream_xchacha20poly1305_init_push(
-            any(),
-          ),
+          () =>
+              mockSodium.crypto_secretstream_xchacha20poly1305_init_push(any()),
         ).thenThrow(JSError());
 
         expect(
@@ -108,8 +107,9 @@ void main() {
         sut.rekey(state.toJS);
 
         verify(
-          () => mockSodium
-              .crypto_secretstream_xchacha20poly1305_rekey(state.toJS),
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(
+            state.toJS,
+          ),
         );
       });
 
@@ -118,10 +118,7 @@ void main() {
           () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()),
         ).thenThrow(JSError());
 
-        expect(
-          () => sut.rekey(1.toJS),
-          throwsA(isA<SodiumException>()),
-        );
+        expect(() => sut.rekey(1.toJS), throwsA(isA<SodiumException>()));
       });
     });
 
@@ -133,8 +130,9 @@ void main() {
       });
 
       test('calls push with correct arguments', () {
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH)
-            .thenReturn(42);
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH,
+        ).thenReturn(42);
         when(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
             any(),
@@ -285,8 +283,11 @@ void main() {
 
       expect(
         sink,
-        isA<SecretStreamPushTransformerSinkJS>()
-            .having((s) => s.sodium, 'sodium', sut.sodium),
+        isA<SecretStreamPushTransformerSinkJS>().having(
+          (s) => s.sodium,
+          'sodium',
+          sut.sodium,
+        ),
       );
     });
   });

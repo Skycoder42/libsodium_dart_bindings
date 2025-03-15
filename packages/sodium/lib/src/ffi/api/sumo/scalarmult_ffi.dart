@@ -33,10 +33,7 @@ class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
 
     SodiumPointer<UnsignedChar>? qPtr;
     try {
-      qPtr = SodiumPointer.alloc(
-        sodium,
-        count: bytes,
-      );
+      qPtr = SodiumPointer.alloc(sodium, count: bytes);
 
       final result = n.runUnlockedNative(
         sodium,
@@ -53,10 +50,7 @@ class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
 
   @override
   @pragma('vm:entry-point')
-  SecureKey call({
-    required SecureKey n,
-    required Uint8List p,
-  }) {
+  SecureKey call({required SecureKey n, required Uint8List p}) {
     validateSecretKey(n);
     validatePublicKey(p);
 
@@ -72,11 +66,7 @@ class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
       final result = q.runUnlockedNative(
         (qPtr) => n.runUnlockedNative(
           sodium,
-          (nPtr) => sodium.crypto_scalarmult(
-            qPtr.ptr,
-            nPtr.ptr,
-            pPtr!.ptr,
-          ),
+          (nPtr) => sodium.crypto_scalarmult(qPtr.ptr, nPtr.ptr, pPtr!.ptr),
         ),
         writable: true,
       );

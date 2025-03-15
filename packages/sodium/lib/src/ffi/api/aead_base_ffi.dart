@@ -15,60 +15,64 @@ import 'helpers/keygen_mixin.dart';
 
 /// @nodoc
 @internal
-typedef InternalEncrypt = int Function(
-  Pointer<UnsignedChar> c,
-  Pointer<UnsignedLongLong> clenP,
-  Pointer<UnsignedChar> m,
-  int mlen,
-  Pointer<UnsignedChar> ad,
-  int adlen,
-  Pointer<UnsignedChar> nsec,
-  Pointer<UnsignedChar> npub,
-  Pointer<UnsignedChar> k,
-);
+typedef InternalEncrypt =
+    int Function(
+      Pointer<UnsignedChar> c,
+      Pointer<UnsignedLongLong> clenP,
+      Pointer<UnsignedChar> m,
+      int mlen,
+      Pointer<UnsignedChar> ad,
+      int adlen,
+      Pointer<UnsignedChar> nsec,
+      Pointer<UnsignedChar> npub,
+      Pointer<UnsignedChar> k,
+    );
 
 /// @nodoc
 @internal
-typedef InternalDecrypt = int Function(
-  Pointer<UnsignedChar> m,
-  Pointer<UnsignedLongLong> mlenP,
-  Pointer<UnsignedChar> nsec,
-  Pointer<UnsignedChar> c,
-  int clen,
-  Pointer<UnsignedChar> ad,
-  int adlen,
-  Pointer<UnsignedChar> npub,
-  Pointer<UnsignedChar> k,
-);
+typedef InternalDecrypt =
+    int Function(
+      Pointer<UnsignedChar> m,
+      Pointer<UnsignedLongLong> mlenP,
+      Pointer<UnsignedChar> nsec,
+      Pointer<UnsignedChar> c,
+      int clen,
+      Pointer<UnsignedChar> ad,
+      int adlen,
+      Pointer<UnsignedChar> npub,
+      Pointer<UnsignedChar> k,
+    );
 
 /// @nodoc
 @internal
-typedef InternalEncryptDetached = int Function(
-  Pointer<UnsignedChar> c,
-  Pointer<UnsignedChar> mac,
-  Pointer<UnsignedLongLong> maclenP,
-  Pointer<UnsignedChar> m,
-  int mlen,
-  Pointer<UnsignedChar> ad,
-  int adlen,
-  Pointer<UnsignedChar> nsec,
-  Pointer<UnsignedChar> npub,
-  Pointer<UnsignedChar> k,
-);
+typedef InternalEncryptDetached =
+    int Function(
+      Pointer<UnsignedChar> c,
+      Pointer<UnsignedChar> mac,
+      Pointer<UnsignedLongLong> maclenP,
+      Pointer<UnsignedChar> m,
+      int mlen,
+      Pointer<UnsignedChar> ad,
+      int adlen,
+      Pointer<UnsignedChar> nsec,
+      Pointer<UnsignedChar> npub,
+      Pointer<UnsignedChar> k,
+    );
 
 /// @nodoc
 @internal
-typedef InternalDecryptDetached = int Function(
-  Pointer<UnsignedChar> m,
-  Pointer<UnsignedChar> nsec,
-  Pointer<UnsignedChar> c,
-  int clen,
-  Pointer<UnsignedChar> mac,
-  Pointer<UnsignedChar> ad,
-  int adlen,
-  Pointer<UnsignedChar> npub,
-  Pointer<UnsignedChar> k,
-);
+typedef InternalDecryptDetached =
+    int Function(
+      Pointer<UnsignedChar> m,
+      Pointer<UnsignedChar> nsec,
+      Pointer<UnsignedChar> c,
+      int clen,
+      Pointer<UnsignedChar> mac,
+      Pointer<UnsignedChar> ad,
+      int adlen,
+      Pointer<UnsignedChar> npub,
+      Pointer<UnsignedChar> k,
+    );
 
 /// @nodoc
 @internal
@@ -109,15 +113,10 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
     SodiumPointer<UnsignedChar>? noncePtr;
     SodiumPointer<UnsignedChar>? adPtr;
     try {
-      dataPtr = SodiumPointer.alloc(
-        sodium,
-        count: message.length + aBytes,
-      )
-        ..fill(message)
-        ..fill(
-          List<int>.filled(aBytes, 0),
-          offset: message.length,
-        );
+      dataPtr =
+          SodiumPointer.alloc(sodium, count: message.length + aBytes)
+            ..fill(message)
+            ..fill(List<int>.filled(aBytes, 0), offset: message.length);
       noncePtr = nonce.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,

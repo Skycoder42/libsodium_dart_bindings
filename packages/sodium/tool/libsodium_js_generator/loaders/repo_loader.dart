@@ -16,10 +16,7 @@ class RepoLoader {
         downloadUri,
         withSignature: false,
       );
-      await Archive.extract(
-        archive: archive,
-        outDir: Github.env.runnerTemp,
-      );
+      await Archive.extract(archive: archive, outDir: Github.env.runnerTemp);
       return Github.env.runnerTemp
           .subDir('libsodium.js-$tag')
           .subDir('wrapper');

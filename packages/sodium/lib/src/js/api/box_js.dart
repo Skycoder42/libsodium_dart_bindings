@@ -26,21 +26,19 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
   PrecalculatedBoxJS(this.box, this.sharedKey);
 
   @override
-  Uint8List easy({
-    required Uint8List message,
-    required Uint8List nonce,
-  }) {
+  Uint8List easy({required Uint8List message, required Uint8List nonce}) {
     box.validateNonce(nonce);
 
     return jsErrorWrap(
       () => sharedKey.runUnlockedSync(
-        (sharedKeyData) => box.sodium
-            .crypto_box_easy_afternm(
-              message.toJS,
-              nonce.toJS,
-              sharedKeyData.toJS,
-            )
-            .toDart,
+        (sharedKeyData) =>
+            box.sodium
+                .crypto_box_easy_afternm(
+                  message.toJS,
+                  nonce.toJS,
+                  sharedKeyData.toJS,
+                )
+                .toDart,
       ),
     );
   }
@@ -56,13 +54,14 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
 
     return jsErrorWrap(
       () => sharedKey.runUnlockedSync(
-        (sharedKeyData) => box.sodium
-            .crypto_box_open_easy_afternm(
-              cipherText.toJS,
-              nonce.toJS,
-              sharedKeyData.toJS,
-            )
-            .toDart,
+        (sharedKeyData) =>
+            box.sodium
+                .crypto_box_open_easy_afternm(
+                  cipherText.toJS,
+                  nonce.toJS,
+                  sharedKeyData.toJS,
+                )
+                .toDart,
       ),
     );
   }
@@ -73,10 +72,7 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
     required Uint8List nonce,
   }) {
     // Simulate detached, as it is not exposed from JS
-    final easyCipher = easy(
-      message: message,
-      nonce: nonce,
-    );
+    final easyCipher = easy(message: message, nonce: nonce);
     return DetachedCipherResult(
       cipherText: easyCipher.sublist(box.macBytes),
       mac: easyCipher.sublist(0, box.macBytes),
@@ -89,11 +85,8 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
     required Uint8List mac,
     required Uint8List nonce,
   }) =>
-      // Simulate detached, as it is not exposed from JS
-      openEasy(
-        cipherText: Uint8List.fromList(mac + cipherText),
-        nonce: nonce,
-      );
+  // Simulate detached, as it is not exposed from JS
+  openEasy(cipherText: Uint8List.fromList(mac + cipherText), nonce: nonce);
 
   @override
   void dispose() => sharedKey.dispose();
@@ -165,14 +158,15 @@ class BoxJS with BoxValidations implements Box {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium
-            .crypto_box_easy(
-              message.toJS,
-              nonce.toJS,
-              publicKey.toJS,
-              secretKeyData.toJS,
-            )
-            .toDart,
+        (secretKeyData) =>
+            sodium
+                .crypto_box_easy(
+                  message.toJS,
+                  nonce.toJS,
+                  publicKey.toJS,
+                  secretKeyData.toJS,
+                )
+                .toDart,
       ),
     );
   }
@@ -191,14 +185,15 @@ class BoxJS with BoxValidations implements Box {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium
-            .crypto_box_open_easy(
-              cipherText.toJS,
-              nonce.toJS,
-              publicKey.toJS,
-              secretKeyData.toJS,
-            )
-            .toDart,
+        (secretKeyData) =>
+            sodium
+                .crypto_box_open_easy(
+                  cipherText.toJS,
+                  nonce.toJS,
+                  publicKey.toJS,
+                  secretKeyData.toJS,
+                )
+                .toDart,
       ),
     );
   }
@@ -246,15 +241,16 @@ class BoxJS with BoxValidations implements Box {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium
-            .crypto_box_open_detached(
-              cipherText.toJS,
-              mac.toJS,
-              nonce.toJS,
-              publicKey.toJS,
-              secretKeyData.toJS,
-            )
-            .toDart,
+        (secretKeyData) =>
+            sodium
+                .crypto_box_open_detached(
+                  cipherText.toJS,
+                  mac.toJS,
+                  nonce.toJS,
+                  publicKey.toJS,
+                  secretKeyData.toJS,
+                )
+                .toDart,
       ),
     );
   }
@@ -273,10 +269,8 @@ class BoxJS with BoxValidations implements Box {
         sodium,
         jsErrorWrap(
           () => secretKey.runUnlockedSync(
-            (secretKeyData) => sodium.crypto_box_beforenm(
-              publicKey.toJS,
-              secretKeyData.toJS,
-            ),
+            (secretKeyData) =>
+                sodium.crypto_box_beforenm(publicKey.toJS, secretKeyData.toJS),
           ),
         ),
       ),
@@ -284,19 +278,11 @@ class BoxJS with BoxValidations implements Box {
   }
 
   @override
-  Uint8List seal({
-    required Uint8List message,
-    required Uint8List publicKey,
-  }) {
+  Uint8List seal({required Uint8List message, required Uint8List publicKey}) {
     validatePublicKey(publicKey);
 
     return jsErrorWrap(
-      () => sodium
-          .crypto_box_seal(
-            message.toJS,
-            publicKey.toJS,
-          )
-          .toDart,
+      () => sodium.crypto_box_seal(message.toJS, publicKey.toJS).toDart,
     );
   }
 
@@ -312,13 +298,14 @@ class BoxJS with BoxValidations implements Box {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium
-            .crypto_box_seal_open(
-              cipherText.toJS,
-              publicKey.toJS,
-              secretKeyData.toJS,
-            )
-            .toDart,
+        (secretKeyData) =>
+            sodium
+                .crypto_box_seal_open(
+                  cipherText.toJS,
+                  publicKey.toJS,
+                  secretKeyData.toJS,
+                )
+                .toDart,
       ),
     );
   }

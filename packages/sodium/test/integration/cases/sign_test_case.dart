@@ -43,8 +43,9 @@ class SignTestCase extends TestCase {
     });
 
     group('seedKeypair', () {
-      test('generates different correct length keys for different seeds',
-          (sodium) {
+      test('generates different correct length keys for different seeds', (
+        sodium,
+      ) {
         final sut = sodium.crypto.sign;
 
         final seed1 = sodium.secureRandom(sut.seedBytes);
@@ -231,9 +232,7 @@ class SignTestCase extends TestCase {
         final signerKey = sut.keyPair();
         final messages = List.generate(
           10,
-          (i) => Uint8List.fromList(
-            List.generate(32, (j) => i + j),
-          ),
+          (i) => Uint8List.fromList(List.generate(32, (j) => i + j)),
         );
 
         printOnFailure(
@@ -265,9 +264,7 @@ class SignTestCase extends TestCase {
         final signerKey = sut.keyPair();
         final messages = List.generate(
           10,
-          (i) => Uint8List.fromList(
-            List.generate(32, (j) => i + j),
-          ),
+          (i) => Uint8List.fromList(List.generate(32, (j) => i + j)),
         );
 
         printOnFailure(

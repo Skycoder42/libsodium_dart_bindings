@@ -13,8 +13,9 @@ import 'secret_stream_message_tag_jsx.dart';
 
 /// @nodoc
 @internal
-class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
-    SecretstreamXchacha20poly1305State> {
+class SecretStreamPullTransformerSinkJS
+    extends
+        SecretStreamPullTransformerSink<SecretstreamXchacha20poly1305State> {
   /// @nodoc
   final LibSodiumJS sodium;
 
@@ -33,21 +34,20 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
   SecretstreamXchacha20poly1305State initialize(
     SecureKey key,
     Uint8List header,
-  ) =>
-      jsErrorWrap(
-        () => key.runUnlockedSync(
-          (keyData) => sodium.crypto_secretstream_xchacha20poly1305_init_pull(
-            header.toJS,
-            keyData.toJS,
-          ),
-        ),
-      );
+  ) => jsErrorWrap(
+    () => key.runUnlockedSync(
+      (keyData) => sodium.crypto_secretstream_xchacha20poly1305_init_pull(
+        header.toJS,
+        keyData.toJS,
+      ),
+    ),
+  );
 
   @override
   void rekey(SecretstreamXchacha20poly1305State cryptoState) => jsErrorWrap(
-        // ignore result, as it is always true
-        () => sodium.crypto_secretstream_xchacha20poly1305_rekey(cryptoState),
-      );
+    // ignore result, as it is always true
+    () => sodium.crypto_secretstream_xchacha20poly1305_rekey(cryptoState),
+  );
 
   @override
   SecretStreamPlainMessage decryptMessage(
@@ -64,20 +64,14 @@ class SecretStreamPullTransformerSinkJS extends SecretStreamPullTransformerSink<
 
     if (pullResult.isA<JSBoolean>()) {
       final boolResult = pullResult as JSBoolean;
-      assert(
-        !boolResult.toDart,
-        'unexpected true value for SecretStreamPull',
-      );
+      assert(!boolResult.toDart, 'unexpected true value for SecretStreamPull');
       throw SodiumException();
       // ignore: invalid_runtime_check_with_js_interop_types because SecretStreamPull is an anonymous type
     } else if (pullResult is SecretStreamPull) {
       return SecretStreamPlainMessage(
         pullResult.message.toDart,
         additionalData: event.additionalData,
-        tag: SecretStreamMessageTagJSX.fromValue(
-          sodium,
-          pullResult.tag,
-        ),
+        tag: SecretStreamMessageTagJSX.fromValue(sodium, pullResult.tag),
       );
     } else {
       throw TypeError();
@@ -105,6 +99,6 @@ class SecretStreamPullTransformerJS
 
   @override
   SecretStreamPullTransformerSink<SecretstreamXchacha20poly1305State>
-      createSink(bool requireFinalized) =>
-          SecretStreamPullTransformerSinkJS(sodium, requireFinalized);
+  createSink(bool requireFinalized) =>
+      SecretStreamPullTransformerSinkJS(sodium, requireFinalized);
 }

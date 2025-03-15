@@ -54,9 +54,10 @@ class SignSumoJS extends SignJS with SignSumoValidations implements SignSumo {
     validateSecretKeyOrSeed(secretKey);
 
     // TODO workaround for https://github.com/jedisct1/libsodium.js/issues/347
-    final actualKey = secretKey.length == seedBytes
-        ? seedKeyPair(secretKey).secretKey
-        : secretKey;
+    final actualKey =
+        secretKey.length == seedBytes
+            ? seedKeyPair(secretKey).secretKey
+            : secretKey;
     try {
       return jsErrorWrap(
         () => actualKey.runUnlockedSync(

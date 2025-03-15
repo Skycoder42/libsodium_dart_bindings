@@ -44,18 +44,14 @@ class GenericHashFFI
 
   @override
   SecureKey keygen() => keygenImpl(
-        sodium: sodium,
-        keyBytes: keyBytes,
-        implementation: sodium.crypto_generichash_keygen,
-      );
+    sodium: sodium,
+    keyBytes: keyBytes,
+    implementation: sodium.crypto_generichash_keygen,
+  );
 
   @override
   @pragma('vm:entry-point')
-  Uint8List call({
-    required Uint8List message,
-    int? outLen,
-    SecureKey? key,
-  }) {
+  Uint8List call({required Uint8List message, int? outLen, SecureKey? key}) {
     if (outLen != null) {
       validateOutLen(outLen);
     }
@@ -66,10 +62,7 @@ class GenericHashFFI
     SodiumPointer<UnsignedChar>? outPtr;
     SodiumPointer<UnsignedChar>? inPtr;
     try {
-      outPtr = SodiumPointer.alloc(
-        sodium,
-        count: outLen ?? bytes,
-      );
+      outPtr = SodiumPointer.alloc(sodium, count: outLen ?? bytes);
       inPtr = message.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
@@ -98,10 +91,7 @@ class GenericHashFFI
   }
 
   @override
-  GenericHashConsumer createConsumer({
-    int? outLen,
-    SecureKey? key,
-  }) {
+  GenericHashConsumer createConsumer({int? outLen, SecureKey? key}) {
     if (outLen != null) {
       validateOutLen(outLen);
     }

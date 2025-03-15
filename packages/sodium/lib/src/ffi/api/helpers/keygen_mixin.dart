@@ -22,11 +22,10 @@ mixin KeygenMixin {
   }) {
     final key = SecureKeyFFI.alloc(sodium, keyBytes);
     try {
-      return key
-        ..runUnlockedNative(
-          (pointer) => implementation(pointer.ptr),
-          writable: true,
-        );
+      return key..runUnlockedNative(
+        (pointer) => implementation(pointer.ptr),
+        writable: true,
+      );
     } catch (e) {
       key.dispose();
       rethrow;
@@ -40,7 +39,7 @@ mixin KeygenMixin {
     required int secretKeyBytes,
     required int publicKeyBytes,
     required int Function(Pointer<UnsignedChar> pk, Pointer<UnsignedChar> sk)
-        implementation,
+    implementation,
   }) {
     SecureKeyFFI? secretKey;
     SodiumPointer<UnsignedChar>? publicKeyPtr;
@@ -49,10 +48,7 @@ mixin KeygenMixin {
       publicKeyPtr = SodiumPointer.alloc(sodium, count: publicKeyBytes);
 
       final result = secretKey.runUnlockedNative(
-        (secretKeyPtr) => implementation(
-          publicKeyPtr!.ptr,
-          secretKeyPtr.ptr,
-        ),
+        (secretKeyPtr) => implementation(publicKeyPtr!.ptr, secretKeyPtr.ptr),
         writable: true,
       );
       SodiumException.checkSucceededInt(result);
@@ -79,7 +75,8 @@ mixin KeygenMixin {
       Pointer<UnsignedChar> pk,
       Pointer<UnsignedChar> sk,
       Pointer<UnsignedChar> seed,
-    ) implementation,
+    )
+    implementation,
   }) {
     SecureKeyFFI? secretKey;
     SodiumPointer<UnsignedChar>? publicKeyPtr;
@@ -90,11 +87,8 @@ mixin KeygenMixin {
       final result = secretKey.runUnlockedNative(
         (secretKeyPtr) => seed.runUnlockedNative(
           sodium,
-          (seedPtr) => implementation(
-            publicKeyPtr!.ptr,
-            secretKeyPtr.ptr,
-            seedPtr.ptr,
-          ),
+          (seedPtr) =>
+              implementation(publicKeyPtr!.ptr, secretKeyPtr.ptr, seedPtr.ptr),
         ),
         writable: true,
       );

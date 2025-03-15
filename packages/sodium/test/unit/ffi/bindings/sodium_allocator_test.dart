@@ -81,15 +81,11 @@ void main() {
 
     testData<(int, bool)>(
       'result result of native operation',
-      const [
-        (0, true),
-        (1, false),
-        (10, false),
-        (-1, false),
-      ],
+      const [(0, true), (1, false), (10, false), (-1, false)],
       (fixture) {
-        when(() => mockSodium.sodium_mlock(any(), any()))
-            .thenReturn(fixture.$1);
+        when(
+          () => mockSodium.sodium_mlock(any(), any()),
+        ).thenReturn(fixture.$1);
 
         final res = sut.lock(nullptr, 0);
 
@@ -112,15 +108,11 @@ void main() {
 
     testData<(int, bool)>(
       'result result of native operation',
-      const [
-        (0, true),
-        (1, false),
-        (10, false),
-        (-1, false),
-      ],
+      const [(0, true), (1, false), (10, false), (-1, false)],
       (fixture) {
-        when(() => mockSodium.sodium_munlock(any(), any()))
-            .thenReturn(fixture.$1);
+        when(
+          () => mockSodium.sodium_munlock(any(), any()),
+        ).thenReturn(fixture.$1);
 
         final res = sut.unlock(nullptr, 0);
 
@@ -143,15 +135,11 @@ void main() {
 
       testData<(int, bool)>(
         'result result of native operation',
-        const [
-          (0, true),
-          (1, false),
-          (10, false),
-          (-1, false),
-        ],
+        const [(0, true), (1, false), (10, false), (-1, false)],
         (fixture) {
-          when(() => mockSodium.sodium_mprotect_noaccess(any()))
-              .thenReturn(fixture.$1);
+          when(
+            () => mockSodium.sodium_mprotect_noaccess(any()),
+          ).thenReturn(fixture.$1);
 
           final res = sut.memoryProtect(nullptr, MemoryProtection.noAccess);
 
@@ -173,15 +161,11 @@ void main() {
 
       testData<(int, bool)>(
         'result result of native operation',
-        const [
-          (0, true),
-          (1, false),
-          (10, false),
-          (-1, false),
-        ],
+        const [(0, true), (1, false), (10, false), (-1, false)],
         (fixture) {
-          when(() => mockSodium.sodium_mprotect_readonly(any()))
-              .thenReturn(fixture.$1);
+          when(
+            () => mockSodium.sodium_mprotect_readonly(any()),
+          ).thenReturn(fixture.$1);
 
           final res = sut.memoryProtect(nullptr, MemoryProtection.readOnly);
 
@@ -203,15 +187,11 @@ void main() {
 
       testData<(int, bool)>(
         'result result of native operation',
-        const [
-          (0, true),
-          (1, false),
-          (10, false),
-          (-1, false),
-        ],
+        const [(0, true), (1, false), (10, false), (-1, false)],
         (fixture) {
-          when(() => mockSodium.sodium_mprotect_readwrite(any()))
-              .thenReturn(fixture.$1);
+          when(
+            () => mockSodium.sodium_mprotect_readwrite(any()),
+          ).thenReturn(fixture.$1);
 
           final res = sut.memoryProtect(nullptr, MemoryProtection.readWrite);
 

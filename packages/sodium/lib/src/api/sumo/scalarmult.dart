@@ -31,26 +31,17 @@ abstract class Scalarmult {
   /// Provides crypto_scalarmult.
   ///
   /// See https://libsodium.gitbook.io/doc/advanced/scalar_multiplication#usage
-  SecureKey call({
-    required SecureKey n,
-    required Uint8List p,
-  });
+  SecureKey call({required SecureKey n, required Uint8List p});
 }
 
 /// @nodoc
 @internal
 mixin ScalarmultValidations implements Scalarmult {
   /// @nodoc
-  void validatePublicKey(Uint8List publicKey) => Validations.checkIsSame(
-        publicKey.length,
-        bytes,
-        'publicKey',
-      );
+  void validatePublicKey(Uint8List publicKey) =>
+      Validations.checkIsSame(publicKey.length, bytes, 'publicKey');
 
   /// @nodoc
-  void validateSecretKey(SecureKey secretKey) => Validations.checkIsSame(
-        secretKey.length,
-        scalarBytes,
-        'secretKey',
-      );
+  void validateSecretKey(SecureKey secretKey) =>
+      Validations.checkIsSame(secretKey.length, scalarBytes, 'secretKey');
 }

@@ -25,9 +25,7 @@ abstract class SodiumInit {
   /// loaded `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on your platform.
   /// Please refer to the README for more details on loading the library.
   static Future<Sodium> init(DynamicLibraryFactory getLibsodium) =>
-      initFromSodiumFFI(
-        () async => LibSodiumFFI(await getLibsodium()),
-      );
+      initFromSodiumFFI(() async => LibSodiumFFI(await getLibsodium()));
   // coverage:ignore-end
 
   /// Creates a [Sodium] instance for the loaded libsodium returned by the
@@ -40,9 +38,7 @@ abstract class SodiumInit {
   /// Please note that [LibSodiumFFI] is not documented, as it is an auto
   /// generated binding, which simply mimics the C interface in dart, as
   /// required by [dart:ffi].
-  static Future<Sodium> initFromSodiumFFI(
-    LibSodiumFFIFactory getSodium,
-  ) =>
+  static Future<Sodium> initFromSodiumFFI(LibSodiumFFIFactory getSodium) =>
       SodiumFFI.fromFactory(() async {
         final sodium = await getSodium();
         final result = sodium.sodium_init();

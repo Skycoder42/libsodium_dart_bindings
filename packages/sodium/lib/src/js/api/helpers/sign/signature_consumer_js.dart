@@ -22,10 +22,7 @@ class SignatureConsumerJS
   late final SecureKey secretKey;
 
   /// @nodoc
-  SignatureConsumerJS({
-    required this.sodium,
-    required SecureKey secretKey,
-  }) {
+  SignatureConsumerJS({required this.sodium, required SecureKey secretKey}) {
     this.secretKey = secretKey.copy();
     try {
       initState();
@@ -40,13 +37,9 @@ class SignatureConsumerJS
 
   @override
   Uint8List finalize(SignState state) => jsErrorWrap(
-        () => secretKey.runUnlockedSync(
-          (secretKeyData) => sodium
-              .crypto_sign_final_create(
-                state,
-                secretKeyData.toJS,
-              )
-              .toDart,
-        ),
-      );
+    () => secretKey.runUnlockedSync(
+      (secretKeyData) =>
+          sodium.crypto_sign_final_create(state, secretKeyData.toJS).toDart,
+    ),
+  );
 }

@@ -9,15 +9,13 @@ final class TypedefGenerator extends SpecGenerator<TypeDef> {
   final String name;
   final String type;
 
-  const TypedefGenerator({
-    required this.name,
-    required this.type,
-  });
+  const TypedefGenerator({required this.name, required this.type});
 
   @override
   TypeDef build() => TypeDef(
-        (b) => b
+    (b) =>
+        b
           ..name = name
           ..definition = Types.named(type),
-      );
+  );
 }

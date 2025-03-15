@@ -37,11 +37,11 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
 
   @override
   KeyPair keyPair() => keyPairImpl(
-        sodium: sodium,
-        secretKeyBytes: secretKeyBytes,
-        publicKeyBytes: publicKeyBytes,
-        implementation: sodium.crypto_kx_keypair,
-      );
+    sodium: sodium,
+    secretKeyBytes: secretKeyBytes,
+    publicKeyBytes: publicKeyBytes,
+    implementation: sodium.crypto_kx_keypair,
+  );
 
   @override
   KeyPair seedKeyPair(SecureKey seed) {
@@ -99,10 +99,7 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
       );
       SodiumException.checkSucceededInt(result);
 
-      return SessionKeys(
-        rx: rxKey,
-        tx: txKey,
-      );
+      return SessionKeys(rx: rxKey, tx: txKey);
     } catch (e) {
       rxKey?.dispose();
       txKey?.dispose();
@@ -157,10 +154,7 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
       );
       SodiumException.checkSucceededInt(result);
 
-      return SessionKeys(
-        rx: rxKey,
-        tx: txKey,
-      );
+      return SessionKeys(rx: rxKey, tx: txKey);
     } catch (e) {
       rxKey?.dispose();
       txKey?.dispose();

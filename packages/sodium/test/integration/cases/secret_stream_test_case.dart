@@ -155,10 +155,7 @@ class SecretStreamTestCase extends TestCase {
           key: key,
         );
 
-        final restoredStream = sut.pullEx(
-          cipherStream: cipherStream,
-          key: key,
-        );
+        final restoredStream = sut.pullEx(cipherStream: cipherStream, key: key);
 
         expect(restoredStream, emitsInOrder(plainEvents));
 
@@ -197,10 +194,7 @@ class SecretStreamTestCase extends TestCase {
           key: key,
         );
 
-        final restoredStream = sut.pullEx(
-          cipherStream: cipherStream,
-          key: key,
-        );
+        final restoredStream = sut.pullEx(cipherStream: cipherStream, key: key);
 
         expect(restoredStream, emitsError(isA<SodiumException>()));
 

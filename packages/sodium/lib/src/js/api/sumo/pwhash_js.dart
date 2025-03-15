@@ -128,10 +128,7 @@ class PwhashJS with PwHashValidations implements Pwhash {
   }
 
   @override
-  bool strVerify({
-    required String passwordHash,
-    required String password,
-  }) {
+  bool strVerify({required String passwordHash, required String password}) {
     final passwordChars = password.toCharArray();
     validatePasswordHashStr(passwordHash);
     validatePassword(passwordChars);

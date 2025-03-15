@@ -7,8 +7,8 @@ class SymbolsLoader {
   SymbolsLoader(this._wrapperLoader);
 
   Stream<Symbol> loadSymbols() => _wrapperLoader.loadFilesJson(
-        'symbols',
-        (file) => file.path.endsWith('.json'),
-        Symbol.fromJson,
-      );
+    'symbols',
+    (file) => file.path.endsWith('.json'),
+    Symbol.fromJson,
+  );
 }

@@ -46,16 +46,8 @@ void main() {
       () => sut.secretKeyBytes,
       'secretKeyBytes',
     ),
-    (
-      () => mockSodium.crypto_sign_BYTES,
-      () => sut.bytes,
-      'bytes',
-    ),
-    (
-      () => mockSodium.crypto_sign_SEEDBYTES,
-      () => sut.seedBytes,
-      'seedBytes',
-    ),
+    (() => mockSodium.crypto_sign_BYTES, () => sut.bytes, 'bytes'),
+    (() => mockSodium.crypto_sign_SEEDBYTES, () => sut.seedBytes, 'seedBytes'),
   ]);
 
   group('methods', () {
@@ -81,10 +73,7 @@ void main() {
     group('call', () {
       test('asserts if secretKey is invalid', () {
         expect(
-          () => sut(
-            message: Uint8List(20),
-            secretKey: SecureKeyFake.empty(10),
-          ),
+          () => sut(message: Uint8List(20), secretKey: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -93,10 +82,7 @@ void main() {
 
       test('calls crypto_sign with correct arguments', () {
         when(
-          () => mockSodium.crypto_sign(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign(any(), any()),
         ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
@@ -118,10 +104,7 @@ void main() {
       test('returns signed message', () {
         final signedMessage = List.generate(25, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_sign(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign(any(), any()),
         ).thenReturn(Uint8List.fromList(signedMessage).toJS);
 
         final result = sut(
@@ -133,18 +116,10 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_sign(
-            any(),
-            any(),
-          ),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_sign(any(), any())).thenThrow(JSError());
 
         expect(
-          () => sut(
-            message: Uint8List(10),
-            secretKey: SecureKeyFake.empty(5),
-          ),
+          () => sut(message: Uint8List(10), secretKey: SecureKeyFake.empty(5)),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -153,10 +128,7 @@ void main() {
     group('open', () {
       test('asserts if signedMessage is invalid', () {
         expect(
-          () => sut.open(
-            signedMessage: Uint8List(3),
-            publicKey: Uint8List(5),
-          ),
+          () => sut.open(signedMessage: Uint8List(3), publicKey: Uint8List(5)),
           throwsA(isA<RangeError>()),
         );
 
@@ -165,10 +137,7 @@ void main() {
 
       test('asserts if publicKey is invalid', () {
         expect(
-          () => sut.open(
-            signedMessage: Uint8List(5),
-            publicKey: Uint8List(10),
-          ),
+          () => sut.open(signedMessage: Uint8List(5), publicKey: Uint8List(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -177,10 +146,7 @@ void main() {
 
       test('calls crypto_sign_open with correct arguments', () {
         when(
-          () => mockSodium.crypto_sign_open(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_open(any(), any()),
         ).thenReturn(Uint8List(0).toJS);
 
         final signedMessage = List.generate(20, (index) => index * 2);
@@ -202,10 +168,7 @@ void main() {
       test('returns validated message', () {
         final message = List.generate(20, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_sign_open(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_open(any(), any()),
         ).thenReturn(Uint8List.fromList(message).toJS);
 
         final result = sut.open(
@@ -218,17 +181,11 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_sign_open(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_open(any(), any()),
         ).thenThrow(JSError());
 
         expect(
-          () => sut.open(
-            signedMessage: Uint8List(25),
-            publicKey: Uint8List(5),
-          ),
+          () => sut.open(signedMessage: Uint8List(25), publicKey: Uint8List(5)),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -249,10 +206,7 @@ void main() {
 
       test('calls crypto_sign with correct arguments', () {
         when(
-          () => mockSodium.crypto_sign_detached(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_detached(any(), any()),
         ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
@@ -274,10 +228,7 @@ void main() {
       test('returns signature of message', () {
         final signature = List.generate(5, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_sign_detached(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_detached(any(), any()),
         ).thenReturn(Uint8List.fromList(signature).toJS);
 
         final result = sut.detached(
@@ -290,10 +241,7 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_sign_detached(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_detached(any(), any()),
         ).thenThrow(JSError());
 
         expect(
@@ -335,11 +283,7 @@ void main() {
 
       test('calls crypto_sign_verify_detached with correct arguments', () {
         when(
-          () => mockSodium.crypto_sign_verify_detached(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_verify_detached(any(), any(), any()),
         ).thenReturn(true);
 
         final message = List.generate(20, (index) => index * 2);
@@ -363,11 +307,7 @@ void main() {
 
       test('returns successful validation result', () {
         when(
-          () => mockSodium.crypto_sign_verify_detached(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_verify_detached(any(), any(), any()),
         ).thenReturn(true);
 
         final result = sut.verifyDetached(
@@ -381,11 +321,7 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_sign_verify_detached(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_verify_detached(any(), any(), any()),
         ).thenThrow(JSError());
 
         expect(
@@ -402,9 +338,7 @@ void main() {
     group('createConsumer', () {
       test('asserts if secretKey is invalid', () {
         expect(
-          () => sut.createConsumer(
-            secretKey: SecureKeyFake.empty(10),
-          ),
+          () => sut.createConsumer(secretKey: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -416,9 +350,7 @@ void main() {
 
         final secretKey = List.generate(5, (index) => index * index);
 
-        final result = sut.createConsumer(
-          secretKey: SecureKeyFake(secretKey),
-        );
+        final result = sut.createConsumer(secretKey: SecureKeyFake(secretKey));
 
         expect(
           result,

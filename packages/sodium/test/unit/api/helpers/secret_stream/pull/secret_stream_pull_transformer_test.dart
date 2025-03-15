@@ -27,7 +27,7 @@ class SutSecretStreamPullTransformerSink
 
   // ignore: avoid_positional_boolean_parameters
   SutSecretStreamPullTransformerSink(this.mock, bool requireFinalized)
-      : super(requireFinalized);
+    : super(requireFinalized);
 
   @override
   int get headerBytes => mock.headerBytes;
@@ -43,8 +43,7 @@ class SutSecretStreamPullTransformerSink
   SecretStreamPlainMessage decryptMessage(
     int cryptoState,
     SecretStreamCipherMessage event,
-  ) =>
-      mock.decryptMessage(cryptoState, event);
+  ) => mock.decryptMessage(cryptoState, event);
 
   @override
   void disposeState(int cryptoState) => mock.disposeState(cryptoState);
@@ -91,8 +90,9 @@ void main() {
 
       when(() => mockSut.headerBytes).thenReturn(headerBytes);
       when(() => mockSut.initialize(any(), any())).thenReturn(state);
-      when(() => mockSut.decryptMessage(any(), any()))
-          .thenReturn(SecretStreamPlainMessage(Uint8List(0)));
+      when(
+        () => mockSut.decryptMessage(any(), any()),
+      ).thenReturn(SecretStreamPlainMessage(Uint8List(0)));
 
       sut = SutSecretStreamPullTransformerSink(mockSut, true);
     });
@@ -131,10 +131,7 @@ void main() {
       test('close moves to closed state', () {
         sut.close();
 
-        expect(
-          () => sut.init(mockSink, key),
-          throwsA(isA<StateError>()),
-        );
+        expect(() => sut.init(mockSink, key), throwsA(isA<StateError>()));
       });
     });
 
@@ -206,12 +203,7 @@ void main() {
       test('addError adds error to stream', () {
         sut.addError(Exception(), StackTrace.empty);
 
-        verify(
-          () => mockSink.addError(
-            any(that: isA<Exception>()),
-            any(),
-          ),
-        );
+        verify(() => mockSink.addError(any(that: isA<Exception>()), any()));
       });
 
       test('close moves to closed state and closes key and sink', () {
@@ -281,17 +273,13 @@ void main() {
         );
 
         test('adds error to stream on an error', () {
-          when(() => mockSut.decryptMessage(any(), any()))
-              .thenThrow(Exception());
+          when(
+            () => mockSut.decryptMessage(any(), any()),
+          ).thenThrow(Exception());
 
           sut.add(SecretStreamCipherMessage(Uint8List(0)));
 
-          verify(
-            () => mockSink.addError(
-              any(that: isA<Exception>()),
-              any(),
-            ),
-          );
+          verify(() => mockSink.addError(any(that: isA<Exception>()), any()));
         });
       });
 
@@ -308,21 +296,17 @@ void main() {
       test('addError adds error to stream', () {
         sut.addError(Exception(), StackTrace.empty);
 
-        verify(
-          () => mockSink.addError(
-            any(that: isA<Exception>()),
-            any(),
-          ),
-        );
+        verify(() => mockSink.addError(any(that: isA<Exception>()), any()));
       });
 
       group('close', () {
         test(
           'not req finalized moves to closed state and closes state and sink',
           () {
-            sut = SutSecretStreamPullTransformerSink(mockSut, false)
-              ..init(mockSink, key)
-              ..add(SecretStreamCipherMessage(Uint8List(headerBytes)));
+            sut =
+                SutSecretStreamPullTransformerSink(mockSut, false)
+                  ..init(mockSink, key)
+                  ..add(SecretStreamCipherMessage(Uint8List(headerBytes)));
             verifyNever(() => mockSink.addError(any(), any()));
             clearInteractions(mockSut);
             clearInteractions(mockSink);
@@ -343,9 +327,8 @@ void main() {
           sut.close();
 
           verifyInOrder([
-            () => mockSink.addError(
-                  any(that: isA<StreamClosedEarlyException>()),
-                ),
+            () =>
+                mockSink.addError(any(that: isA<StreamClosedEarlyException>())),
             () => mockSut.disposeState(state),
             () => mockSink.close(),
           ]);
@@ -395,12 +378,7 @@ void main() {
       test('addError adds error to stream', () {
         sut.addError(Exception(), StackTrace.empty);
 
-        verify(
-          () => mockSink.addError(
-            any(that: isA<Exception>()),
-            any(),
-          ),
-        );
+        verify(() => mockSink.addError(any(that: isA<Exception>()), any()));
       });
 
       test('close closes sink and enters closed state', () {
@@ -482,8 +460,9 @@ void main() {
       test('creates secret pull stream that pipes items through the sink', () {
         late EventSink<SecretStreamPlainMessage> transformerSink;
         when(() => mockSink.init(any(), any())).thenAnswer((i) {
-          transformerSink = i.positionalArguments.first
-              as EventSink<SecretStreamPlainMessage>;
+          transformerSink =
+              i.positionalArguments.first
+                  as EventSink<SecretStreamPlainMessage>;
         });
         when(() => mockSink.add(any())).thenAnswer((i) {
           final event =

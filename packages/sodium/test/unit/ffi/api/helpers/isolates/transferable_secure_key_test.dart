@@ -100,19 +100,21 @@ void main() {
         () => mockLibSodiumFFI.sodium_mprotect_noaccess(any()),
       ).thenReturn(0);
 
-      final result = const TransferrableSecureKeyFFI.ffi(
-        testNativeHandle,
-      ).toSecureKey(mockSodiumFFI) as SecureKeyFFI;
+      final result =
+          const TransferrableSecureKeyFFI.ffi(
+                testNativeHandle,
+              ).toSecureKey(mockSodiumFFI)
+              as SecureKeyFFI;
 
       verifyInOrder([
         () => mockSodiumFinalizer.attach(
-              any(),
-              Pointer.fromAddress(testNativeHandle.$1),
-              testNativeHandle.$2,
-            ),
+          any(),
+          Pointer.fromAddress(testNativeHandle.$1),
+          testNativeHandle.$2,
+        ),
         () => mockLibSodiumFFI.sodium_mprotect_noaccess(
-              Pointer.fromAddress(testNativeHandle.$1),
-            ),
+          Pointer.fromAddress(testNativeHandle.$1),
+        ),
       ]);
 
       expect(result.detach(), testNativeHandle);

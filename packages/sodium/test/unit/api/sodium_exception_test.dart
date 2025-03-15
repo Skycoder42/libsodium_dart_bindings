@@ -12,12 +12,7 @@ void main() {
 
   testData<(int, bool)>(
     'checkSucceededInt asserts for non zero values',
-    const [
-      (0, false),
-      (1, true),
-      (-1, true),
-      (666, true),
-    ],
+    const [(0, false), (1, true), (-1, true), (666, true)],
     (fixture) {
       final exceptionMatcher = throwsA(isA<SodiumException>());
       expect(
@@ -29,12 +24,7 @@ void main() {
 
   testData<(int, bool)>(
     'checkSucceededInitInt asserts for non zero and non one values',
-    const [
-      (0, false),
-      (1, false),
-      (-1, true),
-      (666, true),
-    ],
+    const [(0, false), (1, false), (-1, true), (666, true)],
     (fixture) {
       final exceptionMatcher = throwsA(isA<SodiumException>());
       expect(
@@ -46,10 +36,7 @@ void main() {
 
   testData<(bool, bool)>(
     'checkSucceededBool asserts for false value',
-    const [
-      (true, false),
-      (false, true),
-    ],
+    const [(true, false), (false, true)],
     (fixture) {
       final exceptionMatcher = throwsA(isA<SodiumException>());
       expect(

@@ -67,10 +67,8 @@ void main() {
     const length = 42;
     final testData = List.generate(length, (index) => index);
     when(() => mockSodium.randombytes_buf(any(), any())).thenAnswer(
-      (i) => fillPointer(
-        i.positionalArguments.first as Pointer<Void>,
-        testData,
-      ),
+      (i) =>
+          fillPointer(i.positionalArguments.first as Pointer<Void>, testData),
     );
 
     final res = sut.buf(length);
@@ -87,12 +85,11 @@ void main() {
 
       const length = 42;
       final testData = List.generate(length, (index) => index);
-      when(() => mockSodium.randombytes_buf_deterministic(any(), any(), any()))
-          .thenAnswer(
-        (i) => fillPointer(
-          i.positionalArguments.first as Pointer<Void>,
-          testData,
-        ),
+      when(
+        () => mockSodium.randombytes_buf_deterministic(any(), any(), any()),
+      ).thenAnswer(
+        (i) =>
+            fillPointer(i.positionalArguments.first as Pointer<Void>, testData),
       );
 
       final res = sut.bufDeterministic(length, seed);
@@ -113,10 +110,7 @@ void main() {
 
       final seed = Uint8List(1);
 
-      expect(
-        () => sut.bufDeterministic(1, seed),
-        throwsA(isA<RangeError>()),
-      );
+      expect(() => sut.bufDeterministic(1, seed), throwsA(isA<RangeError>()));
     });
   });
 

@@ -55,8 +55,9 @@ void main() {
       test('fills buffer with random data', () {
         const length = 10;
 
-        when(() => mockSodium.randombytes_buf(any()))
-            .thenReturn(Uint8List(length).toJS);
+        when(
+          () => mockSodium.randombytes_buf(any()),
+        ).thenReturn(Uint8List(length).toJS);
 
         SecureKeyJS.random(mockSodiumJS, length);
 
@@ -80,10 +81,7 @@ void main() {
     late SecureKeyJS sut;
 
     setUp(() {
-      sut = SecureKeyJS(
-        mockSodiumJS,
-        Uint8List.fromList(testList).toJS,
-      );
+      sut = SecureKeyJS(mockSodiumJS, Uint8List.fromList(testList).toJS);
     });
 
     test('length returns pointer length', () {
@@ -140,10 +138,7 @@ void main() {
       test('throws SodiumException on JSError', () {
         when(() => mockSodium.memzero(any())).thenThrow(JSError());
 
-        expect(
-          () => sut.dispose(),
-          throwsA(isA<SodiumException>()),
-        );
+        expect(() => sut.dispose(), throwsA(isA<SodiumException>()));
       });
     });
   });

@@ -23,13 +23,12 @@ class SecretPushStream extends SecretExStream<SecretStreamCipherMessage> {
     Function? onError,
     void Function()? onDone,
     bool? cancelOnError,
-  }) =>
-      stream.listen(
-        onData,
-        onError: onError,
-        onDone: onDone,
-        cancelOnError: cancelOnError,
-      );
+  }) => stream.listen(
+    onData,
+    onError: onError,
+    onDone: onDone,
+    cancelOnError: cancelOnError,
+  );
 
   @override
   void rekey() => sink.triggerRekey();

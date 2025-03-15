@@ -35,10 +35,10 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
 
   @override
   SecureKey keygen() => keygenImpl(
-        sodium: sodium,
-        keyBytes: keyBytes,
-        implementation: sodium.crypto_kdf_keygen,
-      );
+    sodium: sodium,
+    keyBytes: keyBytes,
+    implementation: sodium.crypto_kdf_keygen,
+  );
 
   @override
   SecureKey deriveFromKey({

@@ -31,19 +31,13 @@ abstract class ShortHash {
   /// Provides crypto_shorthash.
   ///
   /// See https://libsodium.gitbook.io/doc/hashing/short-input_hashing#usage
-  Uint8List call({
-    required Uint8List message,
-    required SecureKey key,
-  });
+  Uint8List call({required Uint8List message, required SecureKey key});
 }
 
 /// @nodoc
 @internal
 mixin ShortHashValidations implements ShortHash {
   /// @nodoc
-  void validateKey(SecureKey key) => Validations.checkIsSame(
-        key.length,
-        keyBytes,
-        'key',
-      );
+  void validateKey(SecureKey key) =>
+      Validations.checkIsSame(key.length, keyBytes, 'key');
 }

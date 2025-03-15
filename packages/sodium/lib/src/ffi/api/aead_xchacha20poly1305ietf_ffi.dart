@@ -20,10 +20,10 @@ class AeadXChaCha20Poly1305IETFFFI extends AeadBaseFFI {
 
   @override
   SecureKey keygen() => keygenImpl(
-        sodium: sodium,
-        keyBytes: keyBytes,
-        implementation: sodium.crypto_aead_xchacha20poly1305_ietf_keygen,
-      );
+    sodium: sodium,
+    keyBytes: keyBytes,
+    implementation: sodium.crypto_aead_xchacha20poly1305_ietf_keygen,
+  );
 
   @override
   InternalEncrypt get internalEncrypt =>

@@ -13,7 +13,8 @@ final class TestLibraryGenerator extends SpecGenerator<Library> {
 
   @override
   Library build() => Library(
-        (b) => b
+    (b) =>
+        b
           ..ignoreForFile.add('non_constant_identifier_names')
           ..ignoreForFile.add('public_member_api_docs')
           ..directives.add(Directive.import('dart:js_interop'))
@@ -22,7 +23,7 @@ final class TestLibraryGenerator extends SpecGenerator<Library> {
             Directive.import('package:sodium/src/js/bindings/sodium.js.dart'),
           )
           ..body.addAll(_buildBody()),
-      );
+  );
 
   Iterable<Spec> _buildBody() sync* {
     yield TestLibSodiumJsGenerator(

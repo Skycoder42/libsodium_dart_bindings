@@ -13,7 +13,7 @@ class SodiumFinalizer {
 
   /// @nodoc
   SodiumFinalizer(LibSodiumFFI sodium)
-      : _nativeFinalizer = NativeFinalizer(sodium.sodium_freePtr);
+    : _nativeFinalizer = NativeFinalizer(sodium.sodium_freePtr);
 
   /// @nodoc
   void attach(Finalizable value, Pointer<Void> token, int size) =>

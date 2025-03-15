@@ -53,10 +53,12 @@ void main() {
 
   group('methods', () {
     setUp(() {
-      when(() => mockSodium.crypto_aead_chacha20poly1305_KEYBYTES)
-          .thenReturn(5);
-      when(() => mockSodium.crypto_aead_chacha20poly1305_NPUBBYTES)
-          .thenReturn(5);
+      when(
+        () => mockSodium.crypto_aead_chacha20poly1305_KEYBYTES,
+      ).thenReturn(5);
+      when(
+        () => mockSodium.crypto_aead_chacha20poly1305_NPUBBYTES,
+      ).thenReturn(5);
       when(() => mockSodium.crypto_aead_chacha20poly1305_ABYTES).thenReturn(5);
     });
 
@@ -93,8 +95,7 @@ void main() {
         verify(() => mockSodium.crypto_aead_chacha20poly1305_KEYBYTES);
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_encrypt with default '
+      test('calls crypto_aead_chacha20poly1305_encrypt with default '
           'arguments', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt(
@@ -127,8 +128,7 @@ void main() {
         );
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_encrypt with additional '
+      test('calls crypto_aead_chacha20poly1305_encrypt with additional '
           'data', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt(
@@ -246,8 +246,7 @@ void main() {
         verify(() => mockSodium.crypto_aead_chacha20poly1305_KEYBYTES);
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_decrypt with default '
+      test('calls crypto_aead_chacha20poly1305_decrypt with default '
           'arguments', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt(
@@ -280,8 +279,7 @@ void main() {
         );
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_decrypt with additional '
+      test('calls crypto_aead_chacha20poly1305_decrypt with additional '
           'data', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt(
@@ -386,8 +384,7 @@ void main() {
         verify(() => mockSodium.crypto_aead_chacha20poly1305_KEYBYTES);
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_encrypt_detached with '
+      test('calls crypto_aead_chacha20poly1305_encrypt_detached with '
           'default arguments', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt_detached(
@@ -398,10 +395,7 @@ void main() {
             any(),
           ),
         ).thenReturn(
-          CryptoBox(
-            ciphertext: Uint8List(0).toJS,
-            mac: Uint8List(0).toJS,
-          ),
+          CryptoBox(ciphertext: Uint8List(0).toJS, mac: Uint8List(0).toJS),
         );
 
         final message = List.generate(20, (index) => index * 2);
@@ -425,8 +419,7 @@ void main() {
         );
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_encrypt_detached with '
+      test('calls crypto_aead_chacha20poly1305_encrypt_detached with '
           'additional data', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt_detached(
@@ -437,10 +430,7 @@ void main() {
             any(),
           ),
         ).thenReturn(
-          CryptoBox(
-            ciphertext: Uint8List(0).toJS,
-            mac: Uint8List(0).toJS,
-          ),
+          CryptoBox(ciphertext: Uint8List(0).toJS, mac: Uint8List(0).toJS),
         );
 
         final message = List.generate(20, (index) => index * 2);
@@ -564,8 +554,7 @@ void main() {
         verify(() => mockSodium.crypto_aead_chacha20poly1305_KEYBYTES);
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_decrypt_detached with '
+      test('calls crypto_aead_chacha20poly1305_decrypt_detached with '
           'default arguments', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt_detached(
@@ -602,8 +591,7 @@ void main() {
         );
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_decrypt_detached with '
+      test('calls crypto_aead_chacha20poly1305_decrypt_detached with '
           'additonal data', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt_detached(

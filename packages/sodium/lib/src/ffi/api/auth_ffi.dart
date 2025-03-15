@@ -29,17 +29,14 @@ class AuthFFI with AuthValidations, KeygenMixin implements Auth {
 
   @override
   SecureKey keygen() => keygenImpl(
-        sodium: sodium,
-        keyBytes: keyBytes,
-        implementation: sodium.crypto_auth_keygen,
-      );
+    sodium: sodium,
+    keyBytes: keyBytes,
+    implementation: sodium.crypto_auth_keygen,
+  );
 
   @override
   @pragma('vm:entry-point')
-  Uint8List call({
-    required Uint8List message,
-    required SecureKey key,
-  }) {
+  Uint8List call({required Uint8List message, required SecureKey key}) {
     validateKey(key);
 
     SodiumPointer<UnsignedChar>? messagePtr;

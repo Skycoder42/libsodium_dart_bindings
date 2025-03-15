@@ -32,21 +32,13 @@ void main() {
 
     testData<(int, bool)>(
       'validatePasswordHashStr asserts if value is not in range',
-      const [
-        (3, false),
-        (5, false),
-        (1, false),
-        (0, true),
-        (6, true),
-      ],
+      const [(3, false), (5, false), (1, false), (0, true), (6, true)],
       (fixture) {
         when(() => sutMock.strBytes).thenReturn(5);
 
         final exceptionMatcher = throwsA(isA<RangeError>());
         expect(
-          () => sutMock.validatePasswordHashStr(
-            'x' * fixture.$1,
-          ),
+          () => sutMock.validatePasswordHashStr('x' * fixture.$1),
           fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
         verify(() => sutMock.strBytes);

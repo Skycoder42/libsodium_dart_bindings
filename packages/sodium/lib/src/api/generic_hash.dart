@@ -79,11 +79,7 @@ abstract class GenericHash {
   /// Provides crypto_generichash.
   ///
   /// See https://libsodium.gitbook.io/doc/hashing/generic_hashing#usage
-  Uint8List call({
-    required Uint8List message,
-    int? outLen,
-    SecureKey? key,
-  });
+  Uint8List call({required Uint8List message, int? outLen, SecureKey? key});
 
   /// Creates a [StreamConsumer] for generating a hash from a stream.
   ///
@@ -102,10 +98,7 @@ abstract class GenericHash {
   /// want to get the hash from it, you ca use [stream] instead.
   ///
   /// See https://libsodium.gitbook.io/doc/hashing/generic_hashing#usage
-  GenericHashConsumer createConsumer({
-    int? outLen,
-    SecureKey? key,
-  });
+  GenericHashConsumer createConsumer({int? outLen, SecureKey? key});
 
   /// Get the hash from an aynchronous stream of data.
   ///
@@ -126,33 +119,19 @@ abstract class GenericHash {
 @internal
 mixin GenericHashValidations implements GenericHash {
   /// @nodoc
-  void validateOutLen(int outLen) => Validations.checkInRange(
-        outLen,
-        bytesMin,
-        bytesMax,
-        'outLen',
-      );
+  void validateOutLen(int outLen) =>
+      Validations.checkInRange(outLen, bytesMin, bytesMax, 'outLen');
 
   /// @nodoc
-  void validateKey(SecureKey key) => Validations.checkInRange(
-        key.length,
-        keyBytesMin,
-        keyBytesMax,
-        'key',
-      );
+  void validateKey(SecureKey key) =>
+      Validations.checkInRange(key.length, keyBytesMin, keyBytesMax, 'key');
 
   @override
   Future<Uint8List> stream({
     required Stream<Uint8List> messages,
     int? outLen,
     SecureKey? key,
-  }) =>
-      messages
-          .pipe(
-            createConsumer(
-              outLen: outLen,
-              key: key,
-            ),
-          )
-          .then((dynamic value) => value as Uint8List);
+  }) => messages
+      .pipe(createConsumer(outLen: outLen, key: key))
+      .then((dynamic value) => value as Uint8List);
 }

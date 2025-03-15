@@ -62,20 +62,13 @@ class SignJS with SignValidations implements Sign {
   }
 
   @override
-  Uint8List call({
-    required Uint8List message,
-    required SecureKey secretKey,
-  }) {
+  Uint8List call({required Uint8List message, required SecureKey secretKey}) {
     validateSecretKey(secretKey);
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium
-            .crypto_sign(
-              message.toJS,
-              secretKeyData.toJS,
-            )
-            .toDart,
+        (secretKeyData) =>
+            sodium.crypto_sign(message.toJS, secretKeyData.toJS).toDart,
       ),
     );
   }
@@ -89,12 +82,7 @@ class SignJS with SignValidations implements Sign {
     validatePublicKey(publicKey);
 
     return jsErrorWrap(
-      () => sodium
-          .crypto_sign_open(
-            signedMessage.toJS,
-            publicKey.toJS,
-          )
-          .toDart,
+      () => sodium.crypto_sign_open(signedMessage.toJS, publicKey.toJS).toDart,
     );
   }
 
@@ -107,12 +95,10 @@ class SignJS with SignValidations implements Sign {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) => sodium
-            .crypto_sign_detached(
-              message.toJS,
-              secretKeyData.toJS,
-            )
-            .toDart,
+        (secretKeyData) =>
+            sodium
+                .crypto_sign_detached(message.toJS, secretKeyData.toJS)
+                .toDart,
       ),
     );
   }
@@ -136,15 +122,10 @@ class SignJS with SignValidations implements Sign {
   }
 
   @override
-  SignatureConsumer createConsumer({
-    required SecureKey secretKey,
-  }) {
+  SignatureConsumer createConsumer({required SecureKey secretKey}) {
     validateSecretKey(secretKey);
 
-    return SignatureConsumerJS(
-      sodium: sodium,
-      secretKey: secretKey,
-    );
+    return SignatureConsumerJS(sodium: sodium, secretKey: secretKey);
   }
 
   @override

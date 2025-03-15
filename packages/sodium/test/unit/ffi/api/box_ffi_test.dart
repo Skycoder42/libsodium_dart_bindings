@@ -49,11 +49,7 @@ void main() {
         () => sut.secretKeyBytes,
         'secretKeyBytes',
       ),
-      (
-        () => mockSodium.crypto_box_macbytes(),
-        () => sut.macBytes,
-        'macBytes',
-      ),
+      (() => mockSodium.crypto_box_macbytes(), () => sut.macBytes, 'macBytes'),
       (
         () => mockSodium.crypto_box_noncebytes(),
         () => sut.nonceBytes,
@@ -169,22 +165,22 @@ void main() {
 
           verifyInOrder([
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(nonce)),
-                ),
+              any(that: hasRawData(nonce)),
+            ),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(publicKey)),
-                ),
+              any(that: hasRawData(publicKey)),
+            ),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(secretKey)),
-                ),
+              any(that: hasRawData(secretKey)),
+            ),
             () => mockSodium.crypto_box_easy(
-                  any(that: hasRawData<UnsignedChar>(mac + message)),
-                  any(that: hasRawData<UnsignedChar>(message)),
-                  message.length,
-                  any(that: hasRawData<UnsignedChar>(nonce)),
-                  any(that: hasRawData<UnsignedChar>(publicKey)),
-                  any(that: hasRawData<UnsignedChar>(secretKey)),
-                ),
+              any(that: hasRawData<UnsignedChar>(mac + message)),
+              any(that: hasRawData<UnsignedChar>(message)),
+              message.length,
+              any(that: hasRawData<UnsignedChar>(nonce)),
+              any(that: hasRawData<UnsignedChar>(publicKey)),
+              any(that: hasRawData<UnsignedChar>(secretKey)),
+            ),
           ]);
         });
 
@@ -328,22 +324,22 @@ void main() {
 
           verifyInOrder([
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(nonce)),
-                ),
+              any(that: hasRawData(nonce)),
+            ),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(publicKey)),
-                ),
+              any(that: hasRawData(publicKey)),
+            ),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(secretKey)),
-                ),
+              any(that: hasRawData(secretKey)),
+            ),
             () => mockSodium.crypto_box_open_easy(
-                  any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
-                  any(that: hasRawData<UnsignedChar>(cipherText)),
-                  cipherText.length,
-                  any(that: hasRawData<UnsignedChar>(nonce)),
-                  any(that: hasRawData<UnsignedChar>(publicKey)),
-                  any(that: hasRawData<UnsignedChar>(secretKey)),
-                ),
+              any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
+              any(that: hasRawData<UnsignedChar>(cipherText)),
+              cipherText.length,
+              any(that: hasRawData<UnsignedChar>(nonce)),
+              any(that: hasRawData<UnsignedChar>(publicKey)),
+              any(that: hasRawData<UnsignedChar>(secretKey)),
+            ),
           ]);
         });
 
@@ -474,23 +470,23 @@ void main() {
 
           verifyInOrder([
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(nonce)),
-                ),
+              any(that: hasRawData(nonce)),
+            ),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(publicKey)),
-                ),
+              any(that: hasRawData(publicKey)),
+            ),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(secretKey)),
-                ),
+              any(that: hasRawData(secretKey)),
+            ),
             () => mockSodium.crypto_box_detached(
-                  any(that: hasRawData<UnsignedChar>(message)),
-                  any(that: isNot(nullptr)),
-                  any(that: hasRawData<UnsignedChar>(message)),
-                  message.length,
-                  any(that: hasRawData<UnsignedChar>(nonce)),
-                  any(that: hasRawData<UnsignedChar>(publicKey)),
-                  any(that: hasRawData<UnsignedChar>(secretKey)),
-                ),
+              any(that: hasRawData<UnsignedChar>(message)),
+              any(that: isNot(nullptr)),
+              any(that: hasRawData<UnsignedChar>(message)),
+              message.length,
+              any(that: hasRawData<UnsignedChar>(nonce)),
+              any(that: hasRawData<UnsignedChar>(publicKey)),
+              any(that: hasRawData<UnsignedChar>(secretKey)),
+            ),
           ]);
         });
 
@@ -650,27 +646,26 @@ void main() {
           );
 
           verifyInOrder([
+            () =>
+                mockSodium.sodium_mprotect_readonly(any(that: hasRawData(mac))),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(mac)),
-                ),
+              any(that: hasRawData(nonce)),
+            ),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(nonce)),
-                ),
+              any(that: hasRawData(publicKey)),
+            ),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(publicKey)),
-                ),
-            () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(secretKey)),
-                ),
+              any(that: hasRawData(secretKey)),
+            ),
             () => mockSodium.crypto_box_open_detached(
-                  any(that: hasRawData<UnsignedChar>(cipherText)),
-                  any(that: hasRawData<UnsignedChar>(cipherText)),
-                  any(that: hasRawData<UnsignedChar>(mac)),
-                  cipherText.length,
-                  any(that: hasRawData<UnsignedChar>(nonce)),
-                  any(that: hasRawData<UnsignedChar>(publicKey)),
-                  any(that: hasRawData<UnsignedChar>(secretKey)),
-                ),
+              any(that: hasRawData<UnsignedChar>(cipherText)),
+              any(that: hasRawData<UnsignedChar>(cipherText)),
+              any(that: hasRawData<UnsignedChar>(mac)),
+              cipherText.length,
+              any(that: hasRawData<UnsignedChar>(nonce)),
+              any(that: hasRawData<UnsignedChar>(publicKey)),
+              any(that: hasRawData<UnsignedChar>(secretKey)),
+            ),
           ]);
         });
 
@@ -762,11 +757,7 @@ void main() {
 
         test('calls crypto_box_beforenm with correct arguments', () {
           when(
-            () => mockSodium.crypto_box_beforenm(
-              any(),
-              any(),
-              any(),
-            ),
+            () => mockSodium.crypto_box_beforenm(any(), any(), any()),
           ).thenReturn(0);
 
           final publicKey = List.generate(5, (index) => 20 + index);
@@ -779,33 +770,27 @@ void main() {
 
           verifyInOrder([
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(publicKey)),
-                ),
-            () => mockSodium.sodium_mprotect_readwrite(
-                  any(that: isNot(nullptr)),
-                ),
+              any(that: hasRawData(publicKey)),
+            ),
+            () =>
+                mockSodium.sodium_mprotect_readwrite(any(that: isNot(nullptr))),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(secretKey)),
-                ),
+              any(that: hasRawData(secretKey)),
+            ),
             () => mockSodium.crypto_box_beforenm(
-                  any(that: isNot(nullptr)),
-                  any(that: hasRawData<UnsignedChar>(publicKey)),
-                  any(that: hasRawData<UnsignedChar>(secretKey)),
-                ),
-            () => mockSodium.sodium_mprotect_noaccess(
-                  any(that: isNot(nullptr)),
-                ),
+              any(that: isNot(nullptr)),
+              any(that: hasRawData<UnsignedChar>(publicKey)),
+              any(that: hasRawData<UnsignedChar>(secretKey)),
+            ),
+            () =>
+                mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
           ]);
         });
 
         test('returns precompiled box with shared key', () {
           final sharedKey = List.generate(15, (index) => 44 - index);
           when(
-            () => mockSodium.crypto_box_beforenm(
-              any(),
-              any(),
-              any(),
-            ),
+            () => mockSodium.crypto_box_beforenm(any(), any(), any()),
           ).thenAnswer((i) {
             fillPointer(i.positionalArguments.first as Pointer, sharedKey);
             return 0;
@@ -819,11 +804,7 @@ void main() {
           expect(
             result,
             isA<PrecalculatedBoxFFI>()
-                .having(
-                  (b) => b.box,
-                  'box',
-                  sut,
-                )
+                .having((b) => b.box, 'box', sut)
                 .having(
                   (b) => b.sharedKey.extractBytes(),
                   'sharedKey',
@@ -836,11 +817,7 @@ void main() {
 
         test('throws error if crypto_box_beforenm fails', () {
           when(
-            () => mockSodium.crypto_box_beforenm(
-              any(),
-              any(),
-              any(),
-            ),
+            () => mockSodium.crypto_box_beforenm(any(), any(), any()),
           ).thenReturn(1);
 
           expect(
@@ -858,10 +835,7 @@ void main() {
       group('seal', () {
         test('asserts if publicKey is invalid', () {
           expect(
-            () => sut.seal(
-              message: Uint8List(20),
-              publicKey: Uint8List(10),
-            ),
+            () => sut.seal(message: Uint8List(20), publicKey: Uint8List(10)),
             throwsA(isA<RangeError>()),
           );
 
@@ -870,12 +844,7 @@ void main() {
 
         test('calls crypto_box_seal with correct arguments', () {
           when(
-            () => mockSodium.crypto_box_seal(
-              any(),
-              any(),
-              any(),
-              any(),
-            ),
+            () => mockSodium.crypto_box_seal(any(), any(), any(), any()),
           ).thenReturn(0);
 
           final message = List.generate(20, (index) => index * 2);
@@ -889,26 +858,21 @@ void main() {
 
           verifyInOrder([
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(publicKey)),
-                ),
+              any(that: hasRawData(publicKey)),
+            ),
             () => mockSodium.crypto_box_seal(
-                  any(that: hasRawData<UnsignedChar>(seal + message)),
-                  any(that: hasRawData<UnsignedChar>(message)),
-                  message.length,
-                  any(that: hasRawData<UnsignedChar>(publicKey)),
-                ),
+              any(that: hasRawData<UnsignedChar>(seal + message)),
+              any(that: hasRawData<UnsignedChar>(message)),
+              message.length,
+              any(that: hasRawData<UnsignedChar>(publicKey)),
+            ),
           ]);
         });
 
         test('returns sealed data', () {
           final cipher = List.generate(25, (index) => 100 - index);
           when(
-            () => mockSodium.crypto_box_seal(
-              any(),
-              any(),
-              any(),
-              any(),
-            ),
+            () => mockSodium.crypto_box_seal(any(), any(), any(), any()),
           ).thenAnswer((i) {
             fillPointer(
               i.positionalArguments.first as Pointer<UnsignedChar>,
@@ -929,19 +893,11 @@ void main() {
 
         test('throws exception on failure', () {
           when(
-            () => mockSodium.crypto_box_seal(
-              any(),
-              any(),
-              any(),
-              any(),
-            ),
+            () => mockSodium.crypto_box_seal(any(), any(), any(), any()),
           ).thenReturn(1);
 
           expect(
-            () => sut.seal(
-              message: Uint8List(10),
-              publicKey: Uint8List(5),
-            ),
+            () => sut.seal(message: Uint8List(10), publicKey: Uint8List(5)),
             throwsA(isA<SodiumException>()),
           );
 
@@ -1012,18 +968,18 @@ void main() {
 
           verifyInOrder([
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(publicKey)),
-                ),
+              any(that: hasRawData(publicKey)),
+            ),
             () => mockSodium.sodium_mprotect_readonly(
-                  any(that: hasRawData(secretKey)),
-                ),
+              any(that: hasRawData(secretKey)),
+            ),
             () => mockSodium.crypto_box_seal_open(
-                  any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
-                  any(that: hasRawData<UnsignedChar>(cipherText)),
-                  cipherText.length,
-                  any(that: hasRawData<UnsignedChar>(publicKey)),
-                  any(that: hasRawData<UnsignedChar>(secretKey)),
-                ),
+              any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
+              any(that: hasRawData<UnsignedChar>(cipherText)),
+              cipherText.length,
+              any(that: hasRawData<UnsignedChar>(publicKey)),
+              any(that: hasRawData<UnsignedChar>(secretKey)),
+            ),
           ]);
         });
 
@@ -1106,10 +1062,7 @@ void main() {
     group('easy', () {
       test('asserts if nonce is invalid', () {
         expect(
-          () => preSut.easy(
-            message: Uint8List(20),
-            nonce: Uint8List(10),
-          ),
+          () => preSut.easy(message: Uint8List(20), nonce: Uint8List(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -1137,22 +1090,21 @@ void main() {
         );
 
         verifyInOrder([
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(sharedKey)),
-              ),
+            any(that: hasRawData(sharedKey)),
+          ),
           () => mockSodium.crypto_box_easy_afternm(
-                any(that: hasRawData<UnsignedChar>(mac + message)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(sharedKey)),
-              ),
+            any(that: hasRawData<UnsignedChar>(mac + message)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(sharedKey)),
+          ),
           () => mockSodium.sodium_mprotect_noaccess(
-                any(that: hasRawData(sharedKey)),
-              ),
+            any(that: hasRawData(sharedKey)),
+          ),
         ]);
       });
 
@@ -1171,10 +1123,7 @@ void main() {
           return 0;
         });
 
-        final result = preSut.easy(
-          message: Uint8List(20),
-          nonce: Uint8List(5),
-        );
+        final result = preSut.easy(message: Uint8List(20), nonce: Uint8List(5));
 
         expect(result, cipher);
 
@@ -1193,10 +1142,7 @@ void main() {
         ).thenReturn(1);
 
         expect(
-          () => preSut.easy(
-            message: Uint8List(10),
-            nonce: Uint8List(5),
-          ),
+          () => preSut.easy(message: Uint8List(10), nonce: Uint8List(5)),
           throwsA(isA<SodiumException>()),
         );
 
@@ -1207,10 +1153,7 @@ void main() {
     group('openEasy', () {
       test('asserts if cipherText is invalid', () {
         expect(
-          () => preSut.openEasy(
-            cipherText: Uint8List(3),
-            nonce: Uint8List(5),
-          ),
+          () => preSut.openEasy(cipherText: Uint8List(3), nonce: Uint8List(5)),
           throwsA(isA<RangeError>()),
         );
 
@@ -1219,10 +1162,8 @@ void main() {
 
       test('asserts if nonce is invalid', () {
         expect(
-          () => preSut.openEasy(
-            cipherText: Uint8List(20),
-            nonce: Uint8List(10),
-          ),
+          () =>
+              preSut.openEasy(cipherText: Uint8List(20), nonce: Uint8List(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -1249,22 +1190,21 @@ void main() {
         );
 
         verifyInOrder([
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(sharedKey)),
-              ),
+            any(that: hasRawData(sharedKey)),
+          ),
           () => mockSodium.crypto_box_open_easy_afternm(
-                any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                cipherText.length,
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(sharedKey)),
-              ),
+            any(that: hasRawData<UnsignedChar>(cipherText.sublist(5))),
+            any(that: hasRawData<UnsignedChar>(cipherText)),
+            cipherText.length,
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(sharedKey)),
+          ),
           () => mockSodium.sodium_mprotect_noaccess(
-                any(that: hasRawData(sharedKey)),
-              ),
+            any(that: hasRawData(sharedKey)),
+          ),
         ]);
       });
 
@@ -1305,10 +1245,7 @@ void main() {
         ).thenReturn(1);
 
         expect(
-          () => preSut.openEasy(
-            cipherText: Uint8List(10),
-            nonce: Uint8List(5),
-          ),
+          () => preSut.openEasy(cipherText: Uint8List(10), nonce: Uint8List(5)),
           throwsA(isA<SodiumException>()),
         );
 
@@ -1319,10 +1256,7 @@ void main() {
     group('detached', () {
       test('asserts if nonce is invalid', () {
         expect(
-          () => preSut.detached(
-            message: Uint8List(20),
-            nonce: Uint8List(10),
-          ),
+          () => preSut.detached(message: Uint8List(20), nonce: Uint8List(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -1350,23 +1284,22 @@ void main() {
         );
 
         verifyInOrder([
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(sharedKey)),
-              ),
+            any(that: hasRawData(sharedKey)),
+          ),
           () => mockSodium.crypto_box_detached_afternm(
-                any(that: hasRawData<UnsignedChar>(message)),
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(sharedKey)),
-              ),
+            any(that: hasRawData<UnsignedChar>(message)),
+            any(that: isNot(nullptr)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(sharedKey)),
+          ),
           () => mockSodium.sodium_mprotect_noaccess(
-                any(that: hasRawData(sharedKey)),
-              ),
+            any(that: hasRawData(sharedKey)),
+          ),
         ]);
       });
 
@@ -1417,10 +1350,7 @@ void main() {
         ).thenReturn(1);
 
         expect(
-          () => preSut.detached(
-            message: Uint8List(10),
-            nonce: Uint8List(5),
-          ),
+          () => preSut.detached(message: Uint8List(10), nonce: Uint8List(5)),
           throwsA(isA<SodiumException>()),
         );
 
@@ -1456,52 +1386,52 @@ void main() {
       });
 
       test(
-          'calls crypto_secretbox_open_detached_afternm with correct arguments',
-          () {
-        when(
-          () => mockSodium.crypto_box_open_detached_afternm(
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
-        ).thenReturn(0);
+        'calls crypto_secretbox_open_detached_afternm with correct arguments',
+        () {
+          when(
+            () => mockSodium.crypto_box_open_detached_afternm(
+              any(),
+              any(),
+              any(),
+              any(),
+              any(),
+              any(),
+            ),
+          ).thenReturn(0);
 
-        final cipherText = List.generate(15, (index) => index * 2);
-        final mac = List.generate(5, (index) => 20 - index);
-        final nonce = List.generate(5, (index) => 10 + index);
+          final cipherText = List.generate(15, (index) => index * 2);
+          final mac = List.generate(5, (index) => 20 - index);
+          final nonce = List.generate(5, (index) => 10 + index);
 
-        preSut.openDetached(
-          cipherText: Uint8List.fromList(cipherText),
-          mac: Uint8List.fromList(mac),
-          nonce: Uint8List.fromList(nonce),
-        );
+          preSut.openDetached(
+            cipherText: Uint8List.fromList(cipherText),
+            mac: Uint8List.fromList(mac),
+            nonce: Uint8List.fromList(nonce),
+          );
 
-        verifyInOrder([
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(mac)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(sharedKey)),
-              ),
-          () => mockSodium.crypto_box_open_detached_afternm(
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                any(that: hasRawData<UnsignedChar>(mac)),
-                cipherText.length,
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(sharedKey)),
-              ),
-          () => mockSodium.sodium_mprotect_noaccess(
-                any(that: hasRawData(sharedKey)),
-              ),
-        ]);
-      });
+          verifyInOrder([
+            () =>
+                mockSodium.sodium_mprotect_readonly(any(that: hasRawData(mac))),
+            () => mockSodium.sodium_mprotect_readonly(
+              any(that: hasRawData(nonce)),
+            ),
+            () => mockSodium.sodium_mprotect_readonly(
+              any(that: hasRawData(sharedKey)),
+            ),
+            () => mockSodium.crypto_box_open_detached_afternm(
+              any(that: hasRawData<UnsignedChar>(cipherText)),
+              any(that: hasRawData<UnsignedChar>(cipherText)),
+              any(that: hasRawData<UnsignedChar>(mac)),
+              cipherText.length,
+              any(that: hasRawData<UnsignedChar>(nonce)),
+              any(that: hasRawData<UnsignedChar>(sharedKey)),
+            ),
+            () => mockSodium.sodium_mprotect_noaccess(
+              any(that: hasRawData(sharedKey)),
+            ),
+          ]);
+        },
+      );
 
       test('returns decrypted data', () {
         final message = List.generate(25, (index) => index);

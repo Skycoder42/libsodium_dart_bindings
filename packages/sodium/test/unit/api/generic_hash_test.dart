@@ -46,12 +46,8 @@ void main() {
 
       const messageStream = Stream<Uint8List>.empty();
       const outLen = 42;
-      final key = SecureKeyFake(
-        List.generate(15, (index) => index),
-      );
-      final hash = Uint8List.fromList(
-        List.generate(5, (index) => 100 + index),
-      );
+      final key = SecureKeyFake(List.generate(15, (index) => index));
+      final hash = Uint8List.fromList(List.generate(5, (index) => 100 + index));
 
       when(
         () => sutMock.createConsumer(
@@ -70,10 +66,7 @@ void main() {
 
       expect(res, hash);
       verifyInOrder([
-        () => sutMock.createConsumer(
-              outLen: outLen,
-              key: key,
-            ),
+        () => sutMock.createConsumer(outLen: outLen, key: key),
         () => mockConsumer.addStream(messageStream),
         () => mockConsumer.close(),
       ]);

@@ -61,10 +61,8 @@ class SecretStreamPushTransformerSinkFFI
 
   @override
   @protected
-  void rekey(SodiumPointer<UnsignedChar> cryptoState) =>
-      sodium.crypto_secretstream_xchacha20poly1305_rekey(
-        cryptoState.ptr.cast(),
-      );
+  void rekey(SodiumPointer<UnsignedChar> cryptoState) => sodium
+      .crypto_secretstream_xchacha20poly1305_rekey(cryptoState.ptr.cast());
 
   @override
   @protected
@@ -86,7 +84,8 @@ class SecretStreamPushTransformerSinkFFI
       );
       cipherPtr = SodiumPointer.alloc(
         sodium,
-        count: messagePtr.count +
+        count:
+            messagePtr.count +
             sodium.crypto_secretstream_xchacha20poly1305_abytes(),
       );
 

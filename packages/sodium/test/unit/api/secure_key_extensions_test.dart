@@ -30,18 +30,12 @@ void main() {
 
       test('throws RangeError when any length < 1', () {
         final sut = SecureKeyFake(const [1, 2, 3, 4]);
-        expect(
-          () => sut.split(mockSodium, [4, 0]),
-          throwsA(isA<RangeError>()),
-        );
+        expect(() => sut.split(mockSodium, [4, 0]), throwsA(isA<RangeError>()));
       });
 
       test('throws RangeError when sum of lengths exceed key length', () {
         final sut = SecureKeyFake(const [1, 2, 3, 4]);
-        expect(
-          () => sut.split(mockSodium, [4, 1]),
-          throwsA(isA<RangeError>()),
-        );
+        expect(() => sut.split(mockSodium, [4, 1]), throwsA(isA<RangeError>()));
       });
 
       testData<(List<int>, List<int>, List<int>, List<int>?)>(
@@ -73,11 +67,9 @@ void main() {
 }
 
 void _mockSodiumAllocations(MockSodium mockSodium) {
-  when(() => mockSodium.secureAlloc(any())).thenAnswer(
-    (invocation) {
-      expect(invocation.positionalArguments.first, isA<int>());
-      final length = invocation.positionalArguments.first as int;
-      return SecureKeyFake.empty(length);
-    },
-  );
+  when(() => mockSodium.secureAlloc(any())).thenAnswer((invocation) {
+    expect(invocation.positionalArguments.first, isA<int>());
+    final length = invocation.positionalArguments.first as int;
+    return SecureKeyFake.empty(length);
+  });
 }

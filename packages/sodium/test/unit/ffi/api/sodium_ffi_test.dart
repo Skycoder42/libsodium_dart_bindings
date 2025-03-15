@@ -44,15 +44,12 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SodiumFFI(
-      mockSodium,
-      () {
-        registerPointers();
-        final sodium = MockSodiumFFI();
-        mockAllocArray(sodium, delayedFree: false);
-        return sodium;
-      },
-    );
+    sut = SodiumFFI(mockSodium, () {
+      registerPointers();
+      final sodium = MockSodiumFFI();
+      mockAllocArray(sodium, delayedFree: false);
+      return sodium;
+    });
   });
 
   test('fromFactory returns instance created by the factory', () async {
@@ -87,8 +84,9 @@ void main() {
     setUp(() {
       mockAllocArray(mockSodium);
       mockAlloc(mockSodium, 4);
-      when(() => mockSodium.sodium_pad(any(), any(), any(), any(), any()))
-          .thenReturn(0);
+      when(
+        () => mockSodium.sodium_pad(any(), any(), any(), any(), any()),
+      ).thenReturn(0);
     });
 
     test('allocs extended buffer with extra len', () {
@@ -137,8 +135,9 @@ void main() {
     });
 
     test('throws if sodium_pad fails', () {
-      when(() => mockSodium.sodium_pad(any(), any(), any(), any(), any()))
-          .thenReturn(1);
+      when(
+        () => mockSodium.sodium_pad(any(), any(), any(), any(), any()),
+      ).thenReturn(1);
 
       expect(() => sut.pad(testData, 10), throwsA(isA<SodiumException>()));
 
@@ -152,8 +151,9 @@ void main() {
     setUp(() {
       mockAllocArray(mockSodium);
       mockAlloc(mockSodium, 4);
-      when(() => mockSodium.sodium_unpad(any(), any(), any(), any()))
-          .thenReturn(0);
+      when(
+        () => mockSodium.sodium_unpad(any(), any(), any(), any()),
+      ).thenReturn(0);
     });
 
     test('allocs extended buffer with data len and read only', () {
@@ -205,8 +205,9 @@ void main() {
     });
 
     test('throws if sodium_unpad fails', () {
-      when(() => mockSodium.sodium_unpad(any(), any(), any(), any()))
-          .thenReturn(1);
+      when(
+        () => mockSodium.sodium_unpad(any(), any(), any(), any()),
+      ).thenReturn(1);
 
       expect(() => sut.unpad(testData, 10), throwsA(isA<SodiumException>()));
 
@@ -246,22 +247,14 @@ void main() {
   test('randombytes returns RandombytesFFI instance', () {
     expect(
       sut.randombytes,
-      isA<RandombytesFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<RandombytesFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('crypto returns CryptoFFI instance', () {
     expect(
       sut.crypto,
-      isA<CryptoFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<CryptoFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
@@ -289,20 +282,23 @@ void main() {
       const testSecureKeyData = [1, 2, 3, 4, 5];
       final testSecureKey = SecureKeyFake(testSecureKeyData);
 
-      final result = await sut.runIsolated(
-        secureKeys: [testSecureKey],
-        (sodium, secureKeys, keyPairs) {
-          assert(keyPairs.isEmpty, '$keyPairs.isEmpty');
-          assert(secureKeys.length == 1, '$secureKeys.length == 1');
-          final secureKey = secureKeys.single;
-          assert(
-            const ListEquality<int>()
-                .equals(secureKey.extractBytes(), testSecureKeyData),
-            '${secureKey.extractBytes()} == $testSecureKeyData',
-          );
-          return secureKey;
-        },
-      );
+      final result = await sut.runIsolated(secureKeys: [testSecureKey], (
+        sodium,
+        secureKeys,
+        keyPairs,
+      ) {
+        assert(keyPairs.isEmpty, '$keyPairs.isEmpty');
+        assert(secureKeys.length == 1, '$secureKeys.length == 1');
+        final secureKey = secureKeys.single;
+        assert(
+          const ListEquality<int>().equals(
+            secureKey.extractBytes(),
+            testSecureKeyData,
+          ),
+          '${secureKey.extractBytes()} == $testSecureKeyData',
+        );
+        return secureKey;
+      });
 
       expect(result, testSecureKey);
       expect(testSecureKey.disposed, isFalse);
@@ -318,25 +314,30 @@ void main() {
         secretKey: SecureKeyFake(testSecretKeyData),
       );
 
-      final result = await sut.runIsolated(
-        keyPairs: [testKeyPair],
-        (sodium, secureKeys, keyPairs) {
-          assert(secureKeys.isEmpty, '$secureKeys.isEmpty');
-          assert(keyPairs.length == 1, '$keyPairs == 1');
-          final keyPair = keyPairs.single;
-          assert(
-            const ListEquality<int>()
-                .equals(keyPair.publicKey, testPublicKeyData),
-            '${keyPair.publicKey} == $testPublicKeyData',
-          );
-          assert(
-            const ListEquality<int>()
-                .equals(keyPair.secretKey.extractBytes(), testSecretKeyData),
-            '${keyPair.secretKey.extractBytes()} == $testSecretKeyData',
-          );
-          return keyPair;
-        },
-      );
+      final result = await sut.runIsolated(keyPairs: [testKeyPair], (
+        sodium,
+        secureKeys,
+        keyPairs,
+      ) {
+        assert(secureKeys.isEmpty, '$secureKeys.isEmpty');
+        assert(keyPairs.length == 1, '$keyPairs == 1');
+        final keyPair = keyPairs.single;
+        assert(
+          const ListEquality<int>().equals(
+            keyPair.publicKey,
+            testPublicKeyData,
+          ),
+          '${keyPair.publicKey} == $testPublicKeyData',
+        );
+        assert(
+          const ListEquality<int>().equals(
+            keyPair.secretKey.extractBytes(),
+            testSecretKeyData,
+          ),
+          '${keyPair.secretKey.extractBytes()} == $testSecretKeyData',
+        );
+        return keyPair;
+      });
 
       expect(result, testKeyPair);
     });
@@ -346,75 +347,64 @@ void main() {
 
       final testData = Uint8List.fromList([1, 2, 3, 4, 5]);
 
-      final result = await sut.runIsolated(
-        (sodium, _, __) => testData,
-      );
+      final result = await sut.runIsolated((sodium, _, _) => testData);
 
       expect(result, testData);
       expect(result, isNot(same(testData)));
     });
   });
 
-  test(
-    'isolateFactory returns a factory that '
-    'can create a sodium instance with a different ffi reference',
-    () async {
-      when(() => mockSodium.sodium_library_version_major()).thenReturn(1);
-      when(() => mockSodium.sodium_library_version_minor()).thenReturn(2);
-      when(() => mockSodium.sodium_version_string()).thenReturn(nullptr);
+  test('isolateFactory returns a factory that '
+      'can create a sodium instance with a different ffi reference', () async {
+    when(() => mockSodium.sodium_library_version_major()).thenReturn(1);
+    when(() => mockSodium.sodium_library_version_minor()).thenReturn(2);
+    when(() => mockSodium.sodium_version_string()).thenReturn(nullptr);
 
-      final factory = sut.isolateFactory;
+    final factory = sut.isolateFactory;
 
-      final newSodium = await factory();
+    final newSodium = await factory();
 
-      expect(
-        newSodium,
-        isA<SodiumFFI>().having(
-          (m) => m.sodium,
-          'sodium',
-          isNot(same(mockSodium)),
-        ),
-      );
-      expect(
-        newSodium.secureAlloc(10),
-        isA<SecureKey>().having((m) => m.length, 'length', 10),
-      );
-    },
-  );
+    expect(
+      newSodium,
+      isA<SodiumFFI>().having(
+        (m) => m.sodium,
+        'sodium',
+        isNot(same(mockSodium)),
+      ),
+    );
+    expect(
+      newSodium.secureAlloc(10),
+      isA<SecureKey>().having((m) => m.length, 'length', 10),
+    );
+  });
 
-  test(
-    'createTransferrableSecureKey creates a transferrable key',
-    () {
-      mockAllocArray(mockSodium);
+  test('createTransferrableSecureKey creates a transferrable key', () {
+    mockAllocArray(mockSodium);
 
-      final testBytes = [1, 3, 5, 7];
-      final result = sut.createTransferrableSecureKey(SecureKeyFake(testBytes));
+    final testBytes = [1, 3, 5, 7];
+    final result = sut.createTransferrableSecureKey(SecureKeyFake(testBytes));
 
-      expect(result, isA<TransferrableSecureKeyFFI>());
-      final transferrableKey = result as TransferrableSecureKeyFFI;
+    expect(result, isA<TransferrableSecureKeyFFI>());
+    final transferrableKey = result as TransferrableSecureKeyFFI;
 
-      final restored = transferrableKey.toSecureKey(sut);
-      expect(restored.extractBytes(), testBytes);
-    },
-  );
+    final restored = transferrableKey.toSecureKey(sut);
+    expect(restored.extractBytes(), testBytes);
+  });
 
   group('materializeTransferrableSecureKey', () {
-    test(
-      'restores the original key',
-      () {
-        mockAllocArray(mockSodium);
+    test('restores the original key', () {
+      mockAllocArray(mockSodium);
 
-        final transferBytes = Uint8List.fromList([2, 4, 6, 8]);
+      final transferBytes = Uint8List.fromList([2, 4, 6, 8]);
 
-        final result = sut.materializeTransferrableSecureKey(
-          TransferrableSecureKeyFFI.generic(
-            TransferableTypedData.fromList([transferBytes]),
-          ),
-        );
+      final result = sut.materializeTransferrableSecureKey(
+        TransferrableSecureKeyFFI.generic(
+          TransferableTypedData.fromList([transferBytes]),
+        ),
+      );
 
-        expect(result.extractBytes(), transferBytes);
-      },
-    );
+      expect(result.extractBytes(), transferBytes);
+    });
 
     test('throws if not an FFI key', () {
       expect(
@@ -431,51 +421,43 @@ void main() {
     });
   });
 
-  test(
-    'createTransferrableKeyPair creates a transferrable key pair',
-    () {
+  test('createTransferrableKeyPair creates a transferrable key pair', () {
+    mockAllocArray(mockSodium);
+
+    final testPublicBytes = [1, 3, 5, 7];
+    final testSecretBytes = [1, 2, 3, 4];
+    final result = sut.createTransferrableKeyPair(
+      KeyPair(
+        publicKey: Uint8List.fromList(testPublicBytes),
+        secretKey: SecureKeyFake(testSecretBytes),
+      ),
+    );
+
+    expect(result, isA<TransferrableKeyPairFFI>());
+    final transferrableKeyPair = result as TransferrableKeyPairFFI;
+
+    final restored = transferrableKeyPair.toKeyPair(sut);
+    expect(restored.publicKey, testPublicBytes);
+    expect(restored.secretKey.extractBytes(), testSecretBytes);
+  });
+
+  group('materializeTransferrableKeyPair', () {
+    test('restores the original key pair', () {
       mockAllocArray(mockSodium);
 
-      final testPublicBytes = [1, 3, 5, 7];
-      final testSecretBytes = [1, 2, 3, 4];
-      final result = sut.createTransferrableKeyPair(
-        KeyPair(
-          publicKey: Uint8List.fromList(testPublicBytes),
-          secretKey: SecureKeyFake(testSecretBytes),
+      final transferPublicBytes = Uint8List.fromList([2, 4, 6, 8]);
+      final transferSecureBytes = Uint8List.fromList([5, 6, 7, 8]);
+
+      final result = sut.materializeTransferrableKeyPair(
+        TransferrableKeyPairFFI.generic(
+          publicKeyBytes: TransferableTypedData.fromList([transferPublicBytes]),
+          secretKeyBytes: TransferableTypedData.fromList([transferSecureBytes]),
         ),
       );
 
-      expect(result, isA<TransferrableKeyPairFFI>());
-      final transferrableKeyPair = result as TransferrableKeyPairFFI;
-
-      final restored = transferrableKeyPair.toKeyPair(sut);
-      expect(restored.publicKey, testPublicBytes);
-      expect(restored.secretKey.extractBytes(), testSecretBytes);
-    },
-  );
-
-  group('materializeTransferrableKeyPair', () {
-    test(
-      'restores the original key pair',
-      () {
-        mockAllocArray(mockSodium);
-
-        final transferPublicBytes = Uint8List.fromList([2, 4, 6, 8]);
-        final transferSecureBytes = Uint8List.fromList([5, 6, 7, 8]);
-
-        final result = sut.materializeTransferrableKeyPair(
-          TransferrableKeyPairFFI.generic(
-            publicKeyBytes:
-                TransferableTypedData.fromList([transferPublicBytes]),
-            secretKeyBytes:
-                TransferableTypedData.fromList([transferSecureBytes]),
-          ),
-        );
-
-        expect(result.publicKey, transferPublicBytes);
-        expect(result.secretKey.extractBytes(), transferSecureBytes);
-      },
-    );
+      expect(result.publicKey, transferPublicBytes);
+      expect(result.secretKey.extractBytes(), transferSecureBytes);
+    });
 
     test('throws if not an FFI key', () {
       expect(

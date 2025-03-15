@@ -36,10 +36,7 @@ class ScalarmultJS with ScalarmultValidations implements Scalarmult {
   }
 
   @override
-  SecureKey call({
-    required SecureKey n,
-    required Uint8List p,
-  }) {
+  SecureKey call({required SecureKey n, required Uint8List p}) {
     validateSecretKey(n);
     validatePublicKey(p);
 

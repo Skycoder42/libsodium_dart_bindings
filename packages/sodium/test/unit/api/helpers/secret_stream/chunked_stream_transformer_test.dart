@@ -111,9 +111,7 @@ void main() {
 
         final expectedChunks = <Uint8List>[
           if (fixture case int())
-            Uint8List.fromList(
-              totalBytes.take(fixture).toList(),
-            ),
+            Uint8List.fromList(totalBytes.take(fixture).toList()),
         ];
         for (var i = fixture ?? 0; i < totalBytes.length; i += testChunkSize) {
           final chunk = Uint8List.fromList(
@@ -163,10 +161,7 @@ void main() {
       ]);
 
       final transformed = testData.transform(
-        const ChunkedStreamTransformer(
-          testChunkSize,
-          headerSize: 3,
-        ),
+        const ChunkedStreamTransformer(testChunkSize, headerSize: 3),
       );
 
       expect(

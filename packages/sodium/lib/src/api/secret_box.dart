@@ -76,30 +76,18 @@ abstract class SecretBox {
 @internal
 mixin SecretBoxValidations implements SecretBox {
   /// @nodoc
-  void validateNonce(Uint8List nonce) => Validations.checkIsSame(
-        nonce.length,
-        nonceBytes,
-        'nonce',
-      );
+  void validateNonce(Uint8List nonce) =>
+      Validations.checkIsSame(nonce.length, nonceBytes, 'nonce');
 
   /// @nodoc
-  void validateKey(SecureKey key) => Validations.checkIsSame(
-        key.length,
-        keyBytes,
-        'key',
-      );
+  void validateKey(SecureKey key) =>
+      Validations.checkIsSame(key.length, keyBytes, 'key');
 
   /// @nodoc
-  void validateMac(Uint8List mac) => Validations.checkIsSame(
-        mac.length,
-        macBytes,
-        'mac',
-      );
+  void validateMac(Uint8List mac) =>
+      Validations.checkIsSame(mac.length, macBytes, 'mac');
 
   /// @nodoc
-  void validateEasyCipherText(Uint8List cipherText) => Validations.checkAtLeast(
-        cipherText.length,
-        macBytes,
-        'cipherText',
-      );
+  void validateEasyCipherText(Uint8List cipherText) =>
+      Validations.checkAtLeast(cipherText.length, macBytes, 'cipherText');
 }

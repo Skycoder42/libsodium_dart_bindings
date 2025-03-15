@@ -29,15 +29,14 @@ import 'test_case.dart';
 typedef SetupAllFn = void Function(dynamic Function() body);
 typedef SetupFn = void Function(dynamic Function(Sodium sodium) body);
 typedef GroupFn = void Function(String description, dynamic Function() body);
-typedef TestFn = void Function(
-  String description,
-  dynamic Function(Sodium sodium) body, {
-  bool? skip,
-});
-typedef TestSumoFn = void Function(
-  String description,
-  dynamic Function(SodiumSumo sodium) body,
-);
+typedef TestFn =
+    void Function(
+      String description,
+      dynamic Function(Sodium sodium) body, {
+      bool? skip,
+    });
+typedef TestSumoFn =
+    void Function(String description, dynamic Function(SodiumSumo sodium) body);
 
 abstract class TestRunner {
   late final Sodium _sodium;
@@ -51,23 +50,23 @@ abstract class TestRunner {
   TestRunner();
 
   Iterable<TestCase> createTestCases() => [
-        SodiumTestCase(this),
-        SodiumInitTestCase(this),
-        RandombytesTestCase(this),
-        SecretBoxTestCase(this),
-        SecretStreamTestCase(this),
-        AeadChaCha20Poly1305TestCase(this),
-        AeadXChaCha20Poly1305IETFTestCase(this),
-        AuthTestCase(this),
-        BoxTestCase(this),
-        SignTestCase(this),
-        GenericHashTestCase(this),
-        ShortHashTestCase(this),
-        PwhashTestCase(this, is32Bit: is32Bit),
-        KdfTestCase(this),
-        KxTestCase(this),
-        ScalarMultTestCase(this),
-      ];
+    SodiumTestCase(this),
+    SodiumInitTestCase(this),
+    RandombytesTestCase(this),
+    SecretBoxTestCase(this),
+    SecretStreamTestCase(this),
+    AeadChaCha20Poly1305TestCase(this),
+    AeadXChaCha20Poly1305IETFTestCase(this),
+    AuthTestCase(this),
+    BoxTestCase(this),
+    SignTestCase(this),
+    GenericHashTestCase(this),
+    ShortHashTestCase(this),
+    PwhashTestCase(this, is32Bit: is32Bit),
+    KdfTestCase(this),
+    KxTestCase(this),
+    ScalarMultTestCase(this),
+  ];
 
   @protected
   @visibleForTesting
@@ -85,12 +84,7 @@ abstract class TestRunner {
     String description,
     dynamic Function(Sodium sodium) body, {
     bool? skip,
-  }) =>
-      t.test(
-        description,
-        skip: skip,
-        () => body(_sodium),
-      );
+  }) => t.test(description, skip: skip, () => body(_sodium));
 
   @visibleForOverriding
   void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
@@ -126,8 +120,7 @@ abstract class TestRunner {
   Future<T> ioCompute<T, M>(
     FutureOr<T> Function(M message) callback,
     M message,
-  ) =>
-      Isolate.run(() => callback(message));
+  ) => Isolate.run(() => callback(message));
 }
 
 abstract class SumoTestRunner extends TestRunner {
@@ -145,8 +138,5 @@ abstract class SumoTestRunner extends TestRunner {
   @override
   @visibleForOverriding
   void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
-      t.test(
-        '[sumo] $description',
-        () => body(sodium),
-      );
+      t.test('[sumo] $description', () => body(sodium));
 }

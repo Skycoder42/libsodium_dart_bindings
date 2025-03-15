@@ -139,10 +139,7 @@ abstract class Pwhash {
   /// Provides crypto_pwhash_str_verify.
   ///
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#password-storage
-  bool strVerify({
-    required String passwordHash,
-    required String password,
-  });
+  bool strVerify({required String passwordHash, required String password});
 
   /// Provides crypto_pwhash_str_needs_rehash.
   ///
@@ -159,56 +156,38 @@ abstract class Pwhash {
 @internal
 mixin PwHashValidations implements Pwhash {
   /// @nodoc
-  void validateOutLen(int outLen) => Validations.checkInRange(
-        outLen,
-        bytesMin,
-        bytesMax,
-        'outLen',
-      );
+  void validateOutLen(int outLen) =>
+      Validations.checkInRange(outLen, bytesMin, bytesMax, 'outLen');
 
   /// @nodoc
-  void validatePasswordHash(Int8List passwordHash) => Validations.checkIsSame(
-        passwordHash.length,
-        strBytes,
-        'passwordHash',
-      );
+  void validatePasswordHash(Int8List passwordHash) =>
+      Validations.checkIsSame(passwordHash.length, strBytes, 'passwordHash');
 
   /// @nodoc
   void validatePasswordHashStr(String passwordHash) => Validations.checkInRange(
-        passwordHash.length,
-        1,
-        strBytes,
-        'passwordHash',
-      );
+    passwordHash.length,
+    1,
+    strBytes,
+    'passwordHash',
+  );
 
   /// @nodoc
   void validatePassword(Int8List password) => Validations.checkInRange(
-        password.length,
-        passwdMin,
-        passwdMax,
-        'password',
-      );
+    password.length,
+    passwdMin,
+    passwdMax,
+    'password',
+  );
 
   /// @nodoc
-  void validateSalt(Uint8List salt) => Validations.checkIsSame(
-        salt.length,
-        saltBytes,
-        'salt',
-      );
+  void validateSalt(Uint8List salt) =>
+      Validations.checkIsSame(salt.length, saltBytes, 'salt');
 
   /// @nodoc
-  void validateOpsLimit(int opsLimit) => Validations.checkInRange(
-        opsLimit,
-        opsLimitMin,
-        opsLimitMax,
-        'opsLimit',
-      );
+  void validateOpsLimit(int opsLimit) =>
+      Validations.checkInRange(opsLimit, opsLimitMin, opsLimitMax, 'opsLimit');
 
   /// @nodoc
-  void validateMemLimit(int memLimit) => Validations.checkInRange(
-        memLimit,
-        memLimitMin,
-        memLimitMax,
-        'memLimit',
-      );
+  void validateMemLimit(int memLimit) =>
+      Validations.checkInRange(memLimit, memLimitMin, memLimitMax, 'memLimit');
 }

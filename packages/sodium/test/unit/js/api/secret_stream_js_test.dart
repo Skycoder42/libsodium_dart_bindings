@@ -50,8 +50,9 @@ void main() {
 
   group('methods', () {
     setUp(() {
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_KEYBYTES)
-          .thenReturn(5);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_KEYBYTES,
+      ).thenReturn(5);
     });
 
     testKeygen(
@@ -67,9 +68,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(
-          () => mockSodium.crypto_secretstream_xchacha20poly1305_KEYBYTES,
-        );
+        verify(() => mockSodium.crypto_secretstream_xchacha20poly1305_KEYBYTES);
       });
 
       test('returns SecretStreamPushTransformerJS', () {
@@ -93,9 +92,7 @@ void main() {
           throwsA(isA<RangeError>()),
         );
 
-        verify(
-          () => mockSodium.crypto_secretstream_xchacha20poly1305_KEYBYTES,
-        );
+        verify(() => mockSodium.crypto_secretstream_xchacha20poly1305_KEYBYTES);
       });
 
       test('returns SecretStreamPullTransformerJS', () {

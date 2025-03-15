@@ -8,11 +8,7 @@ class TypeInfo {
   final String? typeDef;
   final bool force;
 
-  const TypeInfo(
-    this.dartType, {
-    this.typeDef,
-    this.force = false,
-  });
+  const TypeInfo(this.dartType, {this.typeDef, this.force = false});
 
   DartTypeDef? get dartTypeDef =>
       typeDef != null ? (name: dartType, type: typeDef!) : null;

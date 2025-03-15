@@ -33,10 +33,8 @@ class KdfJS with KdfValidations implements Kdf {
   int get keyBytes => sodium.crypto_kdf_KEYBYTES;
 
   @override
-  SecureKey keygen() => SecureKeyJS(
-        sodium,
-        jsErrorWrap(() => sodium.crypto_kdf_keygen()),
-      );
+  SecureKey keygen() =>
+      SecureKeyJS(sodium, jsErrorWrap(() => sodium.crypto_kdf_keygen()));
 
   @override
   SecureKey deriveFromKey({

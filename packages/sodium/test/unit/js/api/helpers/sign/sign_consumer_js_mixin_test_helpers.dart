@@ -44,10 +44,7 @@ void addStreamTests({
 
       await sut.close();
 
-      expect(
-        () => sut.add(Uint8List(0)),
-        throwsA(isA<StateError>()),
-      );
+      expect(() => sut.add(Uint8List(0)), throwsA(isA<StateError>()));
     });
   });
 
@@ -72,8 +69,9 @@ void addStreamTests({
     });
 
     test('throws exception and cancels addStream on error', () async {
-      when(() => mockSodium.crypto_sign_update(any(), any()))
-          .thenThrow(JSError());
+      when(
+        () => mockSodium.crypto_sign_update(any(), any()),
+      ).thenThrow(JSError());
 
       final message = List.generate(25, (index) => index * 3);
 

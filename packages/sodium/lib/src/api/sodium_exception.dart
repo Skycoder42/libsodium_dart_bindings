@@ -14,9 +14,7 @@ class SodiumException implements Exception {
 
   /// @nodoc
   @internal
-  static void checkSucceededInt(
-    int result,
-  ) {
+  static void checkSucceededInt(int result) {
     if (result != 0) {
       throw SodiumException();
     }
@@ -24,9 +22,7 @@ class SodiumException implements Exception {
 
   /// @nodoc
   @internal
-  static void checkSucceededInitInt(
-    int result,
-  ) {
+  static void checkSucceededInitInt(int result) {
     // Result will be 0 if first init and 1 if second and so on.
     if (result != 0 && result != 1) {
       throw SodiumException();

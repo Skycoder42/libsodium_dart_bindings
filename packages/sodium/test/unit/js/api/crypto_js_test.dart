@@ -32,22 +32,14 @@ void main() {
   test('secretBox returns SecretBoxJS instance', () {
     expect(
       sut.secretBox,
-      isA<SecretBoxJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<SecretBoxJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
   test('secretStream returns SecretStreamJS instance', () {
     expect(
       sut.secretStream,
-      isA<SecretStreamJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<SecretStreamJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
@@ -62,92 +54,57 @@ void main() {
     );
   });
 
-  test('aeadXChaCha20Poly1305IETF returns AeadXChaCha20Poly1305IEFTJS instance',
-      () {
-    expect(
-      sut.aeadXChaCha20Poly1305IETF,
-      isA<AeadXChaCha20Poly1305IEFTJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
-    );
-  });
+  test(
+    'aeadXChaCha20Poly1305IETF returns AeadXChaCha20Poly1305IEFTJS instance',
+    () {
+      expect(
+        sut.aeadXChaCha20Poly1305IETF,
+        isA<AeadXChaCha20Poly1305IEFTJS>().having(
+          (p) => p.sodium,
+          'sodium',
+          sut.sodium,
+        ),
+      );
+    },
+  );
 
   test('auth returns AuthJS instance', () {
     expect(
       sut.auth,
-      isA<AuthJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<AuthJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
   test('box returns BoxJS instance', () {
-    expect(
-      sut.box,
-      isA<BoxJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
-    );
+    expect(sut.box, isA<BoxJS>().having((p) => p.sodium, 'sodium', sut.sodium));
   });
 
   test('sign returns SignJS instance', () {
     expect(
       sut.sign,
-      isA<SignJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<SignJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
   test('genericHash returns GenericHashJS instance', () {
     expect(
       sut.genericHash,
-      isA<GenericHashJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<GenericHashJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
   test('shortHash returns ShortHashJS instance', () {
     expect(
       sut.shortHash,
-      isA<ShortHashJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<ShortHashJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 
   test('kdf returns KdfJS instance', () {
-    expect(
-      sut.kdf,
-      isA<KdfJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
-    );
+    expect(sut.kdf, isA<KdfJS>().having((p) => p.sodium, 'sodium', sut.sodium));
   });
 
   test('kx returns KxJS instance', () {
-    expect(
-      sut.kx,
-      isA<KxJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
-    );
+    expect(sut.kx, isA<KxJS>().having((p) => p.sodium, 'sodium', sut.sodium));
   });
 }

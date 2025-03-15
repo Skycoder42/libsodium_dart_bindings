@@ -21,11 +21,7 @@ void main() {
 
     expect(
       sodium,
-      isA<SodiumJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        libSodium,
-      ),
+      isA<SodiumJS>().having((p) => p.sodium, 'sodium', libSodium),
     );
   });
 
@@ -35,11 +31,7 @@ void main() {
 
     expect(
       sodium,
-      isA<SodiumJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        libSodium,
-      ),
+      isA<SodiumJS>().having((p) => p.sodium, 'sodium', libSodium),
     );
   });
 }

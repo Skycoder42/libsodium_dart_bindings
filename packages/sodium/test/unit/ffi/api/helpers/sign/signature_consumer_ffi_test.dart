@@ -49,10 +49,7 @@ void main() {
       when(() => mockSecretKey.copy()).thenReturn(SecureKeyFake.empty(0));
       when(() => mockSodium.crypto_sign_init(any())).thenReturn(0);
 
-      SignatureConsumerFFI(
-        sodium: mockSodium,
-        secretKey: mockSecretKey,
-      );
+      SignatureConsumerFFI(sodium: mockSodium, secretKey: mockSecretKey);
 
       verify(() => mockSecretKey.copy());
     });
@@ -63,10 +60,8 @@ void main() {
       when(() => mockSodium.crypto_sign_init(any())).thenReturn(1);
 
       expect(
-        () => SignatureConsumerFFI(
-          sodium: mockSodium,
-          secretKey: mockSecretKey,
-        ),
+        () =>
+            SignatureConsumerFFI(sodium: mockSodium, secretKey: mockSecretKey),
         throwsA(isA<SodiumException>()),
       );
 
@@ -75,10 +70,11 @@ void main() {
 
     initStateTests(
       mockSodium: mockSodium,
-      createSut: () => SignatureConsumerFFI(
-        sodium: mockSodium,
-        secretKey: mockSecretKey,
-      ),
+      createSut:
+          () => SignatureConsumerFFI(
+            sodium: mockSodium,
+            secretKey: mockSecretKey,
+          ),
       setUp: () {
         when(() => mockSecretKey.copy()).thenReturn(SecureKeyFake.empty(0));
       },
@@ -93,10 +89,7 @@ void main() {
     setUp(() {
       when(() => mockSodium.crypto_sign_init(any())).thenReturn(0);
 
-      sut = SignatureConsumerFFI(
-        sodium: mockSodium,
-        secretKey: secretKey,
-      );
+      sut = SignatureConsumerFFI(sodium: mockSodium, secretKey: secretKey);
 
       clearInteractions(mockSodium);
     });
@@ -106,12 +99,7 @@ void main() {
       createSut: () => sut,
       setUpVerify: () {
         when(
-          () => mockSodium.crypto_sign_final_create(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_final_create(any(), any(), any(), any()),
         ).thenReturn(0);
       },
     );
@@ -119,12 +107,7 @@ void main() {
     group('close', () {
       test('calls crypto_sign_final_create with correct arguments', () async {
         when(
-          () => mockSodium.crypto_sign_final_create(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_final_create(any(), any(), any(), any()),
         ).thenReturn(0);
 
         await sut.close();
@@ -133,14 +116,14 @@ void main() {
           () => mockSodium.sodium_allocarray(10, 1),
           () => mockSodium.sodium_memzero(any(that: isNot(nullptr)), 10),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(secretKey.data)),
-              ),
+            any(that: hasRawData(secretKey.data)),
+          ),
           () => mockSodium.crypto_sign_final_create(
-                any(that: isNot(nullptr)),
-                any(that: isNot(nullptr)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(secretKey.data)),
-              ),
+            any(that: isNot(nullptr)),
+            any(that: isNot(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(secretKey.data)),
+          ),
         ]);
       });
 
@@ -148,12 +131,7 @@ void main() {
         final signature = List.generate(10, (index) => index * 10);
 
         when(
-          () => mockSodium.crypto_sign_final_create(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_final_create(any(), any(), any(), any()),
         ).thenAnswer((i) {
           fillPointer(i.positionalArguments[1] as Pointer, signature);
           return 0;
@@ -167,48 +145,27 @@ void main() {
 
       test('throws exception if signing fails', () async {
         when(
-          () => mockSodium.crypto_sign_final_create(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_final_create(any(), any(), any(), any()),
         ).thenReturn(1);
 
-        await expectLater(
-          () => sut.close(),
-          throwsA(isA<SodiumException>()),
-        );
+        await expectLater(() => sut.close(), throwsA(isA<SodiumException>()));
 
         verify(() => mockSodium.sodium_free(any())).called(3);
       });
 
       test('throws state error if close is called a second time', () async {
         when(
-          () => mockSodium.crypto_sign_final_create(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_final_create(any(), any(), any(), any()),
         ).thenReturn(0);
 
         await sut.close();
 
-        await expectLater(
-          () => sut.close(),
-          throwsA(isA<StateError>()),
-        );
+        await expectLater(() => sut.close(), throwsA(isA<StateError>()));
       });
 
       test('returns same future as signature', () async {
         when(
-          () => mockSodium.crypto_sign_final_create(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_final_create(any(), any(), any(), any()),
         ).thenReturn(0);
 
         final signature = sut.signature;

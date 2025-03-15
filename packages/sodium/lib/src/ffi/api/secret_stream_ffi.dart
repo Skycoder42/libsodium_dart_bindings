@@ -31,24 +31,21 @@ class SecretStreamFFI
 
   @override
   SecureKey keygen() => keygenImpl(
-        sodium: sodium,
-        keyBytes: keyBytes,
-        implementation: sodium.crypto_secretstream_xchacha20poly1305_keygen,
-      );
+    sodium: sodium,
+    keyBytes: keyBytes,
+    implementation: sodium.crypto_secretstream_xchacha20poly1305_keygen,
+  );
 
   @override
   SecretExStreamTransformer<SecretStreamPlainMessage, SecretStreamCipherMessage>
-      createPushEx(SecureKey key) {
+  createPushEx(SecureKey key) {
     validateKey(key);
     return SecretStreamPushTransformerFFI(sodium, key);
   }
 
   @override
   SecretExStreamTransformer<SecretStreamCipherMessage, SecretStreamPlainMessage>
-      createPullEx(
-    SecureKey key, {
-    bool requireFinalized = true,
-  }) {
+  createPullEx(SecureKey key, {bool requireFinalized = true}) {
     validateKey(key);
     return SecretStreamPullTransformerFFI(sodium, key, requireFinalized);
   }

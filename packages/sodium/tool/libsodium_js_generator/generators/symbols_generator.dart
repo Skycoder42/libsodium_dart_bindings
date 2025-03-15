@@ -20,22 +20,25 @@ final class SymbolsGenerator extends SpecGenerator<Method> {
 
   @override
   Method build() => Method(
-        (b) => b
+    (b) =>
+        b
           ..name = symbol.name
           ..external = external
           ..returns = typeMapping[_getReturnTypeName(symbol)]
           ..requiredParameters.addAll(_buildParams())
-          ..body = external
-              ? null
-              : Types.unimplementedError.newInstance(const []).thrown.code,
-      );
+          ..body =
+              external
+                  ? null
+                  : Types.unimplementedError.newInstance(const []).thrown.code,
+  );
 
   Iterable<Parameter> _buildParams() sync* {
     for (final input in symbol.inputs) {
       yield Parameter(
-        (b) => b
-          ..name = input.name
-          ..type = typeMapping[input.type],
+        (b) =>
+            b
+              ..name = input.name
+              ..type = typeMapping[input.type],
       );
     }
   }

@@ -36,10 +36,7 @@ class VerificationConsumerJS
 
   @override
   bool finalize(SignState state) => jsErrorWrap(
-        () => sodium.crypto_sign_final_verify(
-          state,
-          signature.toJS,
-          publicKey.toJS,
-        ),
-      );
+    () =>
+        sodium.crypto_sign_final_verify(state, signature.toJS, publicKey.toJS),
+  );
 }

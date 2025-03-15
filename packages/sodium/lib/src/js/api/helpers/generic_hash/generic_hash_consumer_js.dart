@@ -42,9 +42,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
   void add(Uint8List data) {
     _ensureNotCompleted();
 
-    jsErrorWrap(
-      () => sodium.crypto_generichash_update(_state, data.toJS),
-    );
+    jsErrorWrap(() => sodium.crypto_generichash_update(_state, data.toJS));
   }
 
   @override
@@ -59,10 +57,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
 
     try {
       final result = jsErrorWrap(
-        () => sodium.crypto_generichash_final(
-          _state,
-          outLen,
-        ),
+        () => sodium.crypto_generichash_final(_state, outLen),
       );
       _hashCompleter.complete(result.toDart);
     } catch (e, s) {

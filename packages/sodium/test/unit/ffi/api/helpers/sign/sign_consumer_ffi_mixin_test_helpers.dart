@@ -37,10 +37,7 @@ void initStateTests({
     setUp?.call();
     when(() => mockSodium.crypto_sign_init(any())).thenReturn(1);
 
-    expect(
-      createSut,
-      throwsA(isA<SodiumException>()),
-    );
+    expect(createSut, throwsA(isA<SodiumException>()));
 
     verifyInOrder([
       () => mockSodium.crypto_sign_statebytes(),
@@ -68,25 +65,23 @@ void addStreamTests({
     });
 
     test('call crypto_sign_update with the given data', () {
-      when(() => mockSodium.crypto_sign_update(any(), any(), any()))
-          .thenReturn(0);
+      when(
+        () => mockSodium.crypto_sign_update(any(), any(), any()),
+      ).thenReturn(0);
 
       final message = List.generate(25, (index) => index * 3);
 
       sut.add(Uint8List.fromList(message));
 
       verifyInOrder([
-        () => mockSodium.sodium_mprotect_readonly(
-              any(that: hasRawData(message)),
-            ),
+        () =>
+            mockSodium.sodium_mprotect_readonly(any(that: hasRawData(message))),
         () => mockSodium.crypto_sign_update(
-              any(that: isNot(nullptr)),
-              any(that: hasRawData<UnsignedChar>(message)),
-              message.length,
-            ),
-        () => mockSodium.sodium_free(
-              any(that: hasRawData(message)),
-            ),
+          any(that: isNot(nullptr)),
+          any(that: hasRawData<UnsignedChar>(message)),
+          message.length,
+        ),
+        () => mockSodium.sodium_free(any(that: hasRawData(message))),
       ]);
     });
 
@@ -95,10 +90,7 @@ void addStreamTests({
 
       await sut.close();
 
-      expect(
-        () => sut.add(Uint8List(0)),
-        throwsA(isA<StateError>()),
-      );
+      expect(() => sut.add(Uint8List(0)), throwsA(isA<StateError>()));
     });
   });
 
@@ -110,31 +102,30 @@ void addStreamTests({
     });
 
     test('call crypto_sign_update on stream events', () async {
-      when(() => mockSodium.crypto_sign_update(any(), any(), any()))
-          .thenReturn(0);
+      when(
+        () => mockSodium.crypto_sign_update(any(), any(), any()),
+      ).thenReturn(0);
 
       final message = List.generate(25, (index) => index * 3);
 
       await sut.addStream(Stream.value(Uint8List.fromList(message)));
 
       verifyInOrder([
-        () => mockSodium.sodium_mprotect_readonly(
-              any(that: hasRawData(message)),
-            ),
+        () =>
+            mockSodium.sodium_mprotect_readonly(any(that: hasRawData(message))),
         () => mockSodium.crypto_sign_update(
-              any(that: isNot(nullptr)),
-              any(that: hasRawData<UnsignedChar>(message)),
-              message.length,
-            ),
-        () => mockSodium.sodium_free(
-              any(that: hasRawData(message)),
-            ),
+          any(that: isNot(nullptr)),
+          any(that: hasRawData<UnsignedChar>(message)),
+          message.length,
+        ),
+        () => mockSodium.sodium_free(any(that: hasRawData(message))),
       ]);
     });
 
     test('throws exception and cancels addStream on error', () async {
-      when(() => mockSodium.crypto_sign_update(any(), any(), any()))
-          .thenReturn(1);
+      when(
+        () => mockSodium.crypto_sign_update(any(), any(), any()),
+      ).thenReturn(1);
 
       final message = List.generate(25, (index) => index * 3);
 
@@ -143,11 +134,7 @@ void addStreamTests({
         throwsA(isA<SodiumException>()),
       );
 
-      verify(
-        () => mockSodium.sodium_free(
-          any(that: hasRawData(message)),
-        ),
-      );
+      verify(() => mockSodium.sodium_free(any(that: hasRawData(message))));
     });
 
     test('throws StateError when adding a stream after completition', () async {

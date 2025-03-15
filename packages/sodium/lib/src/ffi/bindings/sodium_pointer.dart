@@ -25,8 +25,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
   static void debugOverwriteFinalizer(
     LibSodiumFFI sodium,
     SodiumFinalizer finalizer,
-  ) =>
-      _sodiumFinalizerCache[sodium] = finalizer;
+  ) => _sodiumFinalizerCache[sodium] = finalizer;
 
   /// libsodium bindings used to access the C API
   final LibSodiumFFI sodium;
@@ -49,9 +48,9 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
   /// Constructs the pointer from the lib[sodium] API, the raw [ptr] and the
   /// element [count].
   SodiumPointer.raw(this.sodium, this.ptr, this.count)
-      : _viewParent = null,
-        _locked = true,
-        _memoryProtection = MemoryProtection.readWrite {
+    : _viewParent = null,
+      _locked = true,
+      _memoryProtection = MemoryProtection.readWrite {
     _getFinalizer(sodium).attach(this, ptr.cast(), byteLength);
   }
 
@@ -273,9 +272,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
   /// [SodiumPointer.dispose] is not allowed as long as you still use the
   /// returned list. If you still dispose of the pointer, any try to access the
   /// data will crash your application.
-  TList asListView<TList extends List<num>>({
-    bool owned = false,
-  }) {
+  TList asListView<TList extends List<num>>({bool owned = false}) {
     if (owned) {
       memoryProtection = MemoryProtection.readWrite;
       // ignore: unused_result
@@ -288,56 +285,66 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
           return ptr.cast<Int8>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         } else if (elementSize <= sizeOf<Int16>()) {
           return ptr.cast<Int16>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         } else if (elementSize <= sizeOf<Int32>()) {
           return ptr.cast<Int32>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         } else if (elementSize <= sizeOf<Int64>()) {
           return ptr.cast<Int64>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         }
       case _Signage.unsigned:
         if (elementSize <= sizeOf<Uint8>()) {
           return ptr.cast<Uint8>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         } else if (elementSize <= sizeOf<Uint16>()) {
           return ptr.cast<Uint16>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         } else if (elementSize <= sizeOf<Uint32>()) {
           return ptr.cast<Uint32>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         } else if (elementSize <= sizeOf<Uint64>()) {
           return ptr.cast<Uint64>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         }
       case _Signage.float:
         if (elementSize <= sizeOf<Float>()) {
           return ptr.cast<Float>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         } else if (elementSize <= sizeOf<Double>()) {
           return ptr.cast<Double>().asTypedList(
                 count,
                 finalizer: owned ? sodium.sodium_freePtr : null,
-              ) as TList;
+              )
+              as TList;
         }
     }
 
@@ -406,8 +413,9 @@ extension SodiumString on String {
     toCharArray(
       memoryWidth: memoryWidth,
       zeroTerminated: zeroTerminated,
-      allocator: (length) =>
-          (ptr = SodiumPointer.alloc(sodium, count: length)).asListView(),
+      allocator:
+          (length) =>
+              (ptr = SodiumPointer.alloc(sodium, count: length)).asListView(),
     );
     ptr.memoryProtection = memoryProtection;
     return ptr;
@@ -453,11 +461,7 @@ extension TypedNumberListX on List<num> {
   }
 }
 
-enum _Signage {
-  signed,
-  unsigned,
-  float,
-}
+enum _Signage { signed, unsigned, float }
 
 extension _StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
   static int staticSizeOf<T>() {

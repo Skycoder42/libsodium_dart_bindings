@@ -27,26 +27,16 @@ class ShortHashJS with ShortHashValidations implements ShortHash {
   int get keyBytes => sodium.crypto_shorthash_KEYBYTES;
 
   @override
-  SecureKey keygen() => SecureKeyJS(
-        sodium,
-        jsErrorWrap(() => sodium.crypto_shorthash_keygen()),
-      );
+  SecureKey keygen() =>
+      SecureKeyJS(sodium, jsErrorWrap(() => sodium.crypto_shorthash_keygen()));
 
   @override
-  Uint8List call({
-    required Uint8List message,
-    required SecureKey key,
-  }) {
+  Uint8List call({required Uint8List message, required SecureKey key}) {
     validateKey(key);
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium
-            .crypto_shorthash(
-              message.toJS,
-              keyData.toJS,
-            )
-            .toDart,
+        (keyData) => sodium.crypto_shorthash(message.toJS, keyData.toJS).toDart,
       ),
     );
   }

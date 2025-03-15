@@ -27,17 +27,17 @@ import 'secure_key_ffi.dart';
 
 /// @nodoc
 @internal
-typedef SodiumFFIIsolateCallback<TResult, TSodium extends SodiumFFI>
-    = FutureOr<TResult> Function(
-  TSodium sodium,
-  List<SecureKey> secureKeys,
-  List<KeyPair> keyPairs,
-);
+typedef SodiumFFIIsolateCallback<TResult, TSodium extends SodiumFFI> =
+    FutureOr<TResult> Function(
+      TSodium sodium,
+      List<SecureKey> secureKeys,
+      List<KeyPair> keyPairs,
+    );
 
 /// @nodoc
 @internal
-typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> = Future<TSodiumFFI>
-    Function(LibSodiumFFIFactory factory);
+typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> =
+    Future<TSodiumFFI> Function(LibSodiumFFIFactory factory);
 
 /// @nodoc
 @internal
@@ -53,17 +53,14 @@ class SodiumFFI implements Sodium {
 
   /// @nodoc
   static Future<SodiumFFI> fromFactory(LibSodiumFFIFactory factory) async =>
-      SodiumFFI(
-        await factory(),
-        factory,
-      );
+      SodiumFFI(await factory(), factory);
 
   @override
   SodiumVersion get version => SodiumVersion(
-        sodium.sodium_library_version_major(),
-        sodium.sodium_library_version_minor(),
-        sodium.sodium_version_string().cast<Utf8>().toDartString(),
-      );
+    sodium.sodium_library_version_major(),
+    sodium.sodium_library_version_minor(),
+    sodium.sodium_version_string().cast<Utf8>().toDartString(),
+  );
 
   @override
   Uint8List pad(Uint8List buf, int blocksize) {
@@ -132,11 +129,8 @@ class SodiumFFI implements Sodium {
 
   @override
   SecureKey secureCopy(Uint8List data) => SecureKeyFFI(
-        data.toSodiumPointer(
-          sodium,
-          memoryProtection: MemoryProtection.noAccess,
-        ),
-      );
+    data.toSodiumPointer(sodium, memoryProtection: MemoryProtection.noAccess),
+  );
 
   @override
   late final Randombytes randombytes = RandombytesFFI(sodium);
@@ -149,13 +143,12 @@ class SodiumFFI implements Sodium {
     SodiumIsolateCallback<T> callback, {
     List<SecureKey> secureKeys = const [],
     List<KeyPair> keyPairs = const [],
-  }) async =>
-      await runIsolatedWithFactory<T, SodiumFFI>(
-        SodiumFFI.fromFactory,
-        callback,
-        secureKeys,
-        keyPairs,
-      );
+  }) async => await runIsolatedWithFactory<T, SodiumFFI>(
+    SodiumFFI.fromFactory,
+    callback,
+    secureKeys,
+    keyPairs,
+  );
 
   @override
   SodiumFactory get isolateFactory {
@@ -217,59 +210,57 @@ class SodiumFFI implements Sodium {
   }
 
   static Future<IsolateResult<TResult>>
-      _isolateRun<TResult, TSodiumFFI extends SodiumFFI>(
+  _isolateRun<TResult, TSodiumFFI extends SodiumFFI>(
     LibSodiumFFIFactory sodiumFactory,
     SodiumFFIFactory<TSodiumFFI> fromFactory,
     List<TransferrableSecureKeyFFI> transferableSecureKeys,
     List<TransferrableKeyPairFFI> transferableKeyPairs,
     SodiumFFIIsolateCallback<TResult, TSodiumFFI> callback,
-  ) async =>
-          await Isolate.run(
-            debugName: 'SodiumFFI.runIsolated',
-            () async {
-              final sodium = await fromFactory(sodiumFactory);
-              final restoredSecureKeys = transferableSecureKeys
-                  .map((transferKey) => transferKey.toSecureKey(sodium))
-                  .toList();
-              final restoredKeyPairs = transferableKeyPairs
-                  .map((transferKeyPair) => transferKeyPair.toKeyPair(sodium))
-                  .toList();
+  ) async => await Isolate.run(debugName: 'SodiumFFI.runIsolated', () async {
+    final sodium = await fromFactory(sodiumFactory);
+    final restoredSecureKeys =
+        transferableSecureKeys
+            .map((transferKey) => transferKey.toSecureKey(sodium))
+            .toList();
+    final restoredKeyPairs =
+        transferableKeyPairs
+            .map((transferKeyPair) => transferKeyPair.toKeyPair(sodium))
+            .toList();
 
-              try {
-                final result = await callback(
-                  sodium,
-                  restoredSecureKeys,
-                  restoredKeyPairs,
-                );
+    try {
+      final result = await callback(
+        sodium,
+        restoredSecureKeys,
+        restoredKeyPairs,
+      );
 
-                IsolateResult<TResult> isolateResult;
-                switch (result) {
-                  case SecureKey():
-                    isolateResult = IsolateResult<TResult>.key(
-                      TransferrableSecureKeyFFI(result),
-                    );
-                    result.dispose();
-                  case KeyPair():
-                    isolateResult = IsolateResult<TResult>.keyPair(
-                      TransferrableKeyPairFFI(result),
-                    );
-                    result.dispose();
-                  case Uint8List():
-                    isolateResult = IsolateResult<TResult>.bytes(
-                      TransferableTypedData.fromList([result]),
-                    );
-                  default:
-                    isolateResult = IsolateResult<TResult>(result);
-                }
-                return isolateResult;
-              } finally {
-                for (final key in restoredSecureKeys) {
-                  key.dispose();
-                }
-                for (final keyPair in restoredKeyPairs) {
-                  keyPair.dispose();
-                }
-              }
-            },
+      IsolateResult<TResult> isolateResult;
+      switch (result) {
+        case SecureKey():
+          isolateResult = IsolateResult<TResult>.key(
+            TransferrableSecureKeyFFI(result),
           );
+          result.dispose();
+        case KeyPair():
+          isolateResult = IsolateResult<TResult>.keyPair(
+            TransferrableKeyPairFFI(result),
+          );
+          result.dispose();
+        case Uint8List():
+          isolateResult = IsolateResult<TResult>.bytes(
+            TransferableTypedData.fromList([result]),
+          );
+        default:
+          isolateResult = IsolateResult<TResult>(result);
+      }
+      return isolateResult;
+    } finally {
+      for (final key in restoredSecureKeys) {
+        key.dispose();
+      }
+      for (final keyPair in restoredKeyPairs) {
+        keyPair.dispose();
+      }
+    }
+  });
 }

@@ -14,7 +14,7 @@ class SodiumFinalizer {
 
   /// @nodoc
   SodiumFinalizer(LibSodiumJS sodium)
-      : _finalizer = Finalizer((v) => jsErrorWrap(() => sodium.memzero(v)));
+    : _finalizer = Finalizer((v) => jsErrorWrap(() => sodium.memzero(v)));
 
   /// @nodoc
   void attach(Object value, JSUint8Array token) =>

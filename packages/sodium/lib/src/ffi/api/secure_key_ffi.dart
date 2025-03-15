@@ -12,9 +12,8 @@ import '../bindings/sodium_pointer.dart';
 
 /// @nodoc
 @internal
-typedef SecureFFICallbackFn<T> = T Function(
-  SodiumPointer<UnsignedChar> pointer,
-);
+typedef SecureFFICallbackFn<T> =
+    T Function(SodiumPointer<UnsignedChar> pointer);
 
 /// @nodoc
 @internal
@@ -34,12 +33,12 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
 
   /// @nodoc
   factory SecureKeyFFI.alloc(LibSodiumFFI sodium, int length) => SecureKeyFFI(
-        SodiumPointer<UnsignedChar>.alloc(
-          sodium,
-          count: length,
-          memoryProtection: MemoryProtection.noAccess,
-        ),
-      );
+    SodiumPointer<UnsignedChar>.alloc(
+      sodium,
+      count: length,
+      memoryProtection: MemoryProtection.noAccess,
+    ),
+  );
 
   /// @nodoc
   factory SecureKeyFFI.random(LibSodiumFFI sodium, int length) {
@@ -58,14 +57,13 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   factory SecureKeyFFI.attach(
     LibSodiumFFI sodium,
     SecureKeyFFINativeHandle nativeHandle,
-  ) =>
-      SecureKeyFFI(
-        SodiumPointer.raw(
-          sodium,
-          Pointer.fromAddress(nativeHandle.$1),
-          nativeHandle.$2,
-        ),
-      );
+  ) => SecureKeyFFI(
+    SodiumPointer.raw(
+      sodium,
+      Pointer.fromAddress(nativeHandle.$1),
+      nativeHandle.$2,
+    ),
+  );
 
   @override
   int get length => _raw.count;
@@ -85,10 +83,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   }
 
   @override
-  T runUnlockedSync<T>(
-    SecureCallbackFn<T> callback, {
-    bool writable = false,
-  }) =>
+  T runUnlockedSync<T>(SecureCallbackFn<T> callback, {bool writable = false}) =>
       runUnlockedNative(
         (pointer) => callback(pointer.asListView()),
         writable: writable,
@@ -109,19 +104,18 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   }
 
   @override
-  Uint8List extractBytes() => runUnlockedNative(
-        (pointer) => Uint8List.fromList(pointer.asListView()),
-      );
+  Uint8List extractBytes() =>
+      runUnlockedNative((pointer) => Uint8List.fromList(pointer.asListView()));
 
   @override
   SecureKeyFFI copy() => runUnlockedNative(
-        (originalPointer) => SecureKeyFFI(
-          originalPointer.asListView().toSodiumPointer(
-                _raw.sodium,
-                memoryProtection: MemoryProtection.noAccess,
-              ),
-        ),
-      );
+    (originalPointer) => SecureKeyFFI(
+      originalPointer.asListView().toSodiumPointer(
+        _raw.sodium,
+        memoryProtection: MemoryProtection.noAccess,
+      ),
+    ),
+  );
 
   @override
   void dispose() {

@@ -33,10 +33,10 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
 
   @override
   SecureKey keygen() => keygenImpl(
-        sodium: sodium,
-        keyBytes: keyBytes,
-        implementation: sodium.crypto_secretbox_keygen,
-      );
+    sodium: sodium,
+    keyBytes: keyBytes,
+    implementation: sodium.crypto_secretbox_keygen,
+  );
 
   @override
   Uint8List easy({
@@ -50,12 +50,10 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
     SodiumPointer<UnsignedChar>? dataPtr;
     SodiumPointer<UnsignedChar>? noncePtr;
     try {
-      dataPtr = SodiumPointer.alloc(
-        sodium,
-        count: message.length + macBytes,
-      )
-        ..fill(List<int>.filled(macBytes, 0))
-        ..fill(message, offset: macBytes);
+      dataPtr =
+          SodiumPointer.alloc(sodium, count: message.length + macBytes)
+            ..fill(List<int>.filled(macBytes, 0))
+            ..fill(message, offset: macBytes);
       noncePtr = nonce.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,

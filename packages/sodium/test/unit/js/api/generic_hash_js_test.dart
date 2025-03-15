@@ -33,11 +33,7 @@ void main() {
   });
 
   testConstantsMapping([
-    (
-      () => mockSodium.crypto_generichash_BYTES,
-      () => sut.bytes,
-      'bytes',
-    ),
+    (() => mockSodium.crypto_generichash_BYTES, () => sut.bytes, 'bytes'),
     (
       () => mockSodium.crypto_generichash_BYTES_MIN,
       () => sut.bytesMin,
@@ -82,10 +78,7 @@ void main() {
     group('call', () {
       test('asserts if outLen is invalid', () {
         expect(
-          () => sut(
-            message: Uint8List(0),
-            outLen: 10,
-          ),
+          () => sut(message: Uint8List(0), outLen: 10),
           throwsA(isA<RangeError>()),
         );
 
@@ -95,10 +88,7 @@ void main() {
 
       test('asserts if key is invalid', () {
         expect(
-          () => sut(
-            message: Uint8List(0),
-            key: SecureKeyFake.empty(10),
-          ),
+          () => sut(message: Uint8List(0), key: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -110,11 +100,7 @@ void main() {
         const hashBytes = 15;
         when(() => mockSodium.crypto_generichash_BYTES).thenReturn(hashBytes);
         when(
-          () => mockSodium.crypto_generichash(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_generichash(any(), any(), any()),
         ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
@@ -132,11 +118,7 @@ void main() {
 
       test('calls crypto_generichash with all arguments', () {
         when(
-          () => mockSodium.crypto_generichash(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_generichash(any(), any(), any()),
         ).thenReturn(Uint8List(0).toJS);
 
         const outLen = 5;
@@ -162,11 +144,7 @@ void main() {
         final hash = List.generate(25, (index) => 10 + index);
         when(() => mockSodium.crypto_generichash_BYTES).thenReturn(hash.length);
         when(
-          () => mockSodium.crypto_generichash(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_generichash(any(), any(), any()),
         ).thenReturn(Uint8List.fromList(hash).toJS);
 
         final result = sut(message: Uint8List(10));
@@ -177,18 +155,11 @@ void main() {
       test('throws exception on failure', () {
         when(() => mockSodium.crypto_generichash_BYTES).thenReturn(10);
         when(
-          () => mockSodium.crypto_generichash(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_generichash(any(), any(), any()),
         ).thenThrow(JSError());
 
         expect(
-          () => sut(
-            message: Uint8List(15),
-            key: SecureKeyFake.empty(5),
-          ),
+          () => sut(message: Uint8List(15), key: SecureKeyFake.empty(5)),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -197,9 +168,7 @@ void main() {
     group('createConsumer', () {
       test('asserts if outLen is invalid', () {
         expect(
-          () => sut.createConsumer(
-            outLen: 10,
-          ),
+          () => sut.createConsumer(outLen: 10),
           throwsA(isA<RangeError>()),
         );
 
@@ -209,9 +178,7 @@ void main() {
 
       test('asserts if key is invalid', () {
         expect(
-          () => sut.createConsumer(
-            key: SecureKeyFake.empty(10),
-          ),
+          () => sut.createConsumer(key: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -223,10 +190,7 @@ void main() {
         const outLen = 55;
         when(() => mockSodium.crypto_generichash_BYTES).thenReturn(outLen);
         when(
-          () => mockSodium.crypto_generichash_init(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_generichash_init(any(), any()),
         ).thenReturn(0.toJS);
 
         final result = sut.createConsumer();
@@ -235,20 +199,13 @@ void main() {
           result,
           isA<GenericHashConsumerJS>()
               .having((c) => c.sodium, 'sodium', sut.sodium)
-              .having(
-                (c) => c.outLen,
-                'outLen',
-                outLen,
-              ),
+              .having((c) => c.outLen, 'outLen', outLen),
         );
       });
 
       test('returns GenericHashConsumerJS with key', () {
         when(
-          () => mockSodium.crypto_generichash_init(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_generichash_init(any(), any()),
         ).thenReturn(0.toJS);
 
         const outLen = 5;
@@ -263,11 +220,7 @@ void main() {
           result,
           isA<GenericHashConsumerJS>()
               .having((c) => c.sodium, 'sodium', sut.sodium)
-              .having(
-                (c) => c.outLen,
-                'outLen',
-                outLen,
-              ),
+              .having((c) => c.outLen, 'outLen', outLen),
         );
       });
     });

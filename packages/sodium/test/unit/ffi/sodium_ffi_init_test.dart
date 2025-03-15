@@ -42,11 +42,7 @@ void main() {
     final sodium = await SodiumInit.initFromSodiumFFI(() => mockSodium);
     expect(
       sodium,
-      isA<SodiumFFI>().having(
-        (s) => s.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<SodiumFFI>().having((s) => s.sodium, 'sodium', mockSodium),
     );
   });
 }

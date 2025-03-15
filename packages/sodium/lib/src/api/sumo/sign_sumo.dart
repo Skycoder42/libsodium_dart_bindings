@@ -40,9 +40,8 @@ abstract class SignSumo implements Sign {
 mixin SignSumoValidations on SignValidations implements Sign {
   /// @nodoc
   void validateSecretKeyOrSeed(SecureKey secretKeyOrSeed) =>
-      Validations.checkIsAny(
-        secretKeyOrSeed.length,
-        [secretKeyBytes, seedBytes],
-        'secretKey',
-      );
+      Validations.checkIsAny(secretKeyOrSeed.length, [
+        secretKeyBytes,
+        seedBytes,
+      ], 'secretKey');
 }

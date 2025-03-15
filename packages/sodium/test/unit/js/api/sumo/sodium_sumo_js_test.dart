@@ -28,11 +28,7 @@ void main() {
   test('crypto returns CryptoSumoJS instance', () {
     expect(
       sut.crypto,
-      isA<CryptoSumoJS>().having(
-        (p) => p.sodium,
-        'sodium',
-        sut.sodium,
-      ),
+      isA<CryptoSumoJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 

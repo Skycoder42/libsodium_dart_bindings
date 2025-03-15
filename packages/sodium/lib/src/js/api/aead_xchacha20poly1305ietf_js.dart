@@ -27,9 +27,9 @@ class AeadXChaCha20Poly1305IEFTJS extends AeadBaseJS {
 
   @override
   SecureKey keygen() => SecureKeyJS(
-        sodium,
-        jsErrorWrap(() => sodium.crypto_aead_xchacha20poly1305_ietf_keygen()),
-      );
+    sodium,
+    jsErrorWrap(() => sodium.crypto_aead_xchacha20poly1305_ietf_keygen()),
+  );
 
   @override
   JSUint8Array internalEncrypt(
@@ -38,14 +38,13 @@ class AeadXChaCha20Poly1305IEFTJS extends AeadBaseJS {
     JSUint8Array? secretNonce,
     JSUint8Array publicNonce,
     JSUint8Array key,
-  ) =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
-        message,
-        additionalData,
-        secretNonce,
-        publicNonce,
-        key,
-      );
+  ) => sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
+    message,
+    additionalData,
+    secretNonce,
+    publicNonce,
+    key,
+  );
 
   @override
   JSUint8Array internalDecrypt(
@@ -54,14 +53,13 @@ class AeadXChaCha20Poly1305IEFTJS extends AeadBaseJS {
     JSUint8Array? additionalData,
     JSUint8Array publicNonce,
     JSUint8Array key,
-  ) =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
-        secretNonce,
-        ciphertext,
-        additionalData,
-        publicNonce,
-        key,
-      );
+  ) => sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
+    secretNonce,
+    ciphertext,
+    additionalData,
+    publicNonce,
+    key,
+  );
 
   @override
   CryptoBox internalEncryptDetached(
@@ -70,14 +68,13 @@ class AeadXChaCha20Poly1305IEFTJS extends AeadBaseJS {
     JSUint8Array? secretNonce,
     JSUint8Array publicNonce,
     JSUint8Array key,
-  ) =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
-        message,
-        additionalData,
-        secretNonce,
-        publicNonce,
-        key,
-      );
+  ) => sodium.crypto_aead_xchacha20poly1305_ietf_encrypt_detached(
+    message,
+    additionalData,
+    secretNonce,
+    publicNonce,
+    key,
+  );
 
   @override
   JSUint8Array internalDecryptDetached(
@@ -87,13 +84,12 @@ class AeadXChaCha20Poly1305IEFTJS extends AeadBaseJS {
     JSUint8Array? additionalData,
     JSUint8Array publicNonce,
     JSUint8Array key,
-  ) =>
-      sodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
-        secretNonce,
-        ciphertext,
-        mac,
-        additionalData,
-        publicNonce,
-        key,
-      );
+  ) => sodium.crypto_aead_xchacha20poly1305_ietf_decrypt_detached(
+    secretNonce,
+    ciphertext,
+    mac,
+    additionalData,
+    publicNonce,
+    key,
+  );
 }

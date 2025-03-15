@@ -47,8 +47,10 @@ class SignSumoFFI extends SignFFI with SignSumoValidations implements SignSumo {
   Uint8List skToPk(SecureKey secretKey) {
     validateSecretKey(secretKey);
 
-    final publicKey =
-        SodiumPointer<UnsignedChar>.alloc(sodium, count: publicKeyBytes);
+    final publicKey = SodiumPointer<UnsignedChar>.alloc(
+      sodium,
+      count: publicKeyBytes,
+    );
     try {
       final result = secretKey.runUnlockedNative(
         sodium,

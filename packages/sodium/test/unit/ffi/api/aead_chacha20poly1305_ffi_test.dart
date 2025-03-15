@@ -57,12 +57,15 @@ void main() {
 
   group('methods', () {
     setUp(() {
-      when(() => mockSodium.crypto_aead_chacha20poly1305_keybytes())
-          .thenReturn(5);
-      when(() => mockSodium.crypto_aead_chacha20poly1305_npubbytes())
-          .thenReturn(5);
-      when(() => mockSodium.crypto_aead_chacha20poly1305_abytes())
-          .thenReturn(5);
+      when(
+        () => mockSodium.crypto_aead_chacha20poly1305_keybytes(),
+      ).thenReturn(5);
+      when(
+        () => mockSodium.crypto_aead_chacha20poly1305_npubbytes(),
+      ).thenReturn(5);
+      when(
+        () => mockSodium.crypto_aead_chacha20poly1305_abytes(),
+      ).thenReturn(5);
     });
 
     testKeygen(
@@ -99,8 +102,7 @@ void main() {
         verify(() => mockSodium.crypto_aead_chacha20poly1305_keybytes());
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_encrypt with default '
+      test('calls crypto_aead_chacha20poly1305_encrypt with default '
           'arguments', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt(
@@ -128,28 +130,24 @@ void main() {
         );
 
         verifyInOrder([
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt(
-                any(that: hasRawData<UnsignedChar>(message + mac)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: equals(nullptr)),
-                0,
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(key)),
-              ),
+            any(that: hasRawData<UnsignedChar>(message + mac)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: equals(nullptr)),
+            0,
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(key)),
+          ),
         ]);
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_encrypt with additional '
+      test('calls crypto_aead_chacha20poly1305_encrypt with additional '
           'data', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt(
@@ -180,23 +178,20 @@ void main() {
         );
 
         verifyInOrder([
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt(
-                any(that: hasRawData<UnsignedChar>(message + mac)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: hasRawData<UnsignedChar>(additionalData)),
-                additionalData.length,
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(key)),
-              ),
+            any(that: hasRawData<UnsignedChar>(message + mac)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: hasRawData<UnsignedChar>(additionalData)),
+            additionalData.length,
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(key)),
+          ),
         ]);
       });
 
@@ -300,8 +295,7 @@ void main() {
         verify(() => mockSodium.crypto_aead_chacha20poly1305_keybytes());
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_decrypt with default '
+      test('calls crypto_aead_chacha20poly1305_decrypt with default '
           'arguments', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt(
@@ -328,28 +322,24 @@ void main() {
         );
 
         verifyInOrder([
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt(
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                any(that: equals(nullptr)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                cipherText.length,
-                any(that: equals(nullptr)),
-                0,
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(key)),
-              ),
+            any(that: hasRawData<UnsignedChar>(cipherText)),
+            any(that: equals(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(cipherText)),
+            cipherText.length,
+            any(that: equals(nullptr)),
+            0,
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(key)),
+          ),
         ]);
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_decrypt with additional '
+      test('calls crypto_aead_chacha20poly1305_decrypt with additional '
           'data', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt(
@@ -378,26 +368,23 @@ void main() {
         );
 
         verifyInOrder([
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(additionalData)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+            any(that: hasRawData(additionalData)),
+          ),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt(
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                any(that: equals(nullptr)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                cipherText.length,
-                any(that: hasRawData<UnsignedChar>(additionalData)),
-                additionalData.length,
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(key)),
-              ),
+            any(that: hasRawData<UnsignedChar>(cipherText)),
+            any(that: equals(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(cipherText)),
+            cipherText.length,
+            any(that: hasRawData<UnsignedChar>(additionalData)),
+            additionalData.length,
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(key)),
+          ),
         ]);
       });
 
@@ -488,8 +475,7 @@ void main() {
         verify(() => mockSodium.crypto_aead_chacha20poly1305_keybytes());
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_encrypt_detached with '
+      test('calls crypto_aead_chacha20poly1305_encrypt_detached with '
           'default arguments', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt_detached(
@@ -517,29 +503,25 @@ void main() {
         );
 
         verifyInOrder([
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt_detached(
-                any(that: hasRawData<UnsignedChar>(message)),
-                any(that: isNot(nullptr)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: equals(nullptr)),
-                0,
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(key)),
-              ),
+            any(that: hasRawData<UnsignedChar>(message)),
+            any(that: isNot(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: equals(nullptr)),
+            0,
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(key)),
+          ),
         ]);
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_encrypt_detached with '
+      test('calls crypto_aead_chacha20poly1305_encrypt_detached with '
           'additional data', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt_detached(
@@ -570,27 +552,24 @@ void main() {
         );
 
         verifyInOrder([
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(additionalData)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+            any(that: hasRawData(additionalData)),
+          ),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_aead_chacha20poly1305_encrypt_detached(
-                any(that: hasRawData<UnsignedChar>(message)),
-                any(that: isNot(nullptr)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: hasRawData<UnsignedChar>(additionalData)),
-                additionalData.length,
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(key)),
-              ),
+            any(that: hasRawData<UnsignedChar>(message)),
+            any(that: isNot(nullptr)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: hasRawData<UnsignedChar>(additionalData)),
+            additionalData.length,
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(key)),
+          ),
         ]);
       });
 
@@ -710,8 +689,7 @@ void main() {
         verify(() => mockSodium.crypto_aead_chacha20poly1305_keybytes());
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_decrypt_detached with '
+      test('calls crypto_aead_chacha20poly1305_decrypt_detached with '
           'default arguments', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt_detached(
@@ -740,31 +718,25 @@ void main() {
         );
 
         verifyInOrder([
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(mac)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(mac))),
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt_detached(
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                cipherText.length,
-                any(that: hasRawData<UnsignedChar>(mac)),
-                any(that: equals(nullptr)),
-                0,
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(key)),
-              ),
+            any(that: hasRawData<UnsignedChar>(cipherText)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(cipherText)),
+            cipherText.length,
+            any(that: hasRawData<UnsignedChar>(mac)),
+            any(that: equals(nullptr)),
+            0,
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(key)),
+          ),
         ]);
       });
 
-      test(
-          'calls crypto_aead_chacha20poly1305_decrypt_detached with '
+      test('calls crypto_aead_chacha20poly1305_decrypt_detached with '
           'additonal data', () {
         when(
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt_detached(
@@ -795,29 +767,24 @@ void main() {
         );
 
         verifyInOrder([
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(mac))),
+          () =>
+              mockSodium.sodium_mprotect_readonly(any(that: hasRawData(nonce))),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(mac)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(nonce)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(additionalData)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+            any(that: hasRawData(additionalData)),
+          ),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_aead_chacha20poly1305_decrypt_detached(
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                any(that: equals(nullptr)),
-                any(that: hasRawData<UnsignedChar>(cipherText)),
-                cipherText.length,
-                any(that: hasRawData<UnsignedChar>(mac)),
-                any(that: hasRawData<UnsignedChar>(additionalData)),
-                additionalData.length,
-                any(that: hasRawData<UnsignedChar>(nonce)),
-                any(that: hasRawData<UnsignedChar>(key)),
-              ),
+            any(that: hasRawData<UnsignedChar>(cipherText)),
+            any(that: equals(nullptr)),
+            any(that: hasRawData<UnsignedChar>(cipherText)),
+            cipherText.length,
+            any(that: hasRawData<UnsignedChar>(mac)),
+            any(that: hasRawData<UnsignedChar>(additionalData)),
+            additionalData.length,
+            any(that: hasRawData<UnsignedChar>(nonce)),
+            any(that: hasRawData<UnsignedChar>(key)),
+          ),
         ]);
       });
 

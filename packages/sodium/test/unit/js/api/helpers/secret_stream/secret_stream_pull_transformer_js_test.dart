@@ -33,8 +33,9 @@ void main() {
     late SecretStreamPullTransformerSinkJS sut;
 
     setUp(() {
-      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES)
-          .thenReturn(10);
+      when(
+        () => mockSodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES,
+      ).thenReturn(10);
 
       sut = SecretStreamPullTransformerSinkJS(mockSodium.asLibSodiumJS, false);
     });
@@ -59,10 +60,7 @@ void main() {
         final keyData = List.generate(7, (index) => index * 4);
         final headerData = List.generate(10, (index) => index + 1);
 
-        sut.initialize(
-          SecureKeyFake(keyData),
-          Uint8List.fromList(headerData),
-        );
+        sut.initialize(SecureKeyFake(keyData), Uint8List.fromList(headerData));
 
         verify(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
@@ -112,8 +110,9 @@ void main() {
         sut.rekey(state.toJS);
 
         verify(
-          () => mockSodium
-              .crypto_secretstream_xchacha20poly1305_rekey(state.toJS),
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(
+            state.toJS,
+          ),
         );
       });
 
@@ -122,18 +121,12 @@ void main() {
           () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(any()),
         ).thenThrow(JSError());
 
-        expect(
-          () => sut.rekey(1.toJS),
-          throwsA(isA<SodiumException>()),
-        );
+        expect(() => sut.rekey(1.toJS), throwsA(isA<SodiumException>()));
       });
     });
 
     group('decryptMessage', () {
-      final pullResult = SecretStreamPull(
-        message: Uint8List(0).toJS,
-        tag: 0,
-      );
+      final pullResult = SecretStreamPull(message: Uint8List(0).toJS, tag: 0);
 
       setUp(() {
         when(
@@ -200,8 +193,9 @@ void main() {
       test('returns decrypted plain message', () {
         const tagValue = 77;
         final plainData = List.generate(13, (index) => index + 1);
-        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH)
-            .thenReturn(tagValue);
+        when(
+          () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH,
+        ).thenReturn(tagValue);
         when<dynamic>(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
             any(),
@@ -239,10 +233,7 @@ void main() {
             any(),
           ),
         ).thenReturn(
-          SecretStreamPull(
-            message: Uint8List.fromList(plainData).toJS,
-            tag: 0,
-          ),
+          SecretStreamPull(message: Uint8List.fromList(plainData).toJS, tag: 0),
         );
 
         const state = 44;

@@ -43,14 +43,8 @@ class ShortHashTestCase extends TestCase {
 
         printOnFailure('message: $message');
 
-        final hash1 = sut(
-          message: message,
-          key: key,
-        );
-        final hash2 = sut(
-          message: message,
-          key: key,
-        );
+        final hash1 = sut(message: message, key: key);
+        final hash2 = sut(message: message, key: key);
 
         printOnFailure('hash1: $hash1');
         printOnFailure('hash2: $hash2');
@@ -71,14 +65,8 @@ class ShortHashTestCase extends TestCase {
 
         printOnFailure('message: $message');
 
-        final hash1 = sut(
-          message: message,
-          key: key1,
-        );
-        final hash2 = sut(
-          message: message,
-          key: key2,
-        );
+        final hash1 = sut(message: message, key: key1);
+        final hash2 = sut(message: message, key: key2);
 
         printOnFailure('hash1: $hash1');
         printOnFailure('hash2: $hash2');

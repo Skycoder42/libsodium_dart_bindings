@@ -33,22 +33,14 @@ void main() {
   test('secretBox returns SecretBoxFFI instance', () {
     expect(
       sut.secretBox,
-      isA<SecretBoxFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<SecretBoxFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('secretStream returns SecretStreamFFI instance', () {
     expect(
       sut.secretStream,
-      isA<SecretStreamFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<SecretStreamFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
@@ -64,92 +56,62 @@ void main() {
   });
 
   test(
-      'aeadXChaCha20Poly1305IETF returns AeadXChaCha20Poly1305IETFFFI instance',
-      () {
-    expect(
-      sut.aeadXChaCha20Poly1305IETF,
-      isA<AeadXChaCha20Poly1305IETFFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
-    );
-  });
+    'aeadXChaCha20Poly1305IETF returns AeadXChaCha20Poly1305IETFFFI instance',
+    () {
+      expect(
+        sut.aeadXChaCha20Poly1305IETF,
+        isA<AeadXChaCha20Poly1305IETFFFI>().having(
+          (p) => p.sodium,
+          'sodium',
+          mockSodium,
+        ),
+      );
+    },
+  );
 
   test('auth returns AuthFFI instance', () {
     expect(
       sut.auth,
-      isA<AuthFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<AuthFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('box returns BoxFFI instance', () {
     expect(
       sut.box,
-      isA<BoxFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<BoxFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('sign returns SignFFI instance', () {
     expect(
       sut.sign,
-      isA<SignFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<SignFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('genericHash returns GenericHashFFI instance', () {
     expect(
       sut.genericHash,
-      isA<GenericHashFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<GenericHashFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('shortHash returns ShortHashFFI instance', () {
     expect(
       sut.shortHash,
-      isA<ShortHashFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<ShortHashFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('kdf returns KdfFFI instance', () {
     expect(
       sut.kdf,
-      isA<KdfFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<KdfFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('kx returns KxFFI instance', () {
-    expect(
-      sut.kx,
-      isA<KxFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
-    );
+    expect(sut.kx, isA<KxFFI>().having((p) => p.sodium, 'sodium', mockSodium));
   });
 }

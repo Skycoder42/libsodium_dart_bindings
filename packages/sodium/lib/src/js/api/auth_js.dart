@@ -27,26 +27,16 @@ class AuthJS with AuthValidations implements Auth {
   int get keyBytes => sodium.crypto_auth_KEYBYTES;
 
   @override
-  SecureKey keygen() => SecureKeyJS(
-        sodium,
-        jsErrorWrap(() => sodium.crypto_auth_keygen()),
-      );
+  SecureKey keygen() =>
+      SecureKeyJS(sodium, jsErrorWrap(() => sodium.crypto_auth_keygen()));
 
   @override
-  Uint8List call({
-    required Uint8List message,
-    required SecureKey key,
-  }) {
+  Uint8List call({required Uint8List message, required SecureKey key}) {
     validateKey(key);
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium
-            .crypto_auth(
-              message.toJS,
-              keyData.toJS,
-            )
-            .toDart,
+        (keyData) => sodium.crypto_auth(message.toJS, keyData.toJS).toDart,
       ),
     );
   }
@@ -62,11 +52,8 @@ class AuthJS with AuthValidations implements Auth {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => sodium.crypto_auth_verify(
-          tag.toJS,
-          message.toJS,
-          keyData.toJS,
-        ),
+        (keyData) =>
+            sodium.crypto_auth_verify(tag.toJS, message.toJS, keyData.toJS),
       ),
     );
   }

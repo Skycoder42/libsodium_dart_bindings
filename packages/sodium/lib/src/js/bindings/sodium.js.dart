@@ -41,10 +41,7 @@ extension type KeyPair._(JSObject _) implements JSObject {
   external JSUint8Array get publicKey;
 }
 extension type SecretBox._(JSObject _) implements JSObject {
-  external SecretBox({
-    required JSUint8Array cipher,
-    required JSUint8Array mac,
-  });
+  external SecretBox({required JSUint8Array cipher, required JSUint8Array mac});
 
   external JSUint8Array get cipher;
   external JSUint8Array get mac;
@@ -59,10 +56,7 @@ extension type SecretStreamInitPush._(JSObject _) implements JSObject {
   external JSUint8Array get header;
 }
 extension type SecretStreamPull._(JSObject _) implements JSObject {
-  external SecretStreamPull({
-    required JSUint8Array message,
-    required int tag,
-  });
+  external SecretStreamPull({required JSUint8Array message, required int tag});
 
   external JSUint8Array get message;
   external int get tag;
@@ -504,10 +498,7 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     JSUint8Array key,
   );
   external JSUint8Array crypto_aead_xchacha20poly1305_ietf_keygen();
-  external JSUint8Array crypto_auth(
-    JSUint8Array message,
-    JSUint8Array key,
-  );
+  external JSUint8Array crypto_auth(JSUint8Array message, JSUint8Array key);
   external JSUint8Array crypto_auth_hmacsha256(
     JSUint8Array message,
     JSUint8Array key,
@@ -609,7 +600,7 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     JSUint8Array privateKey,
   );
   external JSUint8Array
-      crypto_box_curve25519xchacha20poly1305_open_detached_afternm(
+  crypto_box_curve25519xchacha20poly1305_open_detached_afternm(
     JSUint8Array ciphertext,
     JSUint8Array mac,
     JSUint8Array nonce,
@@ -622,7 +613,7 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     JSUint8Array privateKey,
   );
   external JSUint8Array
-      crypto_box_curve25519xchacha20poly1305_open_easy_afternm(
+  crypto_box_curve25519xchacha20poly1305_open_easy_afternm(
     JSUint8Array ciphertext,
     JSUint8Array nonce,
     JSUint8Array sharedKey,
@@ -685,10 +676,7 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     JSUint8Array privateKey,
   );
   external KeyPair crypto_box_seed_keypair(JSUint8Array seed);
-  external JSUint8Array crypto_core_ed25519_add(
-    JSUint8Array p,
-    JSUint8Array q,
-  );
+  external JSUint8Array crypto_core_ed25519_add(JSUint8Array p, JSUint8Array q);
   external JSUint8Array crypto_core_ed25519_from_hash(JSUint8Array r);
   external JSUint8Array crypto_core_ed25519_from_uniform(JSUint8Array r);
   external bool crypto_core_ed25519_is_valid_point(JSUint8Array repr);
@@ -710,10 +698,7 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     JSUint8Array x,
     JSUint8Array y,
   );
-  external JSUint8Array crypto_core_ed25519_sub(
-    JSUint8Array p,
-    JSUint8Array q,
-  );
+  external JSUint8Array crypto_core_ed25519_sub(JSUint8Array p, JSUint8Array q);
   external JSUint8Array crypto_core_hchacha20(
     JSUint8Array input,
     JSUint8Array privateKey,
@@ -925,7 +910,7 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     JSUint8Array key,
   );
   external SecretstreamXchacha20poly1305State
-      crypto_secretstream_xchacha20poly1305_init_pull(
+  crypto_secretstream_xchacha20poly1305_init_pull(
     JSUint8Array header,
     JSUint8Array key,
   );
@@ -1047,12 +1032,6 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external String sodium_version_string();
   external int randombytes_seedbytes();
   external void memzero(JSUint8Array bytes);
-  external JSUint8Array pad(
-    JSUint8Array buf,
-    int blocksize,
-  );
-  external JSUint8Array unpad(
-    JSUint8Array buf,
-    int blocksize,
-  );
+  external JSUint8Array pad(JSUint8Array buf, int blocksize);
+  external JSUint8Array unpad(JSUint8Array buf, int blocksize);
 }

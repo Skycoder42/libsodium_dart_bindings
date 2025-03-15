@@ -158,10 +158,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   }
 
   @override
-  bool strVerify({
-    required String passwordHash,
-    required String password,
-  }) {
+  bool strVerify({required String passwordHash, required String password}) {
     SodiumPointer<Char>? passwordPtr;
     SodiumPointer<Char>? passwordHashPtr;
     try {

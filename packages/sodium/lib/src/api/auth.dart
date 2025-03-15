@@ -32,10 +32,7 @@ abstract class Auth {
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication#usage
   @pragma('vm:entry-point')
-  Uint8List call({
-    required Uint8List message,
-    required SecureKey key,
-  });
+  Uint8List call({required Uint8List message, required SecureKey key});
 
   /// Provides crypto_auth_verify.
   ///
@@ -51,16 +48,10 @@ abstract class Auth {
 @internal
 mixin AuthValidations implements Auth {
   /// @nodoc
-  void validateTag(Uint8List tag) => Validations.checkIsSame(
-        tag.length,
-        bytes,
-        'tag',
-      );
+  void validateTag(Uint8List tag) =>
+      Validations.checkIsSame(tag.length, bytes, 'tag');
 
   /// @nodoc
-  void validateKey(SecureKey key) => Validations.checkIsSame(
-        key.length,
-        keyBytes,
-        'key',
-      );
+  void validateKey(SecureKey key) =>
+      Validations.checkIsSame(key.length, keyBytes, 'key');
 }

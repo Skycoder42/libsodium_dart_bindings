@@ -23,9 +23,10 @@ void mockFree(LibSodiumFFI mockSodium, {bool delayedFree = true}) {
   }
 
   when(() => mockSodium.sodium_free(any())).thenAnswer(
-    (i) => delayedFree
-        ? toDispose.add(i.positionalArguments.first as Pointer)
-        : calloc.free(i.positionalArguments.first as Pointer),
+    (i) =>
+        delayedFree
+            ? toDispose.add(i.positionalArguments.first as Pointer)
+            : calloc.free(i.positionalArguments.first as Pointer),
   );
   when(() => mockSodium.sodium_freePtr).thenReturn(calloc.nativeFree);
 }

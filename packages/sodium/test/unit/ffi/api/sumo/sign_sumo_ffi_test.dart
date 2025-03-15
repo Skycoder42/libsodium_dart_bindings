@@ -54,10 +54,7 @@ void main() {
 
       test('calls crypto_sign_ed25519_sk_to_seed with correct arguments', () {
         when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_sk_to_seed(any(), any()),
         ).thenReturn(0);
 
         final secretKey = List.generate(5, (index) => 30 + index);
@@ -68,12 +65,12 @@ void main() {
           () => mockSodium.sodium_allocarray(5, 1),
           () => mockSodium.sodium_mprotect_readwrite(any(that: isNot(nullptr))),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(secretKey)),
-              ),
+            any(that: hasRawData(secretKey)),
+          ),
           () => mockSodium.crypto_sign_ed25519_sk_to_seed(
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<UnsignedChar>(secretKey)),
-              ),
+            any(that: isNot(nullptr)),
+            any(that: hasRawData<UnsignedChar>(secretKey)),
+          ),
           () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
         ]);
       });
@@ -81,10 +78,7 @@ void main() {
       test('returns seed of the secret key', () {
         final seed = List.generate(5, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_sk_to_seed(any(), any()),
         ).thenAnswer((i) {
           fillPointer(i.positionalArguments.first as Pointer, seed);
           return 0;
@@ -99,10 +93,7 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_sk_to_seed(any(), any()),
         ).thenReturn(1);
 
         expect(
@@ -126,10 +117,7 @@ void main() {
 
       test('calls crypto_sign_ed25519_sk_to_pk with correct arguments', () {
         when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_sk_to_pk(any(), any()),
         ).thenReturn(0);
 
         final secretKey = List.generate(5, (index) => 30 + index);
@@ -139,22 +127,19 @@ void main() {
         verifyInOrder([
           () => mockSodium.sodium_allocarray(5, 1),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(secretKey)),
-              ),
+            any(that: hasRawData(secretKey)),
+          ),
           () => mockSodium.crypto_sign_ed25519_sk_to_pk(
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<UnsignedChar>(secretKey)),
-              ),
+            any(that: isNot(nullptr)),
+            any(that: hasRawData<UnsignedChar>(secretKey)),
+          ),
         ]);
       });
 
       test('returns the public key of the secret key', () {
         final publicKey = List.generate(5, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_sk_to_pk(any(), any()),
         ).thenAnswer((i) {
           fillPointer(i.positionalArguments.first as Pointer, publicKey);
           return 0;
@@ -169,10 +154,7 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_sk_to_pk(any(), any()),
         ).thenReturn(1);
 
         expect(
@@ -186,8 +168,9 @@ void main() {
 
     group('pkToCurve25519', () {
       setUp(() {
-        when(() => mockSodium.crypto_scalarmult_curve25519_bytes())
-            .thenReturn(11);
+        when(
+          () => mockSodium.crypto_scalarmult_curve25519_bytes(),
+        ).thenReturn(11);
       });
 
       test('asserts if publicKey is invalid', () {
@@ -199,39 +182,35 @@ void main() {
         verify(() => mockSodium.crypto_sign_publickeybytes());
       });
 
-      test('calls crypto_sign_ed25519_pk_to_curve25519 with correct arguments',
-          () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
-            any(),
-            any(),
-          ),
-        ).thenReturn(0);
+      test(
+        'calls crypto_sign_ed25519_pk_to_curve25519 with correct arguments',
+        () {
+          when(
+            () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(any(), any()),
+          ).thenReturn(0);
 
-        final publicKey = List.generate(5, (index) => 30 + index);
+          final publicKey = List.generate(5, (index) => 30 + index);
 
-        sut.pkToCurve25519(Uint8List.fromList(publicKey));
+          sut.pkToCurve25519(Uint8List.fromList(publicKey));
 
-        verifyInOrder([
-          () => mockSodium.crypto_scalarmult_curve25519_bytes(),
-          () => mockSodium.sodium_allocarray(11, 1),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(publicKey)),
-              ),
-          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<UnsignedChar>(publicKey)),
-              ),
-        ]);
-      });
+          verifyInOrder([
+            () => mockSodium.crypto_scalarmult_curve25519_bytes(),
+            () => mockSodium.sodium_allocarray(11, 1),
+            () => mockSodium.sodium_mprotect_readonly(
+              any(that: hasRawData(publicKey)),
+            ),
+            () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
+              any(that: isNot(nullptr)),
+              any(that: hasRawData<UnsignedChar>(publicKey)),
+            ),
+          ]);
+        },
+      );
 
       test('returns the converted public key', () {
         final publicKey = List.generate(11, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(any(), any()),
         ).thenAnswer((i) {
           fillPointer(i.positionalArguments.first as Pointer, publicKey);
           return 0;
@@ -246,10 +225,7 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_pk_to_curve25519(any(), any()),
         ).thenReturn(1);
 
         expect(
@@ -263,8 +239,9 @@ void main() {
 
     group('skToCurve25519', () {
       setUp(() {
-        when(() => mockSodium.crypto_scalarmult_curve25519_bytes())
-            .thenReturn(11);
+        when(
+          () => mockSodium.crypto_scalarmult_curve25519_bytes(),
+        ).thenReturn(11);
       });
 
       test('asserts if secretKey is invalid', () {
@@ -277,41 +254,39 @@ void main() {
         verify(() => mockSodium.crypto_sign_seedbytes());
       });
 
-      test('calls crypto_sign_ed25519_sk_to_curve25519 with correct arguments',
-          () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
-            any(),
-            any(),
-          ),
-        ).thenReturn(0);
+      test(
+        'calls crypto_sign_ed25519_sk_to_curve25519 with correct arguments',
+        () {
+          when(
+            () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any(), any()),
+          ).thenReturn(0);
 
-        final secretKey = List.generate(5, (index) => 30 + index);
+          final secretKey = List.generate(5, (index) => 30 + index);
 
-        sut.skToCurve25519(SecureKeyFake(secretKey));
+          sut.skToCurve25519(SecureKeyFake(secretKey));
 
-        verifyInOrder([
-          () => mockSodium.crypto_scalarmult_curve25519_bytes(),
-          () => mockSodium.sodium_allocarray(11, 1),
-          () => mockSodium.sodium_mprotect_readwrite(any(that: isNot(nullptr))),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(secretKey)),
-              ),
-          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<UnsignedChar>(secretKey)),
-              ),
-          () => mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
-        ]);
-      });
+          verifyInOrder([
+            () => mockSodium.crypto_scalarmult_curve25519_bytes(),
+            () => mockSodium.sodium_allocarray(11, 1),
+            () =>
+                mockSodium.sodium_mprotect_readwrite(any(that: isNot(nullptr))),
+            () => mockSodium.sodium_mprotect_readonly(
+              any(that: hasRawData(secretKey)),
+            ),
+            () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
+              any(that: isNot(nullptr)),
+              any(that: hasRawData<UnsignedChar>(secretKey)),
+            ),
+            () =>
+                mockSodium.sodium_mprotect_noaccess(any(that: isNot(nullptr))),
+          ]);
+        },
+      );
 
       test('returns the converted secret key', () {
         final seed = List.generate(11, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any(), any()),
         ).thenAnswer((i) {
           fillPointer(i.positionalArguments.first as Pointer, seed);
           return 0;
@@ -326,10 +301,7 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_sign_ed25519_sk_to_curve25519(any(), any()),
         ).thenReturn(1);
 
         expect(

@@ -34,27 +34,20 @@ class SecretStreamJS
 
   @override
   SecureKey keygen() => SecureKeyJS(
-        sodium,
-        jsErrorWrap(
-          () => sodium.crypto_secretstream_xchacha20poly1305_keygen(),
-        ),
-      );
+    sodium,
+    jsErrorWrap(() => sodium.crypto_secretstream_xchacha20poly1305_keygen()),
+  );
 
   @override
   SecretExStreamTransformer<SecretStreamPlainMessage, SecretStreamCipherMessage>
-      createPushEx(
-    SecureKey key,
-  ) {
+  createPushEx(SecureKey key) {
     validateKey(key);
     return SecretStreamPushTransformerJS(sodium, key);
   }
 
   @override
   SecretExStreamTransformer<SecretStreamCipherMessage, SecretStreamPlainMessage>
-      createPullEx(
-    SecureKey key, {
-    bool requireFinalized = true,
-  }) {
+  createPullEx(SecureKey key, {bool requireFinalized = true}) {
     validateKey(key);
     return SecretStreamPullTransformerJS(sodium, key, requireFinalized);
   }

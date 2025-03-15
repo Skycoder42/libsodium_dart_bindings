@@ -29,17 +29,14 @@ class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
 
   @override
   SecureKey keygen() => keygenImpl(
-        sodium: sodium,
-        keyBytes: keyBytes,
-        implementation: sodium.crypto_shorthash_keygen,
-      );
+    sodium: sodium,
+    keyBytes: keyBytes,
+    implementation: sodium.crypto_shorthash_keygen,
+  );
 
   @override
   @pragma('vm:entry-point')
-  Uint8List call({
-    required Uint8List message,
-    required SecureKey key,
-  }) {
+  Uint8List call({required Uint8List message, required SecureKey key}) {
     validateKey(key);
 
     SodiumPointer<UnsignedChar>? messagePtr;

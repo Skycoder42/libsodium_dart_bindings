@@ -34,8 +34,8 @@ void main() {
         fixture.$3,
       );
     },
-    fixtureToString: (fixture) =>
-        '[${fixture.$1} == ${fixture.$2} -> ${fixture.$3}]',
+    fixtureToString:
+        (fixture) => '[${fixture.$1} == ${fixture.$2} -> ${fixture.$3}]',
   );
 
   testData<(SodiumVersion, SodiumVersion, bool)>(
@@ -52,8 +52,8 @@ void main() {
     (fixture) {
       expect(fixture.$1 < fixture.$2, fixture.$3);
     },
-    fixtureToString: (fixture) =>
-        '[${fixture.$1} < ${fixture.$2} -> ${fixture.$3}]',
+    fixtureToString:
+        (fixture) => '[${fixture.$1} < ${fixture.$2} -> ${fixture.$3}]',
   );
 
   testData<(SodiumVersion, SodiumVersion, bool)>(
@@ -70,8 +70,8 @@ void main() {
     (fixture) {
       expect(fixture.$1 <= fixture.$2, fixture.$3);
     },
-    fixtureToString: (fixture) =>
-        '[${fixture.$1} <= ${fixture.$2} -> ${fixture.$3}]',
+    fixtureToString:
+        (fixture) => '[${fixture.$1} <= ${fixture.$2} -> ${fixture.$3}]',
   );
 
   testData<(SodiumVersion, SodiumVersion, bool)>(
@@ -88,8 +88,8 @@ void main() {
     (fixture) {
       expect(fixture.$1 > fixture.$2, fixture.$3);
     },
-    fixtureToString: (fixture) =>
-        '[${fixture.$1} > ${fixture.$2} -> ${fixture.$3}]',
+    fixtureToString:
+        (fixture) => '[${fixture.$1} > ${fixture.$2} -> ${fixture.$3}]',
   );
 
   testData<(SodiumVersion, SodiumVersion, bool)>(
@@ -106,7 +106,7 @@ void main() {
     (fixture) {
       expect(fixture.$1 >= fixture.$2, fixture.$3);
     },
-    fixtureToString: (fixture) =>
-        '[${fixture.$1} >= ${fixture.$2} -> ${fixture.$3}]',
+    fixtureToString:
+        (fixture) => '[${fixture.$1} >= ${fixture.$2} -> ${fixture.$3}]',
   );
 }

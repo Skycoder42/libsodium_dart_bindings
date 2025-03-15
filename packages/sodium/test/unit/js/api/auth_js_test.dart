@@ -32,16 +32,8 @@ void main() {
   });
 
   testConstantsMapping([
-    (
-      () => mockSodium.crypto_auth_BYTES,
-      () => sut.bytes,
-      'bytes',
-    ),
-    (
-      () => mockSodium.crypto_auth_KEYBYTES,
-      () => sut.keyBytes,
-      'keyBytes',
-    ),
+    (() => mockSodium.crypto_auth_BYTES, () => sut.bytes, 'bytes'),
+    (() => mockSodium.crypto_auth_KEYBYTES, () => sut.keyBytes, 'keyBytes'),
   ]);
 
   group('methods', () {
@@ -59,10 +51,7 @@ void main() {
     group('call', () {
       test('asserts if key is invalid', () {
         expect(
-          () => sut(
-            message: Uint8List(0),
-            key: SecureKeyFake.empty(10),
-          ),
+          () => sut(message: Uint8List(0), key: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -71,19 +60,13 @@ void main() {
 
       test('calls crypto_auth with correct arguments', () {
         when(
-          () => mockSodium.crypto_auth(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_auth(any(), any()),
         ).thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final key = List.generate(5, (index) => index);
 
-        sut(
-          message: Uint8List.fromList(message),
-          key: SecureKeyFake(key),
-        );
+        sut(message: Uint8List.fromList(message), key: SecureKeyFake(key));
 
         verify(
           () => mockSodium.crypto_auth(
@@ -96,33 +79,19 @@ void main() {
       test('returns authentication tag', () {
         final tag = List.generate(5, (index) => 10 + index);
         when(
-          () => mockSodium.crypto_auth(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_auth(any(), any()),
         ).thenReturn(Uint8List.fromList(tag).toJS);
 
-        final result = sut(
-          message: Uint8List(10),
-          key: SecureKeyFake.empty(5),
-        );
+        final result = sut(message: Uint8List(10), key: SecureKeyFake.empty(5));
 
         expect(result, tag);
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_auth(
-            any(),
-            any(),
-          ),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_auth(any(), any())).thenThrow(JSError());
 
         expect(
-          () => sut(
-            message: Uint8List(15),
-            key: SecureKeyFake.empty(5),
-          ),
+          () => sut(message: Uint8List(15), key: SecureKeyFake.empty(5)),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -157,11 +126,7 @@ void main() {
 
       test('calls crypto_auth_verify with correct arguments', () {
         when(
-          () => mockSodium.crypto_auth_verify(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_auth_verify(any(), any(), any()),
         ).thenReturn(true);
 
         final tag = List.generate(5, (index) => index + 15);
@@ -185,11 +150,7 @@ void main() {
 
       test('returns true if validate succeeds', () {
         when(
-          () => mockSodium.crypto_auth_verify(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_auth_verify(any(), any(), any()),
         ).thenReturn(true);
 
         final result = sut.verify(
@@ -203,11 +164,7 @@ void main() {
 
       test('returns false if validate fails', () {
         when(
-          () => mockSodium.crypto_auth_verify(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_auth_verify(any(), any(), any()),
         ).thenReturn(false);
 
         final result = sut.verify(
@@ -221,11 +178,7 @@ void main() {
 
       test('throws SodiumException on JSError', () {
         when(
-          () => mockSodium.crypto_auth_verify(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_auth_verify(any(), any(), any()),
         ).thenThrow(JSError());
 
         expect(

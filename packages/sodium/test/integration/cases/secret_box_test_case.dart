@@ -50,11 +50,7 @@ class SecretBoxTestCase extends TestCase {
         printOnFailure('nonce: $nonce');
         printOnFailure('message: $message');
 
-        final cipherText = sut.easy(
-          message: message,
-          nonce: nonce,
-          key: key,
-        );
+        final cipherText = sut.easy(message: message, nonce: nonce, key: key);
 
         printOnFailure('cipherText: $cipherText');
 
@@ -88,11 +84,7 @@ class SecretBoxTestCase extends TestCase {
         cipherText[0] = cipherText[0] ^ 0xFF;
 
         expect(
-          () => sut.openEasy(
-            cipherText: cipherText,
-            nonce: nonce,
-            key: key,
-          ),
+          () => sut.openEasy(cipherText: cipherText, nonce: nonce, key: key),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -112,11 +104,7 @@ class SecretBoxTestCase extends TestCase {
         printOnFailure('nonce: $nonce');
         printOnFailure('message: $message');
 
-        final cipher = sut.detached(
-          message: message,
-          nonce: nonce,
-          key: key,
-        );
+        final cipher = sut.detached(message: message, nonce: nonce, key: key);
 
         printOnFailure('cipher: $cipher');
 

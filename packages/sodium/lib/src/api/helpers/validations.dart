@@ -11,8 +11,7 @@ abstract class Validations {
     int minValue,
     int maxValue,
     String name,
-  ) =>
-      RangeError.checkValueInInterval(value, minValue, maxValue, name);
+  ) => RangeError.checkValueInInterval(value, minValue, maxValue, name);
 
   /// @nodoc
   static void checkIsSame(int value, int expected, String name) {
@@ -50,11 +49,7 @@ abstract class Validations {
   /// @nodoc
   static void checkAtMost(int value, int maxValue, String name) {
     if (value > maxValue) {
-      throw RangeError.value(
-        value,
-        name,
-        'Must be at most $maxValue, but was',
-      );
+      throw RangeError.value(value, name, 'Must be at most $maxValue, but was');
     }
     checkAtLeast(value, 0, name);
   }

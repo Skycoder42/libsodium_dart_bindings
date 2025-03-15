@@ -22,9 +22,10 @@ mixin SecretStreamBase implements SecretStream {
           .map(
             (chunk) => SecretStreamPlainMessage(
               chunk,
-              tag: chunk.length < chunkSize
-                  ? SecretStreamMessageTag.finalPush
-                  : SecretStreamMessageTag.message,
+              tag:
+                  chunk.length < chunkSize
+                      ? SecretStreamMessageTag.finalPush
+                      : SecretStreamMessageTag.message,
             ),
           )
           .transform(transformer)
@@ -58,16 +59,14 @@ mixin SecretStreamBase implements SecretStream {
     required Stream<List<int>> messageStream,
     required SecureKey key,
     required int chunkSize,
-  }) =>
-      createPushChunked(key: key, chunkSize: chunkSize).bind(messageStream);
+  }) => createPushChunked(key: key, chunkSize: chunkSize).bind(messageStream);
 
   @override
   Stream<List<int>> pullChunked({
     required Stream<List<int>> cipherStream,
     required SecureKey key,
     required int chunkSize,
-  }) =>
-      createPullChunked(key: key, chunkSize: chunkSize).bind(cipherStream);
+  }) => createPullChunked(key: key, chunkSize: chunkSize).bind(cipherStream);
 
   @override
   StreamTransformer<Uint8List, Uint8List> createPush(SecureKey key) {
@@ -100,27 +99,23 @@ mixin SecretStreamBase implements SecretStream {
   Stream<Uint8List> push({
     required Stream<Uint8List> messageStream,
     required SecureKey key,
-  }) =>
-      createPush(key).bind(messageStream);
+  }) => createPush(key).bind(messageStream);
 
   @override
   Stream<Uint8List> pull({
     required Stream<Uint8List> cipherStream,
     required SecureKey key,
-  }) =>
-      createPull(key).bind(cipherStream);
+  }) => createPull(key).bind(cipherStream);
 
   @override
   SecretExStream<SecretStreamCipherMessage> pushEx({
     required Stream<SecretStreamPlainMessage> messageStream,
     required SecureKey key,
-  }) =>
-      createPushEx(key).bind(messageStream);
+  }) => createPushEx(key).bind(messageStream);
 
   @override
   SecretExStream<SecretStreamPlainMessage> pullEx({
     required Stream<SecretStreamCipherMessage> cipherStream,
     required SecureKey key,
-  }) =>
-      createPullEx(key).bind(cipherStream);
+  }) => createPullEx(key).bind(cipherStream);
 }

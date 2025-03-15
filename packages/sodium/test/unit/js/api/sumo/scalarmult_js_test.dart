@@ -31,11 +31,7 @@ void main() {
   });
 
   testConstantsMapping([
-    (
-      () => mockSodium.crypto_scalarmult_BYTES,
-      () => sut.bytes,
-      'bytes',
-    ),
+    (() => mockSodium.crypto_scalarmult_BYTES, () => sut.bytes, 'bytes'),
     (
       () => mockSodium.crypto_scalarmult_SCALARBYTES,
       () => sut.scalarBytes,
@@ -61,9 +57,7 @@ void main() {
 
       test('calls crypto_scalarmult_base with correct arguments', () {
         when(
-          () => mockSodium.crypto_scalarmult_base(
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult_base(any()),
         ).thenReturn(Uint8List(0).toJS);
 
         final n = List.generate(10, (index) => index);
@@ -78,29 +72,21 @@ void main() {
       test('returns public key data', () {
         final q = List.generate(5, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_scalarmult_base(
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult_base(any()),
         ).thenReturn(Uint8List.fromList(q).toJS);
 
-        final result = sut.base(
-          n: SecureKeyFake.empty(10),
-        );
+        final result = sut.base(n: SecureKeyFake.empty(10));
 
         expect(result, q);
       });
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_scalarmult_base(
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult_base(any()),
         ).thenThrow(JSError());
 
         expect(
-          () => sut.base(
-            n: SecureKeyFake.empty(10),
-          ),
+          () => sut.base(n: SecureKeyFake.empty(10)),
           throwsA(isA<SodiumException>()),
         );
       });
@@ -109,10 +95,7 @@ void main() {
     group('call', () {
       test('asserts if n is invalid', () {
         expect(
-          () => sut(
-            n: SecureKeyFake.empty(5),
-            p: Uint8List(5),
-          ),
+          () => sut(n: SecureKeyFake.empty(5), p: Uint8List(5)),
           throwsA(isA<RangeError>()),
         );
 
@@ -121,10 +104,7 @@ void main() {
 
       test('asserts if p is invalid', () {
         expect(
-          () => sut(
-            n: SecureKeyFake.empty(10),
-            p: Uint8List(10),
-          ),
+          () => sut(n: SecureKeyFake.empty(10), p: Uint8List(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -136,19 +116,13 @@ void main() {
 
       test('calls crypto_scalarmult with correct arguments', () {
         when(
-          () => mockSodium.crypto_scalarmult(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult(any(), any()),
         ).thenReturn(Uint8List(0).toJS);
 
         final n = List.generate(10, (index) => index);
         final p = List.generate(5, (index) => index * 2);
 
-        sut(
-          n: SecureKeyFake(n),
-          p: Uint8List.fromList(p),
-        );
+        sut(n: SecureKeyFake(n), p: Uint8List.fromList(p));
 
         verify(
           () => mockSodium.crypto_scalarmult(
@@ -161,33 +135,21 @@ void main() {
       test('returns shared key data', () {
         final q = List.generate(5, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_scalarmult(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult(any(), any()),
         ).thenReturn(Uint8List.fromList(q).toJS);
 
-        final result = sut(
-          n: SecureKeyFake.empty(10),
-          p: Uint8List(5),
-        );
+        final result = sut(n: SecureKeyFake.empty(10), p: Uint8List(5));
 
         expect(result.extractBytes(), q);
       });
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_scalarmult(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult(any(), any()),
         ).thenThrow(JSError());
 
         expect(
-          () => sut(
-            n: SecureKeyFake.empty(10),
-            p: Uint8List(5),
-          ),
+          () => sut(n: SecureKeyFake.empty(10), p: Uint8List(5)),
           throwsA(isA<SodiumException>()),
         );
       });

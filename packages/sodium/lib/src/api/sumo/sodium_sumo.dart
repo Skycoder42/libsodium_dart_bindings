@@ -10,11 +10,12 @@ import 'crypto_sumo.dart';
 /// The callback receives a fresh [sodium] sumo instance that only lives on the
 /// new isolate, as well as the [secureKeys] and [keyPairs] that have been
 /// transferred to it via the [SodiumSumo.runIsolated] method.
-typedef SodiumSumoIsolateCallback<T> = FutureOr<T> Function(
-  SodiumSumo sodium,
-  List<SecureKey> secureKeys,
-  List<KeyPair> keyPairs,
-);
+typedef SodiumSumoIsolateCallback<T> =
+    FutureOr<T> Function(
+      SodiumSumo sodium,
+      List<SecureKey> secureKeys,
+      List<KeyPair> keyPairs,
+    );
 
 /// A factory method that creates new [SodiumSumo] instances. This factory can
 /// be passed between isolates and can be used if custom isolate handling is

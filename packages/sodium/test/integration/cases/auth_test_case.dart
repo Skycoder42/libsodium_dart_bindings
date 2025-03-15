@@ -43,18 +43,11 @@ class AuthTestCase extends TestCase {
       printOnFailure('key: ${key.extractBytes()}');
       printOnFailure('message: $message');
 
-      final tag = sut(
-        message: message,
-        key: key,
-      );
+      final tag = sut(message: message, key: key);
 
       printOnFailure('tag: $tag');
 
-      final verified = sut.verify(
-        tag: tag,
-        message: message,
-        key: key,
-      );
+      final verified = sut.verify(tag: tag, message: message, key: key);
 
       expect(verified, isTrue);
     });
@@ -70,19 +63,12 @@ class AuthTestCase extends TestCase {
       printOnFailure('key: ${key.extractBytes()}');
       printOnFailure('message: $message');
 
-      final tag = sut(
-        message: message,
-        key: key,
-      );
+      final tag = sut(message: message, key: key);
 
       printOnFailure('tag: $tag');
 
       tag[0] = tag[0] ^ 0xFF;
-      final verified = sut.verify(
-        tag: tag,
-        message: message,
-        key: key,
-      );
+      final verified = sut.verify(tag: tag, message: message, key: key);
 
       expect(verified, isFalse);
     });

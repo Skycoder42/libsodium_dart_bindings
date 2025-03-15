@@ -43,11 +43,7 @@ void main() {
       () => sut.secretKeyBytes,
       'secretKeyBytes',
     ),
-    (
-      () => mockSodium.crypto_kx_SEEDBYTES,
-      () => sut.seedBytes,
-      'seedBytes',
-    ),
+    (() => mockSodium.crypto_kx_SEEDBYTES, () => sut.seedBytes, 'seedBytes'),
     (
       () => mockSodium.crypto_kx_SESSIONKEYBYTES,
       () => sut.sessionKeyBytes,
@@ -118,16 +114,9 @@ void main() {
 
       test('calls crypto_kx_client_session_keys with correct arguments', () {
         when(
-          () => mockSodium.crypto_kx_client_session_keys(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_kx_client_session_keys(any(), any(), any()),
         ).thenReturn(
-          CryptoKX(
-            sharedRx: Uint8List(0).toJS,
-            sharedTx: Uint8List(0).toJS,
-          ),
+          CryptoKX(sharedRx: Uint8List(0).toJS, sharedTx: Uint8List(0).toJS),
         );
 
         final clientPublicKey = List.generate(5, (index) => index);
@@ -153,11 +142,7 @@ void main() {
         final rx = List.generate(10, (index) => index);
         final tx = List.generate(10, (index) => 20 - index);
         when(
-          () => mockSodium.crypto_kx_client_session_keys(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_kx_client_session_keys(any(), any(), any()),
         ).thenReturn(
           CryptoKX(
             sharedRx: Uint8List.fromList(rx).toJS,
@@ -177,11 +162,7 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_kx_client_session_keys(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_kx_client_session_keys(any(), any(), any()),
         ).thenThrow(JSError());
 
         expect(
@@ -237,16 +218,9 @@ void main() {
 
       test('calls crypto_kx_server_session_keys with correct arguments', () {
         when(
-          () => mockSodium.crypto_kx_server_session_keys(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_kx_server_session_keys(any(), any(), any()),
         ).thenReturn(
-          CryptoKX(
-            sharedRx: Uint8List(0).toJS,
-            sharedTx: Uint8List(0).toJS,
-          ),
+          CryptoKX(sharedRx: Uint8List(0).toJS, sharedTx: Uint8List(0).toJS),
         );
 
         final serverPublicKey = List.generate(5, (index) => index);
@@ -272,11 +246,7 @@ void main() {
         final rx = List.generate(10, (index) => index);
         final tx = List.generate(10, (index) => 20 - index);
         when(
-          () => mockSodium.crypto_kx_server_session_keys(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_kx_server_session_keys(any(), any(), any()),
         ).thenReturn(
           CryptoKX(
             sharedRx: Uint8List.fromList(rx).toJS,
@@ -296,11 +266,7 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_kx_server_session_keys(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_kx_server_session_keys(any(), any(), any()),
         ).thenThrow(JSError());
 
         expect(

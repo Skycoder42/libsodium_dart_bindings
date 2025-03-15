@@ -38,8 +38,9 @@ class KxTestCase extends TestCase {
     });
 
     group('seedKeypair', () {
-      test('generates different correct length keys for different seeds',
-          (sodium) {
+      test('generates different correct length keys for different seeds', (
+        sodium,
+      ) {
         final sut = sodium.crypto.kx;
 
         final seed1 = sodium.secureRandom(sut.seedBytes);

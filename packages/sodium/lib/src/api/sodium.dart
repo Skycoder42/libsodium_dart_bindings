@@ -15,11 +15,12 @@ import 'transferrable_secure_key.dart';
 /// The callback receives a fresh [sodium] instance that only lives on the
 /// new isolate, as well as the [secureKeys] and [keyPairs] that have been
 /// transferred to it via the [Sodium.runIsolated] method.
-typedef SodiumIsolateCallback<T> = FutureOr<T> Function(
-  Sodium sodium,
-  List<SecureKey> secureKeys,
-  List<KeyPair> keyPairs,
-);
+typedef SodiumIsolateCallback<T> =
+    FutureOr<T> Function(
+      Sodium sodium,
+      List<SecureKey> secureKeys,
+      List<KeyPair> keyPairs,
+    );
 
 /// A factory method that creates new [Sodium] instances. This factory can be
 /// passed between isolates and can be used if custom isolate handling is

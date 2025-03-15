@@ -14,9 +14,8 @@ typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<UnsignedChar> keyPtr);
 
 /// @nodoc
 @internal
-typedef SecureFFINullableCallbackFn<T> = T Function(
-  SodiumPointer<UnsignedChar>? keyPtr,
-);
+typedef SecureFFINullableCallbackFn<T> =
+    T Function(SodiumPointer<UnsignedChar>? keyPtr);
 
 /// @nodoc
 @internal
@@ -53,27 +52,22 @@ extension SecureKeySafeCastX on SecureKey {
     LibSodiumFFI sodium,
     SecureFFICallbackFn<T> callback, {
     bool writable = false,
-  }) =>
-      runUnlockedSync(
-        (data) {
-          final ptr = data.toSodiumPointer<UnsignedChar>(
-            sodium,
-            memoryProtection: writable
-                ? MemoryProtection.readWrite
-                : MemoryProtection.readOnly,
-          );
-          try {
-            final result = callback(ptr);
-            if (writable) {
-              data.setRange(0, data.length, ptr.asListView<Uint8List>());
-            }
-            return result;
-          } finally {
-            ptr.dispose();
-          }
-        },
-        writable: writable,
-      );
+  }) => runUnlockedSync((data) {
+    final ptr = data.toSodiumPointer<UnsignedChar>(
+      sodium,
+      memoryProtection:
+          writable ? MemoryProtection.readWrite : MemoryProtection.readOnly,
+    );
+    try {
+      final result = callback(ptr);
+      if (writable) {
+        data.setRange(0, data.length, ptr.asListView<Uint8List>());
+      }
+      return result;
+    } finally {
+      ptr.dispose();
+    }
+  }, writable: writable);
 }
 
 /// @nodoc

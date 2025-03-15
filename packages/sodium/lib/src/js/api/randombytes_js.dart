@@ -24,19 +24,15 @@ class RandombytesJS implements Randombytes {
   int get seedBytes => 32;
 
   @override
-  int random() => jsErrorWrap(
-        () => sodium.randombytes_random(),
-      );
+  int random() => jsErrorWrap(() => sodium.randombytes_random());
 
   @override
-  int uniform(int upperBound) => jsErrorWrap(
-        () => sodium.randombytes_uniform(upperBound),
-      );
+  int uniform(int upperBound) =>
+      jsErrorWrap(() => sodium.randombytes_uniform(upperBound));
 
   @override
-  Uint8List buf(int length) => jsErrorWrap(
-        () => sodium.randombytes_buf(length).toDart,
-      );
+  Uint8List buf(int length) =>
+      jsErrorWrap(() => sodium.randombytes_buf(length).toDart);
 
   @override
   Uint8List bufDeterministic(int length, Uint8List seed) {
@@ -48,12 +44,8 @@ class RandombytesJS implements Randombytes {
   }
 
   @override
-  void close() => jsErrorWrap(
-        () => sodium.randombytes_close(),
-      );
+  void close() => jsErrorWrap(() => sodium.randombytes_close());
 
   @override
-  void stir() => jsErrorWrap(
-        () => sodium.randombytes_stir(),
-      );
+  void stir() => jsErrorWrap(() => sodium.randombytes_stir());
 }

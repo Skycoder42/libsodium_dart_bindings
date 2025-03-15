@@ -35,9 +35,7 @@ mixin SignConsumerJSMixin<T extends Object>
   void add(Uint8List data) {
     _ensureNotCompleted();
 
-    jsErrorWrap(
-      () => sodium.crypto_sign_update(_state, data.toJS),
-    );
+    jsErrorWrap(() => sodium.crypto_sign_update(_state, data.toJS));
   }
 
   @override

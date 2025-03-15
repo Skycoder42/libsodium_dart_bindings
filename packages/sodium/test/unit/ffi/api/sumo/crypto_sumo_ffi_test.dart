@@ -25,33 +25,21 @@ void main() {
   test('sign returns SignSumoFFI instance', () {
     expect(
       sut.sign,
-      isA<SignSumoFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<SignSumoFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('pwhash returns PwhashFFI instance', () {
     expect(
       sut.pwhash,
-      isA<PwhashFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<PwhashFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 
   test('scalarmult returns ScalarmultSumoFFI instance', () {
     expect(
       sut.scalarmult,
-      isA<ScalarmultFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<ScalarmultFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 }

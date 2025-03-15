@@ -104,10 +104,7 @@ abstract class Sign {
   /// Provides crypto_sign.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures#combined-mode
-  Uint8List call({
-    required Uint8List message,
-    required SecureKey secretKey,
-  });
+  Uint8List call({required Uint8List message, required SecureKey secretKey});
 
   /// Provides crypto_sign_open.
   ///
@@ -148,9 +145,7 @@ abstract class Sign {
   /// want to get the signature from it, you ca use [stream] instead.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures#multi-part-messages
-  SignatureConsumer createConsumer({
-    required SecureKey secretKey,
-  });
+  SignatureConsumer createConsumer({required SecureKey secretKey});
 
   /// Creates a [StreamConsumer] for verifying a signature from a stream.
   ///
@@ -204,62 +199,39 @@ abstract class Sign {
 @internal
 mixin SignValidations implements Sign {
   /// @nodoc
-  void validatePublicKey(Uint8List publicKey) => Validations.checkIsSame(
-        publicKey.length,
-        publicKeyBytes,
-        'publicKey',
-      );
+  void validatePublicKey(Uint8List publicKey) =>
+      Validations.checkIsSame(publicKey.length, publicKeyBytes, 'publicKey');
 
   /// @nodoc
-  void validateSecretKey(SecureKey secretKey) => Validations.checkIsSame(
-        secretKey.length,
-        secretKeyBytes,
-        'secretKey',
-      );
+  void validateSecretKey(SecureKey secretKey) =>
+      Validations.checkIsSame(secretKey.length, secretKeyBytes, 'secretKey');
 
   /// @nodoc
-  void validateSignature(Uint8List signature) => Validations.checkIsSame(
-        signature.length,
-        bytes,
-        'signature',
-      );
+  void validateSignature(Uint8List signature) =>
+      Validations.checkIsSame(signature.length, bytes, 'signature');
 
   /// @nodoc
   void validateSignedMessage(Uint8List signedMessage) =>
-      Validations.checkAtLeast(
-        signedMessage.length,
-        bytes,
-        'signature',
-      );
+      Validations.checkAtLeast(signedMessage.length, bytes, 'signature');
 
   /// @nodoc
-  void validateSeed(SecureKey seed) => Validations.checkIsSame(
-        seed.length,
-        seedBytes,
-        'seed',
-      );
+  void validateSeed(SecureKey seed) =>
+      Validations.checkIsSame(seed.length, seedBytes, 'seed');
 
   @override
   Future<Uint8List> stream({
     required Stream<Uint8List> messages,
     required SecureKey secretKey,
-  }) =>
-      messages
-          .pipe(createConsumer(secretKey: secretKey))
-          .then((dynamic value) => value as Uint8List);
+  }) => messages
+      .pipe(createConsumer(secretKey: secretKey))
+      .then((dynamic value) => value as Uint8List);
 
   @override
   Future<bool> verifyStream({
     required Stream<Uint8List> messages,
     required Uint8List signature,
     required Uint8List publicKey,
-  }) =>
-      messages
-          .pipe(
-            createVerifyConsumer(
-              signature: signature,
-              publicKey: publicKey,
-            ),
-          )
-          .then((dynamic value) => value as bool);
+  }) => messages
+      .pipe(createVerifyConsumer(signature: signature, publicKey: publicKey))
+      .then((dynamic value) => value as bool);
 }

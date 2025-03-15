@@ -42,16 +42,12 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
 
   @override
   SecureKey keygen() => SecureKeyJS(
-        sodium,
-        jsErrorWrap(() => sodium.crypto_generichash_keygen()),
-      );
+    sodium,
+    jsErrorWrap(() => sodium.crypto_generichash_keygen()),
+  );
 
   @override
-  Uint8List call({
-    required Uint8List message,
-    int? outLen,
-    SecureKey? key,
-  }) {
+  Uint8List call({required Uint8List message, int? outLen, SecureKey? key}) {
     if (outLen != null) {
       validateOutLen(outLen);
     }
@@ -61,22 +57,20 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
 
     return jsErrorWrap(
       () => key.runMaybeUnlockedSync(
-        (keyData) => sodium
-            .crypto_generichash(
-              outLen ?? bytes,
-              message.toJS,
-              keyData?.toJS,
-            )
-            .toDart,
+        (keyData) =>
+            sodium
+                .crypto_generichash(
+                  outLen ?? bytes,
+                  message.toJS,
+                  keyData?.toJS,
+                )
+                .toDart,
       ),
     );
   }
 
   @override
-  GenericHashConsumer createConsumer({
-    int? outLen,
-    SecureKey? key,
-  }) {
+  GenericHashConsumer createConsumer({int? outLen, SecureKey? key}) {
     if (outLen != null) {
       validateOutLen(outLen);
     }

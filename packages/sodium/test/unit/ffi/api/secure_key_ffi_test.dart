@@ -67,16 +67,14 @@ void main() {
         SecureKeyFFI.random(mockSodium, length);
 
         verify(
-          () => mockSodium.randombytes_buf(
-            any(that: isNot(nullptr)),
-            length,
-          ),
+          () => mockSodium.randombytes_buf(any(that: isNot(nullptr)), length),
         );
       });
 
       test('disposes allocated pointer if random fails', () {
-        when(() => mockSodium.randombytes_buf(any(), any()))
-            .thenThrow(Exception());
+        when(
+          () => mockSodium.randombytes_buf(any(), any()),
+        ).thenThrow(Exception());
 
         const length = 10;
         expect(
@@ -112,17 +110,16 @@ void main() {
 
       when(() => mockSodiumPointer.count).thenReturn(testList.length);
       when(() => mockSodiumPointer.ptr).thenReturn(testPtr);
-      when(() => mockSodiumPointer.asListView(owned: any(named: 'owned')))
-          .thenReturn(testList);
       when(
-        () => mockSodiumPointer.asListView<Uint8List>(
-          owned: any(named: 'owned'),
-        ),
+        () => mockSodiumPointer.asListView(owned: any(named: 'owned')),
       ).thenReturn(testList);
       when(
-        () => mockSodiumPointer.asListView<List<int>>(
-          owned: any(named: 'owned'),
-        ),
+        () =>
+            mockSodiumPointer.asListView<Uint8List>(owned: any(named: 'owned')),
+      ).thenReturn(testList);
+      when(
+        () =>
+            mockSodiumPointer.asListView<List<int>>(owned: any(named: 'owned')),
       ).thenReturn(testList);
 
       sut = SecureKeyFFI(mockSodiumPointer);
@@ -145,14 +142,11 @@ void main() {
           (true, MemoryProtection.readWrite),
         ],
         (fixture) {
-          final res = sut.runUnlockedNative(
-            (pointer) {
-              expect(pointer, mockSodiumPointer);
-              verify(() => mockSodiumPointer.memoryProtection = fixture.$2);
-              return true;
-            },
-            writable: fixture.$1,
-          );
+          final res = sut.runUnlockedNative((pointer) {
+            expect(pointer, mockSodiumPointer);
+            verify(() => mockSodiumPointer.memoryProtection = fixture.$2);
+            return true;
+          }, writable: fixture.$1);
           expect(res, isTrue);
         },
       );
@@ -192,14 +186,11 @@ void main() {
           (true, MemoryProtection.readWrite),
         ],
         (fixture) {
-          final res = sut.runUnlockedSync(
-            (data) {
-              expect(data, testList);
-              verify(() => mockSodiumPointer.memoryProtection = fixture.$2);
-              return true;
-            },
-            writable: fixture.$1,
-          );
+          final res = sut.runUnlockedSync((data) {
+            expect(data, testList);
+            verify(() => mockSodiumPointer.memoryProtection = fixture.$2);
+            return true;
+          }, writable: fixture.$1);
           expect(res, isTrue);
         },
       );
@@ -239,14 +230,11 @@ void main() {
           (true, MemoryProtection.readWrite),
         ],
         (fixture) async {
-          final res = await sut.runUnlockedAsync(
-            (data) {
-              expect(data, testList);
-              verify(() => mockSodiumPointer.memoryProtection = fixture.$2);
-              return true;
-            },
-            writable: fixture.$1,
-          );
+          final res = await sut.runUnlockedAsync((data) {
+            expect(data, testList);
+            verify(() => mockSodiumPointer.memoryProtection = fixture.$2);
+            return true;
+          }, writable: fixture.$1);
           expect(res, isTrue);
         },
       );

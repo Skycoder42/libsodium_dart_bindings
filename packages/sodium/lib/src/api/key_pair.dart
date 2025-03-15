@@ -23,9 +23,9 @@ sealed class KeyPair with _$KeyPair {
 
   /// Creates a copy of this key.
   KeyPair copy() => KeyPair(
-        publicKey: Uint8List.fromList(publicKey),
-        secretKey: secretKey.copy(),
-      );
+    publicKey: Uint8List.fromList(publicKey),
+    secretKey: secretKey.copy(),
+  );
 
   /// Disposes the [secretKey] wrapped by this key pair.
   void dispose() => secretKey.dispose();

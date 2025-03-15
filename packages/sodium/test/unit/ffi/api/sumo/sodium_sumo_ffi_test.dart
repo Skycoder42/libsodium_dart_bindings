@@ -28,15 +28,12 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SodiumSumoFFI(
-      mockSodium,
-      () {
-        registerPointers();
-        final sodium = MockSodiumFFI();
-        mockAllocArray(sodium, delayedFree: false);
-        return sodium;
-      },
-    );
+    sut = SodiumSumoFFI(mockSodium, () {
+      registerPointers();
+      final sodium = MockSodiumFFI();
+      mockAllocArray(sodium, delayedFree: false);
+      return sodium;
+    });
   });
 
   test('fromFactory returns instance created by the factory', () async {
@@ -47,11 +44,7 @@ void main() {
   test('crypto returns CryptoSumoFFI instance', () {
     expect(
       sut.crypto,
-      isA<CryptoSumoFFI>().having(
-        (p) => p.sodium,
-        'sodium',
-        mockSodium,
-      ),
+      isA<CryptoSumoFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 

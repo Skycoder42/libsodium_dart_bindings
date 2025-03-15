@@ -87,22 +87,12 @@ class GenericHashTestCase extends TestCase {
         final sut = sodium.crypto.genericHash;
 
         final key = sut.keygen();
-        final message = Uint8List.fromList(
-          List.generate(64, (index) => index),
-        );
+        final message = Uint8List.fromList(List.generate(64, (index) => index));
 
         printOnFailure('message: $message');
 
-        final hash1 = sut(
-          message: message,
-          outLen: sut.bytesMax,
-          key: key,
-        );
-        final hash2 = sut(
-          message: message,
-          outLen: sut.bytesMax,
-          key: key,
-        );
+        final hash1 = sut(message: message, outLen: sut.bytesMax, key: key);
+        final hash2 = sut(message: message, outLen: sut.bytesMax, key: key);
 
         printOnFailure('hash1: $hash1');
         printOnFailure('hash2: $hash2');
@@ -118,22 +108,12 @@ class GenericHashTestCase extends TestCase {
 
         final key1 = sut.keygen();
         final key2 = sut.keygen();
-        final message = Uint8List.fromList(
-          List.generate(64, (index) => index),
-        );
+        final message = Uint8List.fromList(List.generate(64, (index) => index));
 
         printOnFailure('message: $message');
 
-        final hash1 = sut(
-          message: message,
-          outLen: sut.bytesMin,
-          key: key1,
-        );
-        final hash2 = sut(
-          message: message,
-          outLen: sut.bytesMin,
-          key: key2,
-        );
+        final hash1 = sut(message: message, outLen: sut.bytesMin, key: key1);
+        final hash2 = sut(message: message, outLen: sut.bytesMin, key: key2);
 
         printOnFailure('hash1: $hash1');
         printOnFailure('hash2: $hash2');
@@ -151,9 +131,7 @@ class GenericHashTestCase extends TestCase {
 
         final messages = List.generate(
           10,
-          (i) => Uint8List.fromList(
-            List.generate(32, (j) => i + j),
-          ),
+          (i) => Uint8List.fromList(List.generate(32, (j) => i + j)),
         );
 
         printOnFailure('message: $messages');
@@ -175,15 +153,11 @@ class GenericHashTestCase extends TestCase {
 
         final messages1 = List.generate(
           10,
-          (i) => Uint8List.fromList(
-            List.generate(20, (j) => i + j),
-          ),
+          (i) => Uint8List.fromList(List.generate(20, (j) => i + j)),
         );
         final messages2 = List.generate(
           10,
-          (i) => Uint8List.fromList(
-            List.generate(20, (j) => i * j),
-          ),
+          (i) => Uint8List.fromList(List.generate(20, (j) => i * j)),
         );
 
         printOnFailure('message1: $messages1');
@@ -211,9 +185,7 @@ class GenericHashTestCase extends TestCase {
         final key = sut.keygen();
         final messages = List.generate(
           10,
-          (i) => Uint8List.fromList(
-            List.generate(32, (j) => i + j),
-          ),
+          (i) => Uint8List.fromList(List.generate(32, (j) => i + j)),
         );
 
         printOnFailure('message: $messages');
@@ -245,9 +217,7 @@ class GenericHashTestCase extends TestCase {
         final key2 = sut.keygen();
         final messages = List.generate(
           10,
-          (i) => Uint8List.fromList(
-            List.generate(32, (j) => i + j),
-          ),
+          (i) => Uint8List.fromList(List.generate(32, (j) => i + j)),
         );
 
         printOnFailure('message: $messages');

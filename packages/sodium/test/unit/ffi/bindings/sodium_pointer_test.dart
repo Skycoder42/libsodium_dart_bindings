@@ -45,8 +45,9 @@ void main() {
 
     setUp(() {
       when(() => mockSodium.sodium_malloc(any())).thenReturn(fakePtr.cast());
-      when(() => mockSodium.sodium_allocarray(any(), any()))
-          .thenReturn(fakePtr.cast());
+      when(
+        () => mockSodium.sodium_allocarray(any(), any()),
+      ).thenReturn(fakePtr.cast());
     });
 
     test('raw initializes members and attaches finalizer', () {
@@ -82,11 +83,8 @@ void main() {
 
         verify(() => mockSodium.sodium_malloc(sizeOf<Uint16>()));
         verify(
-          () => mockSodiumFinalizer.attach(
-            sut,
-            sut.ptr.cast(),
-            sizeOf<Uint16>(),
-          ),
+          () =>
+              mockSodiumFinalizer.attach(sut, sut.ptr.cast(), sizeOf<Uint16>()),
         );
       });
 
@@ -166,10 +164,7 @@ void main() {
             () => SodiumPointer<Short>.alloc(mockSodium, count: 2),
             sizeOf<Short>(),
           ),
-          (
-            () => SodiumPointer<Int>.alloc(mockSodium, count: 2),
-            sizeOf<Int>(),
-          ),
+          (() => SodiumPointer<Int>.alloc(mockSodium, count: 2), sizeOf<Int>()),
           (
             () => SodiumPointer<Long>.alloc(mockSodium, count: 2),
             sizeOf<Long>(),
@@ -272,8 +267,9 @@ void main() {
       });
 
       test('frees pointer if allocation fails', () {
-        when(() => mockSodium.sodium_mprotect_noaccess(any()))
-            .thenThrow(Exception('error'));
+        when(
+          () => mockSodium.sodium_mprotect_noaccess(any()),
+        ).thenThrow(Exception('error'));
 
         expect(
           () => SodiumPointer<Uint8>.alloc(
@@ -284,17 +280,18 @@ void main() {
           throwsA(isA<Exception>()),
         );
 
-        final captured = verifyInOrder([
-          () => mockSodium.sodium_allocarray(10, 1),
-          () => mockSodiumFinalizer.attach(
+        final captured =
+            verifyInOrder([
+              () => mockSodium.sodium_allocarray(10, 1),
+              () => mockSodiumFinalizer.attach(
                 captureAny(),
                 fakePtr.cast(),
                 sizeOf<Uint8>() * 10,
               ),
-          () => mockSodium.sodium_mprotect_noaccess(fakePtr.cast()),
-          () => mockSodiumFinalizer.detach(captureAny()),
-          () => mockSodium.sodium_free(fakePtr.cast()),
-        ]).captured.expand<dynamic>((c) => c).toList();
+              () => mockSodium.sodium_mprotect_noaccess(fakePtr.cast()),
+              () => mockSodiumFinalizer.detach(captureAny()),
+              () => mockSodium.sodium_free(fakePtr.cast()),
+            ]).captured.expand<dynamic>((c) => c).toList();
         expect(captured, hasLength(2));
         expect(captured[0], same(captured[1]));
       });
@@ -332,25 +329,26 @@ void main() {
       });
 
       test('applies memory protection after copying', () {
-        final sut = SodiumPointer<Uint16>.fromList(
-          mockSodium,
-          const <int>[1, 2, 3],
-          memoryProtection: MemoryProtection.noAccess,
-        );
+        final sut = SodiumPointer<Uint16>.fromList(mockSodium, const <int>[
+          1,
+          2,
+          3,
+        ], memoryProtection: MemoryProtection.noAccess);
 
         verify(() => mockSodium.sodium_mprotect_noaccess(sut.ptr.cast()));
       });
 
       test('frees pointer if allocation fails', () {
-        when(() => mockSodium.sodium_mprotect_noaccess(any()))
-            .thenThrow(Exception('error'));
+        when(
+          () => mockSodium.sodium_mprotect_noaccess(any()),
+        ).thenThrow(Exception('error'));
 
         expect(
-          () => SodiumPointer<Uint8>.fromList(
-            mockSodium,
-            const <int>[1, 2, 3],
-            memoryProtection: MemoryProtection.noAccess,
-          ),
+          () => SodiumPointer<Uint8>.fromList(mockSodium, const <int>[
+            1,
+            2,
+            3,
+          ], memoryProtection: MemoryProtection.noAccess),
           throwsA(isA<Exception>()),
         );
 
@@ -560,9 +558,10 @@ void main() {
           expect(view.ptr, Pointer.fromAddress(fixture.$3));
           expect(view.count, fixture.$4);
         },
-        fixtureToString: (fixture) =>
-            '(offset: ${fixture.$1}, length: ${fixture.$2}) '
-            '-> (address: ${fixture.$3}, count: ${fixture.$4})',
+        fixtureToString:
+            (fixture) =>
+                '(offset: ${fixture.$1}, length: ${fixture.$2}) '
+                '-> (address: ${fixture.$3}, count: ${fixture.$4})',
       );
 
       test('dispose does not free views and does not detach', () {
@@ -573,10 +572,7 @@ void main() {
       });
 
       test('detach throws unsupported error', () {
-        expect(
-          () => sut.viewAt(0).detach(),
-          throwsA(isUnsupportedError),
-        );
+        expect(() => sut.viewAt(0).detach(), throwsA(isUnsupportedError));
 
         verifyNever(() => mockSodiumFinalizer.detach(sut));
       });
@@ -626,9 +622,10 @@ void main() {
 
           expect(sut.asListView(), fixture.$3);
         },
-        fixtureToString: (fixture) =>
-            '(data: ${fixture.$1}, offset: ${fixture.$2}) '
-            '-> ${fixture.$3}',
+        fixtureToString:
+            (fixture) =>
+                '(data: ${fixture.$1}, offset: ${fixture.$2}) '
+                '-> ${fixture.$3}',
       );
     });
 
@@ -677,8 +674,10 @@ void main() {
       mockAllocArray(mockSodium);
     });
 
-    void testPointerListConversions<TPtr extends NativeType,
-        TList extends List<int>>({
+    void testPointerListConversions<
+      TPtr extends NativeType,
+      TList extends List<int>
+    >({
       required int elementSize,
       required Pointer<TPtr> Function(int lengthInBytes) alloc,
       required TList Function(List<int> data) createList,
@@ -701,10 +700,7 @@ void main() {
         expect(view.count, 2);
         expect(
           view.ptr,
-          hasRawData<TPtr>(
-            testData.sublist(2, 4),
-            sizeHint: elementSize,
-          ),
+          hasRawData<TPtr>(testData.sublist(2, 4), sizeHint: elementSize),
         );
       });
 
@@ -714,10 +710,13 @@ void main() {
         expect(sut.count, testData.length);
         expect(
           sut.ptr,
-          hasRawData<TPtr>(
-            [testData[0], 1, 2, 3, testData[4]],
-            sizeHint: elementSize,
-          ),
+          hasRawData<TPtr>([
+            testData[0],
+            1,
+            2,
+            3,
+            testData[4],
+          ], sizeHint: elementSize),
         );
       });
 
@@ -735,10 +734,11 @@ void main() {
         list[1] = 11;
         expect(
           sut.ptr,
-          hasRawData<TPtr>(
-            [10, 11, ...testData.skip(2)],
-            sizeHint: elementSize,
-          ),
+          hasRawData<TPtr>([
+            10,
+            11,
+            ...testData.skip(2),
+          ], sizeHint: elementSize),
         );
 
         sut.fill([20, 21], offset: 2);
@@ -771,13 +771,7 @@ void main() {
         expect(ptr.elementSize, elementSize);
         expect(ptr.count, testData.length);
         expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        expect(
-          ptr.ptr,
-          hasRawData<TPtr>(
-            testData,
-            sizeHint: elementSize,
-          ),
-        );
+        expect(ptr.ptr, hasRawData<TPtr>(testData, sizeHint: elementSize));
       });
 
       subTests?.call(() => sut);
@@ -1050,26 +1044,20 @@ void main() {
         final view = sut.viewAt(2, 2);
 
         expect(view.count, 2);
-        expect(
-          view.ptr.asTypedList(view.count),
-          testData.sublist(2, 4),
-        );
+        expect(view.ptr.asTypedList(view.count), testData.sublist(2, 4));
       });
 
       test('fill fills correct bytes', () {
         sut.fill(const [1.1, 2.2, 3.3], offset: 1);
 
         expect(sut.count, testData.length);
-        expect(
-          sut.ptr.asTypedList(sut.count),
-          [
-            testData[0],
-            1.100000023841858,
-            2.200000047683716,
-            3.299999952316284,
-            testData[4],
-          ],
-        );
+        expect(sut.ptr.asTypedList(sut.count), [
+          testData[0],
+          1.100000023841858,
+          2.200000047683716,
+          3.299999952316284,
+          testData[4],
+        ]);
       });
 
       test('asListView returns memory view', () {
@@ -1079,10 +1067,11 @@ void main() {
 
         list[0] = 10.5;
         list[1] = 11.5;
-        expect(
-          sut.ptr.asTypedList(sut.count),
-          [10.5, 11.5, ...testData.skip(2)],
-        );
+        expect(sut.ptr.asTypedList(sut.count), [
+          10.5,
+          11.5,
+          ...testData.skip(2),
+        ]);
 
         sut.fill([20.2, 21.1], offset: 2);
         expect(list[2], 20.200000762939453);
@@ -1103,10 +1092,7 @@ void main() {
         expect(ptr.elementSize, sizeOf<Float>());
         expect(ptr.count, testData.length);
         expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        expect(
-          ptr.ptr.asTypedList(ptr.count),
-          testData,
-        );
+        expect(ptr.ptr.asTypedList(ptr.count), testData);
       });
     });
 
@@ -1125,20 +1111,20 @@ void main() {
         final view = sut.viewAt(2, 2);
 
         expect(view.count, 2);
-        expect(
-          view.ptr.asTypedList(view.count),
-          testData.sublist(2, 4),
-        );
+        expect(view.ptr.asTypedList(view.count), testData.sublist(2, 4));
       });
 
       test('fill fills correct bytes', () {
         sut.fill(const [1.1, 2.2, 3.3], offset: 1);
 
         expect(sut.count, testData.length);
-        expect(
-          sut.ptr.asTypedList(sut.count),
-          [testData[0], 1.1, 2.2, 3.3, testData[4]],
-        );
+        expect(sut.ptr.asTypedList(sut.count), [
+          testData[0],
+          1.1,
+          2.2,
+          3.3,
+          testData[4],
+        ]);
       });
 
       test('asListView returns memory view', () {
@@ -1148,10 +1134,11 @@ void main() {
 
         list[0] = 10.5;
         list[1] = 11.5;
-        expect(
-          sut.ptr.asTypedList(sut.count),
-          [10.5, 11.5, ...testData.skip(2)],
-        );
+        expect(sut.ptr.asTypedList(sut.count), [
+          10.5,
+          11.5,
+          ...testData.skip(2),
+        ]);
 
         sut.fill([20.2, 21.1], offset: 2);
         expect(list[2], 20.2);
@@ -1172,10 +1159,7 @@ void main() {
         expect(ptr.elementSize, sizeOf<Double>());
         expect(ptr.count, testData.length);
         expect(ptr.memoryProtection, MemoryProtection.readOnly);
-        expect(
-          ptr.ptr.asTypedList(ptr.count),
-          testData,
-        );
+        expect(ptr.ptr.asTypedList(ptr.count), testData);
       });
     });
 

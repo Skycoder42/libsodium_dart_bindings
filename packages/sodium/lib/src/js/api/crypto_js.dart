@@ -43,8 +43,9 @@ class CryptoJS implements Crypto {
   late final Aead aeadChaCha20Poly1305 = AeadChaCha20Poly1305JS(sodium);
 
   @override
-  late final Aead aeadXChaCha20Poly1305IETF =
-      AeadXChaCha20Poly1305IEFTJS(sodium);
+  late final Aead aeadXChaCha20Poly1305IETF = AeadXChaCha20Poly1305IEFTJS(
+    sodium,
+  );
 
   @override
   late final Auth auth = AuthJS(sodium);

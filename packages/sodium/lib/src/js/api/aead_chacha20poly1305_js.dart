@@ -27,9 +27,9 @@ class AeadChaCha20Poly1305JS extends AeadBaseJS {
 
   @override
   SecureKey keygen() => SecureKeyJS(
-        sodium,
-        jsErrorWrap(() => sodium.crypto_aead_chacha20poly1305_keygen()),
-      );
+    sodium,
+    jsErrorWrap(() => sodium.crypto_aead_chacha20poly1305_keygen()),
+  );
 
   @override
   JSUint8Array internalEncrypt(
@@ -38,14 +38,13 @@ class AeadChaCha20Poly1305JS extends AeadBaseJS {
     JSUint8Array? secretNonce,
     JSUint8Array publicNonce,
     JSUint8Array key,
-  ) =>
-      sodium.crypto_aead_chacha20poly1305_encrypt(
-        message,
-        additionalData,
-        secretNonce,
-        publicNonce,
-        key,
-      );
+  ) => sodium.crypto_aead_chacha20poly1305_encrypt(
+    message,
+    additionalData,
+    secretNonce,
+    publicNonce,
+    key,
+  );
 
   @override
   JSUint8Array internalDecrypt(
@@ -54,14 +53,13 @@ class AeadChaCha20Poly1305JS extends AeadBaseJS {
     JSUint8Array? additionalData,
     JSUint8Array publicNonce,
     JSUint8Array key,
-  ) =>
-      sodium.crypto_aead_chacha20poly1305_decrypt(
-        secretNonce,
-        ciphertext,
-        additionalData,
-        publicNonce,
-        key,
-      );
+  ) => sodium.crypto_aead_chacha20poly1305_decrypt(
+    secretNonce,
+    ciphertext,
+    additionalData,
+    publicNonce,
+    key,
+  );
 
   @override
   CryptoBox internalEncryptDetached(
@@ -70,14 +68,13 @@ class AeadChaCha20Poly1305JS extends AeadBaseJS {
     JSUint8Array? secretNonce,
     JSUint8Array publicNonce,
     JSUint8Array key,
-  ) =>
-      sodium.crypto_aead_chacha20poly1305_encrypt_detached(
-        message,
-        additionalData,
-        secretNonce,
-        publicNonce,
-        key,
-      );
+  ) => sodium.crypto_aead_chacha20poly1305_encrypt_detached(
+    message,
+    additionalData,
+    secretNonce,
+    publicNonce,
+    key,
+  );
 
   @override
   JSUint8Array internalDecryptDetached(
@@ -87,13 +84,12 @@ class AeadChaCha20Poly1305JS extends AeadBaseJS {
     JSUint8Array? additionalData,
     JSUint8Array publicNonce,
     JSUint8Array key,
-  ) =>
-      sodium.crypto_aead_chacha20poly1305_decrypt_detached(
-        secretNonce,
-        ciphertext,
-        mac,
-        additionalData,
-        publicNonce,
-        key,
-      );
+  ) => sodium.crypto_aead_chacha20poly1305_decrypt_detached(
+    secretNonce,
+    ciphertext,
+    mac,
+    additionalData,
+    publicNonce,
+    key,
+  );
 }

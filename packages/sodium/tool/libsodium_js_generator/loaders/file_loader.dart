@@ -28,12 +28,13 @@ class FileLoader {
     bool Function(File file) filter,
   ) async {
     final dir = Directory(join(directory.path, subDir));
-    final files = await dir
-        .list()
-        .where((entry) => entry is File)
-        .cast<File>()
-        .where(filter)
-        .toList();
+    final files =
+        await dir
+            .list()
+            .where((entry) => entry is File)
+            .cast<File>()
+            .where(filter)
+            .toList();
     return files..sort((lhs, rhs) => lhs.path.compareTo(rhs.path));
   }
 

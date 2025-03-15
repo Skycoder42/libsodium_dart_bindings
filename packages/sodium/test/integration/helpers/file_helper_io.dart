@@ -15,10 +15,7 @@ class FileHelper {
   }
 
   Future<void> writeBytes(String name, List<int> bytes) =>
-      _file(name).writeAsBytes(
-        bytes,
-        flush: true,
-      );
+      _file(name).writeAsBytes(bytes, flush: true);
 
   Future<List<int>> readBytes(String name) => _file(name).readAsBytes();
 

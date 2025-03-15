@@ -37,6 +37,5 @@ abstract class TestCase {
   Future<T> ioCompute<T, M>(
     FutureOr<T> Function(M message) callback,
     M message,
-  ) =>
-      _runner.ioCompute(callback, message);
+  ) => _runner.ioCompute(callback, message);
 }

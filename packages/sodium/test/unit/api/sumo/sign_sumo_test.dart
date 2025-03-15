@@ -24,9 +24,9 @@ void main() {
       'validateSecretKeyOrSeed',
       source1: () => sutMock.secretKeyBytes,
       source2: () => sutMock.seedBytes,
-      sut: (value) => sutMock.validateSecretKeyOrSeed(
-        SecureKeyFake.empty(value),
-      ),
+      sut:
+          (value) =>
+              sutMock.validateSecretKeyOrSeed(SecureKeyFake.empty(value)),
     );
   });
 }

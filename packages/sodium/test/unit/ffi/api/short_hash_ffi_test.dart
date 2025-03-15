@@ -37,11 +37,7 @@ void main() {
   });
 
   testConstantsMapping([
-    (
-      () => mockSodium.crypto_shorthash_bytes(),
-      () => sut.bytes,
-      'bytes',
-    ),
+    (() => mockSodium.crypto_shorthash_bytes(), () => sut.bytes, 'bytes'),
     (
       () => mockSodium.crypto_shorthash_keybytes(),
       () => sut.keyBytes,
@@ -65,10 +61,7 @@ void main() {
     group('call', () {
       test('asserts if key is invalid', () {
         expect(
-          () => sut(
-            message: Uint8List(0),
-            key: SecureKeyFake.empty(10),
-          ),
+          () => sut(message: Uint8List(0), key: SecureKeyFake.empty(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -77,57 +70,39 @@ void main() {
 
       test('calls crypto_generichash with correct arguments', () {
         when(
-          () => mockSodium.crypto_shorthash(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_shorthash(any(), any(), any(), any()),
         ).thenReturn(0);
 
         final key = List.generate(5, (index) => index * 10);
         final message = List.generate(20, (index) => index * 2);
 
-        sut(
-          message: Uint8List.fromList(message),
-          key: SecureKeyFake(key),
-        );
+        sut(message: Uint8List.fromList(message), key: SecureKeyFake(key));
 
         verifyInOrder([
           () => mockSodium.sodium_allocarray(5, 1),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(message)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(key)),
-              ),
+            any(that: hasRawData(message)),
+          ),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(key))),
           () => mockSodium.crypto_shorthash(
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<UnsignedChar>(message)),
-                message.length,
-                any(that: hasRawData<UnsignedChar>(key)),
-              ),
+            any(that: isNot(nullptr)),
+            any(that: hasRawData<UnsignedChar>(message)),
+            message.length,
+            any(that: hasRawData<UnsignedChar>(key)),
+          ),
         ]);
       });
 
       test('returns calculated hash', () {
         final hash = List.generate(5, (index) => 10 + index);
         when(
-          () => mockSodium.crypto_shorthash(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_shorthash(any(), any(), any(), any()),
         ).thenAnswer((i) {
           fillPointer(i.positionalArguments.first as Pointer, hash);
           return 0;
         });
 
-        final result = sut(
-          message: Uint8List(10),
-          key: SecureKeyFake.empty(5),
-        );
+        final result = sut(message: Uint8List(10), key: SecureKeyFake.empty(5));
 
         expect(result, hash);
 
@@ -136,19 +111,11 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_shorthash(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_shorthash(any(), any(), any(), any()),
         ).thenReturn(1);
 
         expect(
-          () => sut(
-            message: Uint8List(15),
-            key: SecureKeyFake.empty(5),
-          ),
+          () => sut(message: Uint8List(15), key: SecureKeyFake.empty(5)),
           throwsA(isA<SodiumException>()),
         );
 

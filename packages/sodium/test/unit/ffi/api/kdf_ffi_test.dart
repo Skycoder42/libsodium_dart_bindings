@@ -37,26 +37,14 @@ void main() {
   });
 
   testConstantsMapping([
-    (
-      () => mockSodium.crypto_kdf_bytes_min(),
-      () => sut.bytesMin,
-      'bytesMin',
-    ),
-    (
-      () => mockSodium.crypto_kdf_bytes_max(),
-      () => sut.bytesMax,
-      'bytesMax',
-    ),
+    (() => mockSodium.crypto_kdf_bytes_min(), () => sut.bytesMin, 'bytesMin'),
+    (() => mockSodium.crypto_kdf_bytes_max(), () => sut.bytesMax, 'bytesMax'),
     (
       () => mockSodium.crypto_kdf_contextbytes(),
       () => sut.contextBytes,
       'contextBytes',
     ),
-    (
-      () => mockSodium.crypto_kdf_keybytes(),
-      () => sut.keyBytes,
-      'keyBytes',
-    ),
+    (() => mockSodium.crypto_kdf_keybytes(), () => sut.keyBytes, 'keyBytes'),
   ]);
 
   group('methods', () {
@@ -143,20 +131,18 @@ void main() {
 
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(context.toCharArray(memoryWidth: 5))),
-              ),
+            any(that: hasRawData(context.toCharArray(memoryWidth: 5))),
+          ),
           () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(masterKey)),
-              ),
+            any(that: hasRawData(masterKey)),
+          ),
           () => mockSodium.crypto_kdf_derive_from_key(
-                any(that: isNot(nullptr)),
-                subkeyLen,
-                subkeyId,
-                any(
-                  that: hasRawData<Char>(context.toCharArray(memoryWidth: 5)),
-                ),
-                any(that: hasRawData<UnsignedChar>(masterKey)),
-              ),
+            any(that: isNot(nullptr)),
+            subkeyLen,
+            subkeyId,
+            any(that: hasRawData<Char>(context.toCharArray(memoryWidth: 5))),
+            any(that: hasRawData<UnsignedChar>(masterKey)),
+          ),
         ]);
       });
 

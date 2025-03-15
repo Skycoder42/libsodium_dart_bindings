@@ -34,26 +34,14 @@ void main() {
   });
 
   testConstantsMapping([
-    (
-      () => mockSodium.crypto_kdf_BYTES_MIN,
-      () => sut.bytesMin,
-      'bytesMin',
-    ),
-    (
-      () => mockSodium.crypto_kdf_BYTES_MAX,
-      () => sut.bytesMax,
-      'bytesMax',
-    ),
+    (() => mockSodium.crypto_kdf_BYTES_MIN, () => sut.bytesMin, 'bytesMin'),
+    (() => mockSodium.crypto_kdf_BYTES_MAX, () => sut.bytesMax, 'bytesMax'),
     (
       () => mockSodium.crypto_kdf_CONTEXTBYTES,
       () => sut.contextBytes,
       'contextBytes',
     ),
-    (
-      () => mockSodium.crypto_kdf_KEYBYTES,
-      () => sut.keyBytes,
-      'keyBytes',
-    ),
+    (() => mockSodium.crypto_kdf_KEYBYTES, () => sut.keyBytes, 'keyBytes'),
   ]);
 
   group('methods', () {
@@ -116,12 +104,8 @@ void main() {
 
       test('calls crypto_kdf_derive_from_key with correct arguments', () {
         when(
-          () => mockSodium.crypto_kdf_derive_from_key(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () =>
+              mockSodium.crypto_kdf_derive_from_key(any(), any(), any(), any()),
         ).thenReturn(Uint8List(0).toJS);
 
         final masterKey = List.generate(5, (index) => index * 2);
@@ -149,12 +133,8 @@ void main() {
       test('returns derieved key', () {
         final subkey = List.generate(10, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_kdf_derive_from_key(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () =>
+              mockSodium.crypto_kdf_derive_from_key(any(), any(), any(), any()),
         ).thenReturn(Uint8List.fromList(subkey).toJS);
 
         final result = sut.deriveFromKey(
@@ -169,12 +149,8 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_kdf_derive_from_key(
-            any(),
-            any(),
-            any(),
-            any(),
-          ),
+          () =>
+              mockSodium.crypto_kdf_derive_from_key(any(), any(), any(), any()),
         ).thenThrow(JSError());
 
         expect(

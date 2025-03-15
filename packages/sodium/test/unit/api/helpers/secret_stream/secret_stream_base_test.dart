@@ -25,10 +25,16 @@ class SecretStreamPullTransformerSinkFake extends Fake
     implements SecretStreamPullTransformerSink {}
 
 void main() {
-  final mockPushTransformer = MockSecretExStreamTransformer<
-      SecretStreamPlainMessage, SecretStreamCipherMessage>();
-  final mockPullTransformer = MockSecretExStreamTransformer<
-      SecretStreamCipherMessage, SecretStreamPlainMessage>();
+  final mockPushTransformer =
+      MockSecretExStreamTransformer<
+        SecretStreamPlainMessage,
+        SecretStreamCipherMessage
+      >();
+  final mockPullTransformer =
+      MockSecretExStreamTransformer<
+        SecretStreamCipherMessage,
+        SecretStreamPlainMessage
+      >();
 
   late SecretStreamMock sutMock;
 
@@ -76,10 +82,7 @@ void main() {
     final key = SecureKeyFake.empty(10);
     final messageStream = Stream.fromIterable([
       SecretStreamPlainMessage(Uint8List(5)),
-      SecretStreamPlainMessage(
-        Uint8List(10),
-        additionalData: Uint8List(3),
-      ),
+      SecretStreamPlainMessage(Uint8List(10), additionalData: Uint8List(3)),
       SecretStreamPlainMessage(
         Uint8List(5),
         tag: SecretStreamMessageTag.finalPush,
@@ -87,18 +90,12 @@ void main() {
     ]);
     final resultData = [
       SecretStreamCipherMessage(Uint8List(3)),
-      SecretStreamCipherMessage(
-        Uint8List(5),
-        additionalData: Uint8List(7),
-      ),
+      SecretStreamCipherMessage(Uint8List(5), additionalData: Uint8List(7)),
     ];
 
     mockPush(resultData);
 
-    final res = sutMock.pushEx(
-      messageStream: messageStream,
-      key: key,
-    );
+    final res = sutMock.pushEx(messageStream: messageStream, key: key);
 
     expect(res, emitsInOrder(resultData));
 
@@ -110,17 +107,11 @@ void main() {
     final key = SecureKeyFake.empty(10);
     final cipherStream = Stream.fromIterable([
       SecretStreamCipherMessage(Uint8List(3)),
-      SecretStreamCipherMessage(
-        Uint8List(5),
-        additionalData: Uint8List(7),
-      ),
+      SecretStreamCipherMessage(Uint8List(5), additionalData: Uint8List(7)),
     ]);
     final resultData = [
       SecretStreamPlainMessage(Uint8List(5)),
-      SecretStreamPlainMessage(
-        Uint8List(10),
-        additionalData: Uint8List(3),
-      ),
+      SecretStreamPlainMessage(Uint8List(10), additionalData: Uint8List(3)),
       SecretStreamPlainMessage(
         Uint8List(5),
         tag: SecretStreamMessageTag.finalPush,
@@ -129,10 +120,7 @@ void main() {
 
     mockPull(resultData);
 
-    final res = sutMock.pullEx(
-      cipherStream: cipherStream,
-      key: key,
-    );
+    final res = sutMock.pullEx(cipherStream: cipherStream, key: key);
 
     expect(res, emitsInOrder(resultData));
 
@@ -158,11 +146,7 @@ void main() {
           tag: SecretStreamMessageTag.finalPush,
         ),
       ];
-      final resultData = [
-        Uint8List(3),
-        Uint8List(0),
-        Uint8List(5),
-      ];
+      final resultData = [Uint8List(3), Uint8List(0), Uint8List(5)];
       final resultDataEx = [
         SecretStreamCipherMessage(Uint8List(3)),
         SecretStreamCipherMessage(Uint8List(0)),
@@ -181,30 +165,20 @@ void main() {
 
       verify(() => sutMock.createPushEx(key));
       verify(
-        () => mockPushTransformer.bind(
-          any(that: emitsInOrder(messageDataEx)),
-        ),
+        () => mockPushTransformer.bind(any(that: emitsInOrder(messageDataEx))),
       );
     });
 
     test('does not add final tag if input matches chunks', () {
       const chunkSize = 10;
       final key = SecureKeyFake.empty(10);
-      final messageData = [
-        Uint8List(5),
-        Uint8List(10),
-        Uint8List(15),
-      ];
+      final messageData = [Uint8List(5), Uint8List(10), Uint8List(15)];
       final messageDataEx = [
         SecretStreamPlainMessage(Uint8List(10)),
         SecretStreamPlainMessage(Uint8List(10)),
         SecretStreamPlainMessage(Uint8List(10)),
       ];
-      final resultData = [
-        Uint8List(3),
-        Uint8List(0),
-        Uint8List(5),
-      ];
+      final resultData = [Uint8List(3), Uint8List(0), Uint8List(5)];
       final resultDataEx = [
         SecretStreamCipherMessage(Uint8List(3)),
         SecretStreamCipherMessage(Uint8List(0)),
@@ -223,9 +197,7 @@ void main() {
 
       verify(() => sutMock.createPushEx(key));
       verify(
-        () => mockPushTransformer.bind(
-          any(that: emitsInOrder(messageDataEx)),
-        ),
+        () => mockPushTransformer.bind(any(that: emitsInOrder(messageDataEx))),
       );
     });
   });
@@ -249,11 +221,7 @@ void main() {
       SecretStreamCipherMessage(Uint8List(13)),
       SecretStreamCipherMessage(Uint8List(5)),
     ];
-    final resultData = [
-      Uint8List(3),
-      Uint8List(0),
-      Uint8List(5),
-    ];
+    final resultData = [Uint8List(3), Uint8List(0), Uint8List(5)];
     final resultDataEx = [
       SecretStreamPlainMessage(Uint8List(3)),
       SecretStreamPlainMessage(Uint8List(0)),
@@ -274,9 +242,7 @@ void main() {
 
     verify(() => sutMock.createPullEx(key));
     verify(
-      () => mockPullTransformer.bind(
-        any(that: emitsInOrder(cipherDataEx)),
-      ),
+      () => mockPullTransformer.bind(any(that: emitsInOrder(cipherDataEx))),
     );
   });
 
@@ -293,11 +259,7 @@ void main() {
       SecretStreamPlainMessage(Uint8List(10)),
       SecretStreamPlainMessage(Uint8List(5)),
     ];
-    final resultData = [
-      Uint8List(3),
-      Uint8List(0),
-      Uint8List(5),
-    ];
+    final resultData = [Uint8List(3), Uint8List(0), Uint8List(5)];
     final resultDataEx = [
       SecretStreamCipherMessage(Uint8List(3)),
       SecretStreamCipherMessage(Uint8List(0)),
@@ -315,9 +277,7 @@ void main() {
 
     verify(() => sutMock.createPushEx(key));
     verify(
-      () => mockPushTransformer.bind(
-        any(that: emitsInOrder(messageDataEx)),
-      ),
+      () => mockPushTransformer.bind(any(that: emitsInOrder(messageDataEx))),
     );
   });
 
@@ -335,10 +295,7 @@ void main() {
       SecretStreamCipherMessage(Uint8List(10)),
       SecretStreamCipherMessage(Uint8List(5)),
     ];
-    final resultData = [
-      Uint8List(3),
-      Uint8List(5),
-    ];
+    final resultData = [Uint8List(3), Uint8List(5)];
     final resultDataEx = [
       SecretStreamPlainMessage(Uint8List(3)),
       SecretStreamPlainMessage(Uint8List(0)),
@@ -356,9 +313,7 @@ void main() {
 
     verify(() => sutMock.createPullEx(key));
     verify(
-      () => mockPullTransformer.bind(
-        any(that: emitsInOrder(cipherDataEx)),
-      ),
+      () => mockPullTransformer.bind(any(that: emitsInOrder(cipherDataEx))),
     );
   });
 }

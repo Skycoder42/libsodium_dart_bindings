@@ -114,9 +114,6 @@ mixin KxValidations implements Kx {
       );
 
   /// @nodoc
-  void validateSeed(SecureKey seed) => Validations.checkIsSame(
-        seed.length,
-        seedBytes,
-        'seed',
-      );
+  void validateSeed(SecureKey seed) =>
+      Validations.checkIsSame(seed.length, seedBytes, 'seed');
 }

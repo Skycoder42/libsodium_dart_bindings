@@ -36,11 +36,7 @@ void main() {
   });
 
   testConstantsMapping([
-    (
-      () => mockSodium.crypto_scalarmult_bytes(),
-      () => sut.bytes,
-      'bytes',
-    ),
+    (() => mockSodium.crypto_scalarmult_bytes(), () => sut.bytes, 'bytes'),
     (
       () => mockSodium.crypto_scalarmult_scalarbytes(),
       () => sut.scalarBytes,
@@ -66,10 +62,7 @@ void main() {
 
       test('calls crypto_scalarmult_base with correct arguments', () {
         when(
-          () => mockSodium.crypto_scalarmult_base(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult_base(any(), any()),
         ).thenReturn(0);
 
         final n = List.generate(10, (index) => index);
@@ -77,34 +70,24 @@ void main() {
         sut.base(n: SecureKeyFake(n));
 
         verifyInOrder([
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(n)),
-              ),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(n))),
           () => mockSodium.crypto_scalarmult_base(
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<UnsignedChar>(n)),
-              ),
+            any(that: isNot(nullptr)),
+            any(that: hasRawData<UnsignedChar>(n)),
+          ),
         ]);
       });
 
       test('returns public key data', () {
         final q = List.generate(5, (index) => 100 - index);
-        when(
-          () => mockSodium.crypto_scalarmult_base(
-            any(),
-            any(),
-          ),
-        ).thenAnswer((i) {
-          fillPointer(
-            i.positionalArguments.first as Pointer<UnsignedChar>,
-            q,
-          );
+        when(() => mockSodium.crypto_scalarmult_base(any(), any())).thenAnswer((
+          i,
+        ) {
+          fillPointer(i.positionalArguments.first as Pointer<UnsignedChar>, q);
           return 0;
         });
 
-        final result = sut.base(
-          n: SecureKeyFake.empty(10),
-        );
+        final result = sut.base(n: SecureKeyFake.empty(10));
 
         expect(result, q);
 
@@ -113,16 +96,11 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_scalarmult_base(
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult_base(any(), any()),
         ).thenReturn(1);
 
         expect(
-          () => sut.base(
-            n: SecureKeyFake.empty(10),
-          ),
+          () => sut.base(n: SecureKeyFake.empty(10)),
           throwsA(isA<SodiumException>()),
         );
 
@@ -133,10 +111,7 @@ void main() {
     group('call', () {
       test('asserts if n is invalid', () {
         expect(
-          () => sut(
-            n: SecureKeyFake.empty(5),
-            p: Uint8List(5),
-          ),
+          () => sut(n: SecureKeyFake.empty(5), p: Uint8List(5)),
           throwsA(isA<RangeError>()),
         );
 
@@ -145,10 +120,7 @@ void main() {
 
       test('asserts if p is invalid', () {
         expect(
-          () => sut(
-            n: SecureKeyFake.empty(10),
-            p: Uint8List(10),
-          ),
+          () => sut(n: SecureKeyFake.empty(10), p: Uint8List(10)),
           throwsA(isA<RangeError>()),
         );
 
@@ -160,56 +132,35 @@ void main() {
 
       test('calls crypto_scalarmult with correct arguments', () {
         when(
-          () => mockSodium.crypto_scalarmult(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult(any(), any(), any()),
         ).thenReturn(0);
 
         final n = List.generate(10, (index) => index);
         final p = List.generate(5, (index) => index * 2);
 
-        sut(
-          n: SecureKeyFake(n),
-          p: Uint8List.fromList(p),
-        );
+        sut(n: SecureKeyFake(n), p: Uint8List.fromList(p));
 
         verifyInOrder([
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(p)),
-              ),
-          () => mockSodium.sodium_mprotect_readonly(
-                any(that: hasRawData(n)),
-              ),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(p))),
+          () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(n))),
           () => mockSodium.crypto_scalarmult(
-                any(that: isNot(nullptr)),
-                any(that: hasRawData<UnsignedChar>(n)),
-                any(that: hasRawData<UnsignedChar>(p)),
-              ),
+            any(that: isNot(nullptr)),
+            any(that: hasRawData<UnsignedChar>(n)),
+            any(that: hasRawData<UnsignedChar>(p)),
+          ),
         ]);
       });
 
       test('returns shared key data', () {
         final q = List.generate(5, (index) => 100 - index);
         when(
-          () => mockSodium.crypto_scalarmult(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult(any(), any(), any()),
         ).thenAnswer((i) {
-          fillPointer(
-            i.positionalArguments.first as Pointer<UnsignedChar>,
-            q,
-          );
+          fillPointer(i.positionalArguments.first as Pointer<UnsignedChar>, q);
           return 0;
         });
 
-        final result = sut(
-          n: SecureKeyFake.empty(10),
-          p: Uint8List(5),
-        );
+        final result = sut(n: SecureKeyFake.empty(10), p: Uint8List(5));
 
         expect(result.extractBytes(), q);
 
@@ -218,18 +169,11 @@ void main() {
 
       test('throws exception on failure', () {
         when(
-          () => mockSodium.crypto_scalarmult(
-            any(),
-            any(),
-            any(),
-          ),
+          () => mockSodium.crypto_scalarmult(any(), any(), any()),
         ).thenReturn(1);
 
         expect(
-          () => sut(
-            n: SecureKeyFake.empty(10),
-            p: Uint8List(5),
-          ),
+          () => sut(n: SecureKeyFake.empty(10), p: Uint8List(5)),
           throwsA(isA<SodiumException>()),
         );
 
