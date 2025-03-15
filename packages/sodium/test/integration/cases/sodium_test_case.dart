@@ -122,7 +122,7 @@ class SodiumTestCase extends TestCase {
           expect(secureKey.extractBytes(), testData);
 
           // read data
-          final resAsync = await secureKey.runUnlockedAsync((data) async {
+          final resAsync = await secureKey.runUnlockedAsync((data) {
             expect(data, testData);
             return Future.delayed(
               const Duration(milliseconds: 1),

@@ -497,8 +497,7 @@ void main() {
         verify(() => mockSink.triggerRekey());
       });
 
-      test('creates secret push stream that pipes items through the sink',
-          () async {
+      test('creates secret push stream that pipes items through the sink', () {
         late EventSink<SecretStreamCipherMessage> transformerSink;
         when(() => mockSink.init(any(), any())).thenAnswer((i) {
           transformerSink = i.positionalArguments.first

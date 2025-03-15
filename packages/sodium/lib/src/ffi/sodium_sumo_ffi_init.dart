@@ -49,13 +49,11 @@ abstract class SodiumSumoInit {
   /// required by [dart:ffi].
   static Future<SodiumSumo> initFromSodiumFFI(
     LibSodiumFFIFactory getSodium,
-  ) async =>
-      Future.value(
-        SodiumSumoFFI.fromFactory(() async {
-          final sodium = await getSodium();
-          final result = sodium.sodium_init();
-          SodiumException.checkSucceededInitInt(result);
-          return sodium;
-        }),
-      );
+  ) =>
+      SodiumSumoFFI.fromFactory(() async {
+        final sodium = await getSodium();
+        final result = sodium.sodium_init();
+        SodiumException.checkSucceededInitInt(result);
+        return sodium;
+      });
 }

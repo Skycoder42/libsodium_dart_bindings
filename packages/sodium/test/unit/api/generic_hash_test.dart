@@ -59,8 +59,7 @@ void main() {
           key: any(named: 'key'),
         ),
       ).thenReturn(mockConsumer);
-      when<dynamic>(() => mockConsumer.addStream(any()))
-          .thenAnswer((i) async {});
+      when<dynamic>(() => mockConsumer.addStream(any())).thenAnswer((i) {});
       when(() => mockConsumer.close()).thenAnswer((i) async => hash);
 
       final res = await sutMock.stream(

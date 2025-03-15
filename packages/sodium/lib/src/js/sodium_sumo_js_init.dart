@@ -28,7 +28,7 @@ abstract class SodiumSumoInit {
   /// library.
   static Future<SodiumSumo> init(
     FutureOr<dynamic> Function() getLibsodium,
-  ) async =>
+  ) =>
       initFromSodiumJS(
         () async => (await getLibsodium()) as LibSodiumJS,
       );

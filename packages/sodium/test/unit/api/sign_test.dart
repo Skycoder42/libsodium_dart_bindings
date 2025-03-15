@@ -76,8 +76,7 @@ void main() {
           secretKey: any(named: 'secretKey'),
         ),
       ).thenReturn(mockConsumer);
-      when<dynamic>(() => mockConsumer.addStream(any()))
-          .thenAnswer((i) async {});
+      when<dynamic>(() => mockConsumer.addStream(any())).thenAnswer((i) {});
       when(() => mockConsumer.close()).thenAnswer((i) async => signature);
 
       final res = await sutMock.stream(
@@ -110,8 +109,7 @@ void main() {
           signature: any(named: 'signature'),
         ),
       ).thenReturn(mockConsumer);
-      when<dynamic>(() => mockConsumer.addStream(any()))
-          .thenAnswer((i) async {});
+      when<dynamic>(() => mockConsumer.addStream(any())).thenAnswer((i) {});
       when(() => mockConsumer.close()).thenAnswer((i) async => true);
 
       final res = await sutMock.verifyStream(

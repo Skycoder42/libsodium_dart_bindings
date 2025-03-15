@@ -16,7 +16,7 @@ class JsSumoTestRunner extends SumoTestRunner with JsLoaderMixin {
   String get sodiumJsSrc => sodium_sumo_js.sodiumJsSrc;
 
   @override
-  Future<SodiumSumo> loadSodium() async => SodiumSumoInit.init(loadSodiumJs);
+  Future<SodiumSumo> loadSodium() => SodiumSumoInit.init(loadSodiumJs);
 }
 
 void main() {

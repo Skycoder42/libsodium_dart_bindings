@@ -384,7 +384,7 @@ void main() {
 
   test(
     'createTransferrableSecureKey creates a transferrable key',
-    () async {
+    () {
       mockAllocArray(mockSodium);
 
       final testBytes = [1, 3, 5, 7];
@@ -401,7 +401,7 @@ void main() {
   group('materializeTransferrableSecureKey', () {
     test(
       'restores the original key',
-      () async {
+      () {
         mockAllocArray(mockSodium);
 
         final transferBytes = Uint8List.fromList([2, 4, 6, 8]);
@@ -433,7 +433,7 @@ void main() {
 
   test(
     'createTransferrableKeyPair creates a transferrable key pair',
-    () async {
+    () {
       mockAllocArray(mockSodium);
 
       final testPublicBytes = [1, 3, 5, 7];
@@ -457,7 +457,7 @@ void main() {
   group('materializeTransferrableKeyPair', () {
     test(
       'restores the original key pair',
-      () async {
+      () {
         mockAllocArray(mockSodium);
 
         final transferPublicBytes = Uint8List.fromList([2, 4, 6, 8]);

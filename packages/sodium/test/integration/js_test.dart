@@ -16,7 +16,7 @@ class JsTestRunner extends TestRunner with JsLoaderMixin {
   String get sodiumJsSrc => sodium_js.sodiumJsSrc;
 
   @override
-  Future<Sodium> loadSodium() async => SodiumInit.init(loadSodiumJs);
+  Future<Sodium> loadSodium() => SodiumInit.init(loadSodiumJs);
 }
 
 void main() {

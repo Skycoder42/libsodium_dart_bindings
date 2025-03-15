@@ -24,7 +24,7 @@ mixin JsLoaderMixin {
   String get sodiumJsSrc;
 
   @protected
-  Future<LibSodiumJS> loadSodiumJs() async {
+  Future<LibSodiumJS> loadSodiumJs() {
     final completer = Completer<LibSodiumJS>();
 
     void onload(LibSodiumJS sodium) => completer.complete(sodium);

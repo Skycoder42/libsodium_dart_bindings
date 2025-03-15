@@ -479,8 +479,7 @@ void main() {
         verify(() => mockSink.triggerRekey());
       });
 
-      test('creates secret pull stream that pipes items through the sink',
-          () async {
+      test('creates secret pull stream that pipes items through the sink', () {
         late EventSink<SecretStreamPlainMessage> transformerSink;
         when(() => mockSink.init(any(), any())).thenAnswer((i) {
           transformerSink = i.positionalArguments.first

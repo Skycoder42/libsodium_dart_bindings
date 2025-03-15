@@ -31,7 +31,7 @@ void main() {
     when(() => mockSodium.sodium_init()).thenReturn(-1);
 
     expect(
-      () async => SodiumSumoInit.initFromSodiumFFI(() => mockSodium),
+      () async => await SodiumSumoInit.initFromSodiumFFI(() => mockSodium),
       throwsA(isA<SodiumException>()),
     );
   });

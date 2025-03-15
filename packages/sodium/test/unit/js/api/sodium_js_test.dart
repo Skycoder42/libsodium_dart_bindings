@@ -173,7 +173,7 @@ void main() {
       expect(isSodium, isTrue);
     });
 
-    test('prints warning and runs callback synchronously', () async {
+    test('prints warning and runs callback synchronously', () {
       final secureKey = SecureKeyJS(
         mockSodium.asLibSodiumJS,
         Uint8List.fromList(List.filled(10, 10)).toJS,
@@ -206,7 +206,8 @@ void main() {
       );
     });
 
-    test('isolateFactory creates factory that returns this', () async {
+    test('isolateFactory creates factory that returns this', () {
+      // ignore: discarded_futures
       expect(sut.isolateFactory(), completion(same(sut)));
     });
 

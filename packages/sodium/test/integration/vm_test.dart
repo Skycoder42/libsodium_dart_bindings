@@ -18,7 +18,7 @@ class VmTestRunner extends SumoTestRunner {
   bool get is32Bit => sizeOf<IntPtr>() == 4;
 
   @override
-  Future<SodiumSumo> loadSodium() async {
+  Future<SodiumSumo> loadSodium() {
     String libSodiumPath;
     if (Platform.isLinux) {
       libSodiumPath = 'test/integration/binaries/linux/lib/libsodium.so';
