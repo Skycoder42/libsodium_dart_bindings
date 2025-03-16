@@ -49,7 +49,7 @@ Future<dynamic> _initImpl() async {
         () =>
             throw Exception(
               'You must first download sodium.js from '
-              'https://github.com/jedisct1/libsodium.js/tree/master/dist/browsers '
+              'https://github.com/jedisct1/libsodium.js '
               'and place it in the web folder!',
             ),
   );
