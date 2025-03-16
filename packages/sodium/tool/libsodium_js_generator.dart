@@ -85,7 +85,7 @@ Future<void> _generate(Spec codeSpec, File outFile) async {
     await outSink.close();
   }
 
-  await Github.exec('dart', ['format', '--fix', outFile.path]);
+  await Github.exec('dart', ['format', outFile.path]);
   await Github.exec('dart', ['fix', '--apply', outFile.path]);
-  await Github.exec('dart', ['format', '--fix', outFile.path]);
+  await Github.exec('dart', ['format', outFile.path]);
 }

@@ -1,6 +1,6 @@
 name: sodium
 description: Dart bindings for libsodium, for the Dart-VM and for the Web
-version: 3.4.4
+version: 3.4.5
 homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
@@ -39,7 +39,7 @@ ffigen:
     entry-points:
       - "test/integration/binaries/linux/include/sodium.h"
   compiler-opts:
-    - "-I/usr/lib/clang/18/include/"
+    - "-I/usr/lib/clang/19/include/"
   exclude-all-by-default: true
   macros:
     include:
