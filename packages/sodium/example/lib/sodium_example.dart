@@ -43,9 +43,7 @@ Future<void> simpleFileEncryption(
         key: secretKey,
         chunkSize: chunkSize,
       )
-      .pipe(
-        File(cipher).openWrite(),
-      );
+      .pipe(File(cipher).openWrite());
 
   // decryption
   await sodium.crypto.secretStream
@@ -54,7 +52,5 @@ Future<void> simpleFileEncryption(
         key: secretKey,
         chunkSize: chunkSize,
       )
-      .pipe(
-        File(plain).openWrite(),
-      );
+      .pipe(File(plain).openWrite());
 }

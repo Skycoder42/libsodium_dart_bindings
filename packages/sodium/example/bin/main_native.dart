@@ -9,9 +9,7 @@ import '../lib/sodium_example.dart';
 
 Future<void> main(List<String> arguments) async {
   if (arguments.isEmpty) {
-    stderr.writeln(
-      'Usage: main_native.dart <path_to_libsodium.[dll|so|dylib]',
-    );
+    stderr.writeln('Usage: main_native.dart <path_to_libsodium.[dll|so|dylib]');
     exit(1);
   }
 

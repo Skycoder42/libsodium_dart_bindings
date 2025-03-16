@@ -2147,10 +2147,10 @@ class LibSodiumFFI {
 
   int crypto_hash_sha512(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_hash_sha512(out, in1, inlen);
+    return _crypto_hash_sha512(out, in$, inlen);
   }
 
   late final _crypto_hash_sha512Ptr = _lookup<
@@ -2185,10 +2185,10 @@ class LibSodiumFFI {
 
   int crypto_hash_sha512_update(
     ffi.Pointer<crypto_hash_sha512_state> state,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_hash_sha512_update(state, in1, inlen);
+    return _crypto_hash_sha512_update(state, in$, inlen);
   }
 
   late final _crypto_hash_sha512_updatePtr = _lookup<
@@ -2258,11 +2258,11 @@ class LibSodiumFFI {
 
   int crypto_auth_hmacsha512(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_auth_hmacsha512(out, in1, inlen, k);
+    return _crypto_auth_hmacsha512(out, in$, inlen, k);
   }
 
   late final _crypto_auth_hmacsha512Ptr = _lookup<
@@ -2288,11 +2288,11 @@ class LibSodiumFFI {
 
   int crypto_auth_hmacsha512_verify(
     ffi.Pointer<ffi.UnsignedChar> h,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_auth_hmacsha512_verify(h, in1, inlen, k);
+    return _crypto_auth_hmacsha512_verify(h, in$, inlen, k);
   }
 
   late final _crypto_auth_hmacsha512_verifyPtr = _lookup<
@@ -2356,10 +2356,10 @@ class LibSodiumFFI {
 
   int crypto_auth_hmacsha512_update(
     ffi.Pointer<crypto_auth_hmacsha512_state> state,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_auth_hmacsha512_update(state, in1, inlen);
+    return _crypto_auth_hmacsha512_update(state, in$, inlen);
   }
 
   late final _crypto_auth_hmacsha512_updatePtr = _lookup<
@@ -2440,11 +2440,11 @@ class LibSodiumFFI {
 
   int crypto_auth_hmacsha512256(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_auth_hmacsha512256(out, in1, inlen, k);
+    return _crypto_auth_hmacsha512256(out, in$, inlen, k);
   }
 
   late final _crypto_auth_hmacsha512256Ptr = _lookup<
@@ -2470,11 +2470,11 @@ class LibSodiumFFI {
 
   int crypto_auth_hmacsha512256_verify(
     ffi.Pointer<ffi.UnsignedChar> h,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_auth_hmacsha512256_verify(h, in1, inlen, k);
+    return _crypto_auth_hmacsha512256_verify(h, in$, inlen, k);
   }
 
   late final _crypto_auth_hmacsha512256_verifyPtr = _lookup<
@@ -2538,10 +2538,10 @@ class LibSodiumFFI {
 
   int crypto_auth_hmacsha512256_update(
     ffi.Pointer<crypto_auth_hmacsha512256_state> state,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_auth_hmacsha512256_update(state, in1, inlen);
+    return _crypto_auth_hmacsha512256_update(state, in$, inlen);
   }
 
   late final _crypto_auth_hmacsha512256_updatePtr = _lookup<
@@ -2629,11 +2629,11 @@ class LibSodiumFFI {
 
   int crypto_auth(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_auth(out, in1, inlen, k);
+    return _crypto_auth(out, in$, inlen, k);
   }
 
   late final _crypto_authPtr = _lookup<
@@ -2659,11 +2659,11 @@ class LibSodiumFFI {
 
   int crypto_auth_verify(
     ffi.Pointer<ffi.UnsignedChar> h,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_auth_verify(h, in1, inlen, k);
+    return _crypto_auth_verify(h, in$, inlen, k);
   }
 
   late final _crypto_auth_verifyPtr = _lookup<
@@ -2722,10 +2722,10 @@ class LibSodiumFFI {
 
   int crypto_hash_sha256(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_hash_sha256(out, in1, inlen);
+    return _crypto_hash_sha256(out, in$, inlen);
   }
 
   late final _crypto_hash_sha256Ptr = _lookup<
@@ -2760,10 +2760,10 @@ class LibSodiumFFI {
 
   int crypto_hash_sha256_update(
     ffi.Pointer<crypto_hash_sha256_state> state,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_hash_sha256_update(state, in1, inlen);
+    return _crypto_hash_sha256_update(state, in$, inlen);
   }
 
   late final _crypto_hash_sha256_updatePtr = _lookup<
@@ -2833,11 +2833,11 @@ class LibSodiumFFI {
 
   int crypto_auth_hmacsha256(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_auth_hmacsha256(out, in1, inlen, k);
+    return _crypto_auth_hmacsha256(out, in$, inlen, k);
   }
 
   late final _crypto_auth_hmacsha256Ptr = _lookup<
@@ -2863,11 +2863,11 @@ class LibSodiumFFI {
 
   int crypto_auth_hmacsha256_verify(
     ffi.Pointer<ffi.UnsignedChar> h,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_auth_hmacsha256_verify(h, in1, inlen, k);
+    return _crypto_auth_hmacsha256_verify(h, in$, inlen, k);
   }
 
   late final _crypto_auth_hmacsha256_verifyPtr = _lookup<
@@ -2931,10 +2931,10 @@ class LibSodiumFFI {
 
   int crypto_auth_hmacsha256_update(
     ffi.Pointer<crypto_auth_hmacsha256_state> state,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_auth_hmacsha256_update(state, in1, inlen);
+    return _crypto_auth_hmacsha256_update(state, in$, inlen);
   }
 
   late final _crypto_auth_hmacsha256_updatePtr = _lookup<
@@ -4188,11 +4188,11 @@ class LibSodiumFFI {
 
   int crypto_core_hchacha20(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     ffi.Pointer<ffi.UnsignedChar> k,
     ffi.Pointer<ffi.UnsignedChar> c,
   ) {
-    return _crypto_core_hchacha20(out, in1, k, c);
+    return _crypto_core_hchacha20(out, in$, k, c);
   }
 
   late final _crypto_core_hchacha20Ptr = _lookup<
@@ -4262,11 +4262,11 @@ class LibSodiumFFI {
 
   int crypto_core_hsalsa20(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     ffi.Pointer<ffi.UnsignedChar> k,
     ffi.Pointer<ffi.UnsignedChar> c,
   ) {
-    return _crypto_core_hsalsa20(out, in1, k, c);
+    return _crypto_core_hsalsa20(out, in$, k, c);
   }
 
   late final _crypto_core_hsalsa20Ptr = _lookup<
@@ -4336,11 +4336,11 @@ class LibSodiumFFI {
 
   int crypto_core_salsa20(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     ffi.Pointer<ffi.UnsignedChar> k,
     ffi.Pointer<ffi.UnsignedChar> c,
   ) {
-    return _crypto_core_salsa20(out, in1, k, c);
+    return _crypto_core_salsa20(out, in$, k, c);
   }
 
   late final _crypto_core_salsa20Ptr = _lookup<
@@ -4410,11 +4410,11 @@ class LibSodiumFFI {
 
   int crypto_core_salsa2012(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     ffi.Pointer<ffi.UnsignedChar> k,
     ffi.Pointer<ffi.UnsignedChar> c,
   ) {
-    return _crypto_core_salsa2012(out, in1, k, c);
+    return _crypto_core_salsa2012(out, in$, k, c);
   }
 
   late final _crypto_core_salsa2012Ptr = _lookup<
@@ -4484,11 +4484,11 @@ class LibSodiumFFI {
 
   int crypto_core_salsa208(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     ffi.Pointer<ffi.UnsignedChar> k,
     ffi.Pointer<ffi.UnsignedChar> c,
   ) {
-    return _crypto_core_salsa208(out, in1, k, c);
+    return _crypto_core_salsa208(out, in$, k, c);
   }
 
   late final _crypto_core_salsa208Ptr = _lookup<
@@ -4614,12 +4614,12 @@ class LibSodiumFFI {
   int crypto_generichash_blake2b(
     ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
   ) {
-    return _crypto_generichash_blake2b(out, outlen, in1, inlen, key, keylen);
+    return _crypto_generichash_blake2b(out, outlen, in$, inlen, key, keylen);
   }
 
   late final _crypto_generichash_blake2bPtr = _lookup<
@@ -4650,7 +4650,7 @@ class LibSodiumFFI {
   int crypto_generichash_blake2b_salt_personal(
     ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
@@ -4660,7 +4660,7 @@ class LibSodiumFFI {
     return _crypto_generichash_blake2b_salt_personal(
       out,
       outlen,
-      in1,
+      in$,
       inlen,
       key,
       keylen,
@@ -4773,10 +4773,10 @@ class LibSodiumFFI {
 
   int crypto_generichash_blake2b_update(
     ffi.Pointer<crypto_generichash_blake2b_state> state,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_generichash_blake2b_update(state, in1, inlen);
+    return _crypto_generichash_blake2b_update(state, in$, inlen);
   }
 
   late final _crypto_generichash_blake2b_updatePtr = _lookup<
@@ -4928,12 +4928,12 @@ class LibSodiumFFI {
   int crypto_generichash(
     ffi.Pointer<ffi.UnsignedChar> out,
     int outlen,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> key,
     int keylen,
   ) {
-    return _crypto_generichash(out, outlen, in1, inlen, key, keylen);
+    return _crypto_generichash(out, outlen, in$, inlen, key, keylen);
   }
 
   late final _crypto_generichashPtr = _lookup<
@@ -4993,10 +4993,10 @@ class LibSodiumFFI {
 
   int crypto_generichash_update(
     ffi.Pointer<crypto_generichash_state> state,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_generichash_update(state, in1, inlen);
+    return _crypto_generichash_update(state, in$, inlen);
   }
 
   late final _crypto_generichash_updatePtr = _lookup<
@@ -5067,10 +5067,10 @@ class LibSodiumFFI {
 
   int crypto_hash(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_hash(out, in1, inlen);
+    return _crypto_hash(out, in$, inlen);
   }
 
   late final _crypto_hashPtr = _lookup<
@@ -5894,11 +5894,11 @@ class LibSodiumFFI {
 
   int crypto_onetimeauth_poly1305(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_onetimeauth_poly1305(out, in1, inlen, k);
+    return _crypto_onetimeauth_poly1305(out, in$, inlen, k);
   }
 
   late final _crypto_onetimeauth_poly1305Ptr = _lookup<
@@ -5924,11 +5924,11 @@ class LibSodiumFFI {
 
   int crypto_onetimeauth_poly1305_verify(
     ffi.Pointer<ffi.UnsignedChar> h,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_onetimeauth_poly1305_verify(h, in1, inlen, k);
+    return _crypto_onetimeauth_poly1305_verify(h, in$, inlen, k);
   }
 
   late final _crypto_onetimeauth_poly1305_verifyPtr = _lookup<
@@ -5978,10 +5978,10 @@ class LibSodiumFFI {
 
   int crypto_onetimeauth_poly1305_update(
     ffi.Pointer<crypto_onetimeauth_poly1305_state> state,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_onetimeauth_poly1305_update(state, in1, inlen);
+    return _crypto_onetimeauth_poly1305_update(state, in$, inlen);
   }
 
   late final _crypto_onetimeauth_poly1305_updatePtr = _lookup<
@@ -6085,11 +6085,11 @@ class LibSodiumFFI {
 
   int crypto_onetimeauth(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_onetimeauth(out, in1, inlen, k);
+    return _crypto_onetimeauth(out, in$, inlen, k);
   }
 
   late final _crypto_onetimeauthPtr = _lookup<
@@ -6115,11 +6115,11 @@ class LibSodiumFFI {
 
   int crypto_onetimeauth_verify(
     ffi.Pointer<ffi.UnsignedChar> h,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_onetimeauth_verify(h, in1, inlen, k);
+    return _crypto_onetimeauth_verify(h, in$, inlen, k);
   }
 
   late final _crypto_onetimeauth_verifyPtr = _lookup<
@@ -6169,10 +6169,10 @@ class LibSodiumFFI {
 
   int crypto_onetimeauth_update(
     ffi.Pointer<crypto_onetimeauth_state> state,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
   ) {
-    return _crypto_onetimeauth_update(state, in1, inlen);
+    return _crypto_onetimeauth_update(state, in$, inlen);
   }
 
   late final _crypto_onetimeauth_updatePtr = _lookup<
@@ -8504,11 +8504,11 @@ class LibSodiumFFI {
 
   int crypto_shorthash_siphash24(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_shorthash_siphash24(out, in1, inlen, k);
+    return _crypto_shorthash_siphash24(out, in$, inlen, k);
   }
 
   late final _crypto_shorthash_siphash24Ptr = _lookup<
@@ -8556,11 +8556,11 @@ class LibSodiumFFI {
 
   int crypto_shorthash_siphashx24(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_shorthash_siphashx24(out, in1, inlen, k);
+    return _crypto_shorthash_siphashx24(out, in$, inlen, k);
   }
 
   late final _crypto_shorthash_siphashx24Ptr = _lookup<
@@ -8620,11 +8620,11 @@ class LibSodiumFFI {
 
   int crypto_shorthash(
     ffi.Pointer<ffi.UnsignedChar> out,
-    ffi.Pointer<ffi.UnsignedChar> in1,
+    ffi.Pointer<ffi.UnsignedChar> in$,
     int inlen,
     ffi.Pointer<ffi.UnsignedChar> k,
   ) {
-    return _crypto_shorthash(out, in1, inlen, k);
+    return _crypto_shorthash(out, in$, inlen, k);
   }
 
   late final _crypto_shorthashPtr = _lookup<
