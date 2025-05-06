@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.4+4] - 2025-05-06
+### Changed
+- Updated embedded libsodium binaries
+
 ## [3.4.4+3] - 2025-04-29
 ### Changed
 - Updated embedded libsodium binaries
@@ -407,6 +411,7 @@ the page
 ### Added
 - Initial stable release
 
+[3.4.4+4]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.4.4+3...sodium_libs-v3.4.4+4
 [3.4.4+3]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.4.4+2...sodium_libs-v3.4.4+3
 [3.4.4+2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.4.4+1...sodium_libs-v3.4.4+2
 [3.4.4+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.4.4...sodium_libs-v3.4.4+1
