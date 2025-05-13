@@ -62,7 +62,7 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
 target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
-if(DEFINED ENV{LIBETEBASE_USE_PKGCONFIG})
+if(DEFINED ENV{LIBSODIUM_USE_PKGCONFIG})
   target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::SODIUM)
 else()
   target_link_libraries(${PLUGIN_NAME} PRIVATE sodium)
@@ -71,7 +71,7 @@ endif()
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
-if(DEFINED ENV{LIBETEBASE_USE_PKGCONFIG})
+if(DEFINED ENV{LIBSODIUM_USE_PKGCONFIG})
   set(sodium_libs_bundled_libraries
     ""
     PARENT_SCOPE
