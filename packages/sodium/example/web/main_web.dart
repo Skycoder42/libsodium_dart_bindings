@@ -17,7 +17,8 @@ Future<void> main() async {
   final message = "Hello, World!";
   final cipher = runSample(sodium, message);
 
-  querySelector('#output')!.innerHtml = 'Sodium Version: ${sodium.version}<br/>'
+  querySelector('#output')!.innerHtml =
+      'Sodium Version: ${sodium.version}<br/>'
       'Plain text: $message<br/>'
       'Secret box cipher:$cipher';
 }
@@ -29,9 +30,7 @@ Future<dynamic> _initImpl() async {
   setProperty(
     window,
     'sodium',
-    SodiumBrowserInit(
-      onload: allowInterop(completer.complete),
-    ),
+    SodiumBrowserInit(onload: allowInterop(completer.complete)),
   );
   print('> setup window');
 

@@ -13,7 +13,8 @@ import 'package:sodium_libs_example/main.dart' show MyApp;
 import '../../../sodium/test/integration/test_runner.dart';
 
 import 'arch_detection_fallback.dart'
-    if (dart.library.ffi) 'arch_detection_ffi.dart' as arch;
+    if (dart.library.ffi) 'arch_detection_ffi.dart'
+    as arch;
 
 class FlutterTestRunner extends SumoTestRunner {
   @override
@@ -33,26 +34,17 @@ class FlutterTestRunner extends SumoTestRunner {
     String description,
     dynamic Function(Sodium sodium) body, {
     bool? skip,
-  }) =>
-      ft.testWidgets(
-        description,
-        skip: skip,
-        (tester) async => body(sodium),
-      );
+  }) => ft.testWidgets(description, skip: skip, (tester) async => body(sodium));
 
   @override
   void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
-      ft.testWidgets(
-        description,
-        (tester) async => body(sodium),
-      );
+      ft.testWidgets(description, (tester) async => body(sodium));
 
   @override
   Future<T> ioCompute<T, M>(
     FutureOr<T> Function(M message) callback,
     M message,
-  ) =>
-      compute(callback, message);
+  ) => compute(callback, message);
 }
 
 void main() {
