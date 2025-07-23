@@ -105,7 +105,8 @@ class SodiumJS implements Sodium {
   }
 
   @override
-  SodiumFactory get isolateFactory => () => Future.value(this);
+  SodiumFactory get isolateFactory =>
+      () => Future.value(this);
 
   @override
   TransferrableSecureKey createTransferrableSecureKey(SecureKey secureKey) =>

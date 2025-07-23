@@ -13,6 +13,6 @@ typedef SecureNullableCallbackFn<T> = T Function(Uint8List? data);
 extension SecureKeyNullableX on SecureKey? {
   T runMaybeUnlockedSync<T>(SecureNullableCallbackFn<T> callback) =>
       this != null
-          ? this!.runUnlockedSync((data) => callback(data))
-          : callback(null);
+      ? this!.runUnlockedSync((data) => callback(data))
+      : callback(null);
 }

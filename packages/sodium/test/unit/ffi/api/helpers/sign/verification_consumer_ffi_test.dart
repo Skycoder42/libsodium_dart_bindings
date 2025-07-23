@@ -42,12 +42,11 @@ void main() {
   group('constructor', () {
     initStateTests(
       mockSodium: mockSodium,
-      createSut:
-          () => VerificationConsumerFFI(
-            sodium: mockSodium,
-            publicKey: publicKey,
-            signature: signature,
-          ),
+      createSut: () => VerificationConsumerFFI(
+        sodium: mockSodium,
+        publicKey: publicKey,
+        signature: signature,
+      ),
     );
   });
 

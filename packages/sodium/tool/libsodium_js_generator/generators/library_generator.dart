@@ -15,12 +15,11 @@ final class LibraryGenerator extends SpecGenerator<Library> {
 
   @override
   Library build() => Library(
-    (b) =>
-        b
-          ..ignoreForFile.add('non_constant_identifier_names')
-          ..ignoreForFile.add('public_member_api_docs')
-          ..directives.add(Directive.import('dart:js_interop'))
-          ..body.addAll(_buildBody()),
+    (b) => b
+      ..ignoreForFile.add('non_constant_identifier_names')
+      ..ignoreForFile.add('public_member_api_docs')
+      ..directives.add(Directive.import('dart:js_interop'))
+      ..body.addAll(_buildBody()),
   );
 
   Iterable<Spec> _buildBody() sync* {

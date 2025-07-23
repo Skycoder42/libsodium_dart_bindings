@@ -166,10 +166,9 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
   Never _throwFinalized() =>
       throw StateError('Transformer has already received the final message');
 
-  Never _throwClosed() =>
-      throw StateError(
-        'Transformer has not been initialized or was already closed',
-      );
+  Never _throwClosed() => throw StateError(
+    'Transformer has not been initialized or was already closed',
+  );
 }
 
 /// @nodoc
@@ -204,10 +203,11 @@ abstract class SecretStreamPushTransformer<TState extends Object>
   }
 
   @override
-  StreamTransformer<RS, RT> cast<RS, RT>() => StreamTransformer.castFrom<
-    SecretStreamPlainMessage,
-    SecretStreamCipherMessage,
-    RS,
-    RT
-  >(this);
+  StreamTransformer<RS, RT> cast<RS, RT>() =>
+      StreamTransformer.castFrom<
+        SecretStreamPlainMessage,
+        SecretStreamCipherMessage,
+        RS,
+        RT
+      >(this);
 }

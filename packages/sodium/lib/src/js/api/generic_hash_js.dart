@@ -57,14 +57,9 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
 
     return jsErrorWrap(
       () => key.runMaybeUnlockedSync(
-        (keyData) =>
-            sodium
-                .crypto_generichash(
-                  outLen ?? bytes,
-                  message.toJS,
-                  keyData?.toJS,
-                )
-                .toDart,
+        (keyData) => sodium
+            .crypto_generichash(outLen ?? bytes, message.toJS, keyData?.toJS)
+            .toDart,
       ),
     );
   }

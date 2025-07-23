@@ -30,5 +30,6 @@ class SodiumSumoJS extends SodiumJS implements SodiumSumo {
   );
 
   @override
-  SodiumSumoFactory get isolateFactory => () => Future.value(this);
+  SodiumSumoFactory get isolateFactory =>
+      () => Future.value(this);
 }

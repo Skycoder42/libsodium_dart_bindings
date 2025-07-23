@@ -500,8 +500,8 @@ void main() {
     });
 
     test('cast returns transformed instance', () {
-      final castTransformer =
-          sut.cast<SecretStreamPlainMessage, SecretStreamCipherMessage>();
+      final castTransformer = sut
+          .cast<SecretStreamPlainMessage, SecretStreamCipherMessage>();
       expect(castTransformer, isNotNull);
     });
   });

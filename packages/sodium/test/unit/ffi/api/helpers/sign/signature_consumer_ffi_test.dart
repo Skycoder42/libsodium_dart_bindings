@@ -70,11 +70,8 @@ void main() {
 
     initStateTests(
       mockSodium: mockSodium,
-      createSut:
-          () => SignatureConsumerFFI(
-            sodium: mockSodium,
-            secretKey: mockSecretKey,
-          ),
+      createSut: () =>
+          SignatureConsumerFFI(sodium: mockSodium, secretKey: mockSecretKey),
       setUp: () {
         when(() => mockSecretKey.copy()).thenReturn(SecureKeyFake.empty(0));
       },

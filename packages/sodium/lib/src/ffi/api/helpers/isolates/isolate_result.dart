@@ -3,9 +3,7 @@ import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-// ignore: unused_import
 import '../../../../api/key_pair.dart';
-// ignore: unused_import
 import '../../../../api/secure_key.dart';
 import '../../sodium_ffi.dart';
 import 'transferrable_key_pair_ffi.dart';

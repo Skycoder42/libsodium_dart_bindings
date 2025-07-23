@@ -113,10 +113,9 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
     SodiumPointer<UnsignedChar>? noncePtr;
     SodiumPointer<UnsignedChar>? adPtr;
     try {
-      dataPtr =
-          SodiumPointer.alloc(sodium, count: message.length + aBytes)
-            ..fill(message)
-            ..fill(List<int>.filled(aBytes, 0), offset: message.length);
+      dataPtr = SodiumPointer.alloc(sodium, count: message.length + aBytes)
+        ..fill(message)
+        ..fill(List<int>.filled(aBytes, 0), offset: message.length);
       noncePtr = nonce.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,

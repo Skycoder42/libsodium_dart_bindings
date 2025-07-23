@@ -13,9 +13,8 @@ final class TypedefGenerator extends SpecGenerator<TypeDef> {
 
   @override
   TypeDef build() => TypeDef(
-    (b) =>
-        b
-          ..name = name
-          ..definition = Types.named(type),
+    (b) => b
+      ..name = name
+      ..definition = Types.named(type),
   );
 }

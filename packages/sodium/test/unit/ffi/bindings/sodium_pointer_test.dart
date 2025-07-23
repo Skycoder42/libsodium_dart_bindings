@@ -280,18 +280,17 @@ void main() {
           throwsA(isA<Exception>()),
         );
 
-        final captured =
-            verifyInOrder([
-              () => mockSodium.sodium_allocarray(10, 1),
-              () => mockSodiumFinalizer.attach(
-                captureAny(),
-                fakePtr.cast(),
-                sizeOf<Uint8>() * 10,
-              ),
-              () => mockSodium.sodium_mprotect_noaccess(fakePtr.cast()),
-              () => mockSodiumFinalizer.detach(captureAny()),
-              () => mockSodium.sodium_free(fakePtr.cast()),
-            ]).captured.expand<dynamic>((c) => c).toList();
+        final captured = verifyInOrder([
+          () => mockSodium.sodium_allocarray(10, 1),
+          () => mockSodiumFinalizer.attach(
+            captureAny(),
+            fakePtr.cast(),
+            sizeOf<Uint8>() * 10,
+          ),
+          () => mockSodium.sodium_mprotect_noaccess(fakePtr.cast()),
+          () => mockSodiumFinalizer.detach(captureAny()),
+          () => mockSodium.sodium_free(fakePtr.cast()),
+        ]).captured.expand<dynamic>((c) => c).toList();
         expect(captured, hasLength(2));
         expect(captured[0], same(captured[1]));
       });
@@ -558,10 +557,9 @@ void main() {
           expect(view.ptr, Pointer.fromAddress(fixture.$3));
           expect(view.count, fixture.$4);
         },
-        fixtureToString:
-            (fixture) =>
-                '(offset: ${fixture.$1}, length: ${fixture.$2}) '
-                '-> (address: ${fixture.$3}, count: ${fixture.$4})',
+        fixtureToString: (fixture) =>
+            '(offset: ${fixture.$1}, length: ${fixture.$2}) '
+            '-> (address: ${fixture.$3}, count: ${fixture.$4})',
       );
 
       test('dispose does not free views and does not detach', () {
@@ -622,10 +620,9 @@ void main() {
 
           expect(sut.asListView(), fixture.$3);
         },
-        fixtureToString:
-            (fixture) =>
-                '(data: ${fixture.$1}, offset: ${fixture.$2}) '
-                '-> ${fixture.$3}',
+        fixtureToString: (fixture) =>
+            '(data: ${fixture.$1}, offset: ${fixture.$2}) '
+            '-> ${fixture.$3}',
       );
     });
 

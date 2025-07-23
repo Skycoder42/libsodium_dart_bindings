@@ -36,23 +36,21 @@ final class TestLibSodiumJsGenerator extends SpecGenerator<Class>
 
   @override
   Class build() => Class(
-    (b) =>
-        b
-          ..name = 'MockLibSodiumJS'
-          ..extend = Types.named('Mock')
-          ..implements.add(Types.named('_MockLibSodiumJS'))
-          ..annotations.add(Types.named('JSExport').newInstance(const []))
-          ..methods.add(_buildCast()),
+    (b) => b
+      ..name = 'MockLibSodiumJS'
+      ..extend = Types.named('Mock')
+      ..implements.add(Types.named('_MockLibSodiumJS'))
+      ..annotations.add(Types.named('JSExport').newInstance(const []))
+      ..methods.add(_buildCast()),
   );
 
   @protected
   Class buildInterface() => Class(
-    (b) =>
-        b
-          ..name = '_MockLibSodiumJS'
-          ..abstract = true
-          ..annotations.add(Types.named('JSExport').newInstance(const []))
-          ..methods.addAll(_buildMethods()),
+    (b) => b
+      ..name = '_MockLibSodiumJS'
+      ..abstract = true
+      ..annotations.add(Types.named('JSExport').newInstance(const []))
+      ..methods.addAll(_buildMethods()),
   );
 
   Iterable<Method> _buildMethods() sync* {
@@ -75,19 +73,17 @@ final class TestLibSodiumJsGenerator extends SpecGenerator<Class>
   }
 
   Method _buildCast() => Method(
-    (b) =>
-        b
-          ..name = 'asLibSodiumJS'
-          ..type = MethodType.getter
-          ..returns = Types.named('LibSodiumJS')
-          ..body =
-              const Reference('createJSInteropWrapper')
-                  .call(
-                    const [Reference('this')],
-                    const {},
-                    [Types.named('MockLibSodiumJS')],
-                  )
-                  .asA(Types.named('LibSodiumJS'))
-                  .code,
+    (b) => b
+      ..name = 'asLibSodiumJS'
+      ..type = MethodType.getter
+      ..returns = Types.named('LibSodiumJS')
+      ..body = const Reference('createJSInteropWrapper')
+          .call(
+            const [Reference('this')],
+            const {},
+            [Types.named('MockLibSodiumJS')],
+          )
+          .asA(Types.named('LibSodiumJS'))
+          .code,
   );
 }

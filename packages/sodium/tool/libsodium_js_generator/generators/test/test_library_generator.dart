@@ -13,16 +13,15 @@ final class TestLibraryGenerator extends SpecGenerator<Library> {
 
   @override
   Library build() => Library(
-    (b) =>
-        b
-          ..ignoreForFile.add('non_constant_identifier_names')
-          ..ignoreForFile.add('public_member_api_docs')
-          ..directives.add(Directive.import('dart:js_interop'))
-          ..directives.add(Directive.import('package:mocktail/mocktail.dart'))
-          ..directives.add(
-            Directive.import('package:sodium/src/js/bindings/sodium.js.dart'),
-          )
-          ..body.addAll(_buildBody()),
+    (b) => b
+      ..ignoreForFile.add('non_constant_identifier_names')
+      ..ignoreForFile.add('public_member_api_docs')
+      ..directives.add(Directive.import('dart:js_interop'))
+      ..directives.add(Directive.import('package:mocktail/mocktail.dart'))
+      ..directives.add(
+        Directive.import('package:sodium/src/js/bindings/sodium.js.dart'),
+      )
+      ..body.addAll(_buildBody()),
   );
 
   Iterable<Spec> _buildBody() sync* {

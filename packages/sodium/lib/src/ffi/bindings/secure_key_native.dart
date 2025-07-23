@@ -55,8 +55,9 @@ extension SecureKeySafeCastX on SecureKey {
   }) => runUnlockedSync((data) {
     final ptr = data.toSodiumPointer<UnsignedChar>(
       sodium,
-      memoryProtection:
-          writable ? MemoryProtection.readWrite : MemoryProtection.readOnly,
+      memoryProtection: writable
+          ? MemoryProtection.readWrite
+          : MemoryProtection.readOnly,
     );
     try {
       final result = callback(ptr);

@@ -95,10 +95,9 @@ class SignJS with SignValidations implements Sign {
 
     return jsErrorWrap(
       () => secretKey.runUnlockedSync(
-        (secretKeyData) =>
-            sodium
-                .crypto_sign_detached(message.toJS, secretKeyData.toJS)
-                .toDart,
+        (secretKeyData) => sodium
+            .crypto_sign_detached(message.toJS, secretKeyData.toJS)
+            .toDart,
       ),
     );
   }

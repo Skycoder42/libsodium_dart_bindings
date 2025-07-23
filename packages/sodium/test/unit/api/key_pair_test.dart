@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_lambdas
-
 import 'dart:typed_data';
 
 import 'package:sodium/src/api/key_pair.dart';

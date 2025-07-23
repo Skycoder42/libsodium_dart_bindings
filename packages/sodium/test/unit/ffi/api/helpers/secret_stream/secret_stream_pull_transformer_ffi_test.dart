@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_lambdas, invalid_use_of_protected_member
+// ignore_for_file: unnecessary_lambdas
 
 @TestOn('dart-vm')
 library;

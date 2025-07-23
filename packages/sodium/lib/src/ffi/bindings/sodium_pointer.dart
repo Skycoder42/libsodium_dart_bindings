@@ -413,9 +413,8 @@ extension SodiumString on String {
     toCharArray(
       memoryWidth: memoryWidth,
       zeroTerminated: zeroTerminated,
-      allocator:
-          (length) =>
-              (ptr = SodiumPointer.alloc(sodium, count: length)).asListView(),
+      allocator: (length) =>
+          (ptr = SodiumPointer.alloc(sodium, count: length)).asListView(),
     );
     ptr.memoryProtection = memoryProtection;
     return ptr;

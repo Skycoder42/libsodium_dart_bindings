@@ -74,8 +74,9 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     bool writable = false,
   }) {
     try {
-      _raw.memoryProtection =
-          writable ? MemoryProtection.readWrite : MemoryProtection.readOnly;
+      _raw.memoryProtection = writable
+          ? MemoryProtection.readWrite
+          : MemoryProtection.readOnly;
       return callback(_raw);
     } finally {
       _raw.memoryProtection = MemoryProtection.noAccess;
@@ -95,8 +96,9 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     bool writable = false,
   }) async {
     try {
-      _raw.memoryProtection =
-          writable ? MemoryProtection.readWrite : MemoryProtection.readOnly;
+      _raw.memoryProtection = writable
+          ? MemoryProtection.readWrite
+          : MemoryProtection.readOnly;
       return await callback(_raw.asListView());
     } finally {
       _raw.memoryProtection = MemoryProtection.noAccess;

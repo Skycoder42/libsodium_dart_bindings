@@ -30,14 +30,13 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) =>
-            internalEncrypt(
-              message.toJS,
-              additionalData?.toJS,
-              null,
-              nonce.toJS,
-              keyData.toJS,
-            ).toDart,
+        (keyData) => internalEncrypt(
+          message.toJS,
+          additionalData?.toJS,
+          null,
+          nonce.toJS,
+          keyData.toJS,
+        ).toDart,
       ),
     );
   }
@@ -55,14 +54,13 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) =>
-            internalDecrypt(
-              null,
-              cipherText.toJS,
-              additionalData?.toJS,
-              nonce.toJS,
-              keyData.toJS,
-            ).toDart,
+        (keyData) => internalDecrypt(
+          null,
+          cipherText.toJS,
+          additionalData?.toJS,
+          nonce.toJS,
+          keyData.toJS,
+        ).toDart,
       ),
     );
   }
@@ -109,15 +107,14 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
 
     return jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) =>
-            internalDecryptDetached(
-              null,
-              cipherText.toJS,
-              mac.toJS,
-              additionalData?.toJS,
-              nonce.toJS,
-              keyData.toJS,
-            ).toDart,
+        (keyData) => internalDecryptDetached(
+          null,
+          cipherText.toJS,
+          mac.toJS,
+          additionalData?.toJS,
+          nonce.toJS,
+          keyData.toJS,
+        ).toDart,
       ),
     );
   }

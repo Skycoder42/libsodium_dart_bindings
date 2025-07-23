@@ -20,7 +20,6 @@ class CryptoSumoFFI extends CryptoFFI implements CryptoSumo {
   late final SignSumo sign = SignSumoFFI(sodium);
 
   @override
-  // ignore: overridden_fields
   late final Pwhash pwhash = PwhashFFI(sodium);
 
   @override

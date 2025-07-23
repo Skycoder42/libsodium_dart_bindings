@@ -218,14 +218,12 @@ class SodiumFFI implements Sodium {
     SodiumFFIIsolateCallback<TResult, TSodiumFFI> callback,
   ) async => await Isolate.run(debugName: 'SodiumFFI.runIsolated', () async {
     final sodium = await fromFactory(sodiumFactory);
-    final restoredSecureKeys =
-        transferableSecureKeys
-            .map((transferKey) => transferKey.toSecureKey(sodium))
-            .toList();
-    final restoredKeyPairs =
-        transferableKeyPairs
-            .map((transferKeyPair) => transferKeyPair.toKeyPair(sodium))
-            .toList();
+    final restoredSecureKeys = transferableSecureKeys
+        .map((transferKey) => transferKey.toSecureKey(sodium))
+        .toList();
+    final restoredKeyPairs = transferableKeyPairs
+        .map((transferKeyPair) => transferKeyPair.toKeyPair(sodium))
+        .toList();
 
     try {
       final result = await callback(

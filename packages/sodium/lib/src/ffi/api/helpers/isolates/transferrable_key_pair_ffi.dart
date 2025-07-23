@@ -18,17 +18,18 @@ sealed class TransferrableKeyPairFFI
   /// @nodoc
   factory TransferrableKeyPairFFI(KeyPair keyPair) =>
       keyPair.secretKey is SecureKeyFFI
-          ? TransferrableKeyPairFFI.ffi(
-            publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
-            secretKeyNativeHandle:
-                (keyPair.secretKey as SecureKeyFFI).copy().detach(),
-          )
-          : TransferrableKeyPairFFI.generic(
-            publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
-            secretKeyBytes: TransferableTypedData.fromList([
-              keyPair.secretKey.extractBytes(),
-            ]),
-          );
+      ? TransferrableKeyPairFFI.ffi(
+          publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
+          secretKeyNativeHandle: (keyPair.secretKey as SecureKeyFFI)
+              .copy()
+              .detach(),
+        )
+      : TransferrableKeyPairFFI.generic(
+          publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
+          secretKeyBytes: TransferableTypedData.fromList([
+            keyPair.secretKey.extractBytes(),
+          ]),
+        );
 
   /// @nodoc
   const factory TransferrableKeyPairFFI.ffi({

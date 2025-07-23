@@ -47,10 +47,9 @@ Future<void> _createJsSrc({
   required String moduleName,
   required String outFileName,
 }) => Github.logGroupAsync('Creating $outFileName from sources', () async {
-  final sodiumJsFile = tmpDir
-    .subDir('dist')
-    .subDir(moduleName)
-    .subFile('sodium.js')..assertExists();
+  final sodiumJsFile =
+      tmpDir.subDir('dist').subDir(moduleName).subFile('sodium.js')
+        ..assertExists();
 
   final jsTestDir = Directory(_defaultOutDir);
   await jsTestDir.create(recursive: true);

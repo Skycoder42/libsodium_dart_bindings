@@ -256,10 +256,9 @@ void main() {
             testKeyPair = KeyPair(
               keyType: '',
               publicKey: Uint8List(0).toJS,
-              privateKey:
-                  Uint8List.fromList(
-                    List.generate(5, (index) => 20 + index),
-                  ).toJS,
+              privateKey: Uint8List.fromList(
+                List.generate(5, (index) => 20 + index),
+              ).toJS,
             );
 
             when(

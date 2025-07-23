@@ -63,10 +63,9 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
 
     SodiumPointer<UnsignedChar>? dataPtr;
     try {
-      dataPtr =
-          SodiumPointer.alloc(sodium, count: message.length + bytes)
-            ..fill(List<int>.filled(bytes, 0))
-            ..fill(message, offset: bytes);
+      dataPtr = SodiumPointer.alloc(sodium, count: message.length + bytes)
+        ..fill(List<int>.filled(bytes, 0))
+        ..fill(message, offset: bytes);
 
       final result = secretKey.runUnlockedNative(
         sodium,

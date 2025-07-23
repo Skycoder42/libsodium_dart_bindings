@@ -18,10 +18,10 @@ sealed class TransferrableSecureKeyFFI
   /// @nodoc
   factory TransferrableSecureKeyFFI(SecureKey secureKey) =>
       secureKey is SecureKeyFFI
-          ? TransferrableSecureKeyFFI.ffi(secureKey.copy().detach())
-          : TransferrableSecureKeyFFI.generic(
-            TransferableTypedData.fromList([secureKey.extractBytes()]),
-          );
+      ? TransferrableSecureKeyFFI.ffi(secureKey.copy().detach())
+      : TransferrableSecureKeyFFI.generic(
+          TransferableTypedData.fromList([secureKey.extractBytes()]),
+        );
 
   /// @nodoc
   const factory TransferrableSecureKeyFFI.ffi(

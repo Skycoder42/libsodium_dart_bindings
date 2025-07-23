@@ -28,9 +28,7 @@ void main() {
 
   setUpAll(() {
     registerPointers();
-    // ignore: avoid_types_on_closure_parameters
     registerFallbackValue((SodiumPointer<UnsignedChar> _) => null);
-    // ignore: avoid_types_on_closure_parameters
     registerFallbackValue((Uint8List _) => null);
   });
 
@@ -73,16 +71,17 @@ void main() {
         sutMock = MockSecureKey();
       });
 
-      void mockRun(Uint8List data) => when(
-        () => sutMock.runUnlockedSync<bool>(
-          any(),
-          writable: any(named: 'writable'),
-        ),
-      ).thenAnswer((i) {
-        final callback =
-            i.positionalArguments.first as bool Function(Uint8List);
-        return callback(data);
-      });
+      void mockRun(Uint8List data) =>
+          when(
+            () => sutMock.runUnlockedSync<bool>(
+              any(),
+              writable: any(named: 'writable'),
+            ),
+          ).thenAnswer((i) {
+            final callback =
+                i.positionalArguments.first as bool Function(Uint8List);
+            return callback(data);
+          });
 
       testData<(bool, MemoryProtection)>(
         'creates temporary pointer from data',

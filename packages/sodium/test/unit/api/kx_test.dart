@@ -52,9 +52,8 @@ void main() {
     testCheckIsSame(
       'validateSecretKey',
       source: () => sutMock.secretKeyBytes,
-      sut:
-          (value) =>
-              sutMock.validateSecretKey(SecureKeyFake.empty(value), 'test'),
+      sut: (value) =>
+          sutMock.validateSecretKey(SecureKeyFake.empty(value), 'test'),
     );
 
     testCheckIsSame(

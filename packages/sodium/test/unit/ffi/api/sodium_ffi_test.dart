@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_lambdas, prefer_asserts_with_message
+// ignore_for_file: unnecessary_lambdas
 
 @TestOn('dart-vm')
 library;

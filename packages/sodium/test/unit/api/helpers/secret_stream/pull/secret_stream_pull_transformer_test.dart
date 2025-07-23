@@ -303,10 +303,9 @@ void main() {
         test(
           'not req finalized moves to closed state and closes state and sink',
           () {
-            sut =
-                SutSecretStreamPullTransformerSink(mockSut, false)
-                  ..init(mockSink, key)
-                  ..add(SecretStreamCipherMessage(Uint8List(headerBytes)));
+            sut = SutSecretStreamPullTransformerSink(mockSut, false)
+              ..init(mockSink, key)
+              ..add(SecretStreamCipherMessage(Uint8List(headerBytes)));
             verifyNever(() => mockSink.addError(any(), any()));
             clearInteractions(mockSut);
             clearInteractions(mockSink);
@@ -491,8 +490,8 @@ void main() {
     });
 
     test('cast returns transformed instance', () {
-      final castTransformer =
-          sut.cast<SecretStreamPlainMessage, SecretStreamCipherMessage>();
+      final castTransformer = sut
+          .cast<SecretStreamPlainMessage, SecretStreamCipherMessage>();
       expect(castTransformer, isNotNull);
     });
   });

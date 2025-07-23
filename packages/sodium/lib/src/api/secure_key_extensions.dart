@@ -26,11 +26,12 @@ extension SecureKeySplit on SecureKey {
         try {
           var start = 0;
           for (final length in lengths) {
-            final splitKey = SecureKey(sodium, length)..runUnlockedSync(
-              (splitKeyData) =>
-                  splitKeyData.setRange(0, length, originalKeyData, start),
-              writable: true,
-            );
+            final splitKey = SecureKey(sodium, length)
+              ..runUnlockedSync(
+                (splitKeyData) =>
+                    splitKeyData.setRange(0, length, originalKeyData, start),
+                writable: true,
+              );
             keys.add(splitKey);
             start += length;
           }

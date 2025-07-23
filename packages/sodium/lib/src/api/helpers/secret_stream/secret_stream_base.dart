@@ -22,10 +22,9 @@ mixin SecretStreamBase implements SecretStream {
           .map(
             (chunk) => SecretStreamPlainMessage(
               chunk,
-              tag:
-                  chunk.length < chunkSize
-                      ? SecretStreamMessageTag.finalPush
-                      : SecretStreamMessageTag.message,
+              tag: chunk.length < chunkSize
+                  ? SecretStreamMessageTag.finalPush
+                  : SecretStreamMessageTag.message,
             ),
           )
           .transform(transformer)

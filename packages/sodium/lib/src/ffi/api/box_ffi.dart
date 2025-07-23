@@ -259,10 +259,9 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     SodiumPointer<UnsignedChar>? noncePtr;
     SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
-      dataPtr =
-          SodiumPointer.alloc(sodium, count: message.length + macBytes)
-            ..fill(List<int>.filled(macBytes, 0))
-            ..fill(message, offset: macBytes);
+      dataPtr = SodiumPointer.alloc(sodium, count: message.length + macBytes)
+        ..fill(List<int>.filled(macBytes, 0))
+        ..fill(message, offset: macBytes);
       noncePtr = nonce.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,
@@ -505,10 +504,9 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     SodiumPointer<UnsignedChar>? dataPtr;
     SodiumPointer<UnsignedChar>? publicKeyPtr;
     try {
-      dataPtr =
-          SodiumPointer.alloc(sodium, count: message.length + sealBytes)
-            ..fill(List<int>.filled(sealBytes, 0))
-            ..fill(message, offset: sealBytes);
+      dataPtr = SodiumPointer.alloc(sodium, count: message.length + sealBytes)
+        ..fill(List<int>.filled(sealBytes, 0))
+        ..fill(message, offset: sealBytes);
       publicKeyPtr = publicKey.toSodiumPointer(
         sodium,
         memoryProtection: MemoryProtection.readOnly,

@@ -20,15 +20,13 @@ final class ConstantsGenerator extends SpecGenerator<Method> {
 
   @override
   Method build() => Method(
-    (b) =>
-        b
-          ..name = constant.name
-          ..external = external
-          ..type = MethodType.getter
-          ..returns = typeMapping[constant.type]
-          ..body =
-              external
-                  ? null
-                  : Types.unimplementedError.newInstance(const []).thrown.code,
+    (b) => b
+      ..name = constant.name
+      ..external = external
+      ..type = MethodType.getter
+      ..returns = typeMapping[constant.type]
+      ..body = external
+          ? null
+          : Types.unimplementedError.newInstance(const []).thrown.code,
   );
 }

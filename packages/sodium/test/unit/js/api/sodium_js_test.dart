@@ -194,7 +194,6 @@ void main() {
     });
 
     test('isolateFactory creates factory that returns this', () {
-      // ignore: discarded_futures
       expect(sut.isolateFactory(), completion(same(sut)));
     });
 
