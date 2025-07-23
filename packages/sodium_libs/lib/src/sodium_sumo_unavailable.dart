@@ -9,12 +9,11 @@ class SodiumSumoUnavailable extends PlatformException {
   String get message => super.message!;
 
   /// Default constructor.
-  SodiumSumoUnavailable({
-    super.details,
-    super.stacktrace,
-  }) : super(
-          code: messageCode,
-          message: 'The current platform implementation '
-              'does not support the advanced sodium sumo APIs',
-        );
+  SodiumSumoUnavailable({super.details, super.stacktrace})
+    : super(
+        code: messageCode,
+        message:
+            'The current platform implementation '
+            'does not support the advanced sodium sumo APIs',
+      );
 }

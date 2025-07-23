@@ -14,9 +14,7 @@ import '../sodium_sumo_unavailable.dart';
 extension type _SodiumBrowserInit._(JSObject _) implements JSObject {
   external JSFunction get onload;
 
-  external _SodiumBrowserInit({
-    JSFunction onload,
-  });
+  external _SodiumBrowserInit({JSFunction onload});
 }
 
 @JS('sodium')
@@ -39,12 +37,12 @@ class SodiumWeb extends SodiumPlatform {
   Future<SodiumSumo> loadSodiumSumo() =>
       SodiumSumoInit.initFromSodiumJS(() async {
         final libSodiumJs = await _loadLibSodiumJS();
-        // ignore: avoid_dynamic_calls
         if (libSodiumJs.has('crypto_sign_ed25519_sk_to_seed')) {
           return libSodiumJs;
         } else {
           throw SodiumSumoUnavailable(
-            details: 'JS-API for sumo-method crypto_sign_ed25519_sk_to_seed '
+            details:
+                'JS-API for sumo-method crypto_sign_ed25519_sk_to_seed '
                 'is missing.',
           );
         }
@@ -63,9 +61,7 @@ class SodiumWeb extends SodiumPlatform {
     // if not, overwrite sodium window property with custom onload
     final completer = Completer<LibSodiumJS>();
     void onload(LibSodiumJS sodium) => completer.complete(sodium);
-    _sodium = _SodiumBrowserInit(
-      onload: onload.toJS,
-    );
+    _sodium = _SodiumBrowserInit(onload: onload.toJS);
 
     // ... and add the sodium script to the page
     final script = HTMLScriptElement()

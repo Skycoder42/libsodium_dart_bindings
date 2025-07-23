@@ -26,10 +26,7 @@ class WindowsTarget extends PluginTarget {
     const msvcVersions = ['v142', 'v143'];
     const releaseFiles = ['libsodium.dll'];
     const debugFiles = [...releaseFiles, 'libsodium.pdb'];
-    const configurations = {
-      'Debug': debugFiles,
-      'Release': releaseFiles,
-    };
+    const configurations = {'Debug': debugFiles, 'Release': releaseFiles};
 
     for (final configEntry in configurations.entries) {
       final config = configEntry.key;
@@ -43,8 +40,10 @@ class WindowsTarget extends PluginTarget {
               .subDir(msvcVersion)
               .subDir(libraryType)
               .subFile(file);
-          final target =
-              artifactDir.subDir(config).subDir(msvcVersion).subFile(file);
+          final target = artifactDir
+              .subDir(config)
+              .subDir(msvcVersion)
+              .subFile(file);
 
           Github.logInfo('Installing ${target.path}');
           await target.parent.create(recursive: true);

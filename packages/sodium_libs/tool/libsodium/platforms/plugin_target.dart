@@ -10,9 +10,9 @@ abstract class PluginTarget {
   String get suffix;
 
   Uri get downloadUrl => Uri.https(
-        'download.libsodium.org',
-        '/libsodium/releases/libsodium-${libsodium_version.ffi}-stable$suffix',
-      );
+    'download.libsodium.org',
+    '/libsodium/releases/libsodium-${libsodium_version.ffi}-stable$suffix',
+  );
 
   Future<void> build({
     required Directory extractDir,

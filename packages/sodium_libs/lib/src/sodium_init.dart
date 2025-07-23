@@ -28,16 +28,16 @@ abstract class SodiumInit {
   /// **Note:** Calling this method multiple times will always return the same
   /// instance.
   static Future<Sodium> init() => _instanceLock.synchronized(() async {
-        if (_instance != null) {
-          return _instance!;
-        }
+    if (_instance != null) {
+      return _instance!;
+    }
 
-        _instance = await SodiumPlatform.instance.loadSodium();
+    _instance = await SodiumPlatform.instance.loadSodium();
 
-        if (kDebugMode) {
-          VersionCheck.check(SodiumPlatform.instance, _instance!);
-        }
+    if (kDebugMode) {
+      VersionCheck.check(SodiumPlatform.instance, _instance!);
+    }
 
-        return _instance!;
-      });
+    return _instance!;
+  });
 }

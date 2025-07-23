@@ -5,22 +5,13 @@ class _Version {
   final String ffi;
   final String js;
 
-  const _Version({
-    required this.ffi,
-    required this.js,
-  });
+  const _Version({required this.ffi, required this.js});
 
-  Map<String, String> toJson() => {
-        'ffi': ffi,
-        'js': js,
-      };
+  Map<String, String> toJson() => {'ffi': ffi, 'js': js};
 }
 
 // ignore: constant_identifier_names
-const libsodium_version = _Version(
-  ffi: '1.0.20',
-  js: '0.7.14',
-);
+const libsodium_version = _Version(ffi: '1.0.20', js: '0.7.14');
 
 // ignore: unreachable_from_main
 const libsodiumSigningKey =

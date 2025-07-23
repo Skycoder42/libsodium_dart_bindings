@@ -7,16 +7,15 @@ import 'plugin_platform.dart';
 import 'plugin_target.dart';
 import 'windows_target.dart';
 
-typedef PublishCallback = Future<void> Function({
-  required PluginTargetGroup group,
-  required Directory artifactsDir,
-  required Directory archiveDir,
-});
+typedef PublishCallback =
+    Future<void> Function({
+      required PluginTargetGroup group,
+      required Directory artifactsDir,
+      required Directory archiveDir,
+    });
 
-typedef ComputeHashCallback = Future<Object> Function(
-  File archive,
-  String originalHash,
-);
+typedef ComputeHashCallback =
+    Future<Object> Function(File archive, String originalHash);
 
 class PluginTargetGroup {
   final PluginPlatform platform;
@@ -45,24 +44,15 @@ abstract class PluginTargets {
   ];
 
   static const targetGroups = [
-    PluginTargetGroup(
-      PluginPlatform.android,
-      AndroidTarget.values,
-    ),
+    PluginTargetGroup(PluginPlatform.android, AndroidTarget.values),
     PluginTargetGroup(
       PluginPlatform.darwin,
       DarwinTarget.values,
       publish: DarwinTarget.createXcFramework,
       hash: DarwinTarget.computeHash,
     ),
-    PluginTargetGroup(
-      PluginPlatform.linux,
-      LinuxTarget.values,
-    ),
-    PluginTargetGroup(
-      PluginPlatform.windows,
-      WindowsTarget.values,
-    ),
+    PluginTargetGroup(PluginPlatform.linux, LinuxTarget.values),
+    PluginTargetGroup(PluginPlatform.windows, WindowsTarget.values),
   ];
 
   static PluginTarget fromName(String name) =>

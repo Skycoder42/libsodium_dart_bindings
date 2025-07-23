@@ -42,8 +42,9 @@ Future<void> _createArchive({
   required Directory archivesDir,
 }) async {
   for (final group in targetGroups) {
-    final archiveDir =
-        await archivesDir.subDir(group.name).create(recursive: true);
+    final archiveDir = await archivesDir
+        .subDir(group.name)
+        .create(recursive: true);
 
     if (group.publish case final PublishCallback publish) {
       await publish(
@@ -65,49 +66,44 @@ Future<void> _mergeArtifacts({
   required PluginTargetGroup group,
   required Directory artifactsDir,
   required Directory archiveDir,
-}) =>
-    Github.logGroupAsync(
-      'Creating archive for ${group.name} by merging artifacts',
-      () async {
-        for (final target in group.targets) {
-          final artifactDir = artifactsDir.subDir('libsodium-${target.name}');
-          await Github.exec('rsync', [
-            '-av',
-            '${artifactDir.path}/',
-            '${archiveDir.path}/',
-          ]);
-        }
-      },
-    );
+}) => Github.logGroupAsync(
+  'Creating archive for ${group.name} by merging artifacts',
+  () async {
+    for (final target in group.targets) {
+      final artifactDir = artifactsDir.subDir('libsodium-${target.name}');
+      await Github.exec('rsync', [
+        '-av',
+        '${artifactDir.path}/',
+        '${archiveDir.path}/',
+      ]);
+    }
+  },
+);
 
 Future<void> _archiveAndSignArtifacts({
   required Iterable<PluginTargetGroup> targetGroups,
   required Directory publishDir,
   required Directory archivesDir,
   required File secretKey,
-}) =>
-    Github.logGroupAsync(
-      'Creating and signing archives.',
-      () async {
-        await publishDir.create();
+}) => Github.logGroupAsync('Creating and signing archives.', () async {
+  await publishDir.create();
 
-        final hashSums = <String, Object>{};
-        for (final targetGroup in targetGroups) {
-          final archiveDir = archivesDir.subDir(targetGroup.name);
-          final archive = publishDir.subFile(targetGroup.platform.artifactName);
+  final hashSums = <String, Object>{};
+  for (final targetGroup in targetGroups) {
+    final archiveDir = archivesDir.subDir(targetGroup.name);
+    final archive = publishDir.subFile(targetGroup.platform.artifactName);
 
-          await Archive.compress(inDir: archiveDir, archive: archive);
-          await Minisign.sign(archive, secretKey);
-          final hashSum = await _sha512sum(archive);
-          hashSums[targetGroup.name] = switch (targetGroup.hash) {
-            final ComputeHashCallback hash => await hash(archive, hashSum),
-            _ => hashSum,
-          };
-        }
+    await Archive.compress(inDir: archiveDir, archive: archive);
+    await Minisign.sign(archive, secretKey);
+    final hashSum = await _sha512sum(archive);
+    hashSums[targetGroup.name] = switch (targetGroup.hash) {
+      final ComputeHashCallback hash => await hash(archive, hashSum),
+      _ => hashSum,
+    };
+  }
 
-        await Github.env.setOutput('hash-sums', json.encode(hashSums));
-      },
-    );
+  await Github.env.setOutput('hash-sums', json.encode(hashSums));
+});
 
 Future<String> _sha512sum(File target) => target
     .openRead()

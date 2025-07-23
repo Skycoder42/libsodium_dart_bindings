@@ -16,15 +16,11 @@ class AndroidTarget extends PluginTarget {
     architecture: 'armeabi-v7a',
     buildTarget: 'armv7-a',
   );
-  // ignore: constant_identifier_names
   static const x86_64 = AndroidTarget(
     architecture: 'x86_64',
     installTarget: 'westmere',
   );
-  static const x86 = AndroidTarget(
-    architecture: 'x86',
-    installTarget: 'i686',
-  );
+  static const x86 = AndroidTarget(architecture: 'x86', installTarget: 'i686');
   static const values = [arm64_v8a, armeabi_v7a, x86_64, x86];
 
   final String _architecture;
@@ -35,9 +31,9 @@ class AndroidTarget extends PluginTarget {
     required String architecture,
     String? buildTarget,
     String? installTarget,
-  })  : _architecture = architecture,
-        _buildTarget = buildTarget ?? architecture,
-        _installTarget = installTarget ?? buildTarget ?? architecture;
+  }) : _architecture = architecture,
+       _buildTarget = buildTarget ?? architecture,
+       _installTarget = installTarget ?? buildTarget ?? architecture;
 
   @override
   String get name => 'android_$_architecture';

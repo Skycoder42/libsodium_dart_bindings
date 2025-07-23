@@ -9,11 +9,7 @@ import 'plugin_targets.dart';
 enum DarwinPlatform {
   ios('iPhoneOS', true, '-mios-version-min=12.0'),
   // ignore: constant_identifier_names
-  ios_simulator(
-    'iPhoneSimulator',
-    true,
-    '-mios-simulator-version-min=12.0',
-  ),
+  ios_simulator('iPhoneSimulator', true, '-mios-simulator-version-min=12.0'),
   macos('MacOSX', false, '-mmacosx-version-min=10.14', 'A');
 
   final String sdk;
@@ -95,7 +91,8 @@ class DarwinTarget extends PluginTarget {
       // ignore: lines_longer_than_80_chars
       '5aa4efd30f914f85da881e4cb4eeeeb8cc65864c0ecfaba854e96326e790e6151ee53f962c25532548c1f2ecbc2d9c514a4238750e74ee57c5eaee0e603bbe38';
 
-  static final _frameworkInfoPlist = '''
+  static final _frameworkInfoPlist =
+      '''
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -154,20 +151,14 @@ class DarwinTarget extends PluginTarget {
 
     await Github.exec(
       './configure',
-      [
-        '--host=$buildTarget',
-        '--prefix=${prefixDir.path}',
-      ],
+      ['--host=$buildTarget', '--prefix=${prefixDir.path}'],
       workingDirectory: buildDir,
       environment: environment,
     );
 
     await Github.exec(
       'make',
-      [
-        '-j${Platform.numberOfProcessors}',
-        'install',
-      ],
+      ['-j${Platform.numberOfProcessors}', 'install'],
       workingDirectory: buildDir,
       environment: environment,
     );
@@ -176,19 +167,18 @@ class DarwinTarget extends PluginTarget {
   }
 
   Future<void> _validateBuildScriptHasNotChanged(Directory buildDir) async {
-    final scriptFile =
-        buildDir.subDir('dist-build').subFile('apple-xcframework.sh');
+    final scriptFile = buildDir
+        .subDir('dist-build')
+        .subFile('apple-xcframework.sh');
 
     final tmpDir = await Github.env.runnerTemp.createTemp();
     try {
       final checksumFile = tmpDir.subFile('checksums.txt');
-      await checksumFile
-          .writeAsString('$_appleXcframeworkScriptHash  ${scriptFile.path}');
-
-      await Github.exec(
-        'b2sum',
-        ['-c', checksumFile.path],
+      await checksumFile.writeAsString(
+        '$_appleXcframeworkScriptHash  ${scriptFile.path}',
       );
+
+      await Github.exec('b2sum', ['-c', checksumFile.path]);
     } finally {
       await tmpDir.delete(recursive: true);
     }
@@ -197,9 +187,9 @@ class DarwinTarget extends PluginTarget {
   Future<Map<String, String>> _createBuildEnvironment() async {
     // path
     final xcodeDir = Directory(
-      await Github.execLines('xcode-select', const ['-p'])
-          .map((l) => l.trim())
-          .single,
+      await Github.execLines('xcode-select', const [
+        '-p',
+      ]).map((l) => l.trim()).single,
     );
     final baseDir = xcodeDir
         .subDir('Platforms')
@@ -207,11 +197,7 @@ class DarwinTarget extends PluginTarget {
         .subDir('Developer');
     final binDir = baseDir.subDir('usr').subDir('bin');
     final sbinDir = baseDir.subDir('usr').subDir('sbin');
-    final path = [
-      binDir.path,
-      sbinDir.path,
-      Platform.environment['PATH'],
-    ];
+    final path = [binDir.path, sbinDir.path, Platform.environment['PATH']];
 
     // compiler flags
     final ldFlags = [
@@ -259,42 +245,43 @@ class DarwinTarget extends PluginTarget {
     required PluginTargetGroup group,
     required Directory artifactsDir,
     required Directory archiveDir,
-  }) =>
-      Github.logGroupAsync('Creating combined xcframework for ${group.name}',
-          () async {
-        const frameworkName = 'libsodium';
+  }) => Github.logGroupAsync(
+    'Creating combined xcframework for ${group.name}',
+    () async {
+      const frameworkName = 'libsodium';
 
-        final platforms = <DarwinPlatform, List<DarwinTarget>>{};
-        for (final target in group.targets.cast<DarwinTarget>()) {
-          (platforms[target.platform] ??= []).add(target);
-        }
+      final platforms = <DarwinPlatform, List<DarwinTarget>>{};
+      for (final target in group.targets.cast<DarwinTarget>()) {
+        (platforms[target.platform] ??= []).add(target);
+      }
 
-        final tmpDir = await Github.env.runnerTemp.createTemp();
-        try {
-          // create frameworks
-          final frameworks = <Directory>[];
-          for (final MapEntry(key: platform, value: targets)
-              in platforms.entries) {
-            frameworks.add(
-              await _createFramework(
-                name: frameworkName,
-                artifactsDir: artifactsDir,
-                targets: targets,
-                outDir: tmpDir.subDir(platform.name),
-              ),
-            );
-          }
-
-          // create xcframework
-          await _createXcFramework(
-            name: frameworkName,
-            frameworks: frameworks,
-            outDir: archiveDir,
+      final tmpDir = await Github.env.runnerTemp.createTemp();
+      try {
+        // create frameworks
+        final frameworks = <Directory>[];
+        for (final MapEntry(key: platform, value: targets)
+            in platforms.entries) {
+          frameworks.add(
+            await _createFramework(
+              name: frameworkName,
+              artifactsDir: artifactsDir,
+              targets: targets,
+              outDir: tmpDir.subDir(platform.name),
+            ),
           );
-        } finally {
-          await tmpDir.delete(recursive: true);
         }
-      });
+
+        // create xcframework
+        await _createXcFramework(
+          name: frameworkName,
+          frameworks: frameworks,
+          outDir: archiveDir,
+        );
+      } finally {
+        await tmpDir.delete(recursive: true);
+      }
+    },
+  );
 
   static Directory _dirForTarget(Directory artifactsDir, DarwinTarget target) =>
       artifactsDir.subDir('libsodium-${target.name}');
@@ -332,8 +319,9 @@ class DarwinTarget extends PluginTarget {
     required List<DarwinTarget> targets,
     required Directory outDir,
   }) async {
-    final framework =
-        await outDir.subDir('$name.framework').create(recursive: true);
+    final framework = await outDir
+        .subDir('$name.framework')
+        .create(recursive: true);
 
     var addSymlinks = false;
     var dataDir = framework;
@@ -352,8 +340,10 @@ class DarwinTarget extends PluginTarget {
         .subFile('Info.plist')
         .writeAsString(DarwinTarget._frameworkInfoPlist);
 
-    final headersDir =
-        _dirForTarget(artifactsDir, targets.first).subDir('include');
+    final headersDir = _dirForTarget(
+      artifactsDir,
+      targets.first,
+    ).subDir('include');
     await headersDir.rename(dataDir.subDir('Headers').path);
 
     await _createLipoLibrary(
@@ -381,10 +371,7 @@ class DarwinTarget extends PluginTarget {
     final xcFramework = outDir.subDir('$name.xcframework');
     await Github.exec('xcodebuild', [
       '-create-xcframework',
-      for (final framework in frameworks) ...[
-        '-framework',
-        framework.path,
-      ],
+      for (final framework in frameworks) ...['-framework', framework.path],
       '-output',
       xcFramework.path,
     ]);
@@ -397,11 +384,11 @@ class DarwinTarget extends PluginTarget {
   ) async {
     final archiveDir = archive.parent;
     final package = await archiveDir.subFile('Package.swift').create();
-    final checksum = await Github.execLines(
-      'swift',
-      ['package', 'compute-checksum', archive.path],
-      workingDirectory: archiveDir,
-    ).single;
+    final checksum = await Github.execLines('swift', [
+      'package',
+      'compute-checksum',
+      archive.path,
+    ], workingDirectory: archiveDir).single;
     await package.delete();
     return [originalHash, checksum];
   }

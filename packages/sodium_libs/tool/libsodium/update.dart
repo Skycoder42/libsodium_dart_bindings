@@ -38,20 +38,19 @@ Future<void> main(List<String> args) async {
 }
 
 Iterable<(PluginPlatform, String, bool)> _getHashSums(String arg) =>
-    (json.decode(arg) as Map<String, dynamic>)
-        .entries
+    (json.decode(arg) as Map<String, dynamic>).entries
         .map((e) => (PluginPlatform.values.byName(e.key), e.value))
         .expand((pair) sync* {
-      switch (pair.$2) {
-        case final String single:
-          yield (pair.$1, single, false);
-        case [final String first, final String second]:
-          yield (pair.$1, first, false);
-          yield (pair.$1, second, true);
-        default:
-          throw UnsupportedError('Unexpected map entry: $pair');
-      }
-    });
+          switch (pair.$2) {
+            case final String single:
+              yield (pair.$1, single, false);
+            case [final String first, final String second]:
+              yield (pair.$1, first, false);
+              yield (pair.$1, second, true);
+            default:
+              throw UnsupportedError('Unexpected map entry: $pair');
+          }
+        });
 
 List<Map<String, dynamic>> _getReleaseAssets(String arg) =>
     (json.decode(arg) as List).cast<Map<String, dynamic>>();

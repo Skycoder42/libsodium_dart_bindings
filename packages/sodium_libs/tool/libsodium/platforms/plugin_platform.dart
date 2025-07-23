@@ -19,11 +19,7 @@ enum PluginPlatform {
   final String binaryDir;
   final ArchiveType archiveType;
 
-  const PluginPlatform(
-    this.name,
-    this.binaryDir,
-    this.archiveType,
-  );
+  const PluginPlatform(this.name, this.binaryDir, this.archiveType);
 
   String get artifactName =>
       'libsodium-${libsodium_version.ffi}-$name${archiveType.suffix}';

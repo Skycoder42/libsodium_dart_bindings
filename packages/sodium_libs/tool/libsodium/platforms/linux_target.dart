@@ -5,16 +5,14 @@ import 'package:dart_test_tools/tools.dart';
 import 'plugin_target.dart';
 
 class LinuxTarget extends PluginTarget {
-  // ignore: constant_identifier_names
   static const x86_64 = LinuxTarget(architecture: 'x86_64');
   static const aarch64 = LinuxTarget(architecture: 'aarch64');
   static const values = [x86_64, aarch64];
 
   final String _architecture;
 
-  const LinuxTarget({
-    required String architecture,
-  }) : _architecture = architecture;
+  const LinuxTarget({required String architecture})
+    : _architecture = architecture;
 
   @override
   String get name => 'linux_$_architecture';
@@ -45,10 +43,7 @@ class LinuxTarget extends PluginTarget {
 
     await Github.exec(
       'make',
-      [
-        '-j${Platform.numberOfProcessors}',
-        'install',
-      ],
+      ['-j${Platform.numberOfProcessors}', 'install'],
       workingDirectory: buildDir,
       environment: environment,
     );
@@ -61,10 +56,7 @@ class LinuxTarget extends PluginTarget {
     final cFlags = ['-Os'];
 
     // environment
-    return {
-      'CFLAGS': cFlags.join(' '),
-      'CC': '$_architecture-linux-gnu-gcc',
-    };
+    return {'CFLAGS': cFlags.join(' '), 'CC': '$_architecture-linux-gnu-gcc'};
   }
 
   Future<void> _installLibrary(

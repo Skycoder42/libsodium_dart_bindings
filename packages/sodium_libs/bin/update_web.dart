@@ -11,31 +11,29 @@ const _targetDirectoryArg = 'target-directory';
 const _helpArg = 'help';
 
 Future<void> main(List<String> rawArguments) async {
-  final parser = ArgParser(
-    allowTrailingOptions: false,
-    usageLineLength: stdout.hasTerminal ? stdout.terminalColumns : null,
-  )
-    ..addFlag(
-      _sumoArg,
-      help: 'Download the sumo variant of sodium.js.',
-    )
-    ..addFlag(
-      _editIndexArg,
-      defaultsTo: true,
-      help: 'Update index.html to automatically load sodium.js.',
-    )
-    ..addOption(
-      _targetDirectoryArg,
-      abbr: 'd',
-      defaultsTo: 'web',
-      help: 'The directory to download the binaries to.',
-    )
-    ..addFlag(
-      _helpArg,
-      abbr: 'h',
-      negatable: false,
-      help: 'Show this help.',
-    );
+  final parser =
+      ArgParser(
+          allowTrailingOptions: false,
+          usageLineLength: stdout.hasTerminal ? stdout.terminalColumns : null,
+        )
+        ..addFlag(_sumoArg, help: 'Download the sumo variant of sodium.js.')
+        ..addFlag(
+          _editIndexArg,
+          defaultsTo: true,
+          help: 'Update index.html to automatically load sodium.js.',
+        )
+        ..addOption(
+          _targetDirectoryArg,
+          abbr: 'd',
+          defaultsTo: 'web',
+          help: 'The directory to download the binaries to.',
+        )
+        ..addFlag(
+          _helpArg,
+          abbr: 'h',
+          negatable: false,
+          help: 'Show this help.',
+        );
 
   try {
     final arguments = parser.parse(rawArguments);
@@ -88,18 +86,15 @@ Future<bool> _copySodiumJs(Directory targetDir, bool isSumo) async {
   stdout.writeln('> Fetching sodium.js repository');
   final tmpDir = await Directory.systemTemp.createTemp();
   try {
-    if (!await _runGit(
-      [
-        'clone',
-        '-b',
-        libsodium_version.js,
-        '--depth',
-        '1',
-        'https://github.com/jedisct1/libsodium.js.git',
-        '.',
-      ],
-      tmpDir,
-    )) {
+    if (!await _runGit([
+      'clone',
+      '-b',
+      libsodium_version.js,
+      '--depth',
+      '1',
+      'https://github.com/jedisct1/libsodium.js.git',
+      '.',
+    ], tmpDir)) {
       return false;
     }
 
