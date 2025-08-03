@@ -24,7 +24,7 @@
 		}
 	},
 	"features": {
-		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {
+		"ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
 			"plugins": "git colorize vscode",
 			"omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions"
 		},

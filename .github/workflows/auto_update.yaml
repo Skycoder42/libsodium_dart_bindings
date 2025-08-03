@@ -1,0 +1,16 @@
+name: Automatic dependency updates
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 3 * * 3"
+
+jobs:
+  ci:
+    name: Updates
+    uses: Skycoder42/dart_test_tools/.github/workflows/auto-update.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
+    secrets:
+      githubToken: ${{ secrets.GH_PAT }}
