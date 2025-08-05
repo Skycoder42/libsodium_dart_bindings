@@ -13,5 +13,6 @@ jobs:
       id-token: write
     with:
       tagPrefix: sodium-v
+      flutter: true
       workingDirectory: packages/sodium
       buildRunner: true
