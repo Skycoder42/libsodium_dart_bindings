@@ -32,7 +32,7 @@ jobs:
         with:
           cache: true
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install dart dependencies
         run: dart pub get
         working-directory: packages/sodium_libs
@@ -95,7 +95,7 @@ jobs:
         if: runner.os == 'Linux' && matrix.install
         run: sudo apt update && sudo apt install -y ${{ matrix.install }}
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install minisign
         uses: Skycoder42/dart_test_tools/.github/actions/install-minisign@main
       - name: Install gnu coreutils
@@ -133,7 +133,7 @@ jobs:
         with:
           cache: true
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install minisign
         uses: Skycoder42/dart_test_tools/.github/actions/install-minisign@main
       - name: Install dart dependencies
@@ -186,7 +186,7 @@ jobs:
       - name: Install dart_test_tools
         run: dart pub global activate dart_test_tools
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install dart dependencies
         run: dart pub get
         working-directory: packages/sodium_libs
