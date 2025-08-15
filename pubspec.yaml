@@ -7,3 +7,4 @@ environment:
 workspace:
   - packages/sodium
   - packages/sodium_libs
+  - packages/sodium_libs/example
