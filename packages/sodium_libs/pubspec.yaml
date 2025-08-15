@@ -27,9 +27,9 @@ dependencies:
 dev_dependencies:
   cider: ^0.2.8
   crypto: ^3.0.6
-  custom_lint: ^0.7.6
-  dart_pre_commit: ^5.4.6
-  dart_test_tools: ^6.1.2
+  custom_lint: ^0.8.0
+  dart_pre_commit: ^5.4.8
+  dart_test_tools: ^6.2.2
   flutter_test:
     sdk: flutter
 

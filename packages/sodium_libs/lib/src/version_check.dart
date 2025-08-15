@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 import 'package:sodium/sodium.dart';
 
 import 'sodium_platform.dart';
