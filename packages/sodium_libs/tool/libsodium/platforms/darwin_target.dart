@@ -95,7 +95,7 @@ class DarwinTarget extends PluginTarget {
   // last update: 2024-12-31
   static const _appleXcframeworkScriptHash =
       // ignore: lines_longer_than_80_chars
-      'df5a8478558938660f926d25e12066e6e8afe7cebd234f334b989c3bdf17fbb1c0d2fa8be924757753f49767152e53cc2f13aa00b2032cae5ffa2f3d09d9c4e6';
+      '2ff5ee3b140b0e7d43022aa1afe6107c8994a42a3b2e4094d03b62277e1fc6e95b46bfacf10d3b3d7348ccb883653eec7b1e4c92b797b6f07c62b98397f6ecc3';
 
   static final _frameworkInfoPlist =
       '''
