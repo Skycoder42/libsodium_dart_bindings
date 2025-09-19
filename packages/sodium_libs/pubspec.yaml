@@ -4,8 +4,8 @@ description: Flutter companion package to sodium that provides the low-level lib
 homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
-  sdk: ^3.8.0
-  flutter: ">=3.32.0"
+  sdk: ^3.9.0
+  flutter: ">=3.35.0"
 resolution: workspace
 
 executables:
@@ -28,7 +28,7 @@ dev_dependencies:
   cider: ^0.2.8
   crypto: ^3.0.6
   custom_lint: ^0.8.0
-  dart_pre_commit: ^5.4.8
+  dart_pre_commit: ^6.0.0
   dart_test_tools: ^6.2.2
   flutter_test:
     sdk: flutter

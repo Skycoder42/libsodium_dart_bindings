@@ -1,5 +1,4 @@
 import 'package:code_builder/code_builder.dart';
-import 'package:code_builder/src/visitors.dart';
 import 'package:meta/meta.dart';
 
 import '../../json/constant.dart';

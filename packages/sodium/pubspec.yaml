@@ -4,7 +4,7 @@ version: 3.4.6
 homepage: https://github.com/Skycoder42/libsodium_dart_bindings
 
 environment:
-  sdk: ^3.8.0
+  sdk: ^3.9.0
 resolution: workspace
 
 dependencies:
@@ -14,16 +14,16 @@ dependencies:
 
 dev_dependencies:
   args: ^2.7.0
-  build_runner: ^2.7.0
+  build_runner: ^2.7.1
   cider: ^0.2.8
-  code_builder: ^4.10.1
+  code_builder: ^4.11.0
   collection: ^1.19.1
   coverage: ^1.15.0
   custom_lint: ^0.8.0
-  dart_pre_commit: ^5.4.8
+  dart_pre_commit: ^6.0.0
   dart_test_tools: ^6.2.2
   ffigen: ^19.1.0
-  freezed: ^3.2.0
+  freezed: ^3.2.3
   mocktail: ^1.0.4
   path: ^1.9.1
   test: ^1.26.2
