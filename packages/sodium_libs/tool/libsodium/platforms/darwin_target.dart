@@ -34,13 +34,13 @@ class DarwinTarget extends PluginTarget {
     buildTarget: 'aarch64-apple-darwin',
     hostTarget: 'aarch64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
-  static const ios_arm64e = DarwinTarget(
-    platform: DarwinPlatform.ios,
-    architecture: 'arm64e',
-    buildTarget: 'aarch64-apple-darwin',
-    hostTarget: 'aarch64-apple-darwin23',
-  );
+  // // ignore: constant_identifier_names
+  // static const ios_arm64e = DarwinTarget(
+  //   platform: DarwinPlatform.ios,
+  //   architecture: 'arm64e',
+  //   buildTarget: 'aarch64-apple-darwin',
+  //   hostTarget: 'aarch64-apple-darwin23',
+  // );
   // ignore: constant_identifier_names
   static const ios_simulator_arm64 = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
@@ -48,13 +48,13 @@ class DarwinTarget extends PluginTarget {
     buildTarget: 'aarch64-apple-darwin',
     hostTarget: 'aarch64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
-  static const ios_simulator_arm64e = DarwinTarget(
-    platform: DarwinPlatform.ios_simulator,
-    architecture: 'arm64e',
-    buildTarget: 'aarch64-apple-darwin',
-    hostTarget: 'aarch64-apple-darwin23',
-  );
+  // // ignore: constant_identifier_names
+  // static const ios_simulator_arm64e = DarwinTarget(
+  //   platform: DarwinPlatform.ios_simulator,
+  //   architecture: 'arm64e',
+  //   buildTarget: 'aarch64-apple-darwin',
+  //   hostTarget: 'aarch64-apple-darwin23',
+  // );
   // ignore: constant_identifier_names
   static const ios_simulator_x86_64 = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
@@ -68,12 +68,12 @@ class DarwinTarget extends PluginTarget {
     architecture: 'arm64',
     hostTarget: 'aarch64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
-  static const macos_arm64e = DarwinTarget(
-    platform: DarwinPlatform.macos,
-    architecture: 'arm64e',
-    hostTarget: 'aarch64-apple-darwin23',
-  );
+  // // ignore: constant_identifier_names
+  // static const macos_arm64e = DarwinTarget(
+  //   platform: DarwinPlatform.macos,
+  //   architecture: 'arm64e',
+  //   hostTarget: 'aarch64-apple-darwin23',
+  // );
   // ignore: constant_identifier_names
   static const macos_x86_64 = DarwinTarget(
     platform: DarwinPlatform.macos,
@@ -82,12 +82,16 @@ class DarwinTarget extends PluginTarget {
   );
   static const iosValues = [
     ios_arm64,
-    ios_arm64e,
+    // ios_arm64e,
     ios_simulator_arm64,
-    ios_simulator_arm64e,
+    // ios_simulator_arm64e,
     ios_simulator_x86_64,
   ];
-  static const macosValues = [macos_arm64, macos_arm64e, macos_x86_64];
+  static const macosValues = [
+    macos_arm64,
+    // macos_arm64e,
+    macos_x86_64,
+  ];
   static const values = [...iosValues, ...macosValues];
 
   // Check here: https://github.com/jedisct1/libsodium/blob/master/dist-build/apple-xcframework.sh
