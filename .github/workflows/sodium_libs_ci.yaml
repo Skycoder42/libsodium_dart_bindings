@@ -42,5 +42,6 @@ jobs:
     with:
       workingDirectory: packages/sodium_libs
       tagPrefix: sodium_libs-v
+      releaseRef: refs/heads/ios_26_workaround
     secrets:
       githubToken: ${{ secrets.GH_PAT }}
