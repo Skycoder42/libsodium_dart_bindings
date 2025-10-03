@@ -94,7 +94,7 @@ this means for you as a consumer of the library is the following:
 
 - If you only ever intend to use the native variante (i. e. your application will not be transpiled to JS), you can
 simply always use the sumo variant.
-- If you want to support bith, native and web, you have to check wich of the APIs you need are available in which
+- If you want to support both, native and web, you have to check wich of the APIs you need are available in which
 version. The Sumo-Variant is more complete, but has a bigger binary size, which might matter depending on the usecase.
 
 ### Loading libsodium
