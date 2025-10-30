@@ -140,7 +140,7 @@ jobs:
         run: dart pub get
         working-directory: packages/sodium_libs
       - name: Download all binary artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           path: artifacts
       - name: Create secret key for minisign
