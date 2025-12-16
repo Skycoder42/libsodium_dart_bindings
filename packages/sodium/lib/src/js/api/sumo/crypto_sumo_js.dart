@@ -16,7 +16,7 @@ class CryptoSumoJS extends CryptoJS implements CryptoSumo {
   CryptoSumoJS(super.sodium);
 
   @override
-  // ignore: overridden_fields
+  // ignore: overridden_fields for api customization
   late final SignSumo sign = SignSumoJS(sodium);
 
   @override

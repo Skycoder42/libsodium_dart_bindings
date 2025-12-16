@@ -31,7 +31,7 @@ class SodiumException implements Exception {
 
   /// @nodoc
   @internal
-  // ignore: avoid_positional_boolean_parameters
+  // ignore: avoid_positional_boolean_parameters for single param
   static void checkSucceededBool(bool result) {
     if (!result) {
       throw SodiumException();

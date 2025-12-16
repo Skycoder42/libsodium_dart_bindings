@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
-// ignore: no_self_package_imports
 import 'package:sodium/sodium.dart';
 
 import '../helpers/file_helper_web.dart'

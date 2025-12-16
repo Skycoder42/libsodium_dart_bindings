@@ -28,7 +28,7 @@ void main() {
   });
 
   group('SecretStreamPushTransformerSinkJS', () {
-    // ignore: close_sinks
+    // ignore: close_sinks for testing
     late SecretStreamPushTransformerSinkJS sut;
 
     setUp(() {

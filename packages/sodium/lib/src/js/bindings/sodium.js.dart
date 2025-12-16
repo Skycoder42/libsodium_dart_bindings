@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, public_member_api_docs
+// ignore_for_file: non_constant_identifier_names, public_member_api_docs, document_ignores, lines_longer_than_80_chars
 
 import 'dart:js_interop';
 

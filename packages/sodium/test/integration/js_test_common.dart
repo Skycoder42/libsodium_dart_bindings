@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:js_interop';
 
 import 'package:meta/meta.dart';
-// ignore: no_self_package_imports
+
 import 'package:sodium/sodium.js.dart';
 import 'package:web/web.dart';
 

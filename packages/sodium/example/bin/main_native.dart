@@ -1,11 +1,10 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print for example
 import 'dart:ffi';
 import 'dart:io';
 
 import 'package:sodium/sodium.dart';
 
-// ignore: avoid_relative_lib_imports
-import '../lib/sodium_example.dart';
+import 'package:sodium_example/sodium_example.dart';
 
 Future<void> main(List<String> arguments) async {
   if (arguments.isEmpty) {

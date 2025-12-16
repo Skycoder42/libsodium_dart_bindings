@@ -15,7 +15,7 @@ class VersionCheck {
     assert(kDebugMode, 'Version check should only be run in debug mode!');
 
     if (instance.version < _expectedVersion) {
-      // ignore: avoid_print
+      // ignore: avoid_print for debug code
       print(
         'WARNING: The embedded libsodium is outdated! '
         'Expected $_expectedVersion, but was ${instance.version}}. '

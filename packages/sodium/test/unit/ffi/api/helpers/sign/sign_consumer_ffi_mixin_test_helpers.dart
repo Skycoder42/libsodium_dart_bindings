@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_asserts_with_message
+// ignore_for_file: prefer_asserts_with_message for testing
 
 import 'dart:async';
 import 'dart:ffi';

@@ -5,7 +5,6 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
-// ignore: no_self_package_imports
 import 'package:sodium/sodium_sumo.dart';
 import 'package:test/test.dart';
 
@@ -34,7 +33,7 @@ class VmTestRunner extends SumoTestRunner {
     final libSodiumFile = File(libSodiumPath).absolute;
 
     expect(libSodiumFile.existsSync(), isTrue);
-    // ignore: avoid_print
+    // ignore: avoid_print for tests
     print('Found libsodium at: ${libSodiumFile.path}');
     return SodiumSumoInit.init(() => DynamicLibrary.open(libSodiumFile.path));
   }

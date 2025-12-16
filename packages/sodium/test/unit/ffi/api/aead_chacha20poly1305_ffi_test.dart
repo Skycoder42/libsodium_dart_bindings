@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_lambdas
+// ignore_for_file: unnecessary_lambdas for mocking
 
 @TestOn('dart-vm')
 library;
@@ -169,8 +169,7 @@ void main() {
         final key = List.generate(5, (index) => index);
         final mac = List.filled(5, 0);
 
-        // ignore: unused_local_variable
-        final result = sut.encrypt(
+        sut.encrypt(
           message: Uint8List.fromList(message),
           additionalData: Uint8List.fromList(additionalData),
           nonce: Uint8List.fromList(nonce),
@@ -543,8 +542,7 @@ void main() {
         final nonce = List.generate(5, (index) => 10 + index);
         final key = List.generate(5, (index) => index);
 
-        // ignore: unused_local_variable
-        final resut = sut.encryptDetached(
+        sut.encryptDetached(
           message: Uint8List.fromList(message),
           additionalData: Uint8List.fromList(additionalData),
           nonce: Uint8List.fromList(nonce),

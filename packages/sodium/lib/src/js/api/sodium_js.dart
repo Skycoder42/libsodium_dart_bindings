@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_lambdas
+// ignore_for_file: unnecessary_lambdas to catch member access errors
 
 import 'dart:async';
 import 'dart:js_interop';
@@ -91,9 +91,9 @@ class SodiumJS implements Sodium {
     List<SecureKey> secureKeys,
     List<KeyPair> keyPairs,
   ) async {
-    // ignore: prefer_asserts_with_message
+    // ignore: prefer_asserts_with_message for debug mode validation
     assert(() {
-      // ignore: avoid_print
+      // ignore: avoid_print for debug mode validation
       print(
         'WARNING: Sodium.runIsolated does not actually use parallel '
         'execution on the web. Use service workers if needed!',

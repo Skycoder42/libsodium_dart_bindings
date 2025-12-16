@@ -1,4 +1,5 @@
-// ignore_for_file: unnecessary_lambdas, type_literal_in_constant_pattern
+// ignore_for_file: unnecessary_lambdas for mocking
+// ignore_for_file: type_literal_in_constant_pattern, switch_on_type for testing
 
 @TestOn('dart-vm')
 library;
@@ -613,10 +614,8 @@ void main() {
           const testData = [1, 2, 3, 4, 5];
           final ptr = calloc<Uint8>(testData.length);
           fillPointer(ptr, testData);
-          final sut = SodiumPointer.raw(mockSodium, ptr, testData.length);
-
-          // ignore: cascade_invocations
-          sut.fill(fixture.$1, offset: fixture.$2);
+          final sut = SodiumPointer.raw(mockSodium, ptr, testData.length)
+            ..fill(fixture.$1, offset: fixture.$2);
 
           expect(sut.asListView(), fixture.$3);
         },

@@ -41,28 +41,33 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
 
   /// @nodoc
   SecretStreamPullTransformerSink(
-    // ignore: avoid_positional_boolean_parameters
+    // ignore: avoid_positional_boolean_parameters for single param
     this.requireFinalized,
   );
 
   /// @nodoc
   @protected
+  @visibleForTesting
   int get headerBytes;
 
   /// @nodoc
   @protected
+  @visibleForTesting
   void rekey(TState cryptoState);
 
   /// @nodoc
   @protected
+  @visibleForTesting
   void disposeState(TState cryptoState);
 
   /// @nodoc
   @protected
+  @visibleForTesting
   TState initialize(SecureKey key, Uint8List header);
 
   /// @nodoc
   @protected
+  @visibleForTesting
   SecretStreamPlainMessage decryptMessage(
     TState cryptoState,
     SecretStreamCipherMessage event,
@@ -215,20 +220,21 @@ abstract class SecretStreamPullTransformer<TState extends Object>
   /// @nodoc
   const SecretStreamPullTransformer(
     this.key,
-    // ignore: avoid_positional_boolean_parameters
+    // ignore: avoid_positional_boolean_parameters for single param
     this.requireFinalized,
   );
 
   /// @nodoc
   @protected
-  // ignore: avoid_positional_boolean_parameters
+  @visibleForTesting
+  // ignore: avoid_positional_boolean_parameters for single param
   SecretStreamPullTransformerSink<TState> createSink(bool requireFinalized);
 
   @override
   SecretExStream<SecretStreamPlainMessage> bind(
     Stream<SecretStreamCipherMessage> stream,
   ) {
-    // ignore: close_sinks
+    // ignore: close_sinks is returned by method
     final transformerSink = createSink(requireFinalized);
     final baseStream = Stream<SecretStreamPlainMessage>.eventTransformed(
       stream,

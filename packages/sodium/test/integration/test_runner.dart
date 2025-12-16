@@ -1,10 +1,10 @@
-// ignore_for_file: unnecessary_lambdas
+// ignore_for_file: unnecessary_lambdas for mocking
 
 import 'dart:async';
 import 'dart:isolate';
 
 import 'package:meta/meta.dart';
-// ignore: no_self_package_imports
+
 import 'package:sodium/sodium_sumo.dart';
 import 'package:test/test.dart' as t;
 
@@ -68,25 +68,19 @@ abstract class TestRunner {
     ScalarMultTestCase(this),
   ];
 
-  @protected
-  @visibleForTesting
   Future<Sodium> loadSodium();
 
-  @visibleForOverriding
   late SetupAllFn setUpAll = t.setUpAll;
 
-  @visibleForOverriding
   void setUp(dynamic Function(Sodium sodium) body) =>
       t.setUp(() => body(_sodium));
 
-  @visibleForOverriding
   void test(
     String description,
     dynamic Function(Sodium sodium) body, {
     bool? skip,
   }) => t.test(description, skip: skip, () => body(_sodium));
 
-  @visibleForOverriding
   void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
       t.test(
         '[sumo] $description',
@@ -94,7 +88,6 @@ abstract class TestRunner {
         skip: 'This test only works with the sodium.js sumo variant',
       );
 
-  @visibleForOverriding
   late GroupFn group = t.group;
 
   void setupTests() {
@@ -103,7 +96,7 @@ abstract class TestRunner {
     setUpAll(() async {
       _sodium = await loadSodium();
 
-      // ignore: avoid_print
+      // ignore: avoid_print for test output
       print(
         'Running integration tests with libsodium version: ${_sodium.version} '
         '(${is32Bit ? '32 bit' : '64 bit'})',

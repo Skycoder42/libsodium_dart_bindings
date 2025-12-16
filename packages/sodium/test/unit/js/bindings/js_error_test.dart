@@ -19,7 +19,7 @@ void main() {
       const message = 'error-message';
 
       expect(
-        // ignore: only_throw_errors
+        // ignore: only_throw_errors for testing
         () => jsErrorWrap(() => throw JSError(message)),
         throwsA(
           isA<SodiumException>().having(

@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_lambdas
+// ignore_for_file: unnecessary_lambdas for mocking
 
 @TestOn('dart-vm')
 library;
@@ -34,7 +34,7 @@ class FakeSecureKey extends Fake implements SecureKey {
   Uint8List extractBytes() => bytes;
 }
 
-// ignore: avoid_implementing_value_types
+// ignore: avoid_implementing_value_types for mocking
 class MockSecureKeyFFI extends Mock implements SecureKeyFFI {}
 
 void main() {

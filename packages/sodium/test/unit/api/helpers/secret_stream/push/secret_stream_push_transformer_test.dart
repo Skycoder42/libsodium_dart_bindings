@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member, unnecessary_lambdas
+// ignore_for_file: unnecessary_lambdas for mocking
 import 'dart:async';
 import 'dart:typed_data';
 

@@ -7,9 +7,9 @@ import 'plugin_target.dart';
 import 'plugin_targets.dart';
 
 enum DarwinPlatform {
-  ios('iPhoneOS', true, '-mios-version-min=12.0'),
-  // ignore: constant_identifier_names
-  ios_simulator('iPhoneSimulator', true, '-mios-simulator-version-min=12.0'),
+  ios('iPhoneOS', true, '-mios-version-min=13.0'),
+  // ignore: constant_identifier_names for consistent naming
+  ios_simulator('iPhoneSimulator', true, '-mios-simulator-version-min=13.0'),
   macos('MacOSX', false, '-mmacosx-version-min=10.14', 'A');
 
   final String sdk;
@@ -19,7 +19,7 @@ enum DarwinPlatform {
 
   const DarwinPlatform(
     this.sdk,
-    // ignore: avoid_positional_boolean_parameters
+    // ignore: avoid_positional_boolean_parameters for enum
     this.hasSysroot,
     this.versionParameter, [
     this.frameworkVersion,
@@ -27,54 +27,54 @@ enum DarwinPlatform {
 }
 
 class DarwinTarget extends PluginTarget {
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const ios_arm64 = DarwinTarget(
     platform: DarwinPlatform.ios,
     architecture: 'arm64',
     buildTarget: 'aarch64-apple-darwin',
     hostTarget: 'aarch64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const ios_arm64e = DarwinTarget(
     platform: DarwinPlatform.ios,
     architecture: 'arm64e',
     buildTarget: 'aarch64-apple-darwin',
     hostTarget: 'aarch64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const ios_simulator_arm64 = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
     architecture: 'arm64',
     buildTarget: 'aarch64-apple-darwin',
     hostTarget: 'aarch64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const ios_simulator_arm64e = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
     architecture: 'arm64e',
     buildTarget: 'aarch64-apple-darwin',
     hostTarget: 'aarch64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const ios_simulator_x86_64 = DarwinTarget(
     platform: DarwinPlatform.ios_simulator,
     architecture: 'x86_64',
     buildTarget: 'aarch64-apple-darwin',
     hostTarget: 'x86_64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const macos_arm64 = DarwinTarget(
     platform: DarwinPlatform.macos,
     architecture: 'arm64',
     hostTarget: 'aarch64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const macos_arm64e = DarwinTarget(
     platform: DarwinPlatform.macos,
     architecture: 'arm64e',
     hostTarget: 'aarch64-apple-darwin23',
   );
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const macos_x86_64 = DarwinTarget(
     platform: DarwinPlatform.macos,
     architecture: 'x86_64',
@@ -94,7 +94,7 @@ class DarwinTarget extends PluginTarget {
   // get hash: curl -sSL https://raw.githubusercontent.com/jedisct1/libsodium/refs/heads/master/dist-build/apple-xcframework.sh | b2sum
   // last update: 2024-12-31
   static const _appleXcframeworkScriptHash =
-      // ignore: lines_longer_than_80_chars
+      // ignore: lines_longer_than_80_chars because it's a hash
       '2ff5ee3b140b0e7d43022aa1afe6107c8994a42a3b2e4094d03b62277e1fc6e95b46bfacf10d3b3d7348ccb883653eec7b1e4c92b797b6f07c62b98397f6ecc3';
 
   static final _frameworkInfoPlist =
@@ -122,7 +122,7 @@ class DarwinTarget extends PluginTarget {
   <key>CFBundleVersion</key>
   <string>${libsodium_version.ffi}</string>
   <key>MinimumOSVersion</key>
-  <string>12.0</string>
+  <string>13.0</string>
 </dict>
 </plist>
 ''';

@@ -29,7 +29,7 @@ void main() {
   });
 
   group('SecretStreamPullTransformerSinkJS', () {
-    // ignore: close_sinks
+    // ignore: close_sinks for testing
     late SecretStreamPullTransformerSinkJS sut;
 
     setUp(() {

@@ -22,7 +22,7 @@ class SecretStreamPullTransformerSinkJS
   /// @nodoc
   SecretStreamPullTransformerSinkJS(
     this.sodium,
-    // ignore: avoid_positional_boolean_parameters
+    // ignore: avoid_positional_boolean_parameters for single param
     bool requireFinalized,
   ) : super(requireFinalized);
 
@@ -93,7 +93,7 @@ class SecretStreamPullTransformerJS
   const SecretStreamPullTransformerJS(
     this.sodium,
     SecureKey key,
-    // ignore: avoid_positional_boolean_parameters
+    // ignore: avoid_positional_boolean_parameters for single param
     bool requireFinalized,
   ) : super(key, requireFinalized);
 

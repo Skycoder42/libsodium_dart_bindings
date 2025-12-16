@@ -19,7 +19,7 @@ class SodiumSumoFFI extends SodiumFFI implements SodiumSumo {
       SodiumSumoFFI(await factory(), factory);
 
   @override
-  // ignore: overridden_fields
+  // ignore: overridden_fields for api customization
   late final CryptoSumo crypto = CryptoSumoFFI(sodium);
 
   @override

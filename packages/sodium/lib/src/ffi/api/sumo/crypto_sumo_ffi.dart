@@ -16,7 +16,7 @@ class CryptoSumoFFI extends CryptoFFI implements CryptoSumo {
   CryptoSumoFFI(super.sodium);
 
   @override
-  // ignore: overridden_fields
+  // ignore: overridden_fields for api customization
   late final SignSumo sign = SignSumoFFI(sodium);
 
   @override

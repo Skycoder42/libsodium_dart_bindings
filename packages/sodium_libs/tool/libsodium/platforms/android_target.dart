@@ -5,13 +5,13 @@ import 'package:dart_test_tools/tools.dart';
 import 'plugin_target.dart';
 
 class AndroidTarget extends PluginTarget {
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const arm64_v8a = AndroidTarget(
     architecture: 'arm64-v8a',
     buildTarget: 'armv8-a',
     installTarget: 'armv8-a+crypto',
   );
-  // ignore: constant_identifier_names
+  // ignore: constant_identifier_names for consistent naming
   static const armeabi_v7a = AndroidTarget(
     architecture: 'armeabi-v7a',
     buildTarget: 'armv7-a',

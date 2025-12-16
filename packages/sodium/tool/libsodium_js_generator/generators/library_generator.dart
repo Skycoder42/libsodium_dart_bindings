@@ -18,6 +18,8 @@ final class LibraryGenerator extends SpecGenerator<Library> {
     (b) => b
       ..ignoreForFile.add('non_constant_identifier_names')
       ..ignoreForFile.add('public_member_api_docs')
+      ..ignoreForFile.add('document_ignores')
+      ..ignoreForFile.add('lines_longer_than_80_chars')
       ..directives.add(Directive.import('dart:js_interop'))
       ..body.addAll(_buildBody()),
   );

@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member, unnecessary_lambdas
+// ignore_for_file: unnecessary_lambdas for mocking
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -25,7 +25,7 @@ class SutSecretStreamPullTransformerSink
     extends SecretStreamPullTransformerSink<int> {
   final MockSecretStreamPullTransformerSink mock;
 
-  // ignore: avoid_positional_boolean_parameters
+  // ignore: avoid_positional_boolean_parameters for single parameter
   SutSecretStreamPullTransformerSink(this.mock, bool requireFinalized)
     : super(requireFinalized);
 
@@ -55,7 +55,7 @@ class SutSecretStreamPullTransformer extends SecretStreamPullTransformer<int> {
   SutSecretStreamPullTransformer(
     this.mock,
     SecureKey key,
-    // ignore: avoid_positional_boolean_parameters
+    // ignore: avoid_positional_boolean_parameters for single parameter
     bool requireFinalized,
   ) : super(key, requireFinalized);
 

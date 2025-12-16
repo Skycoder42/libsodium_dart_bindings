@@ -14,7 +14,7 @@ class SodiumSumoJS extends SodiumJS implements SodiumSumo {
   SodiumSumoJS(super.sodium);
 
   @override
-  // ignore: overridden_fields
+  // ignore: overridden_fields for api customization
   late final CryptoSumo crypto = CryptoSumoJS(sodium);
 
   @override

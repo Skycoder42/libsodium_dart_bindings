@@ -1,4 +1,4 @@
-// ignore: no_self_package_imports
+// ignore: dart_test_tools/no_self_package_imports for coverage
 import 'package:sodium/sodium.dart';
 import 'package:test/test.dart';
 

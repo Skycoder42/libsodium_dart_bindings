@@ -16,12 +16,10 @@ Future<void> main(List<String> args) async {
         .single;
 
     if (isExtra) {
-      switch (target) {
-        case PluginPlatform.darwin:
-          await _updateSwiftPackage(url, digest);
-        // ignore: no_default_cases
-        default:
-          throw UnsupportedError('Unexpected extra for $target');
+      if (target case PluginPlatform.darwin) {
+        await _updateSwiftPackage(url, digest);
+      } else {
+        throw UnsupportedError('Unexpected extra for $target');
       }
     } else {
       final targetDir = await Directory.current

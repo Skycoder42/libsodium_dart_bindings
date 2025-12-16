@@ -4,6 +4,7 @@ import 'package:code_builder/code_builder.dart';
 import 'package:dart_test_tools/tools.dart';
 import 'package:path/path.dart';
 
+import '../../sodium_libs/libsodium_version.dart' show libsodium_version;
 import 'libsodium_js_generator/generators/library_generator.dart';
 import 'libsodium_js_generator/generators/test/test_library_generator.dart';
 import 'libsodium_js_generator/json/library_info.dart';
@@ -13,9 +14,6 @@ import 'libsodium_js_generator/loaders/library_info_loader.dart';
 import 'libsodium_js_generator/loaders/repo_loader.dart';
 import 'libsodium_js_generator/loaders/symbols_loader.dart';
 import 'libsodium_js_generator/loaders/type_mappings_loader.dart';
-
-// ignore: directives_ordering
-import '../../sodium_libs/libsodium_version.dart' show libsodium_version;
 
 Future<void> main() async {
   final libraryInfo = await _loadLibraryInfo();

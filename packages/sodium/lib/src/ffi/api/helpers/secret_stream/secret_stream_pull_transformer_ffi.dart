@@ -23,7 +23,7 @@ class SecretStreamPullTransformerSinkFFI
   /// @nodoc
   SecretStreamPullTransformerSinkFFI(
     this.sodium,
-    // ignore: avoid_positional_boolean_parameters
+    // ignore: avoid_positional_boolean_parameters for single param
     bool requireFinalized,
   ) : super(requireFinalized);
 
@@ -138,7 +138,7 @@ class SecretStreamPullTransformerFFI
   const SecretStreamPullTransformerFFI(
     this.sodium,
     SecureKey key,
-    // ignore: avoid_positional_boolean_parameters
+    // ignore: avoid_positional_boolean_parameters for single param
     bool requireFinalized,
   ) : super(key, requireFinalized);
 

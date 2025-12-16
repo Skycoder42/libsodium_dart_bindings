@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_lambdas, invalid_use_of_protected_member
+// ignore_for_file: unnecessary_lambdas for mocking
 
 @TestOn('dart-vm')
 library;
@@ -33,7 +33,7 @@ void main() {
   });
 
   group('SecretStreamPushTransformerSinkFFI', () {
-    // ignore: close_sinks
+    // ignore: close_sinks for testing
     late SecretStreamPushTransformerSinkFFI sut;
 
     setUp(() {

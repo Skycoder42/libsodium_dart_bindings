@@ -25,6 +25,7 @@ class SecretStreamPushTransformerSinkFFI
 
   @override
   @protected
+  @visibleForTesting
   InitPushResult<SodiumPointer<UnsignedChar>> initialize(SecureKey key) {
     SodiumPointer<UnsignedChar>? statePtr;
     SodiumPointer<UnsignedChar>? headerPtr;
@@ -61,11 +62,13 @@ class SecretStreamPushTransformerSinkFFI
 
   @override
   @protected
+  @visibleForTesting
   void rekey(SodiumPointer<UnsignedChar> cryptoState) => sodium
       .crypto_secretstream_xchacha20poly1305_rekey(cryptoState.ptr.cast());
 
   @override
   @protected
+  @visibleForTesting
   SecretStreamCipherMessage encryptMessage(
     SodiumPointer<UnsignedChar> cryptoState,
     SecretStreamPlainMessage event,
@@ -116,6 +119,7 @@ class SecretStreamPushTransformerSinkFFI
 
   @override
   @protected
+  @visibleForTesting
   void disposeState(SodiumPointer<UnsignedChar> cryptoState) =>
       cryptoState.dispose();
 }

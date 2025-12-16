@@ -1,7 +1,6 @@
 import 'dart:isolate';
 import 'dart:typed_data';
 
-// ignore: no_self_package_imports
 import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';

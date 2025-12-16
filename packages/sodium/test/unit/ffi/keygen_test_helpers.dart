@@ -19,7 +19,7 @@ void testKeygen({
 }) => group('keygen', () {
   const keyLen = 24;
 
-  // ignore: prefer_asserts_with_message
+  // ignore: prefer_asserts_with_message for testing
   assert(mockSodium is Mock);
 
   setUp(() {
@@ -73,7 +73,7 @@ void testKeypair({
   const secretKeyLen = 42;
   const publicKeyLen = 24;
 
-  // ignore: prefer_asserts_with_message
+  // ignore: prefer_asserts_with_message for testing
   assert(mockSodium is Mock);
 
   setUp(() {
@@ -150,7 +150,7 @@ void testSeedKeypair({
   const secretKeyLen = 42;
   const publicKeyLen = 24;
 
-  // ignore: prefer_asserts_with_message
+  // ignore: prefer_asserts_with_message for testing
   assert(mockSodium is Mock);
 
   setUp(() {

@@ -3,14 +3,14 @@ description: Demonstrates how to use the sodium_libs plugin.
 publish_to: none
 
 environment:
-  sdk: ^3.9.0
-  flutter: ">=3.35.0"
+  sdk: ^3.10.0
+  flutter: ">3.38.0"
 resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
-  sodium_libs: ^3.4.6+1
+  sodium_libs: ^3.4.6+4
 
 dev_dependencies:
   flutter_driver:
@@ -20,7 +20,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  test: ^1.26.2
+  test: ^1.26.3
   tuple: ^2.0.2
 
 flutter:

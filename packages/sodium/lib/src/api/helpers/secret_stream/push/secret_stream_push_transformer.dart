@@ -35,18 +35,22 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
 
   /// @nodoc
   @protected
+  @visibleForTesting
   void rekey(TState cryptoState);
 
   /// @nodoc
   @protected
+  @visibleForTesting
   void disposeState(TState cryptoState);
 
   /// @nodoc
   @protected
+  @visibleForTesting
   InitPushResult<TState> initialize(SecureKey key);
 
   /// @nodoc
   @protected
+  @visibleForTesting
   SecretStreamCipherMessage encryptMessage(
     TState cryptoState,
     SecretStreamPlainMessage event,
@@ -187,13 +191,14 @@ abstract class SecretStreamPushTransformer<TState extends Object>
 
   /// @nodoc
   @protected
+  @visibleForTesting
   SecretStreamPushTransformerSink<TState> createSink();
 
   @override
   SecretExStream<SecretStreamCipherMessage> bind(
     Stream<SecretStreamPlainMessage> stream,
   ) {
-    // ignore: close_sinks
+    // ignore: close_sinks is returned by method
     final transformerSink = createSink();
     final baseStream = Stream<SecretStreamCipherMessage>.eventTransformed(
       stream,

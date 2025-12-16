@@ -17,7 +17,7 @@ Flutter companion package to sodium that provides the low-level libsodium binari
   s.resource_bundles = {'plugin_name_privacy' => ['sodium_libs/Sources/sodium_libs/PrivacyInfo.xcprivacy']}
 
   s.ios.dependency 'Flutter'
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
 
   s.osx.dependency 'FlutterMacOS'
   s.osx.deployment_target = '10.14'

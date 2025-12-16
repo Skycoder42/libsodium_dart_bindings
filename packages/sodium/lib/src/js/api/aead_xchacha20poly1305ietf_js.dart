@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_lambdas
+// ignore_for_file: unnecessary_lambdas to catch member access errors
 
 import 'dart:js_interop';
 

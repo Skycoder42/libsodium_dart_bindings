@@ -1,4 +1,5 @@
-// ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: type_literal_in_constant_pattern, switch_on_type for pointer
+// type matching
 
 import 'dart:ffi';
 import 'dart:typed_data';
@@ -275,7 +276,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
   TList asListView<TList extends List<num>>({bool owned = false}) {
     if (owned) {
       memoryProtection = MemoryProtection.readWrite;
-      // ignore: unused_result
+      // ignore: unused_result for internal use
       detach();
     }
     final signage = _StaticallyTypedSizeOf.signage<T>();
