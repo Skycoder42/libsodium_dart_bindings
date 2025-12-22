@@ -7,7 +7,7 @@ let package = Package(
     name: "sodium_libs",
     platforms: [
         .iOS("13.0"),
-        .macOS("10.14")
+        .macOS("10.15")
     ],
     products: [
         .library(name: "sodium-libs", targets: ["sodium_libs", "libsodium"])
