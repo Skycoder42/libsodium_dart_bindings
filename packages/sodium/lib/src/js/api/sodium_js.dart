@@ -23,15 +23,6 @@ import 'transferrable_secure_key_js.dart';
 
 /// @nodoc
 @internal
-typedef SodiumJSIsolateCallback<TResult, TSodium extends SodiumJS> =
-    FutureOr<TResult> Function(
-      TSodium sodium,
-      List<SecureKey> secureKeys,
-      List<KeyPair> keyPairs,
-    );
-
-/// @nodoc
-@internal
 class SodiumJS implements Sodium {
   /// @nodoc
   final LibSodiumJS sodium;
@@ -87,7 +78,7 @@ class SodiumJS implements Sodium {
   @protected
   Future<TResult> runIsolatedWithInstance<TResult, TSodiumJS extends SodiumJS>(
     TSodiumJS sodium,
-    SodiumJSIsolateCallback<TResult, TSodiumJS> callback,
+    SodiumIsolateCallback<TResult> callback,
     List<SecureKey> secureKeys,
     List<KeyPair> keyPairs,
   ) async {
@@ -101,12 +92,8 @@ class SodiumJS implements Sodium {
       return true;
     }());
 
-    return await callback(sodium, secureKeys, keyPairs);
+    return await callback(secureKeys, keyPairs);
   }
-
-  @override
-  SodiumFactory get isolateFactory =>
-      () => Future.value(this);
 
   @override
   TransferrableSecureKey createTransferrableSecureKey(SecureKey secureKey) =>

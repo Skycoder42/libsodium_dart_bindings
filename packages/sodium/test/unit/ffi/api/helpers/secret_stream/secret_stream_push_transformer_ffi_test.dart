@@ -11,7 +11,7 @@ import 'package:sodium/src/api/secret_stream.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/helpers/secret_stream/secret_stream_push_transformer_ffi.dart';
 
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
 

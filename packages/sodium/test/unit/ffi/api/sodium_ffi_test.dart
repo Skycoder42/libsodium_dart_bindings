@@ -11,7 +11,6 @@ import 'package:collection/collection.dart';
 import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/key_pair.dart';
-import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/api/transferrable_secure_key.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
@@ -19,7 +18,7 @@ import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_key_pair_ffi.d
 import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_secure_key_ffi.dart';
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:test/test.dart';
 
 import '../../../secure_key_fake.dart';
@@ -44,17 +43,7 @@ void main() {
   setUp(() {
     reset(mockSodium);
 
-    sut = SodiumFFI(mockSodium, () {
-      registerPointers();
-      final sodium = MockSodiumFFI();
-      mockAllocArray(sodium, delayedFree: false);
-      return sodium;
-    });
-  });
-
-  test('fromFactory returns instance created by the factory', () async {
-    final sut = await SodiumFFI.fromFactory(() => MockSodiumFFI());
-    expect(sut.sodium, isNot(same(mockSodium)));
+    sut = SodiumFFI(mockSodium);
   });
 
   test('version returns correct library version', () {
@@ -262,18 +251,10 @@ void main() {
     test('invokes the given callback on a custom isolate', () async {
       final currentIsolateName = Isolate.current.debugName;
       final callbackIsolateName = await sut.runIsolated(
-        (sodium, secureKeys, keyPairs) => Isolate.current.debugName,
+        (secureKeys, keyPairs) => Isolate.current.debugName,
       );
 
       expect(callbackIsolateName, isNot(currentIsolateName));
-    });
-
-    test('invokes the given callback with a sodium instance', () async {
-      final isSodium = await sut.runIsolated(
-        (sodium, secureKeys, keyPairs) => sodium is SodiumFFI,
-      );
-
-      expect(isSodium, isTrue);
     });
 
     test('passes over keys via the transferable secure key', () async {
@@ -283,7 +264,6 @@ void main() {
       final testSecureKey = SecureKeyFake(testSecureKeyData);
 
       final result = await sut.runIsolated(secureKeys: [testSecureKey], (
-        sodium,
         secureKeys,
         keyPairs,
       ) {
@@ -315,7 +295,6 @@ void main() {
       );
 
       final result = await sut.runIsolated(keyPairs: [testKeyPair], (
-        sodium,
         secureKeys,
         keyPairs,
       ) {
@@ -347,35 +326,11 @@ void main() {
 
       final testData = Uint8List.fromList([1, 2, 3, 4, 5]);
 
-      final result = await sut.runIsolated((sodium, _, _) => testData);
+      final result = await sut.runIsolated((_, _) => testData);
 
       expect(result, testData);
       expect(result, isNot(same(testData)));
     });
-  });
-
-  test('isolateFactory returns a factory that '
-      'can create a sodium instance with a different ffi reference', () async {
-    when(() => mockSodium.sodium_library_version_major()).thenReturn(1);
-    when(() => mockSodium.sodium_library_version_minor()).thenReturn(2);
-    when(() => mockSodium.sodium_version_string()).thenReturn(nullptr);
-
-    final factory = sut.isolateFactory;
-
-    final newSodium = await factory();
-
-    expect(
-      newSodium,
-      isA<SodiumFFI>().having(
-        (m) => m.sodium,
-        'sodium',
-        isNot(same(mockSodium)),
-      ),
-    );
-    expect(
-      newSodium.secureAlloc(10),
-      isA<SecureKey>().having((m) => m.length, 'length', 10),
-    );
   });
 
   test('createTransferrableSecureKey creates a transferrable key', () {

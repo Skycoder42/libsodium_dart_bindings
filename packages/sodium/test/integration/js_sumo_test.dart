@@ -3,6 +3,8 @@
 @TestOn('js')
 library;
 
+import 'dart:async';
+
 import 'package:sodium/sodium_sumo.dart';
 import 'package:test/test.dart';
 
@@ -18,7 +20,7 @@ class JsSumoTestRunner extends SumoTestRunner with JsLoaderMixin {
   String get sodiumJsSrc => sodium_sumo_js.sodiumJsSrc;
 
   @override
-  Future<SodiumSumo> loadSodium() => SodiumSumoInit.init(loadSodiumJs);
+  FutureOr<SodiumSumo> loadSodium() => SodiumSumoInit.init(loadSodiumJs);
 }
 
 void main() {

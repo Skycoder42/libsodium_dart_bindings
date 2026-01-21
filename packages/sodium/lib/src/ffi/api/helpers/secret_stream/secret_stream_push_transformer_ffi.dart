@@ -7,7 +7,7 @@ import '../../../../api/helpers/secret_stream/push/secret_stream_push_transforme
 import '../../../../api/secret_stream.dart';
 import '../../../../api/secure_key.dart';
 import '../../../../api/sodium_exception.dart';
-import '../../../bindings/libsodium.ffi.dart';
+import '../../../bindings/libsodium.ffi.wrapper.dart';
 import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';

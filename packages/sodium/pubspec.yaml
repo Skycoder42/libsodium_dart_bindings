@@ -28,63 +28,6 @@ dev_dependencies:
   test: ^1.29.0
   web: ^1.1.1
 
-ffigen:
-  output: "lib/src/ffi/bindings/libsodium.ffi.dart"
-  name: LibSodiumFFI
-  description: "Bindings of libsodium"
-  preamble: |
-    // ignore_for_file: unused_field
-  headers:
-    entry-points:
-      - "test/integration/binaries/linux/include/sodium.h"
-  compiler-opts:
-    - "-I/usr/lib/clang/20/include/"
-  exclude-all-by-default: true
-  macros:
-    include:
-      - SODIUM_.*
-      - CRYPTO_.*
-      - RANDOMBYTES_.*
-      - sodium_.*
-      - crypto_.*
-      - randombytes_.*
-  globals:
-    include:
-      - SODIUM_.*
-      - CRYPTO_.*
-      - RANDOMBYTES_.*
-      - sodium_.*
-      - crypto_.*
-      - randombytes_.*
-  enums:
-    include:
-      - SODIUM_.*
-      - CRYPTO_.*
-      - RANDOMBYTES_.*
-      - sodium_.*
-      - crypto_.*
-      - randombytes_.*
-  structs:
-    include:
-      - sodium.*
-      - crypto.*
-      - randombytes.*
-  unions:
-    include:
-      - sodium.*
-      - crypto.*
-      - randombytes.*
-  functions:
-    include:
-      - sodium.*
-      - crypto.*
-      - randombytes.*
-  typedefs:
-    include:
-      - sodium.*
-      - crypto.*
-      - randombytes.*
-
 cider:
   link_template:
     tag: https://github.com/Skycoder42/libsodium_dart_bindings/releases/tag/sodium-v%tag%

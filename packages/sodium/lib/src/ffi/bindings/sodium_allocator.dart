@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'libsodium.ffi.dart';
+import 'libsodium.ffi.wrapper.dart';
 import 'memory_protection.dart';
 
 /// An [Allocator] using the libsodium memory functionality.

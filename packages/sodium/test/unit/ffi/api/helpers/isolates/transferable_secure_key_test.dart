@@ -12,7 +12,7 @@ import 'package:sodium/src/api/secure_key.dart';
 import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_secure_key_ffi.dart';
 import 'package:sodium/src/ffi/api/secure_key_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:sodium/src/ffi/bindings/sodium_finalizer.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
@@ -66,10 +66,7 @@ void main() {
       when(() => testFfiKeyMock2.detach()).thenReturn(testNativeHandle);
 
       when(() => mockSodiumFFI.sodium).thenReturn(mockLibSodiumFFI);
-      SodiumPointer.debugOverwriteFinalizer(
-        mockLibSodiumFFI,
-        mockSodiumFinalizer,
-      );
+      SodiumPointer.debugOverwriteFinalizer = mockSodiumFinalizer;
     });
 
     test('can wrap ffi secure key for transfer', () {

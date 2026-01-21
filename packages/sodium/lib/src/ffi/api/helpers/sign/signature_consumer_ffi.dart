@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 import '../../../../api/secure_key.dart';
 import '../../../../api/sign.dart';
 import '../../../../api/sodium_exception.dart';
-import '../../../bindings/libsodium.ffi.dart';
+import '../../../bindings/libsodium.ffi.wrapper.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'sign_consumer_ffi_mixin.dart';

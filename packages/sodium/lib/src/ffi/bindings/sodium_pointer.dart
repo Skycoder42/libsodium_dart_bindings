@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 import '../../api/sodium_exception.dart';
 import '../../api/string_x.dart';
 
-import 'libsodium.ffi.dart';
+import 'libsodium.ffi.wrapper.dart';
 import 'memory_protection.dart';
 import 'sodium_finalizer.dart';
 
@@ -16,17 +16,16 @@ import 'sodium_finalizer.dart';
 ///
 /// See https://libsodium.gitbook.io/doc/memory_management
 class SodiumPointer<T extends NativeType> implements Finalizable {
-  static final _sodiumFinalizerCache = Expando<SodiumFinalizer>();
-
-  static SodiumFinalizer _getFinalizer(LibSodiumFFI sodium) =>
-      _sodiumFinalizerCache[sodium] ??= SodiumFinalizer(sodium);
+  static SodiumFinalizer _sodiumFinalizer = SodiumFinalizer();
 
   /// @nodoc
   @visibleForTesting
-  static void debugOverwriteFinalizer(
-    LibSodiumFFI sodium,
-    SodiumFinalizer finalizer,
-  ) => _sodiumFinalizerCache[sodium] = finalizer;
+  static SodiumFinalizer get debugOverwriteFinalizer => _sodiumFinalizer;
+
+  /// @nodoc
+  @visibleForTesting
+  static set debugOverwriteFinalizer(SodiumFinalizer finalizer) =>
+      _sodiumFinalizer = finalizer;
 
   /// libsodium bindings used to access the C API
   final LibSodiumFFI sodium;
@@ -52,7 +51,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
     : _viewParent = null,
       _locked = true,
       _memoryProtection = MemoryProtection.readWrite {
-    _getFinalizer(sodium).attach(this, ptr.cast(), byteLength);
+    _sodiumFinalizer.attach(this, ptr.cast(), byteLength);
   }
 
   /// Allocates new memory using the libsodium APIs.
@@ -366,7 +365,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
       return;
     }
     _disposed = true;
-    _getFinalizer(sodium).detach(this);
+    _sodiumFinalizer.detach(this);
     sodium.sodium_free(ptr.cast());
   }
 
@@ -381,7 +380,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
       );
     }
     _disposed = true;
-    _getFinalizer(sodium).detach(this);
+    _sodiumFinalizer.detach(this);
     return ptr;
   }
 }

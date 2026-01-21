@@ -18,16 +18,7 @@ abstract class SodiumInit {
   /// The [getLibsodium] parameter must be a factory method that returns a
   /// loaded `[lib]sodium.[so|dll|dylib|a|lib|js]`- depending on your platform.
   /// Please refer to the README for more details on loading the library.
-  static Future<Sodium> init(FutureOr<dynamic> Function() getLibsodium) =>
-      initFromSodiumJS(() async => (await getLibsodium()) as LibSodiumJS);
-
-  /// Creates a [Sodium] instance for the loaded libsodium returned by the
-  /// callback as [LibSodiumJS].
-  ///
-  /// The [getLibsodium] parameter must be a factory method that returns a
-  /// loaded `sodium.js`. Please refer to the README for more details on loading
-  /// the library.
-  static Future<Sodium> initFromSodiumJS(
-    FutureOr<LibSodiumJS> Function() getLibsodium,
-  ) async => SodiumJS(await getLibsodium());
+  static Future<Sodium> init(
+    FutureOr<LibSodiumJS> Function() libsodiumFactory,
+  ) async => SodiumJS(await libsodiumFactory());
 }

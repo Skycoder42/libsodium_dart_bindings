@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import '../../../../api/secret_stream.dart';
-import '../../../bindings/libsodium.ffi.dart';
+import '../../../bindings/libsodium.ffi.wrapper.dart';
 
 /// @nodoc
 @internal

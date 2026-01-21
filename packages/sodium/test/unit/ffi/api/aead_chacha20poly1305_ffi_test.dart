@@ -10,7 +10,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/detached_cipher_result.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/aead_chacha20poly1305_ffi.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:test/test.dart';
 
 import '../../../secure_key_fake.dart';

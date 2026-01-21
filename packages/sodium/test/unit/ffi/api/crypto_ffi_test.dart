@@ -14,7 +14,7 @@ import 'package:sodium/src/ffi/api/secret_box_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_stream_ffi.dart';
 import 'package:sodium/src/ffi/api/short_hash_ffi.dart';
 import 'package:sodium/src/ffi/api/sign_ffi.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:test/test.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI {}

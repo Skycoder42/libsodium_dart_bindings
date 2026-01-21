@@ -10,7 +10,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/generic_hash_ffi.dart';
 import 'package:sodium/src/ffi/api/helpers/generic_hash/generic_hash_consumer_ffi.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:test/test.dart';
 
 import '../../../secure_key_fake.dart';
