@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:code_assets/code_assets.dart';
-import 'package:dart_test_tools/tools.dart';
 import 'package:hooks/hooks.dart';
 
-import 'libsodium/build_macos.dart';
+import 'libsodium/build_common.dart';
 import 'libsodium/download.dart';
 
 void main(List<String> args) async => await build(args, (input, output) async {
@@ -13,7 +12,7 @@ void main(List<String> args) async => await build(args, (input, output) async {
   if (config.targetOS == .macOS) {
     final sourceDir = await downloadLibsodium(input);
 
-    final builder = BuildMacos();
+    final builder = BuildCommon.forOs(config.targetOS);
     final installDir = await builder.build(input: input, sourceDir: sourceDir);
 
     final sourceLib = Uri.file(

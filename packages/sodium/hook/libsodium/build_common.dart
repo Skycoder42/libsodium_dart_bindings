@@ -7,7 +7,16 @@ import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
 
-abstract class BuildCommon {
+import 'build_macos.dart';
+
+abstract base class BuildCommon {
+  BuildCommon();
+
+  factory BuildCommon.forOs(OS os) => switch (os) {
+    .macOS => BuildMacos(),
+    _ => throw UnsupportedError('Unsupported OS: $os'),
+  };
+
   Future<Uri> build({
     required BuildInput input,
     required Directory sourceDir,
@@ -129,15 +138,18 @@ abstract class BuildCommon {
     CodeConfig config,
     Directory sourceDir,
     Uri installDirUri,
-  ) async => await exec(
-    './configure',
-    [
-      ...await createConfigureArguments(config),
-      '--prefix=${installDirUri.toFilePath()}',
-    ],
-    workingDirectory: sourceDir,
-    environment: await createEnvironment(config),
-  );
+  ) async {
+    final environment = await createEnvironment(config);
+    await exec(
+      './configure',
+      [
+        ...await createConfigureArguments(config),
+        '--prefix=${installDirUri.toFilePath()}',
+      ],
+      workingDirectory: sourceDir,
+      environment: environment,
+    );
+  }
 
   Future<void> _make(CodeConfig config, Directory sourceDir) async =>
       await exec(
