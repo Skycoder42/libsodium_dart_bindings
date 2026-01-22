@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -13,7 +14,7 @@ abstract class BuildCommon {
   }) async {
     final configHash = utf8.encoder
         .fuse(sha256)
-        .convert(hashValues(input.config.code).join('|'))
+        .convert((await hashValues(input.config.code)).join('|'))
         .toString()
         .substring(0, 10);
 
@@ -38,7 +39,7 @@ abstract class BuildCommon {
 
   @protected
   @mustCallSuper
-  List<Object> hashValues(CodeConfig config) => [
+  FutureOr<List<Object>> hashValues(CodeConfig config) => [
     config.targetArchitecture,
     config.linkModePreference,
     ?config.cCompiler?.compiler,
@@ -48,7 +49,7 @@ abstract class BuildCommon {
 
   @protected
   @mustCallSuper
-  Map<String, String> createEnvironment(CodeConfig config) => {
+  FutureOr<Map<String, String>> createEnvironment(CodeConfig config) => {
     if (config.cCompiler case final cc?) ...{
       'CC': cc.compiler.toFilePath(),
       'AR': cc.archiver.toFilePath(),
@@ -58,7 +59,7 @@ abstract class BuildCommon {
 
   @protected
   @mustCallSuper
-  List<String> createConfigureArguments(CodeConfig config) {
+  FutureOr<List<String>> createConfigureArguments(CodeConfig config) {
     final linkStatic = switch (config.linkModePreference) {
       .static || .preferStatic => true,
       .dynamic || .preferDynamic => false,
@@ -70,61 +71,91 @@ abstract class BuildCommon {
         : const ['--enable-shared=yes', '--enable-static=no'];
   }
 
-  Future<void> _configure(
-    CodeConfig config,
-    Directory sourceDir,
-    Uri installDirUri,
-  ) async {
-    final result = await _exec(
-      './configure',
-      [
-        ...createConfigureArguments(config),
-        '--prefix=${installDirUri.toFilePath()}',
-      ],
-      workingDirectory: sourceDir,
-      environment: createEnvironment(config),
-    );
-
-    if (result != 0) {
-      throw Exception('Configure failed with exit code: $result');
-    }
-  }
-
-  Future<void> _make(CodeConfig config, Directory sourceDir) async {
-    final result = await _exec(
-      'make',
-      ['-j${Platform.numberOfProcessors}', 'install'],
-      workingDirectory: sourceDir,
-      environment: createEnvironment(config),
-    );
-
-    if (result != 0) {
-      throw Exception('Make failed with exit code: $result');
-    }
-  }
-
-  Future<int> _exec(
+  @protected
+  @nonVirtual
+  Future<int> exec(
     String executable,
     List<String> arguments, {
     Directory? workingDirectory,
     Map<String, String>? environment,
+    int? expectExitCode = 0,
   }) async {
     final process = await Process.start(
       executable,
       arguments,
       workingDirectory: workingDirectory?.path,
       environment: environment,
-      mode: ProcessStartMode.inheritStdio,
+      mode: .inheritStdio,
     );
-    return await process.exitCode;
+
+    final exitCode = await process.exitCode;
+    if (expectExitCode != null && exitCode != expectExitCode) {
+      throw Exception('$executable failed with exit code $exitCode.');
+    }
+
+    return exitCode;
   }
+
+  @protected
+  @nonVirtual
+  Stream<List<int>> execStream(
+    String executable,
+    List<String> arguments, {
+    Directory? workingDirectory,
+    Map<String, String>? environment,
+    int? expectExitCode = 0,
+  }) async* {
+    final process = await Process.start(
+      executable,
+      arguments,
+      workingDirectory: workingDirectory?.path,
+      environment: environment,
+    );
+
+    process.stderr.listen(stderr.add);
+
+    yield* process.stdout;
+
+    final exitCode = await process.exitCode;
+    if (expectExitCode != null && exitCode != expectExitCode) {
+      throw Exception(
+        'Process $executable exited with code $exitCode, '
+        'expected $expectExitCode.',
+      );
+    }
+  }
+
+  Future<void> _configure(
+    CodeConfig config,
+    Directory sourceDir,
+    Uri installDirUri,
+  ) async => await exec(
+    './configure',
+    [
+      ...await createConfigureArguments(config),
+      '--prefix=${installDirUri.toFilePath()}',
+    ],
+    workingDirectory: sourceDir,
+    environment: await createEnvironment(config),
+  );
+
+  Future<void> _make(CodeConfig config, Directory sourceDir) async =>
+      await exec(
+        'make',
+        ['-j${Platform.numberOfProcessors}', 'install'],
+        workingDirectory: sourceDir,
+        environment: await createEnvironment(config),
+      );
 
   Future<Directory> _recursiveCopy(Directory source, Uri destinationUri) async {
     final destination = await Directory.fromUri(
       destinationUri,
     ).create(recursive: true);
     await for (final entity in source.list(followLinks: false)) {
-      final newUri = destination.uri.resolve(entity.uri.pathSegments.last);
+      final name = entity.uri.path.endsWith('/')
+          ? entity.uri.pathSegments.reversed.skip(1).first
+          : entity.uri.pathSegments.last;
+      final newUri = destination.uri.resolve(name);
       switch (entity) {
         case File():
           await entity.copy(newUri.toFilePath());
