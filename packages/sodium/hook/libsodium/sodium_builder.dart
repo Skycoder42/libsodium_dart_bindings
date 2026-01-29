@@ -7,34 +7,50 @@ import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
 
-import 'build_macos.dart';
+import 'linux_builder.dart';
+import 'macos_builder.dart';
 
-abstract base class BuildCommon {
-  BuildCommon();
+abstract base class SodiumBuilder {
+  @protected
+  final CodeConfig config;
 
-  factory BuildCommon.forOs(OS os) => switch (os) {
-    .macOS => BuildMacos(),
-    _ => throw UnsupportedError('Unsupported OS: $os'),
+  const SodiumBuilder(this.config);
+
+  factory SodiumBuilder.forConfig(CodeConfig config) =>
+      switch (config.targetOS) {
+        .linux => LinuxBuilder(config),
+        .macOS => MacosBuilder(config),
+        _ => throw UnsupportedError('Unsupported OS: ${config.targetOS}'),
+      };
+
+  @protected
+  bool get isStaticLinking => switch (config.linkModePreference) {
+    .static || .preferStatic => true,
+    .dynamic || .preferDynamic => false,
+    _ => false,
   };
 
-  Future<Uri> build({
+  Future<CodeAsset> build({
     required BuildInput input,
     required Directory sourceDir,
   }) async {
-    final configHash = utf8.encoder
-        .fuse(sha256)
-        .convert((await hashValues(input.config.code)).join('|'))
-        .toString()
-        .substring(0, 10);
+    final hashValue = await configHash
+        .map((v) => v.toString())
+        .transform(utf8.encoder)
+        .transform(sha256)
+        .map((h) => h.toString().substring(0, 10))
+        .single;
 
-    final configUri = input.outputDirectoryShared.resolve('build/$configHash/');
-    final srcDirUri = configUri.resolve('src/');
-    final installDirUri = configUri.resolve('install/');
+    final configUri = input.outputDirectoryShared.resolve('$hashValue/');
+    final srcDirUri = configUri.resolve('s/');
+    final installDirUri = configUri.resolve('i/');
 
     try {
+      final env = await environment;
       final configSrcDir = await _recursiveCopy(sourceDir, srcDirUri);
-      await _configure(input.config.code, configSrcDir, installDirUri);
-      await _make(input.config.code, configSrcDir);
+      await _configure(configSrcDir, installDirUri, env);
+      await _make(configSrcDir, env);
+      return await _createAsset(installDirUri);
     } catch (e) {
       final configDir = Directory.fromUri(configUri);
       if (configDir.existsSync()) {
@@ -42,23 +58,22 @@ abstract base class BuildCommon {
       }
       rethrow;
     }
-
-    return installDirUri;
   }
 
   @protected
   @mustCallSuper
-  FutureOr<List<Object>> hashValues(CodeConfig config) => [
+  Stream<Object> get configHash => Stream.fromIterable([
+    config.targetOS,
     config.targetArchitecture,
     config.linkModePreference,
     ?config.cCompiler?.compiler,
     ?config.cCompiler?.archiver,
     ?config.cCompiler?.linker,
-  ];
+  ]);
 
   @protected
   @mustCallSuper
-  FutureOr<Map<String, String>> createEnvironment(CodeConfig config) => {
+  FutureOr<Map<String, String>> get environment => {
     if (config.cCompiler case final cc?) ...{
       'CC': cc.compiler.toFilePath(),
       'AR': cc.archiver.toFilePath(),
@@ -68,17 +83,9 @@ abstract base class BuildCommon {
 
   @protected
   @mustCallSuper
-  FutureOr<List<String>> createConfigureArguments(CodeConfig config) {
-    final linkStatic = switch (config.linkModePreference) {
-      .static || .preferStatic => true,
-      .dynamic || .preferDynamic => false,
-      _ => false,
-    };
-
-    return linkStatic
-        ? const ['--enable-shared=no', '--enable-static=yes']
-        : const ['--enable-shared=yes', '--enable-static=no'];
-  }
+  FutureOr<List<String>> get configureArgs => isStaticLinking
+      ? const ['--enable-shared=no', '--enable-static=yes']
+      : const ['--enable-shared=yes', '--enable-static=no'];
 
   @protected
   @nonVirtual
@@ -135,29 +142,41 @@ abstract base class BuildCommon {
   }
 
   Future<void> _configure(
-    CodeConfig config,
     Directory sourceDir,
     Uri installDirUri,
+    Map<String, String> env,
   ) async {
-    final environment = await createEnvironment(config);
     await exec(
       './configure',
-      [
-        ...await createConfigureArguments(config),
-        '--prefix=${installDirUri.toFilePath()}',
-      ],
+      [...await configureArgs, '--prefix=${installDirUri.toFilePath()}'],
       workingDirectory: sourceDir,
-      environment: environment,
+      environment: env,
     );
   }
 
-  Future<void> _make(CodeConfig config, Directory sourceDir) async =>
+  Future<void> _make(Directory sourceDir, Map<String, String> env) async =>
       await exec(
         'make',
         ['-j${Platform.numberOfProcessors}', 'install'],
         workingDirectory: sourceDir,
-        environment: await createEnvironment(config),
+        environment: env,
       );
+
+  Future<CodeAsset> _createAsset(Uri installDir) async {
+    final linkMode = isStaticLinking
+        ? StaticLinking()
+        : DynamicLoadingBundled();
+    final libName = config.targetOS.libraryFileName('sodium', linkMode);
+    final libFile = File(installDir.resolve('lib/$libName').toFilePath());
+    final resolvedUri = Uri.file(await libFile.resolveSymbolicLinks());
+
+    return CodeAsset(
+      package: 'sodium',
+      name: 'libsodium',
+      linkMode: linkMode,
+      file: resolvedUri,
+    );
+  }
 
   Future<Directory> _recursiveCopy(Directory source, Uri destinationUri) async {
     final destination = await Directory.fromUri(

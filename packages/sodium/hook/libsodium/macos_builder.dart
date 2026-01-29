@@ -1,10 +1,12 @@
 import 'package:code_assets/code_assets.dart';
 
-import 'build_darwin.dart';
+import 'darwin_builder.dart';
 
-final class BuildMacos extends BuildDarwin {
+final class MacosBuilder extends DarwinBuilder {
+  MacosBuilder(super.config);
+
   @override
-  DarwinConfig getPlatformConfig(CodeConfig config, Uri xcodeDir) {
+  DarwinConfig getPlatformConfig(Uri xcodeDir) {
     assert(config.targetOS == .macOS, 'Expected target OS to be macOS.');
 
     final platform = xcodeDir.resolve('Platforms/MacOSX.platform/Developer/');

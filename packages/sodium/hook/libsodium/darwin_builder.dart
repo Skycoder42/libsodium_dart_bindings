@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:code_assets/code_assets.dart';
 import 'package:meta/meta.dart';
 
-import 'build_common.dart';
+import 'sodium_builder.dart';
 import 'utils.dart';
 
 class DarwinConfig {
@@ -32,19 +31,21 @@ class DarwinConfig {
   }
 }
 
-abstract base class BuildDarwin extends BuildCommon {
+abstract base class DarwinBuilder extends SodiumBuilder {
   DarwinConfig? _cachedPlatformConfig;
 
-  @override
-  Future<List<Object>> hashValues(CodeConfig config) async => [
-    ...await super.hashValues(config),
-    ...(await _getPlatformConfig(config))._hashValues,
-  ];
+  DarwinBuilder(super.config);
 
   @override
-  Future<Map<String, String>> createEnvironment(CodeConfig config) async {
+  Stream<Object> get configHash async* {
+    yield* super.configHash;
+    yield* Stream.fromFuture(_platformConfig).expand((c) => c._hashValues);
+  }
+
+  @override
+  Future<Map<String, String>> get environment async {
     final DarwinConfig(:platform, :arch, :sdk, :versionParameter) =
-        await _getPlatformConfig(config);
+        await _platformConfig;
 
     final binUri = platform.resolve('usr/bin/');
     final sbinUri = platform.resolve('usr/sbin/');
@@ -64,7 +65,7 @@ abstract base class BuildDarwin extends BuildCommon {
     ];
 
     return {
-      ...await super.createEnvironment(config),
+      ...await super.environment,
       'PATH': path,
       'CFLAGS': cFlags.join(' '),
       'LDFLAGS': cFlags.followedBy(ldFlags).join(' '),
@@ -72,24 +73,21 @@ abstract base class BuildDarwin extends BuildCommon {
   }
 
   @override
-  Future<List<String>> createConfigureArguments(CodeConfig config) async {
-    final DarwinConfig(:host, :sdk) = await _getPlatformConfig(config);
+  Future<List<String>> get configureArgs async {
+    final DarwinConfig(:host, :sdk) = await _platformConfig;
 
     return [
-      ...await super.createConfigureArguments(config),
+      ...await super.configureArgs,
       '--host=$host',
       '--with-sysroot=${sdk.toFilePath()}',
     ];
   }
 
   @visibleForOverriding
-  FutureOr<DarwinConfig> getPlatformConfig(CodeConfig config, Uri xcodeDir);
+  FutureOr<DarwinConfig> getPlatformConfig(Uri xcodeDir);
 
-  Future<DarwinConfig> _getPlatformConfig(CodeConfig config) async =>
-      _cachedPlatformConfig ??= await getPlatformConfig(
-        config,
-        await _getXcodeDir(),
-      );
+  Future<DarwinConfig> get _platformConfig async =>
+      _cachedPlatformConfig ??= await getPlatformConfig(await _getXcodeDir());
 
   Future<Uri> _getXcodeDir() async {
     final result = await execStream('xcode-select', const [
