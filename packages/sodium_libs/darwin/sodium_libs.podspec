@@ -25,8 +25,4 @@ Flutter companion package to sodium that provides the low-level libsodium binari
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
-
-  # libsodium
-  s.prepare_command = 'dart run ../tool/libsodium/download.dart darwin'
-  s.vendored_frameworks = "Libraries/libsodium.xcframework"
 end

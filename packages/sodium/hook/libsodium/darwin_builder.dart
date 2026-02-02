@@ -9,6 +9,7 @@ import 'utils.dart';
 
 class DarwinConfig {
   final String arch;
+  final String? build;
   final String host;
   final Uri platform;
   final Uri sdk;
@@ -16,6 +17,7 @@ class DarwinConfig {
 
   DarwinConfig({
     required this.arch,
+    this.build,
     required this.host,
     required this.platform,
     required this.sdk,
@@ -67,17 +69,18 @@ abstract base class DarwinBuilder extends SodiumBuilder {
     return {
       ...await super.environment,
       'PATH': path,
-      'CFLAGS': cFlags.join(' '),
-      'LDFLAGS': cFlags.followedBy(ldFlags).join(' '),
+      'CFLAGS': cFlags.followedBy(ldFlags).join(' '),
+      'LDFLAGS': ldFlags.join(' '),
     };
   }
 
   @override
   Future<List<String>> get configureArgs async {
-    final DarwinConfig(:host, :sdk) = await _platformConfig;
+    final DarwinConfig(:build, :host, :sdk) = await _platformConfig;
 
     return [
       ...await super.configureArgs,
+      if (build != null) '--build=$build',
       '--host=$host',
       '--with-sysroot=${sdk.toFilePath()}',
     ];

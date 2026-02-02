@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
 
+import 'ios_builder.dart';
 import 'linux_builder.dart';
 import 'macos_builder.dart';
 
@@ -20,6 +21,7 @@ abstract base class SodiumBuilder {
       switch (config.targetOS) {
         .linux => LinuxBuilder(config),
         .macOS => MacosBuilder(config),
+        .iOS => IosBuilder(config),
         _ => throw UnsupportedError('Unsupported OS: ${config.targetOS}'),
       };
 
