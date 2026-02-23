@@ -29,8 +29,8 @@ final class TestLibSodiumJsGenerator extends SpecGenerator<Class>
 
   @override
   R accept<R>(SpecVisitor<R> visitor, [R? context]) {
-    context = buildInterface().accept<R>(visitor, context);
-    return super.accept<R>(visitor, context);
+    final newContext = buildInterface().accept<R>(visitor, context);
+    return super.accept<R>(visitor, newContext);
   }
 
   @override

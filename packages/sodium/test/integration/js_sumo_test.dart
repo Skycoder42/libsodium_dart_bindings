@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_ignore for conditional import
+
 @TestOn('js')
 library;
 
