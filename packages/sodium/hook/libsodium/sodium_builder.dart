@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
 
+import 'android_builder.dart';
 import 'ios_builder.dart';
 import 'linux_builder.dart';
 import 'macos_builder.dart';
@@ -21,6 +22,7 @@ abstract base class SodiumBuilder {
       switch (config.targetOS) {
         .linux => LinuxBuilder(config),
         .macOS => MacosBuilder(config),
+        .android => AndroidBuilder(config),
         .iOS => IosBuilder(config),
         _ => throw UnsupportedError('Unsupported OS: ${config.targetOS}'),
       };
@@ -32,6 +34,7 @@ abstract base class SodiumBuilder {
     _ => false,
   };
 
+  @nonVirtual
   Future<CodeAsset> build({
     required BuildInput input,
     required Directory sourceDir,
@@ -48,11 +51,12 @@ abstract base class SodiumBuilder {
     final installDirUri = configUri.resolve('i/');
 
     try {
-      final env = await environment;
       final configSrcDir = await _recursiveCopy(sourceDir, srcDirUri);
-      await _configure(configSrcDir, installDirUri, env);
-      await _make(configSrcDir, env);
-      return await _createAsset(installDirUri);
+      return await buildCached(
+        input: input,
+        sourceDir: configSrcDir,
+        installDir: installDirUri,
+      );
     } catch (e) {
       final configDir = Directory.fromUri(configUri);
       if (configDir.existsSync()) {
@@ -62,32 +66,35 @@ abstract base class SodiumBuilder {
     }
   }
 
+  @visibleForOverriding
+  Future<CodeAsset> buildCached({
+    required BuildInput input,
+    required Directory sourceDir,
+    required Uri installDir,
+  });
+
   @protected
   @mustCallSuper
   Stream<Object> get configHash => Stream.fromIterable([
     config.targetOS,
     config.targetArchitecture,
     config.linkModePreference,
-    ?config.cCompiler?.compiler,
-    ?config.cCompiler?.archiver,
-    ?config.cCompiler?.linker,
   ]);
 
   @protected
-  @mustCallSuper
-  FutureOr<Map<String, String>> get environment => {
-    if (config.cCompiler case final cc?) ...{
-      'CC': cc.compiler.toFilePath(),
-      'AR': cc.archiver.toFilePath(),
-      'LD': cc.linker.toFilePath(),
-    },
-  };
-
-  @protected
-  @mustCallSuper
-  FutureOr<List<String>> get configureArgs => isStaticLinking
-      ? const ['--enable-shared=no', '--enable-static=yes']
-      : const ['--enable-shared=yes', '--enable-static=no'];
+  @nonVirtual
+  CodeAsset createCodeAsset(Uri installDir, [LinkMode? linkMode]) {
+    final actualLinkMode =
+        linkMode ??
+        (isStaticLinking ? StaticLinking() : DynamicLoadingBundled());
+    final libName = config.targetOS.libraryFileName('sodium', actualLinkMode);
+    return CodeAsset(
+      package: 'sodium',
+      name: 'libsodium',
+      linkMode: actualLinkMode,
+      file: installDir.resolve(libName),
+    );
+  }
 
   @protected
   @nonVirtual
@@ -96,6 +103,7 @@ abstract base class SodiumBuilder {
     List<String> arguments, {
     Directory? workingDirectory,
     Map<String, String>? environment,
+    bool runInShell = false,
     int? expectExitCode = 0,
   }) async {
     final process = await Process.start(
@@ -103,6 +111,7 @@ abstract base class SodiumBuilder {
       arguments,
       workingDirectory: workingDirectory?.path,
       environment: environment,
+      runInShell: runInShell,
       mode: .inheritStdio,
     );
 
@@ -141,43 +150,6 @@ abstract base class SodiumBuilder {
         'expected $expectExitCode.',
       );
     }
-  }
-
-  Future<void> _configure(
-    Directory sourceDir,
-    Uri installDirUri,
-    Map<String, String> env,
-  ) async {
-    await exec(
-      './configure',
-      [...await configureArgs, '--prefix=${installDirUri.toFilePath()}'],
-      workingDirectory: sourceDir,
-      environment: env,
-    );
-  }
-
-  Future<void> _make(Directory sourceDir, Map<String, String> env) async =>
-      await exec(
-        'make',
-        ['-j${Platform.numberOfProcessors}', 'install'],
-        workingDirectory: sourceDir,
-        environment: env,
-      );
-
-  Future<CodeAsset> _createAsset(Uri installDir) async {
-    final linkMode = isStaticLinking
-        ? StaticLinking()
-        : DynamicLoadingBundled();
-    final libName = config.targetOS.libraryFileName('sodium', linkMode);
-    final libFile = File(installDir.resolve('lib/$libName').toFilePath());
-    final resolvedUri = Uri.file(await libFile.resolveSymbolicLinks());
-
-    return CodeAsset(
-      package: 'sodium',
-      name: 'libsodium',
-      linkMode: linkMode,
-      file: resolvedUri,
-    );
   }
 
   Future<Directory> _recursiveCopy(Directory source, Uri destinationUri) async {

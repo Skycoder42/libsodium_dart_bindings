@@ -1,8 +1,8 @@
 import 'package:code_assets/code_assets.dart';
 
-import 'sodium_builder.dart';
+import 'automake_builder.dart';
 
-final class LinuxBuilder extends SodiumBuilder {
+final class LinuxBuilder extends AutomakeBuilder {
   const LinuxBuilder(super.config);
 
   @override

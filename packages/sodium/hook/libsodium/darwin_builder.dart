@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:meta/meta.dart';
 
-import 'sodium_builder.dart';
+import 'automake_builder.dart';
 import 'utils.dart';
 
 class DarwinConfig {
@@ -33,7 +33,7 @@ class DarwinConfig {
   }
 }
 
-abstract base class DarwinBuilder extends SodiumBuilder {
+abstract base class DarwinBuilder extends AutomakeBuilder {
   DarwinConfig? _cachedPlatformConfig;
 
   DarwinBuilder(super.config);
