@@ -9,24 +9,24 @@ resolution: workspace
 
 dependencies:
   code_assets: ^1.0.0
-  ffi: ^2.1.5
+  ffi: ^2.2.0
   freezed_annotation: ^3.1.0
-  hooks: ^1.0.0
+  hooks: ^1.0.1
   meta: ^1.17.0
 
 dev_dependencies:
-  analyzer: ^8.4.0
+  analyzer: ^10.0.1
   args: ^2.7.0
-  build_runner: ^2.10.5
-  cider: ^0.2.9
+  build_runner: ^2.11.1
+  cider: ^0.2.10
   code_builder: ^4.11.1
   collection: ^1.19.1
   coverage: ^1.15.0
-  dart_pre_commit: ^6.1.0
-  dart_style: ^3.1.3
-  dart_test_tools: ^7.0.1
+  dart_pre_commit: ^6.1.1+1
+  dart_style: ^3.1.5
+  dart_test_tools: ^7.0.2
   ffigen: ^20.1.1
-  freezed: ^3.2.3
+  freezed: ^3.2.5
   glob: ^2.1.3
   mocktail: ^1.0.4
   path: ^1.9.1

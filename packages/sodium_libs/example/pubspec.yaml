@@ -10,7 +10,7 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  sodium_libs: ^3.4.6+4
+  sodium_libs: ^3.4.7
 
 dev_dependencies:
   flutter_driver:
