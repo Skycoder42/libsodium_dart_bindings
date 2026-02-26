@@ -11,6 +11,7 @@ import 'android_builder.dart';
 import 'ios_builder.dart';
 import 'linux_builder.dart';
 import 'macos_builder.dart';
+import 'windows_builder.dart';
 
 abstract base class SodiumBuilder {
   @protected
@@ -20,10 +21,11 @@ abstract base class SodiumBuilder {
 
   factory SodiumBuilder.forConfig(CodeConfig config) =>
       switch (config.targetOS) {
-        .linux => LinuxBuilder(config),
-        .macOS => MacosBuilder(config),
         .android => AndroidBuilder(config),
         .iOS => IosBuilder(config),
+        .linux => LinuxBuilder(config),
+        .macOS => MacosBuilder(config),
+        .windows => WindowsBuilder(config),
         _ => throw UnsupportedError('Unsupported OS: ${config.targetOS}'),
       };
 
