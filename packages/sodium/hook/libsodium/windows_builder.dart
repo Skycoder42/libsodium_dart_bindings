@@ -64,7 +64,7 @@ final class WindowsBuilder extends SodiumBuilder {
       ..writeln(' /p:RuntimeLibrary=MultiThreadedDLL')
       ..writeln('exit /b %errorlevel%');
 
-    await scriptFile.writeAsString(scriptBuilder.toString());
+    await scriptFile.writeAsString(scriptBuilder.toString(), flush: true);
     return scriptFile.uri;
   }
 
