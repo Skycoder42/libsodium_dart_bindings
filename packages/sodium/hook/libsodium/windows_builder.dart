@@ -37,7 +37,7 @@ final class WindowsBuilder extends SodiumBuilder {
       return scriptFile.uri;
     }
 
-    final scriptBuilder = StringBuffer()..writeln('@ECHO OFF');
+    final scriptBuilder = StringBuffer()..writeln('@ECHO ON');
 
     if (config.cCompiler?.windows.developerCommandPrompt
         case final commandPrompt?) {
@@ -50,7 +50,7 @@ final class WindowsBuilder extends SodiumBuilder {
           ..write(' ')
           ..write(arg);
       }
-      scriptBuilder.writeln(' > nul 2>&1');
+      scriptBuilder.writeln();
     }
 
     scriptBuilder
