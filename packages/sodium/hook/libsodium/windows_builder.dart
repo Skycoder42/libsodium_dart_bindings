@@ -19,8 +19,7 @@ final class WindowsBuilder extends SodiumBuilder {
     required Uri installDir,
   }) async {
     final scriptFile = await _createBuildScript(sourceDir);
-    final winPath = scriptFile.toFilePath(windows: true);
-    await exec('cmd.exe', ['/c', '"$winPath"']);
+    await exec('cmd.exe', ['/c', scriptFile.toFilePath(windows: true)]);
     return createCodeAsset(sourceDir.uri.resolve(_assetPath));
   }
 
