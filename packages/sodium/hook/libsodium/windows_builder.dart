@@ -32,6 +32,17 @@ final class WindowsBuilder extends SodiumBuilder {
   );
 
   Future<Uri> _createBuildScript(Directory sourceDir) async {
+    stderr
+      ..writeln('CC: ${config.cCompiler?.compiler}')
+      ..writeln('AR: ${config.cCompiler?.archiver}')
+      ..writeln('LD ${config.cCompiler?.linker}')
+      ..writeln(
+        'VSDEVCMD: ${config.cCompiler?.windows.developerCommandPrompt?.script}',
+      )
+      ..writeln(
+        'ARGS: ${config.cCompiler?.windows.developerCommandPrompt?.arguments}',
+      );
+
     final scriptFile = File.fromUri(sourceDir.uri.resolve('dart-build.bat'));
     if (scriptFile.existsSync()) {
       return scriptFile.uri;
