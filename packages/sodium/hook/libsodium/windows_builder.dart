@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print for debugging
+
 import 'dart:io';
 
 import 'package:code_assets/code_assets.dart';
@@ -50,21 +52,22 @@ final class WindowsBuilder extends SodiumBuilder {
 
     final scriptBuilder = StringBuffer()..writeln('@ECHO ON');
 
-    if (config.cCompiler?.windows.developerCommandPrompt
-        case final commandPrompt?) {
+    final commandPrompt =
+        config.cCompiler?.windows.developerCommandPrompt ??
+        await _findVcDevCmd();
+
+    scriptBuilder
+      ..write('CALL "')
+      ..write(commandPrompt.script.toFilePath(windows: true))
+      ..write('"');
+    for (final arg in commandPrompt.arguments) {
       scriptBuilder
-        ..write('CALL "')
-        ..write(commandPrompt.script.toFilePath(windows: true))
-        ..write('"');
-      for (final arg in commandPrompt.arguments) {
-        scriptBuilder
-          ..write(' ')
-          ..write(arg);
-      }
-      scriptBuilder.writeln();
+        ..write(' ')
+        ..write(arg);
     }
 
     scriptBuilder
+      ..writeln()
       ..write('msbuild builds/msvc/')
       ..write(_vsVersion)
       ..write('/libsodium.sln /m /v:n /MD /p:Configuration=')
@@ -83,7 +86,116 @@ final class WindowsBuilder extends SodiumBuilder {
   String _mapPlatform(Architecture arch) => switch (arch) {
     .arm64 => 'ARM64',
     .x64 => 'x64',
-    .ia32 => 'Win32',
+    .ia32 => 'x86',
     _ => throw UnsupportedError('Unsupported Windows architecture: $arch'),
   };
+
+  String _mapVcDevCmdPlatform(Architecture arch) => switch (arch) {
+    .arm64 => 'arm64',
+    .arm => 'arm',
+    .x64 => 'amd64',
+    .ia32 => 'x86',
+    _ => throw UnsupportedError('Unsupported Windows architecture: $arch'),
+  };
+
+  String _mapVcVarsallPlatform(
+    Architecture targetArch,
+    Architecture hostArch,
+  ) => switch ((targetArch, hostArch)) {
+    (.x64, .x64) => 'amd64',
+    (.x64, .ia32) => 'x86_amd64',
+    (.ia32, .ia32 || .x64) => 'x86',
+    (.arm64, .x64) => 'amd64_arm64',
+    (.arm64, .ia32) => 'x86_arm64',
+    (.arm, .x64) => 'amd64_arm',
+    (.arm, .ia32) => 'x86_arm',
+    _ => throw UnsupportedError(
+      'Unsupported Windows architecture combination: '
+      'Target=$targetArch, Host=$hostArch',
+    ),
+  };
+
+  Future<DeveloperCommandPrompt> _findVcDevCmd() async {
+    final vsWherePaths =
+        [
+          Platform.environment['PROGRAMFILES(X86)'],
+          Platform.environment['PROGRAMFILES'],
+          r'C:\Program Files (x86)',
+          r'C:\Program Files',
+        ].nonNulls.map(
+          (b) => path.join(
+            b,
+            'Microsoft Visual Studio',
+            'Installer',
+            'vswhere.exe',
+          ),
+        );
+
+    for (final vsWherePath in vsWherePaths) {
+      if (!File(vsWherePath).existsSync()) {
+        print('vswhere.exe not found at $vsWherePath');
+        continue;
+      }
+
+      // See https://devblogs.microsoft.com/cppblog/finding-the-visual-c-compiler-tools-in-visual-studio-2017/
+      final installDir = await execStream(vsWherePath, [
+        '-latest',
+        '-products',
+        '*',
+        '-requires',
+        'Microsoft.VisualStudio.Workload.NativeDesktop',
+        '-property',
+        'installationPath',
+      ]).join();
+      print('VSWHERE result: $installDir');
+
+      final versionFile = File(
+        path.join(
+          installDir,
+          'VC',
+          'Auxiliary',
+          'Build',
+          'Microsoft.VCToolsVersion.default.txt',
+        ),
+      );
+      final version = versionFile.existsSync()
+          ? (await versionFile.readAsString()).trim()
+          : _toolsetVersion;
+      print('VC Tools version: $version');
+
+      final vsDevCmd = File(
+        path.join(installDir, 'Common7', 'Tools', 'VsDevCmd.bat'),
+      );
+      if (vsDevCmd.existsSync()) {
+        print('Found VsDevCmd.bat at: ${vsDevCmd.path}');
+        return DeveloperCommandPrompt(
+          script: vsDevCmd.uri,
+          arguments: [
+            '-arch=${_mapVcDevCmdPlatform(config.targetArchitecture)}',
+            '-host_arch=${_mapVcDevCmdPlatform(Architecture.current)}',
+          ],
+        );
+      }
+
+      final vcvarsall = File(
+        path.join(installDir, 'VC', 'Auxiliary', 'Build', 'vcvarsall.bat'),
+      );
+      if (vcvarsall.existsSync()) {
+        print('Found vcvarsall.bat at: ${vcvarsall.path}');
+        return DeveloperCommandPrompt(
+          script: vcvarsall.uri,
+          arguments: [
+            _mapVcVarsallPlatform(
+              config.targetArchitecture,
+              Architecture.current,
+            ),
+          ],
+        );
+      }
+    }
+
+    throw Exception(
+      'Could not find Visual Studio Developer Command Prompt script',
+    );
+  }
 }
