@@ -150,6 +150,12 @@ final class WindowsBuilder extends SodiumBuilder {
       ]).transform(utf8.decoder).join();
       print('VSWHERE result: $installDir');
 
+      if (!Directory(installDir).existsSync()) {
+        print('Installation directory not found: $installDir');
+        await _recursivePrint(Directory(installDir).parent.parent);
+        continue;
+      }
+
       final versionFile = File(
         path.join(
           installDir,
