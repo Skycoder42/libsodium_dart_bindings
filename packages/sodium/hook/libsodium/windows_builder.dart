@@ -73,7 +73,9 @@ final class WindowsBuilder extends SodiumBuilder {
       ..writeln('type outdir.txt');
 
     _writeMsBuildCommonArgs(scriptBuilder);
-    scriptBuilder.writeln('exit /b %errorlevel%');
+    scriptBuilder
+      ..writeln()
+      ..writeln('exit /b %errorlevel%');
 
     await scriptFile.writeAsString(scriptBuilder.toString(), flush: true);
     return scriptFile.uri;
