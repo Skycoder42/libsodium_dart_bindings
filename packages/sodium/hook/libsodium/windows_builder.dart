@@ -26,6 +26,9 @@ final class WindowsBuilder extends SodiumBuilder {
       '/c',
       scriptFile.toFilePath(windows: true),
     ], workingDirectory: sourceDir);
+
+    await _recursivePrint(Directory.fromUri(sourceDir.uri.resolve('bin')));
+
     return createCodeAsset(sourceDir.uri.resolve(_assetPath));
   }
 
