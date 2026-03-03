@@ -10,7 +10,7 @@ import 'package:path/path.dart' as path;
 import 'sodium_builder.dart';
 
 final class WindowsBuilder extends SodiumBuilder {
-  static const _vsVersion = 'vs2026';
+  static const _vsVersion = 'vs2022';
   static const _toolsetVersion = 'v143';
 
   WindowsBuilder(super.config);
@@ -22,7 +22,10 @@ final class WindowsBuilder extends SodiumBuilder {
     required Uri installDir,
   }) async {
     final scriptFile = await _createBuildScript(sourceDir);
-    await exec('cmd.exe', ['/c', scriptFile.toFilePath(windows: true)]);
+    await exec('cmd.exe', [
+      '/c',
+      scriptFile.toFilePath(windows: true),
+    ], workingDirectory: sourceDir);
     return createCodeAsset(sourceDir.uri.resolve(_assetPath));
   }
 
@@ -35,17 +38,6 @@ final class WindowsBuilder extends SodiumBuilder {
   );
 
   Future<Uri> _createBuildScript(Directory sourceDir) async {
-    stderr
-      ..writeln('CC: ${config.cCompiler?.compiler}')
-      ..writeln('AR: ${config.cCompiler?.archiver}')
-      ..writeln('LD ${config.cCompiler?.linker}')
-      ..writeln(
-        'VSDEVCMD: ${config.cCompiler?.windows.developerCommandPrompt?.script}',
-      )
-      ..writeln(
-        'ARGS: ${config.cCompiler?.windows.developerCommandPrompt?.arguments}',
-      );
-
     final scriptFile = File.fromUri(sourceDir.uri.resolve('dart-build.bat'));
     if (scriptFile.existsSync()) {
       return scriptFile.uri;
