@@ -147,7 +147,7 @@ final class WindowsBuilder extends SodiumBuilder {
         'Microsoft.VisualStudio.Workload.NativeDesktop',
         '-property',
         'installationPath',
-      ]).transform(utf8.decoder).join();
+      ]).transform(utf8.decoder).join().then((p) => p.trim());
       print('VSWHERE result: $installDir');
 
       if (!Directory(installDir).existsSync()) {
