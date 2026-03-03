@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print for debugging
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -143,10 +141,10 @@ final class WindowsBuilder extends SodiumBuilder {
         '-property',
         'installationPath',
       ]).transform(utf8.decoder).join().then((p) => p.trim());
-      print('VSWHERE result: $installDir');
+      stderr.writeln('VSWHERE result: $installDir');
 
       if (!Directory(installDir).existsSync()) {
-        print('Installation directory not found: $installDir');
+        stderr.writeln('Installation directory not found: $installDir');
         await _recursivePrint(Directory(installDir).parent.parent);
         continue;
       }
@@ -163,13 +161,13 @@ final class WindowsBuilder extends SodiumBuilder {
       final version = versionFile.existsSync()
           ? (await versionFile.readAsString()).trim()
           : null;
-      print('VC Tools version: $version');
+      stderr.writeln('VC Tools version: $version');
 
       final vsDevCmd = File(
         path.join(installDir, 'Common7', 'Tools', 'VsDevCmd.bat'),
       );
       if (vsDevCmd.existsSync()) {
-        print('Found VsDevCmd.bat at: ${vsDevCmd.path}');
+        stderr.writeln('Found VsDevCmd.bat at: ${vsDevCmd.path}');
         return DeveloperCommandPrompt(
           script: vsDevCmd.uri,
           arguments: [
@@ -183,7 +181,7 @@ final class WindowsBuilder extends SodiumBuilder {
         path.join(installDir, 'VC', 'Auxiliary', 'Build', 'vcvarsall.bat'),
       );
       if (vcvarsall.existsSync()) {
-        print('Found vcvarsall.bat at: ${vcvarsall.path}');
+        stderr.writeln('Found vcvarsall.bat at: ${vcvarsall.path}');
         return DeveloperCommandPrompt(
           script: vcvarsall.uri,
           arguments: [
@@ -206,12 +204,12 @@ final class WindowsBuilder extends SodiumBuilder {
 
 Future<void> _recursivePrint(Directory dir, [int level = 0]) async {
   if (level == 0) {
-    print('Directory structure of ${dir.path}:');
+    stderr.writeln('Directory structure of ${dir.path}:');
   }
 
   final indent = '  ' * (level + 1);
   await for (final entity in dir.list()) {
-    print('$indent${entity.path}');
+    stderr.writeln('$indent${entity.path}');
     if (entity is Directory) {
       await _recursivePrint(entity, level + 1);
     }
