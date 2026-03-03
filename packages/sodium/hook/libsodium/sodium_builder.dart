@@ -89,7 +89,11 @@ abstract base class SodiumBuilder {
     final actualLinkMode =
         linkMode ??
         (isStaticLinking ? StaticLinking() : DynamicLoadingBundled());
-    final libName = config.targetOS.libraryFileName('sodium', actualLinkMode);
+    final libName = config.targetOS.libraryFileName(
+      // libsodium uses the lib prefix for windows as well
+      config.targetOS == .windows ? 'libsodium' : 'sodium',
+      actualLinkMode,
+    );
     return CodeAsset(
       package: 'sodium',
       name: 'libsodium',

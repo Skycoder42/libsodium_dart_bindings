@@ -35,7 +35,7 @@ final class WindowsBuilder extends SodiumBuilder {
     _mapPlatform(config.targetArchitecture),
     'Release',
     _toolsetVersion,
-    isStaticLinking ? 'static' : 'dynamic',
+    isStaticLinking ? 'static/' : 'dynamic/',
   );
 
   Future<Uri> _createBuildScript(Directory sourceDir) async {
@@ -80,7 +80,7 @@ final class WindowsBuilder extends SodiumBuilder {
   String _mapPlatform(Architecture arch) => switch (arch) {
     .arm64 => 'ARM64',
     .x64 => 'x64',
-    .ia32 => 'x86',
+    .ia32 => 'Win32',
     _ => throw UnsupportedError('Unsupported Windows architecture: $arch'),
   };
 
