@@ -27,6 +27,12 @@ final class WindowsBuilder extends SodiumBuilder {
 
     await _recursivePrint(Directory.fromUri(sourceDir.uri.resolve('bin')));
 
+    final outFile = File.fromUri(sourceDir.uri.resolve('outdir.txt'));
+    final outDirPath = outFile.existsSync()
+        ? (await outFile.readAsString()).trim()
+        : null;
+    stderr.writeln('Build output directory: $outDirPath');
+
     return createCodeAsset(sourceDir.uri.resolve(_assetPath));
   }
 
@@ -60,19 +66,28 @@ final class WindowsBuilder extends SodiumBuilder {
         ..write(arg);
     }
 
+    scriptBuilder.writeln();
+    _writeMsBuildCommonArgs(scriptBuilder);
     scriptBuilder
-      ..writeln()
+      ..writeln('-getProperty:OutDir > outdir.txt')
+      ..writeln('type outdir.txt');
+
+    _writeMsBuildCommonArgs(scriptBuilder);
+    scriptBuilder.writeln('exit /b %errorlevel%');
+
+    await scriptFile.writeAsString(scriptBuilder.toString(), flush: true);
+    return scriptFile.uri;
+  }
+
+  void _writeMsBuildCommonArgs(StringBuffer scriptBuilder) {
+    scriptBuilder
       ..write('msbuild builds/msvc/')
       ..write(_vsVersion)
       ..write('/libsodium.sln /m /v:n /p:Configuration=')
       ..write(_configuration)
       ..write(' /p:Platform=')
       ..write(_mapPlatform(config.targetArchitecture))
-      ..writeln(' /p:RuntimeLibrary=MultiThreadedDLL')
-      ..writeln('exit /b %errorlevel%');
-
-    await scriptFile.writeAsString(scriptBuilder.toString(), flush: true);
-    return scriptFile.uri;
+      ..write(' /p:RuntimeLibrary=MultiThreadedDLL');
   }
 
   String get _configuration => isStaticLinking ? 'StaticRelease' : 'DynRelease';
@@ -148,20 +163,6 @@ final class WindowsBuilder extends SodiumBuilder {
         await _recursivePrint(Directory(installDir).parent.parent);
         continue;
       }
-
-      final versionFile = File(
-        path.join(
-          installDir,
-          'VC',
-          'Auxiliary',
-          'Build',
-          'Microsoft.VCToolsVersion.default.txt',
-        ),
-      );
-      final version = versionFile.existsSync()
-          ? (await versionFile.readAsString()).trim()
-          : null;
-      stderr.writeln('VC Tools version: $version');
 
       final vsDevCmd = File(
         path.join(installDir, 'Common7', 'Tools', 'VsDevCmd.bat'),
