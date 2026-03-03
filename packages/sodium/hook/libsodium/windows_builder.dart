@@ -176,12 +176,6 @@ final class WindowsBuilder extends SodiumBuilder {
             '-host_arch=${_mapVcDevCmdPlatform(Architecture.current)}',
           ],
         );
-      } else {
-        final dir = Directory(path.join(installDir, 'Common7'));
-        print(
-          'VsDevCmd.bat NOT FOUND:\n'
-          '${dir.listSync(recursive: true).join('\n')}',
-        );
       }
 
       final vcvarsall = File(
@@ -198,17 +192,27 @@ final class WindowsBuilder extends SodiumBuilder {
             ),
           ],
         );
-      } else {
-        final dir = Directory(path.join(installDir, 'VC'));
-        print(
-          'vcvarsall.bat NOT FOUND:\n'
-          '${dir.listSync(recursive: true).join('\n')}',
-        );
       }
+
+      await _recursivePrint(Directory(installDir));
     }
 
     throw Exception(
       'Could not find Visual Studio Developer Command Prompt script',
     );
+  }
+}
+
+Future<void> _recursivePrint(Directory dir, [int level = 0]) async {
+  if (level == 0) {
+    print('Directory structure of ${dir.path}:');
+  }
+
+  final indent = '  ' * (level + 1);
+  await for (final entity in dir.list()) {
+    print('$indent${entity.path}');
+    if (entity is Directory) {
+      await _recursivePrint(entity, level + 1);
+    }
   }
 }
