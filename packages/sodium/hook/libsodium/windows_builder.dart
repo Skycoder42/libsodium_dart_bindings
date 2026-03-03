@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print for debugging
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:code_assets/code_assets.dart';
@@ -146,7 +147,7 @@ final class WindowsBuilder extends SodiumBuilder {
         'Microsoft.VisualStudio.Workload.NativeDesktop',
         '-property',
         'installationPath',
-      ]).join();
+      ]).transform(utf8.decoder).join();
       print('VSWHERE result: $installDir');
 
       final versionFile = File(
