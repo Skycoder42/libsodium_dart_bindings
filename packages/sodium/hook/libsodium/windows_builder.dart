@@ -161,7 +161,7 @@ final class WindowsBuilder extends SodiumBuilder {
       );
       final version = versionFile.existsSync()
           ? (await versionFile.readAsString()).trim()
-          : _toolsetVersion;
+          : null;
       print('VC Tools version: $version');
 
       final vsDevCmd = File(
@@ -175,6 +175,12 @@ final class WindowsBuilder extends SodiumBuilder {
             '-arch=${_mapVcDevCmdPlatform(config.targetArchitecture)}',
             '-host_arch=${_mapVcDevCmdPlatform(Architecture.current)}',
           ],
+        );
+      } else {
+        final dir = Directory(path.join(installDir, 'Common7'));
+        print(
+          'VsDevCmd.bat NOT FOUND:\n'
+          '${dir.listSync(recursive: true).join('\n')}',
         );
       }
 
@@ -191,6 +197,12 @@ final class WindowsBuilder extends SodiumBuilder {
               Architecture.current,
             ),
           ],
+        );
+      } else {
+        final dir = Directory(path.join(installDir, 'VC'));
+        print(
+          'vcvarsall.bat NOT FOUND:\n'
+          '${dir.listSync(recursive: true).join('\n')}',
         );
       }
     }
