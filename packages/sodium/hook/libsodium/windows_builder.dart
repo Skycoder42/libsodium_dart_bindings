@@ -71,7 +71,7 @@ final class WindowsBuilder extends SodiumBuilder {
       ..writeln()
       ..write('msbuild builds/msvc/')
       ..write(_vsVersion)
-      ..write('/libsodium.sln /m /v:n /MD /p:Configuration=')
+      ..write('/libsodium.sln /m /v:n /p:Configuration=')
       ..write(_configuration)
       ..write(' /p:Platform=')
       ..write(_mapPlatform(config.targetArchitecture))
