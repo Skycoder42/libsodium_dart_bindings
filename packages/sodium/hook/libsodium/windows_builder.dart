@@ -127,7 +127,7 @@ final class WindowsBuilder extends SodiumBuilder {
 
     for (final vsWherePath in vsWherePaths) {
       if (!File(vsWherePath).existsSync()) {
-        print('vswhere.exe not found at $vsWherePath');
+        stderr.writeln('vswhere.exe not found at $vsWherePath');
         continue;
       }
 
