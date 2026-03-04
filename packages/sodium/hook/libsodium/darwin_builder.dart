@@ -24,8 +24,9 @@ class DarwinConfig {
     required this.versionParameter,
   });
 
-  Iterable<Object> get _hashValues sync* {
+  Iterable<Object?> get _hashValues sync* {
     yield arch;
+    yield build;
     yield host;
     yield platform;
     yield sdk;
@@ -34,20 +35,27 @@ class DarwinConfig {
 }
 
 abstract base class DarwinBuilder extends AutomakeBuilder {
-  DarwinConfig? _cachedPlatformConfig;
+  late final DarwinConfig _platformConfig;
 
   DarwinBuilder(super.config);
 
   @override
-  Stream<Object> get configHash async* {
-    yield* super.configHash;
-    yield* Stream.fromFuture(_platformConfig).expand((c) => c._hashValues);
+  @nonVirtual
+  Future<void> prepare() async {
+    final xcodeDir = await _getXcodeDir();
+    _platformConfig = await getPlatformConfig(xcodeDir);
   }
 
   @override
-  Future<Map<String, String>> get environment async {
+  Iterable<Object?> get configHash sync* {
+    yield* super.configHash;
+    yield* _platformConfig._hashValues;
+  }
+
+  @override
+  Map<String, String> get environment {
     final DarwinConfig(:platform, :arch, :sdk, :versionParameter) =
-        await _platformConfig;
+        _platformConfig;
 
     final binUri = platform.resolve('usr/bin/');
     final sbinUri = platform.resolve('usr/sbin/');
@@ -67,7 +75,7 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
     ];
 
     return {
-      ...await super.environment,
+      ...super.environment,
       'PATH': path,
       'CFLAGS': cFlags.followedBy(ldFlags).join(' '),
       'LDFLAGS': ldFlags.join(' '),
@@ -75,22 +83,18 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
   }
 
   @override
-  Future<List<String>> get configureArgs async {
-    final DarwinConfig(:build, :host, :sdk) = await _platformConfig;
-
-    return [
-      ...await super.configureArgs,
-      if (build != null) '--build=$build',
-      '--host=$host',
-      '--with-sysroot=${sdk.toFilePath()}',
-    ];
+  Iterable<String> get configureArgs sync* {
+    final DarwinConfig(:build, :host, :sdk) = _platformConfig;
+    yield* super.configureArgs;
+    if (build != null) {
+      yield '--build=$build';
+    }
+    yield '--host=$host';
+    yield '--with-sysroot=${sdk.toFilePath()}';
   }
 
   @visibleForOverriding
   FutureOr<DarwinConfig> getPlatformConfig(Uri xcodeDir);
-
-  Future<DarwinConfig> get _platformConfig async =>
-      _cachedPlatformConfig ??= await getPlatformConfig(await _getXcodeDir());
 
   Future<Uri> _getXcodeDir() async {
     final result = await execStream('xcode-select', const [

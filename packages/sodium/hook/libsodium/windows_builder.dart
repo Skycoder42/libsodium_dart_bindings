@@ -24,6 +24,11 @@ final class WindowsBuilder extends SodiumBuilder {
   WindowsBuilder(super.config);
 
   @override
+  Future<void> prepare() async {
+    // TODO implement
+  }
+
+  @override
   Future<CodeAsset> buildCached({
     required BuildInput input,
     required Directory sourceDir,

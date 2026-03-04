@@ -7,15 +7,20 @@ import 'package:hooks/src/config.dart';
 import 'sodium_builder.dart';
 
 final class AndroidBuilder extends SodiumBuilder {
-  Uri? _cachedNdkPath;
+  late final Uri _ndkPath;
 
   AndroidBuilder(super.config);
 
   @override
-  Stream<Object> get configHash async* {
+  Future<void> prepare() async {
+    _ndkPath = await _getAndroidNdkPath();
+  }
+
+  @override
+  Iterable<Object?> get configHash sync* {
     yield* super.configHash;
     yield config.android.targetNdkApi;
-    yield await _getAndroidNdkPath();
+    yield _ndkPath;
   }
 
   @override
@@ -33,7 +38,7 @@ final class AndroidBuilder extends SodiumBuilder {
       workingDirectory: sourceDir,
       runInShell: true,
       environment: {
-        'ANDROID_NDK_HOME': (await _getAndroidNdkPath()).toFilePath(),
+        'ANDROID_NDK_HOME': _ndkPath.toFilePath(),
         'NDK_PLATFORM': 'android-${config.android.targetNdkApi}',
         'LIBSODIUM_FULL_BUILD': '1',
       },
@@ -45,10 +50,6 @@ final class AndroidBuilder extends SodiumBuilder {
   }
 
   Future<Uri> _getAndroidNdkPath() async {
-    if (_cachedNdkPath case final ndkPath?) {
-      return ndkPath;
-    }
-
     final flutterConfig = await execStream('flutter', ['config', '--machine'])
         .transform(utf8.decoder)
         .transform(json.decoder)
@@ -71,7 +72,7 @@ final class AndroidBuilder extends SodiumBuilder {
       throw Exception('No Android NDK found in $androidSdk/ndk/');
     }
 
-    return _cachedNdkPath = bestCandidate;
+    return _ndkPath = bestCandidate;
   }
 
   int _compareFileName(Uri a, Uri b) =>

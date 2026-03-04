@@ -18,7 +18,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     required Directory sourceDir,
     required Uri installDir,
   }) async {
-    final env = await environment;
+    final env = environment;
     await _configure(sourceDir, installDir, env);
     await _make(sourceDir, env);
 
@@ -28,7 +28,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
   @override
   @protected
   @mustCallSuper
-  Stream<Object> get configHash async* {
+  Iterable<Object?> get configHash sync* {
     yield* super.configHash;
     if (config.cCompiler case final cc?) {
       yield cc.compiler;
@@ -39,7 +39,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
 
   @protected
   @mustCallSuper
-  FutureOr<Map<String, String>> get environment => {
+  Map<String, String> get environment => {
     if (config.cCompiler case final cc?) ...{
       'CC': cc.compiler.toFilePath(),
       'AR': cc.archiver.toFilePath(),
@@ -49,7 +49,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
 
   @protected
   @mustCallSuper
-  FutureOr<List<String>> get configureArgs => [
+  Iterable<String> get configureArgs => [
     '--disable-soname-versions',
     if (isStaticLinking) '--enable-static=yes' else '--enable-static=no',
     if (!isStaticLinking) '--enable-shared=yes' else '--enable-shared=no',
@@ -62,7 +62,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
   ) async {
     await exec(
       './configure',
-      [...await configureArgs, '--prefix=${installDirUri.toFilePath()}'],
+      [...configureArgs, '--prefix=${installDirUri.toFilePath()}'],
       workingDirectory: sourceDir,
       environment: env,
     );

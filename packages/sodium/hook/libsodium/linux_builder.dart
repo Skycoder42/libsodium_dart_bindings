@@ -6,25 +6,25 @@ final class LinuxBuilder extends AutomakeBuilder {
   const LinuxBuilder(super.config);
 
   @override
-  Future<Map<String, String>> get environment async {
+  Map<String, String> get environment {
     final cFlags = ['-Os'];
-    return {...await super.environment, 'CFLAGS': cFlags.join(' ')};
+    return {...super.environment, 'CFLAGS': cFlags.join(' ')};
   }
 
   @override
-  Future<List<String>> get configureArgs async => [
-    ...await super.configureArgs,
-    '--host=${_mapArch(config.targetArchitecture)}-unknown-linux-gnu',
-  ];
+  Iterable<String> get configureArgs sync* {
+    yield* super.configureArgs;
+    yield '--host=${_mapHost(config.targetArchitecture)}';
+  }
 
   // See https://wiki.debian.org/Multiarch/Tuples
-  String _mapArch(Architecture arch) => switch (arch) {
-    .arm => 'arm',
-    .arm64 => 'aarch64',
-    .ia32 => 'i386',
-    .riscv32 => 'riscv',
-    .riscv64 => 'riscv64',
-    .x64 => 'x86_64',
+  String _mapHost(Architecture arch) => switch (arch) {
+    .arm => 'arm-unknown-linux-gnueabihf',
+    .arm64 => 'aarch64-unknown-linux-gnu',
+    .ia32 => 'i686-unknown-linux-gnu',
+    .x64 => 'x86_64-unknown-linux-gnu',
+    .riscv32 => 'riscv32-unknown-linux-gnu',
+    .riscv64 => 'riscv64-unknown-linux-gnu',
     _ => throw UnsupportedError('Unsupported linux architecture: $arch'),
   };
 }

@@ -41,10 +41,12 @@ abstract base class SodiumBuilder {
     required BuildInput input,
     required Directory sourceDir,
   }) async {
-    final hashValue = await configHash
+    await prepare();
+
+    final hashValue = configHash
         .map((v) => v.toString())
-        .transform(utf8.encoder)
-        .transform(sha256)
+        .map(utf8.encode)
+        .map(sha256.convert)
         .map((h) => h.toString().substring(0, 10))
         .single;
 
@@ -69,6 +71,9 @@ abstract base class SodiumBuilder {
   }
 
   @visibleForOverriding
+  Future<void> prepare() => Future.value();
+
+  @visibleForOverriding
   Future<CodeAsset> buildCached({
     required BuildInput input,
     required Directory sourceDir,
@@ -77,33 +82,28 @@ abstract base class SodiumBuilder {
 
   @protected
   @mustCallSuper
-  Stream<Object> get configHash => Stream.fromIterable([
+  Iterable<Object?> get configHash => [
     config.targetOS,
     config.targetArchitecture,
-    config.linkModePreference,
-  ]);
+    isStaticLinking,
+  ];
 
   @protected
   @nonVirtual
-  CodeAsset createCodeAsset(
-    Uri installDir, {
-    LinkMode? linkMode,
-    bool isFullPath = false,
-  }) {
-    final actualLinkMode =
-        linkMode ??
-        (isStaticLinking ? StaticLinking() : DynamicLoadingBundled());
-    return CodeAsset(
-      package: 'sodium',
-      name: 'libsodium',
-      linkMode: actualLinkMode,
-      file: isFullPath
-          ? installDir
-          : installDir.resolve(
-              config.targetOS.libraryFileName('sodium', actualLinkMode),
-            ),
-    );
-  }
+  CodeAsset createCodeAsset(Uri installDir, {bool isFullPath = false}) =>
+      CodeAsset(
+        package: 'sodium',
+        name: 'libsodium',
+        linkMode: isStaticLinking ? StaticLinking() : DynamicLoadingBundled(),
+        file: isFullPath
+            ? installDir
+            : installDir.resolve(
+                config.targetOS.libraryFileName(
+                  'sodium',
+                  (isStaticLinking ? StaticLinking() : DynamicLoadingBundled()),
+                ),
+              ),
+      );
 
   @protected
   @nonVirtual
