@@ -1,14 +1,24 @@
+// ignore_for_file: avoid_print for debug logging
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 
 import 'sodium_builder.dart';
 
 final class WindowsBuilder extends SodiumBuilder {
-  static const _vsVersion = 'vs2022';
+  static const _vsFallbackVersion = 'vs2026';
+  static const _vsVersionMap = {
+    '18': _vsFallbackVersion,
+    '17': 'vs2022',
+    '16': 'vs2019',
+    '15': 'vs2017',
+    // older versions are not supported by this library
+  };
   static const _toolsetVersion = 'v143';
 
   WindowsBuilder(super.config);
@@ -25,13 +35,11 @@ final class WindowsBuilder extends SodiumBuilder {
       scriptFile.toFilePath(windows: true),
     ], workingDirectory: sourceDir);
 
-    await _recursivePrint(Directory.fromUri(sourceDir.uri.resolve('bin')));
-
     final outFile = File.fromUri(sourceDir.uri.resolve('outdir.txt'));
     final outDirPath = outFile.existsSync()
         ? (await outFile.readAsString()).trim()
         : null;
-    stderr.writeln('Build output directory: $outDirPath');
+    stderr.writeln('Build output directory: <<$outDirPath>>');
 
     return createCodeAsset(sourceDir.uri.resolve(_assetPath));
   }
@@ -52,9 +60,21 @@ final class WindowsBuilder extends SodiumBuilder {
 
     final scriptBuilder = StringBuffer()..writeln('@ECHO ON');
 
-    final commandPrompt =
-        config.cCompiler?.windows.developerCommandPrompt ??
-        await _findVcDevCmd();
+    final (
+      commandPrompt,
+      vsVersion,
+    ) = switch (config.cCompiler?.windows.developerCommandPrompt) {
+      DeveloperCommandPrompt commandPrompt => (
+        commandPrompt,
+        _vsFallbackVersion,
+      ),
+      _ => await _findVcDevCmd(),
+    };
+    stderr
+      ..writeln('Using Visual Studion Configuration:')
+      ..writeln('  >> Script: ${commandPrompt.script}')
+      ..writeln('  >> Args: ${commandPrompt.arguments}')
+      ..writeln('  >> Version: $vsVersion');
 
     scriptBuilder
       ..write('CALL "')
@@ -67,12 +87,12 @@ final class WindowsBuilder extends SodiumBuilder {
     }
 
     scriptBuilder.writeln();
-    _writeMsBuildCommonArgs(scriptBuilder);
+    _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
     scriptBuilder
-      ..writeln('-getProperty:OutDir > outdir.txt')
+      ..writeln('-getProperty:OutDir,PlatformToolset > outdir.txt')
       ..writeln('type outdir.txt');
 
-    _writeMsBuildCommonArgs(scriptBuilder);
+    _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
     scriptBuilder
       ..writeln()
       ..writeln('exit /b %errorlevel%');
@@ -81,11 +101,11 @@ final class WindowsBuilder extends SodiumBuilder {
     return scriptFile.uri;
   }
 
-  void _writeMsBuildCommonArgs(StringBuffer scriptBuilder) {
+  void _writeMsBuildCommonArgs(StringBuffer scriptBuilder, String vsVersion) {
     scriptBuilder
       ..write('msbuild builds/msvc/')
-      ..write(_vsVersion)
-      ..write('/libsodium.sln /m /v:n /p:Configuration=')
+      ..write(vsVersion)
+      ..write('libsodium/libsodium.vcxproj /m /v:n /p:Configuration=')
       ..write(_configuration)
       ..write(' /p:Platform=')
       ..write(_mapPlatform(config.targetArchitecture))
@@ -126,7 +146,7 @@ final class WindowsBuilder extends SodiumBuilder {
     ),
   };
 
-  Future<DeveloperCommandPrompt> _findVcDevCmd() async {
+  Future<(DeveloperCommandPrompt, String)> _findVcDevCmd() async {
     final vsWherePaths =
         [
           Platform.environment['PROGRAMFILES(X86)'],
@@ -144,77 +164,113 @@ final class WindowsBuilder extends SodiumBuilder {
 
     for (final vsWherePath in vsWherePaths) {
       if (!File(vsWherePath).existsSync()) {
-        stderr.writeln('vswhere.exe not found at $vsWherePath');
+        print('vswhere.exe not found at $vsWherePath');
         continue;
       }
 
-      // See https://devblogs.microsoft.com/cppblog/finding-the-visual-c-compiler-tools-in-visual-studio-2017/
-      final installDir = await execStream(vsWherePath, [
-        '-latest',
-        '-products',
-        '*',
-        '-requires',
-        'Microsoft.VisualStudio.Workload.NativeDesktop',
-        '-property',
-        'installationPath',
-      ]).transform(utf8.decoder).join().then((p) => p.trim());
-      stderr.writeln('VSWHERE result: $installDir');
+      await for (final _VsWhereResult(:installationPath, :installationVersion)
+          in _vsWhere(vsWherePath)) {
+        final majorVersion = installationVersion.split('.').first;
+        final vsVersion = _vsVersionMap[majorVersion] ?? _vsFallbackVersion;
 
-      if (!Directory(installDir).existsSync()) {
-        stderr.writeln('Installation directory not found: $installDir');
-        await _recursivePrint(Directory(installDir).parent.parent);
-        continue;
-      }
+        if (!Directory(installationPath).existsSync()) {
+          print('Installation directory not found: $installationPath');
+          continue;
+        }
 
-      final vsDevCmd = File(
-        path.join(installDir, 'Common7', 'Tools', 'VsDevCmd.bat'),
-      );
-      if (vsDevCmd.existsSync()) {
-        stderr.writeln('Found VsDevCmd.bat at: ${vsDevCmd.path}');
-        return DeveloperCommandPrompt(
-          script: vsDevCmd.uri,
-          arguments: [
-            '-arch=${_mapVcDevCmdPlatform(config.targetArchitecture)}',
-            '-host_arch=${_mapVcDevCmdPlatform(Architecture.current)}',
-          ],
+        final vsDevCmd = File(
+          path.join(installationPath, 'Common7', 'Tools', 'VsDevCmd.bat'),
         );
-      }
-
-      final vcvarsall = File(
-        path.join(installDir, 'VC', 'Auxiliary', 'Build', 'vcvarsall.bat'),
-      );
-      if (vcvarsall.existsSync()) {
-        stderr.writeln('Found vcvarsall.bat at: ${vcvarsall.path}');
-        return DeveloperCommandPrompt(
-          script: vcvarsall.uri,
-          arguments: [
-            _mapVcVarsallPlatform(
-              config.targetArchitecture,
-              Architecture.current,
+        if (vsDevCmd.existsSync()) {
+          print('Found VsDevCmd.bat at: ${vsDevCmd.path}');
+          return (
+            DeveloperCommandPrompt(
+              script: vsDevCmd.uri,
+              arguments: [
+                '-arch=${_mapVcDevCmdPlatform(config.targetArchitecture)}',
+                '-host_arch=${_mapVcDevCmdPlatform(Architecture.current)}',
+              ],
             ),
-          ],
-        );
-      }
+            vsVersion,
+          );
+        }
 
-      await _recursivePrint(Directory(installDir));
+        final vcvarsall = File(
+          path.join(
+            installationPath,
+            'VC',
+            'Auxiliary',
+            'Build',
+            'vcvarsall.bat',
+          ),
+        );
+        if (vcvarsall.existsSync()) {
+          print('Found vcvarsall.bat at: ${vcvarsall.path}');
+          return (
+            DeveloperCommandPrompt(
+              script: vcvarsall.uri,
+              arguments: [
+                _mapVcVarsallPlatform(
+                  config.targetArchitecture,
+                  Architecture.current,
+                ),
+              ],
+            ),
+            vsVersion,
+          );
+        }
+      }
     }
 
     throw Exception(
       'Could not find Visual Studio Developer Command Prompt script',
     );
   }
+
+  // See https://devblogs.microsoft.com/cppblog/finding-the-visual-c-compiler-tools-in-visual-studio-2017/
+  Stream<_VsWhereResult> _vsWhere(String vsWherePath) =>
+      execStream(vsWherePath, [
+            '-latest',
+            '-products',
+            '*',
+            '-requiresAny',
+            '-requires',
+            'Microsoft.VisualStudio.Workload.NativeDesktop',
+            '-requires',
+            'Microsoft.VisualStudio.Workload.VCTools',
+            '-format',
+            'json',
+          ])
+          .transform(utf8.decoder)
+          .transform(json.decoder)
+          .cast<List<dynamic>>()
+          .expand(_VsWhereResult.fromJsonList);
 }
 
-Future<void> _recursivePrint(Directory dir, [int level = 0]) async {
-  if (level == 0) {
-    stderr.writeln('Directory structure of ${dir.path}:');
-  }
+@immutable
+class _VsWhereResult {
+  final String installationPath;
+  final String installationVersion;
 
-  final indent = '  ' * (level + 1);
-  await for (final entity in dir.list()) {
-    stderr.writeln('$indent${entity.path}');
-    if (entity is Directory) {
-      await _recursivePrint(entity, level + 1);
+  const _VsWhereResult({
+    required this.installationPath,
+    required this.installationVersion,
+  });
+
+  factory _VsWhereResult.fromJson(Map<String, dynamic> json) {
+    if (json case {
+      'installationPath': final String installationPath,
+      'installationVersion': final String installationVersion,
+    }) {
+      return _VsWhereResult(
+        installationPath: installationPath,
+        installationVersion: installationVersion,
+      );
+    } else {
+      throw FormatException('Invalid vswhere result json format', json);
     }
   }
+
+  static List<_VsWhereResult> fromJsonList(List<dynamic> json) =>
+      json.cast<Map<String, dynamic>>().map(_VsWhereResult.fromJson).toList();
 }
