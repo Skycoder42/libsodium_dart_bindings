@@ -11,7 +11,7 @@ import 'package:path/path.dart' as path;
 import 'sodium_builder.dart';
 
 final class WindowsBuilder extends SodiumBuilder {
-  static const _buildPropsFileName = 'buildProps.json';
+  static const _targetOutputFileName = 'target.txt';
   static const _vsFallbackVersion = 'vs2026';
   static const _vsVersionMap = {
     '18': _vsFallbackVersion,
@@ -39,14 +39,10 @@ final class WindowsBuilder extends SodiumBuilder {
   }
 
   Future<CodeAsset> _createAsset(Directory sourceDir) async {
-    final outFile = File.fromUri(sourceDir.uri.resolve(_buildPropsFileName));
-    final buildPropsJson = await outFile.readAsString();
-    stderr.writeln('Build properties JSON: $buildPropsJson');
-    final buildProps = _VsBuildProps.fromJson(
-      json.decode(buildPropsJson) as Map<String, dynamic>,
-    );
+    final outFile = File.fromUri(sourceDir.uri.resolve(_targetOutputFileName));
+    final targetPath = await outFile.readAsString();
     return createCodeAsset(
-      Uri.file(path.canonicalize(buildProps.properties.targetPath)),
+      Uri.file(path.canonicalize(targetPath.trim())),
       isFullPath: true,
     );
   }
@@ -81,7 +77,7 @@ final class WindowsBuilder extends SodiumBuilder {
     _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
     scriptBuilder
       ..write(' /v:q /getProperty:TargetPath > ')
-      ..writeln(_buildPropsFileName);
+      ..writeln(_targetOutputFileName);
 
     _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
     scriptBuilder
@@ -310,34 +306,4 @@ class _VsWhereResult {
 
   static List<_VsWhereResult> fromJsonList(List<dynamic> json) =>
       json.cast<Map<String, dynamic>>().map(_VsWhereResult.fromJson).toList();
-}
-
-@immutable
-class _VsBuildProps {
-  final _VsProperties properties;
-
-  const _VsBuildProps(this.properties);
-
-  factory _VsBuildProps.fromJson(Map<String, dynamic> json) {
-    if (json case {'Properties': final Map<String, dynamic> propertiesJson}) {
-      return _VsBuildProps(_VsProperties.fromJson(propertiesJson));
-    } else {
-      throw FormatException('Invalid build props json format', json);
-    }
-  }
-}
-
-@immutable
-class _VsProperties {
-  final String targetPath;
-
-  const _VsProperties({required this.targetPath});
-
-  factory _VsProperties.fromJson(Map<String, dynamic> json) {
-    if (json case {'TargetPath': final String targetPath}) {
-      return _VsProperties(targetPath: targetPath);
-    } else {
-      throw FormatException('Invalid build props json format', json);
-    }
-  }
 }
