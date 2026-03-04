@@ -89,7 +89,7 @@ final class WindowsBuilder extends SodiumBuilder {
     scriptBuilder.writeln();
     _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
     scriptBuilder
-      ..writeln('-getProperty:OutDir,PlatformToolset > outdir.txt')
+      ..writeln('-getProperty:OutDir > outdir.txt')
       ..writeln('type outdir.txt');
 
     _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
@@ -112,7 +112,7 @@ final class WindowsBuilder extends SodiumBuilder {
       ..write(' /p:RuntimeLibrary=MultiThreadedDLL');
   }
 
-  String get _configuration => isStaticLinking ? 'StaticRelease' : 'DynRelease';
+  String get _configuration => isStaticLinking ? 'ReleaseLIB' : 'ReleaseDLL';
 
   String _mapPlatform(Architecture arch) => switch (arch) {
     .arm64 => 'ARM64',
