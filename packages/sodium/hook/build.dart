@@ -12,7 +12,7 @@ import 'libsodium/sodium_builder.dart';
 const skipBuildHooksVariableName = 'NIX_SKIP_SODIUM_BUILD_HOOKS';
 
 void main(List<String> args) async => await build(args, (input, output) async {
-  if (Platform.environment.containsKey(skipBuildHooksVariableName)) {
+  if (Platform.environment[skipBuildHooksVariableName] == '1') {
     stderr.writeln(
       'Skipping sodium build hooks because environment variable '
       '$skipBuildHooksVariableName is set.',
