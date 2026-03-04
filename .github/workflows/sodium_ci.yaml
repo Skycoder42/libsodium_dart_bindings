@@ -18,6 +18,10 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
     with:
       workingDirectory: packages/sodium
+      env: >-
+        {
+          "NIX_SKIP_SODIUM_BUILD_HOOKS": "1"
+        }
       needsFlutterSdk: true
       buildRunner: true
       unitTestPaths: -P unit
