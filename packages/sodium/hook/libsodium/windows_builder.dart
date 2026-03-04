@@ -89,12 +89,12 @@ final class WindowsBuilder extends SodiumBuilder {
     scriptBuilder.writeln();
     _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
     scriptBuilder
-      ..writeln('-getProperty:OutDir > outdir.txt')
+      ..writeln(' /v:q /getProperty:OutDir,PlatformToolset > outdir.txt')
       ..writeln('type outdir.txt');
 
     _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
     scriptBuilder
-      ..writeln()
+      ..writeln(' /m /v:n')
       ..writeln('exit /b %errorlevel%');
 
     await scriptFile.writeAsString(scriptBuilder.toString(), flush: true);
@@ -105,7 +105,7 @@ final class WindowsBuilder extends SodiumBuilder {
     scriptBuilder
       ..write('msbuild builds/msvc/')
       ..write(vsVersion)
-      ..write('/libsodium/libsodium.vcxproj /m /v:n /p:Configuration=')
+      ..write('/libsodium/libsodium.vcxproj /p:Configuration=')
       ..write(_configuration)
       ..write(' /p:Platform=')
       ..write(_mapPlatform(config.targetArchitecture))
