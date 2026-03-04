@@ -85,20 +85,23 @@ abstract base class SodiumBuilder {
 
   @protected
   @nonVirtual
-  CodeAsset createCodeAsset(Uri installDir, [LinkMode? linkMode]) {
+  CodeAsset createCodeAsset(
+    Uri installDir, {
+    LinkMode? linkMode,
+    bool isFullPath = false,
+  }) {
     final actualLinkMode =
         linkMode ??
         (isStaticLinking ? StaticLinking() : DynamicLoadingBundled());
-    final libName = config.targetOS.libraryFileName(
-      // libsodium uses the lib prefix for windows as well
-      config.targetOS == .windows ? 'libsodium' : 'sodium',
-      actualLinkMode,
-    );
     return CodeAsset(
       package: 'sodium',
       name: 'libsodium',
       linkMode: actualLinkMode,
-      file: installDir.resolve(libName),
+      file: isFullPath
+          ? installDir
+          : installDir.resolve(
+              config.targetOS.libraryFileName('sodium', actualLinkMode),
+            ),
     );
   }
 
