@@ -34,9 +34,9 @@ jobs:
       integrationTestPaths: -P integration
       integrationTestSetup: >-
         {
-          "linux": "dart run tool/integration/setup_hooks.dart",
-          "windows": "dart run tool/integration/setup_hooks.dart",
-          "macos": "dart run tool/integration/setup_hooks.dart",
+          "linux": "dart run tool/download_libsodium.dart",
+          "windows": "dart run tool/download_libsodium.dart",
+          "macos": "dart run tool/download_libsodium.dart",
           "web": "dart run tool/integration/setup_web.dart"
         }
 
