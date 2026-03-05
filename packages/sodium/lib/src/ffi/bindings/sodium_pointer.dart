@@ -24,8 +24,13 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
 
   /// @nodoc
   @visibleForTesting
-  static set debugOverwriteFinalizer(SodiumFinalizer finalizer) =>
+  static set debugOverwriteFinalizer(SodiumFinalizer finalizer) {
+    // ignore: prefer_asserts_with_message for debug only code
+    assert(() {
       _sodiumFinalizer = finalizer;
+      return true;
+    }());
+  }
 
   /// libsodium bindings used to access the C API
   final LibSodiumFFI sodium;

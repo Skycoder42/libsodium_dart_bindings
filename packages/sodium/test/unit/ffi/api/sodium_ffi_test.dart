@@ -19,6 +19,7 @@ import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_secure_key_ffi
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
+import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
 
 import '../../../secure_key_fake.dart';
@@ -248,6 +249,10 @@ void main() {
   });
 
   group('runIsolated', () {
+    setUp(() {
+      SodiumPointer.debugOverwriteFinalizer = MockSodiumFinalizer();
+    });
+
     test('invokes the given callback on a custom isolate', () async {
       final currentIsolateName = Isolate.current.debugName;
       final callbackIsolateName = await sut.runIsolated(

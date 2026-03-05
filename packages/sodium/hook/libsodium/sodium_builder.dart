@@ -43,14 +43,8 @@ abstract base class SodiumBuilder {
   }) async {
     await prepare();
 
-    final hashValue = configHash
-        .map((v) => v.toString())
-        .map(utf8.encode)
-        .map(sha256.convert)
-        .map((h) => h.toString().substring(0, 10))
-        .single;
-
-    final configUri = input.outputDirectoryShared.resolve('$hashValue/');
+    final shortHash = _calculateHash();
+    final configUri = input.outputDirectoryShared.resolve('$shortHash/');
     final srcDirUri = configUri.resolve('s/');
     final installDirUri = configUri.resolve('i/');
 
@@ -68,6 +62,25 @@ abstract base class SodiumBuilder {
       }
       rethrow;
     }
+  }
+
+  String _calculateHash() {
+    late final Digest digest;
+    final sink = utf8.encoder
+        .fuse(sha256)
+        .startChunkedConversion(
+          ChunkedConversionSink.withCallback(
+            (chunks) => digest = chunks.single,
+          ),
+        );
+
+    try {
+      configHash.map((v) => v.toString()).forEach(sink.add);
+    } finally {
+      sink.close();
+    }
+
+    return digest.toString().substring(0, 10);
   }
 
   @visibleForOverriding
