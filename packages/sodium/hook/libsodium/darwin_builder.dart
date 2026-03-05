@@ -37,13 +37,21 @@ class DarwinConfig {
 abstract base class DarwinBuilder extends AutomakeBuilder {
   late final DarwinConfig _platformConfig;
 
-  DarwinBuilder(super.config);
+  DarwinBuilder(super.config, super.logger);
 
   @override
   @nonVirtual
   Future<void> prepare() async {
     final xcodeDir = await _getXcodeDir();
+    logger.info('Xcode directory: ${xcodeDir.toFilePath()}');
     _platformConfig = await getPlatformConfig(xcodeDir);
+    logger
+      ..debug('Detect architecture: ${_platformConfig.arch}')
+      ..debug('Detect build: ${_platformConfig.build ?? '<default>'}')
+      ..debug('Detect host: ${_platformConfig.host}')
+      ..debug('Detect platform: ${_platformConfig.platform.toFilePath()}')
+      ..debug('Detect SDK: ${_platformConfig.sdk.toFilePath()}')
+      ..debug('Detect version parameter: ${_platformConfig.versionParameter}');
   }
 
   @override

@@ -3,7 +3,7 @@ import 'package:code_assets/code_assets.dart';
 import 'automake_builder.dart';
 
 final class LinuxBuilder extends AutomakeBuilder {
-  const LinuxBuilder(super.config);
+  LinuxBuilder(super.config, super.logger);
 
   @override
   Map<String, String> get environment {
@@ -14,7 +14,9 @@ final class LinuxBuilder extends AutomakeBuilder {
   @override
   Iterable<String> get configureArgs sync* {
     yield* super.configureArgs;
-    yield '--host=${_mapHost(config.targetArchitecture)}';
+    final host = _mapHost(config.targetArchitecture);
+    logger.debug('Detected host target: $host');
+    yield '--host=$host';
   }
 
   // See https://wiki.debian.org/Multiarch/Tuples

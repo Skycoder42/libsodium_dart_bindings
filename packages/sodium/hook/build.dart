@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
 
+import 'common/hook_logger.dart';
 import 'libsodium/sodium_builder.dart';
 
 /// special environment variable to skip build hooks. Must be prefixed by
@@ -30,8 +31,9 @@ void main(List<String> args) async => await build(args, (input, output) async {
     );
   }
 
+  final logger = HookLogger('sodium');
   final config = input.config.code;
-  final builder = SodiumBuilder.forConfig(config);
+  final builder = SodiumBuilder.forConfig(config, logger);
   final asset = await builder.build(input: input, sourceDir: sourceDir);
 
   output.assets.code.add(asset);

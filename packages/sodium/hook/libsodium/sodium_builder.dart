@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
 
+import '../common/hook_logger.dart';
 import 'android_builder.dart';
 import 'ios_builder.dart';
 import 'linux_builder.dart';
@@ -16,16 +17,18 @@ import 'windows_builder.dart';
 abstract base class SodiumBuilder {
   @protected
   final CodeConfig config;
+  @protected
+  final HookLogger logger;
 
-  const SodiumBuilder(this.config);
+  SodiumBuilder(this.config, this.logger);
 
-  factory SodiumBuilder.forConfig(CodeConfig config) =>
+  factory SodiumBuilder.forConfig(CodeConfig config, HookLogger logger) =>
       switch (config.targetOS) {
-        .android => AndroidBuilder(config),
-        .iOS => IosBuilder(config),
-        .linux => LinuxBuilder(config),
-        .macOS => MacosBuilder(config),
-        .windows => WindowsBuilder(config),
+        .android => AndroidBuilder(config, logger),
+        .iOS => IosBuilder(config, logger),
+        .linux => LinuxBuilder(config, logger),
+        .macOS => MacosBuilder(config, logger),
+        .windows => WindowsBuilder(config, logger),
         _ => throw UnsupportedError('Unsupported OS: ${config.targetOS}'),
       };
 
@@ -41,23 +44,41 @@ abstract base class SodiumBuilder {
     required BuildInput input,
     required Directory sourceDir,
   }) async {
+    logger.debug('Running prepare step...');
     await prepare();
+    logger.debug('Prepare step completed!');
 
     final shortHash = _calculateHash();
     final configUri = input.outputDirectoryShared.resolve('$shortHash/');
     final srcDirUri = configUri.resolve('s/');
     final installDirUri = configUri.resolve('i/');
+    logger
+      ..debug('Calculated config hash: $shortHash')
+      ..debug('Source directory URI: $srcDirUri')
+      ..debug('Install directory URI: $installDirUri');
 
     try {
-      final configSrcDir = await _recursiveCopy(sourceDir, srcDirUri);
-      return await buildCached(
+      final configSrcDir = Directory.fromUri(srcDirUri);
+      if (configSrcDir.existsSync()) {
+        logger.debug('Source directory already exists, skipping copy.');
+      } else {
+        logger.info('Copying source files to config-specific directory...');
+        await _recursiveCopy(sourceDir, configSrcDir);
+        logger.debug('Source files copied successfully!');
+      }
+
+      logger.info('Starting build process...');
+      final asset = await buildCached(
         input: input,
         sourceDir: configSrcDir,
         installDir: installDirUri,
       );
+      logger.debug('Successfully built code asset: ${asset.id}');
+      return asset;
     } catch (e) {
       final configDir = Directory.fromUri(configUri);
       if (configDir.existsSync()) {
+        logger.debug('Build failed, cleaning up config directory...');
         await configDir.delete(recursive: true);
       }
       rethrow;
@@ -128,16 +149,26 @@ abstract base class SodiumBuilder {
     bool runInShell = false,
     int? expectExitCode = 0,
   }) async {
+    logger.debug("Executing command: $executable ${arguments.join(' ')}");
     final process = await Process.start(
       executable,
       arguments,
       workingDirectory: workingDirectory?.path,
       environment: environment,
       runInShell: runInShell,
-      mode: .inheritStdio,
     );
 
+    process.stderr
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .listen(logger.warning);
+    process.stdout
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .listen(logger.debug);
+
     final exitCode = await process.exitCode;
+    logger.debug('Command exited with code: $exitCode');
     if (expectExitCode != null && exitCode != expectExitCode) {
       throw Exception('$executable failed with exit code $exitCode.');
     }
@@ -154,6 +185,7 @@ abstract base class SodiumBuilder {
     Map<String, String>? environment,
     int? expectExitCode = 0,
   }) async* {
+    logger.debug("Streaming command: $executable ${arguments.join(' ')}");
     final process = await Process.start(
       executable,
       arguments,
@@ -161,11 +193,15 @@ abstract base class SodiumBuilder {
       environment: environment,
     );
 
-    process.stderr.listen(stderr.add);
+    process.stderr
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .listen(logger.warning);
 
     yield* process.stdout;
 
     final exitCode = await process.exitCode;
+    logger.debug('Command exited with code: $exitCode');
     if (expectExitCode != null && exitCode != expectExitCode) {
       throw Exception(
         'Process $executable exited with code $exitCode, '
@@ -174,10 +210,8 @@ abstract base class SodiumBuilder {
     }
   }
 
-  Future<Directory> _recursiveCopy(Directory source, Uri destinationUri) async {
-    final destination = await Directory.fromUri(
-      destinationUri,
-    ).create(recursive: true);
+  Future<void> _recursiveCopy(Directory source, Directory destination) async {
+    await destination.create(recursive: true);
     await for (final entity in source.list(followLinks: false)) {
       final name = entity.uri.path.endsWith('/')
           ? entity.uri.pathSegments.reversed.skip(1).first
@@ -187,13 +221,12 @@ abstract base class SodiumBuilder {
         case File():
           await entity.copy(newUri.toFilePath());
         case Directory():
-          await _recursiveCopy(entity, newUri);
+          await _recursiveCopy(entity, Directory.fromUri(newUri));
         default:
-          throw UnsupportedError(
+          logger.warning(
             'Cannot copy entity of type ${entity.runtimeType}: ${entity.uri}',
           );
       }
     }
-    return destination;
   }
 }

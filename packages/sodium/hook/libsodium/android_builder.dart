@@ -9,11 +9,12 @@ import 'sodium_builder.dart';
 final class AndroidBuilder extends SodiumBuilder {
   late final Uri _ndkPath;
 
-  AndroidBuilder(super.config);
+  AndroidBuilder(super.config, super.logger);
 
   @override
   Future<void> prepare() async {
     _ndkPath = await _getAndroidNdkPath();
+    logger.info('Detected Android NDK path: ${_ndkPath.toFilePath()}');
   }
 
   @override
@@ -31,6 +32,10 @@ final class AndroidBuilder extends SodiumBuilder {
   }) async {
     final buildTarget = _mapBuildTarget(config.targetArchitecture);
     final installTarget = _mapInstallTarget(config.targetArchitecture);
+    logger
+      ..debug('Detected build target: $buildTarget')
+      ..debug('Detected install target: $installTarget')
+      ..debug('Target API level: ${config.android.targetNdkApi}');
 
     await exec(
       './dist-build/android-$buildTarget.sh',
@@ -59,6 +64,7 @@ final class AndroidBuilder extends SodiumBuilder {
     if (androidSdk == null) {
       throw Exception('Android SDK path not found in flutter config');
     }
+    logger.debug('Detected android SDK path from flutter config: $androidSdk');
 
     final sdkUri = Uri.directory(androidSdk);
     final ndkCandidates = await Directory.fromUri(sdkUri.resolve('ndk/'))
@@ -67,12 +73,17 @@ final class AndroidBuilder extends SodiumBuilder {
         .cast<Directory>()
         .map((d) => d.absolute.uri)
         .toList();
+    logger.debug('Found ${ndkCandidates.length} NDK candidates:');
+    for (final candidate in ndkCandidates) {
+      logger.debug('  > ${candidate.toFilePath()}');
+    }
+
     final bestCandidate = (ndkCandidates..sort(_compareFileName)).lastOrNull;
     if (bestCandidate == null) {
       throw Exception('No Android NDK found in $androidSdk/ndk/');
     }
 
-    return _ndkPath = bestCandidate;
+    return bestCandidate;
   }
 
   int _compareFileName(Uri a, Uri b) =>

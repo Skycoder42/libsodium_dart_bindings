@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print for debug logging
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -28,13 +26,19 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
 
   late final DeveloperCommandPrompt _commandPrompt;
 
-  WindowsBuilder(super.config);
+  WindowsBuilder(super.config, super.logger);
 
   @override
   Future<void> prepare() async {
     _commandPrompt =
         config.cCompiler?.windows.developerCommandPrompt ??
         await _findVcDevCmd();
+    logger
+      ..debug(
+        'Detected Developer Command Prompt: '
+        '${_commandPrompt.script.toFilePath()}',
+      )
+      ..debug("With arguments: ${_commandPrompt.arguments.join(' ')}");
   }
 
   @override
@@ -51,6 +55,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
     required Uri installDir,
   }) async {
     final scriptFile = await _createBuildScript(sourceDir);
+    logger.debug('Building...');
     await exec('cmd.exe', [
       '/c',
       scriptFile.toFilePath(windows: true),
@@ -62,6 +67,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
   Future<CodeAsset> _createAsset(Directory sourceDir) async {
     final outFile = File.fromUri(sourceDir.uri.resolve(_targetOutputFileName));
     final targetPath = await outFile.readAsString();
+    logger.debug('Read target path from build script output: $targetPath');
     return createCodeAsset(
       Uri.file(path.canonicalize(targetPath.trim())),
       isFullPath: true,
@@ -71,6 +77,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
   Future<Uri> _createBuildScript(Directory sourceDir) async {
     final scriptFile = File.fromUri(sourceDir.uri.resolve('dart-build.bat'));
     if (scriptFile.existsSync()) {
+      logger.debug('Build script already exists at: ${scriptFile.path}');
       return scriptFile.uri;
     }
 
@@ -96,7 +103,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
         ..write(' /v:q /getProperty:TargetPath > ')
         ..writeln(_targetOutputFileName);
 
-      _writeMsBuildCommonArgs(scriptFileSink);
+      _writeMsBuildCommonArgs(scriptFileSink, withLogging: false);
       scriptFileSink
         ..writeln(' /m /v:n')
         ..writeln('exit /b %errorlevel%');
@@ -106,10 +113,25 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
       await scriptFileSink.close();
     }
 
+    logger.debug('Created build script at: ${scriptFile.path}');
     return scriptFile.uri;
   }
 
-  void _writeMsBuildCommonArgs(StringSink scriptBuilder) {
+  void _writeMsBuildCommonArgs(
+    StringSink scriptBuilder, {
+    bool withLogging = true,
+  }) {
+    final platform = _mapPlatform(config.targetArchitecture);
+
+    if (withLogging) {
+      logger.debug('Detected platform: $platform');
+      if (isStaticLinking) {
+        logger.debug('Using static linking');
+      } else {
+        logger.debug('Using dynamic linking');
+      }
+    }
+
     scriptBuilder
       ..write(
         'msbuild "builds/msvc/%__SODIUM_VS_NAME%/libsodium/libsodium.vcxproj"',
@@ -117,7 +139,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
       ..write(' /p:Configuration=')
       ..write(isStaticLinking ? 'ReleaseLIB' : 'ReleaseDLL')
       ..write(' /p:Platform=')
-      ..write(_mapPlatform(config.targetArchitecture))
+      ..write(platform)
       ..write(' /p:RuntimeLibrary=MultiThreadedDLL');
   }
 
@@ -131,21 +153,26 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
   Future<DeveloperCommandPrompt> _findVcDevCmd() async {
     await for (final _VsWhereResult(:installationPath) in _vsWhere()) {
       if (!Directory(installationPath).existsSync()) {
-        print('Installation directory not found: $installationPath');
+        logger.warning(
+          'Detected Visual Studio does not exist: $installationPath',
+        );
         continue;
       }
+      logger.info('Found Visual Studio installation: $installationPath');
 
       final vsDevCmd = File(
         path.join(installationPath, 'Common7', 'Tools', 'VsDevCmd.bat'),
       );
       if (vsDevCmd.existsSync()) {
-        print('Found VsDevCmd.bat at: ${vsDevCmd.path}');
+        logger.debug('Found VsDevCmd.bat at: ${vsDevCmd.path}');
+        final buildArch = _mapVcDevCmdPlatform(config.targetArchitecture);
+        final hostArch = _mapVcDevCmdPlatform(Architecture.current);
+        logger
+          ..debug('Detected build architecture: $buildArch')
+          ..debug('Detected host architecture: $hostArch');
         DeveloperCommandPrompt(
           script: vsDevCmd.uri,
-          arguments: [
-            '-arch=${_mapVcDevCmdPlatform(config.targetArchitecture)}',
-            '-host_arch=${_mapVcDevCmdPlatform(Architecture.current)}',
-          ],
+          arguments: ['-arch=$buildArch', '-host_arch=$hostArch'],
         );
       }
 
@@ -159,15 +186,15 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
         ),
       );
       if (vcvarsall.existsSync()) {
-        print('Found vcvarsall.bat at: ${vcvarsall.path}');
+        logger.debug('Found vcvarsall.bat at: ${vcvarsall.path}');
+        final mapVcVarsallPlatform = _mapVcVarsallPlatform(
+          config.targetArchitecture,
+          Architecture.current,
+        );
+        logger.debug('Detected vcvarsall platform: $mapVcVarsallPlatform');
         return DeveloperCommandPrompt(
           script: vcvarsall.uri,
-          arguments: [
-            _mapVcVarsallPlatform(
-              config.targetArchitecture,
-              Architecture.current,
-            ),
-          ],
+          arguments: [mapVcVarsallPlatform],
         );
       }
     }
@@ -221,10 +248,11 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
 
     for (final vsWherePath in vsWherePaths) {
       if (!File(vsWherePath).existsSync()) {
-        print('vswhere.exe not found at $vsWherePath');
+        logger.debug('vswhere.exe not found at: $vsWherePath');
         continue;
       }
 
+      logger.debug('Found vswhere.exe at: $vsWherePath');
       yield* execStream(vsWherePath, [
             '-latest',
             '-products',

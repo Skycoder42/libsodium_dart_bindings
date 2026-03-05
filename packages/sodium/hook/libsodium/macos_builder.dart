@@ -3,7 +3,7 @@ import 'package:code_assets/code_assets.dart';
 import 'darwin_builder.dart';
 
 final class MacosBuilder extends DarwinBuilder {
-  MacosBuilder(super.config);
+  MacosBuilder(super.config, super.logger);
 
   @override
   DarwinConfig getPlatformConfig(Uri xcodeDir) {
