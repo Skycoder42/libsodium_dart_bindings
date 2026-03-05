@@ -12,20 +12,36 @@ import 'sodium_builder.dart';
 
 final class WindowsBuilder extends SodiumBuilder {
   static const _targetOutputFileName = 'target.txt';
-  static const _vsFallbackVersion = 'vs2026';
-  static const _vsVersionMap = {
-    '18': _vsFallbackVersion,
-    '17': 'vs2022',
-    '16': 'vs2019',
-    '15': 'vs2017',
-    // older versions are not supported by this library
-  };
+  static const _vsVersionDetectionScript = '''
+IF "%VSCMD_VER%"=="" (
+  SET "__SODIUM_VS_VERSION=%VisualStudioVersion%"
+) ELSE (
+  SET "__SODIUM_VS_VERSION=%VSCMD_VER%"
+)
+FOR /f "tokens=1 delims=." %%i IN ("%__SODIUM_VS_VERSION%") DO SET "__SODIUM_VS_VERSION_MAJOR=%%i"
+SET "__SODIUM_VS_NAME=vs2026"
+IF "%__SODIUM_VS_VERSION_MAJOR%"=="18" SET "__SODIUM_VS_NAME=vs2026"
+IF "%__SODIUM_VS_VERSION_MAJOR%"=="17" SET "__SODIUM_VS_NAME=vs2022"
+IF "%__SODIUM_VS_VERSION_MAJOR%"=="16" SET "__SODIUM_VS_NAME=vs2019"
+IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
+''';
+
+  late final DeveloperCommandPrompt _commandPrompt;
 
   WindowsBuilder(super.config);
 
   @override
   Future<void> prepare() async {
-    // TODO implement
+    _commandPrompt =
+        config.cCompiler?.windows.developerCommandPrompt ??
+        await _findVcDevCmd();
+  }
+
+  @override
+  Iterable<Object?> get configHash sync* {
+    yield* super.configHash;
+    yield _commandPrompt.script;
+    yield _commandPrompt.arguments;
   }
 
   @override
@@ -58,68 +74,52 @@ final class WindowsBuilder extends SodiumBuilder {
       return scriptFile.uri;
     }
 
-    final scriptBuilder = StringBuffer()..writeln('@ECHO ON');
+    final scriptFileSink = scriptFile.openWrite();
+    try {
+      scriptFileSink
+        ..writeln('@ECHO ON')
+        ..write('CALL "')
+        ..write(_commandPrompt.script.toFilePath(windows: true))
+        ..write('"');
+      for (final arg in _commandPrompt.arguments) {
+        scriptFileSink
+          ..write(' ')
+          ..write(arg);
+      }
 
-    final (
-      commandPrompt,
-      vsVersion,
-    ) = switch (config.cCompiler?.windows.developerCommandPrompt) {
-      DeveloperCommandPrompt commandPrompt => (
-        commandPrompt,
-        await _findVsVersionFromPrompt(sourceDir, commandPrompt),
-      ),
-      _ => await _findVcDevCmd(),
-    };
-    stderr
-      ..writeln('Using Visual Studion Configuration:')
-      ..writeln('  >> Script: ${commandPrompt.script}')
-      ..writeln('  >> Args: ${commandPrompt.arguments}')
-      ..writeln('  >> Version: $vsVersion');
+      scriptFileSink
+        ..writeln()
+        ..writeln(_vsVersionDetectionScript);
 
-    _writeSetupEnv(scriptBuilder, commandPrompt);
-    scriptBuilder.writeln();
+      _writeMsBuildCommonArgs(scriptFileSink);
+      scriptFileSink
+        ..write(' /v:q /getProperty:TargetPath > ')
+        ..writeln(_targetOutputFileName);
 
-    _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
-    scriptBuilder
-      ..write(' /v:q /getProperty:TargetPath > ')
-      ..writeln(_targetOutputFileName);
+      _writeMsBuildCommonArgs(scriptFileSink);
+      scriptFileSink
+        ..writeln(' /m /v:n')
+        ..writeln('exit /b %errorlevel%');
 
-    _writeMsBuildCommonArgs(scriptBuilder, vsVersion);
-    scriptBuilder
-      ..writeln(' /m /v:n')
-      ..writeln('exit /b %errorlevel%');
+      await scriptFileSink.flush();
+    } finally {
+      await scriptFileSink.close();
+    }
 
-    await scriptFile.writeAsString(scriptBuilder.toString(), flush: true);
     return scriptFile.uri;
   }
 
-  void _writeSetupEnv(
-    StringBuffer scriptBuilder,
-    DeveloperCommandPrompt commandPrompt,
-  ) {
+  void _writeMsBuildCommonArgs(StringSink scriptBuilder) {
     scriptBuilder
-      ..write('CALL "')
-      ..write(commandPrompt.script.toFilePath(windows: true))
-      ..write('"');
-    for (final arg in commandPrompt.arguments) {
-      scriptBuilder
-        ..write(' ')
-        ..write(arg);
-    }
-  }
-
-  void _writeMsBuildCommonArgs(StringBuffer scriptBuilder, String vsVersion) {
-    scriptBuilder
-      ..write('msbuild builds/msvc/')
-      ..write(vsVersion)
-      ..write('/libsodium/libsodium.vcxproj /p:Configuration=')
-      ..write(_configuration)
+      ..write(
+        'msbuild "builds/msvc/%__SODIUM_VS_NAME%/libsodium/libsodium.vcxproj"',
+      )
+      ..write(' /p:Configuration=')
+      ..write(isStaticLinking ? 'ReleaseLIB' : 'ReleaseDLL')
       ..write(' /p:Platform=')
       ..write(_mapPlatform(config.targetArchitecture))
       ..write(' /p:RuntimeLibrary=MultiThreadedDLL');
   }
-
-  String get _configuration => isStaticLinking ? 'ReleaseLIB' : 'ReleaseDLL';
 
   String _mapPlatform(Architecture arch) => switch (arch) {
     .arm64 => 'ARM64',
@@ -127,6 +127,55 @@ final class WindowsBuilder extends SodiumBuilder {
     .ia32 => 'Win32',
     _ => throw UnsupportedError('Unsupported Windows architecture: $arch'),
   };
+
+  Future<DeveloperCommandPrompt> _findVcDevCmd() async {
+    await for (final _VsWhereResult(:installationPath) in _vsWhere()) {
+      if (!Directory(installationPath).existsSync()) {
+        print('Installation directory not found: $installationPath');
+        continue;
+      }
+
+      final vsDevCmd = File(
+        path.join(installationPath, 'Common7', 'Tools', 'VsDevCmd.bat'),
+      );
+      if (vsDevCmd.existsSync()) {
+        print('Found VsDevCmd.bat at: ${vsDevCmd.path}');
+        DeveloperCommandPrompt(
+          script: vsDevCmd.uri,
+          arguments: [
+            '-arch=${_mapVcDevCmdPlatform(config.targetArchitecture)}',
+            '-host_arch=${_mapVcDevCmdPlatform(Architecture.current)}',
+          ],
+        );
+      }
+
+      final vcvarsall = File(
+        path.join(
+          installationPath,
+          'VC',
+          'Auxiliary',
+          'Build',
+          'vcvarsall.bat',
+        ),
+      );
+      if (vcvarsall.existsSync()) {
+        print('Found vcvarsall.bat at: ${vcvarsall.path}');
+        return DeveloperCommandPrompt(
+          script: vcvarsall.uri,
+          arguments: [
+            _mapVcVarsallPlatform(
+              config.targetArchitecture,
+              Architecture.current,
+            ),
+          ],
+        );
+      }
+    }
+
+    throw Exception(
+      'Could not find Visual Studio Developer Command Prompt script',
+    );
+  }
 
   String _mapVcDevCmdPlatform(Architecture arch) => switch (arch) {
     .arm64 => 'arm64',
@@ -152,90 +201,6 @@ final class WindowsBuilder extends SodiumBuilder {
       'Target=$targetArch, Host=$hostArch',
     ),
   };
-
-  Future<(DeveloperCommandPrompt, String)> _findVcDevCmd() async {
-    await for (final _VsWhereResult(:installationPath, :installationVersion)
-        in _vsWhere()) {
-      final majorVersion = installationVersion.split('.').first;
-      final vsVersion = _vsVersionMap[majorVersion] ?? _vsFallbackVersion;
-
-      if (!Directory(installationPath).existsSync()) {
-        print('Installation directory not found: $installationPath');
-        continue;
-      }
-
-      final vsDevCmd = File(
-        path.join(installationPath, 'Common7', 'Tools', 'VsDevCmd.bat'),
-      );
-      if (vsDevCmd.existsSync()) {
-        print('Found VsDevCmd.bat at: ${vsDevCmd.path}');
-        return (
-          DeveloperCommandPrompt(
-            script: vsDevCmd.uri,
-            arguments: [
-              '-arch=${_mapVcDevCmdPlatform(config.targetArchitecture)}',
-              '-host_arch=${_mapVcDevCmdPlatform(Architecture.current)}',
-            ],
-          ),
-          vsVersion,
-        );
-      }
-
-      final vcvarsall = File(
-        path.join(
-          installationPath,
-          'VC',
-          'Auxiliary',
-          'Build',
-          'vcvarsall.bat',
-        ),
-      );
-      if (vcvarsall.existsSync()) {
-        print('Found vcvarsall.bat at: ${vcvarsall.path}');
-        return (
-          DeveloperCommandPrompt(
-            script: vcvarsall.uri,
-            arguments: [
-              _mapVcVarsallPlatform(
-                config.targetArchitecture,
-                Architecture.current,
-              ),
-            ],
-          ),
-          vsVersion,
-        );
-      }
-    }
-
-    throw Exception(
-      'Could not find Visual Studio Developer Command Prompt script',
-    );
-  }
-
-  Future<String> _findVsVersionFromPrompt(
-    Directory sourceDir,
-    DeveloperCommandPrompt commandPrompt,
-  ) async {
-    final scriptBuilder = StringBuffer()..writeln('@ECHO OFF');
-
-    _writeSetupEnv(scriptBuilder, commandPrompt);
-    scriptBuilder
-      ..writeln('> nul')
-      ..writeln(
-        'if "%VSCMD_VER%"=="" echo %VisualStudioVersion% else echo %VSCMD_VER%',
-      );
-
-    final scriptFile = File.fromUri(sourceDir.uri.resolve('dart-build.bat'));
-    await scriptFile.writeAsString(scriptBuilder.toString(), flush: true);
-    final result = await execStream('cmd.exe', [
-      '/c',
-      scriptFile.path,
-    ], workingDirectory: sourceDir).transform(utf8.decoder).join();
-
-    final majorVersion = result.trim().split('.').first;
-    final vsVersion = _vsVersionMap[majorVersion] ?? _vsFallbackVersion;
-    return vsVersion;
-  }
 
   // See https://devblogs.microsoft.com/cppblog/finding-the-visual-c-compiler-tools-in-visual-studio-2017/
   Stream<_VsWhereResult> _vsWhere() async* {
@@ -288,22 +253,12 @@ final class WindowsBuilder extends SodiumBuilder {
 @immutable
 class _VsWhereResult {
   final String installationPath;
-  final String installationVersion;
 
-  const _VsWhereResult({
-    required this.installationPath,
-    required this.installationVersion,
-  });
+  const _VsWhereResult({required this.installationPath});
 
   factory _VsWhereResult.fromJson(Map<String, dynamic> json) {
-    if (json case {
-      'installationPath': final String installationPath,
-      'installationVersion': final String installationVersion,
-    }) {
-      return _VsWhereResult(
-        installationPath: installationPath,
-        installationVersion: installationVersion,
-      );
+    if (json case {'installationPath': final String installationPath}) {
+      return _VsWhereResult(installationPath: installationPath);
     } else {
       throw FormatException('Invalid vswhere result json format', json);
     }

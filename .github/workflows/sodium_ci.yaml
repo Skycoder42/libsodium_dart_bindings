@@ -28,6 +28,7 @@ jobs:
       coverageExclude: >-
         "**/*.freezed.dart"
         "**/*.ffi.dart"
+        "**/*.ffi.wrapper.dart"
         "**/*.js.dart"
       integrationTestPaths: -P integration
       integrationTestSetup: >-
