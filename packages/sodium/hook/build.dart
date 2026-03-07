@@ -13,8 +13,10 @@ import 'libsodium/sodium_builder.dart';
 const skipBuildHooksVariableName = 'NIX_SKIP_SODIUM_BUILD_HOOKS';
 
 void main(List<String> args) async => await build(args, (input, output) async {
+  final logger = HookLogger('sodium');
+
   if (Platform.environment[skipBuildHooksVariableName] == '1') {
-    stderr.writeln(
+    logger.warning(
       'Skipping sodium build hooks because environment variable '
       '$skipBuildHooksVariableName is set.',
     );
@@ -31,7 +33,6 @@ void main(List<String> args) async => await build(args, (input, output) async {
     );
   }
 
-  final logger = HookLogger('sodium');
   final config = input.config.code;
   final builder = SodiumBuilder.forConfig(config, logger);
   final asset = await builder.build(input: input, sourceDir: sourceDir);
