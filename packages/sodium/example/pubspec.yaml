@@ -1,17 +1,26 @@
 name: sodium_example
-description: Sample dart program for web and native
+description: Demonstrates how to use the sodium package.
+publish_to: none
 
 environment:
   sdk: ^3.11.0
+  flutter: ">3.41.0"
 resolution: workspace
 
 dependencies:
+  flutter:
+    sdk: flutter
   sodium: ^3.4.7
 
 dev_dependencies:
-  build_runner: ^2.11.1
-  build_web_compilers: ^4.4.12
-  lint: ^2.8.0
+  flutter_driver:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  test: ^1.29.0
 
-executables:
-  native: main_native
+flutter:
+  uses-material-design: true
