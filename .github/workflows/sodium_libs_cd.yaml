@@ -15,3 +15,7 @@ jobs:
       tagPrefix: sodium_libs-v
       flutter: true
       workingDirectory: packages/sodium_libs
+      env: >-
+        {
+          "NIX_SKIP_SODIUM_BUILD_HOOKS": "1"
+        }
