@@ -30,10 +30,12 @@ jobs:
       integrationTestPaths: -P integration
       integrationTestSetup: >-
         {
+          "android": "dart run tool/download_libsodium.dart",
+          "ios": "dart run tool/download_libsodium.dart",
           "linux": "dart run tool/download_libsodium.dart",
           "windows": "dart run tool/download_libsodium.dart",
           "macos": "dart run tool/download_libsodium.dart",
-          "web": "dart run tool/integration/setup_web.dart"
+          "web": "dart run sodium:update_web --sumo"
         }
 
   flutter_tests:
