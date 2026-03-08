@@ -1,8 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:sodium/sodium_sumo.dart';
 
-import 'sodium_sumo_unavailable.dart';
-
 /// The abstract platform interface
 ///
 /// This interface is implemented by the package for each supported native

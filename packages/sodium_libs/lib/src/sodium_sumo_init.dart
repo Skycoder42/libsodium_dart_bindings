@@ -3,7 +3,6 @@ import 'package:sodium/sodium_sumo.dart' show SodiumSumo;
 import 'package:synchronized/synchronized.dart';
 
 import 'sodium_platform.dart';
-import 'sodium_sumo_unavailable.dart';
 import 'version_check.dart';
 
 /// Static class to obtain a [SodiumSumo] instance.
