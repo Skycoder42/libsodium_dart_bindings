@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - hooks
     paths:
       - packages/sodium/tool/libsodium
       - .github/workflows/libsodium_update.yaml
