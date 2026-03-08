@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
 
-import '../../../sodium_libs/libsodium_version.dart' show libsodium_version;
+import '../libsodium_version.dart' show libsodium_version;
 
 const _defaultOutDir = 'test/integration/binaries/js';
 

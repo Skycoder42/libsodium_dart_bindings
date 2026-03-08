@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
 
-import '../../sodium_libs/libsodium_version.dart';
 import '../hook/build.dart';
+import 'libsodium_version.dart';
 
 final _libsodiumDownloadUri = Uri.https(
   'download.libsodium.org',

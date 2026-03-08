@@ -1,4 +1,4 @@
-package com.example.sodium_example
+package de.skycoder42.sodium_example
 
 import io.flutter.embedding.android.FlutterActivity
 

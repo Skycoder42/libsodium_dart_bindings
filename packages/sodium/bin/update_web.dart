@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:html/parser.dart' show parse;
 
-import '../../sodium_libs/libsodium_version.dart' show libsodium_version;
+import '../tool/libsodium_version.dart' show libsodium_version;
 
 const _sumoArg = 'sumo';
 const _editIndexArg = 'edit-index';
