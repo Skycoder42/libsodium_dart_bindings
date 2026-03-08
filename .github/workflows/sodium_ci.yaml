@@ -7,10 +7,6 @@ on:
       - "packages/sodium/**"
       - ".github/workflows/sodium_ci.yaml"
       - ".github/workflows/sodium_cd.yaml"
-  pull_request:
-    types:
-      - opened
-      - synchronize
 
 jobs:
   ci:
@@ -40,11 +36,41 @@ jobs:
           "web": "dart run tool/integration/setup_web.dart"
         }
 
+  flutter_tests:
+    name: Flutter integration tests
+    uses: Skycoder42/dart_test_tools/.github/workflows/flutter-integration.yml@main
+    needs:
+      - ci
+    with:
+      enabledPlatforms: ""
+      workingDirectory: packages/sodium/example
+      env: >-
+        {
+          "NIX_SKIP_SODIUM_BUILD_HOOKS": "1",
+          "NIX_HOOKS_ENABLE_DEBUG_LOGGING": "1"
+        }
+      buildDependencies: sodium
+      integrationTestPaths: integration_test/app_test.dart
+      integrationTestSetup: >-
+        {
+          "linux": "cd .. && dart run tool/download_libsodium.dart",
+          "windows": "cd .. && dart run tool/download_libsodium.dart",
+          "macos": "cd .. && dart run tool/download_libsodium.dart",
+          "web": "dart run sodium:update_web --sumo"
+        }
+      firebaseProjectId: libsodium-dart-bindings-9b953
+    secrets:
+      firebaseCredentials: ${{ secrets.FIREBASE_CREDENTIALS }}
+      provisioningProfile: ${{ secrets.PROVISIONING_PROFILE }}
+      signingIdentity: ${{ secrets.SIGNING_IDENTITY }}
+      signingIdentityPassphrase: ${{ secrets.SIGNING_IDENTITY_PASSPHRASE }}
+
   cd:
     name: CD
     uses: Skycoder42/dart_test_tools/.github/workflows/release.yml@main
     needs:
       - ci
+      - flutter_tests
     with:
       workingDirectory: packages/sodium
       tagPrefix: sodium-v
