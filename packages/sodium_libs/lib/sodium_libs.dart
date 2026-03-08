@@ -1,8 +1,4 @@
-export 'package:sodium/sodium.dart' hide SodiumInit;
+@Deprecated('All functionality has been moved to sodium. See TODO')
+library;
 
-export 'src/platforms/platforms.fallback.dart'
-    if (dart.library.ffi) 'src/platforms/platforms.ffi.dart'
-    if (dart.library.js_interop) 'src/platforms/platforms.js.dart';
-
-export 'src/sodium_init.dart';
-export 'src/sodium_platform.dart';
+export 'package:sodium/sodium.dart';

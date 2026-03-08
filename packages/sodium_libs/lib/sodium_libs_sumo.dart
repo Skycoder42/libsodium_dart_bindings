@@ -1,5 +1,4 @@
-export 'package:sodium/sodium_sumo.dart' hide SodiumSumoInit;
+@Deprecated('All functionality has been moved to sodium. See TODO')
+library;
 
-export 'sodium_libs.dart' hide SodiumInit;
-
-export 'src/sodium_sumo_init.dart';
+export 'package:sodium/sodium_sumo.dart';

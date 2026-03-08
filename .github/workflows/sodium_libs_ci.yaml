@@ -8,10 +8,6 @@ on:
       - .github/workflows/sodium_libs_ci.yaml
       - .github/workflows/sodium_libs_cd.yaml
       - "!packages/sodium_libs/tool/libsodium/**"
-  pull_request:
-    types:
-      - opened
-      - synchronize
 
 jobs:
   ci:
@@ -21,18 +17,6 @@ jobs:
       workingDirectory: packages/sodium_libs
       buildDependencies: sodium
       unitTestPaths: ""
-      integrationTestProject: example
-      integrationTestPaths: integration_test/app_test.dart
-      integrationTestSetup: >-
-        {
-          "web": "cd example && dart run sodium_libs:update_web --sumo"
-        }
-      firebaseProjectId: libsodium-dart-bindings-9b953
-    secrets:
-      firebaseCredentials: ${{ secrets.FIREBASE_CREDENTIALS }}
-      provisioningProfile: ${{ secrets.PROVISIONING_PROFILE }}
-      signingIdentity: ${{ secrets.SIGNING_IDENTITY }}
-      signingIdentityPassphrase: ${{ secrets.SIGNING_IDENTITY_PASSPHRASE }}
 
   cd:
     name: CD
