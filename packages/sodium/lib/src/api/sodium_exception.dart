@@ -49,6 +49,7 @@ class SodiumException implements Exception {
 
   // coverage:ignore-start
   @override
-  String toString() => 'A low-level libsodium operation has failed';
+  String toString() =>
+      'SodiumException: A low-level libsodium operation has failed';
   // coverage:ignore-end
 }

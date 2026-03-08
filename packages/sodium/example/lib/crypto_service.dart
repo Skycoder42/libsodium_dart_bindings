@@ -1,14 +1,18 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:sodium/sodium.dart';
+import 'package:sodium/sodium_sumo.dart';
 
 class CryptoService {
   final Sodium _sodium;
 
-  final SecureKey _secretKey;
+  SecureKey _secretKey;
 
   CryptoService(this._sodium) : _secretKey = _sodium.crypto.secretBox.keygen();
+
+  SodiumVersion get version => _sodium.version;
+
+  SecureKey get secretKey => _secretKey;
 
   void dispose() {
     _secretKey.dispose();
@@ -77,5 +81,38 @@ class CryptoService {
         )
         .pipe(plainFile.openWrite());
     return plainFile.path;
+  }
+
+  Uint8List generateSalt() {
+    if (_sodium is! SodiumSumo) {
+      throw UnsupportedError(
+        "Password hashing is only supported with the sumo variant of libsodium!",
+      );
+    }
+
+    return _sodium.randombytes.buf(_sodium.crypto.pwhash.saltBytes);
+  }
+
+  Future<void> deriveNewKey(String password, Uint8List salt) async {
+    // copy to variable to ensure this is not sent to isolate
+    final sodium = _sodium;
+    if (sodium is! SodiumSumo) {
+      throw UnsupportedError(
+        "Password hashing is only supported with the sumo variant of libsodium!",
+      );
+    }
+
+    final newKey = await _sodium.runIsolated(
+      (_, _) => sodium.crypto.pwhash(
+        outLen: sodium.crypto.secretBox.keyBytes,
+        password: password.toCharArray(),
+        salt: salt,
+        opsLimit: sodium.crypto.pwhash.opsLimitSensitive,
+        memLimit: sodium.crypto.pwhash.memLimitSensitive,
+      ),
+    );
+
+    _secretKey.dispose();
+    _secretKey = newKey;
   }
 }
