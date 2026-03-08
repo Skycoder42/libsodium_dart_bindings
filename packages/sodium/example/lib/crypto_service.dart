@@ -103,16 +103,23 @@ class CryptoService {
     }
 
     final newKey = await _sodium.runIsolated(
-      (_, _) => sodium.crypto.pwhash(
-        outLen: sodium.crypto.secretBox.keyBytes,
-        password: password.toCharArray(),
-        salt: salt,
-        opsLimit: sodium.crypto.pwhash.opsLimitSensitive,
-        memLimit: sodium.crypto.pwhash.memLimitSensitive,
-      ),
+      (_, _) => _pwhashIsolated(password, salt),
     );
-
     _secretKey.dispose();
     _secretKey = newKey;
+  }
+
+  static Future<SecureKey> _pwhashIsolated(
+    String password,
+    Uint8List salt,
+  ) async {
+    var sodium = await SodiumSumoInit.init();
+    return sodium.crypto.pwhash(
+      outLen: sodium.crypto.secretBox.keyBytes,
+      password: password.toCharArray(),
+      salt: salt,
+      opsLimit: sodium.crypto.pwhash.opsLimitSensitive,
+      memLimit: sodium.crypto.pwhash.memLimitSensitive,
+    );
   }
 }

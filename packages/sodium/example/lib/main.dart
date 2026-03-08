@@ -54,6 +54,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("sodium example")),
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: Center(
