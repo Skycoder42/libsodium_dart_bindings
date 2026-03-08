@@ -1826,6 +1826,54 @@ external int crypto_core_hsalsa20(
 );
 
 @ffi.Native<ffi.Size Function()>()
+external int crypto_core_keccak1600_statebytes();
+
+@ffi.Native<ffi.Void Function(ffi.Pointer<crypto_core_keccak1600_state>)>()
+external void crypto_core_keccak1600_init(
+  ffi.Pointer<crypto_core_keccak1600_state> state,
+);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<crypto_core_keccak1600_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+    ffi.Size,
+  )
+>()
+external void crypto_core_keccak1600_xor_bytes(
+  ffi.Pointer<crypto_core_keccak1600_state> state,
+  ffi.Pointer<ffi.UnsignedChar> bytes,
+  int offset,
+  int length,
+);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<crypto_core_keccak1600_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+    ffi.Size,
+  )
+>()
+external void crypto_core_keccak1600_extract_bytes(
+  ffi.Pointer<crypto_core_keccak1600_state> state,
+  ffi.Pointer<ffi.UnsignedChar> bytes,
+  int offset,
+  int length,
+);
+
+@ffi.Native<ffi.Void Function(ffi.Pointer<crypto_core_keccak1600_state>)>()
+external void crypto_core_keccak1600_permute_24(
+  ffi.Pointer<crypto_core_keccak1600_state> state,
+);
+
+@ffi.Native<ffi.Void Function(ffi.Pointer<crypto_core_keccak1600_state>)>()
+external void crypto_core_keccak1600_permute_12(
+  ffi.Pointer<crypto_core_keccak1600_state> state,
+);
+
+@ffi.Native<ffi.Size Function()>()
 external int crypto_core_salsa20_outputbytes();
 
 @ffi.Native<ffi.Size Function()>()
@@ -2145,6 +2193,162 @@ external int crypto_hash(
 
 @ffi.Native<ffi.Pointer<ffi.Char> Function()>()
 external ffi.Pointer<ffi.Char> crypto_hash_primitive();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_bytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_keybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_nd_keybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_nd_tweakbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_nd_inputbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_nd_outputbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_ndx_keybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_ndx_tweakbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_ndx_inputbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_ndx_outputbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_pfx_keybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_ipcrypt_pfx_bytes();
+
+@ffi.Native<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>()
+external void crypto_ipcrypt_keygen(ffi.Pointer<ffi.UnsignedChar> k);
+
+@ffi.Native<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>()
+external void crypto_ipcrypt_nd_keygen(ffi.Pointer<ffi.UnsignedChar> k);
+
+@ffi.Native<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>()
+external void crypto_ipcrypt_ndx_keygen(ffi.Pointer<ffi.UnsignedChar> k);
+
+@ffi.Native<ffi.Void Function(ffi.Pointer<ffi.UnsignedChar>)>()
+external void crypto_ipcrypt_pfx_keygen(ffi.Pointer<ffi.UnsignedChar> k);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external void crypto_ipcrypt_encrypt(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  ffi.Pointer<ffi.UnsignedChar> k,
+);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external void crypto_ipcrypt_decrypt(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  ffi.Pointer<ffi.UnsignedChar> k,
+);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external void crypto_ipcrypt_nd_encrypt(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  ffi.Pointer<ffi.UnsignedChar> t,
+  ffi.Pointer<ffi.UnsignedChar> k,
+);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external void crypto_ipcrypt_nd_decrypt(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  ffi.Pointer<ffi.UnsignedChar> k,
+);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external void crypto_ipcrypt_ndx_encrypt(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  ffi.Pointer<ffi.UnsignedChar> t,
+  ffi.Pointer<ffi.UnsignedChar> k,
+);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external void crypto_ipcrypt_ndx_decrypt(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  ffi.Pointer<ffi.UnsignedChar> k,
+);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external void crypto_ipcrypt_pfx_encrypt(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  ffi.Pointer<ffi.UnsignedChar> k,
+);
+
+@ffi.Native<
+  ffi.Void Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external void crypto_ipcrypt_pfx_decrypt(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  ffi.Pointer<ffi.UnsignedChar> k,
+);
 
 @ffi.Native<ffi.Size Function()>()
 external int crypto_kdf_blake2b_bytes_min();
@@ -4018,6 +4222,264 @@ external int crypto_verify_64(
 );
 
 @ffi.Native<ffi.Size Function()>()
+external int crypto_xof_shake128_blockbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_xof_shake128_statebytes();
+
+@ffi.Native<ffi.UnsignedChar Function()>()
+external int crypto_xof_shake128_domain_standard();
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_xof_shake128(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  int outlen,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<ffi.Int Function(ffi.Pointer<crypto_xof_shake128_state>)>()
+external int crypto_xof_shake128_init(
+  ffi.Pointer<crypto_xof_shake128_state> state,
+);
+
+@ffi.Native<
+  ffi.Int Function(ffi.Pointer<crypto_xof_shake128_state>, ffi.UnsignedChar)
+>()
+external int crypto_xof_shake128_init_with_domain(
+  ffi.Pointer<crypto_xof_shake128_state> state,
+  int domain,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_shake128_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_xof_shake128_update(
+  ffi.Pointer<crypto_xof_shake128_state> state,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_shake128_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+  )
+>()
+external int crypto_xof_shake128_squeeze(
+  ffi.Pointer<crypto_xof_shake128_state> state,
+  ffi.Pointer<ffi.UnsignedChar> out,
+  int outlen,
+);
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_xof_shake256_blockbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_xof_shake256_statebytes();
+
+@ffi.Native<ffi.UnsignedChar Function()>()
+external int crypto_xof_shake256_domain_standard();
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_xof_shake256(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  int outlen,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<ffi.Int Function(ffi.Pointer<crypto_xof_shake256_state>)>()
+external int crypto_xof_shake256_init(
+  ffi.Pointer<crypto_xof_shake256_state> state,
+);
+
+@ffi.Native<
+  ffi.Int Function(ffi.Pointer<crypto_xof_shake256_state>, ffi.UnsignedChar)
+>()
+external int crypto_xof_shake256_init_with_domain(
+  ffi.Pointer<crypto_xof_shake256_state> state,
+  int domain,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_shake256_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_xof_shake256_update(
+  ffi.Pointer<crypto_xof_shake256_state> state,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_shake256_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+  )
+>()
+external int crypto_xof_shake256_squeeze(
+  ffi.Pointer<crypto_xof_shake256_state> state,
+  ffi.Pointer<ffi.UnsignedChar> out,
+  int outlen,
+);
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_xof_turboshake128_blockbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_xof_turboshake128_statebytes();
+
+@ffi.Native<ffi.UnsignedChar Function()>()
+external int crypto_xof_turboshake128_domain_standard();
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_xof_turboshake128(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  int outlen,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<ffi.Int Function(ffi.Pointer<crypto_xof_turboshake128_state>)>()
+external int crypto_xof_turboshake128_init(
+  ffi.Pointer<crypto_xof_turboshake128_state> state,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_turboshake128_state>,
+    ffi.UnsignedChar,
+  )
+>()
+external int crypto_xof_turboshake128_init_with_domain(
+  ffi.Pointer<crypto_xof_turboshake128_state> state,
+  int domain,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_turboshake128_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_xof_turboshake128_update(
+  ffi.Pointer<crypto_xof_turboshake128_state> state,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_turboshake128_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+  )
+>()
+external int crypto_xof_turboshake128_squeeze(
+  ffi.Pointer<crypto_xof_turboshake128_state> state,
+  ffi.Pointer<ffi.UnsignedChar> out,
+  int outlen,
+);
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_xof_turboshake256_blockbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_xof_turboshake256_statebytes();
+
+@ffi.Native<ffi.UnsignedChar Function()>()
+external int crypto_xof_turboshake256_domain_standard();
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_xof_turboshake256(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  int outlen,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<ffi.Int Function(ffi.Pointer<crypto_xof_turboshake256_state>)>()
+external int crypto_xof_turboshake256_init(
+  ffi.Pointer<crypto_xof_turboshake256_state> state,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_turboshake256_state>,
+    ffi.UnsignedChar,
+  )
+>()
+external int crypto_xof_turboshake256_init_with_domain(
+  ffi.Pointer<crypto_xof_turboshake256_state> state,
+  int domain,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_turboshake256_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_xof_turboshake256_update(
+  ffi.Pointer<crypto_xof_turboshake256_state> state,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_xof_turboshake256_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Size,
+  )
+>()
+external int crypto_xof_turboshake256_squeeze(
+  ffi.Pointer<crypto_xof_turboshake256_state> state,
+  ffi.Pointer<ffi.UnsignedChar> out,
+  int outlen,
+);
+
+@ffi.Native<ffi.Size Function()>()
 external int randombytes_seedbytes();
 
 @ffi.Native<ffi.Void Function(ffi.Pointer<ffi.Void>, ffi.Size)>()
@@ -4240,6 +4702,32 @@ external int sodium_base642bin(
   ffi.Pointer<ffi.Size> bin_len,
   ffi.Pointer<ffi.Pointer<ffi.Char>> b64_end,
   int variant,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.Char>,
+    ffi.Size,
+  )
+>()
+external int sodium_ip2bin(
+  ffi.Pointer<ffi.UnsignedChar> bin,
+  ffi.Pointer<ffi.Char> ip,
+  int ip_len,
+);
+
+@ffi.Native<
+  ffi.Pointer<ffi.Char> Function(
+    ffi.Pointer<ffi.Char>,
+    ffi.Size,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external ffi.Pointer<ffi.Char> sodium_bin2ip(
+  ffi.Pointer<ffi.Char> ip,
+  int ip_maxlen,
+  ffi.Pointer<ffi.UnsignedChar> bin,
 );
 
 @ffi.Native<ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.Size)>()
@@ -5312,6 +5800,11 @@ final class crypto_auth_hmacsha256_state extends ffi.Struct {
   external crypto_hash_sha256_state octx;
 }
 
+final class crypto_core_keccak1600_state extends ffi.Struct {
+  @ffi.Array.multi([224])
+  external ffi.Array<ffi.UnsignedChar> opaque;
+}
+
 final class crypto_generichash_blake2b_state extends ffi.Struct {
   @ffi.Array.multi([384])
   external ffi.Array<ffi.UnsignedChar> opaque;
@@ -5350,6 +5843,26 @@ final class crypto_sign_ed25519ph_state extends ffi.Struct {
 }
 
 typedef crypto_sign_state = crypto_sign_ed25519ph_state;
+
+final class crypto_xof_shake128_state extends ffi.Struct {
+  @ffi.Array.multi([256])
+  external ffi.Array<ffi.UnsignedChar> opaque;
+}
+
+final class crypto_xof_shake256_state extends ffi.Struct {
+  @ffi.Array.multi([256])
+  external ffi.Array<ffi.UnsignedChar> opaque;
+}
+
+final class crypto_xof_turboshake128_state extends ffi.Struct {
+  @ffi.Array.multi([256])
+  external ffi.Array<ffi.UnsignedChar> opaque;
+}
+
+final class crypto_xof_turboshake256_state extends ffi.Struct {
+  @ffi.Array.multi([256])
+  external ffi.Array<ffi.UnsignedChar> opaque;
+}
 
 final class randombytes_implementation extends ffi.Struct {
   external ffi.Pointer<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>
@@ -5603,6 +6116,30 @@ const String crypto_generichash_PRIMITIVE = 'blake2b';
 const int crypto_hash_BYTES = 64;
 
 const String crypto_hash_PRIMITIVE = 'sha512';
+
+const int crypto_ipcrypt_BYTES = 16;
+
+const int crypto_ipcrypt_KEYBYTES = 16;
+
+const int crypto_ipcrypt_ND_KEYBYTES = 16;
+
+const int crypto_ipcrypt_ND_TWEAKBYTES = 8;
+
+const int crypto_ipcrypt_ND_INPUTBYTES = 16;
+
+const int crypto_ipcrypt_ND_OUTPUTBYTES = 24;
+
+const int crypto_ipcrypt_NDX_KEYBYTES = 32;
+
+const int crypto_ipcrypt_NDX_TWEAKBYTES = 16;
+
+const int crypto_ipcrypt_NDX_INPUTBYTES = 16;
+
+const int crypto_ipcrypt_NDX_OUTPUTBYTES = 32;
+
+const int crypto_ipcrypt_PFX_KEYBYTES = 32;
+
+const int crypto_ipcrypt_PFX_BYTES = 16;
 
 const int crypto_kdf_blake2b_BYTES_MIN = 16;
 
@@ -5893,6 +6430,30 @@ const int crypto_verify_16_BYTES = 16;
 const int crypto_verify_32_BYTES = 32;
 
 const int crypto_verify_64_BYTES = 64;
+
+const int crypto_xof_shake128_BLOCKBYTES = 168;
+
+const int crypto_xof_shake128_STATEBYTES = 256;
+
+const int crypto_xof_shake128_DOMAIN_STANDARD = 31;
+
+const int crypto_xof_shake256_BLOCKBYTES = 136;
+
+const int crypto_xof_shake256_STATEBYTES = 256;
+
+const int crypto_xof_shake256_DOMAIN_STANDARD = 31;
+
+const int crypto_xof_turboshake128_BLOCKBYTES = 168;
+
+const int crypto_xof_turboshake128_STATEBYTES = 256;
+
+const int crypto_xof_turboshake128_DOMAIN_STANDARD = 31;
+
+const int crypto_xof_turboshake256_BLOCKBYTES = 136;
+
+const int crypto_xof_turboshake256_STATEBYTES = 256;
+
+const int crypto_xof_turboshake256_DOMAIN_STANDARD = 31;
 
 const int randombytes_BYTES_MAX = 4294967295;
 

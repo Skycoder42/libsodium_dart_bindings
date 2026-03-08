@@ -1462,6 +1462,41 @@ class LibSodiumFFI {
   ) => _i2.crypto_core_hsalsa20(out, in$, k, c);
 
   @pragma('vm:prefer-inline')
+  int crypto_core_keccak1600_statebytes() =>
+      _i2.crypto_core_keccak1600_statebytes();
+
+  @pragma('vm:prefer-inline')
+  void crypto_core_keccak1600_init(
+    _i1.Pointer<_i2.crypto_core_keccak1600_state> state,
+  ) => _i2.crypto_core_keccak1600_init(state);
+
+  @pragma('vm:prefer-inline')
+  void crypto_core_keccak1600_xor_bytes(
+    _i1.Pointer<_i2.crypto_core_keccak1600_state> state,
+    _i1.Pointer<_i1.UnsignedChar> bytes,
+    int offset,
+    int length,
+  ) => _i2.crypto_core_keccak1600_xor_bytes(state, bytes, offset, length);
+
+  @pragma('vm:prefer-inline')
+  void crypto_core_keccak1600_extract_bytes(
+    _i1.Pointer<_i2.crypto_core_keccak1600_state> state,
+    _i1.Pointer<_i1.UnsignedChar> bytes,
+    int offset,
+    int length,
+  ) => _i2.crypto_core_keccak1600_extract_bytes(state, bytes, offset, length);
+
+  @pragma('vm:prefer-inline')
+  void crypto_core_keccak1600_permute_24(
+    _i1.Pointer<_i2.crypto_core_keccak1600_state> state,
+  ) => _i2.crypto_core_keccak1600_permute_24(state);
+
+  @pragma('vm:prefer-inline')
+  void crypto_core_keccak1600_permute_12(
+    _i1.Pointer<_i2.crypto_core_keccak1600_state> state,
+  ) => _i2.crypto_core_keccak1600_permute_12(state);
+
+  @pragma('vm:prefer-inline')
   int crypto_core_salsa20_outputbytes() =>
       _i2.crypto_core_salsa20_outputbytes();
 
@@ -1713,6 +1748,116 @@ class LibSodiumFFI {
 
   @pragma('vm:prefer-inline')
   _i1.Pointer<_i1.Char> crypto_hash_primitive() => _i2.crypto_hash_primitive();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_bytes() => _i2.crypto_ipcrypt_bytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_keybytes() => _i2.crypto_ipcrypt_keybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_nd_keybytes() => _i2.crypto_ipcrypt_nd_keybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_nd_tweakbytes() => _i2.crypto_ipcrypt_nd_tweakbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_nd_inputbytes() => _i2.crypto_ipcrypt_nd_inputbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_nd_outputbytes() => _i2.crypto_ipcrypt_nd_outputbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_ndx_keybytes() => _i2.crypto_ipcrypt_ndx_keybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_ndx_tweakbytes() => _i2.crypto_ipcrypt_ndx_tweakbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_ndx_inputbytes() => _i2.crypto_ipcrypt_ndx_inputbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_ndx_outputbytes() => _i2.crypto_ipcrypt_ndx_outputbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_pfx_keybytes() => _i2.crypto_ipcrypt_pfx_keybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_ipcrypt_pfx_bytes() => _i2.crypto_ipcrypt_pfx_bytes();
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_keygen(_i1.Pointer<_i1.UnsignedChar> k) =>
+      _i2.crypto_ipcrypt_keygen(k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_nd_keygen(_i1.Pointer<_i1.UnsignedChar> k) =>
+      _i2.crypto_ipcrypt_nd_keygen(k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_ndx_keygen(_i1.Pointer<_i1.UnsignedChar> k) =>
+      _i2.crypto_ipcrypt_ndx_keygen(k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_pfx_keygen(_i1.Pointer<_i1.UnsignedChar> k) =>
+      _i2.crypto_ipcrypt_pfx_keygen(k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_encrypt(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    _i1.Pointer<_i1.UnsignedChar> k,
+  ) => _i2.crypto_ipcrypt_encrypt(out, in$, k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_decrypt(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    _i1.Pointer<_i1.UnsignedChar> k,
+  ) => _i2.crypto_ipcrypt_decrypt(out, in$, k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_nd_encrypt(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    _i1.Pointer<_i1.UnsignedChar> t,
+    _i1.Pointer<_i1.UnsignedChar> k,
+  ) => _i2.crypto_ipcrypt_nd_encrypt(out, in$, t, k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_nd_decrypt(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    _i1.Pointer<_i1.UnsignedChar> k,
+  ) => _i2.crypto_ipcrypt_nd_decrypt(out, in$, k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_ndx_encrypt(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    _i1.Pointer<_i1.UnsignedChar> t,
+    _i1.Pointer<_i1.UnsignedChar> k,
+  ) => _i2.crypto_ipcrypt_ndx_encrypt(out, in$, t, k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_ndx_decrypt(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    _i1.Pointer<_i1.UnsignedChar> k,
+  ) => _i2.crypto_ipcrypt_ndx_decrypt(out, in$, k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_pfx_encrypt(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    _i1.Pointer<_i1.UnsignedChar> k,
+  ) => _i2.crypto_ipcrypt_pfx_encrypt(out, in$, k);
+
+  @pragma('vm:prefer-inline')
+  void crypto_ipcrypt_pfx_decrypt(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    _i1.Pointer<_i1.UnsignedChar> k,
+  ) => _i2.crypto_ipcrypt_pfx_decrypt(out, in$, k);
 
   @pragma('vm:prefer-inline')
   int crypto_kdf_blake2b_bytes_min() => _i2.crypto_kdf_blake2b_bytes_min();
@@ -3153,6 +3298,182 @@ class LibSodiumFFI {
   ) => _i2.crypto_verify_64(x, y);
 
   @pragma('vm:prefer-inline')
+  int crypto_xof_shake128_blockbytes() => _i2.crypto_xof_shake128_blockbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake128_statebytes() => _i2.crypto_xof_shake128_statebytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake128_domain_standard() =>
+      _i2.crypto_xof_shake128_domain_standard();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake128(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    int outlen,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_xof_shake128(out, outlen, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake128_init(
+    _i1.Pointer<_i2.crypto_xof_shake128_state> state,
+  ) => _i2.crypto_xof_shake128_init(state);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake128_init_with_domain(
+    _i1.Pointer<_i2.crypto_xof_shake128_state> state,
+    int domain,
+  ) => _i2.crypto_xof_shake128_init_with_domain(state, domain);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake128_update(
+    _i1.Pointer<_i2.crypto_xof_shake128_state> state,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_xof_shake128_update(state, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake128_squeeze(
+    _i1.Pointer<_i2.crypto_xof_shake128_state> state,
+    _i1.Pointer<_i1.UnsignedChar> out,
+    int outlen,
+  ) => _i2.crypto_xof_shake128_squeeze(state, out, outlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake256_blockbytes() => _i2.crypto_xof_shake256_blockbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake256_statebytes() => _i2.crypto_xof_shake256_statebytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake256_domain_standard() =>
+      _i2.crypto_xof_shake256_domain_standard();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake256(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    int outlen,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_xof_shake256(out, outlen, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake256_init(
+    _i1.Pointer<_i2.crypto_xof_shake256_state> state,
+  ) => _i2.crypto_xof_shake256_init(state);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake256_init_with_domain(
+    _i1.Pointer<_i2.crypto_xof_shake256_state> state,
+    int domain,
+  ) => _i2.crypto_xof_shake256_init_with_domain(state, domain);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake256_update(
+    _i1.Pointer<_i2.crypto_xof_shake256_state> state,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_xof_shake256_update(state, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_shake256_squeeze(
+    _i1.Pointer<_i2.crypto_xof_shake256_state> state,
+    _i1.Pointer<_i1.UnsignedChar> out,
+    int outlen,
+  ) => _i2.crypto_xof_shake256_squeeze(state, out, outlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake128_blockbytes() =>
+      _i2.crypto_xof_turboshake128_blockbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake128_statebytes() =>
+      _i2.crypto_xof_turboshake128_statebytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake128_domain_standard() =>
+      _i2.crypto_xof_turboshake128_domain_standard();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake128(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    int outlen,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_xof_turboshake128(out, outlen, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake128_init(
+    _i1.Pointer<_i2.crypto_xof_turboshake128_state> state,
+  ) => _i2.crypto_xof_turboshake128_init(state);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake128_init_with_domain(
+    _i1.Pointer<_i2.crypto_xof_turboshake128_state> state,
+    int domain,
+  ) => _i2.crypto_xof_turboshake128_init_with_domain(state, domain);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake128_update(
+    _i1.Pointer<_i2.crypto_xof_turboshake128_state> state,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_xof_turboshake128_update(state, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake128_squeeze(
+    _i1.Pointer<_i2.crypto_xof_turboshake128_state> state,
+    _i1.Pointer<_i1.UnsignedChar> out,
+    int outlen,
+  ) => _i2.crypto_xof_turboshake128_squeeze(state, out, outlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake256_blockbytes() =>
+      _i2.crypto_xof_turboshake256_blockbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake256_statebytes() =>
+      _i2.crypto_xof_turboshake256_statebytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake256_domain_standard() =>
+      _i2.crypto_xof_turboshake256_domain_standard();
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake256(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    int outlen,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_xof_turboshake256(out, outlen, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake256_init(
+    _i1.Pointer<_i2.crypto_xof_turboshake256_state> state,
+  ) => _i2.crypto_xof_turboshake256_init(state);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake256_init_with_domain(
+    _i1.Pointer<_i2.crypto_xof_turboshake256_state> state,
+    int domain,
+  ) => _i2.crypto_xof_turboshake256_init_with_domain(state, domain);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake256_update(
+    _i1.Pointer<_i2.crypto_xof_turboshake256_state> state,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_xof_turboshake256_update(state, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_xof_turboshake256_squeeze(
+    _i1.Pointer<_i2.crypto_xof_turboshake256_state> state,
+    _i1.Pointer<_i1.UnsignedChar> out,
+    int outlen,
+  ) => _i2.crypto_xof_turboshake256_squeeze(state, out, outlen);
+
+  @pragma('vm:prefer-inline')
   int randombytes_seedbytes() => _i2.randombytes_seedbytes();
 
   @pragma('vm:prefer-inline')
@@ -3331,6 +3652,20 @@ class LibSodiumFFI {
     b64_end,
     variant,
   );
+
+  @pragma('vm:prefer-inline')
+  int sodium_ip2bin(
+    _i1.Pointer<_i1.UnsignedChar> bin,
+    _i1.Pointer<_i1.Char> ip,
+    int ip_len,
+  ) => _i2.sodium_ip2bin(bin, ip, ip_len);
+
+  @pragma('vm:prefer-inline')
+  _i1.Pointer<_i1.Char> sodium_bin2ip(
+    _i1.Pointer<_i1.Char> ip,
+    int ip_maxlen,
+    _i1.Pointer<_i1.UnsignedChar> bin,
+  ) => _i2.sodium_bin2ip(ip, ip_maxlen, bin);
 
   @pragma('vm:prefer-inline')
   int sodium_mlock(_i1.Pointer<_i1.Void> addr, int len) =>

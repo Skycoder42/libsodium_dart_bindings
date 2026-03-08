@@ -10,7 +10,7 @@ class LibsodiumVersion {
 const libsodiumSigningKey =
     'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3';
 
-const libsodiumVersion = LibsodiumVersion(ffi: '1.0.20', js: '0.7.14');
+const libsodiumVersion = LibsodiumVersion(ffi: '1.0.21', js: '0.8.2');
 
 final libsodiumSrcDownloadUri = Uri.https(
   'download.libsodium.org',

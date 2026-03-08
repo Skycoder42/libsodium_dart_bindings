@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../json/library_info.dart';
 import '../spec_generator.dart';
-import '../test/test_lib_sodium_js_generator.dart';
+import 'test_lib_sodium_js_generator.dart';
 
 @immutable
 final class TestLibraryGenerator extends SpecGenerator<Library> {

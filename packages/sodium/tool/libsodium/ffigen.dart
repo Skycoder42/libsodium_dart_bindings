@@ -18,7 +18,7 @@ final _pragmaInline = const cb.Reference(
 ).call([cb.literalString('vm:prefer-inline')]);
 
 Uri _ffigen() {
-  final packageRoot = Platform.script.resolve('../');
+  final packageRoot = Platform.script.resolve('../../');
   final outUri = packageRoot.resolve('lib/src/ffi/bindings/libsodium.ffi.dart');
   FfiGenerator(
     output: Output(
@@ -27,15 +27,11 @@ Uri _ffigen() {
     ),
     headers: Headers(
       entryPoints: [
-        if (Platform.isMacOS)
-          packageRoot.resolve(
-            'test/integration/binaries/macos/include/sodium.h',
-          )
-        else
-          packageRoot.resolve(
-            'test/integration/binaries/linux/include/sodium.h',
-          ),
+        packageRoot.resolve(
+          '3rdparty/libsodium-stable/src/libsodium/include/sodium.h',
+        ),
       ],
+      compilerOptions: ['-I/usr/lib/clang/21/include'],
     ),
     macros: const Macros(include: _matchesLibsodium),
     globals: const Globals(include: _matchesLibsodium),

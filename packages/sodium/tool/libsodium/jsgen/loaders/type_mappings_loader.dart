@@ -26,6 +26,7 @@ class TypeMappingsLoader {
     'uint': TypeInfo('int'),
     'u64': TypeInfo('JSBigInt'),
     'string': TypeInfo('String'),
+    'unsized_string': TypeInfo('String'),
     'buf': TypeInfo('JSUint8Array'),
     'buf_optional': TypeInfo('JSUint8Array?'),
     'unsized_buf': TypeInfo('JSUint8Array'),
@@ -112,6 +113,20 @@ class TypeMappingsLoader {
       typeDef: 'JSNumber',
     ),
     'auth_hmacsha512256_state_address': TypeInfo('AuthHmacsha512256State'),
+    'xof_shake128_state': TypeInfo('XofShake128State', typeDef: 'JSNumber'),
+    'xof_shake128_state_address': TypeInfo('XofShake128State'),
+    'xof_shake256_state': TypeInfo('XofShake256State', typeDef: 'JSNumber'),
+    'xof_shake256_state_address': TypeInfo('XofShake256State'),
+    'xof_turboshake128_state': TypeInfo(
+      'XofTurboshake128State',
+      typeDef: 'JSNumber',
+    ),
+    'xof_turboshake128_state_address': TypeInfo('XofTurboshake128State'),
+    'xof_turboshake256_state': TypeInfo(
+      'XofTurboshake256State',
+      typeDef: 'JSNumber',
+    ),
+    'xof_turboshake256_state_address': TypeInfo('XofTurboshake256State'),
 
     // hidden types
     'randombytes_implementation': TypeInfo('JSAny'),
