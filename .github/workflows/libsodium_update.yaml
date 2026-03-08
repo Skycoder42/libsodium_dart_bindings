@@ -13,37 +13,14 @@ on:
     - cron: "47 2 * * 2"
 
 jobs:
-  detect_modified:
+  update_if_modified:
     name: Check if binaries need to be updated
-    runs-on: ubuntu-latest
-    outputs:
-      modified: ${{ steps.check.outputs.modified }}
-      version: ${{ steps.check.outputs.version }}
-      last-modified: ${{ steps.check.outputs.last-modified }}
-    steps:
-      - name: Install Flutter-SDK (stable)
-        uses: subosito/flutter-action@v2
-        with:
-          cache: true
-      - name: Checkout Repository
-        uses: actions/checkout@v6
-      - name: Install dart dependencies
-        run: dart pub get
-        working-directory: packages/sodium
-      - id: check
-        name: Check if upstream stable archives have been update
-        run: dart run tool/libsodium/detect_modified.dart
-        working-directory: packages/sodium
-
-  create_update_pr:
-    name: Create update PR
-    needs:
-      - detect_modified
-    if: needs.detect_modified.outputs.modified == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
+    env:
+      NIX_SKIP_SODIUM_BUILD_HOOKS: 1
     steps:
       - name: Install Flutter-SDK (stable)
         uses: subosito/flutter-action@v2
@@ -55,21 +32,22 @@ jobs:
         uses: actions/checkout@v6
       - name: Install dart dependencies
         run: dart pub get
-        working-directory: packages/sodium_libs
-      - name: Update last-modified.txt
-        run: >-
-          echo '${{ needs.detect_modified.outputs.last-modified }}'
-          > tool/libsodium/.last-modified.txt
-        working-directory: packages/sodium_libs
+        working-directory: packages/sodium
+      - id: check
+        name: Check if upstream stable archives have been update
+        run: dart run tool/libsodium/detect_modified.dart
+        working-directory: packages/sodium
       - name: Update changelog and bump build number
+        if: steps.check.outputs.modified == 'true'
         run: |
           set -euo pipefail
           dart pub global run dart_test_tools:cider log changed 'Updated embedded libsodium binaries'
           dart pub global run dart_test_tools:cider bump build
           dart pub global run dart_test_tools:cider release
-        working-directory: packages/sodium_libs
+        working-directory: packages/sodium
       - id: create-pull-request
         name: Create Pull Request
+        if: steps.check.outputs.modified == 'true'
         uses: peter-evans/create-pull-request@v8
         with:
           commit-message: Update last-modified.txt
@@ -78,10 +56,11 @@ jobs:
           assignees: Skycoder42
           title: Bump version for new stable libsodium
           body: |
-            Upstream archive for libsodium v${{ needs.detect_modified.outputs.version }} has changed!
-            The new timestamp is: `${{ needs.detect_modified.outputs.last-modified }}`
+            Upstream archive for libsodium v${{ steps.check.outputs.version }} has changed!
+            The new timestamp is: `${{ steps.check.outputs.last-modified }}`
           token: ${{ secrets.GH_PAT }}
       - name: Mention assignees
+        if: steps.check.outputs.modified == 'true'
         uses: thollander/actions-comment-pull-request@v3
         with:
           pr-number: ${{ steps.create-pull-request.outputs.pull-request-number }}

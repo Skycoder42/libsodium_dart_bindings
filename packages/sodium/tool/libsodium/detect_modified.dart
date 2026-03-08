@@ -7,9 +7,9 @@ import 'constants.dart';
 Future<void> main() => Github.runZoned(() async {
   final lastModified = await _getLastModified();
 
-  final lastModifiedFile = _getLastModifiedFile();
+  final lastModifiedFile = File('tool/libsodium/.last-modified.txt');
   if (lastModifiedFile.existsSync()) {
-    final oldLastModified = await _getLastModifiedFile().readAsString().then(
+    final oldLastModified = await lastModifiedFile.readAsString().then(
       (content) => content.trim(),
     );
 
@@ -21,6 +21,7 @@ Future<void> main() => Github.runZoned(() async {
   }
 
   Github.logNotice('Upstream archive has been modified!');
+  await lastModifiedFile.writeAsString(lastModified);
   await Github.env.setOutput('version', libsodiumVersion.ffi);
   await Github.env.setOutput('last-modified', lastModified);
   await Github.env.setOutput('modified', true);
@@ -40,5 +41,3 @@ Future<String> _getLastModified() async {
     httpClient.close(force: true);
   }
 }
-
-File _getLastModifiedFile() => File('tool/libsodium/.last-modified.txt');
