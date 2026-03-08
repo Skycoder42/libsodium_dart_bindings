@@ -2,13 +2,8 @@ import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
 
-import '../hook/build.dart';
-import 'libsodium_version.dart';
-
-final _libsodiumDownloadUri = Uri.https(
-  'download.libsodium.org',
-  '/libsodium/releases/libsodium-${libsodium_version.ffi}-stable.tar.gz',
-);
+import '../../hook/build.dart';
+import 'constants.dart';
 
 Future<void> main(List<String> args) => Github.runZoned(() async {
   await Github.logGroupAsync(
@@ -20,8 +15,6 @@ Future<void> main(List<String> args) => Github.runZoned(() async {
     'Download, verify and extract libsodium sources',
     _downloadLibsodium,
   );
-
-  await Github.logGroupAsync('Merge license files', _mergeLicenses);
 
   await Github.env.setOutput(skipBuildHooksVariableName, '0', asEnv: true);
 });
@@ -38,7 +31,7 @@ Future<void> _downloadLibsodium() async {
   try {
     final archive = await httpClient.download(
       downloadDir,
-      _libsodiumDownloadUri,
+      libsodiumSrcDownloadUri,
     );
     await Minisign.verify(archive, libsodiumSigningKey);
     await Archive.extract(archive: archive, outDir: downloadDir);
@@ -48,6 +41,9 @@ Future<void> _downloadLibsodium() async {
   } finally {
     httpClient.close();
   }
+
+  Github.logInfo('Merging license files');
+  await _mergeLicenses();
 }
 
 final _commentRegExp = RegExp(r'^(?:\/\*|\s*\*|\s*\*\/)(?:\s|$)');

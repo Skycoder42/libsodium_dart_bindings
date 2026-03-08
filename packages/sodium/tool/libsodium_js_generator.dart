@@ -4,6 +4,7 @@ import 'package:code_builder/code_builder.dart';
 import 'package:dart_test_tools/tools.dart';
 import 'package:path/path.dart';
 
+import 'libsodium/constants.dart' show libsodiumVersion;
 import 'libsodium_js_generator/generators/library_generator.dart';
 import 'libsodium_js_generator/generators/test/test_library_generator.dart';
 import 'libsodium_js_generator/json/library_info.dart';
@@ -13,7 +14,6 @@ import 'libsodium_js_generator/loaders/library_info_loader.dart';
 import 'libsodium_js_generator/loaders/repo_loader.dart';
 import 'libsodium_js_generator/loaders/symbols_loader.dart';
 import 'libsodium_js_generator/loaders/type_mappings_loader.dart';
-import 'libsodium_version.dart' show libsodium_version;
 
 Future<void> main() async {
   final libraryInfo = await _loadLibraryInfo();
@@ -50,7 +50,7 @@ Future<void> main() async {
 
 Future<LibraryInfo> _loadLibraryInfo() async {
   final repoLoader = RepoLoader();
-  final wrapperDir = await repoLoader.downloadRepo(libsodium_version.js);
+  final wrapperDir = await repoLoader.downloadRepo(libsodiumVersion.js);
   final wrapperLoader = FileLoader(wrapperDir);
 
   final sourceDir = Directory(

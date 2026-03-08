@@ -30,9 +30,9 @@ jobs:
       integrationTestPaths: -P integration
       integrationTestSetup: >-
         {
-          "linux": "dart run tool/download_libsodium.dart",
-          "windows": "dart run tool/download_libsodium.dart",
-          "macos": "dart run tool/download_libsodium.dart",
+          "linux": "dart run tool/libsodium/download.dart",
+          "windows": "dart run tool/libsodium/download.dart",
+          "macos": "dart run tool/libsodium/download.dart",
           "web": "dart run tool/integration/setup_web.dart"
         }
 
@@ -53,11 +53,11 @@ jobs:
       integrationTestPaths: integration_test/app_test.dart
       integrationTestSetup: >-
         {
-          "android": "cd .. && dart run tool/download_libsodium.dart",
-          "ios": "cd .. && dart run tool/download_libsodium.dart",
-          "linux": "cd .. && dart run tool/download_libsodium.dart",
-          "windows": "cd .. && dart run tool/download_libsodium.dart",
-          "macos": "cd .. && dart run tool/download_libsodium.dart",
+          "android": "cd .. && dart run tool/libsodium/download.dart",
+          "ios": "cd .. && dart run tool/libsodium/download.dart",
+          "linux": "cd .. && dart run tool/libsodium/download.dart",
+          "windows": "cd .. && dart run tool/libsodium/download.dart",
+          "macos": "cd .. && dart run tool/libsodium/download.dart",
           "web": "dart run sodium:update_web --sumo"
         }
       firebaseProjectId: libsodium-dart-bindings-9b953

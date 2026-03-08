@@ -21,4 +21,4 @@ jobs:
           "NIX_HOOKS_ENABLE_DEBUG_LOGGING": "1"
         }
       buildRunner: true
-      prePublish: dart run tool/download_libsodium.dart
+      prePublish: dart run tool/libsodium/download.dart
