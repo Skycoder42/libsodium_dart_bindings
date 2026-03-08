@@ -11,7 +11,7 @@ import 'package:test/test.dart';
 import './js_test_common.dart';
 import 'sodium_sumo.js.fake.dart'
     // ignore: conditional_uri_does_not_exist is generated
-    if (dart.library.js) 'binaries/js/sodium_sumo.js.dart'
+    if (dart.library.js_interop) 'binaries/js/sodium_sumo.js.dart'
     as sodium_sumo_js;
 import 'test_runner.dart';
 
@@ -20,7 +20,10 @@ class JsSumoTestRunner extends SumoTestRunner with JsLoaderMixin {
   String get sodiumJsSrc => sodium_sumo_js.sodiumJsSrc;
 
   @override
-  FutureOr<SodiumSumo> loadSodium() => SodiumSumoInit.init(loadSodiumJs);
+  FutureOr<SodiumSumo> loadSodium() {
+    attachSodiumJs();
+    return SodiumSumoInit.init();
+  }
 }
 
 void main() {

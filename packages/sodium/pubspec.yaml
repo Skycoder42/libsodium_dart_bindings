@@ -7,17 +7,21 @@ environment:
   sdk: ^3.11.0
 resolution: workspace
 
+executables:
+  sodium-update-web: update_web
+
 dependencies:
+  args: ^2.7.0
   code_assets: ^1.0.0
   crypto: ^3.0.7
   ffi: ^2.2.0
   freezed_annotation: ^3.1.0
   hooks: ^1.0.2
+  html: ^0.15.6
   meta: ^1.17.0
 
 dev_dependencies:
   analyzer: ^10.0.1
-  args: ^2.7.0
   build_runner: ^2.12.2
   cider: ^0.2.10
   code_builder: ^4.11.1
