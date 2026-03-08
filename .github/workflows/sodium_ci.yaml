@@ -42,7 +42,7 @@ jobs:
     needs:
       - ci
     with:
-      enabledPlatforms: ""
+      enabledPlatforms: "[]"
       workingDirectory: packages/sodium/example
       env: >-
         {
