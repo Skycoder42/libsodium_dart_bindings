@@ -1,6 +1,6 @@
 # Unignore
 ## 3rd party sources
-!/3rdparty/libsodium-stable
+!/3rdparty/libsodium-*-stable.tar.gz
 
 ## Generated build files
 !*.freezed.dart

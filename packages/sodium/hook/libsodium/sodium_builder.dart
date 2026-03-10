@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive.dart';
 import 'package:code_assets/code_assets.dart';
 import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as path;
+import 'package:posix/posix.dart' as posix;
 
 import '../common/hook_logger.dart';
 import 'android_builder.dart';
@@ -42,7 +45,7 @@ abstract base class SodiumBuilder {
   @nonVirtual
   Future<CodeAsset> build({
     required BuildInput input,
-    required Directory sourceDir,
+    required Uri sourceArchive,
   }) async {
     logger.debug('Running prepare step...');
     await prepare();
@@ -50,27 +53,27 @@ abstract base class SodiumBuilder {
 
     final shortHash = _calculateHash();
     final configUri = input.outputDirectoryShared.resolve('$shortHash/');
-    final srcDirUri = configUri.resolve('s/');
-    final installDirUri = configUri.resolve('i/');
+    final srcDirUri = configUri.resolve('libsodium-stable/');
+    final installDirUri = configUri.resolve('install/');
     logger
       ..debug('Calculated config hash: $shortHash')
       ..debug('Source directory URI: $srcDirUri')
       ..debug('Install directory URI: $installDirUri');
 
     try {
-      final configSrcDir = Directory.fromUri(srcDirUri);
-      if (configSrcDir.existsSync()) {
-        logger.debug('Source directory already exists, skipping copy.');
+      final srcDir = Directory.fromUri(srcDirUri);
+      if (srcDir.existsSync()) {
+        logger.debug('Source directory already exists, skipping extraction.');
       } else {
-        logger.info('Copying source files to config-specific directory...');
-        await _recursiveCopy(sourceDir, configSrcDir);
-        logger.debug('Source files copied successfully!');
+        logger.info('Extracting source files to config-specific directory...');
+        await _extract(sourceArchive, configUri);
+        logger.debug('Source files extracted successfully!');
       }
 
       logger.info('Starting build process...');
       final asset = await buildCached(
         input: input,
-        sourceDir: configSrcDir,
+        sourceDir: srcDir,
         installDir: installDirUri,
       );
       logger.debug('Successfully built code asset: ${asset.id}');
@@ -210,23 +213,91 @@ abstract base class SodiumBuilder {
     }
   }
 
-  Future<void> _recursiveCopy(Directory source, Directory destination) async {
-    await destination.create(recursive: true);
-    await for (final entity in source.list(followLinks: false)) {
-      final name = entity.uri.path.endsWith('/')
-          ? entity.uri.pathSegments.reversed.skip(1).first
-          : entity.uri.pathSegments.last;
-      final newUri = destination.uri.resolve(name);
-      switch (entity) {
-        case File():
-          await entity.copy(newUri.toFilePath());
-        case Directory():
-          await _recursiveCopy(entity, Directory.fromUri(newUri));
-        default:
-          logger.warning(
-            'Cannot copy entity of type ${entity.runtimeType}: ${entity.uri}',
-          );
+  Future<void> _extract(Uri sourceArchive, Uri destinationDir) async {
+    final tarGzInStream = InputFileStream(sourceArchive.toFilePath());
+    final tarOutStream = OutputMemoryStream();
+    Archive? archive;
+    try {
+      final ok = const GZipDecoder().decodeStream(
+        tarGzInStream,
+        tarOutStream,
+        verify: true,
+      );
+      if (!ok) {
+        throw Exception(
+          'Failed to decode gzip stream from archive: $sourceArchive',
+        );
+      }
+
+      archive = TarDecoder().decodeBytes(tarOutStream.getBytes(), verify: true);
+      await _extractToDisk(archive, destinationDir);
+    } finally {
+      await archive?.clear();
+      await tarOutStream.close();
+      await tarGzInStream.close();
+    }
+  }
+
+  Future<void> _extractToDisk(Archive archive, Uri destinationDir) async {
+    final outDir = Directory.fromUri(destinationDir);
+    if (!outDir.existsSync()) {
+      await outDir.create(recursive: true);
+    }
+
+    for (final entry in archive) {
+      final filePath = path.normalize(path.join(outDir.path, entry.name));
+
+      if (!_isWithinOutputPath(outDir.path, filePath)) {
+        throw Exception(
+          'The libsodium archive contains an entry with a path that is outside '
+          'the output directory: "${entry.name}". Extraction has been aborted '
+          'for security reasons.',
+        );
+      }
+
+      if (entry.isSymbolicLink) {
+        throw Exception(
+          'The libsodium archive should not contain symbolic links, but found '
+          'one pointing to "${entry.symbolicLink}" in file "${entry.name}". '
+          'Extraction has been aborted for security reasons.',
+        );
+      }
+
+      if (entry.isDirectory) {
+        await Directory(filePath).create(recursive: true);
+        continue;
+      }
+
+      if (!entry.isFile) {
+        throw Exception(
+          'The libsodium archive contains an entry that is not a file, '
+          'directory, or symbolic link: "${entry.name}". Extraction has been '
+          'aborted for security reasons.',
+        );
+      }
+
+      final output = OutputFileStream(filePath);
+      try {
+        entry.writeContent(output);
+        output.flush();
+        await output.close();
+
+        if (posix.isPosixSupported) {
+          posix.chmodWithMode(filePath, entry.mode);
+          entry.unixPermissions;
+        }
+
+        logger.debug(
+          'Extracted: ${path.relative(filePath, from: outDir.path)}',
+        );
+      } finally {
+        if (output.isOpen) {
+          await output.close();
+        }
       }
     }
   }
+
+  bool _isWithinOutputPath(String outputDir, String filePath) =>
+      path.isWithin(path.canonicalize(outputDir), path.canonicalize(filePath));
 }

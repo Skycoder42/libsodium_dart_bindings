@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
 
+import '../tool/libsodium/constants.dart';
 import 'common/hook_logger.dart';
 import 'libsodium/sodium_builder.dart';
 
@@ -23,19 +24,19 @@ void main(List<String> args) async => await build(args, (input, output) async {
     return;
   }
 
-  final sourceDir = Directory.fromUri(
-    input.packageRoot.resolve('3rdparty/libsodium-stable'),
+  final sourceArchive = input.packageRoot.resolve(
+    '3rdparty/libsodium-${libsodiumVersion.ffi}-stable.tar.gz',
   );
-  if (!sourceDir.existsSync()) {
+  if (!File.fromUri(sourceArchive).existsSync()) {
     throw Exception(
-      'libsodium source directory does not exist! This should not be possible. '
+      'libsodium source archive does not exist! This should not be possible. '
       'Please report this to the package maintainers.',
     );
   }
 
   final config = input.config.code;
   final builder = SodiumBuilder.forConfig(config, logger);
-  final asset = await builder.build(input: input, sourceDir: sourceDir);
+  final asset = await builder.build(input: input, sourceArchive: sourceArchive);
 
   output.assets.code.add(asset);
 });

@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:archive/archive.dart';
 import 'package:dart_test_tools/tools.dart';
 
 import '../../hook/build.dart';
@@ -34,31 +37,32 @@ Future<void> _downloadLibsodium() async {
       libsodiumSrcDownloadUri,
     );
     await Minisign.verify(archive, libsodiumSigningKey);
-    await Archive.extract(archive: archive, outDir: downloadDir);
+
+    Github.logInfo('Merging license files');
+    await _mergeLicenses(archive);
   } catch (e) {
     await downloadDir.delete(recursive: true);
     rethrow;
   } finally {
     httpClient.close();
   }
-
-  Github.logInfo('Merging license files');
-  await _mergeLicenses();
 }
 
 final _commentRegExp = RegExp(r'^(?:\/\*|\s*\*|\s*\*\/)(?:\s|$)');
 
-Future<void> _mergeLicenses() async {
-  final licenseFile = File('LICENSE');
+Future<void> _mergeLicenses(File archive) async {
+  final repoLicenseFile = File('../../LICENSE');
+  final sodiumLicense = await repoLicenseFile.readAsString();
 
-  final sodiumLicense = await licenseFile.readAsString();
-  final libsodiumLicenseFile = File('3rdparty/libsodium-stable/LICENSE');
-  final libsodiumLicenseLines = await libsodiumLicenseFile.readAsLines();
+  final libsodiumLicenseLines = _extractFile(
+    archive.path,
+    'libsodium-stable/LICENSE',
+  ).cast<List<int>>().transform(utf8.decoder).transform(const LineSplitter());
 
-  final combinedLicenseSink = licenseFile.openWrite();
+  final packageLicenseSink = File('LICENSE').openWrite();
   try {
-    Github.logInfo('Adding ${licenseFile.path} for sodium');
-    combinedLicenseSink
+    Github.logInfo('> Adding LICENSE for sodium');
+    packageLicenseSink
       ..writeln('sodium')
       ..writeln()
       ..write(sodiumLicense) // already ends with newline
@@ -68,12 +72,50 @@ Future<void> _mergeLicenses() async {
       ..writeln('libsodium')
       ..writeln();
 
-    Github.logInfo('Adding ${libsodiumLicenseFile.path} for libsodium');
-    for (final line in libsodiumLicenseLines) {
+    Github.logInfo('> Adding LICENSE for libsodium');
+    await for (final line in libsodiumLicenseLines) {
       final cleanLine = line.replaceFirst(_commentRegExp, '');
-      combinedLicenseSink.writeln(cleanLine);
+      packageLicenseSink.writeln(cleanLine);
     }
   } finally {
-    await combinedLicenseSink.close();
+    await packageLicenseSink.close();
+  }
+}
+
+Stream<Uint8List> _extractFile(
+  String archivePath,
+  String fileInArchive,
+) async* {
+  final tarGzInStream = InputFileStream(archivePath);
+  final tarOutStream = OutputMemoryStream();
+  try {
+    final ok = const GZipDecoder().decodeStream(
+      tarGzInStream,
+      tarOutStream,
+      verify: true,
+    );
+    if (!ok) {
+      throw Exception(
+        'Failed to decode gzip stream from archive: $archivePath',
+      );
+    }
+
+    final archive = TarDecoder().decodeBytes(
+      tarOutStream.getBytes(),
+      verify: true,
+    );
+
+    final archiveFile = archive.files.firstWhere(
+      (file) => file.isFile && file.name == fileInArchive,
+      orElse: () => throw Exception(
+        'File "$fileInArchive" not found in archive: $archivePath',
+      ),
+    );
+
+    yield archiveFile.content;
+    await archive.clear();
+  } finally {
+    await tarGzInStream.close();
+    await tarOutStream.close();
   }
 }
