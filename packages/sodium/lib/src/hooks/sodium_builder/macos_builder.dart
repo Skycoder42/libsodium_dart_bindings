@@ -1,7 +1,9 @@
 import 'package:code_assets/code_assets.dart';
+import 'package:meta/meta.dart';
 
 import 'darwin_builder.dart';
 
+@internal
 final class MacosBuilder extends DarwinBuilder {
   MacosBuilder(super.config, super.logger);
 

@@ -4,7 +4,7 @@ import 'package:code_builder/code_builder.dart';
 import 'package:dart_test_tools/tools.dart';
 import 'package:path/path.dart';
 
-import 'constants.dart' show libsodiumVersion;
+import 'package:sodium/src/hooks/constants.dart';
 import 'jsgen/generators/library_generator.dart';
 import 'jsgen/generators/test/test_library_generator.dart';
 import 'jsgen/json/library_info.dart';
@@ -52,7 +52,9 @@ Future<void> main() async {
 
 Future<LibraryInfo> _loadLibraryInfo() async {
   final repoLoader = RepoLoader();
-  final wrapperDir = await repoLoader.downloadRepo(libsodiumVersion.js);
+  final wrapperDir = await repoLoader.downloadRepo(
+    HookConstants.libsodiumVersion.js,
+  );
   final wrapperLoader = FileLoader(wrapperDir);
 
   final sourceDir = Directory(join(FileLoader.scriptDir.path, 'jsgen'));

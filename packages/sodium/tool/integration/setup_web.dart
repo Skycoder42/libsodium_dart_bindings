@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
 
-import '../libsodium/constants.dart' show libsodiumVersion;
+import 'package:sodium/src/hooks/constants.dart';
 
 const _defaultOutDir = 'test/integration/binaries/js';
 
@@ -28,12 +28,12 @@ Future<void> main() => Github.runZoned(() async {
 });
 
 Future<void> _cloneTo({required Directory targetDir}) => Github.logGroupAsync(
-  'Cloning jedisct1/libsodium.js@${libsodiumVersion.js}',
+  'Cloning jedisct1/libsodium.js@${HookConstants.libsodiumVersion.js}',
   () async {
     await Github.exec('git', [
       'clone',
       '-b',
-      libsodiumVersion.js,
+      HookConstants.libsodiumVersion.js,
       '--depth',
       '1',
       'https://github.com/jedisct1/libsodium.js.git',

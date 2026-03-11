@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 
 import 'automake_builder.dart';
-import 'utils.dart';
 
+@internal
 class DarwinConfig {
   final String arch;
   final String? build;
@@ -34,6 +34,7 @@ class DarwinConfig {
   }
 }
 
+@internal
 abstract base class DarwinBuilder extends AutomakeBuilder {
   late final DarwinConfig _platformConfig;
 
@@ -109,5 +110,15 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
       '-p',
     ]).transform(utf8.decoder).join();
     return Uri.file(result.trim()).withTrailingSlash;
+  }
+}
+
+extension on Uri {
+  Uri get withTrailingSlash {
+    if (path.endsWith('/')) {
+      return this;
+    } else {
+      return replace(path: '$path/');
+    }
   }
 }

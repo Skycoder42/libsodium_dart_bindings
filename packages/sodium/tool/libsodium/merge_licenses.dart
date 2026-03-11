@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
 
-import '../../hook/common/extractor.dart';
+import 'package:sodium/src/hooks/common/extractor.dart';
 import 'download.dart';
 
 final _commentRegExp = RegExp(r'^(?:\/\*|\s*\*|\s*\*\/)(?:\s|$)');

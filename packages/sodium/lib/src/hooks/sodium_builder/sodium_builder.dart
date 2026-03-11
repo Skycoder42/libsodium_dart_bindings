@@ -7,7 +7,6 @@ import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
 
-import '../../tool/libsodium/constants.dart';
 import '../common/extractor.dart';
 import '../common/hook_logger.dart';
 import 'android_builder.dart';
@@ -16,6 +15,7 @@ import 'linux_builder.dart';
 import 'macos_builder.dart';
 import 'windows_builder.dart';
 
+@internal
 abstract base class SodiumBuilder {
   @protected
   final CodeConfig config;
@@ -45,7 +45,7 @@ abstract base class SodiumBuilder {
   Future<CodeAsset> build({
     required BuildInput input,
     required Uri sourceArchive,
-    bool exportHeaders = false,
+    Uri? exportHeadersTo,
   }) async {
     logger.debug('Running prepare step...');
     await prepare();
@@ -72,10 +72,10 @@ abstract base class SodiumBuilder {
       final installDir = await buildCached(input: input, sourceDir: srcDir);
       logger.debug('Successfully built libsodium to: $installDir');
 
-      if (exportHeaders) {
+      if (exportHeadersTo != null) {
         logger.info('Exporting sodium headers install location');
         await File.fromUri(
-          input.packageRoot.resolveUri(libsodiumHeadersLocation),
+          input.packageRoot.resolveUri(exportHeadersTo),
         ).writeAsString(getIncludesPath(srcDirUri, installDir).toString());
       }
 

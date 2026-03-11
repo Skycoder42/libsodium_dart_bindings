@@ -1,7 +1,9 @@
 import 'package:code_assets/code_assets.dart';
+import 'package:meta/meta.dart';
 
 import 'automake_builder.dart';
 
+@internal
 final class LinuxBuilder extends AutomakeBuilder {
   LinuxBuilder(super.config, super.logger);
 

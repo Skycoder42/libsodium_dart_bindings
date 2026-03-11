@@ -2,35 +2,27 @@ import 'dart:io';
 
 import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
-
-import '../tool/libsodium/constants.dart';
-import 'common/hook_logger.dart';
-import 'libsodium/sodium_builder.dart';
-
-/// special environment variable to skip build hooks.
-/// Must be prefixed by "NIX_" as otherwise it would be stripped.
-///
-/// See https://dart.dev/tools/hooks#environment-variables
-const skipBuildHooksVariableName = 'NIX_SKIP_SODIUM_BUILD_HOOKS';
-
-/// special environment variable to export headers for ffigen.
-/// Must be prefixed by "NIX_" as otherwise it would be stripped.
-///
-/// See https://dart.dev/tools/hooks#environment-variables
-const exportHeadersVariableName = 'NIX_EXPORT_SODIUM_HEADERS';
+import 'package:sodium/src/hooks/common/hook_logger.dart';
+import 'package:sodium/src/hooks/constants.dart';
+import 'package:sodium/src/hooks/sodium_builder/sodium_builder.dart';
 
 void main(List<String> args) async => await build(args, (input, output) async {
-  final logger = HookLogger('sodium');
+  final logger = HookLogger(
+    'sodium',
+    logDebug: _isSet(HookConstants.debugLogEnvVarName),
+  );
 
-  if (Platform.environment[skipBuildHooksVariableName] == '1') {
+  if (_isSet(HookConstants.skipBuildHooksEnvVarName)) {
     logger.warning(
       'Skipping sodium build hooks because environment variable '
-      '$skipBuildHooksVariableName is set.',
+      '${HookConstants.skipBuildHooksEnvVarName} is set.',
     );
     return;
   }
 
-  final sourceArchive = input.packageRoot.resolveUri(libsodiumArchive);
+  final sourceArchive = input.packageRoot.resolveUri(
+    HookConstants.libsodiumArchive,
+  );
   if (!File.fromUri(sourceArchive).existsSync()) {
     throw Exception(
       'libsodium source archive does not exist! This should not be possible. '
@@ -43,8 +35,12 @@ void main(List<String> args) async => await build(args, (input, output) async {
   final asset = await builder.build(
     input: input,
     sourceArchive: sourceArchive,
-    exportHeaders: Platform.environment[exportHeadersVariableName] == '1',
+    exportHeadersTo: _isSet(HookConstants.exportHeadersEnvVarName)
+        ? HookConstants.libsodiumHeadersLocation
+        : null,
   );
 
   output.assets.code.add(asset);
 });
+
+bool _isSet(String envVar) => Platform.environment[envVar] == '1';
