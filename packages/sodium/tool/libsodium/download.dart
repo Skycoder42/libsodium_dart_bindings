@@ -37,9 +37,8 @@ Future<Uri> _downloadLibsodium() async {
       libsodiumSrcDownloadUri,
     );
     await Minisign.verify(archive, libsodiumSigningKey);
-
     return archive.uri;
-  } catch (e) {
+  } catch (_) {
     await downloadDir.delete(recursive: true);
     rethrow;
   } finally {

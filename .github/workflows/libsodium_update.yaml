@@ -37,6 +37,10 @@ jobs:
         name: Check if upstream stable archives have been update
         run: dart run tool/libsodium/detect_modified.dart
         working-directory: packages/sodium
+      - name: Update merged license
+        if: steps.check.outputs.modified == 'true'
+        run: dart run tool/libsodium/merge_licenses.dart
+        working-directory: packages/sodium
       - name: Update changelog and bump build number
         if: steps.check.outputs.modified == 'true'
         run: |

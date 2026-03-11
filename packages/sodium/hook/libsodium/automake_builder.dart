@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
 
@@ -13,18 +12,20 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
   @override
   @nonVirtual
   @protected
-  Future<CodeAsset> buildCached({
+  Future<Uri> buildCached({
     required BuildInput input,
     required Directory sourceDir,
-    required Uri installDir,
   }) async {
+    final installDir = sourceDir.uri.resolve('install/');
+
     logger.debug('Configuring...');
     final env = environment;
     await _configure(sourceDir, installDir, env);
+
     logger.debug('Building...');
     await _make(sourceDir, env);
 
-    return createCodeAsset(installDir.resolve('lib/'));
+    return installDir;
   }
 
   @override

@@ -21,10 +21,10 @@ Future<void> _mergeLicenses(Uri archive) async {
   final repoLicenseFile = File('../../LICENSE');
   final sodiumLicense = await repoLicenseFile.readAsString();
 
-  final libsodiumLicenseLines = _extractFile(
+  final libsodiumLicenseLines = Extractor.extractSingleFile(
     archive,
     'libsodium-stable/LICENSE',
-  );
+  ).transform(utf8.decoder).transform(const LineSplitter());
 
   final packageLicenseSink = File('LICENSE').openWrite();
   try {
@@ -48,23 +48,5 @@ Future<void> _mergeLicenses(Uri archive) async {
     await packageLicenseSink.flush();
   } finally {
     await packageLicenseSink.close();
-  }
-}
-
-Stream<String> _extractFile(Uri archiveUri, String fileInArchive) async* {
-  final archive = Extractor.extract(archiveUri);
-  try {
-    final archiveFile = archive.files.firstWhere(
-      (file) => file.isFile && file.name == fileInArchive,
-      orElse: () => throw Exception(
-        'File "$fileInArchive" not found in archive: $archiveUri',
-      ),
-    );
-
-    yield* Stream<List<int>>.value(
-      archiveFile.content,
-    ).transform(utf8.decoder).transform(const LineSplitter());
-  } finally {
-    await archive.clear();
   }
 }

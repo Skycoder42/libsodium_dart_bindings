@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:archive/archive.dart';
 import 'package:code_assets/code_assets.dart';
 import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
-import 'package:path/path.dart' as path;
-import 'package:posix/posix.dart' as posix;
 
+import '../../tool/libsodium/constants.dart';
+import '../common/extractor.dart';
 import '../common/hook_logger.dart';
 import 'android_builder.dart';
 import 'ios_builder.dart';
@@ -46,6 +45,7 @@ abstract base class SodiumBuilder {
   Future<CodeAsset> build({
     required BuildInput input,
     required Uri sourceArchive,
+    bool exportHeaders = false,
   }) async {
     logger.debug('Running prepare step...');
     await prepare();
@@ -54,11 +54,9 @@ abstract base class SodiumBuilder {
     final shortHash = _calculateHash();
     final configUri = input.outputDirectoryShared.resolve('$shortHash/');
     final srcDirUri = configUri.resolve('libsodium-stable/');
-    final installDirUri = configUri.resolve('install/');
     logger
       ..debug('Calculated config hash: $shortHash')
-      ..debug('Source directory URI: $srcDirUri')
-      ..debug('Install directory URI: $installDirUri');
+      ..debug('Source directory URI: $srcDirUri');
 
     try {
       final srcDir = Directory.fromUri(srcDirUri);
@@ -66,18 +64,22 @@ abstract base class SodiumBuilder {
         logger.debug('Source directory already exists, skipping extraction.');
       } else {
         logger.info('Extracting source files to config-specific directory...');
-        await _extract(sourceArchive, configUri);
+        await Extractor.extractToDisk(sourceArchive, configUri);
         logger.debug('Source files extracted successfully!');
       }
 
       logger.info('Starting build process...');
-      final asset = await buildCached(
-        input: input,
-        sourceDir: srcDir,
-        installDir: installDirUri,
-      );
-      logger.debug('Successfully built code asset: ${asset.id}');
-      return asset;
+      final installDir = await buildCached(input: input, sourceDir: srcDir);
+      logger.debug('Successfully built libsodium to: $installDir');
+
+      if (exportHeaders) {
+        logger.info('Exporting sodium headers install location');
+        await File.fromUri(
+          input.packageRoot.resolveUri(libsodiumHeadersLocation),
+        ).writeAsString(getIncludesPath(srcDirUri, installDir).toString());
+      }
+
+      return createCodeAsset(installDir);
     } catch (e) {
       final configDir = Directory.fromUri(configUri);
       if (configDir.existsSync()) {
@@ -111,10 +113,9 @@ abstract base class SodiumBuilder {
   Future<void> prepare() => Future.value();
 
   @visibleForOverriding
-  Future<CodeAsset> buildCached({
+  Future<Uri> buildCached({
     required BuildInput input,
     required Directory sourceDir,
-    required Uri installDir,
   });
 
   @protected
@@ -126,21 +127,30 @@ abstract base class SodiumBuilder {
   ];
 
   @protected
-  @nonVirtual
-  CodeAsset createCodeAsset(Uri installDir, {bool isFullPath = false}) =>
-      CodeAsset(
-        package: 'sodium',
-        name: 'libsodium',
-        linkMode: isStaticLinking ? StaticLinking() : DynamicLoadingBundled(),
-        file: isFullPath
-            ? installDir
-            : installDir.resolve(
-                config.targetOS.libraryFileName(
-                  'sodium',
-                  (isStaticLinking ? StaticLinking() : DynamicLoadingBundled()),
-                ),
+  Uri getIncludesPath(Uri sourceDir, Uri installDir) =>
+      installDir.resolve('include/');
+
+  @protected
+  CodeAsset createCodeAsset(Uri installUri, {bool isFullPath = false}) {
+    final linkMode = isStaticLinking
+        ? StaticLinking()
+        : DynamicLoadingBundled();
+    return CodeAsset(
+      package: 'sodium',
+      name: 'libsodium',
+      linkMode: linkMode,
+      file: isFullPath
+          ? installUri
+          : installUri.resolveUri(
+              Uri(
+                pathSegments: [
+                  'lib',
+                  config.targetOS.libraryFileName('sodium', linkMode),
+                ],
               ),
-      );
+            ),
+    );
+  }
 
   @protected
   @nonVirtual
@@ -212,92 +222,4 @@ abstract base class SodiumBuilder {
       );
     }
   }
-
-  Future<void> _extract(Uri sourceArchive, Uri destinationDir) async {
-    final tarGzInStream = InputFileStream(sourceArchive.toFilePath());
-    final tarOutStream = OutputMemoryStream();
-    Archive? archive;
-    try {
-      final ok = const GZipDecoder().decodeStream(
-        tarGzInStream,
-        tarOutStream,
-        verify: true,
-      );
-      if (!ok) {
-        throw Exception(
-          'Failed to decode gzip stream from archive: $sourceArchive',
-        );
-      }
-
-      archive = TarDecoder().decodeBytes(tarOutStream.getBytes(), verify: true);
-      await _extractToDisk(archive, destinationDir);
-    } finally {
-      await archive?.clear();
-      await tarOutStream.close();
-      await tarGzInStream.close();
-    }
-  }
-
-  Future<void> _extractToDisk(Archive archive, Uri destinationDir) async {
-    final outDir = Directory.fromUri(destinationDir);
-    if (!outDir.existsSync()) {
-      await outDir.create(recursive: true);
-    }
-
-    for (final entry in archive) {
-      final filePath = path.normalize(path.join(outDir.path, entry.name));
-
-      if (!_isWithinOutputPath(outDir.path, filePath)) {
-        throw Exception(
-          'The libsodium archive contains an entry with a path that is outside '
-          'the output directory: "${entry.name}". Extraction has been aborted '
-          'for security reasons.',
-        );
-      }
-
-      if (entry.isSymbolicLink) {
-        throw Exception(
-          'The libsodium archive should not contain symbolic links, but found '
-          'one pointing to "${entry.symbolicLink}" in file "${entry.name}". '
-          'Extraction has been aborted for security reasons.',
-        );
-      }
-
-      if (entry.isDirectory) {
-        await Directory(filePath).create(recursive: true);
-        continue;
-      }
-
-      if (!entry.isFile) {
-        throw Exception(
-          'The libsodium archive contains an entry that is not a file, '
-          'directory, or symbolic link: "${entry.name}". Extraction has been '
-          'aborted for security reasons.',
-        );
-      }
-
-      final output = OutputFileStream(filePath);
-      try {
-        entry.writeContent(output);
-        output.flush();
-        await output.close();
-
-        if (posix.isPosixSupported) {
-          posix.chmodWithMode(filePath, entry.mode);
-          entry.unixPermissions;
-        }
-
-        logger.debug(
-          'Extracted: ${path.relative(filePath, from: outDir.path)}',
-        );
-      } finally {
-        if (output.isOpen) {
-          await output.close();
-        }
-      }
-    }
-  }
-
-  bool _isWithinOutputPath(String outputDir, String filePath) =>
-      path.isWithin(path.canonicalize(outputDir), path.canonicalize(filePath));
 }

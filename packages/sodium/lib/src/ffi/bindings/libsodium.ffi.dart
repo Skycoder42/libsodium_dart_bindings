@@ -5889,11 +5889,11 @@ final class randombytes_implementation extends ffi.Struct {
 
 const int SODIUM_SIZE_MAX = -1;
 
-const String SODIUM_VERSION_STRING = '1.0.20';
+const String SODIUM_VERSION_STRING = '1.0.21';
 
 const int SODIUM_LIBRARY_VERSION_MAJOR = 26;
 
-const int SODIUM_LIBRARY_VERSION_MINOR = 2;
+const int SODIUM_LIBRARY_VERSION_MINOR = 3;
 
 const int crypto_aead_aegis128l_KEYBYTES = 16;
 

@@ -25,10 +25,9 @@ final class AndroidBuilder extends SodiumBuilder {
   }
 
   @override
-  Future<CodeAsset> buildCached({
+  Future<Uri> buildCached({
     required BuildInput input,
     required Directory sourceDir,
-    required Uri installDir,
   }) async {
     final buildTarget = _mapBuildTarget(config.targetArchitecture);
     final installTarget = _mapInstallTarget(config.targetArchitecture);
@@ -49,9 +48,7 @@ final class AndroidBuilder extends SodiumBuilder {
       },
     );
 
-    return createCodeAsset(
-      sourceDir.uri.resolve('libsodium-android-$installTarget/lib/'),
-    );
+    return sourceDir.uri.resolve('libsodium-android-$installTarget/');
   }
 
   Future<Uri> _getAndroidNdkPath() async {

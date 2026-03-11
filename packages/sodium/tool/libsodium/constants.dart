@@ -16,3 +16,11 @@ final libsodiumSrcDownloadUri = Uri.https(
   'download.libsodium.org',
   '/libsodium/releases/libsodium-${libsodiumVersion.ffi}-stable.tar.gz',
 );
+
+final libsodiumArchive = Uri.file(
+  '3rdparty/libsodium-${libsodiumVersion.ffi}-stable.tar.gz',
+);
+
+final libsodiumHeadersLocation = Uri.file(
+  '3rdparty/libsodium-${libsodiumVersion.ffi}-stable.includes',
+);

@@ -8,8 +8,11 @@ import 'package:code_builder/code_builder.dart' as cb;
 import 'package:dart_style/dart_style.dart';
 import 'package:ffigen/ffigen.dart';
 
+import '../../hook/build.dart';
+import 'constants.dart';
+
 void main() async {
-  final bindingsUri = _ffigen();
+  final bindingsUri = await _ffigen();
   await _generateWrapper(bindingsUri);
 }
 
@@ -17,7 +20,17 @@ final _pragmaInline = const cb.Reference(
   'pragma',
 ).call([cb.literalString('vm:prefer-inline')]);
 
-Uri _ffigen() {
+Future<Uri> _ffigen() async {
+  final headersLocationFile = File.fromUri(libsodiumHeadersLocation);
+  if (!headersLocationFile.existsSync()) {
+    throw Exception(
+      'Libsodium headers location file missing at ${headersLocationFile.uri}. '
+      'You must set $exportHeadersVariableName to 1 to generate the location.',
+    );
+  }
+
+  final locationUri = Uri.parse(await headersLocationFile.readAsString());
+
   final packageRoot = Platform.script.resolve('../../');
   final outUri = packageRoot.resolve('lib/src/ffi/bindings/libsodium.ffi.dart');
   FfiGenerator(
@@ -25,14 +38,7 @@ Uri _ffigen() {
       dartFile: outUri,
       style: const NativeExternalBindings(assetId: 'package:sodium/libsodium'),
     ),
-    headers: Headers(
-      entryPoints: [
-        packageRoot.resolve(
-          '3rdparty/libsodium-stable/src/libsodium/include/sodium.h',
-        ),
-      ],
-      compilerOptions: ['-I/usr/lib/clang/21/include'],
-    ),
+    headers: Headers(entryPoints: [locationUri.resolve('sodium.h')]),
     macros: const Macros(include: _matchesLibsodium),
     globals: const Globals(include: _matchesLibsodium),
     enums: const Enums(include: _matchesLibsodium),

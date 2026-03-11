@@ -49,10 +49,9 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
   }
 
   @override
-  Future<CodeAsset> buildCached({
+  Future<Uri> buildCached({
     required BuildInput input,
     required Directory sourceDir,
-    required Uri installDir,
   }) async {
     final scriptFile = await _createBuildScript(sourceDir);
     logger.debug('Building...');
@@ -61,18 +60,23 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
       scriptFile.toFilePath(windows: true),
     ], workingDirectory: sourceDir);
 
-    return await _createAsset(sourceDir);
+    return await _findInstallUri(sourceDir);
   }
 
-  Future<CodeAsset> _createAsset(Directory sourceDir) async {
+  Future<Uri> _findInstallUri(Directory sourceDir) async {
     final outFile = File.fromUri(sourceDir.uri.resolve(_targetOutputFileName));
     final targetPath = await outFile.readAsString();
     logger.debug('Read target path from build script output: $targetPath');
-    return createCodeAsset(
-      Uri.file(path.canonicalize(targetPath.trim())),
-      isFullPath: true,
-    );
+    return Uri.file(path.canonicalize(targetPath.trim()));
   }
+
+  @override
+  Uri getIncludesPath(Uri sourceDir, Uri installDir) =>
+      sourceDir.resolve('src/libsodium/include/');
+
+  @override
+  CodeAsset createCodeAsset(Uri installUri, {bool isFullPath = false}) =>
+      super.createCodeAsset(installUri, isFullPath: true);
 
   Future<Uri> _createBuildScript(Directory sourceDir) async {
     final scriptFile = File.fromUri(sourceDir.uri.resolve('dart-build.bat'));
