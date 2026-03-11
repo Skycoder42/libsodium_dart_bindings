@@ -76,7 +76,7 @@ sealed class Extractor {
           output.flush();
           await output.close();
 
-          if (posix.isPosixSupported) {
+          if (Platform.isLinux || Platform.isMacOS) {
             posix.chmodWithMode(filePath, entry.mode);
             entry.unixPermissions;
           }
