@@ -1,13 +1,15 @@
 import 'dart:io';
 
 import 'package:dart_test_tools/tools.dart';
-
-import '../../hook/build.dart';
-import 'constants.dart';
+import 'package:sodium/src/hooks/constants.dart';
 
 Future<void> main() => Github.runZoned(() async {
   await downloadLibsodium();
-  await Github.env.setOutput(skipBuildHooksVariableName, '0', asEnv: true);
+  await Github.env.setOutput(
+    HookConstants.skipBuildHooksEnvVarName,
+    '0',
+    asEnv: true,
+  );
 });
 
 Future<Uri> downloadLibsodium() async {
@@ -17,7 +19,7 @@ Future<Uri> downloadLibsodium() async {
   );
 
   return await Github.logGroupAsync(
-    'Download and verify libsodium v${libsodiumVersion.ffi}',
+    'Download and verify libsodium v${HookConstants.libsodiumVersion.ffi}',
     _downloadLibsodium,
   );
 }
@@ -34,9 +36,9 @@ Future<Uri> _downloadLibsodium() async {
   try {
     final archive = await httpClient.download(
       downloadDir,
-      libsodiumSrcDownloadUri,
+      HookConstants.libsodiumSrcDownloadUri,
     );
-    await Minisign.verify(archive, libsodiumSigningKey);
+    await Minisign.verify(archive, HookConstants.libsodiumSigningKey);
     return archive.uri;
   } catch (_) {
     await downloadDir.delete(recursive: true);

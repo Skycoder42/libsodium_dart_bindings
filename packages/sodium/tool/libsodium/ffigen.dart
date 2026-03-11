@@ -7,9 +7,7 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:code_builder/code_builder.dart' as cb;
 import 'package:dart_style/dart_style.dart';
 import 'package:ffigen/ffigen.dart';
-
-import '../../hook/build.dart';
-import 'constants.dart';
+import 'package:sodium/src/hooks/constants.dart';
 
 void main() async {
   final bindingsUri = await _ffigen();
@@ -21,11 +19,14 @@ final _pragmaInline = const cb.Reference(
 ).call([cb.literalString('vm:prefer-inline')]);
 
 Future<Uri> _ffigen() async {
-  final headersLocationFile = File.fromUri(libsodiumHeadersLocation);
+  final headersLocationFile = File.fromUri(
+    HookConstants.libsodiumHeadersLocation,
+  );
   if (!headersLocationFile.existsSync()) {
     throw Exception(
       'Libsodium headers location file missing at ${headersLocationFile.uri}. '
-      'You must set $exportHeadersVariableName to 1 to generate the location.',
+      'You must set ${HookConstants.exportHeadersEnvVarName} to 1 to '
+      'generate the location.',
     );
   }
 

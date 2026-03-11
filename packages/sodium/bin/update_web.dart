@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:html/parser.dart' show parse;
 
-import '../tool/libsodium/constants.dart' show libsodiumVersion;
+import 'package:sodium/src/hooks/constants.dart';
 
 const _sumoArg = 'sumo';
 const _editIndexArg = 'edit-index';
@@ -89,7 +89,7 @@ Future<bool> _copySodiumJs(Directory targetDir, bool isSumo) async {
     if (!await _runGit([
       'clone',
       '-b',
-      libsodiumVersion.js,
+      HookConstants.libsodiumVersion.js,
       '--depth',
       '1',
       'https://github.com/jedisct1/libsodium.js.git',

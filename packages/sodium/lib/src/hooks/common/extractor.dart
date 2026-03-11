@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:posix/posix.dart' as posix;
 
+@internal
 sealed class Extractor {
   static Archive extractArchive(Uri archiveUri) {
     final tarGzInStream = InputFileStream(archiveUri.toFilePath());
@@ -78,7 +80,6 @@ sealed class Extractor {
 
           if (Platform.isLinux || Platform.isMacOS) {
             posix.chmodWithMode(filePath, entry.mode);
-            entry.unixPermissions;
           }
 
           logFileExtracted?.call(path.relative(filePath, from: outDir.path));

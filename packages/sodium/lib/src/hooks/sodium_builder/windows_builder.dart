@@ -8,6 +8,7 @@ import 'package:path/path.dart' as path;
 
 import 'sodium_builder.dart';
 
+@internal
 final class WindowsBuilder extends SodiumBuilder {
   static const _targetOutputFileName = 'target.txt';
   static const _vsVersionDetectionScript = '''

@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 import 'sodium_builder.dart';
 
+@internal
 abstract base class AutomakeBuilder extends SodiumBuilder {
   AutomakeBuilder(super.config, super.logger);
 

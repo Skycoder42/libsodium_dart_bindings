@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:code_assets/code_assets.dart';
-import 'package:hooks/src/config.dart';
+import 'package:hooks/hooks.dart';
+import 'package:meta/meta.dart';
 
 import 'sodium_builder.dart';
 
+@internal
 final class AndroidBuilder extends SodiumBuilder {
   late final Uri _ndkPath;
 
