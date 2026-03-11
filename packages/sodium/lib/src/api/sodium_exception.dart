@@ -1,12 +1,12 @@
 import 'package:meta/meta.dart';
 
-/// Exception that is thrown if a lowlevel libsodium operation fails.
+/// Exception that is thrown if a low-level libsodium operation fails.
 class SodiumException implements Exception {
   /// The original error message, if one existed.
   ///
   /// This is always null for the dart vm, but might contain more details when
   /// using JS. You should not rely on this to provide anything meaningful, it
-  /// simply exists for completness.
+  /// simply exists for completeness.
   final String? originalMessage;
 
   /// Default constructor.
@@ -49,6 +49,7 @@ class SodiumException implements Exception {
 
   // coverage:ignore-start
   @override
-  String toString() => 'A low-level libsodium operation has failed';
+  String toString() =>
+      'SodiumException: A low-level libsodium operation has failed';
   // coverage:ignore-end
 }

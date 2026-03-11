@@ -5,6 +5,7 @@
 Dart bindings for libsodium, supporting both the VM and JS without flutter dependencies.
 
 ## Table of contents
+- [Version 4.0 Migration Guide](#version-40-migration-guide)
 - [Features](#features)
   * [API Status](#api-status)
     + [Considered for the future](#considered-for-the-future)
@@ -12,22 +13,37 @@ Dart bindings for libsodium, supporting both the VM and JS without flutter depen
 - [Usage](#usage)
   * [Sodium vs SodiumSumo](#sodium-vs-sodiumsumo)
   * [Loading libsodium](#loading-libsodium)
-    + [VM - loading the dynamic library](#vm---loading-the-dynamic-library)
-    + [Transpiled JavaScript - loading the JavaScript code.](#transpiled-javascript---loading-the-javascript-code)
-      - [Loading sodium.js into the browser via dart.](#loading-sodiumjs-into-the-browser-via-dart)
+    + [Transpiled JavaScript - loading the JavaScript code](#transpiled-javascript---loading-the-javascript-code)
   * [Using the API](#using-the-api)
   * [Running computations in a separate isolate](#running-computations-in-a-separate-isolate)
     + [Using custom isolates](#using-custom-isolates)
 - [Documentation](#documentation)
-  * [Example for the dart VM](#example-for-the-dart-vm)
-  * [Example in the browser](#example-in-the-browser)
 
 <small><i><a href='https://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+## Version 4.0 Migration Guide
+Version 4 introduces only one major change: The native `libsodium` binaries are now built on demand using the new build
+hooks, instead of being pre-built and bundled with the library. This has no impact on the API, but it does change how
+the library has to be initialized. You no longer need to pass in a reference to the native library:
+
+```dart
+// Before:
+final sodium = await SodiumInit.init(loadLibsodium);
+// After:
+final sodium = await SodiumInit.init();
+```
+
+Another minor change that follows from this is that `Sodium.runIsolated` now only takes a callback with 2 arguments, as
+the `Sodium` instance is now available in the isolate without needing to be passed in. It can be captured via the
+closure context. See [Running computations in a separate isolate](#running-computations-in-a-separate-isolate) for an
+updated example.
 
 ## Features
 - Provides a simple to use dart API for accessing libsodium - High-Level API that is the same for both VM and JS - Aims
 to provide access to all primary libsodium APIs. See [API Status](#api-status) for more details.
 - Provides native APIs for tighter integration, if necessary
+- Works on all major dart and flutter platforms (Android, iOS, Linux, Windows, macOS, Web)
+- Uses the new build hooks to build native dependencies on demand for every platform
 
 ### API Status
 The following table shows the current status of the implementation. APIs that have already been ported get the ✔️, those
@@ -37,7 +53,7 @@ with a ✔️ are available *only* in the sumo API, while those marked with ➕ 
 listet yet have either been forgotten or are not planned. If you find one you would like to have made available, please
 create an issue for it, and I will add it to the list.
 
-API based on libsodium version: *1.0.20*
+API based on libsodium version: *1.0.21*
 
  libsodium API                | VM  | JS | Sumo | Documentation
 ---------------------------   |-----|----|------|---------------
@@ -92,145 +108,57 @@ In order support both library variants in this library, the APIs have been split
 affects the JS part of the code, as for the native implementation there is no differentiation between the two. What
 this means for you as a consumer of the library is the following:
 
-- If you only ever intend to use the native variante (i. e. your application will not be transpiled to JS), you can
+- If you only ever intend to use the native variant (i. e. your application will not be transpiled to JS), you can
 simply always use the sumo variant.
 - If you want to support both, native and web, you have to check wich of the APIs you need are available in which
 version. The Sumo-Variant is more complete, but has a bigger binary size, which might matter depending on the usecase.
 
 ### Loading libsodium
-How you load the library depends on whether you are running in the dart VM or as transpiled JS code.
-
-**Note:** For flutter users, you should use the [sodium_libs](https://pub.dev/packages/sodium_libs) package, as it
-provides embedded (or compile time added) binaries for every flutter platform. This way you can simply use the library
-without thinking about this part. You can check the documentation of `sodium_libs` to add it to your project and then
-continue at [Using the API](#using-the-api).
+Thanks to the use of native assets, the library initialization is pretty straight forward on all platforms, as the
+library will be automatically built when compiling the app and automatically bundled with the app. To use it, simply
+call `SodiumInit.init()` and the library will be ready to use.
 
 **Note:** When using the sumo APIs, simply replace `SodiumInit` with `SodiumSumoInit` from the
 `package:sodium/sodium_sumo.dart` import.
 
-#### VM - loading the dynamic library
-In the dart VM, `dart:ffi` is used as backend to load and interact with the libsodium binary. So, all you need to do is
-load such a library and then pass it to the sodium APIs. This generally looks like this:
-
 ```dart
-// required imports
-import 'dart:ffi';
 import 'package:sodium/sodium.dart';
 
-// define a loader method that loads the dynamic library into dart
-DynamicLibrary loadLibsodium() {
-  return DynamicLibrary.open('/path/to/libsodium.XXX'); // or DynamicLibrary.process()
-}
-
-// initialize the sodium APIs
-final sodium = await SodiumInit.init2(loadLibsodium);
+final sodium = await SodiumInit.init();
+// You now have a Sodium instance, see sodium package to continue
 ```
 
-The tricky part here is the path, aka `'/path/to/libsodium.XXX'`. It depends on the platform and how you intend to use
-the library. My recommendation is to follow https://libsodium.gitbook.io/doc/installation to get the library binary for
-your platform and then pass the correct path. If you are linking statically, you can use `DynamicLibrary.process()`
-(except on windows) instead of the path.
+#### Transpiled JavaScript - loading the JavaScript code
+For JavaScript, the situation is a little more complex, as there currently the build hooks do not support bundled JS
+assets. This means that the JS code of libsodium cannot be automatically bundled with the library and thus needs to be
+downloaded manually. To do this, the package ships with a helper binary that downloads the correct version of
+[`sodium.js`](https://github.com/jedisct1/libsodium.js) and adds the corresponding `<script>`-tag to the `index.html`.
+You can run this tool with the following command:
 
-However, here are some tips on how to get the library for some platforms and how to load it there. For flutter users,
-you can simply add [sodium_libs](https://pub.dev/packages/sodium_libs) to your project, which takes care of this for
-you.
-
-- **Linux**: Install `libsodium` via your system package manager. Then, you can load the `libsodium.so` from where the
-package manager put it.
-- **Windows**: Download the correct binary from https://download.libsodium.org/libsodium/releases/ and simply use the
-path where you placed the library.
-- **macOS**: Use homebrew and run `brew install libsodium` - then locate the binary in the Cellar. It is typically
-something like `/usr/local/Cellar/libsodium/<version>/lib/libsodium.dylib`.
-- **Android**: Clone the official sources and run the correct build script located at
-https://github.com/jedisct1/libsodium/tree/master/dist-build. The build will produce an `.so` file you can add to your
-`main/src/jniLibs` folder.
-- **iOS**: Simply add the [swift-sodium](https://github.com/jedisct1/swift-sodium) package to your project. It will
-statically link your app with the library. You can use `DynamicLibrary.process()` to access the symbols.
-
-#### Transpiled JavaScript - loading the JavaScript code.
-The correct setup depends on your JavaScript environment (i.e. browser, nodejs, ...) - however, the general way is the
-same:
-
-```dart
-// required imports
-import 'package:sodium/sodium.dart';
-
-// define a loader method that loads the javascript object into dart
-dynamic loadSodiumJS() {
-  return ...; // somehow load the sodium.js into dart
-}
-
-// initialize the sodium APIs
-final sodium = await SodiumInit.init2(loadSodiumJS);
+```.sh
+dart run sodium:update_web [--sumo] [--no-edit-index] [--target-directory <target_directory>]
 ```
 
-The complex part is how to load the library into dart. Generally, you can refer to
-https://github.com/jedisct1/libsodium.js/#installation on how to load the library into your JS environment. However,
-since we are running JavaScript code, the setup is a little more complex. For flutter users, you can simply add
-[sodium_libs](https://pub.dev/packages/sodium_libs) to your project, which takes care of this for you.
+The `--sumo` parameter is optional. If specified, the Sumo-Variant of sodium.js will be downloaded. It is bigger in
+size, but contains all APIs. With the non-sumo version, you can only use `SodiumInit.init`, which should suffice for
+most usecases. However, if you need access to the `SodiumSumo`-APIs and thus need to invoke `SodiumSumoInit.init`, you
+have to make sure to add this parameter.
 
-The only platform I have tried so far is the browser. However, similar approaches should work for all JS environments
-that you can run transpiled dart code in.
+By default, the `index.html` is modified to automatically load the `sodium.js` before the dart code starts. If you want
+to customize when and how the library is loaded, you can disable this behavior with the `--no-edit-index` parameter and
+add the script tag manually.
 
-##### Loading sodium.js into the browser via dart.
-The idea here is, that the dart code asynchronously loads the `sodium.js` into the browser and then acquires the result
-of loading it (As recommended in https://github.com/jedisct1/libsodium.js/#usage-in-a-web-browser-via-a-callback). The
-following code uses the [`package:js`](https://pub.dev/packages/js) to interop with JavaScript and perform these steps.
-You can download the `sodium.js` file from here: https://github.com/jedisct1/libsodium.js/tree/master/dist/browsers
-
-```dart
-// make the dart library JS-interoperable
-@JS()
-library interop;
-
-// required imports
-import 'package:js/js.dart';
-import 'package:sodium/sodium.dart';
-
-// declare a JavaScript type that will provide the callback for the loaded
-// sodium JavaScript object.
-@JS()
-@anonymous
-class SodiumBrowserInit {
-  external void Function(dynamic sodium) get onload;
-
-  external factory SodiumBrowserInit({void Function(dynamic sodium) onload});
-}
-
-Future<dynamic> loadSodiumInBrowser() async {
-  // create a completer that will wait for the library to be loaded
-  final completer = Completer<dynamic>();
-
-  // Set the global `sodium` property to our JS type, with the callback being
-  // redirected to the completer
-  setProperty(window, 'sodium', SodiumBrowserInit(
-    onload: allowInterop(completer.complete),
-  ));
-
-  // Load the sodium.js into the page by appending a `<script>` element
-  final script = ScriptElement();
-  script
-    ..type = 'text/javascript'
-    ..async = true
-    ..src = 'sodium.js'; // use the path where you put the file on your server
-  document.head!.append(script);
-
-  // return the completer
-  return completer.future;
-}
-
-// in your main:
-final sodium = await SodiumInit.init2(loadSodiumInBrowser);
-```
+Finally, if your web project files are for whatever reason not located in the `web` directory, you can set a custom
+directory.
 
 ### Using the API
 Once you have acquired the `Sodium` instance, usage is fairly straight forward. The API mirrors the original native C
 api, splitting different categories of methods into different classes for maintainability, which are all built up in
 hierarchical order starting at `Sodium`. For example, if you wanted to use the `crypto_secretbox_easy` method from the C
-api, the equivalent dart code would be:
+api, the equivalent dart method would be `.crypto.secretBox.easy`. The following example shows how to use it:
 
 ```dart
-final sodium = // load libsodium for your platform
+final sodium = await SodiumInit.init();
 
 // The message to be encrypted, converted to an unsigned char array.
 final String message = 'my very secret message';
@@ -285,7 +213,7 @@ final masterKey = sodium.crypto.kdf.keygen();
 final derivedKey = await sodium.runIsolated(
   secureKeys: [masterKey],
   // keyPairs: use if a KeyPair needs to be passed to the isolate
-  (sodium, secureKeys, keyPairs) {
+  (secureKeys, keyPairs) {
     final [masterKey] = secureKeys;
     final derivedKey = sodium.crypto.kdf.deriveFromKey(
       masterKey: masterKey, // keys must be passed via the extra parameters
@@ -307,14 +235,13 @@ you to do exactly this.
 **Warning:** These APIs are low-level and can lead to memory leaks and hard crashes if used incorrectly. So read the
 following with care!
 
-The first is `Sodium.isolateFactory`. That property returns a factory method to create new `Sodium` instances for the
-same native library and can easily be transferred between different isolates. The second are the create/materialize
-methods. They allow you to make a secure key "transferrable". This is needed, as dart does not allow the transfer of
-pointers between isolates. The `Sodium.createTransferrableSecureKey` and `createTransferrableKeyPair` will create a
-special *copy* of the original key/key pair that can be transferred. You can then call
-`Sodium.materializeTransferrableSecureKey` or `Sodium.materializeTransferrableKeyPair` on the target isolate to get a
-normal key/key pair back. This is preferred over simply sending the keys as `Uint8List`, as the transferrable keys will
-still apply all the advanced security measures that `SecureKey` uses as well.
+The most important part to understand are the create/materialize methods. They allow you to make a secure key
+"transferrable". This is needed, as dart does not allow the transfer of pointers between isolates. The
+`Sodium.createTransferrableSecureKey` and `createTransferrableKeyPair` will create a special *copy* of the original
+key/key pair that can be transferred. You can then call `Sodium.materializeTransferrableSecureKey` or
+`Sodium.materializeTransferrableKeyPair` on the target isolate to get a normal key/key pair back. This is preferred
+over simply sending the keys as `Uint8List`, as the transferrable keys will still apply all the advanced security
+measures that `SecureKey` uses as well.
 
 **IMPORTANT:** As the transferrable variants do work around darts pointer management, they will **not** be automatically
 garbage collected if left dangling. You **MUST** materialize every transferrable key/key pair *exactly* once, or you
@@ -332,18 +259,15 @@ Future<SecureKey> deriveKey() {
   final subkeyId = BigInt.from(42);
   final masterKey = sodium.crypto.kdf.keygen();
 
-  final sodiumFactory = sodium.isolateFactory;
   final transferrableMasterKey = sodium.createTransferrableSecureKey(masterKey);
 
-  final result = compute(_deriveKey, (sodiumFactory, transferrableMasterKey, subkeyId));
+  final result = compute(_deriveKey, (sodium, transferrableMasterKey, subkeyId));
 
   return sodium.materializeTransferrableSecureKey(result);
 }
 
-// at the end of the file
-Future<TransferrableSecureKey> _deriveKey((SodiumFactory, TransferrableSecureKey, BigInt) message) async {
-  final (sodiumFactory, transferrableMasterKey, subkeyId) = message;
-  final sodium = await sodiumFactory();
+static Future<TransferrableSecureKey> _deriveKey((Sodium, TransferrableSecureKey, BigInt) message) async {
+  final (sodium, transferrableMasterKey, subkeyId) = message;
   final masterKey = sodium.materializeTransferrableSecureKey(transferrableMasterKey);
   final derivedKey = sodium.crypto.kdf.deriveFromKey(
     masterKey: masterKey, // keys must be passed via the extra parameters
@@ -360,35 +284,7 @@ Future<TransferrableSecureKey> _deriveKey((SodiumFactory, TransferrableSecureKey
 The documentation is available at https://pub.dev/documentation/sodium/latest/. A full example can be found at
 https://pub.dev/packages/sodium/example.
 
-The example runs both in the VM and on the web. To use it, see below.
+The example is a flutter app on purpose, so it is easier to test the library on all platforms. However, the code is
+pure dart and can be easily adapted to work in a pure dart environment.
 
-As preparation for all platforms, run the following steps:
-```sh
-cd packages/sodium
-dart pub get
-dart run build_runner build
-```
-
-### Example for the dart VM
-Locate/Download the libsodium binary and run the example with it:
-
-```sh
-cd packages/sodium/example
-dart pub get
-dart run bin/main_native.dart '/path/to/libsodium.XXX'
-```
-
-### Example in the browser
-First download `sodium.js` into the examples web directory. Then simply run the example:
-
-```sh
-dart pub global activate webdev
-
-cd packages/sodium/example/web
-curl -Lo sodium.js https://raw.githubusercontent.com/jedisct1/libsodium.js/master/dist/browsers/sodium.js
-
-cd ..
-dart pub get
-dart pub global run webdev serve --release
-# Visit http://127.0.0.1:8080 in the browser
-```
+See the [Example README](example/README.md) for more details on the example.

@@ -54,11 +54,11 @@ mixin KdfValidations implements Kdf {
   void validateMasterKey(SecureKey masterKey) =>
       Validations.checkIsSame(masterKey.length, keyBytes, 'masterKey');
 
-  void validateContext(String context) => Validations.checkAtMost(
-    utf8.encode(context).length,
-    contextBytes,
-    'context',
-  );
+  int validateContext(String context) {
+    final bytes = utf8.encode(context).length;
+    Validations.checkAtMost(bytes, contextBytes, 'context');
+    return bytes;
+  }
 
   void validateSubkeyLen(int subkeyLen) =>
       Validations.checkInRange(subkeyLen, bytesMin, bytesMax, 'subkeyLen');

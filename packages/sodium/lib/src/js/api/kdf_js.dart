@@ -44,7 +44,7 @@ class KdfJS with KdfValidations implements Kdf {
     required int subkeyLen,
   }) {
     validateMasterKey(masterKey);
-    validateContext(context);
+    final expandedContext = _expandContext(context);
     validateSubkeyId(subkeyId);
     validateSubkeyLen(subkeyLen);
 
@@ -55,11 +55,25 @@ class KdfJS with KdfValidations implements Kdf {
           (masterKeyData) => sodium.crypto_kdf_derive_from_key(
             subkeyLen,
             subkeyId.toJS,
-            context,
+            expandedContext,
             masterKeyData.toJS,
           ),
         ),
       ),
     );
+  }
+
+  String _expandContext(String context) {
+    final len = validateContext(context);
+    final missingBytes = contextBytes - len;
+    if (missingBytes > 0) {
+      final buffer = StringBuffer(context);
+      for (var i = 0; i < missingBytes; ++i) {
+        buffer.writeCharCode(0);
+      }
+      return buffer.toString();
+    } else {
+      return context;
+    }
   }
 }

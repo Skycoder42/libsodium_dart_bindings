@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import '../../api/secure_key.dart';
-import 'libsodium.ffi.dart';
+import 'libsodium.ffi.wrapper.dart';
 import 'memory_protection.dart';
 import 'sodium_pointer.dart';
 

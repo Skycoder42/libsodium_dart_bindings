@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import '../../../../api/sign.dart';
-import '../../../bindings/libsodium.ffi.dart';
+import '../../../bindings/libsodium.ffi.wrapper.dart';
 import '../../../bindings/memory_protection.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'sign_consumer_ffi_mixin.dart';

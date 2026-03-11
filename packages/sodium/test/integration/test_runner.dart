@@ -68,7 +68,7 @@ abstract class TestRunner {
     ScalarMultTestCase(this),
   ];
 
-  Future<Sodium> loadSodium();
+  FutureOr<Sodium> loadSodium();
 
   late SetupAllFn setUpAll = t.setUpAll;
 
@@ -126,7 +126,7 @@ abstract class SumoTestRunner extends TestRunner {
   @protected
   @visibleForTesting
   @override
-  Future<SodiumSumo> loadSodium();
+  FutureOr<SodiumSumo> loadSodium();
 
   @override
   @visibleForOverriding

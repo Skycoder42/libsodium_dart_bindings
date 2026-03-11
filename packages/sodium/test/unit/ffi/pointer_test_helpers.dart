@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:sodium/src/ffi/bindings/sodium_finalizer.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
@@ -19,7 +19,7 @@ void registerPointers() {
 void mockFree(LibSodiumFFI mockSodium, {bool delayedFree = true}) {
   final toDispose = <Pointer>[];
   if (delayedFree) {
-    // addTearDown(() => toDispose.forEach(calloc.free));
+    addTearDown(() => toDispose.forEach(calloc.free));
   }
 
   when(() => mockSodium.sodium_free(any())).thenAnswer(
@@ -27,7 +27,7 @@ void mockFree(LibSodiumFFI mockSodium, {bool delayedFree = true}) {
         ? toDispose.add(i.positionalArguments.first as Pointer)
         : calloc.free(i.positionalArguments.first as Pointer),
   );
-  when(() => mockSodium.sodium_freePtr).thenReturn(calloc.nativeFree);
+  when(() => mockSodium.sodium_freePtr).thenReturn(null);
 }
 
 void mockAllocArray(LibSodiumFFI mockSodium, {bool delayedFree = true}) {
@@ -43,7 +43,7 @@ void mockAllocArray(LibSodiumFFI mockSodium, {bool delayedFree = true}) {
   when(() => mockSodium.sodium_mprotect_readonly(any())).thenReturn(0);
   when(() => mockSodium.sodium_mprotect_noaccess(any())).thenReturn(0);
   mockFree(mockSodium, delayedFree: delayedFree);
-  SodiumPointer.debugOverwriteFinalizer(mockSodium, MockSodiumFinalizer());
+  SodiumPointer.debugOverwriteFinalizer = MockSodiumFinalizer();
 }
 
 void mockAlloc(LibSodiumFFI mockSodium, int value) {
@@ -53,7 +53,7 @@ void mockAlloc(LibSodiumFFI mockSodium, int value) {
     final ptr = calloc<Uint64>()..value = value;
     return ptr.cast();
   });
-  SodiumPointer.debugOverwriteFinalizer(mockSodium, MockSodiumFinalizer());
+  SodiumPointer.debugOverwriteFinalizer = MockSodiumFinalizer();
 }
 
 void fillPointer<T extends NativeType>(Pointer<T> ptr, List<int> data) {
@@ -74,7 +74,7 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
   final List<num> data;
   final int? sizeHint;
 
-  const HasRawDataMatcher(this.data, this.sizeHint);
+  HasRawDataMatcher(this.data, this.sizeHint);
 
   @override
   Description describe(Description description) =>
@@ -97,10 +97,10 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
   @override
   bool matches(dynamic item, Map<dynamic, dynamic> matchState) {
     try {
-      printOnFailure('##### Matching $item to $data #####');
       expect(item, isA<Pointer<T>>());
 
       final ptr = (item as Pointer<T>).cast<Uint8>();
+
       final ptrBuffer = ptr.asTypedList(data.length * (sizeHint ?? 1)).buffer;
       final List<int> ptrList;
       switch (sizeHint) {
@@ -114,7 +114,6 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
         case null:
           ptrList = ptrBuffer.asUint8List();
         default:
-          printOnFailure('>> invalid sizeHint $sizeHint');
           matchState[_stateKey] = 'invalid sizeHint $sizeHint';
           return false;
       }
@@ -126,10 +125,8 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
         matchState.remove(_stateKey);
       }
 
-      printOnFailure('>> SUCCESS');
       return true;
     } catch (e) {
-      printOnFailure('>> FAILURE: ${matchState[_stateKey]}');
       return false;
     }
   }

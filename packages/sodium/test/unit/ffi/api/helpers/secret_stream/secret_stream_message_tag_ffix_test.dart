@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/secret_stream.dart';
 
 import 'package:sodium/src/ffi/api/helpers/secret_stream/secret_stream_message_tag_ffix.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:test/test.dart';
 
 import '../../../../../test_data.dart';

@@ -1,8 +1,6 @@
 {
 	"name": "Flutter (Stable)",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
+	"image": "skycoder42/devcontainers-flutter:latest",
 	"customizations": {
 		"vscode": {
 			"extensions": [

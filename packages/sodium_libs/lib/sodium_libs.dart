@@ -1,9 +1,7 @@
-export 'package:sodium/sodium.dart' hide SodiumInit;
+// ignore: remove_deprecations_in_breaking_versions added with v4 as the whole library is deprecated
+@Deprecated(
+  'All functionality has been moved to sodium. See https://github.com/Skycoder42/libsodium_dart_bindings/blob/main/packages/sodium_libs/README.md#migrating-to-sodium for more details.',
+)
+library;
 
-export 'src/platforms/platforms.fallback.dart'
-    if (dart.library.ffi) 'src/platforms/platforms.ffi.dart'
-    if (dart.library.js) 'src/platforms/platforms.js.dart';
-
-export 'src/sodium_init.dart';
-export 'src/sodium_platform.dart';
-export 'src/sodium_sumo_unavailable.dart';
+export 'package:sodium/sodium.dart';

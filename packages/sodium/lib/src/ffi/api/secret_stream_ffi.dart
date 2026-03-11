@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import '../../api/helpers/secret_stream/secret_stream_base.dart';
 import '../../api/secret_stream.dart';
 import '../../api/secure_key.dart';
-import '../bindings/libsodium.ffi.dart';
+import '../bindings/libsodium.ffi.wrapper.dart';
 import 'helpers/keygen_mixin.dart';
 import 'helpers/secret_stream/secret_stream_pull_transformer_ffi.dart';
 import 'helpers/secret_stream/secret_stream_push_transformer_ffi.dart';

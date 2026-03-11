@@ -162,31 +162,6 @@ abstract class SecretStream {
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#encryption
   SecureKey keygen();
 
-  /// @nodoc
-  @Deprecated('Use pushChunked or pushEx instead')
-  Stream<Uint8List> push({
-    required Stream<Uint8List> messageStream,
-    required SecureKey key,
-  });
-
-  /// @nodoc
-  @Deprecated('Use pullChunked or pullEx instead')
-  Stream<Uint8List> pull({
-    required Stream<Uint8List> cipherStream,
-    required SecureKey key,
-  });
-
-  /// @nodoc
-  @Deprecated('Use createPushChunked or createPushEx instead')
-  StreamTransformer<Uint8List, Uint8List> createPush(SecureKey key);
-
-  /// @nodoc
-  @Deprecated('Use createPullChunked or createPullEx instead')
-  StreamTransformer<Uint8List, Uint8List> createPull(
-    SecureKey key, {
-    bool requireFinalized = true,
-  });
-
   /// Provides crypto_secretstream_xchacha20poly1305_(init_)push.
   ///
   /// Transforms the [messageStream] of plaintext messages to an encrypted

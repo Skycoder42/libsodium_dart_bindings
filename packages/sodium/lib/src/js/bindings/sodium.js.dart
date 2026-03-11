@@ -1,4 +1,5 @@
-// ignore_for_file: non_constant_identifier_names, public_member_api_docs, document_ignores, lines_longer_than_80_chars
+// ignore_for_file: document_ignores
+// ignore_for_file: non_constant_identifier_names, public_member_api_docs
 
 import 'dart:js_interop';
 
@@ -11,6 +12,10 @@ typedef OnetimeauthState = JSNumber;
 typedef AuthHmacsha256State = JSNumber;
 typedef AuthHmacsha512State = JSNumber;
 typedef AuthHmacsha512256State = JSNumber;
+typedef XofShake128State = JSNumber;
+typedef XofShake256State = JSNumber;
+typedef XofTurboshake128State = JSNumber;
+typedef XofTurboshake256State = JSNumber;
 extension type CryptoBox._(JSObject _) implements JSObject {
   external CryptoBox({
     required JSUint8Array ciphertext,
@@ -183,6 +188,18 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external int get crypto_hash_BYTES;
   external int get crypto_hash_sha256_BYTES;
   external int get crypto_hash_sha512_BYTES;
+  external int get crypto_ipcrypt_BYTES;
+  external int get crypto_ipcrypt_KEYBYTES;
+  external int get crypto_ipcrypt_ND_INPUTBYTES;
+  external int get crypto_ipcrypt_ND_KEYBYTES;
+  external int get crypto_ipcrypt_ND_OUTPUTBYTES;
+  external int get crypto_ipcrypt_ND_TWEAKBYTES;
+  external int get crypto_ipcrypt_NDX_INPUTBYTES;
+  external int get crypto_ipcrypt_NDX_KEYBYTES;
+  external int get crypto_ipcrypt_NDX_OUTPUTBYTES;
+  external int get crypto_ipcrypt_NDX_TWEAKBYTES;
+  external int get crypto_ipcrypt_PFX_BYTES;
+  external int get crypto_ipcrypt_PFX_KEYBYTES;
   external int get crypto_kdf_BYTES_MAX;
   external int get crypto_kdf_BYTES_MIN;
   external int get crypto_kdf_CONTEXTBYTES;
@@ -345,6 +362,14 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external int get crypto_stream_xsalsa20_KEYBYTES;
   external int get crypto_stream_xsalsa20_MESSAGEBYTES_MAX;
   external int get crypto_stream_xsalsa20_NONCEBYTES;
+  external int get crypto_xof_shake128_BLOCKBYTES;
+  external int get crypto_xof_shake128_STATEBYTES;
+  external int get crypto_xof_shake256_BLOCKBYTES;
+  external int get crypto_xof_shake256_STATEBYTES;
+  external int get crypto_xof_turboshake128_BLOCKBYTES;
+  external int get crypto_xof_turboshake128_STATEBYTES;
+  external int get crypto_xof_turboshake256_BLOCKBYTES;
+  external int get crypto_xof_turboshake256_STATEBYTES;
   external int get crypto_verify_16_BYTES;
   external int get crypto_verify_32_BYTES;
   external int get crypto_verify_64_BYTES;
@@ -780,6 +805,44 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     HashSha512State state_address,
     JSUint8Array message_chunk,
   );
+  external JSUint8Array crypto_ipcrypt_decrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  );
+  external JSUint8Array crypto_ipcrypt_encrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  );
+  external JSUint8Array crypto_ipcrypt_keygen();
+  external JSUint8Array crypto_ipcrypt_nd_decrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  );
+  external JSUint8Array crypto_ipcrypt_nd_encrypt(
+    JSUint8Array input,
+    JSUint8Array tweak,
+    JSUint8Array key,
+  );
+  external JSUint8Array crypto_ipcrypt_nd_keygen();
+  external JSUint8Array crypto_ipcrypt_ndx_decrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  );
+  external JSUint8Array crypto_ipcrypt_ndx_encrypt(
+    JSUint8Array input,
+    JSUint8Array tweak,
+    JSUint8Array key,
+  );
+  external JSUint8Array crypto_ipcrypt_ndx_keygen();
+  external JSUint8Array crypto_ipcrypt_pfx_decrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  );
+  external JSUint8Array crypto_ipcrypt_pfx_encrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  );
+  external JSUint8Array crypto_ipcrypt_pfx_keygen();
   external JSUint8Array crypto_kdf_derive_from_key(
     int subkey_len,
     JSBigInt subkey_id,
@@ -1019,6 +1082,66 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     int nonce_increment,
     JSUint8Array key,
   );
+  external JSUint8Array crypto_xof_shake128(
+    int out_length,
+    JSUint8Array message,
+  );
+  external XofShake128State crypto_xof_shake128_init();
+  external XofShake128State crypto_xof_shake128_init_with_domain(int domain);
+  external JSUint8Array crypto_xof_shake128_squeeze(
+    XofShake128State state_address,
+    int out_length,
+  );
+  external void crypto_xof_shake128_update(
+    XofShake128State state_address,
+    JSUint8Array message_chunk,
+  );
+  external JSUint8Array crypto_xof_shake256(
+    int out_length,
+    JSUint8Array message,
+  );
+  external XofShake256State crypto_xof_shake256_init();
+  external XofShake256State crypto_xof_shake256_init_with_domain(int domain);
+  external JSUint8Array crypto_xof_shake256_squeeze(
+    XofShake256State state_address,
+    int out_length,
+  );
+  external void crypto_xof_shake256_update(
+    XofShake256State state_address,
+    JSUint8Array message_chunk,
+  );
+  external JSUint8Array crypto_xof_turboshake128(
+    int out_length,
+    JSUint8Array message,
+  );
+  external XofTurboshake128State crypto_xof_turboshake128_init();
+  external XofTurboshake128State crypto_xof_turboshake128_init_with_domain(
+    int domain,
+  );
+  external JSUint8Array crypto_xof_turboshake128_squeeze(
+    XofTurboshake128State state_address,
+    int out_length,
+  );
+  external void crypto_xof_turboshake128_update(
+    XofTurboshake128State state_address,
+    JSUint8Array message_chunk,
+  );
+  external JSUint8Array crypto_xof_turboshake256(
+    int out_length,
+    JSUint8Array message,
+  );
+  external XofTurboshake256State crypto_xof_turboshake256_init();
+  external XofTurboshake256State crypto_xof_turboshake256_init_with_domain(
+    int domain,
+  );
+  external JSUint8Array crypto_xof_turboshake256_squeeze(
+    XofTurboshake256State state_address,
+    int out_length,
+  );
+  external void crypto_xof_turboshake256_update(
+    XofTurboshake256State state_address,
+    JSUint8Array message_chunk,
+  );
   external JSUint8Array randombytes_buf(int length);
   external JSUint8Array randombytes_buf_deterministic(
     int length,
@@ -1029,6 +1152,8 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external void randombytes_set_implementation(JSAny implementation);
   external void randombytes_stir();
   external int randombytes_uniform(int upper_bound);
+  external String sodium_bin2ip(JSUint8Array bin);
+  external JSUint8Array sodium_ip2bin(String ip);
   external String sodium_version_string();
   external int randombytes_seedbytes();
   external void memzero(JSUint8Array bytes);

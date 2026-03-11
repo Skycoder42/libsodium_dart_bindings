@@ -11,7 +11,7 @@ import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/api/string_x.dart';
 import 'package:sodium/src/api/sumo/pwhash.dart';
 import 'package:sodium/src/ffi/api/sumo/pwhash_ffi.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:test/test.dart';
 
 import '../../../../test_constants_mapping.dart';

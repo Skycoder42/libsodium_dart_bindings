@@ -4,7 +4,7 @@ import 'dart:ffi';
 
 import 'package:meta/meta.dart';
 
-import 'libsodium.ffi.dart';
+import 'libsodium.ffi.dart' show sodium_free;
 
 /// @nodoc
 @internal
@@ -12,8 +12,8 @@ class SodiumFinalizer {
   final NativeFinalizer _nativeFinalizer;
 
   /// @nodoc
-  SodiumFinalizer(LibSodiumFFI sodium)
-    : _nativeFinalizer = NativeFinalizer(sodium.sodium_freePtr);
+  SodiumFinalizer()
+    : _nativeFinalizer = NativeFinalizer(Native.addressOf(sodium_free));
 
   /// @nodoc
   void attach(Finalizable value, Pointer<Void> token, int size) =>

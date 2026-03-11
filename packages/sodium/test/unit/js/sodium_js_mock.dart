@@ -1,4 +1,5 @@
-// ignore_for_file: non_constant_identifier_names, document_ignores, lines_longer_than_80_chars
+// ignore_for_file: document_ignores
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:js_interop';
 
@@ -285,6 +286,30 @@ abstract class _MockLibSodiumJS {
   int get crypto_hash_sha256_BYTES => throw UnimplementedError();
 
   int get crypto_hash_sha512_BYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_BYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_KEYBYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_ND_INPUTBYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_ND_KEYBYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_ND_OUTPUTBYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_ND_TWEAKBYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_NDX_INPUTBYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_NDX_KEYBYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_NDX_OUTPUTBYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_NDX_TWEAKBYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_PFX_BYTES => throw UnimplementedError();
+
+  int get crypto_ipcrypt_PFX_KEYBYTES => throw UnimplementedError();
 
   int get crypto_kdf_BYTES_MAX => throw UnimplementedError();
 
@@ -656,6 +681,22 @@ abstract class _MockLibSodiumJS {
   int get crypto_stream_xsalsa20_MESSAGEBYTES_MAX => throw UnimplementedError();
 
   int get crypto_stream_xsalsa20_NONCEBYTES => throw UnimplementedError();
+
+  int get crypto_xof_shake128_BLOCKBYTES => throw UnimplementedError();
+
+  int get crypto_xof_shake128_STATEBYTES => throw UnimplementedError();
+
+  int get crypto_xof_shake256_BLOCKBYTES => throw UnimplementedError();
+
+  int get crypto_xof_shake256_STATEBYTES => throw UnimplementedError();
+
+  int get crypto_xof_turboshake128_BLOCKBYTES => throw UnimplementedError();
+
+  int get crypto_xof_turboshake128_STATEBYTES => throw UnimplementedError();
+
+  int get crypto_xof_turboshake256_BLOCKBYTES => throw UnimplementedError();
+
+  int get crypto_xof_turboshake256_STATEBYTES => throw UnimplementedError();
 
   int get crypto_verify_16_BYTES => throw UnimplementedError();
 
@@ -1215,6 +1256,52 @@ abstract class _MockLibSodiumJS {
     JSUint8Array message_chunk,
   ) => throw UnimplementedError();
 
+  JSUint8Array crypto_ipcrypt_decrypt(JSUint8Array input, JSUint8Array key) =>
+      throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_encrypt(JSUint8Array input, JSUint8Array key) =>
+      throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_keygen() => throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_nd_decrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_nd_encrypt(
+    JSUint8Array input,
+    JSUint8Array tweak,
+    JSUint8Array key,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_nd_keygen() => throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_ndx_decrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_ndx_encrypt(
+    JSUint8Array input,
+    JSUint8Array tweak,
+    JSUint8Array key,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_ndx_keygen() => throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_pfx_decrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_pfx_encrypt(
+    JSUint8Array input,
+    JSUint8Array key,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_ipcrypt_pfx_keygen() => throw UnimplementedError();
+
   JSUint8Array crypto_kdf_derive_from_key(
     int subkey_len,
     JSBigInt subkey_id,
@@ -1516,6 +1603,80 @@ abstract class _MockLibSodiumJS {
     JSUint8Array key,
   ) => throw UnimplementedError();
 
+  JSUint8Array crypto_xof_shake128(int out_length, JSUint8Array message) =>
+      throw UnimplementedError();
+
+  XofShake128State crypto_xof_shake128_init() => throw UnimplementedError();
+
+  XofShake128State crypto_xof_shake128_init_with_domain(int domain) =>
+      throw UnimplementedError();
+
+  JSUint8Array crypto_xof_shake128_squeeze(
+    XofShake128State state_address,
+    int out_length,
+  ) => throw UnimplementedError();
+
+  void crypto_xof_shake128_update(
+    XofShake128State state_address,
+    JSUint8Array message_chunk,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_xof_shake256(int out_length, JSUint8Array message) =>
+      throw UnimplementedError();
+
+  XofShake256State crypto_xof_shake256_init() => throw UnimplementedError();
+
+  XofShake256State crypto_xof_shake256_init_with_domain(int domain) =>
+      throw UnimplementedError();
+
+  JSUint8Array crypto_xof_shake256_squeeze(
+    XofShake256State state_address,
+    int out_length,
+  ) => throw UnimplementedError();
+
+  void crypto_xof_shake256_update(
+    XofShake256State state_address,
+    JSUint8Array message_chunk,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_xof_turboshake128(int out_length, JSUint8Array message) =>
+      throw UnimplementedError();
+
+  XofTurboshake128State crypto_xof_turboshake128_init() =>
+      throw UnimplementedError();
+
+  XofTurboshake128State crypto_xof_turboshake128_init_with_domain(int domain) =>
+      throw UnimplementedError();
+
+  JSUint8Array crypto_xof_turboshake128_squeeze(
+    XofTurboshake128State state_address,
+    int out_length,
+  ) => throw UnimplementedError();
+
+  void crypto_xof_turboshake128_update(
+    XofTurboshake128State state_address,
+    JSUint8Array message_chunk,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_xof_turboshake256(int out_length, JSUint8Array message) =>
+      throw UnimplementedError();
+
+  XofTurboshake256State crypto_xof_turboshake256_init() =>
+      throw UnimplementedError();
+
+  XofTurboshake256State crypto_xof_turboshake256_init_with_domain(int domain) =>
+      throw UnimplementedError();
+
+  JSUint8Array crypto_xof_turboshake256_squeeze(
+    XofTurboshake256State state_address,
+    int out_length,
+  ) => throw UnimplementedError();
+
+  void crypto_xof_turboshake256_update(
+    XofTurboshake256State state_address,
+    JSUint8Array message_chunk,
+  ) => throw UnimplementedError();
+
   JSUint8Array randombytes_buf(int length) => throw UnimplementedError();
 
   JSUint8Array randombytes_buf_deterministic(int length, JSUint8Array seed) =>
@@ -1531,6 +1692,10 @@ abstract class _MockLibSodiumJS {
   void randombytes_stir() => throw UnimplementedError();
 
   int randombytes_uniform(int upper_bound) => throw UnimplementedError();
+
+  String sodium_bin2ip(JSUint8Array bin) => throw UnimplementedError();
+
+  JSUint8Array sodium_ip2bin(String ip) => throw UnimplementedError();
 
   String sodium_version_string() => throw UnimplementedError();
 

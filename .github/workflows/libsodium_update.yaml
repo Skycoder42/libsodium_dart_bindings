@@ -1,0 +1,71 @@
+name: Update libsodium
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - hooks
+    paths:
+      - packages/sodium/tool/libsodium
+      - .github/workflows/libsodium_update.yaml
+  schedule:
+    - cron: "47 2 * * 2"
+
+jobs:
+  update_if_modified:
+    name: Check if binaries need to be updated
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      NIX_SKIP_SODIUM_BUILD_HOOKS: 1
+    steps:
+      - name: Install Flutter-SDK (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+      - name: Install dart_test_tools
+        run: dart pub global activate dart_test_tools
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Install dart dependencies
+        run: dart pub get
+        working-directory: packages/sodium
+      - id: check
+        name: Check if upstream stable archives have been update
+        run: dart run tool/libsodium/detect_modified.dart
+        working-directory: packages/sodium
+      - name: Update merged license
+        if: steps.check.outputs.modified == 'true'
+        run: dart run tool/libsodium/merge_licenses.dart
+        working-directory: packages/sodium
+      - name: Update changelog and bump build number
+        if: steps.check.outputs.modified == 'true'
+        run: |
+          set -euo pipefail
+          dart pub global run dart_test_tools:cider log changed 'Updated embedded libsodium binaries'
+          dart pub global run dart_test_tools:cider bump build
+          dart pub global run dart_test_tools:cider release
+        working-directory: packages/sodium
+      - id: create-pull-request
+        name: Create Pull Request
+        if: steps.check.outputs.modified == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          commit-message: Update last-modified.txt
+          branch: last-modified-${{ github.run_id }}
+          delete-branch: true
+          assignees: Skycoder42
+          title: Bump version for new stable libsodium
+          body: |
+            Upstream archive for libsodium v${{ steps.check.outputs.version }} has changed!
+            The new timestamp is: `${{ steps.check.outputs.last-modified }}`
+          token: ${{ secrets.GH_PAT }}
+      - name: Mention assignees
+        if: steps.check.outputs.modified == 'true'
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          pr-number: ${{ steps.create-pull-request.outputs.pull-request-number }}
+          message: Your review has been requested @Skycoder42

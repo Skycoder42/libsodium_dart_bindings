@@ -48,7 +48,7 @@ void main() {
     setUp(() {
       when(() => mockSodium.crypto_kdf_BYTES_MIN).thenReturn(5);
       when(() => mockSodium.crypto_kdf_BYTES_MAX).thenReturn(15);
-      when(() => mockSodium.crypto_kdf_CONTEXTBYTES).thenReturn(5);
+      when(() => mockSodium.crypto_kdf_CONTEXTBYTES).thenReturn(6);
       when(() => mockSodium.crypto_kdf_KEYBYTES).thenReturn(5);
     });
 
@@ -124,7 +124,7 @@ void main() {
           () => mockSodium.crypto_kdf_derive_from_key(
             subkeyLen,
             subkeyId.toJS,
-            context,
+            context + String.fromCharCodes([0, 0]),
             Uint8List.fromList(masterKey).toJS,
           ),
         );

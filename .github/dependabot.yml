@@ -1,11 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: "pub"
-    directory: "/packages/sodium"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "pub"
-    directory: "/packages/sodium_libs"
+    directory: "/"
     schedule:
       interval: "weekly"
   - package-ecosystem: "github-actions"

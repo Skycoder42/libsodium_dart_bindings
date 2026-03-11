@@ -135,7 +135,7 @@ class SodiumTestCase extends TestCase {
         final result = await sodium.runIsolated(
           secureKeys: [secureKey],
           keyPairs: [keyPair1, keyPair2],
-          (sodium, secureKeys, keyPairs) {
+          (secureKeys, keyPairs) {
             final secureKey = secureKeys.single;
             final keyPair1 = keyPairs[0];
             final keyPair2 = keyPairs[1];
@@ -183,7 +183,7 @@ class SodiumTestCase extends TestCase {
         final result = await sodium.runIsolated(
           secureKeys: [secureKey],
           keyPairs: [keyPair],
-          (sodium, secureKeys, keyPairs) {
+          (secureKeys, keyPairs) {
             final [secureKey] = secureKeys;
             final [keyPair] = keyPairs;
 
@@ -204,7 +204,6 @@ class SodiumTestCase extends TestCase {
       testSumo('with byte array as result', (sodium) async {
         final keyPair = sodium.crypto.box.keyPair();
         final base = await sodium.runIsolated(secureKeys: [keyPair.secretKey], (
-          sodium,
           secureKeys,
           _,
         ) {
@@ -231,7 +230,7 @@ class SodiumTestCase extends TestCase {
         final nonce2 = sodium.randombytes.buf(sodium.crypto.box.nonceBytes);
 
         final transferrableResult = await ioCompute(_compute, (
-          sodium.isolateFactory,
+          sodium,
           sodium.createTransferrableSecureKey(secureKey),
           sodium.createTransferrableKeyPair(keyPair1),
           sodium.createTransferrableKeyPair(keyPair2),
@@ -265,7 +264,7 @@ class SodiumTestCase extends TestCase {
 
 Future<TransferrableSecureKey> _compute(
   (
-    SodiumFactory,
+    Sodium,
     TransferrableSecureKey,
     TransferrableKeyPair,
     TransferrableKeyPair,
@@ -276,7 +275,7 @@ Future<TransferrableSecureKey> _compute(
   computeMessage,
 ) async {
   final (
-    isolateFactory,
+    sodium,
     transferrableSecureKey,
     transferrableKeyPair1,
     transferrableKeyPair2,
@@ -285,7 +284,6 @@ Future<TransferrableSecureKey> _compute(
     nonce2,
   ) = computeMessage;
 
-  final sodium = await isolateFactory();
   final secureKey = sodium.materializeTransferrableSecureKey(
     transferrableSecureKey,
   );

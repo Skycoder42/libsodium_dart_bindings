@@ -10,7 +10,7 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:sodium/src/ffi/bindings/memory_protection.dart';
 import 'package:sodium/src/ffi/bindings/sodium_finalizer.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
@@ -38,7 +38,7 @@ void main() {
     when(() => mockSodium.sodium_malloc(any())).thenReturn(nullptr);
     when(() => mockSodium.sodium_allocarray(any(), any())).thenReturn(nullptr);
 
-    SodiumPointer.debugOverwriteFinalizer(mockSodium, mockSodiumFinalizer);
+    SodiumPointer.debugOverwriteFinalizer = mockSodiumFinalizer;
   });
 
   group('construction', () {
@@ -300,7 +300,7 @@ void main() {
     group('fromList', () {
       setUp(() {
         mockAllocArray(mockSodium);
-        SodiumPointer.debugOverwriteFinalizer(mockSodium, mockSodiumFinalizer);
+        SodiumPointer.debugOverwriteFinalizer = mockSodiumFinalizer;
       });
 
       test('allocates array for type and length', () {
@@ -743,7 +743,7 @@ void main() {
       });
 
       test('asListView returns list that owns the pointer if true', () {
-        SodiumPointer.debugOverwriteFinalizer(mockSodium, mockSodiumFinalizer);
+        SodiumPointer.debugOverwriteFinalizer = mockSodiumFinalizer;
         sut.memoryProtection = MemoryProtection.noAccess;
         clearInteractions(mockSodium);
 
@@ -751,7 +751,6 @@ void main() {
         verifyInOrder([
           () => mockSodium.sodium_mprotect_readwrite(sut.ptr.cast()),
           () => mockSodiumFinalizer.detach(sut),
-          () => mockSodium.sodium_freePtr,
         ]);
       });
 

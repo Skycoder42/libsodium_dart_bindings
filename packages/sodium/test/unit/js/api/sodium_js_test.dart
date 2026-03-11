@@ -155,14 +155,6 @@ void main() {
   });
 
   group('runIsolated', () {
-    test('invokes the given callback with a sodium instance', () async {
-      final isSodium = await sut.runIsolated(
-        (sodium, secureKeys, keyPairs) => sodium is SodiumJS,
-      );
-
-      expect(isSodium, isTrue);
-    });
-
     test('prints warning and runs callback synchronously', () {
       final secureKey = SecureKeyJS(
         mockSodium.asLibSodiumJS,
@@ -180,7 +172,7 @@ void main() {
         final result = await sut.runIsolated(
           secureKeys: [secureKey],
           keyPairs: [keyPair],
-          (sodium, secureKeys, keyPairs) {
+          (secureKeys, keyPairs) {
             expect(secureKeys, hasLength(1));
             expect(secureKeys.single, same(secureKey));
             expect(keyPairs, hasLength(1));
@@ -191,10 +183,6 @@ void main() {
 
         expect(result, same(secureKey));
       }, prints(startsWith('WARNING: Sodium.runIsolated')));
-    });
-
-    test('isolateFactory creates factory that returns this', () {
-      expect(sut.isolateFactory(), completion(same(sut)));
     });
 
     test('createTransferrableSecureKey returns wrapped secure key', () {

@@ -6,7 +6,7 @@ library;
 import 'dart:ffi';
 
 import 'package:mocktail/mocktail.dart';
-import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart';
+import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:sodium/src/ffi/bindings/memory_protection.dart';
 import 'package:sodium/src/ffi/bindings/sodium_allocator.dart';
 import 'package:test/test.dart';

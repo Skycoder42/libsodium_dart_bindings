@@ -8,4 +8,3 @@ workspace:
   - packages/sodium
   - packages/sodium/example
   - packages/sodium_libs
-  - packages/sodium_libs/example

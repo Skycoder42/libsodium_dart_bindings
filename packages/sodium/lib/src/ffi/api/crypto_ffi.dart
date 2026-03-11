@@ -11,7 +11,7 @@ import '../../api/secret_box.dart';
 import '../../api/secret_stream.dart';
 import '../../api/short_hash.dart';
 import '../../api/sign.dart';
-import '../bindings/libsodium.ffi.dart';
+import '../bindings/libsodium.ffi.wrapper.dart';
 import 'aead_chacha20poly1305_ffi.dart';
 import 'aead_xchacha20poly1305ietf_ffi.dart';
 import 'auth_ffi.dart';

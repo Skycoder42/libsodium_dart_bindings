@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Deprecated
+- Thanks to the use of native assets and build hooks in the main `sodium` package, this library is not needed anymore
+and can be removed. The main `sodium` package will now directly include the embedded libsodium binaries for all
+platforms and handle the native integration itself.
+
 ## [3.4.7] - 2026-02-23
 ### Changed
 - Updated embedded libsodium binaries
@@ -457,6 +463,7 @@ the page
 ### Added
 - Initial stable release
 
+[Unreleased]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.4.7...sodium_libs-vHEAD
 [3.4.7]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.4.6+4...sodium_libs-v3.4.7
 [3.4.6+4]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.4.6+3...sodium_libs-v3.4.6+4
 [3.4.6+3]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium_libs-v3.4.6+2...sodium_libs-v3.4.6+3

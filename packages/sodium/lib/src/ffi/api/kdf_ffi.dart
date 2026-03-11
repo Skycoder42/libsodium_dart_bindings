@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import '../../api/kdf.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
-import '../bindings/libsodium.ffi.dart';
+import '../bindings/libsodium.ffi.wrapper.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_pointer.dart';

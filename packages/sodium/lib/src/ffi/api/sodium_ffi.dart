@@ -14,12 +14,12 @@ import '../../api/sodium.dart';
 import '../../api/sodium_exception.dart';
 import '../../api/sodium_version.dart';
 import '../../api/transferrable_secure_key.dart';
-import '../bindings/libsodium.ffi.dart';
+import '../bindings/libsodium.ffi.wrapper.dart';
 import '../bindings/memory_protection.dart';
+import '../bindings/sodium_finalizer.dart';
 import '../bindings/sodium_pointer.dart';
 import 'crypto_ffi.dart';
 import 'helpers/isolates/isolate_result.dart';
-import 'helpers/isolates/libsodiumffi_factory.dart';
 import 'helpers/isolates/transferrable_key_pair_ffi.dart';
 import 'helpers/isolates/transferrable_secure_key_ffi.dart';
 import 'randombytes_ffi.dart';
@@ -37,23 +37,16 @@ typedef SodiumFFIIsolateCallback<TResult, TSodium extends SodiumFFI> =
 /// @nodoc
 @internal
 typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> =
-    Future<TSodiumFFI> Function(LibSodiumFFIFactory factory);
+    TSodiumFFI Function(LibSodiumFFI sodium);
 
 /// @nodoc
 @internal
 class SodiumFFI implements Sodium {
-  @protected
-  final LibSodiumFFIFactory sodiumFactory;
-
   /// @nodoc
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SodiumFFI(this.sodium, this.sodiumFactory);
-
-  /// @nodoc
-  static Future<SodiumFFI> fromFactory(LibSodiumFFIFactory factory) async =>
-      SodiumFFI(await factory(), factory);
+  SodiumFFI([this.sodium = const LibSodiumFFI()]);
 
   @override
   SodiumVersion get version => SodiumVersion(
@@ -144,17 +137,11 @@ class SodiumFFI implements Sodium {
     List<SecureKey> secureKeys = const [],
     List<KeyPair> keyPairs = const [],
   }) async => await runIsolatedWithFactory<T, SodiumFFI>(
-    SodiumFFI.fromFactory,
+    this,
     callback,
     secureKeys,
     keyPairs,
   );
-
-  @override
-  SodiumFactory get isolateFactory {
-    final factory = sodiumFactory;
-    return () async => await fromFactory(factory);
-  }
 
   @override
   TransferrableSecureKey createTransferrableSecureKey(SecureKey secureKey) =>
@@ -194,14 +181,13 @@ class SodiumFFI implements Sodium {
 
   @protected
   Future<TResult> runIsolatedWithFactory<TResult, TSodiumFFI extends SodiumFFI>(
-    SodiumFFIFactory<TSodiumFFI> fromFactory,
-    SodiumFFIIsolateCallback<TResult, TSodiumFFI> callback,
+    TSodiumFFI sodium,
+    SodiumIsolateCallback<TResult> callback,
     List<SecureKey> secureKeys,
     List<KeyPair> keyPairs,
   ) async {
     final isolateResult = await _isolateRun<TResult, TSodiumFFI>(
-      sodiumFactory,
-      fromFactory,
+      sodium,
       secureKeys.map(TransferrableSecureKeyFFI.new).toList(),
       keyPairs.map(TransferrableKeyPairFFI.new).toList(),
       callback,
@@ -210,55 +196,85 @@ class SodiumFFI implements Sodium {
   }
 
   static Future<IsolateResult<TResult>>
-  _isolateRun<TResult, TSodiumFFI extends SodiumFFI>(
-    LibSodiumFFIFactory sodiumFactory,
-    SodiumFFIFactory<TSodiumFFI> fromFactory,
+  _isolateRun<TResult, TSodium extends SodiumFFI>(
+    TSodium sodium,
     List<TransferrableSecureKeyFFI> transferableSecureKeys,
     List<TransferrableKeyPairFFI> transferableKeyPairs,
-    SodiumFFIIsolateCallback<TResult, TSodiumFFI> callback,
-  ) async => await Isolate.run(debugName: 'SodiumFFI.runIsolated', () async {
-    final sodium = await fromFactory(sodiumFactory);
-    final restoredSecureKeys = transferableSecureKeys
-        .map((transferKey) => transferKey.toSecureKey(sodium))
-        .toList();
-    final restoredKeyPairs = transferableKeyPairs
-        .map((transferKeyPair) => transferKeyPair.toKeyPair(sodium))
-        .toList();
+    SodiumIsolateCallback<TResult> callback,
+  ) async {
+    SodiumFinalizer? debugOverwriteFinalizer;
+    // ignore: prefer_asserts_with_message for debug only code
+    assert(() {
+      // ignore: invalid_use_of_visible_for_testing_member for debug only code
+      final maybeOverwrittenFinalizer = SodiumPointer.debugOverwriteFinalizer;
+      if (maybeOverwrittenFinalizer.runtimeType != SodiumFinalizer) {
+        debugOverwriteFinalizer = maybeOverwrittenFinalizer;
+      }
+      return true;
+    }());
 
-    try {
-      final result = await callback(
-        sodium,
-        restoredSecureKeys,
-        restoredKeyPairs,
-      );
+    return await Isolate.run(debugName: 'SodiumFFI.runIsolated', () async {
+      // ignore: prefer_asserts_with_message for debug only code
+      assert(() {
+        if (debugOverwriteFinalizer != null) {
+          // ignore: invalid_use_of_visible_for_testing_member for debug only code
+          SodiumPointer.debugOverwriteFinalizer = debugOverwriteFinalizer!;
+          // ignore: avoid_print for debug only code
+          print(
+            '################################################################\n'
+            '###                      !!! WARNING !!!                     ###\n'
+            '###                                                          ###\n'
+            '### Found SodiumPointer.debugOverwriteFinalizer that is used ###\n'
+            '### to mock finalization of objects. If you see this message ###\n'
+            '### in a non-test environment, it means that some code is    ###\n'
+            '### mocking the finalization of SodiumPointer objects which  ###\n'
+            '### can finalization of SodiumPointer objects which can lead ###\n'
+            '### to memory leaks! Make sure that you are not mocking      ###\n'
+            '### SodiumPointer.finalizer in production.                   ###\n'
+            '################################################################',
+          );
+        }
+        return true;
+      }());
 
-      IsolateResult<TResult> isolateResult;
-      switch (result) {
-        case SecureKey():
-          isolateResult = IsolateResult<TResult>.key(
-            TransferrableSecureKeyFFI(result),
-          );
-          result.dispose();
-        case KeyPair():
-          isolateResult = IsolateResult<TResult>.keyPair(
-            TransferrableKeyPairFFI(result),
-          );
-          result.dispose();
-        case Uint8List():
-          isolateResult = IsolateResult<TResult>.bytes(
-            TransferableTypedData.fromList([result]),
-          );
-        default:
-          isolateResult = IsolateResult<TResult>(result);
+      final restoredSecureKeys = transferableSecureKeys
+          .map((transferKey) => transferKey.toSecureKey(sodium))
+          .toList();
+      final restoredKeyPairs = transferableKeyPairs
+          .map((transferKeyPair) => transferKeyPair.toKeyPair(sodium))
+          .toList();
+
+      try {
+        final result = await callback(restoredSecureKeys, restoredKeyPairs);
+
+        IsolateResult<TResult> isolateResult;
+        switch (result) {
+          case SecureKey():
+            isolateResult = IsolateResult<TResult>.key(
+              TransferrableSecureKeyFFI(result),
+            );
+            result.dispose();
+          case KeyPair():
+            isolateResult = IsolateResult<TResult>.keyPair(
+              TransferrableKeyPairFFI(result),
+            );
+            result.dispose();
+          case Uint8List():
+            isolateResult = IsolateResult<TResult>.bytes(
+              TransferableTypedData.fromList([result]),
+            );
+          default:
+            isolateResult = IsolateResult<TResult>(result);
+        }
+        return isolateResult;
+      } finally {
+        for (final key in restoredSecureKeys) {
+          key.dispose();
+        }
+        for (final keyPair in restoredKeyPairs) {
+          keyPair.dispose();
+        }
       }
-      return isolateResult;
-    } finally {
-      for (final key in restoredSecureKeys) {
-        key.dispose();
-      }
-      for (final keyPair in restoredKeyPairs) {
-        keyPair.dispose();
-      }
-    }
-  });
+    });
+  }
 }
