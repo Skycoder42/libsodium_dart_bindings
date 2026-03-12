@@ -21,6 +21,7 @@ jobs:
         }
       buildDependencies: sodium
       unitTestPaths: ""
+      panaScoreThreshold: 20
 
   cd:
     name: CD
