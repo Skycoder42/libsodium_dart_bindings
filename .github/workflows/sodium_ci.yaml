@@ -62,6 +62,10 @@ jobs:
           cache: true
       - name: Download flutter binary artifacts
         run: flutter precache --universal --android
+      - name: Install tools
+        uses: Skycoder42/dart_test_tools/.github/actions/install-tools@main
+        with:
+          withDartTestTools: false
       - name: Validate flutter setup
         run: flutter doctor -v
       - name: Checkout repository
