@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as path;
 
 import 'sodium_builder.dart';
 
@@ -38,11 +39,37 @@ final class AndroidBuilder extends SodiumBuilder {
       ..debug('Detected install target: $installTarget')
       ..debug('Target API level: ${config.android.targetNdkApi}');
 
+    final buildScriptPath = path.posix.join(
+      '.',
+      'dist-build',
+      'android-$buildTarget.sh',
+    );
+
+    if (OS.current == .windows) {
+      final bashCheckExitCode = await exec(
+        'where',
+        const ['bash'],
+        runInShell: true,
+        expectExitCode: null,
+      );
+      if (bashCheckExitCode != 0) {
+        throw Exception(
+          'bash is required to build libsodium for Android on Windows, '
+          'but was not found in PATH. Install Git for Windows (Git Bash) '
+          'or make bash available via WSL and ensure it is on PATH.',
+        );
+      }
+    }
+
+    final buildCommand = OS.current == .windows ? 'bash' : buildScriptPath;
+    final buildArguments = OS.current == .windows
+        ? [buildScriptPath]
+        : const <String>[];
+
     await exec(
-      './dist-build/android-$buildTarget.sh',
-      const [],
+      buildCommand,
+      buildArguments,
       workingDirectory: sourceDir,
-      runInShell: true,
       environment: {
         'ANDROID_NDK_HOME': _ndkPath.toFilePath(),
         'NDK_PLATFORM': 'android-${config.android.targetNdkApi}',
