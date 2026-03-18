@@ -36,6 +36,50 @@ jobs:
           "web": "dart run tool/integration/setup_web.dart"
         }
 
+  android_build_tests:
+    name: Android build tests
+    needs:
+      - ci
+    strategy:
+      matrix:
+        runs-on:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+    runs-on: ${{ matrix.runs-on }}
+    env:
+      NIX_SKIP_SODIUM_BUILD_HOOKS: 1
+      NIX_HOOKS_ENABLE_DEBUG_LOGGING: 1
+    steps:
+      - name: Install JDK Version 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install Flutter-SDK (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+      - name: Download flutter binary artifacts
+        run: flutter precache --universal --android
+      - name: Validate flutter setup
+        run: flutter doctor -v
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Restore dart packages
+        run: flutter pub get
+      - name: Create build files
+        run: dart run build_runner build --release
+        working-directory: packages/sodium
+      - name: Download libsodium
+        run: dart run tool/libsodium/download.dart
+        working-directory: packages/sodium
+      - name: Build AAB
+        run: flutter build aab --release
+        working-directory: packages/sodium/example
+
   flutter_tests:
     name: Flutter integration tests
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter-integration.yml@main
@@ -72,6 +116,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/release.yml@main
     needs:
       - ci
+      - android_build_tests
       - flutter_tests
     with:
       workingDirectory: packages/sodium
