@@ -54,11 +54,15 @@ final class AndroidBuilder extends SodiumBuilder {
   }
 
   Future<Uri> _getAndroidNdkPath() async {
-    final flutterConfig = await execStream('flutter', ['config', '--machine'])
-        .transform(utf8.decoder)
-        .transform(json.decoder)
-        .cast<Map<String, dynamic>>()
-        .single;
+    final flutterConfig =
+        await execStream('flutter', const [
+              'config',
+              '--machine',
+            ], runInShell: OS.current == .windows)
+            .transform(utf8.decoder)
+            .transform(json.decoder)
+            .cast<Map<String, dynamic>>()
+            .single;
     final androidSdk = flutterConfig['android-sdk'] as String?;
     if (androidSdk == null) {
       throw Exception('Android SDK path not found in flutter config');

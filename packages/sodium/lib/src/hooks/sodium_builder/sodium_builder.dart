@@ -196,6 +196,7 @@ abstract base class SodiumBuilder {
     List<String> arguments, {
     Directory? workingDirectory,
     Map<String, String>? environment,
+    bool runInShell = false,
     int? expectExitCode = 0,
   }) async* {
     logger.debug("Streaming command: $executable ${arguments.join(' ')}");
@@ -204,6 +205,7 @@ abstract base class SodiumBuilder {
       arguments,
       workingDirectory: workingDirectory?.path,
       environment: environment,
+      runInShell: runInShell,
     );
 
     process.stderr
