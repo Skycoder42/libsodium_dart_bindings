@@ -45,26 +45,15 @@ final class AndroidBuilder extends SodiumBuilder {
       'android-$buildTarget.sh',
     );
 
+    final String buildCommand;
+    final List<String> buildArguments;
     if (OS.current == .windows) {
-      final bashCheckExitCode = await exec(
-        'where',
-        const ['bash'],
-        runInShell: true,
-        expectExitCode: null,
-      );
-      if (bashCheckExitCode != 0) {
-        throw Exception(
-          'bash is required to build libsodium for Android on Windows, '
-          'but was not found in PATH. Install Git for Windows (Git Bash) '
-          'or make bash available via WSL and ensure it is on PATH.',
-        );
-      }
+      buildCommand = await _findWindowsBash();
+      buildArguments = [buildScriptPath];
+    } else {
+      buildCommand = buildScriptPath;
+      buildArguments = const <String>[];
     }
-
-    final buildCommand = OS.current == .windows ? 'bash' : buildScriptPath;
-    final buildArguments = OS.current == .windows
-        ? [buildScriptPath]
-        : const <String>[];
 
     await exec(
       buildCommand,
@@ -134,4 +123,41 @@ final class AndroidBuilder extends SodiumBuilder {
     .x64 => 'westmere',
     _ => throw UnsupportedError('Unsupported android architecture: $arch'),
   };
+
+  Future<String> _findWindowsBash() async {
+    final candidates =
+        await execStream(
+              'where',
+              const ['bash'],
+              runInShell: true,
+              expectExitCode: null,
+            )
+            .transform(utf8.decoder)
+            .transform(const LineSplitter())
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .map(path.normalize)
+            .toList();
+
+    for (final candidate in candidates) {
+      final lower = candidate.toLowerCase();
+
+      if (path.basename(lower) != 'bash.exe') continue;
+
+      // Skip WSL launcher
+      if (path.equals(lower, r'c:\windows\system32\bash.exe')) continue;
+
+      // Skip Windows app execution aliases
+      final parts = path.split(lower);
+      if (parts.contains('windowsapps')) continue;
+
+      return candidate;
+    }
+
+    throw Exception(
+      'No usable bash.exe found on Windows. Install Git for Windows '
+      '(preferred), MSYS2, or Cygwin. Found only unsupported bash launchers '
+      'such as WSL or Windows App aliases.',
+    );
+  }
 }
