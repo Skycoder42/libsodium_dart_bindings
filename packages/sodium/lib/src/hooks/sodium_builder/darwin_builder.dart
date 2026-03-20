@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import 'automake_builder.dart';
 
 @internal
+@immutable
 class DarwinConfig {
   final String arch;
   final String? build;
@@ -15,7 +16,7 @@ class DarwinConfig {
   final Uri sdk;
   final String versionParameter;
 
-  DarwinConfig({
+  const DarwinConfig({
     required this.arch,
     this.build,
     required this.host,

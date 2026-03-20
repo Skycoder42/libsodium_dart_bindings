@@ -2,15 +2,37 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:code_assets/code_assets.dart';
-import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
-import 'package:path/path.dart' as path;
 
-import 'sodium_builder.dart';
+import 'automake_builder.dart';
+
+@immutable
+@internal
+class AndroidArchConfig {
+  final String host;
+  final List<String> cFlags;
+  final List<String> ldFlags;
+  final Uri toolchainDir;
+
+  const AndroidArchConfig({
+    required this.host,
+    required this.cFlags,
+    required this.ldFlags,
+    required this.toolchainDir,
+  });
+
+  Iterable<Object?> get _hashValues sync* {
+    yield host;
+    yield* cFlags;
+    yield* ldFlags;
+    yield toolchainDir;
+  }
+}
 
 @internal
-final class AndroidBuilder extends SodiumBuilder {
+final class AndroidBuilder extends AutomakeBuilder {
   late final Uri _ndkPath;
+  late final AndroidArchConfig _archConfig;
 
   AndroidBuilder(super.config, super.logger);
 
@@ -18,6 +40,7 @@ final class AndroidBuilder extends SodiumBuilder {
   Future<void> prepare() async {
     _ndkPath = await _getAndroidNdkPath();
     logger.info('Detected Android NDK path: ${_ndkPath.toFilePath()}');
+    _archConfig = _mapArchConfig();
   }
 
   @override
@@ -25,51 +48,72 @@ final class AndroidBuilder extends SodiumBuilder {
     yield* super.configHash;
     yield config.android.targetNdkApi;
     yield _ndkPath;
+    yield _archConfig._hashValues;
   }
 
   @override
-  Future<Uri> buildCached({
-    required BuildInput input,
-    required Directory sourceDir,
-  }) async {
-    final buildTarget = _mapBuildTarget(config.targetArchitecture);
-    final installTarget = _mapInstallTarget(config.targetArchitecture);
-    logger
-      ..debug('Detected build target: $buildTarget')
-      ..debug('Detected install target: $installTarget')
-      ..debug('Target API level: ${config.android.targetNdkApi}');
+  // ignore: must_call_super as build hook args are not usable yet
+  Map<String, String> get environment => {
+    'CFLAGS': _archConfig.cFlags.join(' '),
+    'LDFLAGS': _archConfig.ldFlags.join(' '),
+    'PATH': [
+      _archConfig.toolchainDir.resolve('bin').toFilePath(),
+      ?Platform.environment['PATH'],
+    ].join(OS.current == .windows ? ';' : ':'),
+    'CC': '${_archConfig.host}${config.android.targetNdkApi}-clang',
+  };
 
-    final buildScriptPath = path.posix.join(
-      '.',
-      'dist-build',
-      'android-$buildTarget.sh',
-    );
-
-    final String buildCommand;
-    final List<String> buildArguments;
-    if (OS.current == .windows) {
-      buildCommand = await _findWindowsBash();
-      buildArguments = [buildScriptPath];
-    } else {
-      buildCommand = buildScriptPath;
-      buildArguments = const <String>[];
-    }
-
-    await exec(
-      buildCommand,
-      buildArguments,
-      workingDirectory: sourceDir,
-      environment: {
-        'ANDROID_NDK_HOME': _ndkPath.toFilePath(),
-        'NDK_PLATFORM': 'android-${config.android.targetNdkApi}',
-        'LIBSODIUM_FULL_BUILD': '1',
-      },
-    );
-
-    return sourceDir.uri.resolve('libsodium-android-$installTarget/');
+  @override
+  Iterable<String> get configureArgs sync* {
+    yield* super.configureArgs;
+    yield '--host=${_archConfig.host}';
+    yield '--with-sysroot='
+        '${_archConfig.toolchainDir.resolve("sysroot").toFilePath()}';
   }
 
+  AndroidArchConfig _mapArchConfig() => AndroidArchConfig(
+    host: _mapHost(config.targetArchitecture),
+    cFlags: [
+      '-Os',
+      ..._mapExtraCFlags(config.targetArchitecture),
+      '-march=${_mapTargetArch(config.targetArchitecture)}',
+    ],
+    ldFlags: const ['-Wl,-z,max-page-size=16384'],
+    toolchainDir: _ndkPath.resolve(
+      'toolchains/llvm/prebuilt/${_mapHostPlatform()}-x86_64/',
+    ),
+  );
+
+  String _mapTargetArch(Architecture arch) => switch (arch) {
+    .arm64 => 'armv8-a+crypto',
+    .arm => 'armv7-a',
+    .x64 => 'westmere',
+    .ia32 => 'i686',
+    _ => throw UnsupportedError('Unsupported android architecture: $arch'),
+  };
+
+  String _mapHost(Architecture arch) => switch (arch) {
+    .arm64 => 'aarch64-linux-android',
+    .arm => 'armv7a-linux-androideabi',
+    .x64 => 'x86_64-linux-android',
+    .ia32 => 'i686-linux-android',
+    _ => throw UnsupportedError('Unsupported android architecture: $arch'),
+  };
+
+  String _mapHostPlatform() => switch (OS.current) {
+    .windows => 'windows',
+    .linux => 'linux',
+    .macOS => 'darwin',
+    _ => throw UnsupportedError('Unsupported host platform: ${OS.current}'),
+  };
+
+  Iterable<String> _mapExtraCFlags(Architecture arch) => switch (arch) {
+    .arm => const ['-mfloat-abi=softfp', '-mfpu=vfpv3-d16', '-mthumb', '-marm'],
+    _ => const [],
+  };
+
   Future<Uri> _getAndroidNdkPath() async {
+    // TODO find alternative for non flutter builds
     final flutterConfig =
         await execStream('flutter', const [
               'config',
@@ -107,57 +151,4 @@ final class AndroidBuilder extends SodiumBuilder {
 
   int _compareFileName(Uri a, Uri b) =>
       a.pathSegments.last.compareTo(b.pathSegments.last);
-
-  String _mapBuildTarget(Architecture arch) => switch (arch) {
-    .arm => 'armv7-a',
-    .arm64 => 'armv8-a',
-    .ia32 => 'x86',
-    .x64 => 'x86_64',
-    _ => throw UnsupportedError('Unsupported android architecture: $arch'),
-  };
-
-  String _mapInstallTarget(Architecture arch) => switch (arch) {
-    .arm => 'armv7-a',
-    .arm64 => 'armv8-a+crypto',
-    .ia32 => 'i686',
-    .x64 => 'westmere',
-    _ => throw UnsupportedError('Unsupported android architecture: $arch'),
-  };
-
-  Future<String> _findWindowsBash() async {
-    final candidates =
-        await execStream(
-              'where',
-              const ['bash'],
-              runInShell: true,
-              expectExitCode: null,
-            )
-            .transform(utf8.decoder)
-            .transform(const LineSplitter())
-            .map((e) => e.trim())
-            .where((e) => e.isNotEmpty)
-            .map(path.normalize)
-            .toList();
-
-    for (final candidate in candidates) {
-      final lower = candidate.toLowerCase();
-
-      if (path.basename(lower) != 'bash.exe') continue;
-
-      // Skip WSL launcher
-      if (path.equals(lower, r'c:\windows\system32\bash.exe')) continue;
-
-      // Skip Windows app execution aliases
-      final parts = path.split(lower);
-      if (parts.contains('windowsapps')) continue;
-
-      return candidate;
-    }
-
-    throw Exception(
-      'No usable bash.exe found on Windows. Install Git for Windows '
-      '(preferred), MSYS2, or Cygwin. Found only unsupported bash launchers '
-      'such as WSL or Windows App aliases.',
-    );
-  }
 }

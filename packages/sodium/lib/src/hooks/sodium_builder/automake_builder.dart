@@ -79,12 +79,22 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     Uri installDirUri,
     Map<String, String> env,
   ) async {
-    await exec(
-      './configure',
-      [...configureArgs, '--prefix=${installDirUri.toFilePath()}'],
-      workingDirectory: sourceDir,
-      environment: env,
-    );
+    try {
+      await exec(
+        './configure',
+        [...configureArgs, '--prefix=${installDirUri.toFilePath()}'],
+        workingDirectory: sourceDir,
+        environment: env,
+      );
+    } catch (_) {
+      final configLogFile = File.fromUri(sourceDir.uri.resolve('config.log'));
+      if (configLogFile.existsSync()) {
+        logger.warning('##### config.log #####');
+        await configLogFile.openRead().pipe(stderr);
+        logger.warning('##### config.log #####');
+      }
+      rethrow;
+    }
   }
 
   Future<void> _make(Directory sourceDir, Map<String, String> env) async =>
