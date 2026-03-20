@@ -162,7 +162,8 @@ abstract base class SodiumBuilder {
     bool runInShell = false,
     int? expectExitCode = 0,
   }) async {
-    logger.debug("Executing command: $executable ${arguments.join(' ')}");
+    _logExec('Executing', executable, arguments, environment);
+
     final process = await Process.start(
       executable,
       arguments,
@@ -199,7 +200,8 @@ abstract base class SodiumBuilder {
     bool runInShell = false,
     int? expectExitCode = 0,
   }) async* {
-    logger.debug("Streaming command: $executable ${arguments.join(' ')}");
+    _logExec('Streaming', executable, arguments, environment);
+
     final process = await Process.start(
       executable,
       arguments,
@@ -222,6 +224,21 @@ abstract base class SodiumBuilder {
         'Process $executable exited with code $exitCode, '
         'expected $expectExitCode.',
       );
+    }
+  }
+
+  void _logExec(
+    String operation,
+    String executable,
+    List<String> arguments,
+    Map<String, String>? environment,
+  ) {
+    logger.debug("$operation command: $executable ${arguments.join(' ')}");
+    if (environment != null) {
+      logger.debug('With environment:');
+      for (final MapEntry(:key, :value) in environment.entries) {
+        logger.debug('$key: $value');
+      }
     }
   }
 }

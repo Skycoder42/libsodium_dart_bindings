@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as path;
 
 import 'sodium_builder.dart';
 
@@ -79,10 +82,21 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     Uri installDirUri,
     Map<String, String> env,
   ) async {
+    var buildCommand = './configure';
+    var buildArguments = [
+      ...configureArgs,
+      '--prefix=${installDirUri.toFilePath()}',
+    ];
+
+    if (OS.current == .windows) {
+      buildArguments = [buildCommand, ...buildArguments];
+      buildCommand = await _findWindowsBash();
+    }
+
     try {
       await exec(
-        './configure',
-        [...configureArgs, '--prefix=${installDirUri.toFilePath()}'],
+        buildCommand,
+        buildArguments,
         workingDirectory: sourceDir,
         environment: env,
       );
@@ -104,4 +118,41 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
         workingDirectory: sourceDir,
         environment: env,
       );
+
+  Future<String> _findWindowsBash() async {
+    final candidates =
+        await execStream(
+              'where',
+              const ['bash'],
+              runInShell: true,
+              expectExitCode: null,
+            )
+            .transform(utf8.decoder)
+            .transform(const LineSplitter())
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .map(path.normalize)
+            .toList();
+
+    for (final candidate in candidates) {
+      final lower = candidate.toLowerCase();
+
+      if (path.basename(lower) != 'bash.exe') continue;
+
+      // Skip WSL launcher
+      if (path.equals(lower, r'c:\windows\system32\bash.exe')) continue;
+
+      // Skip Windows app execution aliases
+      final parts = path.split(lower);
+      if (parts.contains('windowsapps')) continue;
+
+      return candidate;
+    }
+
+    throw Exception(
+      'No usable bash.exe found on Windows. Install Git for Windows '
+      '(preferred), MSYS2, or Cygwin. Found only unsupported bash launchers '
+      'such as WSL or Windows App aliases.',
+    );
+  }
 }

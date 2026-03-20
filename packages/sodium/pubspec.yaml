@@ -25,7 +25,7 @@ dependencies:
 
 dev_dependencies:
   analyzer: ^10.0.1
-  build_runner: ^2.12.2
+  build_runner: ^2.13.0
   cider: ^0.2.10
   code_builder: ^4.11.1
   collection: ^1.19.1
