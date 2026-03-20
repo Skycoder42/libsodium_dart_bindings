@@ -70,8 +70,8 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
     final binUri = platform.resolve('usr/bin/');
     final sbinUri = platform.resolve('usr/sbin/');
     final path = [
-      binUri.toFilePath(windows: false),
-      sbinUri.toFilePath(windows: false),
+      binUri.toFilePath(),
+      sbinUri.toFilePath(),
       ?Platform.environment['PATH'],
     ].join(':');
 
@@ -80,7 +80,7 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
       '-arch',
       arch,
       '-isysroot',
-      sdk.toFilePath(windows: false),
+      sdk.toFilePath(),
       versionParameter,
     ];
 
@@ -100,7 +100,7 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
       yield '--build=$build';
     }
     yield '--host=$host';
-    yield '--with-sysroot=${sdk.toFilePath(windows: false)}';
+    yield '--with-sysroot=${sdk.toFilePath()}';
   }
 
   @visibleForOverriding

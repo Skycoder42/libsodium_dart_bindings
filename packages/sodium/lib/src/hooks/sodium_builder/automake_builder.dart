@@ -7,6 +7,7 @@ import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 
+import '../common/extensions.dart';
 import 'sodium_builder.dart';
 
 @internal
@@ -22,12 +23,18 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
   }) async {
     final installDir = sourceDir.uri.resolve('install/');
 
+    Uri? windowsBash;
+    if (OS.current == .windows) {
+      logger.debug('Detecting bash...');
+      windowsBash = await _findWindowsBash();
+    }
+
     logger.debug('Configuring...');
     final env = environment;
-    await _configure(sourceDir, installDir, env);
+    await _configure(sourceDir, installDir, env, windowsBash);
 
     logger.debug('Building...');
-    await _make(sourceDir, env);
+    await _make(sourceDir, env, windowsBash);
 
     return installDir;
   }
@@ -53,9 +60,9 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
         ..debug('Detected custom archiver: ${cc.archiver}')
         ..debug('Detected custom linker: ${cc.linker}');
       return {
-        'CC': cc.compiler.toFilePath(windows: false),
-        'AR': cc.archiver.toFilePath(windows: false),
-        'LD': cc.linker.toFilePath(windows: false),
+        'CC': cc.compiler.toBashSafePath(),
+        'AR': cc.archiver.toBashSafePath(),
+        'LD': cc.linker.toBashSafePath(),
       };
     } else {
       return const {};
@@ -81,16 +88,17 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     Directory sourceDir,
     Uri installDirUri,
     Map<String, String> env,
+    Uri? windowsBash,
   ) async {
     var buildCommand = './configure';
     var buildArguments = [
       ...configureArgs,
-      '--prefix=${installDirUri.toFilePath(windows: false)}',
+      '--prefix=${installDirUri.toBashSafePath()}',
     ];
 
-    if (OS.current == .windows) {
+    if (windowsBash != null) {
       buildArguments = [buildCommand, ...buildArguments];
-      buildCommand = await _findWindowsBash();
+      buildCommand = windowsBash.toFilePath();
     }
 
     try {
@@ -111,15 +119,28 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     }
   }
 
-  Future<void> _make(Directory sourceDir, Map<String, String> env) async =>
-      await exec(
-        'make',
-        ['-j${Platform.numberOfProcessors}', 'install'],
-        workingDirectory: sourceDir,
-        environment: env,
-      );
+  Future<void> _make(
+    Directory sourceDir,
+    Map<String, String> env,
+    Uri? windowsBash,
+  ) async {
+    var buildCommand = '.make';
+    var buildArguments = ['-j${Platform.numberOfProcessors}', 'install'];
 
-  Future<String> _findWindowsBash() async {
+    if (windowsBash != null) {
+      buildArguments = [buildCommand, ...buildArguments];
+      buildCommand = windowsBash.toFilePath();
+    }
+
+    await exec(
+      buildCommand,
+      buildArguments,
+      workingDirectory: sourceDir,
+      environment: env,
+    );
+  }
+
+  Future<Uri> _findWindowsBash() async {
     final candidates =
         await execStream(
               'where',
@@ -146,7 +167,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
       final parts = path.split(lower);
       if (parts.contains('windowsapps')) continue;
 
-      return candidate;
+      return Uri.file(candidate);
     }
 
     throw Exception(

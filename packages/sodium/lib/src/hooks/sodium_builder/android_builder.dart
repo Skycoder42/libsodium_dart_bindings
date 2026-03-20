@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:code_assets/code_assets.dart';
 import 'package:meta/meta.dart';
 
+import '../common/extensions.dart';
 import 'automake_builder.dart';
 
 @immutable
@@ -31,33 +32,52 @@ class AndroidArchConfig {
 
 @internal
 final class AndroidBuilder extends AutomakeBuilder {
-  late final Uri _ndkPath;
   late final AndroidArchConfig _archConfig;
 
   AndroidBuilder(super.config, super.logger);
 
   @override
   Future<void> prepare() async {
-    _ndkPath = await _getAndroidNdkPath();
-    logger.info('Detected Android NDK path: $_ndkPath');
-    _archConfig = _mapArchConfig();
+    Uri toolchainDir;
+
+    if (config.cCompiler?.compiler case final compiler?) {
+      logger.debug('Detecting toolchain from compiler: $compiler');
+      toolchainDir = compiler.replace(
+        pathSegments: compiler.pathSegments
+            .take(compiler.pathSegments.length - 2)
+            .followedBy(const ['']),
+      );
+    } else {
+      logger.warning(
+        'Build hooks did not configure an Android NDK toolchain. This can '
+        'happen if the ANDROID_NDK_HOME environment variable is not set up '
+        'correctly. Attempting to detect NDK via flutter tool.',
+      );
+      final ndkPath = await _findAndroidNdkPath();
+      logger.debug('Detected Android NDK path: $ndkPath');
+      toolchainDir = ndkPath.resolve(
+        'toolchains/llvm/prebuilt/${_mapHostPlatform()}-x86_64/',
+      );
+    }
+
+    logger.info('Detected Android toolchain: $toolchainDir');
+    _archConfig = _mapArchConfig(toolchainDir);
   }
 
   @override
   Iterable<Object?> get configHash sync* {
     yield* super.configHash;
     yield config.android.targetNdkApi;
-    yield _ndkPath;
     yield _archConfig._hashValues;
   }
 
   @override
-  // ignore: must_call_super as build hook args are not usable yet
   Map<String, String> get environment => {
+    ...super.environment,
     'CFLAGS': _archConfig.cFlags.join(' '),
     'LDFLAGS': _archConfig.ldFlags.join(' '),
     'PATH': [
-      _archConfig.toolchainDir.resolve('bin').toFilePath(windows: false),
+      _archConfig.toolchainDir.resolve('bin').toFilePath(),
       ?Platform.environment['PATH'],
     ].join(OS.current == .windows ? ';' : ':'),
     'CC': '${_archConfig.host}${config.android.targetNdkApi}-clang',
@@ -68,10 +88,10 @@ final class AndroidBuilder extends AutomakeBuilder {
     yield* super.configureArgs;
     yield '--host=${_archConfig.host}';
     // ignore: lines_longer_than_80_chars not avoidable
-    yield '--with-sysroot=${_archConfig.toolchainDir.resolve("sysroot").toFilePath(windows: false)}';
+    yield '--with-sysroot=${_archConfig.toolchainDir.resolve("sysroot").toBashSafePath()}';
   }
 
-  AndroidArchConfig _mapArchConfig() => AndroidArchConfig(
+  AndroidArchConfig _mapArchConfig(Uri toolchainDir) => AndroidArchConfig(
     host: _mapHost(config.targetArchitecture),
     cFlags: [
       '-Os',
@@ -79,9 +99,7 @@ final class AndroidBuilder extends AutomakeBuilder {
       '-march=${_mapTargetArch(config.targetArchitecture)}',
     ],
     ldFlags: const ['-Wl,-z,max-page-size=16384'],
-    toolchainDir: _ndkPath.resolve(
-      'toolchains/llvm/prebuilt/${_mapHostPlatform()}-x86_64/',
-    ),
+    toolchainDir: toolchainDir,
   );
 
   String _mapTargetArch(Architecture arch) => switch (arch) {
@@ -112,8 +130,7 @@ final class AndroidBuilder extends AutomakeBuilder {
     _ => const [],
   };
 
-  Future<Uri> _getAndroidNdkPath() async {
-    // TODO find alternative for non flutter builds
+  Future<Uri> _findAndroidNdkPath() async {
     final flutterConfig =
         await execStream('flutter', const [
               'config',
