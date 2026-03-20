@@ -39,7 +39,7 @@ final class AndroidBuilder extends AutomakeBuilder {
   @override
   Future<void> prepare() async {
     _ndkPath = await _getAndroidNdkPath();
-    logger.info('Detected Android NDK path: ${_ndkPath.toFilePath()}');
+    logger.info('Detected Android NDK path: $_ndkPath');
     _archConfig = _mapArchConfig();
   }
 
@@ -57,7 +57,7 @@ final class AndroidBuilder extends AutomakeBuilder {
     'CFLAGS': _archConfig.cFlags.join(' '),
     'LDFLAGS': _archConfig.ldFlags.join(' '),
     'PATH': [
-      _archConfig.toolchainDir.resolve('bin').toFilePath(),
+      _archConfig.toolchainDir.resolve('bin').toFilePath(windows: false),
       ?Platform.environment['PATH'],
     ].join(OS.current == .windows ? ';' : ':'),
     'CC': '${_archConfig.host}${config.android.targetNdkApi}-clang',
@@ -67,8 +67,8 @@ final class AndroidBuilder extends AutomakeBuilder {
   Iterable<String> get configureArgs sync* {
     yield* super.configureArgs;
     yield '--host=${_archConfig.host}';
-    yield '--with-sysroot='
-        '${_archConfig.toolchainDir.resolve("sysroot").toFilePath()}';
+    // ignore: lines_longer_than_80_chars not avoidable
+    yield '--with-sysroot=${_archConfig.toolchainDir.resolve("sysroot").toFilePath(windows: false)}';
   }
 
   AndroidArchConfig _mapArchConfig() => AndroidArchConfig(
@@ -138,7 +138,7 @@ final class AndroidBuilder extends AutomakeBuilder {
         .toList();
     logger.debug('Found ${ndkCandidates.length} NDK candidates:');
     for (final candidate in ndkCandidates) {
-      logger.debug('  > ${candidate.toFilePath()}');
+      logger.debug('  > $candidate');
     }
 
     final bestCandidate = (ndkCandidates..sort(_compareFileName)).lastOrNull;

@@ -49,13 +49,13 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
   Map<String, String> get environment {
     if (config.cCompiler case final cc?) {
       logger
-        ..debug('Detected custom compiler: ${cc.compiler.toFilePath()}')
-        ..debug('Detected custom archiver: ${cc.archiver.toFilePath()}')
-        ..debug('Detected custom linker: ${cc.linker.toFilePath()}');
+        ..debug('Detected custom compiler: ${cc.compiler}')
+        ..debug('Detected custom archiver: ${cc.archiver}')
+        ..debug('Detected custom linker: ${cc.linker}');
       return {
-        'CC': cc.compiler.toFilePath(),
-        'AR': cc.archiver.toFilePath(),
-        'LD': cc.linker.toFilePath(),
+        'CC': cc.compiler.toFilePath(windows: false),
+        'AR': cc.archiver.toFilePath(windows: false),
+        'LD': cc.linker.toFilePath(windows: false),
       };
     } else {
       return const {};
@@ -85,7 +85,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     var buildCommand = './configure';
     var buildArguments = [
       ...configureArgs,
-      '--prefix=${installDirUri.toFilePath()}',
+      '--prefix=${installDirUri.toFilePath(windows: false)}',
     ];
 
     if (OS.current == .windows) {

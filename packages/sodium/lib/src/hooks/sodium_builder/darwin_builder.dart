@@ -45,14 +45,14 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
   @nonVirtual
   Future<void> prepare() async {
     final xcodeDir = await _getXcodeDir();
-    logger.info('Xcode directory: ${xcodeDir.toFilePath()}');
+    logger.info('Xcode directory: $xcodeDir');
     _platformConfig = await getPlatformConfig(xcodeDir);
     logger
       ..debug('Detect architecture: ${_platformConfig.arch}')
       ..debug('Detect build: ${_platformConfig.build ?? '<default>'}')
       ..debug('Detect host: ${_platformConfig.host}')
-      ..debug('Detect platform: ${_platformConfig.platform.toFilePath()}')
-      ..debug('Detect SDK: ${_platformConfig.sdk.toFilePath()}')
+      ..debug('Detect platform: ${_platformConfig.platform}')
+      ..debug('Detect SDK: ${_platformConfig.sdk}')
       ..debug('Detect version parameter: ${_platformConfig.versionParameter}');
   }
 
@@ -70,8 +70,8 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
     final binUri = platform.resolve('usr/bin/');
     final sbinUri = platform.resolve('usr/sbin/');
     final path = [
-      binUri.toFilePath(),
-      sbinUri.toFilePath(),
+      binUri.toFilePath(windows: false),
+      sbinUri.toFilePath(windows: false),
       ?Platform.environment['PATH'],
     ].join(':');
 
@@ -80,7 +80,7 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
       '-arch',
       arch,
       '-isysroot',
-      sdk.toFilePath(),
+      sdk.toFilePath(windows: false),
       versionParameter,
     ];
 
@@ -100,7 +100,7 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
       yield '--build=$build';
     }
     yield '--host=$host';
-    yield '--with-sysroot=${sdk.toFilePath()}';
+    yield '--with-sysroot=${sdk.toFilePath(windows: false)}';
   }
 
   @visibleForOverriding

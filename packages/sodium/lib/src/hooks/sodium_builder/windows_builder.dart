@@ -37,7 +37,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
     logger
       ..debug(
         'Detected Developer Command Prompt: '
-        '${_commandPrompt.script.toFilePath()}',
+        '${_commandPrompt.script}',
       )
       ..debug("With arguments: ${_commandPrompt.arguments.join(' ')}");
   }
