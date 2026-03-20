@@ -124,7 +124,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     Map<String, String> env,
     Uri? windowsBash,
   ) async {
-    var buildCommand = '.make';
+    var buildCommand = 'make';
     var buildArguments = ['-j${Platform.numberOfProcessors}', 'install'];
 
     if (windowsBash != null) {
