@@ -128,7 +128,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     var buildArguments = ['-j${Platform.numberOfProcessors}', 'install'];
 
     if (windowsBash != null) {
-      buildArguments = [buildCommand, ...buildArguments];
+      buildArguments = ['-lc', buildCommand, ...buildArguments];
       buildCommand = windowsBash.toFilePath();
     }
 
