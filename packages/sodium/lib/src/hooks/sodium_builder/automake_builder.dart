@@ -155,7 +155,9 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
             .map(path.normalize)
             .toList();
 
-    for (final candidate in candidates) {
+    logger.debug("Found bash candidates: ${candidates.join(', ')}");
+
+    for (final candidate in candidates.reversed) {
       final lower = candidate.toLowerCase();
 
       if (path.basename(lower) != 'bash.exe') continue;
