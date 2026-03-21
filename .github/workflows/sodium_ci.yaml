@@ -41,6 +41,7 @@ jobs:
     needs:
       - ci
     strategy:
+      fail-fast: false
       matrix:
         runs-on:
           - ubuntu-latest
@@ -89,6 +90,7 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/flutter-integration.yml@main
     needs:
       - ci
+      - android_build_tests
     with:
       enabledPlatforms: "[]"
       workingDirectory: packages/sodium/example
