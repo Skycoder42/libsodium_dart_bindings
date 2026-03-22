@@ -73,30 +73,25 @@ final class AndroidBuilder extends AutomakeBuilder {
 
   @override
   Map<String, String> get environment {
-    final compiler =
-        config.cCompiler?.compiler ??
-        _archConfig.toolchainDir.resolve('bin/clang');
-    final archiver =
-        config.cCompiler?.archiver ??
-        _archConfig.toolchainDir.resolve('bin/llvm-ar');
-    final linker =
-        config.cCompiler?.linker ?? _archConfig.toolchainDir.resolve('bin/ld');
-    final ranlib = _archConfig.toolchainDir.resolve('bin/llvm-ranlib');
-    final strip = _archConfig.toolchainDir.resolve('bin/llvm-strip');
-    final names = _archConfig.toolchainDir.resolve('bin/llvm-nm');
+    final compiler = config.cCompiler?.compiler.pathSegments.last ?? 'clang';
+    final archiver = config.cCompiler?.archiver.pathSegments.last ?? 'llvm-ar';
+    final linker = config.cCompiler?.linker.pathSegments.last ?? 'ld';
+    const ranlib = 'llvm-ranlib';
+    const strip = 'llvm-strip';
+    const names = 'llvm-nm';
 
     final compilerWithTarget =
-        '${compiler.toBashSafePath()} '
+        '$compiler '
         '--target=${_archConfig.host}${config.android.targetNdkApi}';
     return {
       ...super.environment,
       'CC': compilerWithTarget,
       'AS': compilerWithTarget,
-      'AR': archiver.toBashSafePath(),
-      'LD': linker.toBashSafePath(),
-      'RANLIB': ranlib.toBashSafePath(),
-      'STRIP': strip.toBashSafePath(),
-      'NM': names.toBashSafePath(),
+      'AR': archiver,
+      'LD': linker,
+      'RANLIB': ranlib,
+      'STRIP': strip,
+      'NM': names,
 
       'CFLAGS': _archConfig.cFlags.join(' '),
       'LDFLAGS': _archConfig.ldFlags.join(' '),

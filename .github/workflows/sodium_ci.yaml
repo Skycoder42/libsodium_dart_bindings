@@ -84,6 +84,14 @@ jobs:
       - name: Build AAB
         run: flutter build aab --release
         working-directory: packages/sodium/example
+      - name: Store error artifact
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: build-failure-${{ matrix.runs-on }}
+          path: packages/sodium/broken-build.zip
+          retention-days: 1
+          if-no-files-found: error
 
   flutter_tests:
     name: Flutter integration tests
@@ -124,8 +132,10 @@ jobs:
       - ci
       - android_build_tests
       - flutter_tests
+    permissions:
+      contents: write
+      actions: write
     with:
       workingDirectory: packages/sodium
       tagPrefix: sodium-v
-    secrets:
-      githubToken: ${{ secrets.GH_PAT }}
+      publishWorkflow: sodium_cd.yml

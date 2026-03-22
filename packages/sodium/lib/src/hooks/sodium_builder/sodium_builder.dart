@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
 import 'package:code_assets/code_assets.dart';
 import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
@@ -81,11 +82,17 @@ abstract base class SodiumBuilder {
 
       return createCodeAsset(installDir);
     } catch (e) {
-      final configDir = Directory.fromUri(configUri);
-      if (configDir.existsSync()) {
-        logger.debug('Build failed, cleaning up config directory...');
-        await configDir.delete(recursive: true);
-      }
+      // final configDir = Directory.fromUri(configUri);
+      // if (configDir.existsSync()) {
+      //   logger.debug('Build failed, cleaning up config directory...');
+      //   await configDir.delete(recursive: true);
+      // }
+
+      await ZipFileEncoder().zipDirectory(
+        Directory.fromUri(srcDirUri),
+        filename: input.packageRoot.resolve('broken-build.zip').toFilePath(),
+        followLinks: false,
+      );
       rethrow;
     }
   }
