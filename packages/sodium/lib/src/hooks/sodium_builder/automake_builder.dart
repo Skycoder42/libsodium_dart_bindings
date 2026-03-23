@@ -102,6 +102,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     }
 
     try {
+      logger.debug('CURRENT ENV: ${Platform.environment}');
       await exec(
         buildCommand,
         buildArguments,
@@ -128,10 +129,11 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     var buildArguments = ['-j${Platform.numberOfProcessors}', 'install'];
 
     if (windowsBash != null) {
-      buildArguments = ['-lc', buildCommand, 'V=1', ...buildArguments];
+      buildArguments = ['-lc', buildCommand, ...buildArguments];
       buildCommand = windowsBash.toFilePath();
     }
 
+    logger.debug('CURRENT ENV: ${Platform.environment}');
     await exec(
       buildCommand,
       buildArguments,

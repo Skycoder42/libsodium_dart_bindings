@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:code_assets/code_assets.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as path;
 
 import '../common/extensions.dart';
 import 'automake_builder.dart';
@@ -60,7 +61,12 @@ final class AndroidBuilder extends AutomakeBuilder {
       );
     }
 
-    logger.info('Detected Android toolchain: $toolchainDir');
+    final resolvedToolchainDir = await File(
+      path.canonicalize(toolchainDir.toFilePath()),
+    ).resolveSymbolicLinks();
+    logger
+      ..info('Detected Android toolchain: $toolchainDir')
+      ..debug('Resolved toolchain path: $resolvedToolchainDir');
     _archConfig = _mapArchConfig(toolchainDir);
   }
 
