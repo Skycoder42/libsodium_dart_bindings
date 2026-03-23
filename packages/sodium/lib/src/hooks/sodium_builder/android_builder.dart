@@ -60,14 +60,11 @@ final class AndroidBuilder extends AutomakeBuilder {
         'toolchains/llvm/prebuilt/${_mapHostPlatform()}-x86_64/',
       );
     }
+    logger.info('Detected Android toolchain: $toolchainDir');
 
-    final resolvedToolchainDir = await File(
-      path.canonicalize(toolchainDir.toFilePath()),
-    ).resolveSymbolicLinks();
-    logger
-      ..info('Detected Android toolchain: $toolchainDir')
-      ..debug('Resolved toolchain path: $resolvedToolchainDir');
-    _archConfig = _mapArchConfig(toolchainDir);
+    final resolvedToolchainDir = await _safeResolveToolchainDir(toolchainDir);
+    logger.debug('Using toolchain path: $resolvedToolchainDir');
+    _archConfig = _mapArchConfig(resolvedToolchainDir);
   }
 
   @override
@@ -79,9 +76,7 @@ final class AndroidBuilder extends AutomakeBuilder {
 
   @override
   Map<String, String> get environment {
-    final compiler = _fixExtension(
-      config.cCompiler?.compiler.pathSegments.last ?? 'clang',
-    );
+    final compiler = config.cCompiler?.compiler.pathSegments.last ?? 'clang';
     final archiver = config.cCompiler?.archiver.pathSegments.last ?? 'llvm-ar';
     final linker = config.cCompiler?.linker.pathSegments.last ?? 'ld';
     const ranlib = 'llvm-ranlib';
@@ -89,7 +84,7 @@ final class AndroidBuilder extends AutomakeBuilder {
     const names = 'llvm-nm';
 
     final compilerWithTarget =
-        '${_fixExtension(compiler)} '
+        '$compiler '
         '--target=${_archConfig.host}${config.android.targetNdkApi}';
     return {
       ...super.environment,
@@ -109,9 +104,6 @@ final class AndroidBuilder extends AutomakeBuilder {
       ].join(OS.current == .windows ? ';' : ':'),
     };
   }
-
-  String _fixExtension(String command) =>
-      OS.current == .windows ? path.setExtension(command, '.cmd') : command;
 
   @override
   Iterable<String> get configureArgs sync* {
@@ -199,4 +191,74 @@ final class AndroidBuilder extends AutomakeBuilder {
 
   int _compareFileName(Uri a, Uri b) =>
       a.pathSegments.last.compareTo(b.pathSegments.last);
+
+  Future<Uri> _safeResolveToolchainDir(Uri toolchainDir) async {
+    if (OS.current != .windows) {
+      return toolchainDir;
+    }
+
+    try {
+      final resolvedPath = await File(
+        path.canonicalize(toolchainDir.toFilePath()),
+      ).resolveSymbolicLinks();
+
+      if (!resolvedPath.contains(' ')) {
+        return Uri.directory(resolvedPath);
+      }
+
+      logger.warning(
+        'Resolved toolchain path contains spaces: $resolvedPath. '
+        'Creating drive letter mapping to avoid issues with build tools.',
+      );
+
+      var driveLetter = 'N';
+      while (!await _createDriveMapping(driveLetter, resolvedPath)) {
+        driveLetter = String.fromCharCode(driveLetter.codeUnitAt(0) + 1);
+        if (driveLetter.codeUnitAt(0) > 'Z'.codeUnitAt(0)) {
+          logger.warning(
+            'Failed to create drive mapping for toolchain directory. '
+            'Falling back to original path.',
+          );
+          return toolchainDir;
+        }
+      }
+
+      return Uri.directory('$driveLetter:/');
+    } catch (e) {
+      logger.warning(
+        'Failed to resolve symbolic links for toolchain directory: $toolchainDir. '
+        'Falling back to original path. Error: $e',
+      );
+      return toolchainDir;
+    }
+  }
+
+  Future<bool> _createDriveMapping(
+    String driveLetter,
+    String targetPath,
+  ) async {
+    try {
+      final result = await exec(
+        'subst',
+        ['$driveLetter:', targetPath],
+        runInShell: true,
+        expectExitCode: null,
+      );
+      if (result == 0) {
+        logger.info('Created drive mapping: $driveLetter: -> $targetPath');
+        return true;
+      } else {
+        logger.warning(
+          'Failed to create drive mapping: $driveLetter: -> $targetPath',
+        );
+        return false;
+      }
+    } catch (e) {
+      logger.warning(
+        'Error while creating drive mapping: $driveLetter: -> $targetPath. '
+        'Error: $e',
+      );
+      return false;
+    }
+  }
 }
