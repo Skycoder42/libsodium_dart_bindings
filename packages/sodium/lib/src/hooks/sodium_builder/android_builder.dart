@@ -79,7 +79,9 @@ final class AndroidBuilder extends AutomakeBuilder {
 
   @override
   Map<String, String> get environment {
-    final compiler = config.cCompiler?.compiler.pathSegments.last ?? 'clang';
+    final compiler = _fixExtension(
+      config.cCompiler?.compiler.pathSegments.last ?? 'clang',
+    );
     final archiver = config.cCompiler?.archiver.pathSegments.last ?? 'llvm-ar';
     final linker = config.cCompiler?.linker.pathSegments.last ?? 'ld';
     const ranlib = 'llvm-ranlib';
@@ -87,7 +89,7 @@ final class AndroidBuilder extends AutomakeBuilder {
     const names = 'llvm-nm';
 
     final compilerWithTarget =
-        '$compiler '
+        '${_fixExtension(compiler)} '
         '--target=${_archConfig.host}${config.android.targetNdkApi}';
     return {
       ...super.environment,
@@ -107,6 +109,9 @@ final class AndroidBuilder extends AutomakeBuilder {
       ].join(OS.current == .windows ? ';' : ':'),
     };
   }
+
+  String _fixExtension(String command) =>
+      OS.current == .windows ? path.setExtension(command, '.cmd') : command;
 
   @override
   Iterable<String> get configureArgs sync* {
