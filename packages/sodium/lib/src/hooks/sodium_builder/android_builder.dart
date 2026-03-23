@@ -226,7 +226,7 @@ final class AndroidBuilder extends AutomakeBuilder {
       return Uri.directory('$driveLetter:/');
     } catch (e) {
       logger.warning(
-        'Failed to resolve symbolic links for toolchain directory: $toolchainDir. '
+        'Failed to resolve toolchain directory: $toolchainDir. '
         'Falling back to original path. Error: $e',
       );
       return toolchainDir;
