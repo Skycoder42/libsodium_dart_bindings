@@ -111,6 +111,7 @@ final class AndroidBuilder extends AutomakeBuilder {
   @override
   Iterable<String> get configureArgs sync* {
     yield* super.configureArgs;
+    yield '--disable-dependency-tracking';
     yield '--host=${_archConfig.host}';
     // ignore: lines_longer_than_80_chars not avoidable
     yield '--with-sysroot=${_archConfig.toolchainDir.resolve("sysroot").toBashSafePath()}';
