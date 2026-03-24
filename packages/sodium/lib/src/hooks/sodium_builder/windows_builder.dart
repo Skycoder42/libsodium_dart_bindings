@@ -6,8 +6,24 @@ import 'package:hooks/hooks.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 
+import '../constants.dart';
 import 'sodium_builder.dart';
 
+/// Windows builder for libsodium.
+///
+/// PATCHED: works around Windows MAX_PATH (260 char) limitation.
+/// The Dart archive extractor (`package:archive`) silently fails to create
+/// files whose full path exceeds 260 characters. The hook's extraction
+/// directory (`.dart_tool/hooks_runner/shared/sodium/build/HASH/`) is deep
+/// enough that some libsodium source files (e.g.
+/// `crypto_pwhash/scryptsalsa208sha256/nosse/pwhash_scryptsalsa208sha256_nosse.c`)
+/// exceed the limit and are silently skipped, causing msbuild to fail.
+///
+/// Fix: re-extract the archive to a short temp path using the system `tar`
+/// command (which supports long paths on Windows 10+), build there using the
+/// original vcvarsall + msbuild approach, then copy the DLL back.
+///
+/// See: https://github.com/Skycoder42/libsodium_dart_bindings/issues/192
 @internal
 final class WindowsBuilder extends SodiumBuilder {
   static const _targetOutputFileName = 'target.txt';
@@ -37,7 +53,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
     logger
       ..debug(
         'Detected Developer Command Prompt: '
-        '${_commandPrompt.script}',
+        '${_commandPrompt.script.toFilePath()}',
       )
       ..debug("With arguments: ${_commandPrompt.arguments.join(' ')}");
   }
@@ -54,12 +70,65 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
     required BuildInput input,
     required Directory sourceDir,
   }) async {
-    final scriptFile = await _createBuildScript(sourceDir);
-    logger.debug('Building...');
+    // --- MAX_PATH workaround: build in a short temp directory ---
+    //
+    // The parent class extracted the archive to sourceDir, but some files
+    // are missing due to MAX_PATH. We re-extract to a short path using
+    // the system tar.exe, build there, then copy the result back.
+
+    final systemDrive = Platform.environment['SYSTEMDRIVE'] ?? r'C:';
+    final shortBuildDir = Directory('$systemDrive\\tmp\\sodium-build');
+    final shortSrcDir = Directory(
+      path.join(shortBuildDir.path, 'libsodium-stable'),
+    );
+
+    // Re-extract if needed (system tar handles long filenames)
+    if (!shortSrcDir.existsSync()) {
+      final archivePath = input.packageRoot
+          .resolveUri(HookConstants.libsodiumArchive)
+          .toFilePath();
+      logger.info(
+        'Re-extracting to short path to avoid MAX_PATH issues: '
+        '${shortBuildDir.path}',
+      );
+      await shortBuildDir.create(recursive: true);
+      await exec('tar', ['xzf', archivePath],
+          workingDirectory: shortBuildDir);
+    } else {
+      logger.info('Short path source already exists, skipping extraction.');
+    }
+
+    // Build using the original vcvarsall + msbuild .bat approach,
+    // but in the short directory where all source files are present.
+    final scriptFile = await _createBuildScript(shortSrcDir);
+    logger.info('Building libsodium in short path...');
     await exec('cmd.exe', [
       '/c',
       scriptFile.toFilePath(windows: true),
-    ], workingDirectory: sourceDir);
+    ], workingDirectory: shortSrcDir);
+
+    // Find the built DLL (path varies by toolset version)
+    final builtDll = await _findFile(shortSrcDir, 'libsodium.dll');
+    if (builtDll == null) {
+      throw Exception(
+        'msbuild succeeded but libsodium.dll not found under '
+        '${shortSrcDir.path}',
+      );
+    }
+    logger.info('Found built DLL: ${builtDll.path}');
+
+    // Copy to sourceDir (where the rest of the hook expects it)
+    final relativePath = path.relative(builtDll.path, from: shortSrcDir.path);
+    final targetDll = File(path.join(sourceDir.path, relativePath));
+    await targetDll.parent.create(recursive: true);
+    await builtDll.copy(targetDll.path);
+    logger.info('Copied DLL to: ${targetDll.path}');
+
+    // Write target.txt for _findInstallUri
+    final targetFile = File.fromUri(
+      sourceDir.uri.resolve(_targetOutputFileName),
+    );
+    await targetFile.writeAsString(targetDll.path);
 
     return await _findInstallUri(sourceDir);
   }
@@ -78,6 +147,8 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
   @override
   CodeAsset createCodeAsset(Uri installUri, {bool isFullPath = false}) =>
       super.createCodeAsset(installUri, isFullPath: true);
+
+  // -- Build script generation (unchanged from original) ----------------------
 
   Future<Uri> _createBuildScript(Directory sourceDir) async {
     final scriptFile = File.fromUri(sourceDir.uri.resolve('dart-build.bat'));
@@ -146,6 +217,18 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
       ..write(' /p:Platform=')
       ..write(platform)
       ..write(' /p:RuntimeLibrary=MultiThreadedDLL');
+  }
+
+  // -- Helpers ----------------------------------------------------------------
+
+  /// Recursively search for a file by name under a directory.
+  Future<File?> _findFile(Directory dir, String fileName) async {
+    await for (final entity in dir.list(recursive: true)) {
+      if (entity is File && path.basename(entity.path) == fileName) {
+        return entity;
+      }
+    }
+    return null;
   }
 
   String _mapPlatform(Architecture arch) => switch (arch) {
