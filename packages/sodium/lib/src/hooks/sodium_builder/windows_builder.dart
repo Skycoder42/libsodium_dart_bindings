@@ -175,7 +175,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
         logger
           ..debug('Detected build architecture: $buildArch')
           ..debug('Detected host architecture: $hostArch');
-        DeveloperCommandPrompt(
+        return DeveloperCommandPrompt(
           script: vsDevCmd.uri,
           arguments: ['-arch=$buildArch', '-host_arch=$hostArch'],
         );

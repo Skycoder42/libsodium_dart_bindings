@@ -13,7 +13,7 @@ dependencies:
 
 dev_dependencies:
   dart_pre_commit: ^6.1.1+1
-  dart_test_tools: ^7.0.2
+  dart_test_tools: ^7.0.2+1
 
 cider:
   link_template:
