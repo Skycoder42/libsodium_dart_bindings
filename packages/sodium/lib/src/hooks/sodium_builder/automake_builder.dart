@@ -130,11 +130,13 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     if (windowsBash != null) {
       buildArguments = [
         '-lc',
-        buildCommand,
-        ...buildArguments,
-        'V=1',
-        'AM_V_GEN=',
-        'AM_V_at=',
+        [
+          buildCommand,
+          ...buildArguments,
+          'V=1',
+          'AM_V_GEN=',
+          'AM_V_at=',
+        ].join(' '),
       ];
       buildCommand = windowsBash.toFilePath();
     }
