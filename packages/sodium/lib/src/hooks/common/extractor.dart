@@ -1,9 +1,22 @@
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:code_assets/code_assets.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:posix/posix.dart' as posix;
+
+@internal
+class FileNotExtractedException implements Exception {
+  final String message;
+
+  FileNotExtractedException(this.message);
+
+  @override
+  String toString() =>
+      'FileNotExtractedException: $message Please try to build in a directory '
+      'with a shorter path.';
+}
 
 @internal
 sealed class Extractor {
@@ -78,7 +91,18 @@ sealed class Extractor {
           output.flush();
           await output.close();
 
-          if (Platform.isLinux || Platform.isMacOS) {
+          if (OS.current == .windows) {
+            // files might not have been created if path is too long
+            if (!File(filePath).existsSync()) {
+              throw FileNotExtractedException(
+                'Failed to extract "${entry.name}" to '
+                '"${path.canonicalize(filePath)}". The file path might be too '
+                'long for Windows.',
+              );
+            }
+          }
+
+          if (OS.current case .linux || .macOS) {
             posix.chmodWithMode(filePath, entry.mode);
           }
 

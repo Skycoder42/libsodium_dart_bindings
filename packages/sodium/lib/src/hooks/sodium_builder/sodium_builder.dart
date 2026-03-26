@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:archive/archive_io.dart';
 import 'package:code_assets/code_assets.dart';
 import 'package:crypto/crypto.dart';
 import 'package:hooks/hooks.dart';
@@ -59,61 +58,45 @@ abstract base class SodiumBuilder {
       ..debug('Calculated config hash: $shortHash')
       ..debug('Source directory URI: $srcDirUri');
 
+    Directory? tempDir;
     try {
-      final srcDir = Directory.fromUri(srcDirUri);
+      var srcDir = Directory.fromUri(srcDirUri);
       if (srcDir.existsSync()) {
         logger.debug('Source directory already exists, skipping extraction.');
       } else {
-        logger.info('Extracting source files to config-specific directory...');
-        await Extractor.extractToDisk(sourceArchive, configUri);
-        logger.debug('Source files extracted successfully!');
+        tempDir = await _safeExtractToDisk(sourceArchive, configUri);
+        srcDir = tempDir ?? srcDir;
       }
 
       logger.info('Starting build process...');
-      final installDir = await buildCached(input: input, sourceDir: srcDir);
+      var installDir = await buildCached(input: input, sourceDir: srcDir);
       logger.debug('Successfully built libsodium to: $installDir');
+
+      if (tempDir != null) {
+        logger.info('Moving installed files to config dir');
+        final newPath = configUri.resolve('install/');
+        await Directory.fromUri(installDir).rename(newPath.toFilePath());
+        installDir = newPath;
+      }
 
       if (exportHeadersTo != null) {
         logger.info('Exporting sodium headers install location');
         await File.fromUri(
           input.packageRoot.resolveUri(exportHeadersTo),
-        ).writeAsString(getIncludesPath(srcDirUri, installDir).toString());
+        ).writeAsString(getIncludesPath(srcDir.uri, installDir).toString());
       }
 
       return createCodeAsset(installDir);
     } catch (e) {
-      // final configDir = Directory.fromUri(configUri);
-      // if (configDir.existsSync()) {
-      //   logger.debug('Build failed, cleaning up config directory...');
-      //   await configDir.delete(recursive: true);
-      // }
-
-      await ZipFileEncoder().zipDirectory(
-        Directory.fromUri(srcDirUri),
-        filename: input.packageRoot.resolve('broken-build.zip').toFilePath(),
-        followLinks: false,
-      );
+      final configDir = Directory.fromUri(configUri);
+      if (configDir.existsSync()) {
+        logger.debug('Build failed, cleaning up config directory...');
+        await configDir.delete(recursive: true);
+      }
       rethrow;
-    }
-  }
-
-  String _calculateHash() {
-    late final Digest digest;
-    final sink = utf8.encoder
-        .fuse(sha256)
-        .startChunkedConversion(
-          ChunkedConversionSink.withCallback(
-            (chunks) => digest = chunks.single,
-          ),
-        );
-
-    try {
-      configHash.map((v) => v.toString()).forEach(sink.add);
     } finally {
-      sink.close();
+      await tempDir?.delete(recursive: true);
     }
-
-    return digest.toString().substring(0, 10);
   }
 
   @visibleForOverriding
@@ -231,6 +214,45 @@ abstract base class SodiumBuilder {
         'Process $executable exited with code $exitCode, '
         'expected $expectExitCode.',
       );
+    }
+  }
+
+  String _calculateHash() {
+    late final Digest digest;
+    final sink = utf8.encoder
+        .fuse(sha256)
+        .startChunkedConversion(
+          ChunkedConversionSink.withCallback(
+            (chunks) => digest = chunks.single,
+          ),
+        );
+
+    try {
+      configHash.map((v) => v.toString()).forEach(sink.add);
+    } finally {
+      sink.close();
+    }
+
+    return digest.toString().substring(0, 10);
+  }
+
+  Future<Directory?> _safeExtractToDisk(
+    Uri sourceArchive,
+    Uri configUri,
+  ) async {
+    logger.info('Extracting source files to config-specific directory...');
+    try {
+      await Extractor.extractToDisk(sourceArchive, configUri);
+      logger.debug('Source files extracted successfully!');
+      return null;
+    } on FileNotExtractedException catch (e) {
+      logger
+        ..warning(e.message)
+        ..warning('Attempting to extract to a temporary directory instead...');
+      final tempDir = await Directory.systemTemp.createTemp();
+      await Extractor.extractToDisk(sourceArchive, tempDir.uri);
+      logger.debug('Source files extracted successfully!');
+      return tempDir;
     }
   }
 

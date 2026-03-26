@@ -20,5 +20,5 @@ class HookLogger {
   }
 
   void _logTo(IOSink sink, String level, String message) =>
-      sink.writeln('[$hook] $level: $message');
+      (logDebug ? stderr : sink).writeln('[$hook] $level: $message');
 }
