@@ -153,7 +153,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
       buildCommand,
       buildArguments,
       workingDirectory: sourceDir,
-      environment: env,
+      environment: buildEnv,
     );
   }
 
