@@ -128,16 +128,14 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
     var buildArguments = ['-j${Platform.numberOfProcessors}', 'install'];
 
     if (windowsBash != null) {
-      logger.warning(Platform.environment.toString());
-
       buildArguments = [
         '-lc',
         [
           buildCommand,
           ...buildArguments,
-          'V=1',
-          'AM_V_GEN=',
-          'AM_V_at=',
+          // overwrite the default "$(SHELL) ..." invocation as it will break
+          // on windows. Leaving out "$(SHELL)" still works, as a SHELL is
+          // set by automake.
           r"LIBTOOL='$(top_builddir)/libtool'",
         ].join(' '),
       ];

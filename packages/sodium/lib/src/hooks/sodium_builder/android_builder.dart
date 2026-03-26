@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:code_assets/code_assets.dart';
 import 'package:meta/meta.dart';
-import 'package:path/path.dart' as path;
 
 import '../common/extensions.dart';
 import 'automake_builder.dart';
@@ -61,17 +60,14 @@ final class AndroidBuilder extends AutomakeBuilder {
       );
     }
     logger.info('Detected Android toolchain: $toolchainDir');
-
-    final resolvedToolchainDir = await _safeResolveToolchainDir(toolchainDir);
-    logger.debug('Using toolchain path: $resolvedToolchainDir');
-    _archConfig = _mapArchConfig(resolvedToolchainDir);
+    _archConfig = _mapArchConfig(toolchainDir);
   }
 
   @override
   Iterable<Object?> get configHash sync* {
     yield* super.configHash;
     yield config.android.targetNdkApi;
-    yield _archConfig._hashValues;
+    yield* _archConfig._hashValues;
   }
 
   @override
@@ -108,7 +104,6 @@ final class AndroidBuilder extends AutomakeBuilder {
   @override
   Iterable<String> get configureArgs sync* {
     yield* super.configureArgs;
-    yield '--disable-dependency-tracking';
     yield '--host=${_archConfig.host}';
     // ignore: lines_longer_than_80_chars not avoidable
     yield '--with-sysroot=${_archConfig.toolchainDir.resolve("sysroot").toBashSafePath()}';
@@ -191,74 +186,4 @@ final class AndroidBuilder extends AutomakeBuilder {
 
   int _compareFileName(Uri a, Uri b) =>
       a.pathSegments.last.compareTo(b.pathSegments.last);
-
-  Future<Uri> _safeResolveToolchainDir(Uri toolchainDir) async {
-    if (OS.current != .windows) {
-      return toolchainDir;
-    }
-
-    try {
-      final resolvedPath = await File(
-        path.canonicalize(toolchainDir.toFilePath()),
-      ).resolveSymbolicLinks();
-
-      if (!resolvedPath.contains(' ')) {
-        return Uri.directory(resolvedPath);
-      }
-
-      logger.warning(
-        'Resolved toolchain path contains spaces: $resolvedPath. '
-        'Creating drive letter mapping to avoid issues with build tools.',
-      );
-
-      var driveLetter = 'N';
-      while (!await _createDriveMapping(driveLetter, resolvedPath)) {
-        driveLetter = String.fromCharCode(driveLetter.codeUnitAt(0) + 1);
-        if (driveLetter.codeUnitAt(0) > 'Z'.codeUnitAt(0)) {
-          logger.warning(
-            'Failed to create drive mapping for toolchain directory. '
-            'Falling back to original path.',
-          );
-          return toolchainDir;
-        }
-      }
-
-      return Uri.directory('$driveLetter:/');
-    } catch (e) {
-      logger.warning(
-        'Failed to resolve toolchain directory: $toolchainDir. '
-        'Falling back to original path. Error: $e',
-      );
-      return toolchainDir;
-    }
-  }
-
-  Future<bool> _createDriveMapping(
-    String driveLetter,
-    String targetPath,
-  ) async {
-    try {
-      final result = await exec(
-        'subst',
-        ['$driveLetter:', targetPath],
-        runInShell: true,
-        expectExitCode: null,
-      );
-      if (result == 0) {
-        logger.info('Created drive mapping: $driveLetter: -> $targetPath');
-        return true;
-      } else {
-        logger.warning(
-          'Failed to create drive mapping: $driveLetter: -> $targetPath',
-        );
-        return false;
-      }
-    } catch (e) {
-      logger.warning(
-        'Error while creating drive mapping: $driveLetter: -> $targetPath. '
-        'Error: $e',
-      );
-      return false;
-    }
-  }
 }

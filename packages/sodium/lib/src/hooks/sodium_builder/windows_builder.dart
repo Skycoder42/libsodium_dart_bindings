@@ -56,7 +56,8 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
   }) async {
     final scriptFile = await _createBuildScript(sourceDir);
     logger.debug('Building...');
-    await exec('cmd.exe', [
+    final comSpec = Platform.environment['COMSPEC'] ?? 'cmd.exe';
+    await exec(comSpec, [
       '/c',
       scriptFile.toFilePath(windows: true),
     ], workingDirectory: sourceDir);
@@ -240,6 +241,10 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
         {
           ?Platform.environment['PROGRAMFILES(X86)'],
           ?Platform.environment['PROGRAMFILES'],
+          if (Platform.environment['SYSTEMDRIVE'] case final systemDrive?) ...{
+            '$systemDrive\\Program Files (x86)',
+            '$systemDrive\\Program Files',
+          },
           r'C:\Program Files (x86)',
           r'C:\Program Files',
         }.map(
