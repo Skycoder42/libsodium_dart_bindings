@@ -138,9 +138,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
           'V=1',
           'AM_V_GEN=',
           'AM_V_at=',
-          'SHELL=${windowsBash.pathSegments.last}',
-          'CONFIG_SHELL=${windowsBash.pathSegments.last}',
-          'MAKESHELL=${windowsBash.pathSegments.last}',
+          r"LIBTOOL='$(top_builddir)/libtool'",
         ].join(' '),
       ];
       buildCommand = windowsBash.toFilePath();
