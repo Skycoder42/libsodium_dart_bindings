@@ -249,7 +249,7 @@ abstract base class SodiumBuilder {
       logger
         ..warning(e.message)
         ..warning('Attempting to extract to a temporary directory instead...');
-      final tempDir = await Directory.systemTemp.createTemp();
+      final tempDir = await Directory.systemTemp.createTemp('sodium_');
       await Extractor.extractToDisk(sourceArchive, tempDir.uri);
       logger.debug('Source files extracted successfully!');
       return tempDir;
