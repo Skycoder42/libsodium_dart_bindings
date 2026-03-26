@@ -126,8 +126,11 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
   ) async {
     var buildCommand = 'make';
     var buildArguments = ['-j${Platform.numberOfProcessors}', 'install'];
+    var buildEnv = env;
 
     if (windowsBash != null) {
+      logger.warning(Platform.environment.toString());
+
       buildArguments = [
         '-lc',
         [
@@ -139,6 +142,11 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
         ].join(' '),
       ];
       buildCommand = windowsBash.toFilePath();
+      buildEnv = {
+        ...buildEnv,
+        'SHELL': windowsBash.pathSegments.last,
+        'CONFIG_SHELL': windowsBash.pathSegments.last,
+      };
     }
 
     await exec(
