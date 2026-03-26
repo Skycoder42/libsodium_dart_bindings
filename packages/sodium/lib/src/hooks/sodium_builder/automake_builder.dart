@@ -95,17 +95,10 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
       ...configureArgs,
       '--prefix=${installDirUri.toBashSafePath()}',
     ];
-    var buildEnv = env;
 
     if (windowsBash != null) {
       buildArguments = [buildCommand, ...buildArguments];
       buildCommand = windowsBash.toFilePath();
-      buildEnv = {
-        ...buildEnv,
-        'SHELL': windowsBash.pathSegments.last,
-        'CONFIG_SHELL': windowsBash.pathSegments.last,
-        'MAKESHELL': windowsBash.pathSegments.last,
-      };
     }
 
     try {
@@ -113,7 +106,7 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
         buildCommand,
         buildArguments,
         workingDirectory: sourceDir,
-        environment: buildEnv,
+        environment: env,
       );
     } catch (_) {
       final configLogFile = File.fromUri(sourceDir.uri.resolve('config.log'));
@@ -133,7 +126,6 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
   ) async {
     var buildCommand = 'make';
     var buildArguments = ['-j${Platform.numberOfProcessors}', 'install'];
-    var buildEnv = env;
 
     if (windowsBash != null) {
       logger.warning(Platform.environment.toString());
@@ -152,19 +144,13 @@ abstract base class AutomakeBuilder extends SodiumBuilder {
         ].join(' '),
       ];
       buildCommand = windowsBash.toFilePath();
-      buildEnv = {
-        ...buildEnv,
-        'SHELL': windowsBash.pathSegments.last,
-        'CONFIG_SHELL': windowsBash.pathSegments.last,
-        'MAKESHELL': windowsBash.pathSegments.last,
-      };
     }
 
     await exec(
       buildCommand,
       buildArguments,
       workingDirectory: sourceDir,
-      environment: buildEnv,
+      environment: env,
     );
   }
 
