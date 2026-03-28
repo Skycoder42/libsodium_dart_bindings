@@ -74,7 +74,7 @@ Future<void> _mergeLicenses(Archive archive) async {
 Future<void> _updateHashes(Archive archive) async {
   final hashesFile = File('tool/libsodium/.hashes.json');
   final expectedHashes = hashesFile.existsSync()
-      ? json.decode(await hashesFile.readAsString()) as Map<String, String>
+      ? json.decode(await hashesFile.readAsString()) as Map<String, dynamic>
       : null;
 
   final newHashes = <String, String>{};
