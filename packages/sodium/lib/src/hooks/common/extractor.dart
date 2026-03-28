@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
@@ -118,25 +119,28 @@ sealed class Extractor {
     }
   }
 
-  static Stream<List<int>> extractSingleFile(
-    Uri archiveUri,
-    String fileInArchive,
-  ) async* {
-    final archive = extractArchive(archiveUri);
-    try {
-      final archiveFile = archive.files.firstWhere(
-        (file) => file.isFile && file.name == fileInArchive,
-        orElse: () => throw Exception(
-          'File "$fileInArchive" not found in archive: $archiveUri',
-        ),
-      );
-
-      yield archiveFile.content;
-    } finally {
-      await archive.clear();
-    }
-  }
-
   static bool _isWithinOutputPath(String outputDir, String filePath) =>
       path.isWithin(path.canonicalize(outputDir), path.canonicalize(filePath));
+}
+
+extension ArchiveX on Archive {
+  Iterable<String> readAsLines(String path) {
+    final file = find(path);
+    if (file == null) {
+      throw Exception('File not found: $path');
+    }
+    if (!file.isFile) {
+      throw Exception('Archive entry is not a file: $path');
+    }
+    final content = file.getContent();
+    if (content == null) {
+      throw Exception('File has no content: $path');
+    }
+
+    try {
+      return LineSplitter.split(content.readString());
+    } finally {
+      content.closeSync();
+    }
+  }
 }
