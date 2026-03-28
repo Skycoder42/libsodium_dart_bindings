@@ -27,10 +27,10 @@ Future<void> main() => Github.runZoned(() async {
     () => Extractor.extractArchive(archiveUri),
   );
 
-  // await Github.logGroupAsync(
-  //   'Generate merged license file',
-  //   () => _mergeLicenses(archive),
-  // );
+  await Github.logGroupAsync(
+    'Generate merged license file',
+    () => _mergeLicenses(archive),
+  );
 
   await Github.logGroupAsync(
     'Update file hashes',
@@ -72,12 +72,27 @@ Future<void> _mergeLicenses(Archive archive) async {
 }
 
 Future<void> _updateHashes(Archive archive) async {
+  final hashesFile = File('tool/libsodium/.hashes.json');
+  final expectedHashes = hashesFile.existsSync()
+      ? json.decode(await hashesFile.readAsString()) as Map<String, String>
+      : null;
+
+  final newHashes = <String, String>{};
+  final modifiedFiles = <String>[];
   for (final path in _filesToHash) {
     final fileData = archive.find(path)?.readBytes();
     if (fileData == null) {
       throw Exception('File not found or has no data: $path');
     }
-    final digest = sha512.convert(fileData);
-    print('$digest  $path');
+    final digest = sha512.convert(fileData).toString();
+    newHashes[path] = digest;
+
+    if (digest != expectedHashes?[path]) {
+      Github.logNotice('Upstream file has been modified: $path');
+      modifiedFiles.add(path);
+    }
   }
+
+  await hashesFile.writeAsString(json.encode(newHashes));
+  await Github.env.setOutput('modified-files', json.encode(modifiedFiles));
 }

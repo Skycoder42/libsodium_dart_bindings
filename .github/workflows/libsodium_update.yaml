@@ -37,9 +37,10 @@ jobs:
         name: Check if upstream stable archives have been update
         run: dart run tool/libsodium/detect_modified.dart
         working-directory: packages/sodium
-      - name: Update merged license
+      - id: sync-changes
+        name: Update merged license
         if: steps.check.outputs.modified == 'true'
-        run: dart run tool/libsodium/merge_licenses.dart
+        run: dart run tool/libsodium/sync_libsodium_changes.dart
         working-directory: packages/sodium
       - name: Update changelog and bump build number
         if: steps.check.outputs.modified == 'true'
@@ -62,6 +63,7 @@ jobs:
           body: |
             Upstream archive for libsodium v${{ steps.check.outputs.version }} has changed!
             The new timestamp is: `${{ steps.check.outputs.last-modified }}`
+            Modified upstream files: ${{ steps.sync-changes.outputs.modified-files }}
           token: ${{ secrets.GH_PAT }}
       - name: Mention assignees
         if: steps.check.outputs.modified == 'true'

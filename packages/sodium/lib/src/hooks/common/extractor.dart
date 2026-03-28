@@ -123,6 +123,7 @@ sealed class Extractor {
       path.isWithin(path.canonicalize(outputDir), path.canonicalize(filePath));
 }
 
+@internal
 extension ArchiveX on Archive {
   Iterable<String> readAsLines(String path) {
     final file = find(path);
