@@ -20,6 +20,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      actions: write
     env:
       NIX_SKIP_SODIUM_BUILD_HOOKS: 1
     steps:
