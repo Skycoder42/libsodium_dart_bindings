@@ -16,6 +16,7 @@ jobs:
   update_if_modified:
     name: Check if binaries need to be updated
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     permissions:
       contents: write
       pull-requests: write
@@ -38,7 +39,7 @@ jobs:
         run: dart run tool/libsodium/detect_modified.dart
         working-directory: packages/sodium
       - id: sync-changes
-        name: Update merged license
+        name: Synchronize upstream changes
         if: steps.check.outputs.modified == 'true'
         run: dart run tool/libsodium/sync_libsodium_changes.dart
         working-directory: packages/sodium
@@ -50,24 +51,16 @@ jobs:
           dart pub global run dart_test_tools:cider bump build
           dart pub global run dart_test_tools:cider release
         working-directory: packages/sodium
-      - id: create-pull-request
-        name: Create Pull Request
+      - name: Create validated pull request
         if: steps.check.outputs.modified == 'true'
-        uses: peter-evans/create-pull-request@v8
+        uses: Skycoder42/dart_test_tools/.github/actions/create-validated-pr@main
         with:
-          commit-message: Update last-modified.txt
-          branch: last-modified-${{ github.run_id }}
-          delete-branch: true
-          assignees: Skycoder42
-          title: Bump version for new stable libsodium
-          body: |
+          prBranchName: last-modified-${{ github.run_id }}
+          prCommitMessage: Update last-modified.txt
+          prTitle: Bump version for new stable libsodium
+          prBody: |
             Upstream archive for libsodium v${{ steps.check.outputs.version }} has changed!
             The new timestamp is: `${{ steps.check.outputs.last-modified }}`
             Modified upstream files: ${{ steps.sync-changes.outputs.modified-files }}
-          token: ${{ secrets.GH_PAT }}
-      - name: Mention assignees
-        if: steps.check.outputs.modified == 'true'
-        uses: thollander/actions-comment-pull-request@v3
-        with:
-          pr-number: ${{ steps.create-pull-request.outputs.pull-request-number }}
-          message: Your review has been requested @Skycoder42
+          validationWorkflow: sodium_libs_ci.yaml
+          validationTimeout: 7200

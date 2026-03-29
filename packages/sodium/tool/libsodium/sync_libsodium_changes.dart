@@ -59,7 +59,7 @@ Future<void> _mergeLicenses(Archive archive) async {
       ..writeln('libsodium')
       ..writeln();
 
-    Github.logInfo('Adding libsodium license from archive: $archive');
+    Github.logInfo('Adding libsodium license from archive');
     for (final line in libsodiumLicenseLines) {
       final cleanLine = line.replaceFirst(_commentRegExp, '');
       packageLicenseSink.writeln(cleanLine);

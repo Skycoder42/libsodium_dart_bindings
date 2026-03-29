@@ -28,8 +28,10 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/release.yml@main
     needs:
       - ci
+    permissions:
+      contents: write
+      actions: write
     with:
       workingDirectory: packages/sodium_libs
       tagPrefix: sodium_libs-v
-    secrets:
-      githubToken: ${{ secrets.GH_PAT }}
+      publishWorkflow: sodium_libs_cd.yml

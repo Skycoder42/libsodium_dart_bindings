@@ -1,9 +1,12 @@
 name: CD - Publish to pub.dev
 
 on:
-  push:
-    tags:
-      - "sodium_libs-v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: The version to be deployed
+        required: true
 
 jobs:
   publish:
@@ -13,6 +16,7 @@ jobs:
       id-token: write
     with:
       tagPrefix: sodium_libs-v
+      version: ${{ inputs.version }}
       flutter: true
       workingDirectory: packages/sodium_libs
       env: >-
