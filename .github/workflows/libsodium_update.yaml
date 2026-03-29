@@ -63,5 +63,5 @@ jobs:
             Upstream archive for libsodium v${{ steps.check.outputs.version }} has changed!
             The new timestamp is: `${{ steps.check.outputs.last-modified }}`
             Modified upstream files: ${{ steps.sync-changes.outputs.modified-files }}
-          validationWorkflow: sodium_libs_ci.yaml
+          validationWorkflow: sodium_ci.yaml
           validationTimeout: 7200
