@@ -94,5 +94,9 @@ Future<void> _updateHashes(Archive archive) async {
   }
 
   await hashesFile.writeAsString(json.encode(newHashes));
-  await Github.env.setOutput('modified-files', json.encode(modifiedFiles));
+  await Github.env.setOutput(
+    'modified-files',
+    multiline: true,
+    modifiedFiles.map((f) => '\n- $f').join(),
+  );
 }
