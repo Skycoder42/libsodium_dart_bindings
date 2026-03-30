@@ -6,10 +6,6 @@ import 'package:sodium/src/hooks/common/hook_logger.dart';
 import 'package:sodium/src/hooks/constants.dart';
 import 'package:sodium/src/hooks/sodium_builder/sodium_builder.dart';
 
-// TODOs:
-// - use windows and other tar
-// - check file changes
-
 void main(List<String> args) async => await build(args, (input, output) async {
   final logger = HookLogger(
     'sodium',

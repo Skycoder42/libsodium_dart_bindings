@@ -9,7 +9,7 @@ environment:
 resolution: workspace
 
 dependencies:
-  sodium: ^4.0.0+1
+  sodium: ^4.0.1
 
 dev_dependencies:
   dart_pre_commit: ^6.1.1+1

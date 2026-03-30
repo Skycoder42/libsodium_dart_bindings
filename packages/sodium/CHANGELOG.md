@@ -4,9 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.0+2] - 2026-03-29
+## [4.0.1] - 2026-03-30
 ### Changed
 - Updated embedded libsodium binaries
+
+### Fixed
+- Fixed Android builds on Windows (#192)
+  - Instead of using the predefined wrapper scripts, which only work on unix, automake is used directly
+  - Requires a usable non WSL bash installation on the compiler machine
+- Fixed Problem with Windows path length limitations (#193)
 
 ## [4.0.0+1] - 2026-03-17
 ### Changed
@@ -308,7 +314,7 @@ changed, only the name of the getter. (#61)
 ### Added
 - Initial stable release
 
-[4.0.0+2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.0+1...sodium-v4.0.0+2
+[4.0.1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.0+1...sodium-v4.0.1
 [4.0.0+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.0...sodium-v4.0.0+1
 [4.0.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.4.7...sodium-v4.0.0
 [3.4.7]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v3.4.6...sodium-v3.4.7
