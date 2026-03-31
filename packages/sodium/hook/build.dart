@@ -20,6 +20,14 @@ void main(List<String> args) async => await build(args, (input, output) async {
     return;
   }
 
+  if (!input.config.buildCodeAssets) {
+    logger.info(
+      'Skipping sodium build hooks because build code assets is disabled in '
+      'the config. Without building libsodium, the package will not work.',
+    );
+    return;
+  }
+
   final sourceArchive = input.packageRoot.resolveUri(
     HookConstants.libsodiumArchive,
   );
