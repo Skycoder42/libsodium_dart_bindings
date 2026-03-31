@@ -1,4 +1,4 @@
-name: Update libsodium
+name: "[sodium] Update libsodium"
 
 on:
   workflow_dispatch:

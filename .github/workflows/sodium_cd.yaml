@@ -1,4 +1,4 @@
-name: CD - Publish to pub.dev
+name: "[sodium] CD"
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: CI/CD for sodium
+name: "[sodium] CI"
 
 on:
   workflow_dispatch:
@@ -138,4 +138,4 @@ jobs:
     with:
       workingDirectory: packages/sodium
       tagPrefix: sodium-v
-      publishWorkflow: sodium_cd.yml
+      publishWorkflow: sodium_cd.yaml
