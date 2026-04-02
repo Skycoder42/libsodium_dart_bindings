@@ -17,6 +17,8 @@ Dart bindings for libsodium, supporting both the VM and JS without flutter depen
   * [Using the API](#using-the-api)
   * [Running computations in a separate isolate](#running-computations-in-a-separate-isolate)
     + [Using custom isolates](#using-custom-isolates)
+- [Cross-Compiling for Android on Windows](#cross-compiling-for-android-on-windows)
+  * [A usable bash installation must be present](#a-usable-bash-installation-must-be-present)
 - [Documentation](#documentation)
 
 <small><i><a href='https://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
@@ -279,6 +281,33 @@ static Future<TransferrableSecureKey> _deriveKey((Sodium, TransferrableSecureKey
   return transferrableDerivedKey;
 }
 ```
+
+## Cross-Compiling for Android on Windows
+Cross compiling for android on windows can be somewhat challenging, as libsodium makes use of automake - which is
+not guaranteed to work on windows. However, the package attempts to work around this issue by applying a number of
+tests and tricks to get the build to work. However, I cannot guarantee that it will work on every windows machine.
+
+For now, only one requirement (besides having the Android NDK and SDK correctly set up) is:
+
+### A usable bash installation must be present
+This means ideally Git Bash, allthough other variants may work as well. What is explicitly not supported is a bash
+that is part of a WSL installation. If you see an exception like this:
+
+```
+Exception: No usable bash.exe found on Windows. Install Git for Windows (preferred), MSYS2, or Cygwin.
+Found only unsupported bash launchers such as WSL or Windows App aliases.
+```
+
+Then your system does not have a usable bash installed or it is not available from `PATH`. My recommendation is to
+install https://git-scm.com/install/windows. After it was installed, make sure your `PATH` contains the following
+entry (The path may differ if you do not install programs to `C:\Program Files` by default). You might need to
+reboot your system after making these changes.
+
+```
+C:\Program Files\Git\bin
+```
+
+**Important:** Double check that `\bin` is at the end of the path. Just adding `...\Git` will *not* work.
 
 ## Documentation
 The documentation is available at https://pub.dev/documentation/sodium/latest/. A full example can be found at
