@@ -1,0 +1,95 @@
+// ignore_for_file: unnecessary_lambdas to catch member access errors
+
+import 'dart:js_interop';
+
+import 'package:meta/meta.dart';
+
+import '../../api/secure_key.dart';
+import '../bindings/js_error.dart';
+import '../bindings/sodium.js.dart';
+import 'aead_base_js.dart';
+import 'secure_key_js.dart';
+
+/// @nodoc
+@internal
+class AeadAegis256JS extends AeadBaseJS {
+  /// @nodoc
+  AeadAegis256JS(super.sodium);
+
+  @override
+  int get keyBytes => sodium.crypto_aead_aegis256_KEYBYTES;
+
+  @override
+  int get nonceBytes => sodium.crypto_aead_aegis256_NPUBBYTES;
+
+  @override
+  int get aBytes => sodium.crypto_aead_aegis256_ABYTES;
+
+  @override
+  SecureKey keygen() => SecureKeyJS(
+    sodium,
+    jsErrorWrap(() => sodium.crypto_aead_aegis256_keygen()),
+  );
+
+  @override
+  JSUint8Array internalEncrypt(
+    JSUint8Array message,
+    JSUint8Array? additionalData,
+    JSUint8Array? secretNonce,
+    JSUint8Array publicNonce,
+    JSUint8Array key,
+  ) => sodium.crypto_aead_aegis256_encrypt(
+    message,
+    additionalData,
+    secretNonce,
+    publicNonce,
+    key,
+  );
+
+  @override
+  JSUint8Array internalDecrypt(
+    JSUint8Array? secretNonce,
+    JSUint8Array ciphertext,
+    JSUint8Array? additionalData,
+    JSUint8Array publicNonce,
+    JSUint8Array key,
+  ) => sodium.crypto_aead_aegis256_decrypt(
+    secretNonce,
+    ciphertext,
+    additionalData,
+    publicNonce,
+    key,
+  );
+
+  @override
+  CryptoBox internalEncryptDetached(
+    JSUint8Array message,
+    JSUint8Array? additionalData,
+    JSUint8Array? secretNonce,
+    JSUint8Array publicNonce,
+    JSUint8Array key,
+  ) => sodium.crypto_aead_aegis256_encrypt_detached(
+    message,
+    additionalData,
+    secretNonce,
+    publicNonce,
+    key,
+  );
+
+  @override
+  JSUint8Array internalDecryptDetached(
+    JSUint8Array? secretNonce,
+    JSUint8Array ciphertext,
+    JSUint8Array mac,
+    JSUint8Array? additionalData,
+    JSUint8Array publicNonce,
+    JSUint8Array key,
+  ) => sodium.crypto_aead_aegis256_decrypt_detached(
+    secretNonce,
+    ciphertext,
+    mac,
+    additionalData,
+    publicNonce,
+    key,
+  );
+}

@@ -12,6 +12,7 @@ import '../../api/secret_stream.dart';
 import '../../api/short_hash.dart';
 import '../../api/sign.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
+import 'aead_aegis256_ffi.dart';
 import 'aead_chacha20poly1305_ffi.dart';
 import 'aead_xchacha20poly1305ietf_ffi.dart';
 import 'auth_ffi.dart';
@@ -46,6 +47,9 @@ class CryptoFFI implements Crypto {
   late final Aead aeadXChaCha20Poly1305IETF = AeadXChaCha20Poly1305IETFFFI(
     sodium,
   );
+
+  @override
+  late final Aead aeadAegis256 = AeadAegis256FFI(sodium);
 
   @override
   late final Auth auth = AuthFFI(sodium);

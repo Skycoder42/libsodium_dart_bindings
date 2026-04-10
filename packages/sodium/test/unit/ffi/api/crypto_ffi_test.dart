@@ -2,6 +2,7 @@
 library;
 
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/ffi/api/aead_aegis256_ffi.dart';
 import 'package:sodium/src/ffi/api/aead_chacha20poly1305_ffi.dart';
 import 'package:sodium/src/ffi/api/aead_xchacha20poly1305ietf_ffi.dart';
 import 'package:sodium/src/ffi/api/auth_ffi.dart';
@@ -68,6 +69,13 @@ void main() {
       );
     },
   );
+
+  test('aeadAegis256 returns AeadAegis256FFI instance', () {
+    expect(
+      sut.aeadAegis256,
+      isA<AeadAegis256FFI>().having((p) => p.sodium, 'sodium', mockSodium),
+    );
+  });
 
   test('auth returns AuthFFI instance', () {
     expect(

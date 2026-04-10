@@ -38,6 +38,13 @@ abstract class Crypto {
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction
   Aead get aeadXChaCha20Poly1305IETF;
 
+  /// An instance of [Aead].
+  ///
+  /// This provides all APIs that start with `crypto_aead_aegis256`.
+  ///
+  /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/aegis-256
+  Aead get aeadAegis256;
+
   /// An instance of [Auth].
   ///
   /// This provides all APIs that start with `crypto_auth`.

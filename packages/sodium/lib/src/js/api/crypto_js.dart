@@ -12,6 +12,7 @@ import '../../api/secret_stream.dart';
 import '../../api/short_hash.dart';
 import '../../api/sign.dart';
 import '../bindings/sodium.js.dart' hide SecretBox;
+import 'aead_aegis256_js.dart';
 import 'aead_chacha20poly1305_js.dart';
 import 'aead_xchacha20poly1305ietf_js.dart';
 import 'auth_js.dart';
@@ -46,6 +47,9 @@ class CryptoJS implements Crypto {
   late final Aead aeadXChaCha20Poly1305IETF = AeadXChaCha20Poly1305IEFTJS(
     sodium,
   );
+
+  @override
+  late final Aead aeadAegis256 = AeadAegis256JS(sodium);
 
   @override
   late final Auth auth = AuthJS(sodium);

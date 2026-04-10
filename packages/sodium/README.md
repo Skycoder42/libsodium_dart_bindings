@@ -67,6 +67,7 @@ API based on libsodium version: *1.0.22*
  crypto_aead_...              | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead
  &gt; _xchacha20poly1305_ietf | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction
  &gt; _chacha20poly1305       | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/original_chacha20-poly1305_construction
+ &gt; _aegis256               | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/aegis-256
  crypto_auth                  | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication
  crypto_box                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption
  crypto_sign                  | ✔️   | ✔️  | ➕   | https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures

@@ -2,6 +2,7 @@
 library;
 
 import 'package:mocktail/mocktail.dart';
+import 'package:sodium/src/js/api/aead_aegis256_js.dart';
 import 'package:sodium/src/js/api/aead_chacha20poly1305_js.dart';
 import 'package:sodium/src/js/api/aead_xchacha20poly1305ietf_js.dart';
 import 'package:sodium/src/js/api/auth_js.dart';
@@ -67,6 +68,13 @@ void main() {
       );
     },
   );
+
+  test('aeadAegis256 returns AeadAegis256JS instance', () {
+    expect(
+      sut.aeadAegis256,
+      isA<AeadAegis256JS>().having((p) => p.sodium, 'sodium', sut.sodium),
+    );
+  });
 
   test('auth returns AuthJS instance', () {
     expect(
