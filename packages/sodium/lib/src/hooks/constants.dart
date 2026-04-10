@@ -14,8 +14,8 @@ class LibsodiumVersion {
 @internal
 sealed class HookConstants {
   static const libsodiumVersion = LibsodiumVersion._(
-    ffi: '1.0.21',
-    js: '0.8.2',
+    ffi: '1.0.22',
+    js: '0.8.3',
   );
 
   static const libsodiumSigningKey =

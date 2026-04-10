@@ -1750,6 +1750,68 @@ class LibSodiumFFI {
   _i1.Pointer<_i1.Char> crypto_hash_primitive() => _i2.crypto_hash_primitive();
 
   @pragma('vm:prefer-inline')
+  int crypto_hash_sha3256_statebytes() => _i2.crypto_hash_sha3256_statebytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3256_bytes() => _i2.crypto_hash_sha3256_bytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3256(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_hash_sha3256(out, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3256_init(
+    _i1.Pointer<_i2.crypto_hash_sha3256_state> state,
+  ) => _i2.crypto_hash_sha3256_init(state);
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3256_update(
+    _i1.Pointer<_i2.crypto_hash_sha3256_state> state,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_hash_sha3256_update(state, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3256_final(
+    _i1.Pointer<_i2.crypto_hash_sha3256_state> state,
+    _i1.Pointer<_i1.UnsignedChar> out,
+  ) => _i2.crypto_hash_sha3256_final(state, out);
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3512_statebytes() => _i2.crypto_hash_sha3512_statebytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3512_bytes() => _i2.crypto_hash_sha3512_bytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3512(
+    _i1.Pointer<_i1.UnsignedChar> out,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_hash_sha3512(out, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3512_init(
+    _i1.Pointer<_i2.crypto_hash_sha3512_state> state,
+  ) => _i2.crypto_hash_sha3512_init(state);
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3512_update(
+    _i1.Pointer<_i2.crypto_hash_sha3512_state> state,
+    _i1.Pointer<_i1.UnsignedChar> in$,
+    int inlen,
+  ) => _i2.crypto_hash_sha3512_update(state, in$, inlen);
+
+  @pragma('vm:prefer-inline')
+  int crypto_hash_sha3512_final(
+    _i1.Pointer<_i2.crypto_hash_sha3512_state> state,
+    _i1.Pointer<_i1.UnsignedChar> out,
+  ) => _i2.crypto_hash_sha3512_final(state, out);
+
+  @pragma('vm:prefer-inline')
   int crypto_ipcrypt_bytes() => _i2.crypto_ipcrypt_bytes();
 
   @pragma('vm:prefer-inline')
@@ -2030,6 +2092,159 @@ class LibSodiumFFI {
     _i1.Pointer<_i2.crypto_kdf_hkdf_sha512_state> state,
     _i1.Pointer<_i1.UnsignedChar> prk,
   ) => _i2.crypto_kdf_hkdf_sha512_extract_final(state, prk);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_publickeybytes() =>
+      _i2.crypto_kem_xwing_publickeybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_secretkeybytes() =>
+      _i2.crypto_kem_xwing_secretkeybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_ciphertextbytes() =>
+      _i2.crypto_kem_xwing_ciphertextbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_sharedsecretbytes() =>
+      _i2.crypto_kem_xwing_sharedsecretbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_seedbytes() => _i2.crypto_kem_xwing_seedbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_seed_keypair(
+    _i1.Pointer<_i1.UnsignedChar> pk,
+    _i1.Pointer<_i1.UnsignedChar> sk,
+    _i1.Pointer<_i1.UnsignedChar> seed,
+  ) => _i2.crypto_kem_xwing_seed_keypair(pk, sk, seed);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_keypair(
+    _i1.Pointer<_i1.UnsignedChar> pk,
+    _i1.Pointer<_i1.UnsignedChar> sk,
+  ) => _i2.crypto_kem_xwing_keypair(pk, sk);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_enc(
+    _i1.Pointer<_i1.UnsignedChar> ct,
+    _i1.Pointer<_i1.UnsignedChar> ss,
+    _i1.Pointer<_i1.UnsignedChar> pk,
+  ) => _i2.crypto_kem_xwing_enc(ct, ss, pk);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_enc_deterministic(
+    _i1.Pointer<_i1.UnsignedChar> ct,
+    _i1.Pointer<_i1.UnsignedChar> ss,
+    _i1.Pointer<_i1.UnsignedChar> pk,
+    _i1.Pointer<_i1.UnsignedChar> seed,
+  ) => _i2.crypto_kem_xwing_enc_deterministic(ct, ss, pk, seed);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_xwing_dec(
+    _i1.Pointer<_i1.UnsignedChar> ss,
+    _i1.Pointer<_i1.UnsignedChar> ct,
+    _i1.Pointer<_i1.UnsignedChar> sk,
+  ) => _i2.crypto_kem_xwing_dec(ss, ct, sk);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_publickeybytes() => _i2.crypto_kem_publickeybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_secretkeybytes() => _i2.crypto_kem_secretkeybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_ciphertextbytes() => _i2.crypto_kem_ciphertextbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_sharedsecretbytes() => _i2.crypto_kem_sharedsecretbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_seedbytes() => _i2.crypto_kem_seedbytes();
+
+  @pragma('vm:prefer-inline')
+  _i1.Pointer<_i1.Char> crypto_kem_primitive() => _i2.crypto_kem_primitive();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_seed_keypair(
+    _i1.Pointer<_i1.UnsignedChar> pk,
+    _i1.Pointer<_i1.UnsignedChar> sk,
+    _i1.Pointer<_i1.UnsignedChar> seed,
+  ) => _i2.crypto_kem_seed_keypair(pk, sk, seed);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_keypair(
+    _i1.Pointer<_i1.UnsignedChar> pk,
+    _i1.Pointer<_i1.UnsignedChar> sk,
+  ) => _i2.crypto_kem_keypair(pk, sk);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_enc(
+    _i1.Pointer<_i1.UnsignedChar> ct,
+    _i1.Pointer<_i1.UnsignedChar> ss,
+    _i1.Pointer<_i1.UnsignedChar> pk,
+  ) => _i2.crypto_kem_enc(ct, ss, pk);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_dec(
+    _i1.Pointer<_i1.UnsignedChar> ss,
+    _i1.Pointer<_i1.UnsignedChar> ct,
+    _i1.Pointer<_i1.UnsignedChar> sk,
+  ) => _i2.crypto_kem_dec(ss, ct, sk);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_publickeybytes() =>
+      _i2.crypto_kem_mlkem768_publickeybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_secretkeybytes() =>
+      _i2.crypto_kem_mlkem768_secretkeybytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_ciphertextbytes() =>
+      _i2.crypto_kem_mlkem768_ciphertextbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_sharedsecretbytes() =>
+      _i2.crypto_kem_mlkem768_sharedsecretbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_seedbytes() => _i2.crypto_kem_mlkem768_seedbytes();
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_seed_keypair(
+    _i1.Pointer<_i1.UnsignedChar> pk,
+    _i1.Pointer<_i1.UnsignedChar> sk,
+    _i1.Pointer<_i1.UnsignedChar> seed,
+  ) => _i2.crypto_kem_mlkem768_seed_keypair(pk, sk, seed);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_keypair(
+    _i1.Pointer<_i1.UnsignedChar> pk,
+    _i1.Pointer<_i1.UnsignedChar> sk,
+  ) => _i2.crypto_kem_mlkem768_keypair(pk, sk);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_enc(
+    _i1.Pointer<_i1.UnsignedChar> ct,
+    _i1.Pointer<_i1.UnsignedChar> ss,
+    _i1.Pointer<_i1.UnsignedChar> pk,
+  ) => _i2.crypto_kem_mlkem768_enc(ct, ss, pk);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_enc_deterministic(
+    _i1.Pointer<_i1.UnsignedChar> ct,
+    _i1.Pointer<_i1.UnsignedChar> ss,
+    _i1.Pointer<_i1.UnsignedChar> pk,
+    _i1.Pointer<_i1.UnsignedChar> seed,
+  ) => _i2.crypto_kem_mlkem768_enc_deterministic(ct, ss, pk, seed);
+
+  @pragma('vm:prefer-inline')
+  int crypto_kem_mlkem768_dec(
+    _i1.Pointer<_i1.UnsignedChar> ss,
+    _i1.Pointer<_i1.UnsignedChar> ct,
+    _i1.Pointer<_i1.UnsignedChar> sk,
+  ) => _i2.crypto_kem_mlkem768_dec(ss, ct, sk);
 
   @pragma('vm:prefer-inline')
   int crypto_kx_publickeybytes() => _i2.crypto_kx_publickeybytes();
@@ -3657,8 +3872,8 @@ class LibSodiumFFI {
   int sodium_ip2bin(
     _i1.Pointer<_i1.UnsignedChar> bin,
     _i1.Pointer<_i1.Char> ip,
-    int ip_len,
-  ) => _i2.sodium_ip2bin(bin, ip, ip_len);
+    int ip_len_,
+  ) => _i2.sodium_ip2bin(bin, ip, ip_len_);
 
   @pragma('vm:prefer-inline')
   _i1.Pointer<_i1.Char> sodium_bin2ip(

@@ -39,7 +39,10 @@ Future<Uri> _ffigen() async {
       dartFile: outUri,
       style: const NativeExternalBindings(assetId: 'package:sodium/libsodium'),
     ),
-    headers: Headers(entryPoints: [locationUri.resolve('sodium.h')]),
+    headers: Headers(
+      entryPoints: [locationUri.resolve('sodium.h')],
+      compilerOptions: ['-I/usr/lib/clang/22/include'],
+    ),
     macros: const Macros(include: _matchesLibsodium),
     globals: const Globals(include: _matchesLibsodium),
     enums: const Enums(include: _matchesLibsodium),

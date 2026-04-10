@@ -1,0 +1,7 @@
+{
+  "name": "KemEncResult",
+  "members": {
+    "ciphertext": "JSUint8Array",
+    "sharedSecret": "JSUint8Array"
+  }
+}

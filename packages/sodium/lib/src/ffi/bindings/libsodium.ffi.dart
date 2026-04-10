@@ -2195,6 +2195,102 @@ external int crypto_hash(
 external ffi.Pointer<ffi.Char> crypto_hash_primitive();
 
 @ffi.Native<ffi.Size Function()>()
+external int crypto_hash_sha3256_statebytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_hash_sha3256_bytes();
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_hash_sha3256(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<ffi.Int Function(ffi.Pointer<crypto_hash_sha3256_state>)>()
+external int crypto_hash_sha3256_init(
+  ffi.Pointer<crypto_hash_sha3256_state> state,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_hash_sha3256_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_hash_sha3256_update(
+  ffi.Pointer<crypto_hash_sha3256_state> state,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_hash_sha3256_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_hash_sha3256_final(
+  ffi.Pointer<crypto_hash_sha3256_state> state,
+  ffi.Pointer<ffi.UnsignedChar> out,
+);
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_hash_sha3512_statebytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_hash_sha3512_bytes();
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_hash_sha3512(
+  ffi.Pointer<ffi.UnsignedChar> out,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<ffi.Int Function(ffi.Pointer<crypto_hash_sha3512_state>)>()
+external int crypto_hash_sha3512_init(
+  ffi.Pointer<crypto_hash_sha3512_state> state,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_hash_sha3512_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.UnsignedLongLong,
+  )
+>()
+external int crypto_hash_sha3512_update(
+  ffi.Pointer<crypto_hash_sha3512_state> state,
+  ffi.Pointer<ffi.UnsignedChar> in$,
+  int inlen,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<crypto_hash_sha3512_state>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_hash_sha3512_final(
+  ffi.Pointer<crypto_hash_sha3512_state> state,
+  ffi.Pointer<ffi.UnsignedChar> out,
+);
+
+@ffi.Native<ffi.Size Function()>()
 external int crypto_ipcrypt_bytes();
 
 @ffi.Native<ffi.Size Function()>()
@@ -2584,6 +2680,225 @@ external int crypto_kdf_hkdf_sha512_extract_update(
 external int crypto_kdf_hkdf_sha512_extract_final(
   ffi.Pointer<crypto_kdf_hkdf_sha512_state> state,
   ffi.Pointer<ffi.UnsignedChar> prk,
+);
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_xwing_publickeybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_xwing_secretkeybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_xwing_ciphertextbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_xwing_sharedsecretbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_xwing_seedbytes();
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_xwing_seed_keypair(
+  ffi.Pointer<ffi.UnsignedChar> pk,
+  ffi.Pointer<ffi.UnsignedChar> sk,
+  ffi.Pointer<ffi.UnsignedChar> seed,
+);
+
+@ffi.Native<
+  ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)
+>()
+external int crypto_kem_xwing_keypair(
+  ffi.Pointer<ffi.UnsignedChar> pk,
+  ffi.Pointer<ffi.UnsignedChar> sk,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_xwing_enc(
+  ffi.Pointer<ffi.UnsignedChar> ct,
+  ffi.Pointer<ffi.UnsignedChar> ss,
+  ffi.Pointer<ffi.UnsignedChar> pk,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_xwing_enc_deterministic(
+  ffi.Pointer<ffi.UnsignedChar> ct,
+  ffi.Pointer<ffi.UnsignedChar> ss,
+  ffi.Pointer<ffi.UnsignedChar> pk,
+  ffi.Pointer<ffi.UnsignedChar> seed,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_xwing_dec(
+  ffi.Pointer<ffi.UnsignedChar> ss,
+  ffi.Pointer<ffi.UnsignedChar> ct,
+  ffi.Pointer<ffi.UnsignedChar> sk,
+);
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_publickeybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_secretkeybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_ciphertextbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_sharedsecretbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_seedbytes();
+
+@ffi.Native<ffi.Pointer<ffi.Char> Function()>()
+external ffi.Pointer<ffi.Char> crypto_kem_primitive();
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_seed_keypair(
+  ffi.Pointer<ffi.UnsignedChar> pk,
+  ffi.Pointer<ffi.UnsignedChar> sk,
+  ffi.Pointer<ffi.UnsignedChar> seed,
+);
+
+@ffi.Native<
+  ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)
+>()
+external int crypto_kem_keypair(
+  ffi.Pointer<ffi.UnsignedChar> pk,
+  ffi.Pointer<ffi.UnsignedChar> sk,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_enc(
+  ffi.Pointer<ffi.UnsignedChar> ct,
+  ffi.Pointer<ffi.UnsignedChar> ss,
+  ffi.Pointer<ffi.UnsignedChar> pk,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_dec(
+  ffi.Pointer<ffi.UnsignedChar> ss,
+  ffi.Pointer<ffi.UnsignedChar> ct,
+  ffi.Pointer<ffi.UnsignedChar> sk,
+);
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_mlkem768_publickeybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_mlkem768_secretkeybytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_mlkem768_ciphertextbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_mlkem768_sharedsecretbytes();
+
+@ffi.Native<ffi.Size Function()>()
+external int crypto_kem_mlkem768_seedbytes();
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_mlkem768_seed_keypair(
+  ffi.Pointer<ffi.UnsignedChar> pk,
+  ffi.Pointer<ffi.UnsignedChar> sk,
+  ffi.Pointer<ffi.UnsignedChar> seed,
+);
+
+@ffi.Native<
+  ffi.Int Function(ffi.Pointer<ffi.UnsignedChar>, ffi.Pointer<ffi.UnsignedChar>)
+>()
+external int crypto_kem_mlkem768_keypair(
+  ffi.Pointer<ffi.UnsignedChar> pk,
+  ffi.Pointer<ffi.UnsignedChar> sk,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_mlkem768_enc(
+  ffi.Pointer<ffi.UnsignedChar> ct,
+  ffi.Pointer<ffi.UnsignedChar> ss,
+  ffi.Pointer<ffi.UnsignedChar> pk,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_mlkem768_enc_deterministic(
+  ffi.Pointer<ffi.UnsignedChar> ct,
+  ffi.Pointer<ffi.UnsignedChar> ss,
+  ffi.Pointer<ffi.UnsignedChar> pk,
+  ffi.Pointer<ffi.UnsignedChar> seed,
+);
+
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+    ffi.Pointer<ffi.UnsignedChar>,
+  )
+>()
+external int crypto_kem_mlkem768_dec(
+  ffi.Pointer<ffi.UnsignedChar> ss,
+  ffi.Pointer<ffi.UnsignedChar> ct,
+  ffi.Pointer<ffi.UnsignedChar> sk,
 );
 
 @ffi.Native<ffi.Size Function()>()
@@ -4714,7 +5029,7 @@ external int sodium_base642bin(
 external int sodium_ip2bin(
   ffi.Pointer<ffi.UnsignedChar> bin,
   ffi.Pointer<ffi.Char> ip,
-  int ip_len,
+  int ip_len_,
 );
 
 @ffi.Native<
@@ -5812,6 +6127,16 @@ final class crypto_generichash_blake2b_state extends ffi.Struct {
 
 typedef crypto_generichash_state = crypto_generichash_blake2b_state;
 
+final class crypto_hash_sha3256_state extends ffi.Struct {
+  @ffi.Array.multi([256])
+  external ffi.Array<ffi.UnsignedChar> opaque;
+}
+
+final class crypto_hash_sha3512_state extends ffi.Struct {
+  @ffi.Array.multi([256])
+  external ffi.Array<ffi.UnsignedChar> opaque;
+}
+
 final class crypto_kdf_hkdf_sha256_state extends ffi.Struct {
   external crypto_auth_hmacsha256_state st;
 }
@@ -5889,11 +6214,11 @@ final class randombytes_implementation extends ffi.Struct {
 
 const int SODIUM_SIZE_MAX = -1;
 
-const String SODIUM_VERSION_STRING = '1.0.21';
+const String SODIUM_VERSION_STRING = '1.0.22';
 
 const int SODIUM_LIBRARY_VERSION_MAJOR = 26;
 
-const int SODIUM_LIBRARY_VERSION_MINOR = 3;
+const int SODIUM_LIBRARY_VERSION_MINOR = 4;
 
 const int crypto_aead_aegis128l_KEYBYTES = 16;
 
@@ -6117,6 +6442,10 @@ const int crypto_hash_BYTES = 64;
 
 const String crypto_hash_PRIMITIVE = 'sha512';
 
+const int crypto_hash_sha3256_BYTES = 32;
+
+const int crypto_hash_sha3512_BYTES = 64;
+
 const int crypto_ipcrypt_BYTES = 16;
 
 const int crypto_ipcrypt_KEYBYTES = 16;
@@ -6170,6 +6499,38 @@ const int crypto_kdf_hkdf_sha512_KEYBYTES = 64;
 const int crypto_kdf_hkdf_sha512_BYTES_MIN = 0;
 
 const int crypto_kdf_hkdf_sha512_BYTES_MAX = 16320;
+
+const int crypto_kem_xwing_PUBLICKEYBYTES = 1216;
+
+const int crypto_kem_xwing_SECRETKEYBYTES = 32;
+
+const int crypto_kem_xwing_CIPHERTEXTBYTES = 1120;
+
+const int crypto_kem_xwing_SHAREDSECRETBYTES = 32;
+
+const int crypto_kem_xwing_SEEDBYTES = 32;
+
+const int crypto_kem_PUBLICKEYBYTES = 1216;
+
+const int crypto_kem_SECRETKEYBYTES = 32;
+
+const int crypto_kem_CIPHERTEXTBYTES = 1120;
+
+const int crypto_kem_SHAREDSECRETBYTES = 32;
+
+const int crypto_kem_SEEDBYTES = 32;
+
+const String crypto_kem_PRIMITIVE = 'xwing';
+
+const int crypto_kem_mlkem768_PUBLICKEYBYTES = 1184;
+
+const int crypto_kem_mlkem768_SECRETKEYBYTES = 2400;
+
+const int crypto_kem_mlkem768_CIPHERTEXTBYTES = 1088;
+
+const int crypto_kem_mlkem768_SHAREDSECRETBYTES = 32;
+
+const int crypto_kem_mlkem768_SEEDBYTES = 64;
 
 const int crypto_kx_PUBLICKEYBYTES = 32;
 

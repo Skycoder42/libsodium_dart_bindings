@@ -16,6 +16,8 @@ typedef XofShake128State = JSNumber;
 typedef XofShake256State = JSNumber;
 typedef XofTurboshake128State = JSNumber;
 typedef XofTurboshake256State = JSNumber;
+typedef HashSha3256State = JSNumber;
+typedef HashSha3512State = JSNumber;
 extension type CryptoBox._(JSObject _) implements JSObject {
   external CryptoBox({
     required JSUint8Array ciphertext,
@@ -34,14 +36,23 @@ extension type CryptoKX._(JSObject _) implements JSObject {
   external JSUint8Array get sharedRx;
   external JSUint8Array get sharedTx;
 }
+extension type KemEncResult._(JSObject _) implements JSObject {
+  external KemEncResult({
+    required JSUint8Array ciphertext,
+    required JSUint8Array sharedSecret,
+  });
+
+  external JSUint8Array get ciphertext;
+  external JSUint8Array get sharedSecret;
+}
 extension type KeyPair._(JSObject _) implements JSObject {
   external KeyPair({
-    required String keyType,
+    required String? keyType,
     required JSUint8Array privateKey,
     required JSUint8Array publicKey,
   });
 
-  external String get keyType;
+  external String? get keyType;
   external JSUint8Array get privateKey;
   external JSUint8Array get publicKey;
 }
@@ -187,6 +198,8 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external int get crypto_generichash_blake2b_SALTBYTES;
   external int get crypto_hash_BYTES;
   external int get crypto_hash_sha256_BYTES;
+  external int get crypto_hash_sha3256_BYTES;
+  external int get crypto_hash_sha3512_BYTES;
   external int get crypto_hash_sha512_BYTES;
   external int get crypto_ipcrypt_BYTES;
   external int get crypto_ipcrypt_KEYBYTES;
@@ -214,6 +227,22 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external int get crypto_kdf_hkdf_sha512_BYTES_MAX;
   external int get crypto_kdf_hkdf_sha512_BYTES_MIN;
   external int get crypto_kdf_hkdf_sha512_KEYBYTES;
+  external int get crypto_kem_CIPHERTEXTBYTES;
+  external String get crypto_kem_PRIMITIVE;
+  external int get crypto_kem_PUBLICKEYBYTES;
+  external int get crypto_kem_SECRETKEYBYTES;
+  external int get crypto_kem_SEEDBYTES;
+  external int get crypto_kem_SHAREDSECRETBYTES;
+  external int get crypto_kem_mlkem768_CIPHERTEXTBYTES;
+  external int get crypto_kem_mlkem768_PUBLICKEYBYTES;
+  external int get crypto_kem_mlkem768_SECRETKEYBYTES;
+  external int get crypto_kem_mlkem768_SEEDBYTES;
+  external int get crypto_kem_mlkem768_SHAREDSECRETBYTES;
+  external int get crypto_kem_xwing_CIPHERTEXTBYTES;
+  external int get crypto_kem_xwing_PUBLICKEYBYTES;
+  external int get crypto_kem_xwing_SECRETKEYBYTES;
+  external int get crypto_kem_xwing_SEEDBYTES;
+  external int get crypto_kem_xwing_SHAREDSECRETBYTES;
   external int get crypto_kx_PUBLICKEYBYTES;
   external int get crypto_kx_SECRETKEYBYTES;
   external int get crypto_kx_SEEDBYTES;
@@ -798,6 +827,24 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     HashSha256State state_address,
     JSUint8Array message_chunk,
   );
+  external JSUint8Array crypto_hash_sha3256(JSUint8Array message);
+  external JSUint8Array crypto_hash_sha3256_final(
+    HashSha3256State state_address,
+  );
+  external HashSha3256State crypto_hash_sha3256_init();
+  external void crypto_hash_sha3256_update(
+    HashSha3256State state_address,
+    JSUint8Array message_chunk,
+  );
+  external JSUint8Array crypto_hash_sha3512(JSUint8Array message);
+  external JSUint8Array crypto_hash_sha3512_final(
+    HashSha3512State state_address,
+  );
+  external HashSha3512State crypto_hash_sha3512_init();
+  external void crypto_hash_sha3512_update(
+    HashSha3512State state_address,
+    JSUint8Array message_chunk,
+  );
   external JSUint8Array crypto_hash_sha512(JSUint8Array message);
   external JSUint8Array crypto_hash_sha512_final(HashSha512State state_address);
   external HashSha512State crypto_hash_sha512_init();
@@ -850,6 +897,36 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     JSUint8Array key,
   );
   external JSUint8Array crypto_kdf_keygen();
+  external JSUint8Array crypto_kem_dec(
+    JSUint8Array ciphertext,
+    JSUint8Array privateKey,
+  );
+  external KemEncResult crypto_kem_enc(JSUint8Array publicKey);
+  external KeyPair crypto_kem_keypair();
+  external JSUint8Array crypto_kem_mlkem768_dec(
+    JSUint8Array ciphertext,
+    JSUint8Array privateKey,
+  );
+  external KemEncResult crypto_kem_mlkem768_enc(JSUint8Array publicKey);
+  external KemEncResult crypto_kem_mlkem768_enc_deterministic(
+    JSUint8Array publicKey,
+    JSUint8Array seed,
+  );
+  external KeyPair crypto_kem_mlkem768_keypair();
+  external KeyPair crypto_kem_mlkem768_seed_keypair(JSUint8Array seed);
+  external String crypto_kem_primitive();
+  external KeyPair crypto_kem_seed_keypair(JSUint8Array seed);
+  external JSUint8Array crypto_kem_xwing_dec(
+    JSUint8Array ciphertext,
+    JSUint8Array privateKey,
+  );
+  external KemEncResult crypto_kem_xwing_enc(JSUint8Array publicKey);
+  external KemEncResult crypto_kem_xwing_enc_deterministic(
+    JSUint8Array publicKey,
+    JSUint8Array seed,
+  );
+  external KeyPair crypto_kem_xwing_keypair();
+  external KeyPair crypto_kem_xwing_seed_keypair(JSUint8Array seed);
   external CryptoKX crypto_kx_client_session_keys(
     JSUint8Array clientPublicKey,
     JSUint8Array clientSecretKey,

@@ -285,6 +285,10 @@ abstract class _MockLibSodiumJS {
 
   int get crypto_hash_sha256_BYTES => throw UnimplementedError();
 
+  int get crypto_hash_sha3256_BYTES => throw UnimplementedError();
+
+  int get crypto_hash_sha3512_BYTES => throw UnimplementedError();
+
   int get crypto_hash_sha512_BYTES => throw UnimplementedError();
 
   int get crypto_ipcrypt_BYTES => throw UnimplementedError();
@@ -338,6 +342,38 @@ abstract class _MockLibSodiumJS {
   int get crypto_kdf_hkdf_sha512_BYTES_MIN => throw UnimplementedError();
 
   int get crypto_kdf_hkdf_sha512_KEYBYTES => throw UnimplementedError();
+
+  int get crypto_kem_CIPHERTEXTBYTES => throw UnimplementedError();
+
+  String get crypto_kem_PRIMITIVE => throw UnimplementedError();
+
+  int get crypto_kem_PUBLICKEYBYTES => throw UnimplementedError();
+
+  int get crypto_kem_SECRETKEYBYTES => throw UnimplementedError();
+
+  int get crypto_kem_SEEDBYTES => throw UnimplementedError();
+
+  int get crypto_kem_SHAREDSECRETBYTES => throw UnimplementedError();
+
+  int get crypto_kem_mlkem768_CIPHERTEXTBYTES => throw UnimplementedError();
+
+  int get crypto_kem_mlkem768_PUBLICKEYBYTES => throw UnimplementedError();
+
+  int get crypto_kem_mlkem768_SECRETKEYBYTES => throw UnimplementedError();
+
+  int get crypto_kem_mlkem768_SEEDBYTES => throw UnimplementedError();
+
+  int get crypto_kem_mlkem768_SHAREDSECRETBYTES => throw UnimplementedError();
+
+  int get crypto_kem_xwing_CIPHERTEXTBYTES => throw UnimplementedError();
+
+  int get crypto_kem_xwing_PUBLICKEYBYTES => throw UnimplementedError();
+
+  int get crypto_kem_xwing_SECRETKEYBYTES => throw UnimplementedError();
+
+  int get crypto_kem_xwing_SEEDBYTES => throw UnimplementedError();
+
+  int get crypto_kem_xwing_SHAREDSECRETBYTES => throw UnimplementedError();
 
   int get crypto_kx_PUBLICKEYBYTES => throw UnimplementedError();
 
@@ -1243,6 +1279,32 @@ abstract class _MockLibSodiumJS {
     JSUint8Array message_chunk,
   ) => throw UnimplementedError();
 
+  JSUint8Array crypto_hash_sha3256(JSUint8Array message) =>
+      throw UnimplementedError();
+
+  JSUint8Array crypto_hash_sha3256_final(HashSha3256State state_address) =>
+      throw UnimplementedError();
+
+  HashSha3256State crypto_hash_sha3256_init() => throw UnimplementedError();
+
+  void crypto_hash_sha3256_update(
+    HashSha3256State state_address,
+    JSUint8Array message_chunk,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_hash_sha3512(JSUint8Array message) =>
+      throw UnimplementedError();
+
+  JSUint8Array crypto_hash_sha3512_final(HashSha3512State state_address) =>
+      throw UnimplementedError();
+
+  HashSha3512State crypto_hash_sha3512_init() => throw UnimplementedError();
+
+  void crypto_hash_sha3512_update(
+    HashSha3512State state_address,
+    JSUint8Array message_chunk,
+  ) => throw UnimplementedError();
+
   JSUint8Array crypto_hash_sha512(JSUint8Array message) =>
       throw UnimplementedError();
 
@@ -1310,6 +1372,57 @@ abstract class _MockLibSodiumJS {
   ) => throw UnimplementedError();
 
   JSUint8Array crypto_kdf_keygen() => throw UnimplementedError();
+
+  JSUint8Array crypto_kem_dec(
+    JSUint8Array ciphertext,
+    JSUint8Array privateKey,
+  ) => throw UnimplementedError();
+
+  KemEncResult crypto_kem_enc(JSUint8Array publicKey) =>
+      throw UnimplementedError();
+
+  KeyPair crypto_kem_keypair() => throw UnimplementedError();
+
+  JSUint8Array crypto_kem_mlkem768_dec(
+    JSUint8Array ciphertext,
+    JSUint8Array privateKey,
+  ) => throw UnimplementedError();
+
+  KemEncResult crypto_kem_mlkem768_enc(JSUint8Array publicKey) =>
+      throw UnimplementedError();
+
+  KemEncResult crypto_kem_mlkem768_enc_deterministic(
+    JSUint8Array publicKey,
+    JSUint8Array seed,
+  ) => throw UnimplementedError();
+
+  KeyPair crypto_kem_mlkem768_keypair() => throw UnimplementedError();
+
+  KeyPair crypto_kem_mlkem768_seed_keypair(JSUint8Array seed) =>
+      throw UnimplementedError();
+
+  String crypto_kem_primitive() => throw UnimplementedError();
+
+  KeyPair crypto_kem_seed_keypair(JSUint8Array seed) =>
+      throw UnimplementedError();
+
+  JSUint8Array crypto_kem_xwing_dec(
+    JSUint8Array ciphertext,
+    JSUint8Array privateKey,
+  ) => throw UnimplementedError();
+
+  KemEncResult crypto_kem_xwing_enc(JSUint8Array publicKey) =>
+      throw UnimplementedError();
+
+  KemEncResult crypto_kem_xwing_enc_deterministic(
+    JSUint8Array publicKey,
+    JSUint8Array seed,
+  ) => throw UnimplementedError();
+
+  KeyPair crypto_kem_xwing_keypair() => throw UnimplementedError();
+
+  KeyPair crypto_kem_xwing_seed_keypair(JSUint8Array seed) =>
+      throw UnimplementedError();
 
   CryptoKX crypto_kx_client_session_keys(
     JSUint8Array clientPublicKey,

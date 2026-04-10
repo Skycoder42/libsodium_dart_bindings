@@ -79,6 +79,17 @@ class TypeMappingsLoader {
     'crypto_box_curve25519xchacha20poly1305_seed_keypair_result': TypeInfo(
       'KeyPair',
     ),
+    'crypto_kem_enc_result': TypeInfo('KemEncResult'),
+    'crypto_kem_keypair_result': TypeInfo('KeyPair'),
+    'crypto_kem_mlkem768_enc_result': TypeInfo('KemEncResult'),
+    'crypto_kem_mlkem768_enc_deterministic_result': TypeInfo('KemEncResult'),
+    'crypto_kem_mlkem768_keypair_result': TypeInfo('KeyPair'),
+    'crypto_kem_mlkem768_seed_keypair_result': TypeInfo('KeyPair'),
+    'crypto_kem_seed_keypair_result': TypeInfo('KeyPair'),
+    'crypto_kem_xwing_enc_result': TypeInfo('KemEncResult'),
+    'crypto_kem_xwing_enc_deterministic_result': TypeInfo('KemEncResult'),
+    'crypto_kem_xwing_keypair_result': TypeInfo('KeyPair'),
+    'crypto_kem_xwing_seed_keypair_result': TypeInfo('KeyPair'),
 
     // state typedefs
     'secretstream_xchacha20poly1305_state': TypeInfo(
@@ -127,6 +138,10 @@ class TypeMappingsLoader {
       typeDef: 'JSNumber',
     ),
     'xof_turboshake256_state_address': TypeInfo('XofTurboshake256State'),
+    'hash_sha3256_state': TypeInfo('HashSha3256State', typeDef: 'JSNumber'),
+    'hash_sha3256_state_address': TypeInfo('HashSha3256State'),
+    'hash_sha3512_state': TypeInfo('HashSha3512State', typeDef: 'JSNumber'),
+    'hash_sha3512_state_address': TypeInfo('HashSha3512State'),
 
     // hidden types
     'randombytes_implementation': TypeInfo('JSAny'),

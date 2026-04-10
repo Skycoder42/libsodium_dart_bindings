@@ -1,7 +1,7 @@
 {
   "name": "KeyPair",
   "members": {
-    "keyType": "String",
+    "keyType": "String?",
     "privateKey": "JSUint8Array",
     "publicKey": "JSUint8Array"
   }
