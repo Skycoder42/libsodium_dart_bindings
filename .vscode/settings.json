@@ -6,6 +6,7 @@
     "ffigen",
     "generichash",
     "jsgen",
+    "keypair",
     "nullptr",
     "pwhash",
     "scalarmult",
