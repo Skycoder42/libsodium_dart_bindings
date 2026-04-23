@@ -52,6 +52,23 @@ sealed class Extractor {
 
     final archive = extractArchive(archiveUri);
     try {
+      if (OS.current == .windows) {
+        // MAX_PATH includes the trailing NUL, so the usable path budget
+        // before cl.exe's ANSI APIs reject it is MAX_PATH - 1 = 259.
+        const maxPath = 260;
+        final base = path.absolute(outDir.path);
+        for (final entry in archive) {
+          final resolvedLength = path.join(base, entry.name).length;
+          if (resolvedLength >= maxPath) {
+            throw FileNotExtractedException(
+              'Extracting "${entry.name}" to a $resolvedLength-character path '
+              'would exceed Windows MAX_PATH ($maxPath). MSVC cl.exe cannot '
+              'open paths longer than this via its legacy ANSI APIs.',
+            );
+          }
+        }
+      }
+
       for (final entry in archive) {
         final filePath = path.normalize(path.join(outDir.path, entry.name));
 
@@ -89,18 +106,6 @@ sealed class Extractor {
           entry.writeContent(output);
           output.flush();
           await output.close();
-
-          if (OS.current == .windows) {
-            // files might not have been created if path is too long
-            if (!File(filePath).existsSync()) {
-              throw FileNotExtractedException(
-                'Failed to extract "${entry.name}" to '
-                '"${path.canonicalize(filePath)}". The file path might be too '
-                'long for Windows. Please try to build in a directory '
-                'with a shorter path.',
-              );
-            }
-          }
 
           if (OS.current case .linux || .macOS) {
             posix.chmodWithMode(filePath, entry.mode);
