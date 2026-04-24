@@ -10,6 +10,7 @@ import 'package:path/path.dart' as path;
 
 import '../common/extractor.dart';
 import '../common/hook_logger.dart';
+import '../constants.dart';
 import 'android_builder.dart';
 import 'ios_builder.dart';
 import 'linux_builder.dart';
@@ -126,6 +127,7 @@ abstract base class SodiumBuilder {
   @protected
   @mustCallSuper
   Iterable<Object?> get configHash => [
+    HookConstants.libsodiumVersion.ffi,
     config.targetOS,
     config.targetArchitecture,
     isStaticLinking,

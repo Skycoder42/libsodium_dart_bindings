@@ -10,6 +10,7 @@ import 'package:sodium/src/ffi/api/box_ffi.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
 import 'package:sodium/src/ffi/api/generic_hash_ffi.dart';
 import 'package:sodium/src/ffi/api/kdf_ffi.dart';
+import 'package:sodium/src/ffi/api/kem_ffi.dart';
 import 'package:sodium/src/ffi/api/kx_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_box_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_stream_ffi.dart';
@@ -116,6 +117,13 @@ void main() {
     expect(
       sut.kdf,
       isA<KdfFFI>().having((p) => p.sodium, 'sodium', mockSodium),
+    );
+  });
+
+  test('kem returns KemFFI instance', () {
+    expect(
+      sut.kem,
+      isA<KemFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 

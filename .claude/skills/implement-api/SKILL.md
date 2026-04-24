@@ -41,8 +41,8 @@ The feature prefix is: **$ARGUMENTS**
   `.claude/skills/implement-api/state.md` already exists. If it does, read it.
   If the file contains `## Last completed phase`, display the saved selection
   and phase number, then ask: *"I found a previous session for `$ARGUMENTS`
-  (last completed: Phase N). Resume from Phase N+1, or start over?"*  
-  If the user says resume, jump directly to Phase N+1.  
+  (last completed: Phase N). Resume from Phase N+1, or start over?"*
+  If the user says resume, jump directly to Phase N+1.
   If the user says start over, delete `state.md` and begin at Phase 1.
 
 ### Phase start rule
@@ -483,7 +483,7 @@ Goal: create `lib/src/ffi/api/{base}_ffi.dart` — the native platform implement
 This phase requires translating each Dart API method from Phase 2 into precise C interop
 code using `SodiumPointer`, `SecureKeyFFI`, and the unlock pattern.
 
-> Previous phase output: `packages/sodium/lib/src/api/{base}.dart`  
+> Previous phase output: `packages/sodium/lib/src/api/{base}.dart`
 > Also read: `packages/sodium/lib/src/ffi/bindings/libsodium.ffi.wrapper.dart` (C signatures for the selected groups)
 
 ### Step 1 — Decide class structure
@@ -1073,7 +1073,7 @@ This is significantly simpler than the FFI implementation: there is no manual me
 management, no pointer arithmetic, and no unlock nesting for outputs. The JS library
 handles allocation internally.
 
-> Previous phase output: `packages/sodium/lib/src/ffi/api/{base}*_ffi.dart`  
+> Previous phase output: `packages/sodium/lib/src/ffi/api/{base}*_ffi.dart`
 > Also scan: `packages/sodium/lib/src/js/bindings/sodium.js.dart` (return types, UPPERCASE constants, method signatures for the selected groups)
 
 ### Step 1 — Decide class structure
@@ -1748,6 +1748,14 @@ dart test -p chrome test/unit/js/api/crypto_js_test.dart
 ```
 
 Fix any failures before proceeding.
+
+### Step 9 - Update README
+
+In the README.md under `### API Status`, add a new row to the table for the new
+feature, with "✔️" in the "VM" and "JS" columns. The "Sumo" column must be
+filled only when the feature was added to `CryptoSumo` instead of `Crypto`. The
+Documentation should reference the same documentation as the generate API
+interface.
 
 **Phase completion**
 Show: a summary of every file modified.

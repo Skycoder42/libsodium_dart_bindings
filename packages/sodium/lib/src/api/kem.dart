@@ -1,19 +1,21 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
+import 'helpers/validations.dart';
 import 'key_pair.dart';
 import 'secure_key.dart';
 
-/// The result of a [Kem.enc] operation.
+/// Result of a KEM encapsulation operation.
 ///
-/// Is made up out of the [ciphertext] to be sent ti the partner, as well as
-/// the [sharedSecret] that is the result of the kem protocol.
+/// Contains the [ciphertext] to send to the other party and the derived
+/// [sharedSecret].
 typedef KemEncResult = ({Uint8List ciphertext, SecureKey sharedSecret});
 
 /// A meta class that provides access to all libsodium kem APIs.
 ///
 /// This class provides the dart interface for the crypto operations documented
-/// in
-/// https://libsodium.gitbook.io/doc/public-key_cryptography/key_encapsulation.
+/// in https://libsodium.gitbook.io/doc/public-key_cryptography/key_encapsulation
 /// Please refer to that documentation for more details about these APIs.
 abstract interface class Kem {
   /// Provides crypto_kem_PUBLICKEYBYTES.
@@ -59,10 +61,30 @@ abstract interface class Kem {
   /// Provides crypto_kem_enc.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/key_encapsulation#usage
-  KemEncResult enc(Uint8List publicKey);
+  KemEncResult enc({required Uint8List publicKey});
 
   /// Provides crypto_kem_dec.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/key_encapsulation#usage
   SecureKey dec({required Uint8List ciphertext, required SecureKey secretKey});
+}
+
+/// @nodoc
+@internal
+mixin KemValidations implements Kem {
+  /// @nodoc
+  void validatePublicKey(Uint8List publicKey) =>
+      Validations.checkIsSame(publicKey.length, publicKeyBytes, 'publicKey');
+
+  /// @nodoc
+  void validateSecretKey(SecureKey secretKey) =>
+      Validations.checkIsSame(secretKey.length, secretKeyBytes, 'secretKey');
+
+  /// @nodoc
+  void validateCiphertext(Uint8List ciphertext) =>
+      Validations.checkIsSame(ciphertext.length, ciphertextBytes, 'ciphertext');
+
+  /// @nodoc
+  void validateSeed(SecureKey seed) =>
+      Validations.checkIsSame(seed.length, seedBytes, 'seed');
 }

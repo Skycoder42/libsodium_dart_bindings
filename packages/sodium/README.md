@@ -57,8 +57,8 @@ create an issue for it, and I will add it to the list.
 
 API based on libsodium version: *1.0.22*
 
- libsodium API                | VM  | JS | Sumo | Documentation
----------------------------   |-----|----|------|---------------
+ libsodium API                | VM   | JS  | Sumo | Documentation
+------------------------------|------|-----|------|---------------
  padding                      | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/padding
  memory                       | ✔️   | ❌  |      | https://libsodium.gitbook.io/doc/memory_management
  randombytes                  | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/generating_random_data
@@ -78,6 +78,7 @@ API based on libsodium version: *1.0.22*
  crypto_kdf                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/key_derivation
  crypto_kx                    | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/key_exchange
  crypto_scalarmult            | ✔️   | ✔️  | ✔️   | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication
+ crypto_kem                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/public-key_cryptography/key_encapsulation
 
 **Note:** Memory Management in JS is limited to overwriting the memory with 0. All other Memory-APIs are only available
 in the VM.
