@@ -82,6 +82,17 @@ When a phase requires running tests, run both platforms and show the full
 output, unless the phase explicitly says otherwise. If tests fail, fix the
 code (not the tests) before asking the user to approve the phase.
 
+### Formatting and linting
+All generated code must be properly formatted and lint-free. Run both commands
+from the `packages/sodium/` directory before showing the output to the user for
+approval:
+
+- **Format:** `dart format <relative-path(s)-to-modified-files>`
+- **Analyze:** `dart analyze <relative-path(s)-to-modified-files>`
+
+Fix any issues reported by `dart analyze` before proceeding. Do not suppress
+warnings with `// ignore` comments unless the warning is a known false positive.
+
 ---
 
 ## Phase 1: API Selection
@@ -306,7 +317,9 @@ Structure the file in this order:
    for `key_pair.dart`, `secure_key.dart`, `helpers/validations.dart`, etc.)
 2. `part` directive if any `freezed` class is needed
 3. Any `typedef` record aliases or `freezed` sealed class definitions
-4. The interface:
+4. Validate documentation links. They are not identical for every API. Scan the
+documentation website to find the correct page(s)
+5. The interface:
 
 ```dart
 /// A meta class that provides access to all libsodium {base} APIs.
@@ -363,14 +376,13 @@ it is the closest existing file that already uses `abstract interface class`.
 ### Step 4 — Generate `freezed` code (conditional)
 
 If the file written in Step 3 includes a `part '{base}.freezed.dart';`
-directive, run from `packages/sodium/`:
+directive, the generated `.freezed.dart` file is needed for all subsequent
+phases to compile. `dart run build_runner build` is always running in the
+background — do **not** invoke it. Instead, wait a short time for it to pick up
+the new file and regenerate the output. If the `.freezed.dart` file does not
+exist yet when you need it, wait a few seconds and check again before proceeding.
 
-```
-dart run build_runner build --delete-conflicting-outputs
-```
-
-This generates the `.freezed.dart` file that all subsequent phases require for
-compilation. If no `part` directive was emitted, skip this step.
+If no `part` directive was emitted, skip this step.
 
 **Phase completion**
 Show: the complete generated file; note any non-obvious design decisions (e.g.

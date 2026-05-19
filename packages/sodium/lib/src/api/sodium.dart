@@ -1,9 +1,16 @@
+/// @docImport 'dart:io';
+library;
+
 import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
 import 'crypto.dart';
+import 'helpers/platform_types/internet_address_fallback.dart'
+    if (dart.library.io) 'helpers/platform_types/internet_address_io.dart'
+    as ia;
+import 'ip_address.dart';
 import 'key_pair.dart';
 import 'randombytes.dart';
 import 'secure_key.dart';
@@ -46,6 +53,29 @@ abstract class Sodium {
   /// Allocates new memory for a [SecureKey] and copies the data from [data].
   @useResult
   SecureKey secureCopy(Uint8List data);
+
+  /// Creates an [IpAddress] from the platform native [address].
+  ///
+  /// On platforms where `dart:io` is available, [address] must be an instance
+  /// of [InternetAddress]. On other platforms (e.g. web), [address] must be a
+  /// string instead and is identical to calling [ipFromString].
+  /// Uses `sodium_ip2bin` internally.
+  @useResult
+  IpAddress ipFromAddress(ia.InternetAddress address);
+
+  /// Creates an [IpAddress] from the string representation [address].
+  ///
+  /// [address] must be a valid IPv4 (e.g. `"192.0.2.1"`) or IPv6
+  /// (e.g. `"::1"`) address string. Uses `sodium_ip2bin` internally.
+  @useResult
+  IpAddress ipFromString(String address);
+
+  /// Creates an [IpAddress] from the 16-byte binary representation [bytes].
+  ///
+  /// [bytes] must be exactly 16 bytes in network byte order, with IPv4
+  /// addresses in IPv4-mapped IPv6 form.
+  @useResult
+  IpAddress ipFromBytes(Uint8List bytes);
 
   /// An instance of [Randombytes].
   ///

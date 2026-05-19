@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dart format *)",
+      "Bash(dart analyze *)",
+      "Bash(dart test *)",
+      "Bash(dart pub *)",
+      "Bash(flutter test *)",
+      "Bash(flutter pub *)",
+      "Bash(flutter analyze *)"
+    ]
+  },
+  "sandbox": {
+    "filesystem": {
+      "allowWrite": [
+        "/Users/felix.brandtner/sdk/flutter/bin/cache/"
+      ]
+    }
+  }
+}
