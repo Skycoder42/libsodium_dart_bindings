@@ -11,10 +11,9 @@
     ]
   },
   "sandbox": {
-    "filesystem": {
-      "allowWrite": [
-        "/Users/felix.brandtner/sdk/flutter/bin/cache/"
-      ]
-    }
+    "enabled": true,
+    "autoAllowBashIfSandboxed": false,
+    "allowUnsandboxedCommands": false,
+    "enableWeakerNetworkIsolation": true
   }
 }
