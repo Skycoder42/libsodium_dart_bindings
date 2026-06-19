@@ -31,7 +31,7 @@ jobs:
       - name: Install dart_test_tools
         run: dart pub global activate dart_test_tools
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install dart dependencies
         run: dart pub get
         working-directory: packages/sodium
