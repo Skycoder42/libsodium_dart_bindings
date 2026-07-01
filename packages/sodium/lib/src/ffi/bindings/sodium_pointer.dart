@@ -16,7 +16,7 @@ import 'sodium_finalizer.dart';
 ///
 /// See https://libsodium.gitbook.io/doc/memory_management
 class SodiumPointer<T extends NativeType> implements Finalizable {
-  static SodiumFinalizer _sodiumFinalizer = SodiumFinalizer();
+  static var _sodiumFinalizer = SodiumFinalizer();
 
   /// @nodoc
   @visibleForTesting

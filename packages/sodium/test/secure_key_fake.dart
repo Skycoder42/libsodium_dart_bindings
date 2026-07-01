@@ -6,6 +6,7 @@ import 'package:sodium/src/api/secure_key.dart';
 
 class SecureKeyFake extends Fake with SecureKeyEquality implements SecureKey {
   final Uint8List data;
+  // ignore: omit_obvious_property_types for public type
   bool disposed = false;
 
   SecureKeyFake(List<int> data) : data = Uint8List.fromList(data);
