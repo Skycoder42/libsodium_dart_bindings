@@ -69,7 +69,8 @@ class IpAddressFFI with IpAddressEquality implements IpAddress {
   }
 
   @override
-  Uint8List get bytes => Uint8List.fromList(rawBytes.asListView<Uint8List>());
+  Uint8List get bytes =>
+      Uint8List.fromList(rawBytes.asListView<Uint8List>()).asUnmodifiableView();
 
   @override
   String get addressString {
