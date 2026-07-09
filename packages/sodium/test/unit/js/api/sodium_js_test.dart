@@ -11,6 +11,7 @@ import 'package:sodium/src/api/key_pair.dart';
 import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/api/transferrable_secure_key.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
+import 'package:sodium/src/js/api/ip_address_js.dart';
 import 'package:sodium/src/js/api/randombytes_js.dart';
 import 'package:sodium/src/js/api/secure_key_js.dart';
 import 'package:sodium/src/js/api/sodium_js.dart';
@@ -152,6 +153,46 @@ void main() {
       sut.crypto,
       isA<CryptoJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
+  });
+
+  group('ipFromAddress', () {
+    test('returns IpAddressJS by converting the address string', () {
+      final ipData = List.generate(16, (i) => i + 1);
+      when(
+        () => mockSodium.sodium_ip2bin(any()),
+      ).thenReturn(Uint8List.fromList(ipData).toJS);
+
+      final result = sut.ipFromAddress('192.168.0.1');
+
+      expect(result, isA<IpAddressJS>());
+      expect(result.bytes, ipData);
+      verify(() => mockSodium.sodium_ip2bin('192.168.0.1'));
+    });
+  });
+
+  group('ipFromString', () {
+    test('returns IpAddressJS by converting the address string', () {
+      final ipData = List.generate(16, (i) => i + 1);
+      when(
+        () => mockSodium.sodium_ip2bin(any()),
+      ).thenReturn(Uint8List.fromList(ipData).toJS);
+
+      final result = sut.ipFromString('::1');
+
+      expect(result, isA<IpAddressJS>());
+      expect(result.bytes, ipData);
+      verify(() => mockSodium.sodium_ip2bin('::1'));
+    });
+  });
+
+  group('ipFromBytes', () {
+    test('returns IpAddressJS with the given bytes', () {
+      final bytes = Uint8List.fromList(List.generate(16, (i) => i));
+      final result = sut.ipFromBytes(bytes);
+
+      expect(result, isA<IpAddressJS>());
+      expect(result.bytes, bytes);
+    });
   });
 
   group('runIsolated', () {

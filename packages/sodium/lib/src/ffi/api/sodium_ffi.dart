@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
@@ -7,6 +8,10 @@ import 'package:ffi/ffi.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../api/crypto.dart';
+import '../../api/helpers/platform_types/internet_address_fallback.dart'
+    if (dart.library.io) '../../api/helpers/platform_types/internet_address_io.dart'
+    as ia;
+import '../../api/ip_address.dart';
 import '../../api/key_pair.dart';
 import '../../api/randombytes.dart';
 import '../../api/secure_key.dart';
@@ -22,6 +27,7 @@ import 'crypto_ffi.dart';
 import 'helpers/isolates/isolate_result.dart';
 import 'helpers/isolates/transferrable_key_pair_ffi.dart';
 import 'helpers/isolates/transferrable_secure_key_ffi.dart';
+import 'ip_address_ffi.dart';
 import 'randombytes_ffi.dart';
 import 'secure_key_ffi.dart';
 
@@ -130,6 +136,17 @@ class SodiumFFI implements Sodium {
 
   @override
   late final Crypto crypto = CryptoFFI(sodium);
+
+  @override
+  IpAddress ipFromAddress(ia.InternetAddress address) =>
+      IpAddressFFI(sodium, address as InternetAddress);
+
+  @override
+  IpAddress ipFromString(String address) => IpAddressFFI.parse(sodium, address);
+
+  @override
+  IpAddress ipFromBytes(Uint8List bytes) =>
+      IpAddressFFI.fromRawBytes(sodium, bytes);
 
   @override
   Future<T> runIsolated<T>(

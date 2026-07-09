@@ -9,6 +9,7 @@ import 'package:sodium/src/js/api/auth_js.dart';
 import 'package:sodium/src/js/api/box_js.dart';
 import 'package:sodium/src/js/api/crypto_js.dart';
 import 'package:sodium/src/js/api/generic_hash_js.dart';
+import 'package:sodium/src/js/api/ipcrypt_js.dart';
 import 'package:sodium/src/js/api/kdf_js.dart';
 import 'package:sodium/src/js/api/kem_js.dart';
 import 'package:sodium/src/js/api/kx_js.dart';
@@ -106,6 +107,13 @@ void main() {
     expect(
       sut.shortHash,
       isA<ShortHashJS>().having((p) => p.sodium, 'sodium', sut.sodium),
+    );
+  });
+
+  test('ipcrypt returns IpcryptJS instance', () {
+    expect(
+      sut.ipcrypt,
+      isA<IpcryptJS>().having((p) => p.sodium, 'sodium', sut.sodium),
     );
   });
 

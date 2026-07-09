@@ -2,6 +2,7 @@ import 'aead.dart';
 import 'auth.dart';
 import 'box.dart';
 import 'generic_hash.dart';
+import 'ipcrypt.dart';
 import 'kdf.dart';
 import 'kem.dart';
 import 'kx.dart';
@@ -65,6 +66,11 @@ abstract class Crypto {
   ///
   /// This provides all APIs that start with `crypto_generichash`.
   GenericHash get genericHash;
+
+  /// An instance of [Ipcrypt].
+  ///
+  /// This provides all APIs that start with `crypto_ipcrypt`.
+  Ipcrypt get ipcrypt;
 
   /// An instance of [ShortHash].
   ///

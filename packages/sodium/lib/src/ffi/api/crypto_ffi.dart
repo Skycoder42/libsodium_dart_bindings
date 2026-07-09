@@ -5,6 +5,7 @@ import '../../api/auth.dart';
 import '../../api/box.dart';
 import '../../api/crypto.dart';
 import '../../api/generic_hash.dart';
+import '../../api/ipcrypt.dart';
 import '../../api/kdf.dart';
 import '../../api/kem.dart';
 import '../../api/kx.dart';
@@ -19,6 +20,7 @@ import 'aead_xchacha20poly1305ietf_ffi.dart';
 import 'auth_ffi.dart';
 import 'box_ffi.dart';
 import 'generic_hash_ffi.dart';
+import 'ipcrypt_ffi.dart';
 import 'kdf_ffi.dart';
 import 'kem_ffi.dart';
 import 'kx_ffi.dart';
@@ -64,6 +66,9 @@ class CryptoFFI implements Crypto {
 
   @override
   late final GenericHash genericHash = GenericHashFFI(sodium);
+
+  @override
+  late final Ipcrypt ipcrypt = IpcryptFFI(sodium);
 
   @override
   late final ShortHash shortHash = ShortHashFFI(sodium);

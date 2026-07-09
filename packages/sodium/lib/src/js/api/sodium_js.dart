@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import '../../api/crypto.dart';
+import '../../api/ip_address.dart';
 import '../../api/key_pair.dart';
 import '../../api/randombytes.dart';
 import '../../api/secure_key.dart';
@@ -17,6 +18,7 @@ import '../../api/transferrable_secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart' hide KeyPair;
 import 'crypto_js.dart';
+import 'ip_address_js.dart';
 import 'randombytes_js.dart';
 import 'secure_key_js.dart';
 import 'transferrable_secure_key_js.dart';
@@ -62,6 +64,20 @@ class SodiumJS implements Sodium {
 
   @override
   late final Crypto crypto = CryptoJS(sodium);
+
+  @override
+  IpAddress ipFromAddress(dynamic _) => throw UnsupportedError(
+    'ipFromAddress is only supported in the native implementation of Sodium. '
+    'Use ipFromString or ipFromBytes instead.',
+  );
+
+  @override
+  IpAddress ipFromString(String address) =>
+      IpAddressJS.fromString(sodium, address);
+
+  @override
+  IpAddress ipFromBytes(Uint8List bytes) =>
+      IpAddressJS.fromBytes(sodium, bytes);
 
   @override
   Future<T> runIsolated<T>(

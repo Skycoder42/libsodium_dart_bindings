@@ -9,6 +9,7 @@ import 'package:sodium/src/ffi/api/auth_ffi.dart';
 import 'package:sodium/src/ffi/api/box_ffi.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
 import 'package:sodium/src/ffi/api/generic_hash_ffi.dart';
+import 'package:sodium/src/ffi/api/ipcrypt_ffi.dart';
 import 'package:sodium/src/ffi/api/kdf_ffi.dart';
 import 'package:sodium/src/ffi/api/kem_ffi.dart';
 import 'package:sodium/src/ffi/api/kx_ffi.dart';
@@ -110,6 +111,13 @@ void main() {
     expect(
       sut.shortHash,
       isA<ShortHashFFI>().having((p) => p.sodium, 'sodium', mockSodium),
+    );
+  });
+
+  test('ipcrypt returns IpcryptFFI instance', () {
+    expect(
+      sut.ipcrypt,
+      isA<IpcryptFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
   });
 

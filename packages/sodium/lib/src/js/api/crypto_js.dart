@@ -5,6 +5,7 @@ import '../../api/auth.dart';
 import '../../api/box.dart';
 import '../../api/crypto.dart';
 import '../../api/generic_hash.dart';
+import '../../api/ipcrypt.dart';
 import '../../api/kdf.dart';
 import '../../api/kem.dart';
 import '../../api/kx.dart';
@@ -19,6 +20,7 @@ import 'aead_xchacha20poly1305ietf_js.dart';
 import 'auth_js.dart';
 import 'box_js.dart';
 import 'generic_hash_js.dart';
+import 'ipcrypt_js.dart';
 import 'kdf_js.dart';
 import 'kem_js.dart';
 import 'kx_js.dart';
@@ -64,6 +66,9 @@ class CryptoJS implements Crypto {
 
   @override
   late final GenericHash genericHash = GenericHashJS(sodium);
+
+  @override
+  late final Ipcrypt ipcrypt = IpcryptJS(sodium);
 
   @override
   late final ShortHash shortHash = ShortHashJS(sodium);

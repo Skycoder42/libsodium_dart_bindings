@@ -4,6 +4,7 @@
 library;
 
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
@@ -16,6 +17,7 @@ import 'package:sodium/src/api/transferrable_secure_key.dart';
 import 'package:sodium/src/ffi/api/crypto_ffi.dart';
 import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_key_pair_ffi.dart';
 import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_secure_key_ffi.dart';
+import 'package:sodium/src/ffi/api/ip_address_ffi.dart';
 import 'package:sodium/src/ffi/api/randombytes_ffi.dart';
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
@@ -246,6 +248,60 @@ void main() {
       sut.crypto,
       isA<CryptoFFI>().having((p) => p.sodium, 'sodium', mockSodium),
     );
+  });
+
+  group('ipFromAddress', () {
+    test('returns IpAddressFFI for IPv6 address', () {
+      mockAllocArray(mockSodium);
+
+      final result = sut.ipFromAddress(InternetAddress('::1'));
+
+      expect(
+        result,
+        isA<IpAddressFFI>().having((p) => p.sodium, 'sodium', mockSodium),
+      );
+    });
+
+    test('returns IpAddressFFI for IPv4 address via parse', () {
+      mockAllocArray(mockSodium);
+      when(() => mockSodium.sodium_ip2bin(any(), any(), any())).thenReturn(0);
+
+      final result = sut.ipFromAddress(InternetAddress('192.168.0.1'));
+
+      expect(
+        result,
+        isA<IpAddressFFI>().having((p) => p.sodium, 'sodium', mockSodium),
+      );
+    });
+  });
+
+  group('ipFromString', () {
+    test('returns IpAddressFFI by parsing the address string', () {
+      mockAllocArray(mockSodium);
+      when(() => mockSodium.sodium_ip2bin(any(), any(), any())).thenReturn(0);
+
+      final result = sut.ipFromString('192.168.0.1');
+
+      expect(
+        result,
+        isA<IpAddressFFI>().having((p) => p.sodium, 'sodium', mockSodium),
+      );
+    });
+  });
+
+  group('ipFromBytes', () {
+    test('returns IpAddressFFI with the given bytes', () {
+      mockAllocArray(mockSodium);
+
+      final bytes = Uint8List.fromList(List.generate(16, (i) => i));
+      final result = sut.ipFromBytes(bytes);
+
+      expect(
+        result,
+        isA<IpAddressFFI>().having((p) => p.sodium, 'sodium', mockSodium),
+      );
+      expect(result.bytes, bytes);
+    });
   });
 
   group('runIsolated', () {
