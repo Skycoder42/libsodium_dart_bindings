@@ -26,7 +26,7 @@ class IpcryptPfxJS with IpcryptPfxValidations implements IpcryptPfx {
   int get keyBytes => sodium.crypto_ipcrypt_PFX_KEYBYTES;
 
   @override
-  int get pfxBytes => sodium.crypto_ipcrypt_PFX_BYTES;
+  int get bytes => sodium.crypto_ipcrypt_PFX_BYTES;
 
   @override
   SecureKey keygen() => SecureKeyJS(

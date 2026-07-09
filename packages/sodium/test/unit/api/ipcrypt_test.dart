@@ -79,7 +79,7 @@ void main() {
 
     testCheckIsSame(
       'validateInput',
-      source: () => sutMock.pfxBytes,
+      source: () => sutMock.bytes,
       sut: (value) => sutMock.validateInput(Uint8List(value)),
     );
 

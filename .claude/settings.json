@@ -7,7 +7,8 @@
       "Bash(dart pub *)",
       "Bash(flutter test *)",
       "Bash(flutter pub *)",
-      "Bash(flutter analyze *)"
+      "Bash(flutter analyze *)",
+      "mcp__dart-mcp-server__analyze_files"
     ]
   },
   "sandbox": {

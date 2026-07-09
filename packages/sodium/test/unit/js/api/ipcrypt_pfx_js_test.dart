@@ -36,7 +36,7 @@ void main() {
       () => sut.keyBytes,
       'keyBytes',
     ),
-    (() => mockSodium.crypto_ipcrypt_PFX_BYTES, () => sut.pfxBytes, 'pfxBytes'),
+    (() => mockSodium.crypto_ipcrypt_PFX_BYTES, () => sut.bytes, 'bytes'),
   ]);
 
   group('methods', () {

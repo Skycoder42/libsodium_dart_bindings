@@ -26,7 +26,7 @@ class IpcryptPfxFFI
   int get keyBytes => sodium.crypto_ipcrypt_pfx_keybytes();
 
   @override
-  int get pfxBytes => sodium.crypto_ipcrypt_pfx_bytes();
+  int get bytes => sodium.crypto_ipcrypt_pfx_bytes();
 
   @override
   SecureKey keygen() => keygenImpl(
@@ -43,7 +43,7 @@ class IpcryptPfxFFI
     validateInput(input.bytes);
     validateKey(key);
 
-    final outPtr = SodiumPointer<UnsignedChar>.alloc(sodium, count: pfxBytes);
+    final outPtr = SodiumPointer<UnsignedChar>.alloc(sodium, count: bytes);
     try {
       key.runUnlockedNative(
         sodium,
@@ -69,7 +69,7 @@ class IpcryptPfxFFI
     SodiumPointer<UnsignedChar>? outPtr;
     SodiumPointer<UnsignedChar>? inPtr;
     try {
-      outPtr = SodiumPointer.alloc(sodium, count: pfxBytes);
+      outPtr = SodiumPointer.alloc(sodium, count: bytes);
       inPtr = input.toSodiumPointer(sodium, memoryProtection: .readOnly);
 
       key.runUnlockedNative(

@@ -148,7 +148,7 @@ abstract interface class IpcryptPfx {
   /// Provides crypto_ipcrypt_pfx_BYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption#constants
-  int get pfxBytes;
+  int get bytes;
 
   /// Provides crypto_ipcrypt_pfx_keygen.
   ///
@@ -171,7 +171,7 @@ abstract interface class IpcryptPfx {
 mixin IpcryptPfxValidations implements IpcryptPfx {
   /// @nodoc
   void validateInput(Uint8List input) =>
-      Validations.checkIsSame(input.length, pfxBytes, 'input');
+      Validations.checkIsSame(input.length, bytes, 'input');
 
   /// @nodoc
   void validateKey(SecureKey key) =>

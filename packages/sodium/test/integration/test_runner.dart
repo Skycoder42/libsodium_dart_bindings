@@ -14,6 +14,7 @@ import 'cases/aead_xchacha20poly1305ietf_test_case.dart';
 import 'cases/auth_test_case.dart';
 import 'cases/box_test_case.dart';
 import 'cases/generic_hash_test_case.dart';
+import 'cases/ipcrypt_test_case.dart';
 import 'cases/kdf_test_case.dart';
 import 'cases/kem_test_case.dart';
 import 'cases/kx_test_case.dart';
@@ -66,6 +67,7 @@ abstract class TestRunner {
     GenericHashTestCase(this),
     ShortHashTestCase(this),
     PwhashTestCase(this, is32Bit: is32Bit),
+    IpcryptTestCase(this),
     KdfTestCase(this),
     KemTestCase(this),
     KxTestCase(this),
