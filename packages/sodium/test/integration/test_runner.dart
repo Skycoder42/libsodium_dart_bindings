@@ -37,6 +37,7 @@ typedef TestFn =
       String description,
       dynamic Function(Sodium sodium) body, {
       bool? skip,
+      String? testOn,
     });
 typedef TestSumoFn =
     void Function(String description, dynamic Function(SodiumSumo sodium) body);
@@ -85,7 +86,8 @@ abstract class TestRunner {
     String description,
     dynamic Function(Sodium sodium) body, {
     bool? skip,
-  }) => t.test(description, skip: skip, () => body(_sodium));
+    String? testOn,
+  }) => t.test(description, skip: skip, testOn: testOn, () => body(_sodium));
 
   void testSumo(String description, dynamic Function(SodiumSumo sodium) body) =>
       t.test(

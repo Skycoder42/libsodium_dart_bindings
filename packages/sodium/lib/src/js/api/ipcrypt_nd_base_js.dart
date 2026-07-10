@@ -58,13 +58,13 @@ abstract class IpcryptNdBaseJS with IpcryptNdValidations implements IpcryptNd {
   }
 
   @override
-  IpAddress decrypt({required Uint8List ciphertext, required SecureKey key}) {
-    validateCiphertext(ciphertext);
+  IpAddress decrypt({required Uint8List cipherText, required SecureKey key}) {
+    validateCipherText(cipherText);
     validateKey(key);
 
     final result = jsErrorWrap(
       () => key.runUnlockedSync(
-        (keyData) => internalDecrypt(ciphertext.toJS, keyData.toJS),
+        (keyData) => internalDecrypt(cipherText.toJS, keyData.toJS),
       ),
     );
 

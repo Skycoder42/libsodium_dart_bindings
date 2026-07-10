@@ -31,6 +31,7 @@ class FlutterTestRunner extends SumoTestRunner {
     String description,
     dynamic Function(Sodium sodium) body, {
     bool? skip,
+    String? testOn,
   }) => ft.testWidgets(description, skip: skip, (tester) async => body(sodium));
 
   @override

@@ -44,7 +44,7 @@ abstract interface class Ipcrypt {
   /// Provides crypto_ipcrypt_decrypt.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption#usage
-  IpAddress decrypt({required Uint8List input, required SecureKey key});
+  IpAddress decrypt({required Uint8List cipherText, required SecureKey key});
 }
 
 /// @nodoc
@@ -97,6 +97,13 @@ abstract interface class IpcryptNd {
   /// address. The [tweak] is consumed by the encryption and need not be stored
   /// separately for decryption.
   ///
+  /// The [tweak] **must be unpredictable and unique for every encryption**. It
+  /// is what makes this variant non-deterministic: reusing a [tweak] (or using
+  /// a constant/predictable one) silently defeats that property and allows
+  /// correlation of identical inputs. Always generate a fresh [tweak] from a
+  /// cryptographically secure random source of length [tweakBytes], e.g.
+  /// `sodium.randombytes.buf(tweakBytes)` or `sodium.secureRandom(tweakBytes)`.
+  ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption#usage
   Uint8List encrypt({
     required IpAddress input,
@@ -106,11 +113,11 @@ abstract interface class IpcryptNd {
 
   /// Provides crypto_ipcrypt_nd_decrypt / crypto_ipcrypt_ndx_decrypt.
   ///
-  /// [ciphertext] must be the full outputBytes-long value returned by
+  /// [cipherText] must be the full outputBytes-long value returned by
   /// [encrypt].
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption#usage
-  IpAddress decrypt({required Uint8List ciphertext, required SecureKey key});
+  IpAddress decrypt({required Uint8List cipherText, required SecureKey key});
 }
 
 /// @nodoc
@@ -129,8 +136,8 @@ mixin IpcryptNdValidations implements IpcryptNd {
       Validations.checkIsSame(key.length, keyBytes, 'key');
 
   /// @nodoc
-  void validateCiphertext(Uint8List ciphertext) =>
-      Validations.checkIsSame(ciphertext.length, outputBytes, 'ciphertext');
+  void validateCipherText(Uint8List cipherText) =>
+      Validations.checkIsSame(cipherText.length, outputBytes, 'cipherText');
 }
 
 /// A meta class that provides access to all libsodium ipcrypt
@@ -163,7 +170,7 @@ abstract interface class IpcryptPfx {
   /// Provides crypto_ipcrypt_pfx_decrypt.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption#usage
-  IpAddress decrypt({required Uint8List input, required SecureKey key});
+  IpAddress decrypt({required Uint8List cipherText, required SecureKey key});
 }
 
 /// @nodoc

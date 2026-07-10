@@ -193,10 +193,10 @@ void main() {
     });
 
     group('decrypt', () {
-      test('asserts if ciphertext is invalid', () {
+      test('asserts if cipherText is invalid', () {
         expect(
           () => sut.decrypt(
-            ciphertext: Uint8List(10),
+            cipherText: Uint8List(10),
             key: SecureKeyFake.empty(5),
           ),
           throwsA(isA<RangeError>()),
@@ -208,7 +208,7 @@ void main() {
       test('asserts if key is invalid', () {
         expect(
           () => sut.decrypt(
-            ciphertext: Uint8List(32),
+            cipherText: Uint8List(32),
             key: SecureKeyFake.empty(10),
           ),
           throwsA(isA<RangeError>()),
@@ -226,7 +226,7 @@ void main() {
         final keyData = List.generate(5, (i) => i + 50);
 
         sut.decrypt(
-          ciphertext: Uint8List.fromList(ctData),
+          cipherText: Uint8List.fromList(ctData),
           key: SecureKeyFake(keyData),
         );
 
@@ -246,7 +246,7 @@ void main() {
         ).thenReturn(Uint8List.fromList(ipData).toJS);
 
         final result = sut.decrypt(
-          ciphertext: Uint8List(32),
+          cipherText: Uint8List(32),
           key: SecureKeyFake.empty(5),
         );
 
@@ -260,7 +260,7 @@ void main() {
 
         expect(
           () => sut.decrypt(
-            ciphertext: Uint8List(32),
+            cipherText: Uint8List(32),
             key: SecureKeyFake.empty(5),
           ),
           throwsA(isA<SodiumException>()),

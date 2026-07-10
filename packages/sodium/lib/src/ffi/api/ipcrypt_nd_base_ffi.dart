@@ -89,17 +89,17 @@ abstract class IpcryptNdBaseFFI
 
   @override
   IpAddressFFI decrypt({
-    required Uint8List ciphertext,
+    required Uint8List cipherText,
     required SecureKey key,
   }) {
-    validateCiphertext(ciphertext);
+    validateCipherText(cipherText);
     validateKey(key);
 
     SodiumPointer<UnsignedChar>? outPtr;
     SodiumPointer<UnsignedChar>? inPtr;
     try {
       outPtr = SodiumPointer.alloc(sodium, count: inputBytes);
-      inPtr = ciphertext.toSodiumPointer(sodium, memoryProtection: .readOnly);
+      inPtr = cipherText.toSodiumPointer(sodium, memoryProtection: .readOnly);
 
       key.runUnlockedNative(
         sodium,

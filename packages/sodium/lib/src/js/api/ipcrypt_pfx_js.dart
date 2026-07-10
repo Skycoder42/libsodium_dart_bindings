@@ -52,14 +52,14 @@ class IpcryptPfxJS with IpcryptPfxValidations implements IpcryptPfx {
   }
 
   @override
-  IpAddress decrypt({required Uint8List input, required SecureKey key}) {
-    validateInput(input);
+  IpAddress decrypt({required Uint8List cipherText, required SecureKey key}) {
+    validateInput(cipherText);
     validateKey(key);
 
     final result = jsErrorWrap(
       () => key.runUnlockedSync(
         (keyData) =>
-            sodium.crypto_ipcrypt_pfx_decrypt(input.toJS, keyData.toJS),
+            sodium.crypto_ipcrypt_pfx_decrypt(cipherText.toJS, keyData.toJS),
       ),
     );
 

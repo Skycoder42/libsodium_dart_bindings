@@ -62,15 +62,18 @@ class IpcryptPfxFFI
   }
 
   @override
-  IpAddressFFI decrypt({required Uint8List input, required SecureKey key}) {
-    validateInput(input);
+  IpAddressFFI decrypt({
+    required Uint8List cipherText,
+    required SecureKey key,
+  }) {
+    validateInput(cipherText);
     validateKey(key);
 
     SodiumPointer<UnsignedChar>? outPtr;
     SodiumPointer<UnsignedChar>? inPtr;
     try {
       outPtr = SodiumPointer.alloc(sodium, count: bytes);
-      inPtr = input.toSodiumPointer(sodium, memoryProtection: .readOnly);
+      inPtr = cipherText.toSodiumPointer(sodium, memoryProtection: .readOnly);
 
       key.runUnlockedNative(
         sodium,

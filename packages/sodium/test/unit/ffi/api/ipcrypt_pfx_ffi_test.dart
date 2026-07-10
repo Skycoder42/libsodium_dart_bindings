@@ -131,9 +131,12 @@ void main() {
     });
 
     group('decrypt', () {
-      test('asserts if input is invalid', () {
+      test('asserts if cipherText is invalid', () {
         expect(
-          () => sut.decrypt(input: Uint8List(10), key: SecureKeyFake.empty(5)),
+          () => sut.decrypt(
+            cipherText: Uint8List(10),
+            key: SecureKeyFake.empty(5),
+          ),
           throwsA(isA<RangeError>()),
         );
 
@@ -142,7 +145,10 @@ void main() {
 
       test('asserts if key is invalid', () {
         expect(
-          () => sut.decrypt(input: Uint8List(16), key: SecureKeyFake.empty(10)),
+          () => sut.decrypt(
+            cipherText: Uint8List(16),
+            key: SecureKeyFake.empty(10),
+          ),
           throwsA(isA<RangeError>()),
         );
 
@@ -158,7 +164,7 @@ void main() {
         final keyData = List.generate(5, (i) => i + 50);
 
         sut.decrypt(
-          input: Uint8List.fromList(inputData),
+          cipherText: Uint8List.fromList(inputData),
           key: SecureKeyFake(keyData),
         );
 
@@ -184,7 +190,7 @@ void main() {
         });
 
         final result = sut.decrypt(
-          input: Uint8List(16),
+          cipherText: Uint8List(16),
           key: SecureKeyFake.empty(5),
         );
 

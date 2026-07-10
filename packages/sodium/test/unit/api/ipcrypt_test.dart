@@ -64,9 +64,9 @@ void main() {
     );
 
     testCheckIsSame(
-      'validateCiphertext',
+      'validateCipherText',
       source: () => sutMock.outputBytes,
-      sut: (value) => sutMock.validateCiphertext(Uint8List(value)),
+      sut: (value) => sutMock.validateCipherText(Uint8List(value)),
     );
   });
 
