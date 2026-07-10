@@ -2,13 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(dart format *)",
-      "Bash(dart analyze *)",
       "Bash(dart test *)",
-      "Bash(dart pub *)",
       "Bash(flutter test *)",
-      "Bash(flutter pub *)",
-      "Bash(flutter analyze *)",
-      "mcp__dart-mcp-server__analyze_files"
+      "mcp__dart-mcp-server__analyze_files",
+      "WebFetch(domain:libsodium.gitbook.io)"
     ]
   },
   "sandbox": {
