@@ -10,7 +10,12 @@ final class LinuxBuilder extends AutomakeBuilder {
   @override
   Map<String, String> get environment {
     final cFlags = ['-Os'];
-    return {...super.environment, 'CFLAGS': cFlags.join(' ')};
+    final ldFlags = ['-Wl,-Bsymbolic-functions'];
+    return {
+      ...super.environment,
+      'CFLAGS': cFlags.followedBy(ldFlags).join(' '),
+      'LDFLAGS': ldFlags.join(' '),
+    };
   }
 
   @override

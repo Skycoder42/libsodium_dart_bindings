@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated min sdk version to ^3.12.0
 - Updated dependencies
 
+### Fixed
+- Link the linux native library with `-Wl,-Bsymbolic-functions`
+  - Prevents symbol collisions with other flutter plugins (#211)
+  - Works as hardening step to make it harder to manipulate the library
+
 ## [4.0.2+1] - 2026-04-14
 ### Changed
 - Updated embedded libsodium binaries
