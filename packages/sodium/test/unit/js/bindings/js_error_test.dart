@@ -15,12 +15,28 @@ void main() {
       expect(res, value);
     });
 
-    test('throws SodiumException on error', () {
+    test('throws SodiumException on js error', () {
       const message = 'error-message';
 
       expect(
         // ignore: only_throw_errors for testing
         () => jsErrorWrap(() => throw JSError(message)),
+        throwsA(
+          isA<SodiumException>().having(
+            (e) => e.originalMessage,
+            'originalMessage',
+            message,
+          ),
+        ),
+      );
+    });
+
+    test('throws SodiumException on other exception type', () {
+      const message = 'error-message';
+
+      expect(
+        // ignore: only_throw_errors for testing
+        () => jsErrorWrap(() => throw message),
         throwsA(
           isA<SodiumException>().having(
             (e) => e.originalMessage,

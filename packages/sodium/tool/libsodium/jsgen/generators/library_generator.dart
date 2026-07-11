@@ -25,7 +25,7 @@ final class LibraryGenerator extends SpecGenerator<Library> {
   );
 
   Iterable<Spec> _buildBody() sync* {
-    for (final (name: name, type: type) in libraryInfo.typeDefs) {
+    for (final (:name, :type) in libraryInfo.typeDefs) {
       yield TypedefGenerator(name: name, type: type);
     }
 

@@ -21,7 +21,11 @@ extension type JSError._(JSObject _) implements JSObject {
 T jsErrorWrap<T>(T Function() callback) {
   try {
     return callback();
-  } on JSError catch (e, s) {
-    Error.throwWithStackTrace(SodiumException(e.message), s);
+  } catch (e, s) {
+    if (e.isA<JSError>()) {
+      Error.throwWithStackTrace(SodiumException((e as JSError).message), s);
+    } else {
+      Error.throwWithStackTrace(SodiumException(e.toString()), s);
+    }
   }
 }
