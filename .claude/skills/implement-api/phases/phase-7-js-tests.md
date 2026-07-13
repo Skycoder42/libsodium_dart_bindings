@@ -259,12 +259,19 @@ when(() => mockSodium.crypto_{prefix}_xwing_enc(any())).thenReturn(...);
 
 ## Step 7 — Run tests
 
-From `packages/sodium/`:
-```
-dart test -p chrome test/unit/js/api/{base}_js_test.dart
-```
+These are JS-only and run in **Chrome**, which cannot start inside the sandbox, so
+they must go through the Chrome wrapper (see `reference/conventions.md` →
+"Chrome / browser tests" for the full rules). Do **not** run
+`dart test -p chrome …` directly, and do **not** run them on the VM.
 
-Do **not** run on the VM (`dart test` without `-p chrome`) — these are JS-only.
+From the repo root, run the wrapper with the test path as an argument:
+```
+bash packages/sodium/tool/chrome_test.sh test/unit/js/api/{base}_js_test.dart
+```
+Keep it a plain, standalone command: any prefix (`timeout …`, `cd … &&`), or any
+pipe/redirect/chaining silently breaks the sandbox exclusion and the run fails
+with `Operation not permitted` (the wrapper aborts with exit 3 and a diagnostic
+if so). Passing the test path as an argument is fine.
 
 Both success and failure tests must pass with zero failures. If a test fails, fix the
 Phase 6 JS implementation — do not weaken the test.

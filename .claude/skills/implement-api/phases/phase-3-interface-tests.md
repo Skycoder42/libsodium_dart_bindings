@@ -81,11 +81,19 @@ Follow the `SessionKeys` disposal test in
 
 ## Step 2 — Run on both platforms
 
-Run on both the Dart VM and Chrome (see `reference/conventions.md`):
-```
-dart test test/unit/api/{base}_test.dart
-dart test -p chrome test/unit/api/{base}_test.dart
-```
+Run on both the Dart VM and Chrome. See `reference/conventions.md` →
+"Running unit tests" for the exact commands and the strict Chrome-wrapper rules;
+the invocations differ per platform:
+
+- **Dart VM** — from `packages/sodium/`:
+  ```
+  NIX_SKIP_SODIUM_BUILD_HOOKS=1 dart test test/unit/api/{base}_test.dart
+  ```
+- **Chrome** — do **not** use `dart test -p chrome`. From the repo root, run the
+  wrapper with the test path as an argument (no prefix, no pipe, no chaining):
+  ```
+  bash packages/sodium/tool/chrome_test.sh test/unit/api/{base}_test.dart
+  ```
 
 Both must pass with zero failures and zero errors before finishing.
 

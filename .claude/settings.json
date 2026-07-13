@@ -5,13 +5,18 @@
       "Bash(dart test *)",
       "Bash(flutter test *)",
       "mcp__dart-mcp-server__analyze_files",
-      "WebFetch(domain:libsodium.gitbook.io)"
+      "WebFetch(domain:libsodium.gitbook.io)",
+      "Bash(NIX_SKIP_SODIUM_BUILD_HOOKS=1 dart test *)",
+      "Bash(bash packages/sodium/tool/chrome_test.sh *)"
     ]
   },
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": false,
     "allowUnsandboxedCommands": false,
-    "enableWeakerNetworkIsolation": true
+    "enableWeakerNetworkIsolation": true,
+    "excludedCommands": [
+      "bash packages/sodium/tool/chrome_test.sh *"
+    ]
   }
 }

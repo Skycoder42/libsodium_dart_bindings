@@ -136,14 +136,19 @@ line in alphabetical order with the existing exports.
 ## Step 8 — Run tests
 
 Run both crypto wire-up test files (plus re-run the individual unit tests for
-the new feature to catch any regressions). Platform commands are in
-`reference/conventions.md`:
+the new feature to catch any regressions). See `reference/conventions.md` →
+"Running unit tests"; the VM and Chrome invocations differ:
 
-```
-# From packages/sodium/
-dart test test/unit/ffi/api/crypto_ffi_test.dart
-dart test -p chrome test/unit/js/api/crypto_js_test.dart
-```
+- **VM** — from `packages/sodium/`:
+  ```
+  NIX_SKIP_SODIUM_BUILD_HOOKS=1 dart test test/unit/ffi/api/crypto_ffi_test.dart
+  ```
+- **Chrome** — from the repo root, run the wrapper with the test path as an
+  argument (plain standalone command — no prefix, no pipe, no chaining; see the
+  Chrome-wrapper rules in `reference/conventions.md`):
+  ```
+  bash packages/sodium/tool/chrome_test.sh test/unit/js/api/crypto_js_test.dart
+  ```
 
 Fix any failures before finishing.
 
