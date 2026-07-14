@@ -8,7 +8,6 @@ import '../../../../api/secret_stream.dart';
 import '../../../../api/secure_key.dart';
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.wrapper.dart';
-import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'secret_stream_message_tag_ffix.dart';
@@ -49,6 +48,8 @@ class SecretStreamPushTransformerSinkFFI
       );
       SodiumException.checkSucceededInt(result);
 
+      statePtr.memoryProtection = .noAccess;
+
       return InitPushResult(
         header: headerPtr.asListView(owned: true),
         state: statePtr,
@@ -63,8 +64,16 @@ class SecretStreamPushTransformerSinkFFI
   @override
   @protected
   @visibleForTesting
-  void rekey(SodiumPointer<UnsignedChar> cryptoState) => sodium
-      .crypto_secretstream_xchacha20poly1305_rekey(cryptoState.ptr.cast());
+  void rekey(SodiumPointer<UnsignedChar> cryptoState) {
+    cryptoState.memoryProtection = .readWrite;
+    try {
+      sodium.crypto_secretstream_xchacha20poly1305_rekey(
+        cryptoState.ptr.cast(),
+      );
+    } finally {
+      cryptoState.memoryProtection = .noAccess;
+    }
+  }
 
   @override
   @protected
@@ -79,11 +88,11 @@ class SecretStreamPushTransformerSinkFFI
     try {
       messagePtr = event.message.toSodiumPointer(
         sodium,
-        memoryProtection: MemoryProtection.readOnly,
+        memoryProtection: .readOnly,
       );
       adPtr = event.additionalData?.toSodiumPointer(
         sodium,
-        memoryProtection: MemoryProtection.readOnly,
+        memoryProtection: .readOnly,
       );
       cipherPtr = SodiumPointer.alloc(
         sodium,
@@ -92,6 +101,7 @@ class SecretStreamPushTransformerSinkFFI
             sodium.crypto_secretstream_xchacha20poly1305_abytes(),
       );
 
+      cryptoState.memoryProtection = .readWrite;
       final result = sodium.crypto_secretstream_xchacha20poly1305_push(
         cryptoState.ptr.cast(),
         cipherPtr.ptr,
@@ -112,6 +122,7 @@ class SecretStreamPushTransformerSinkFFI
       cipherPtr?.dispose();
       rethrow;
     } finally {
+      cryptoState.memoryProtection = .noAccess;
       messagePtr?.dispose();
       adPtr?.dispose();
     }

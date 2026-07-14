@@ -8,7 +8,6 @@ import '../../../../api/generic_hash.dart';
 import '../../../../api/secure_key.dart';
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.wrapper.dart';
-import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
 
@@ -50,6 +49,8 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
         ),
       );
       SodiumException.checkSucceededInt(result);
+
+      _state.memoryProtection = .noAccess;
     } catch (e) {
       _state.dispose();
       rethrow;
@@ -61,11 +62,9 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
 
     SodiumPointer<UnsignedChar>? messagePtr;
     try {
-      messagePtr = data.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      messagePtr = data.toSodiumPointer(sodium, memoryProtection: .readOnly);
 
+      _state.memoryProtection = .readWrite;
       final result = sodium.crypto_generichash_update(
         _state.ptr.cast(),
         messagePtr.ptr,
@@ -73,6 +72,7 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
       );
       SodiumException.checkSucceededInt(result);
     } finally {
+      _state.memoryProtection = .noAccess;
       messagePtr?.dispose();
     }
   }
@@ -95,6 +95,7 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
         zeroMemory: true,
       );
 
+      _state.memoryProtection = .readWrite;
       final result = sodium.crypto_generichash_final(
         _state.ptr.cast(),
         outPtr.ptr,

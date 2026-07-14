@@ -8,7 +8,6 @@ import '../../../../api/secret_stream.dart';
 import '../../../../api/secure_key.dart';
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.wrapper.dart';
-import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
 import 'secret_stream_message_tag_ffix.dart';
@@ -41,10 +40,7 @@ class SecretStreamPullTransformerSinkFFI
         count: sodium.crypto_secretstream_xchacha20poly1305_statebytes(),
         zeroMemory: true,
       );
-      headerPtr = header.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      headerPtr = header.toSodiumPointer(sodium, memoryProtection: .readOnly);
 
       final result = key.runUnlockedNative(
         sodium,
@@ -56,6 +52,8 @@ class SecretStreamPullTransformerSinkFFI
       );
       SodiumException.checkSucceededInt(result);
 
+      statePtr.memoryProtection = .noAccess;
+
       return statePtr;
     } catch (e) {
       statePtr?.dispose();
@@ -66,8 +64,16 @@ class SecretStreamPullTransformerSinkFFI
   }
 
   @override
-  void rekey(SodiumPointer<UnsignedChar> cryptoState) => sodium
-      .crypto_secretstream_xchacha20poly1305_rekey(cryptoState.ptr.cast());
+  void rekey(SodiumPointer<UnsignedChar> cryptoState) {
+    cryptoState.memoryProtection = .readWrite;
+    try {
+      sodium.crypto_secretstream_xchacha20poly1305_rekey(
+        cryptoState.ptr.cast(),
+      );
+    } finally {
+      cryptoState.memoryProtection = .noAccess;
+    }
+  }
 
   @override
   SecretStreamPlainMessage decryptMessage(
@@ -81,11 +87,11 @@ class SecretStreamPullTransformerSinkFFI
     try {
       cipherPtr = event.message.toSodiumPointer(
         sodium,
-        memoryProtection: MemoryProtection.readOnly,
+        memoryProtection: .readOnly,
       );
       adPtr = event.additionalData?.toSodiumPointer(
         sodium,
-        memoryProtection: MemoryProtection.readOnly,
+        memoryProtection: .readOnly,
       );
       messagePtr = SodiumPointer.alloc(
         sodium,
@@ -95,6 +101,7 @@ class SecretStreamPullTransformerSinkFFI
       );
       tagPtr = SodiumPointer.alloc(sodium, zeroMemory: true);
 
+      cryptoState.memoryProtection = .readWrite;
       final result = sodium.crypto_secretstream_xchacha20poly1305_pull(
         cryptoState.ptr.cast(),
         messagePtr.ptr,
@@ -116,6 +123,7 @@ class SecretStreamPullTransformerSinkFFI
       messagePtr?.dispose();
       rethrow;
     } finally {
+      cryptoState.memoryProtection = .noAccess;
       cipherPtr?.dispose();
       adPtr?.dispose();
       tagPtr?.dispose();

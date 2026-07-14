@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.wrapper.dart';
-import '../../../bindings/memory_protection.dart';
 import '../../../bindings/sodium_pointer.dart';
 
 /// @nodoc
@@ -39,6 +38,8 @@ mixin SignConsumerFFIMixin<T extends Object>
     try {
       final result = sodium.crypto_sign_init(_state.ptr.cast());
       SodiumException.checkSucceededInt(result);
+
+      _state.memoryProtection = .noAccess;
     } catch (e) {
       _state.dispose();
       rethrow;
@@ -51,11 +52,9 @@ mixin SignConsumerFFIMixin<T extends Object>
 
     SodiumPointer<UnsignedChar>? messagePtr;
     try {
-      messagePtr = data.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      messagePtr = data.toSodiumPointer(sodium, memoryProtection: .readOnly);
 
+      _state.memoryProtection = .readWrite;
       final result = sodium.crypto_sign_update(
         _state.ptr.cast(),
         messagePtr.ptr,
@@ -63,6 +62,7 @@ mixin SignConsumerFFIMixin<T extends Object>
       );
       SodiumException.checkSucceededInt(result);
     } finally {
+      _state.memoryProtection = .noAccess;
       messagePtr?.dispose();
     }
   }
@@ -78,6 +78,7 @@ mixin SignConsumerFFIMixin<T extends Object>
     _ensureNotCompleted();
 
     try {
+      _state.memoryProtection = .readWrite;
       final result = finalize(_state);
       _signatureCompleter.complete(result);
     } catch (e, s) {
