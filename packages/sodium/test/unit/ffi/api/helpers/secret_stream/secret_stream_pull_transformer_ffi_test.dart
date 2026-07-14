@@ -12,6 +12,7 @@ import 'package:sodium/src/api/sodium_exception.dart';
 import 'package:sodium/src/ffi/api/helpers/secret_stream/secret_stream_pull_transformer_ffi.dart';
 
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
+import 'package:sodium/src/ffi/bindings/memory_protection.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
 
@@ -64,13 +65,14 @@ void main() {
 
     group('initialize', () {
       test('calls init_pull with correct arguments', () {
+        late Pointer state;
         when(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
             any(),
             any(),
             any(),
           ),
-        ).thenReturn(0);
+        ).thenCapture(0, (p) => state = p);
 
         final keyData = List.generate(7, (index) => index * 4);
         final headerData = List.generate(10, (index) => index + 1);
@@ -81,9 +83,12 @@ void main() {
           () => mockSodium.sodium_memzero(any(that: isNot(nullptr)), 5),
           () => mockSodium.sodium_mprotect_readonly(any(that: isNot(nullptr))),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_init_pull(
-            any(that: isNot(nullptr)),
+            any(that: hasAddress(state.address)),
             any(that: hasRawData<UnsignedChar>(headerData)),
             any(that: hasRawData<UnsignedChar>(keyData)),
+          ),
+          () => mockSodium.sodium_mprotect_noaccess(
+            any(that: hasAddress(state.address)),
           ),
         ]);
       });
@@ -132,15 +137,22 @@ void main() {
     });
 
     test('rekey calls rekey with passed state', () {
-      final state = SodiumPointer<UnsignedChar>.alloc(mockSodium);
+      final state = SodiumPointer<UnsignedChar>.alloc(mockSodium)
+        ..memoryProtection = MemoryProtection.noAccess;
 
       sut.rekey(state);
 
-      verify(
+      verifyInOrder([
+        () => mockSodium.sodium_mprotect_readwrite(
+          any(that: hasAddress(state.ptr.address)),
+        ),
         () => mockSodium.crypto_secretstream_xchacha20poly1305_rekey(
           state.ptr.cast(),
         ),
-      );
+        () => mockSodium.sodium_mprotect_noaccess(
+          any(that: hasAddress(state.ptr.address)),
+        ),
+      ]);
     });
 
     group('decryptMessage', () {
@@ -166,7 +178,8 @@ void main() {
 
         final cipherData = List.generate(20, (index) => index + 10);
         final additionalData = List.generate(5, (index) => index * index);
-        final state = SodiumPointer<UnsignedChar>.alloc(mockSodium);
+        final state = SodiumPointer<UnsignedChar>.alloc(mockSodium)
+          ..memoryProtection = MemoryProtection.noAccess;
 
         sut.decryptMessage(
           state,
@@ -183,8 +196,11 @@ void main() {
             any(that: isNot(nullptr)),
             sizeOf<UnsignedChar>(),
           ),
+          () => mockSodium.sodium_mprotect_readwrite(
+            any(that: hasAddress(state.ptr.address)),
+          ),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-            state.ptr.cast(),
+            any(that: hasAddress(state.ptr.address)),
             any(that: isNot(nullptr)),
             any(that: equals(nullptr)),
             any(that: predicate<Pointer<UnsignedChar>>((p) => p.value == 0)),
@@ -192,6 +208,9 @@ void main() {
             cipherData.length,
             any(that: hasRawData<UnsignedChar>(additionalData)),
             additionalData.length,
+          ),
+          () => mockSodium.sodium_mprotect_noaccess(
+            any(that: hasAddress(state.ptr.address)),
           ),
         ]);
       });
@@ -211,7 +230,8 @@ void main() {
         ).thenReturn(0);
 
         final cipherData = List.generate(20, (index) => index + 10);
-        final state = SodiumPointer<UnsignedChar>.alloc(mockSodium);
+        final state = SodiumPointer<UnsignedChar>.alloc(mockSodium)
+          ..memoryProtection = MemoryProtection.noAccess;
 
         sut.decryptMessage(
           state,
@@ -224,8 +244,11 @@ void main() {
             any(that: isNot(nullptr)),
             sizeOf<UnsignedChar>(),
           ),
+          () => mockSodium.sodium_mprotect_readwrite(
+            any(that: hasAddress(state.ptr.address)),
+          ),
           () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
-            state.ptr.cast(),
+            any(that: hasAddress(state.ptr.address)),
             any(that: isNot(nullptr)),
             any(that: equals(nullptr)),
             any(that: predicate<Pointer<UnsignedChar>>((p) => p.value == 0)),
@@ -233,6 +256,9 @@ void main() {
             cipherData.length,
             nullptr.cast(),
             0,
+          ),
+          () => mockSodium.sodium_mprotect_noaccess(
+            any(that: hasAddress(state.ptr.address)),
           ),
         ]);
       });

@@ -38,9 +38,10 @@ void main() {
 
   group('constructor', () {
     test('initializes hash state', () {
+      late Pointer state;
       when(
         () => mockSodium.crypto_generichash_init(any(), any(), any(), any()),
-      ).thenReturn(0);
+      ).thenCapture(0, (p) => state = p);
 
       GenericHashConsumerFFI(sodium: mockSodium, outLen: outLen);
 
@@ -54,13 +55,17 @@ void main() {
           0,
           outLen,
         ),
+        () => mockSodium.sodium_mprotect_noaccess(
+          any(that: hasAddress(state.address)),
+        ),
       ]);
     });
 
     test('initializes hash state with key', () {
+      late Pointer state;
       when(
         () => mockSodium.crypto_generichash_init(any(), any(), any(), any()),
-      ).thenReturn(0);
+      ).thenCapture(0, (p) => state = p);
 
       final key = List.generate(15, (index) => index + 5);
 
@@ -80,6 +85,9 @@ void main() {
           any(that: hasRawData<UnsignedChar>(key)),
           key.length,
           outLen,
+        ),
+        () => mockSodium.sodium_mprotect_noaccess(
+          any(that: hasAddress(state.address)),
         ),
       ]);
     });
@@ -124,9 +132,10 @@ void main() {
 
     group('add', () {
       test('calls crypto_generichash_update with the given data', () {
+        late Pointer state;
         when(
           () => mockSodium.crypto_generichash_update(any(), any(), any()),
-        ).thenReturn(0);
+        ).thenCapture(0, (p) => state = p);
 
         final message = List.generate(25, (index) => index * 3);
 
@@ -136,10 +145,16 @@ void main() {
           () => mockSodium.sodium_mprotect_readonly(
             any(that: hasRawData(message)),
           ),
+          () => mockSodium.sodium_mprotect_readwrite(
+            any(that: hasAddress(state.address)),
+          ),
           () => mockSodium.crypto_generichash_update(
-            any(that: isNot(nullptr)),
+            any(that: hasAddress(state.address)),
             any(that: hasRawData<UnsignedChar>(message)),
             message.length,
+          ),
+          () => mockSodium.sodium_mprotect_noaccess(
+            any(that: hasAddress(state.address)),
           ),
           () => mockSodium.sodium_free(any(that: hasRawData(message))),
         ]);
@@ -158,9 +173,10 @@ void main() {
 
     group('addStream', () {
       test('calls crypto_generichash_update on stream events', () async {
+        late Pointer state;
         when(
           () => mockSodium.crypto_generichash_update(any(), any(), any()),
-        ).thenReturn(0);
+        ).thenCapture(0, (p) => state = p);
 
         final message = List.generate(25, (index) => index * 3);
 
@@ -170,10 +186,16 @@ void main() {
           () => mockSodium.sodium_mprotect_readonly(
             any(that: hasRawData(message)),
           ),
+          () => mockSodium.sodium_mprotect_readwrite(
+            any(that: hasAddress(state.address)),
+          ),
           () => mockSodium.crypto_generichash_update(
-            any(that: isNot(nullptr)),
+            any(that: hasAddress(state.address)),
             any(that: hasRawData<UnsignedChar>(message)),
             message.length,
+          ),
+          () => mockSodium.sodium_mprotect_noaccess(
+            any(that: hasAddress(state.address)),
           ),
           () => mockSodium.sodium_free(any(that: hasRawData(message))),
         ]);
@@ -213,20 +235,25 @@ void main() {
 
     group('close', () {
       test('calls crypto_generichash_final with correct arguments', () async {
+        late Pointer state;
         when(
           () => mockSodium.crypto_generichash_final(any(), any(), any()),
-        ).thenReturn(0);
+        ).thenCapture(0, (p) => state = p);
 
         await sut.close();
 
         verifyInOrder([
           () => mockSodium.sodium_allocarray(outLen, 1),
           () => mockSodium.sodium_memzero(any(that: isNot(nullptr)), outLen),
+          () => mockSodium.sodium_mprotect_readwrite(
+            any(that: hasAddress(state.address)),
+          ),
           () => mockSodium.crypto_generichash_final(
-            any(that: isNot(nullptr)),
+            any(that: hasAddress(state.address)),
             any(that: isNot(nullptr)),
             outLen,
           ),
+          () => mockSodium.sodium_free(any(that: hasAddress(state.address))),
         ]);
       });
 

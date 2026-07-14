@@ -77,13 +77,17 @@ void main() {
 
     group('close', () {
       test('calls crypto_sign_final_verify with correct arguments', () async {
+        late Pointer state;
         when(
           () => mockSodium.crypto_sign_final_verify(any(), any(), any()),
-        ).thenReturn(0);
+        ).thenCapture(0, (p) => state = p);
 
         await sut.close();
 
         verifyInOrder([
+          () => mockSodium.sodium_mprotect_readwrite(
+            any(that: hasAddress(state.address)),
+          ),
           () => mockSodium.sodium_allocarray(10, 1),
           () => mockSodium.sodium_mprotect_readonly(
             any(that: hasRawData(signature)),
@@ -93,10 +97,11 @@ void main() {
             any(that: hasRawData(publicKey)),
           ),
           () => mockSodium.crypto_sign_final_verify(
-            any(that: isNot(nullptr)),
+            any(that: hasAddress(state.address)),
             any(that: hasRawData(signature)),
             any(that: hasRawData(publicKey)),
           ),
+          () => mockSodium.sodium_free(any(that: hasAddress(state.address))),
         ]);
       });
 

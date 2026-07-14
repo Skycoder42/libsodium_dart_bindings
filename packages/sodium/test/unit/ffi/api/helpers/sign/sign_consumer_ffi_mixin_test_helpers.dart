@@ -21,7 +21,10 @@ void initStateTests({
 }) {
   test('initializes sign state', () {
     setUp?.call();
-    when(() => mockSodium.crypto_sign_init(any())).thenReturn(0);
+    late Pointer state;
+    when(
+      () => mockSodium.crypto_sign_init(any()),
+    ).thenCapture(0, (p) => state = p);
 
     createSut();
 
@@ -30,6 +33,9 @@ void initStateTests({
       () => mockSodium.sodium_allocarray(5, 1),
       () => mockSodium.sodium_memzero(any(that: isNot(nullptr)), 5),
       () => mockSodium.crypto_sign_init(any(that: isNot(nullptr))),
+      () => mockSodium.sodium_mprotect_noaccess(
+        any(that: hasAddress(state.address)),
+      ),
     ]);
   });
 
@@ -65,9 +71,10 @@ void addStreamTests({
     });
 
     test('call crypto_sign_update with the given data', () {
+      late Pointer state;
       when(
         () => mockSodium.crypto_sign_update(any(), any(), any()),
-      ).thenReturn(0);
+      ).thenCapture(0, (p) => state = p);
 
       final message = List.generate(25, (index) => index * 3);
 
@@ -76,10 +83,16 @@ void addStreamTests({
       verifyInOrder([
         () =>
             mockSodium.sodium_mprotect_readonly(any(that: hasRawData(message))),
+        () => mockSodium.sodium_mprotect_readwrite(
+          any(that: hasAddress(state.address)),
+        ),
         () => mockSodium.crypto_sign_update(
-          any(that: isNot(nullptr)),
+          any(that: hasAddress(state.address)),
           any(that: hasRawData<UnsignedChar>(message)),
           message.length,
+        ),
+        () => mockSodium.sodium_mprotect_noaccess(
+          any(that: hasAddress(state.address)),
         ),
         () => mockSodium.sodium_free(any(that: hasRawData(message))),
       ]);
@@ -102,9 +115,10 @@ void addStreamTests({
     });
 
     test('call crypto_sign_update on stream events', () async {
+      late Pointer state;
       when(
         () => mockSodium.crypto_sign_update(any(), any(), any()),
-      ).thenReturn(0);
+      ).thenCapture(0, (p) => state = p);
 
       final message = List.generate(25, (index) => index * 3);
 
@@ -113,10 +127,16 @@ void addStreamTests({
       verifyInOrder([
         () =>
             mockSodium.sodium_mprotect_readonly(any(that: hasRawData(message))),
+        () => mockSodium.sodium_mprotect_readwrite(
+          any(that: hasAddress(state.address)),
+        ),
         () => mockSodium.crypto_sign_update(
-          any(that: isNot(nullptr)),
+          any(that: hasAddress(state.address)),
           any(that: hasRawData<UnsignedChar>(message)),
           message.length,
+        ),
+        () => mockSodium.sodium_mprotect_noaccess(
+          any(that: hasAddress(state.address)),
         ),
         () => mockSodium.sodium_free(any(that: hasRawData(message))),
       ]);

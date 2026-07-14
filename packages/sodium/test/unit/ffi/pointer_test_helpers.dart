@@ -134,3 +134,17 @@ class HasRawDataMatcher<T extends NativeType> extends Matcher {
 
 Matcher hasRawData<T extends NativeType>(List<num> data, {int? sizeHint}) =>
     HasRawDataMatcher<T>(data, sizeHint);
+
+Matcher hasAddress(int address) =>
+    isA<Pointer>().having((ptr) => ptr.address, 'address', address);
+
+extension WhenCapturePointerX on When<int> {
+  void thenCapture(
+    int position,
+    void Function(Pointer pointer) capture, {
+    int returning = 0,
+  }) => thenAnswer((i) {
+    capture(i.positionalArguments[position] as Pointer);
+    return returning;
+  });
+}
