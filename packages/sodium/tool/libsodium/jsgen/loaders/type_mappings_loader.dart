@@ -24,6 +24,7 @@ class TypeMappingsLoader {
     'void': TypeInfo('void'),
     'boolean': TypeInfo('bool'),
     'uint': TypeInfo('int'),
+    'ranged_uint': TypeInfo('int'),
     'u64': TypeInfo('JSBigInt'),
     'string': TypeInfo('String'),
     'unsized_string': TypeInfo('String'),
@@ -142,6 +143,16 @@ class TypeMappingsLoader {
     'hash_sha3256_state_address': TypeInfo('HashSha3256State'),
     'hash_sha3512_state': TypeInfo('HashSha3512State', typeDef: 'JSNumber'),
     'hash_sha3512_state_address': TypeInfo('HashSha3512State'),
+    'kdf_hkdf_sha256_state': TypeInfo(
+      'KdfHkdfSha256State',
+      typeDef: 'JSNumber',
+    ),
+    'kdf_hkdf_sha256_state_address': TypeInfo('KdfHkdfSha256State'),
+    'kdf_hkdf_sha512_state': TypeInfo(
+      'KdfHkdfSha512State',
+      typeDef: 'JSNumber',
+    ),
+    'kdf_hkdf_sha512_state_address': TypeInfo('KdfHkdfSha512State'),
 
     // hidden types
     'randombytes_implementation': TypeInfo('JSAny'),

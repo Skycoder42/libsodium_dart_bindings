@@ -1371,6 +1371,56 @@ abstract class _MockLibSodiumJS {
     JSUint8Array key,
   ) => throw UnimplementedError();
 
+  JSUint8Array crypto_kdf_hkdf_sha256_expand(
+    int out_len,
+    String ctx,
+    JSUint8Array prk,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_kdf_hkdf_sha256_extract(
+    JSUint8Array? salt,
+    JSUint8Array ikm,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_kdf_hkdf_sha256_extract_final(
+    KdfHkdfSha256State state_address,
+  ) => throw UnimplementedError();
+
+  KdfHkdfSha256State crypto_kdf_hkdf_sha256_extract_init(JSUint8Array? salt) =>
+      throw UnimplementedError();
+
+  void crypto_kdf_hkdf_sha256_extract_update(
+    KdfHkdfSha256State state_address,
+    JSUint8Array ikm,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_kdf_hkdf_sha256_keygen() => throw UnimplementedError();
+
+  JSUint8Array crypto_kdf_hkdf_sha512_expand(
+    int out_len,
+    String ctx,
+    JSUint8Array prk,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_kdf_hkdf_sha512_extract(
+    JSUint8Array? salt,
+    JSUint8Array ikm,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_kdf_hkdf_sha512_extract_final(
+    KdfHkdfSha512State state_address,
+  ) => throw UnimplementedError();
+
+  KdfHkdfSha512State crypto_kdf_hkdf_sha512_extract_init(JSUint8Array? salt) =>
+      throw UnimplementedError();
+
+  void crypto_kdf_hkdf_sha512_extract_update(
+    KdfHkdfSha512State state_address,
+    JSUint8Array ikm,
+  ) => throw UnimplementedError();
+
+  JSUint8Array crypto_kdf_hkdf_sha512_keygen() => throw UnimplementedError();
+
   JSUint8Array crypto_kdf_keygen() => throw UnimplementedError();
 
   JSUint8Array crypto_kem_dec(
@@ -1447,7 +1497,7 @@ abstract class _MockLibSodiumJS {
   JSUint8Array crypto_onetimeauth_final(OnetimeauthState state_address) =>
       throw UnimplementedError();
 
-  OnetimeauthState crypto_onetimeauth_init(JSUint8Array? key) =>
+  OnetimeauthState crypto_onetimeauth_init(JSUint8Array key) =>
       throw UnimplementedError();
 
   JSUint8Array crypto_onetimeauth_keygen() => throw UnimplementedError();
@@ -1695,7 +1745,7 @@ abstract class _MockLibSodiumJS {
   JSUint8Array crypto_stream_chacha20_xor_ic(
     JSUint8Array input_message,
     JSUint8Array nonce,
-    int nonce_increment,
+    JSBigInt nonce_increment,
     JSUint8Array key,
   ) => throw UnimplementedError();
 
@@ -1712,7 +1762,7 @@ abstract class _MockLibSodiumJS {
   JSUint8Array crypto_stream_xchacha20_xor_ic(
     JSUint8Array input_message,
     JSUint8Array nonce,
-    int nonce_increment,
+    JSBigInt nonce_increment,
     JSUint8Array key,
   ) => throw UnimplementedError();
 
@@ -1798,9 +1848,6 @@ abstract class _MockLibSodiumJS {
   void randombytes_close() => throw UnimplementedError();
 
   int randombytes_random() => throw UnimplementedError();
-
-  void randombytes_set_implementation(JSAny implementation) =>
-      throw UnimplementedError();
 
   void randombytes_stir() => throw UnimplementedError();
 

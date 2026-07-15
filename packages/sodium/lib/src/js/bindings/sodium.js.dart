@@ -18,6 +18,8 @@ typedef XofTurboshake128State = JSNumber;
 typedef XofTurboshake256State = JSNumber;
 typedef HashSha3256State = JSNumber;
 typedef HashSha3512State = JSNumber;
+typedef KdfHkdfSha256State = JSNumber;
+typedef KdfHkdfSha512State = JSNumber;
 extension type CryptoBox._(JSObject _) implements JSObject {
   external CryptoBox({
     required JSUint8Array ciphertext,
@@ -896,6 +898,46 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
     String ctx,
     JSUint8Array key,
   );
+  external JSUint8Array crypto_kdf_hkdf_sha256_expand(
+    int out_len,
+    String ctx,
+    JSUint8Array prk,
+  );
+  external JSUint8Array crypto_kdf_hkdf_sha256_extract(
+    JSUint8Array? salt,
+    JSUint8Array ikm,
+  );
+  external JSUint8Array crypto_kdf_hkdf_sha256_extract_final(
+    KdfHkdfSha256State state_address,
+  );
+  external KdfHkdfSha256State crypto_kdf_hkdf_sha256_extract_init(
+    JSUint8Array? salt,
+  );
+  external void crypto_kdf_hkdf_sha256_extract_update(
+    KdfHkdfSha256State state_address,
+    JSUint8Array ikm,
+  );
+  external JSUint8Array crypto_kdf_hkdf_sha256_keygen();
+  external JSUint8Array crypto_kdf_hkdf_sha512_expand(
+    int out_len,
+    String ctx,
+    JSUint8Array prk,
+  );
+  external JSUint8Array crypto_kdf_hkdf_sha512_extract(
+    JSUint8Array? salt,
+    JSUint8Array ikm,
+  );
+  external JSUint8Array crypto_kdf_hkdf_sha512_extract_final(
+    KdfHkdfSha512State state_address,
+  );
+  external KdfHkdfSha512State crypto_kdf_hkdf_sha512_extract_init(
+    JSUint8Array? salt,
+  );
+  external void crypto_kdf_hkdf_sha512_extract_update(
+    KdfHkdfSha512State state_address,
+    JSUint8Array ikm,
+  );
+  external JSUint8Array crypto_kdf_hkdf_sha512_keygen();
   external JSUint8Array crypto_kdf_keygen();
   external JSUint8Array crypto_kem_dec(
     JSUint8Array ciphertext,
@@ -946,7 +988,7 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external JSUint8Array crypto_onetimeauth_final(
     OnetimeauthState state_address,
   );
-  external OnetimeauthState crypto_onetimeauth_init(JSUint8Array? key);
+  external OnetimeauthState crypto_onetimeauth_init(JSUint8Array key);
   external JSUint8Array crypto_onetimeauth_keygen();
   external void crypto_onetimeauth_update(
     OnetimeauthState state_address,
@@ -1143,7 +1185,7 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external JSUint8Array crypto_stream_chacha20_xor_ic(
     JSUint8Array input_message,
     JSUint8Array nonce,
-    int nonce_increment,
+    JSBigInt nonce_increment,
     JSUint8Array key,
   );
   external JSUint8Array crypto_stream_keygen();
@@ -1156,7 +1198,7 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external JSUint8Array crypto_stream_xchacha20_xor_ic(
     JSUint8Array input_message,
     JSUint8Array nonce,
-    int nonce_increment,
+    JSBigInt nonce_increment,
     JSUint8Array key,
   );
   external JSUint8Array crypto_xof_shake128(
@@ -1226,7 +1268,6 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   );
   external void randombytes_close();
   external int randombytes_random();
-  external void randombytes_set_implementation(JSAny implementation);
   external void randombytes_stir();
   external int randombytes_uniform(int upper_bound);
   external String sodium_bin2ip(JSUint8Array bin);

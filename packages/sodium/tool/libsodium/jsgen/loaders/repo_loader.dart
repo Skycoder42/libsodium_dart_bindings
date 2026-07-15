@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:dart_test_tools/tools.dart';
 
 class RepoLoader {
-  Future<Directory> downloadRepo(String tag) async {
+  Future<Directory> downloadRepo(String tag, {String ref = 'tags'}) async {
     final downloadUri = Uri.https(
       'github.com',
-      '/jedisct1/libsodium.js/archive/refs/tags/$tag.tar.gz',
+      '/jedisct1/libsodium.js/archive/refs/$ref/$tag.tar.gz',
     );
 
     final client = HttpClient();
