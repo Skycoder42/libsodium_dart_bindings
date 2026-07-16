@@ -7,6 +7,7 @@ import '../../api/crypto.dart';
 import '../../api/generic_hash.dart';
 import '../../api/ipcrypt.dart';
 import '../../api/kdf.dart';
+import '../../api/kdf_hkdf.dart';
 import '../../api/kem.dart';
 import '../../api/kx.dart';
 import '../../api/secret_box.dart';
@@ -21,6 +22,8 @@ import 'auth_js.dart';
 import 'box_js.dart';
 import 'generic_hash_js.dart';
 import 'ipcrypt_js.dart';
+import 'kdf_hkdf_sha256_js.dart';
+import 'kdf_hkdf_sha512_js.dart';
 import 'kdf_js.dart';
 import 'kem_js.dart';
 import 'kx_js.dart';
@@ -75,6 +78,12 @@ class CryptoJS implements Crypto {
 
   @override
   late final Kdf kdf = KdfJS(sodium);
+
+  @override
+  late final KdfHkdf kdfHkdfSha256 = KdfHkdfSha256JS(sodium);
+
+  @override
+  late final KdfHkdf kdfHkdfSha512 = KdfHkdfSha512JS(sodium);
 
   @override
   late final Kem kem = KemJS(sodium);

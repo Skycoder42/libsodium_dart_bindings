@@ -8,6 +8,7 @@ export 'src/api/ip_address.dart' hide IpAddressEquality;
 export 'src/api/ipcrypt.dart'
     hide IpcryptNdValidations, IpcryptPfxValidations, IpcryptValidations;
 export 'src/api/kdf.dart' hide KdfValidations;
+export 'src/api/kdf_hkdf.dart' hide KdfHkdfValidations;
 export 'src/api/kem.dart' hide KemValidations;
 export 'src/api/key_pair.dart';
 export 'src/api/kx.dart' hide KxValidations;

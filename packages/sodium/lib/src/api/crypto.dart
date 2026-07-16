@@ -4,6 +4,7 @@ import 'box.dart';
 import 'generic_hash.dart';
 import 'ipcrypt.dart';
 import 'kdf.dart';
+import 'kdf_hkdf.dart';
 import 'kem.dart';
 import 'kx.dart';
 import 'secret_box.dart';
@@ -81,6 +82,20 @@ abstract class Crypto {
   ///
   /// This provides all APIs that start with `crypto_kdf`.
   Kdf get kdf;
+
+  /// An instance of [KdfHkdf].
+  ///
+  /// This provides all APIs that start with `crypto_kdf_hkdf_sha256`.
+  ///
+  /// See https://libsodium.gitbook.io/doc/key_derivation/hkdf
+  KdfHkdf get kdfHkdfSha256;
+
+  /// An instance of [KdfHkdf].
+  ///
+  /// This provides all APIs that start with `crypto_kdf_hkdf_sha512`.
+  ///
+  /// See https://libsodium.gitbook.io/doc/key_derivation/hkdf
+  KdfHkdf get kdfHkdfSha512;
 
   /// An instance of [Kem].
   ///

@@ -5,6 +5,10 @@
       "Bash(dart test *)",
       "Bash(flutter test *)",
       "mcp__dart-mcp-server__analyze_files",
+      "mcp__dart-mcp-server__lsp",
+      "mcp__dart-mcp-server__read_package_uris",
+      "mcp__dart-mcp-server__rip_grep_packages",
+      "mcp__dart-mcp-server__pub_dev_search",
       "WebFetch(domain:libsodium.gitbook.io)",
       "Bash(NIX_SKIP_SODIUM_BUILD_HOOKS=1 dart test *)",
       "Bash(bash packages/sodium/tool/chrome_test.sh *)"

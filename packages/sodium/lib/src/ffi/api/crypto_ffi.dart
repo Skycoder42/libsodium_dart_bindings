@@ -7,6 +7,7 @@ import '../../api/crypto.dart';
 import '../../api/generic_hash.dart';
 import '../../api/ipcrypt.dart';
 import '../../api/kdf.dart';
+import '../../api/kdf_hkdf.dart';
 import '../../api/kem.dart';
 import '../../api/kx.dart';
 import '../../api/secret_box.dart';
@@ -22,6 +23,8 @@ import 'box_ffi.dart';
 import 'generic_hash_ffi.dart';
 import 'ipcrypt_ffi.dart';
 import 'kdf_ffi.dart';
+import 'kdf_hkdf_sha256_ffi.dart';
+import 'kdf_hkdf_sha512_ffi.dart';
 import 'kem_ffi.dart';
 import 'kx_ffi.dart';
 import 'secret_box_ffi.dart';
@@ -75,6 +78,12 @@ class CryptoFFI implements Crypto {
 
   @override
   late final Kdf kdf = KdfFFI(sodium);
+
+  @override
+  late final KdfHkdf kdfHkdfSha256 = KdfHkdfSha256FFI(sodium);
+
+  @override
+  late final KdfHkdf kdfHkdfSha512 = KdfHkdfSha512FFI(sodium);
 
   @override
   late final Kem kem = KemFFI(sodium);

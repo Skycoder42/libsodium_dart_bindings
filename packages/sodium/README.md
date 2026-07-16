@@ -76,6 +76,7 @@ API based on libsodium version: *1.0.22*
  crypto_shorthash             | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/hashing/short-input_hashing
  crypto_pwhash                | ✔️   | ✔️  | ✔️   | https://libsodium.gitbook.io/doc/password_hashing/default_phf
  crypto_kdf                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/key_derivation
+ crypto_kdf_hkdf              | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/key_derivation/hkdf
  crypto_kx                    | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/key_exchange
  crypto_scalarmult            | ✔️   | ✔️  | ✔️   | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication
  crypto_ipcrypt               | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption
