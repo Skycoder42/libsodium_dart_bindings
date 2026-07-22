@@ -42,9 +42,10 @@ sealed class Extractor {
 
   static Future<void> extractToDisk(
     Uri archiveUri,
-    Uri outDirUri, [
+    Uri outDirUri, {
     void Function(String)? logFileExtracted,
-  ]) async {
+    int? maxAbsolutePathLength,
+  }) async {
     final outDir = Directory.fromUri(outDirUri);
     if (!outDir.existsSync()) {
       await outDir.create(recursive: true);
@@ -52,18 +53,15 @@ sealed class Extractor {
 
     final archive = extractArchive(archiveUri);
     try {
-      if (OS.current == .windows) {
-        // MAX_PATH includes the trailing NUL, so the usable path budget
-        // before cl.exe's ANSI APIs reject it is MAX_PATH - 1 = 259.
-        const maxPath = 260;
+      if (maxAbsolutePathLength != null) {
         final base = path.absolute(outDir.path);
         for (final entry in archive) {
           final resolvedLength = path.join(base, entry.name).length;
-          if (resolvedLength >= maxPath) {
+          if (resolvedLength > maxAbsolutePathLength) {
             throw FileNotExtractedException(
               'Extracting "${entry.name}" to a $resolvedLength-character path '
-              'would exceed Windows MAX_PATH ($maxPath). MSVC cl.exe cannot '
-              'open paths longer than this via its legacy ANSI APIs.',
+              'exceeds the limit of $maxAbsolutePathLength characters that '
+              'this build can handle.',
             );
           }
         }
