@@ -32,6 +32,14 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
   @override
   bool get allowSpaceInPath => true;
 
+  // msbuild runs cl.exe from builds\msvc\vsXXXX\libsodium\ and passes sources
+  // as ..\..\..\..\src\libsodium\..., 41 characters longer than the extracted
+  // path. cl.exe opens them through the ANSI APIs, so it stays bound to
+  // MAX_PATH even with LongPathsEnabled.
+  // See https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation
+  @override
+  int get maxSourcePathLength => 259 - 41;
+
   @override
   Future<void> prepare() async {
     _commandPrompt =

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Cap the extracted source path at 218 characters on windows, leaving room for the 41 characters msbuild adds when it passes sources to `cl.exe` (#193)
+
 ## [4.0.3] - 2026-07-11
 ### Changed
 - Updated min sdk version to ^3.12.0

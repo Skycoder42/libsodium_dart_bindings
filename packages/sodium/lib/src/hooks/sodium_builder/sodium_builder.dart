@@ -37,6 +37,13 @@ abstract base class SodiumBuilder {
         _ => throw UnsupportedError('Unsupported OS: ${config.targetOS}'),
       };
 
+  // MAX_PATH counts the terminating NUL, so 259 characters are usable.
+  // Builders whose toolchain needs more headroom override this.
+  @protected
+  @visibleForOverriding
+  @visibleForTesting
+  int? get maxSourcePathLength => Platform.isWindows ? 259 : null;
+
   @protected
   bool get isStaticLinking => switch (config.linkModePreference) {
     .static || .preferStatic => true,
@@ -264,7 +271,11 @@ abstract base class SodiumBuilder {
         );
       }
 
-      await Extractor.extractToDisk(sourceArchive, configUri);
+      await Extractor.extractToDisk(
+        sourceArchive,
+        configUri,
+        maxAbsolutePathLength: maxSourcePathLength,
+      );
       logger.debug('Source files extracted successfully!');
       return null;
     } on FileNotExtractedException catch (e) {
@@ -272,7 +283,11 @@ abstract base class SodiumBuilder {
         ..warning(e.message)
         ..warning('Attempting to extract to a temporary directory instead...');
       final tempDir = await Directory.systemTemp.createTemp('sodium_');
-      await Extractor.extractToDisk(sourceArchive, tempDir.uri);
+      await Extractor.extractToDisk(
+        sourceArchive,
+        tempDir.uri,
+        maxAbsolutePathLength: maxSourcePathLength,
+      );
       logger.debug('Source files extracted successfully to ${tempDir.path}!');
       return Directory.fromUri(tempDir.uri.resolve('libsodium-stable/'));
     }
