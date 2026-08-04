@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:analyzer/dart/analysis/analysis_context_collection.dart';
@@ -5,9 +6,12 @@ import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:code_builder/code_builder.dart' as cb;
+import 'package:collection/collection.dart';
 import 'package:dart_style/dart_style.dart';
+import 'package:dart_test_tools/code_gen.dart';
 import 'package:ffigen/ffigen.dart';
 import 'package:sodium/src/hooks/constants.dart';
+import 'package:source_gen/source_gen.dart';
 
 void main() async {
   final bindingsUri = await _ffigen();
@@ -17,6 +21,12 @@ void main() async {
 final _pragmaInline = const cb.Reference(
   'pragma',
 ).call([cb.literalString('vm:prefer-inline')]);
+
+const _ffiNativeChecker = TypeChecker.typeNamed(Native, inSdk: true);
+bool _isFfiNativeAnnotation(ElementAnnotation annotation) {
+  final element = annotation.element?.enclosingElement;
+  return element != null && _ffiNativeChecker.isExactly(element);
+}
 
 Future<Uri> _ffigen() async {
   final headersLocationFile = File.fromUri(
@@ -39,7 +49,10 @@ Future<Uri> _ffigen() async {
       dartFile: outUri,
       style: const NativeExternalBindings(assetId: 'package:sodium/libsodium'),
     ),
-    headers: Headers(entryPoints: [locationUri.resolve('sodium.h')]),
+    headers: Headers(
+      entryPoints: [locationUri.resolve('sodium.h')],
+      compilerOptions: [if (Platform.isLinux) '-I/usr/lib/clang/22/include/'],
+    ),
     macros: const Macros(include: _matchesLibsodium),
     globals: const Globals(include: _matchesLibsodium),
     enums: const Enums(include: _matchesLibsodium),
@@ -143,7 +156,14 @@ cb.Class _buildWrapperClass(LibraryElement library) => cb.Class(
 cb.Method _buildWrapperMethod(TopLevelFunctionElement method) => cb.Method(
   (b) => b
     ..name = method.name
-    ..annotations.add(_pragmaInline)
+    ..annotations.addAll([
+      _pragmaInline,
+      ...method.metadata.annotations
+          .whereNot(_isFfiNativeAnnotation)
+          .map((a) => a.computeConstantValue()!)
+          .map(ConstantReader.new)
+          .map((c) => c.toExpression()),
+    ])
     ..returns = _typeFromDartType(method.returnType)
     ..requiredParameters.addAll(method.formalParameters.map(_buildParameter))
     ..body = cb
