@@ -4,7 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.0.4] - 2026-08-04
+### Changed
+- Updated dependencies, including ffigen with updated generations
+
 ### Fixed
 - Cap the extracted source path at 218 characters on windows, leaving room for the 41 characters msbuild adds when it passes sources to `cl.exe` (#193)
 
@@ -349,6 +352,7 @@ changed, only the name of the getter. (#61)
 ### Added
 - Initial stable release
 
+[4.0.4]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.3...sodium-v4.0.4
 [4.0.3]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.2+1...sodium-v4.0.3
 [4.0.2+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.2...sodium-v4.0.2+1
 [4.0.2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.1+2...sodium-v4.0.2
