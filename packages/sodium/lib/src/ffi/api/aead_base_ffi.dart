@@ -8,9 +8,8 @@ import '../../api/detached_cipher_result.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
 /// @nodoc
@@ -109,46 +108,33 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? adPtr;
-    try {
-      dataPtr = SodiumPointer.alloc(sodium, count: message.length + aBytes)
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.alloc<UnsignedChar>(message.length + aBytes)
         ..fill(message)
         ..fill(List<int>.filled(aBytes, 0), offset: message.length);
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      adPtr = additionalData?.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final adPtr = additionalData != null
+          ? scope.copyList<UnsignedChar>(additionalData)
+          : null;
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => internalEncrypt(
-          dataPtr!.ptr,
+          dataPtr.ptr,
           nullptr,
           dataPtr.ptr,
           message.length,
           adPtr?.ptr ?? nullptr,
           adPtr?.count ?? 0,
           nullptr,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-      adPtr?.dispose();
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 
   @override
@@ -162,48 +148,39 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? adPtr;
-    try {
-      dataPtr = cipherText.toSodiumPointer(sodium);
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        cipherText,
+        memoryProtection: .readWrite,
       );
-      adPtr = additionalData?.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final adPtr = additionalData != null
+          ? scope.copyList<UnsignedChar>(additionalData)
+          : null;
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => internalDecrypt(
-          dataPtr!.ptr,
+          dataPtr.ptr,
           nullptr,
           nullptr,
           dataPtr.ptr,
           dataPtr.count,
           adPtr?.ptr ?? nullptr,
           adPtr?.count ?? 0,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
+      final messageLength = dataPtr.count - aBytes;
       return Uint8List.sublistView(
-        dataPtr.asListView<Uint8List>(owned: true),
+        scope.takeBytes<Uint8List>(dataPtr),
         0,
-        dataPtr.count - aBytes,
+        messageLength,
       );
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-      adPtr?.dispose();
-    }
+    });
   }
 
   @override
@@ -216,51 +193,39 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? adPtr;
-    SodiumPointer<UnsignedChar>? macPtr;
-    try {
-      dataPtr = message.toSodiumPointer(sodium);
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        message,
+        memoryProtection: .readWrite,
       );
-      adPtr = additionalData?.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      macPtr = SodiumPointer.alloc(sodium, count: aBytes);
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final adPtr = additionalData != null
+          ? scope.copyList<UnsignedChar>(additionalData)
+          : null;
+      final macPtr = scope.alloc<UnsignedChar>(aBytes);
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => internalEncryptDetached(
-          dataPtr!.ptr,
-          macPtr!.ptr,
+          dataPtr.ptr,
+          macPtr.ptr,
           nullptr,
           dataPtr.ptr,
           dataPtr.count,
           adPtr?.ptr ?? nullptr,
           adPtr?.count ?? 0,
           nullptr,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: dataPtr.asListView(owned: true),
-        mac: macPtr.asListView(owned: true),
+        cipherText: scope.takeBytes(dataPtr),
+        mac: scope.takeBytes(macPtr),
       );
-    } catch (_) {
-      dataPtr?.dispose();
-      macPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-      adPtr?.dispose();
-    }
+    });
   }
 
   @override
@@ -275,49 +240,34 @@ abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? macPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? adPtr;
-    try {
-      dataPtr = cipherText.toSodiumPointer(sodium);
-      macPtr = mac.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        cipherText,
+        memoryProtection: .readWrite,
       );
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      adPtr = additionalData?.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final macPtr = scope.copyList<UnsignedChar>(mac);
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final adPtr = additionalData != null
+          ? scope.copyList<UnsignedChar>(additionalData)
+          : null;
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => internalDecryptDetached(
-          dataPtr!.ptr,
+          dataPtr.ptr,
           nullptr,
           dataPtr.ptr,
           dataPtr.count,
-          macPtr!.ptr,
+          macPtr.ptr,
           adPtr?.ptr ?? nullptr,
           adPtr?.count ?? 0,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      macPtr?.dispose();
-      noncePtr?.dispose();
-      adPtr?.dispose();
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 }

@@ -8,9 +8,8 @@ import '../../api/secure_key.dart';
 import '../../api/sign.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 import 'helpers/sign/signature_consumer_ffi.dart';
 import 'helpers/sign/verification_consumer_ffi.dart';
@@ -61,16 +60,15 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
   Uint8List call({required Uint8List message, required SecureKey secretKey}) {
     validateSecretKey(secretKey);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    try {
-      dataPtr = SodiumPointer.alloc(sodium, count: message.length + bytes)
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.alloc<UnsignedChar>(message.length + bytes)
         ..fill(List<int>.filled(bytes, 0))
         ..fill(message, offset: bytes);
 
       final result = secretKey.runUnlockedNative(
         sodium,
         (secretKeyPtr) => sodium.crypto_sign(
-          dataPtr!.ptr,
+          dataPtr.ptr,
           nullptr,
           dataPtr.viewAt(bytes).ptr,
           message.length,
@@ -79,11 +77,8 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 
   @override
@@ -94,14 +89,12 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
     validateSignedMessage(signedMessage);
     validatePublicKey(publicKey);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      dataPtr = signedMessage.toSodiumPointer(sodium);
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        signedMessage,
+        memoryProtection: .readWrite,
       );
+      final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
 
       final result = sodium.crypto_sign_open(
         dataPtr.viewAt(bytes).ptr,
@@ -112,16 +105,8 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
       SodiumException.checkSucceededInt(result);
 
-      return Uint8List.sublistView(
-        dataPtr.asListView<Uint8List>(owned: true),
-        bytes,
-      );
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      publicKeyPtr?.dispose();
-    }
+      return Uint8List.sublistView(scope.takeBytes<Uint8List>(dataPtr), bytes);
+    });
   }
 
   @override
@@ -131,34 +116,24 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
   }) {
     validateSecretKey(secretKey);
 
-    SodiumPointer<UnsignedChar>? messagePtr;
-    SodiumPointer<UnsignedChar>? signaturePtr;
-    try {
-      messagePtr = message.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      signaturePtr = SodiumPointer.alloc(sodium, count: bytes);
+    return sodiumScope(sodium, (scope) {
+      final messagePtr = scope.copyList<UnsignedChar>(message);
+      final signaturePtr = scope.alloc<UnsignedChar>(bytes);
 
       final result = secretKey.runUnlockedNative(
         sodium,
         (secretKeyPtr) => sodium.crypto_sign_detached(
-          signaturePtr!.ptr,
+          signaturePtr.ptr,
           nullptr,
-          messagePtr!.ptr,
+          messagePtr.ptr,
           messagePtr.count,
           secretKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return signaturePtr.asListView(owned: true);
-    } catch (_) {
-      signaturePtr?.dispose();
-      rethrow;
-    } finally {
-      messagePtr?.dispose();
-    }
+      return scope.takeBytes(signaturePtr);
+    });
   }
 
   @override
@@ -170,22 +145,10 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
     validateSignature(signature);
     validatePublicKey(publicKey);
 
-    SodiumPointer<UnsignedChar>? messagePtr;
-    SodiumPointer<UnsignedChar>? signaturePtr;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      messagePtr = message.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      signaturePtr = signature.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final messagePtr = scope.copyList<UnsignedChar>(message);
+      final signaturePtr = scope.copyList<UnsignedChar>(signature);
+      final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
 
       final result = sodium.crypto_sign_verify_detached(
         signaturePtr.ptr,
@@ -195,11 +158,7 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
       );
 
       return result == 0;
-    } finally {
-      messagePtr?.dispose();
-      signaturePtr?.dispose();
-      publicKeyPtr?.dispose();
-    }
+    });
   }
 
   @override

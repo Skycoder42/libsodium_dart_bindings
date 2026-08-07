@@ -23,6 +23,7 @@ import '../bindings/libsodium.ffi.wrapper.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/sodium_finalizer.dart';
 import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'crypto_ffi.dart';
 import 'helpers/isolates/isolate_result.dart';
 import 'helpers/isolates/transferrable_key_pair_ffi.dart';
@@ -64,11 +65,9 @@ class SodiumFFI implements Sodium {
   @override
   Uint8List pad(Uint8List buf, int blocksize) {
     final maxLen = buf.length + blocksize;
-    SodiumPointer<UnsignedChar>? extendedBuffer;
-    SodiumPointer<Size>? paddedLength;
-    try {
-      extendedBuffer = SodiumPointer.alloc(sodium, count: maxLen)..fill(buf);
-      paddedLength = SodiumPointer.alloc(sodium, zeroMemory: true);
+    return sodiumScope(sodium, (scope) {
+      final extendedBuffer = scope.alloc<UnsignedChar>(maxLen)..fill(buf);
+      final paddedLength = scope.alloc<Size>(1, zeroMemory: true);
       final result = sodium.sodium_pad(
         paddedLength.ptr,
         extendedBuffer.ptr,
@@ -77,48 +76,35 @@ class SodiumFFI implements Sodium {
         maxLen,
       );
       SodiumException.checkSucceededInt(result);
+
+      final length = paddedLength.ptr.value;
       return Uint8List.sublistView(
-        extendedBuffer.asListView<Uint8List>(owned: true),
+        scope.takeBytes<Uint8List>(extendedBuffer),
         0,
-        paddedLength.ptr.value,
+        length,
       );
-    } catch (_) {
-      extendedBuffer?.dispose();
-      rethrow;
-    } finally {
-      paddedLength?.dispose();
-    }
+    });
   }
 
   @override
-  Uint8List unpad(Uint8List buf, int blocksize) {
-    SodiumPointer<UnsignedChar>? extendedBuffer;
-    SodiumPointer<Size>? unpaddedLength;
-    try {
-      extendedBuffer = buf.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      unpaddedLength = SodiumPointer.alloc(sodium, zeroMemory: true);
-      final result = sodium.sodium_unpad(
-        unpaddedLength.ptr,
-        extendedBuffer.ptr,
-        extendedBuffer.count,
-        blocksize,
-      );
-      SodiumException.checkSucceededInt(result);
-      return Uint8List.sublistView(
-        extendedBuffer.asListView<Uint8List>(owned: true),
-        0,
-        unpaddedLength.ptr.value,
-      );
-    } catch (_) {
-      extendedBuffer?.dispose();
-      rethrow;
-    } finally {
-      unpaddedLength?.dispose();
-    }
-  }
+  Uint8List unpad(Uint8List buf, int blocksize) => sodiumScope(sodium, (scope) {
+    final extendedBuffer = scope.copyList<UnsignedChar>(buf);
+    final unpaddedLength = scope.alloc<Size>(1, zeroMemory: true);
+    final result = sodium.sodium_unpad(
+      unpaddedLength.ptr,
+      extendedBuffer.ptr,
+      extendedBuffer.count,
+      blocksize,
+    );
+    SodiumException.checkSucceededInt(result);
+
+    final length = unpaddedLength.ptr.value;
+    return Uint8List.sublistView(
+      scope.takeBytes<Uint8List>(extendedBuffer),
+      0,
+      length,
+    );
+  });
 
   @override
   SecureKey secureAlloc(int length) => SecureKeyFFI.alloc(sodium, length);

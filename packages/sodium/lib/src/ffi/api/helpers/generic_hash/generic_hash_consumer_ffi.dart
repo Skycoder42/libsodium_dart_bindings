@@ -10,6 +10,7 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.wrapper.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
+import '../../../bindings/sodium_scope.dart';
 
 /// @nodoc
 @internal
@@ -60,21 +61,21 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
   void add(Uint8List data) {
     _ensureNotCompleted();
 
-    SodiumPointer<UnsignedChar>? messagePtr;
-    try {
-      messagePtr = data.toSodiumPointer(sodium, memoryProtection: .readOnly);
+    sodiumScope(sodium, (scope) {
+      final messagePtr = scope.copyList<UnsignedChar>(data);
 
       _state.memoryProtection = .readWrite;
-      final result = sodium.crypto_generichash_update(
-        _state.ptr.cast(),
-        messagePtr.ptr,
-        messagePtr.count,
-      );
-      SodiumException.checkSucceededInt(result);
-    } finally {
-      _state.memoryProtection = .noAccess;
-      messagePtr?.dispose();
-    }
+      try {
+        final result = sodium.crypto_generichash_update(
+          _state.ptr.cast(),
+          messagePtr.ptr,
+          messagePtr.count,
+        );
+        SodiumException.checkSucceededInt(result);
+      } finally {
+        _state.memoryProtection = .noAccess;
+      }
+    });
   }
 
   @override
@@ -87,25 +88,21 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
   Future<Uint8List> close() {
     _ensureNotCompleted();
 
-    SodiumPointer<UnsignedChar>? outPtr;
     try {
-      outPtr = SodiumPointer<UnsignedChar>.alloc(
-        sodium,
-        count: outLen,
-        zeroMemory: true,
-      );
+      sodiumScope(sodium, (scope) {
+        final outPtr = scope.alloc<UnsignedChar>(outLen, zeroMemory: true);
 
-      _state.memoryProtection = .readWrite;
-      final result = sodium.crypto_generichash_final(
-        _state.ptr.cast(),
-        outPtr.ptr,
-        outPtr.count,
-      );
-      SodiumException.checkSucceededInt(result);
+        _state.memoryProtection = .readWrite;
+        final result = sodium.crypto_generichash_final(
+          _state.ptr.cast(),
+          outPtr.ptr,
+          outPtr.count,
+        );
+        SodiumException.checkSucceededInt(result);
 
-      _hashCompleter.complete(outPtr.asListView(owned: true));
+        _hashCompleter.complete(scope.takeBytes(outPtr));
+      });
     } catch (e, s) {
-      outPtr?.dispose();
       _hashCompleter.completeError(e, s);
     } finally {
       _state.dispose();

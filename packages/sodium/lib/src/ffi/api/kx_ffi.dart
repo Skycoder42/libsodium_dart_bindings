@@ -8,11 +8,9 @@ import '../../api/kx.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
-import 'secure_key_ffi.dart';
 
 /// @nodoc
 @internal
@@ -65,32 +63,22 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
     validateSecretKey(clientSecretKey, 'client');
     validatePublicKey(serverPublicKey, 'server');
 
-    SecureKeyFFI? rxKey;
-    SecureKeyFFI? txKey;
-    SodiumPointer<UnsignedChar>? clientPublicKeyPtr;
-    SodiumPointer<UnsignedChar>? serverPublicKeyPtr;
-    try {
-      rxKey = SecureKeyFFI.alloc(sodium, sessionKeyBytes);
-      txKey = SecureKeyFFI.alloc(sodium, sessionKeyBytes);
-      clientPublicKeyPtr = clientPublicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      serverPublicKeyPtr = serverPublicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final rxKey = scope.allocSecureKey(sessionKeyBytes);
+      final txKey = scope.allocSecureKey(sessionKeyBytes);
+      final clientPublicKeyPtr = scope.copyList<UnsignedChar>(clientPublicKey);
+      final serverPublicKeyPtr = scope.copyList<UnsignedChar>(serverPublicKey);
 
       final result = rxKey.runUnlockedNative(
-        (rxKeyPtr) => txKey!.runUnlockedNative(
+        (rxKeyPtr) => txKey.runUnlockedNative(
           (txKeyPtr) => clientSecretKey.runUnlockedNative(
             sodium,
             (clientSecretKeyPtr) => sodium.crypto_kx_client_session_keys(
               rxKeyPtr.ptr,
               txKeyPtr.ptr,
-              clientPublicKeyPtr!.ptr,
+              clientPublicKeyPtr.ptr,
               clientSecretKeyPtr.ptr,
-              serverPublicKeyPtr!.ptr,
+              serverPublicKeyPtr.ptr,
             ),
           ),
           writable: true,
@@ -99,15 +87,11 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
       );
       SodiumException.checkSucceededInt(result);
 
-      return SessionKeys(rx: rxKey, tx: txKey);
-    } catch (e) {
-      rxKey?.dispose();
-      txKey?.dispose();
-      rethrow;
-    } finally {
-      clientPublicKeyPtr?.dispose();
-      serverPublicKeyPtr?.dispose();
-    }
+      return SessionKeys(
+        rx: scope.takeSecureKey(rxKey),
+        tx: scope.takeSecureKey(txKey),
+      );
+    });
   }
 
   @override
@@ -120,32 +104,22 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
     validateSecretKey(serverSecretKey, 'server');
     validatePublicKey(clientPublicKey, 'client');
 
-    SecureKeyFFI? rxKey;
-    SecureKeyFFI? txKey;
-    SodiumPointer<UnsignedChar>? serverPublicKeyPtr;
-    SodiumPointer<UnsignedChar>? clientPublicKeyPtr;
-    try {
-      rxKey = SecureKeyFFI.alloc(sodium, sessionKeyBytes);
-      txKey = SecureKeyFFI.alloc(sodium, sessionKeyBytes);
-      serverPublicKeyPtr = serverPublicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      clientPublicKeyPtr = clientPublicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final rxKey = scope.allocSecureKey(sessionKeyBytes);
+      final txKey = scope.allocSecureKey(sessionKeyBytes);
+      final serverPublicKeyPtr = scope.copyList<UnsignedChar>(serverPublicKey);
+      final clientPublicKeyPtr = scope.copyList<UnsignedChar>(clientPublicKey);
 
       final result = rxKey.runUnlockedNative(
-        (rxKeyPtr) => txKey!.runUnlockedNative(
+        (rxKeyPtr) => txKey.runUnlockedNative(
           (txKeyPtr) => serverSecretKey.runUnlockedNative(
             sodium,
             (serverSecretKeyPtr) => sodium.crypto_kx_server_session_keys(
               rxKeyPtr.ptr,
               txKeyPtr.ptr,
-              serverPublicKeyPtr!.ptr,
+              serverPublicKeyPtr.ptr,
               serverSecretKeyPtr.ptr,
-              clientPublicKeyPtr!.ptr,
+              clientPublicKeyPtr.ptr,
             ),
           ),
           writable: true,
@@ -154,14 +128,10 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
       );
       SodiumException.checkSucceededInt(result);
 
-      return SessionKeys(rx: rxKey, tx: txKey);
-    } catch (e) {
-      rxKey?.dispose();
-      txKey?.dispose();
-      rethrow;
-    } finally {
-      serverPublicKeyPtr?.dispose();
-      clientPublicKeyPtr?.dispose();
-    }
+      return SessionKeys(
+        rx: scope.takeSecureKey(rxKey),
+        tx: scope.takeSecureKey(txKey),
+      );
+    });
   }
 }

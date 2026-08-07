@@ -7,9 +7,8 @@ import '../../api/generic_hash.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/generic_hash/generic_hash_consumer_ffi.dart';
 import 'helpers/keygen_mixin.dart';
 
@@ -59,21 +58,16 @@ class GenericHashFFI
       validateKey(key);
     }
 
-    SodiumPointer<UnsignedChar>? outPtr;
-    SodiumPointer<UnsignedChar>? inPtr;
-    try {
-      outPtr = SodiumPointer.alloc(sodium, count: outLen ?? bytes);
-      inPtr = message.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final outPtr = scope.alloc<UnsignedChar>(outLen ?? bytes);
+      final inPtr = scope.copyList<UnsignedChar>(message);
 
       final result = key.runMaybeUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_generichash(
-          outPtr!.ptr,
+          outPtr.ptr,
           outPtr.count,
-          inPtr!.ptr,
+          inPtr.ptr,
           inPtr.count,
           keyPtr?.ptr ?? nullptr,
           keyPtr?.count ?? 0,
@@ -81,13 +75,8 @@ class GenericHashFFI
       );
       SodiumException.checkSucceededInt(result);
 
-      return outPtr.asListView(owned: true);
-    } catch (_) {
-      outPtr?.dispose();
-      rethrow;
-    } finally {
-      inPtr?.dispose();
-    }
+      return scope.takeBytes(outPtr);
+    });
   }
 
   @override

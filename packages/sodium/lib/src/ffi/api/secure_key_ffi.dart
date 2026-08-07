@@ -9,6 +9,7 @@ import '../bindings/libsodium.ffi.wrapper.dart';
 import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 
 /// @nodoc
 @internal
@@ -41,16 +42,12 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   );
 
   /// @nodoc
-  factory SecureKeyFFI.random(LibSodiumFFI sodium, int length) {
-    final raw = SodiumPointer<UnsignedChar>.alloc(sodium, count: length);
-    try {
-      sodium.randombytes_buf(raw.ptr.cast(), raw.byteLength);
-      return SecureKeyFFI(raw);
-    } catch (e) {
-      raw.dispose();
-      rethrow;
-    }
-  }
+  factory SecureKeyFFI.random(LibSodiumFFI sodium, int length) =>
+      sodiumScope(sodium, (scope) {
+        final raw = scope.alloc<UnsignedChar>(length);
+        sodium.randombytes_buf(raw.ptr.cast(), raw.byteLength);
+        return SecureKeyFFI(scope.takePointer(raw));
+      });
 
   /// @nodoc
   @internal

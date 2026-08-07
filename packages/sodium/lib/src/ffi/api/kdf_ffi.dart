@@ -1,16 +1,12 @@
-import 'dart:ffi';
-
 import 'package:meta/meta.dart';
 
 import '../../api/kdf.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
-import 'secure_key_ffi.dart';
 
 /// @nodoc
 @internal
@@ -51,15 +47,9 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
     validateContext(context);
     validateSubkeyLen(subkeyLen);
 
-    SecureKeyFFI? subKey;
-    SodiumPointer<Char>? contextPtr;
-    try {
-      subKey = SecureKeyFFI.alloc(sodium, subkeyLen);
-      contextPtr = context.toSodiumPointer(
-        sodium,
-        memoryWidth: contextBytes,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final subKey = scope.allocSecureKey(subkeyLen);
+      final contextPtr = scope.copyString(context, memoryWidth: contextBytes);
 
       final result = subKey.runUnlockedNative(
         (subKeyPtr) => masterKey.runUnlockedNative(
@@ -68,7 +58,7 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
             subKeyPtr.ptr,
             subKeyPtr.count,
             subkeyId.toSigned(64).toInt(),
-            contextPtr!.ptr,
+            contextPtr.ptr,
             masterKeyPtr.ptr,
           ),
         ),
@@ -76,12 +66,7 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
       );
       SodiumException.checkSucceededInt(result);
 
-      return subKey;
-    } catch (e) {
-      subKey?.dispose();
-      rethrow;
-    } finally {
-      contextPtr?.dispose();
-    }
+      return scope.takeSecureKey(subKey);
+    });
   }
 }

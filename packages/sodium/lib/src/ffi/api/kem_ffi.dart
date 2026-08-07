@@ -9,11 +9,9 @@ import '../../api/key_pair.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
-import 'secure_key_ffi.dart';
 
 /// @nodoc
 @internal
@@ -67,31 +65,22 @@ class KemFFI with KemValidations, KeygenMixin implements Kem {
   KemEncResult enc({required Uint8List publicKey}) {
     validatePublicKey(publicKey);
 
-    SodiumPointer<UnsignedChar>? ctPtr;
-    SecureKeyFFI? ssKey;
-    SodiumPointer<UnsignedChar>? pkPtr;
-    try {
-      ctPtr = SodiumPointer.alloc(sodium, count: ciphertextBytes);
-      ssKey = SecureKeyFFI.alloc(sodium, sharedSecretBytes);
-      pkPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final ctPtr = scope.alloc<UnsignedChar>(ciphertextBytes);
+      final ssKey = scope.allocSecureKey(sharedSecretBytes);
+      final pkPtr = scope.copyList<UnsignedChar>(publicKey);
 
       final result = ssKey.runUnlockedNative(
-        (ssPtr) => sodium.crypto_kem_enc(ctPtr!.ptr, ssPtr.ptr, pkPtr!.ptr),
+        (ssPtr) => sodium.crypto_kem_enc(ctPtr.ptr, ssPtr.ptr, pkPtr.ptr),
         writable: true,
       );
       SodiumException.checkSucceededInt(result);
 
-      return (ciphertext: ctPtr.asListView(owned: true), sharedSecret: ssKey);
-    } catch (_) {
-      ctPtr?.dispose();
-      ssKey?.dispose();
-      rethrow;
-    } finally {
-      pkPtr?.dispose();
-    }
+      return (
+        ciphertext: scope.takeBytes<Uint8List>(ctPtr),
+        sharedSecret: scope.takeSecureKey(ssKey),
+      );
+    });
   }
 
   @override
@@ -99,30 +88,20 @@ class KemFFI with KemValidations, KeygenMixin implements Kem {
     validateCiphertext(ciphertext);
     validateSecretKey(secretKey);
 
-    SecureKeyFFI? ssKey;
-    SodiumPointer<UnsignedChar>? ctPtr;
-    try {
-      ssKey = SecureKeyFFI.alloc(sodium, sharedSecretBytes);
-      ctPtr = ciphertext.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final ssKey = scope.allocSecureKey(sharedSecretBytes);
+      final ctPtr = scope.copyList<UnsignedChar>(ciphertext);
 
       final result = ssKey.runUnlockedNative(
         (ssPtr) => secretKey.runUnlockedNative(
           sodium,
-          (skPtr) => sodium.crypto_kem_dec(ssPtr.ptr, ctPtr!.ptr, skPtr.ptr),
+          (skPtr) => sodium.crypto_kem_dec(ssPtr.ptr, ctPtr.ptr, skPtr.ptr),
         ),
         writable: true,
       );
       SodiumException.checkSucceededInt(result);
 
-      return ssKey;
-    } catch (_) {
-      ssKey?.dispose();
-      rethrow;
-    } finally {
-      ctPtr?.dispose();
-    }
+      return scope.takeSecureKey(ssKey);
+    });
   }
 }

@@ -8,10 +8,9 @@ import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/kdf_hkdf/kdf_hkdf_extract_consumer_ffi.dart';
 import 'helpers/keygen_mixin.dart';
-import 'secure_key_ffi.dart';
 
 @internal
 abstract class KdfHkdfBaseFFI<T extends NativeType>
@@ -64,36 +63,28 @@ abstract class KdfHkdfBaseFFI<T extends NativeType>
   );
 
   @override
-  SecureKey extract({Uint8List? salt, required Uint8List ikm}) {
-    SecureKeyFFI? prkKey;
-    SodiumPointer<UnsignedChar>? saltPtr;
-    SodiumPointer<UnsignedChar>? ikmPtr;
-    try {
-      prkKey = SecureKeyFFI.alloc(sodium, keyBytes);
-      saltPtr = salt?.toSodiumPointer(sodium, memoryProtection: .readOnly);
-      ikmPtr = ikm.toSodiumPointer(sodium, memoryProtection: .readOnly);
+  SecureKey extract({Uint8List? salt, required Uint8List ikm}) => sodiumScope(
+    sodium,
+    (scope) {
+      final prkKey = scope.allocSecureKey(keyBytes);
+      final saltPtr = salt != null ? scope.copyList<UnsignedChar>(salt) : null;
+      final ikmPtr = scope.copyList<UnsignedChar>(ikm);
 
       final result = prkKey.runUnlockedNative(
         (prkPtr) => internalExtract(
           prkPtr.ptr,
           saltPtr?.ptr ?? nullptr,
           saltPtr?.count ?? 0,
-          ikmPtr!.ptr,
+          ikmPtr.ptr,
           ikmPtr.count,
         ),
         writable: true,
       );
       SodiumException.checkSucceededInt(result);
 
-      return prkKey;
-    } catch (e) {
-      prkKey?.dispose();
-      rethrow;
-    } finally {
-      saltPtr?.dispose();
-      ikmPtr?.dispose();
-    }
-  }
+      return scope.takeSecureKey(prkKey);
+    },
+  );
 
   @override
   KdfHkdfExtractConsumer createExtractConsumer({Uint8List? salt}) =>
@@ -116,11 +107,9 @@ abstract class KdfHkdfBaseFFI<T extends NativeType>
     validateMasterKey(masterKey);
     validateOutLen(outLen);
 
-    SecureKeyFFI? subKey;
-    SodiumPointer<Char>? contextPtr;
-    try {
-      subKey = SecureKeyFFI.alloc(sodium, outLen);
-      contextPtr = context.toSodiumPointer(sodium, memoryProtection: .readOnly);
+    return sodiumScope(sodium, (scope) {
+      final subKey = scope.allocSecureKey(outLen);
+      final contextPtr = scope.copyString(context);
 
       final result = subKey.runUnlockedNative(
         (subKeyPtr) => masterKey.runUnlockedNative(
@@ -128,7 +117,7 @@ abstract class KdfHkdfBaseFFI<T extends NativeType>
           (masterKeyPtr) => internalExpand(
             subKeyPtr.ptr,
             subKeyPtr.count,
-            contextPtr!.ptr,
+            contextPtr.ptr,
             contextPtr.count,
             masterKeyPtr.ptr,
           ),
@@ -137,12 +126,7 @@ abstract class KdfHkdfBaseFFI<T extends NativeType>
       );
       SodiumException.checkSucceededInt(result);
 
-      return subKey;
-    } catch (e) {
-      subKey?.dispose();
-      rethrow;
-    } finally {
-      contextPtr?.dispose();
-    }
+      return scope.takeSecureKey(subKey);
+    });
   }
 }

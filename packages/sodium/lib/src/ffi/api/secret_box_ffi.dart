@@ -8,9 +8,8 @@ import '../../api/secret_box.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
 /// @nodoc
@@ -47,36 +46,26 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    try {
-      dataPtr = SodiumPointer.alloc(sodium, count: message.length + macBytes)
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.alloc<UnsignedChar>(message.length + macBytes)
         ..fill(List<int>.filled(macBytes, 0))
         ..fill(message, offset: macBytes);
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_secretbox_easy(
-          dataPtr!.ptr,
+          dataPtr.ptr,
           dataPtr.viewAt(macBytes).ptr,
           message.length,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 
   @override
@@ -89,37 +78,30 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    try {
-      dataPtr = cipherText.toSodiumPointer(sodium);
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        cipherText,
+        memoryProtection: .readWrite,
       );
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_secretbox_open_easy(
-          dataPtr!.viewAt(macBytes).ptr,
+          dataPtr.viewAt(macBytes).ptr,
           dataPtr.ptr,
           dataPtr.count,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
       return Uint8List.sublistView(
-        dataPtr.asListView<Uint8List>(owned: true),
+        scope.takeBytes<Uint8List>(dataPtr),
         macBytes,
       );
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-    }
+    });
   }
 
   @override
@@ -131,41 +113,32 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? macPtr;
-    try {
-      dataPtr = message.toSodiumPointer(sodium);
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        message,
+        memoryProtection: .readWrite,
       );
-      macPtr = SodiumPointer.alloc(sodium, count: macBytes);
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final macPtr = scope.alloc<UnsignedChar>(macBytes);
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_secretbox_detached(
-          dataPtr!.ptr,
-          macPtr!.ptr,
+          dataPtr.ptr,
+          macPtr.ptr,
           dataPtr.ptr,
           dataPtr.count,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: dataPtr.asListView(owned: true),
-        mac: macPtr.asListView(owned: true),
+        cipherText: scope.takeBytes(dataPtr),
+        mac: scope.takeBytes(macPtr),
       );
-    } catch (_) {
-      dataPtr?.dispose();
-      macPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-    }
+    });
   }
 
   @override
@@ -179,40 +152,28 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
     validateNonce(nonce);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? macPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    try {
-      dataPtr = cipherText.toSodiumPointer(sodium);
-      macPtr = mac.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        cipherText,
+        memoryProtection: .readWrite,
       );
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final macPtr = scope.copyList<UnsignedChar>(mac);
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_secretbox_open_detached(
-          dataPtr!.ptr,
           dataPtr.ptr,
-          macPtr!.ptr,
+          dataPtr.ptr,
+          macPtr.ptr,
           dataPtr.count,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      macPtr?.dispose();
-      noncePtr?.dispose();
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 }

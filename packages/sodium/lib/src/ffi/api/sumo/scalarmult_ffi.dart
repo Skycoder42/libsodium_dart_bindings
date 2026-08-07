@@ -7,10 +7,8 @@ import '../../../api/secure_key.dart';
 import '../../../api/sodium_exception.dart';
 import '../../../api/sumo/scalarmult.dart';
 import '../../bindings/libsodium.ffi.wrapper.dart';
-import '../../bindings/memory_protection.dart';
 import '../../bindings/secure_key_native.dart';
-import '../../bindings/sodium_pointer.dart';
-import '../secure_key_ffi.dart';
+import '../../bindings/sodium_scope.dart';
 
 /// @nodoc
 @internal
@@ -31,21 +29,17 @@ class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
   Uint8List base({required SecureKey n}) {
     validateSecretKey(n);
 
-    SodiumPointer<UnsignedChar>? qPtr;
-    try {
-      qPtr = SodiumPointer.alloc(sodium, count: bytes);
+    return sodiumScope(sodium, (scope) {
+      final qPtr = scope.alloc<UnsignedChar>(bytes);
 
       final result = n.runUnlockedNative(
         sodium,
-        (nPtr) => sodium.crypto_scalarmult_base(qPtr!.ptr, nPtr.ptr),
+        (nPtr) => sodium.crypto_scalarmult_base(qPtr.ptr, nPtr.ptr),
       );
       SodiumException.checkSucceededInt(result);
 
-      return qPtr.asListView(owned: true);
-    } catch (_) {
-      qPtr?.dispose();
-      rethrow;
-    }
+      return scope.takeBytes(qPtr);
+    });
   }
 
   @override
@@ -54,30 +48,20 @@ class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
     validateSecretKey(n);
     validatePublicKey(p);
 
-    SodiumPointer<UnsignedChar>? pPtr;
-    SecureKeyFFI? q;
-    try {
-      pPtr = p.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      q = SecureKeyFFI.alloc(sodium, bytes);
+    return sodiumScope(sodium, (scope) {
+      final pPtr = scope.copyList<UnsignedChar>(p);
+      final q = scope.allocSecureKey(bytes);
 
       final result = q.runUnlockedNative(
         (qPtr) => n.runUnlockedNative(
           sodium,
-          (nPtr) => sodium.crypto_scalarmult(qPtr.ptr, nPtr.ptr, pPtr!.ptr),
+          (nPtr) => sodium.crypto_scalarmult(qPtr.ptr, nPtr.ptr, pPtr.ptr),
         ),
         writable: true,
       );
       SodiumException.checkSucceededInt(result);
 
-      return q;
-    } catch (e) {
-      q?.dispose();
-      rethrow;
-    } finally {
-      pPtr?.dispose();
-    }
+      return scope.takeSecureKey(q);
+    });
   }
 }

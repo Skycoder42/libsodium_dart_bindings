@@ -7,7 +7,7 @@ import '../../api/ipcrypt.dart';
 import '../../api/secure_key.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 import 'ip_address_ffi.dart';
 
@@ -62,29 +62,22 @@ abstract class IpcryptNdBaseFFI
     validateTweak(tweak);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? tweakPtr;
-    SodiumPointer<UnsignedChar>? outPtr;
-    try {
-      tweakPtr = tweak.toSodiumPointer(sodium, memoryProtection: .readOnly);
-      outPtr = SodiumPointer.alloc(sodium, count: outputBytes);
+    return sodiumScope(sodium, (scope) {
+      final tweakPtr = scope.copyList<UnsignedChar>(tweak);
+      final outPtr = scope.alloc<UnsignedChar>(outputBytes);
 
       key.runUnlockedNative(
         sodium,
         (keyPtr) => internalEncrypt(
-          outPtr!.ptr,
+          outPtr.ptr,
           input.rawBytes.ptr,
-          tweakPtr!.ptr,
+          tweakPtr.ptr,
           keyPtr.ptr,
         ),
       );
 
-      return outPtr.asListView(owned: true);
-    } catch (_) {
-      outPtr?.dispose();
-      rethrow;
-    } finally {
-      tweakPtr?.dispose();
-    }
+      return scope.takeBytes(outPtr);
+    });
   }
 
   @override
@@ -95,23 +88,16 @@ abstract class IpcryptNdBaseFFI
     validateCipherText(cipherText);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? outPtr;
-    SodiumPointer<UnsignedChar>? inPtr;
-    try {
-      outPtr = SodiumPointer.alloc(sodium, count: inputBytes);
-      inPtr = cipherText.toSodiumPointer(sodium, memoryProtection: .readOnly);
+    return sodiumScope(sodium, (scope) {
+      final outPtr = scope.alloc<UnsignedChar>(inputBytes);
+      final inPtr = scope.copyList<UnsignedChar>(cipherText);
 
       key.runUnlockedNative(
         sodium,
-        (keyPtr) => internalDecrypt(outPtr!.ptr, inPtr!.ptr, keyPtr.ptr),
+        (keyPtr) => internalDecrypt(outPtr.ptr, inPtr.ptr, keyPtr.ptr),
       );
 
-      return IpAddressFFI.fromPointer(sodium, outPtr);
-    } catch (_) {
-      outPtr?.dispose();
-      rethrow;
-    } finally {
-      inPtr?.dispose();
-    }
+      return IpAddressFFI.fromPointer(sodium, scope.takePointer(outPtr));
+    });
   }
 }

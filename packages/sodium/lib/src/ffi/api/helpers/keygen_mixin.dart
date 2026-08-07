@@ -7,8 +7,7 @@ import '../../../api/secure_key.dart';
 import '../../../api/sodium_exception.dart';
 import '../../bindings/libsodium.ffi.wrapper.dart';
 import '../../bindings/secure_key_native.dart';
-import '../../bindings/sodium_pointer.dart';
-import '../secure_key_ffi.dart';
+import '../../bindings/sodium_scope.dart';
 
 /// @nodoc
 @internal
@@ -19,18 +18,14 @@ mixin KeygenMixin {
     required LibSodiumFFI sodium,
     required int keyBytes,
     required void Function(Pointer<UnsignedChar> k) implementation,
-  }) {
-    final key = SecureKeyFFI.alloc(sodium, keyBytes);
-    try {
-      return key..runUnlockedNative(
+  }) => sodiumScope(sodium, (scope) {
+    final key = scope.allocSecureKey(keyBytes)
+      ..runUnlockedNative(
         (pointer) => implementation(pointer.ptr),
         writable: true,
       );
-    } catch (e) {
-      key.dispose();
-      rethrow;
-    }
-  }
+    return scope.takeSecureKey(key);
+  });
 
   /// @nodoc
   @protected
@@ -40,29 +35,21 @@ mixin KeygenMixin {
     required int publicKeyBytes,
     required int Function(Pointer<UnsignedChar> pk, Pointer<UnsignedChar> sk)
     implementation,
-  }) {
-    SecureKeyFFI? secretKey;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      secretKey = SecureKeyFFI.alloc(sodium, secretKeyBytes);
-      publicKeyPtr = SodiumPointer.alloc(sodium, count: publicKeyBytes);
+  }) => sodiumScope(sodium, (scope) {
+    final secretKey = scope.allocSecureKey(secretKeyBytes);
+    final publicKeyPtr = scope.alloc<UnsignedChar>(publicKeyBytes);
 
-      final result = secretKey.runUnlockedNative(
-        (secretKeyPtr) => implementation(publicKeyPtr!.ptr, secretKeyPtr.ptr),
-        writable: true,
-      );
-      SodiumException.checkSucceededInt(result);
+    final result = secretKey.runUnlockedNative(
+      (secretKeyPtr) => implementation(publicKeyPtr.ptr, secretKeyPtr.ptr),
+      writable: true,
+    );
+    SodiumException.checkSucceededInt(result);
 
-      return KeyPair(
-        secretKey: secretKey,
-        publicKey: publicKeyPtr.asListView(owned: true),
-      );
-    } catch (e) {
-      secretKey?.dispose();
-      publicKeyPtr?.dispose();
-      rethrow;
-    }
-  }
+    return KeyPair(
+      secretKey: scope.takeSecureKey(secretKey),
+      publicKey: scope.takeBytes(publicKeyPtr),
+    );
+  });
 
   /// @nodoc
   @protected
@@ -77,31 +64,23 @@ mixin KeygenMixin {
       Pointer<UnsignedChar> seed,
     )
     implementation,
-  }) {
-    SecureKeyFFI? secretKey;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      secretKey = SecureKeyFFI.alloc(sodium, secretKeyBytes);
-      publicKeyPtr = SodiumPointer.alloc(sodium, count: publicKeyBytes);
+  }) => sodiumScope(sodium, (scope) {
+    final secretKey = scope.allocSecureKey(secretKeyBytes);
+    final publicKeyPtr = scope.alloc<UnsignedChar>(publicKeyBytes);
 
-      final result = secretKey.runUnlockedNative(
-        (secretKeyPtr) => seed.runUnlockedNative(
-          sodium,
-          (seedPtr) =>
-              implementation(publicKeyPtr!.ptr, secretKeyPtr.ptr, seedPtr.ptr),
-        ),
-        writable: true,
-      );
-      SodiumException.checkSucceededInt(result);
+    final result = secretKey.runUnlockedNative(
+      (secretKeyPtr) => seed.runUnlockedNative(
+        sodium,
+        (seedPtr) =>
+            implementation(publicKeyPtr.ptr, secretKeyPtr.ptr, seedPtr.ptr),
+      ),
+      writable: true,
+    );
+    SodiumException.checkSucceededInt(result);
 
-      return KeyPair(
-        secretKey: secretKey,
-        publicKey: publicKeyPtr.asListView(owned: true),
-      );
-    } catch (e) {
-      secretKey?.dispose();
-      publicKeyPtr?.dispose();
-      rethrow;
-    }
-  }
+    return KeyPair(
+      secretKey: scope.takeSecureKey(secretKey),
+      publicKey: scope.takeBytes(publicKeyPtr),
+    );
+  });
 }

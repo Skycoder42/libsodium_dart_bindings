@@ -7,9 +7,8 @@ import '../../api/auth.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
 /// @nodoc
@@ -39,33 +38,23 @@ class AuthFFI with AuthValidations, KeygenMixin implements Auth {
   Uint8List call({required Uint8List message, required SecureKey key}) {
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? messagePtr;
-    SodiumPointer<UnsignedChar>? tagPtr;
-    try {
-      messagePtr = message.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      tagPtr = SodiumPointer.alloc(sodium, count: bytes);
+    return sodiumScope(sodium, (scope) {
+      final messagePtr = scope.copyList<UnsignedChar>(message);
+      final tagPtr = scope.alloc<UnsignedChar>(bytes);
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_auth(
-          tagPtr!.ptr,
-          messagePtr!.ptr,
+          tagPtr.ptr,
+          messagePtr.ptr,
           messagePtr.count,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return tagPtr.asListView(owned: true);
-    } catch (_) {
-      tagPtr?.dispose();
-      rethrow;
-    } finally {
-      messagePtr?.dispose();
-    }
+      return scope.takeBytes(tagPtr);
+    });
   }
 
   @override
@@ -77,32 +66,21 @@ class AuthFFI with AuthValidations, KeygenMixin implements Auth {
     validateTag(tag);
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? messagePtr;
-    SodiumPointer<UnsignedChar>? tagPtr;
-    try {
-      tagPtr = tag.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      messagePtr = message.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final tagPtr = scope.copyList<UnsignedChar>(tag);
+      final messagePtr = scope.copyList<UnsignedChar>(message);
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_auth_verify(
-          tagPtr!.ptr,
-          messagePtr!.ptr,
+          tagPtr.ptr,
+          messagePtr.ptr,
           messagePtr.count,
           keyPtr.ptr,
         ),
       );
 
       return result == 0;
-    } finally {
-      messagePtr?.dispose();
-      tagPtr?.dispose();
-    }
+    });
   }
 }

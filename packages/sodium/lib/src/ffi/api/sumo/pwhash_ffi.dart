@@ -7,9 +7,7 @@ import '../../../api/secure_key.dart';
 import '../../../api/sodium_exception.dart';
 import '../../../api/sumo/pwhash.dart';
 import '../../bindings/libsodium.ffi.wrapper.dart';
-import '../../bindings/memory_protection.dart';
-import '../../bindings/sodium_pointer.dart';
-import '../secure_key_ffi.dart';
+import '../../bindings/sodium_scope.dart';
 
 /// @nodoc
 @internal
@@ -74,30 +72,18 @@ class PwhashFFI with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    SodiumPointer<Char>? passwordPtr;
-    SodiumPointer<UnsignedChar>? saltPtr;
-    SecureKeyFFI? outKey;
-
-    try {
-      passwordPtr = password.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-
-      saltPtr = salt.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-
-      outKey = SecureKeyFFI.alloc(sodium, outLen);
+    return sodiumScope(sodium, (scope) {
+      final passwordPtr = scope.copyList<Char>(password);
+      final saltPtr = scope.copyList<UnsignedChar>(salt);
+      final outKey = scope.allocSecureKey(outLen);
 
       final result = outKey.runUnlockedNative(
         (pointer) => sodium.crypto_pwhash(
           pointer.ptr,
           pointer.count,
-          passwordPtr!.ptr,
+          passwordPtr.ptr,
           passwordPtr.count,
-          saltPtr!.ptr,
+          saltPtr.ptr,
           opsLimit,
           memLimit,
           alg.toValue(sodium),
@@ -106,14 +92,8 @@ class PwhashFFI with PwHashValidations implements Pwhash {
       );
       SodiumException.checkSucceededInt(result);
 
-      return outKey;
-    } catch (e) {
-      outKey?.dispose();
-      rethrow;
-    } finally {
-      passwordPtr?.dispose();
-      saltPtr?.dispose();
-    }
+      return scope.takeSecureKey(outKey);
+    });
   }
 
   @override
@@ -125,21 +105,11 @@ class PwhashFFI with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    SodiumPointer<Char>? passwordPtr;
-    SodiumPointer<Char>? passwordHashPtr;
-
-    try {
-      passwordPtr = password.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final passwordPtr = scope.copyString(password);
       validatePassword(passwordPtr.asListView());
 
-      passwordHashPtr = SodiumPointer<Char>.alloc(
-        sodium,
-        count: strBytes,
-        zeroMemory: true,
-      );
+      final passwordHashPtr = scope.alloc<Char>(strBytes, zeroMemory: true);
 
       final result = sodium.crypto_pwhash_str(
         passwordHashPtr.ptr,
@@ -150,43 +120,30 @@ class PwhashFFI with PwHashValidations implements Pwhash {
       );
       SodiumException.checkSucceededInt(result);
 
-      return passwordHashPtr.toDartString(zeroTerminated: true);
-    } finally {
-      passwordPtr?.dispose();
-      passwordHashPtr?.dispose();
-    }
+      return scope.takeString(passwordHashPtr);
+    });
   }
 
   @override
-  bool strVerify({required String passwordHash, required String password}) {
-    SodiumPointer<Char>? passwordPtr;
-    SodiumPointer<Char>? passwordHashPtr;
-    try {
-      passwordPtr = password.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      validatePassword(passwordPtr.asListView());
+  bool strVerify({required String passwordHash, required String password}) =>
+      sodiumScope(sodium, (scope) {
+        final passwordPtr = scope.copyString(password);
+        validatePassword(passwordPtr.asListView());
 
-      passwordHashPtr = passwordHash.toSodiumPointer(
-        sodium,
-        memoryWidth: strBytes,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      validatePasswordHash(passwordHashPtr.asListView());
+        final passwordHashPtr = scope.copyString(
+          passwordHash,
+          memoryWidth: strBytes,
+        );
+        validatePasswordHash(passwordHashPtr.asListView());
 
-      final result = sodium.crypto_pwhash_str_verify(
-        passwordHashPtr.ptr,
-        passwordPtr.ptr,
-        passwordPtr.count,
-      );
+        final result = sodium.crypto_pwhash_str_verify(
+          passwordHashPtr.ptr,
+          passwordPtr.ptr,
+          passwordPtr.count,
+        );
 
-      return result == 0;
-    } finally {
-      passwordPtr?.dispose();
-      passwordHashPtr?.dispose();
-    }
-  }
+        return result == 0;
+      });
 
   @override
   bool strNeedsRehash({
@@ -197,12 +154,10 @@ class PwhashFFI with PwHashValidations implements Pwhash {
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
 
-    SodiumPointer<Char>? passwordHashPtr;
-    try {
-      passwordHashPtr = passwordHash.toSodiumPointer(
-        sodium,
+    return sodiumScope(sodium, (scope) {
+      final passwordHashPtr = scope.copyString(
+        passwordHash,
         memoryWidth: strBytes,
-        memoryProtection: MemoryProtection.readOnly,
       );
       validatePasswordHash(passwordHashPtr.asListView());
 
@@ -220,9 +175,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
         default:
           throw SodiumException();
       }
-    } finally {
-      passwordHashPtr?.dispose();
-    }
+    });
   }
 }
 

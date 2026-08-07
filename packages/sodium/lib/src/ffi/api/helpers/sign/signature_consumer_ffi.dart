@@ -10,6 +10,7 @@ import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.wrapper.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
+import '../../../bindings/sodium_scope.dart';
 import 'sign_consumer_ffi_mixin.dart';
 
 /// @nodoc
@@ -38,29 +39,24 @@ class SignatureConsumerFFI
   Future<Uint8List> get signature => result;
 
   @override
-  Uint8List finalize(SodiumPointer<UnsignedChar> state) {
-    final signaturePtr = SodiumPointer<UnsignedChar>.alloc(
-      sodium,
-      count: sodium.crypto_sign_bytes(),
-      zeroMemory: true,
-    );
+  Uint8List finalize(SodiumPointer<UnsignedChar> state) =>
+      sodiumScope(sodium, (scope) {
+        final signaturePtr = scope.alloc<UnsignedChar>(
+          sodium.crypto_sign_bytes(),
+          zeroMemory: true,
+        );
 
-    try {
-      final result = secretKey.runUnlockedNative(
-        sodium,
-        (secretKeyPtr) => sodium.crypto_sign_final_create(
-          state.ptr.cast(),
-          signaturePtr.ptr,
-          nullptr,
-          secretKeyPtr.ptr,
-        ),
-      );
-      SodiumException.checkSucceededInt(result);
+        final result = secretKey.runUnlockedNative(
+          sodium,
+          (secretKeyPtr) => sodium.crypto_sign_final_create(
+            state.ptr.cast(),
+            signaturePtr.ptr,
+            nullptr,
+            secretKeyPtr.ptr,
+          ),
+        );
+        SodiumException.checkSucceededInt(result);
 
-      return signaturePtr.asListView(owned: true);
-    } catch (_) {
-      signaturePtr.dispose();
-      rethrow;
-    }
-  }
+        return scope.takeBytes(signaturePtr);
+      });
 }

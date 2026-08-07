@@ -6,8 +6,8 @@ import 'package:meta/meta.dart';
 
 import '../../../../api/sign.dart';
 import '../../../bindings/libsodium.ffi.wrapper.dart';
-import '../../../bindings/memory_protection.dart';
 import '../../../bindings/sodium_pointer.dart';
+import '../../../bindings/sodium_scope.dart';
 import 'sign_consumer_ffi_mixin.dart';
 
 /// @nodoc
@@ -37,30 +37,17 @@ class VerificationConsumerFFI
   Future<bool> get signatureValid => result;
 
   @override
-  bool finalize(SodiumPointer<UnsignedChar> state) {
-    SodiumPointer<UnsignedChar>? signaturePtr;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
+  bool finalize(SodiumPointer<UnsignedChar> state) =>
+      sodiumScope(sodium, (scope) {
+        final signaturePtr = scope.copyList<UnsignedChar>(signature);
+        final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
 
-    try {
-      signaturePtr = signature.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+        final result = sodium.crypto_sign_final_verify(
+          state.ptr.cast(),
+          signaturePtr.ptr,
+          publicKeyPtr.ptr,
+        );
 
-      final result = sodium.crypto_sign_final_verify(
-        state.ptr.cast(),
-        signaturePtr.ptr,
-        publicKeyPtr.ptr,
-      );
-
-      return result == 0;
-    } finally {
-      signaturePtr?.dispose();
-      publicKeyPtr?.dispose();
-    }
-  }
+        return result == 0;
+      });
 }

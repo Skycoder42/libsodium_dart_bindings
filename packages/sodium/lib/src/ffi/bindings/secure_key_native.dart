@@ -7,6 +7,7 @@ import '../../api/secure_key.dart';
 import 'libsodium.ffi.wrapper.dart';
 import 'memory_protection.dart';
 import 'sodium_pointer.dart';
+import 'sodium_scope.dart';
 
 /// @nodoc
 @internal
@@ -52,23 +53,23 @@ extension SecureKeySafeCastX on SecureKey {
     LibSodiumFFI sodium,
     SecureFFICallbackFn<T> callback, {
     bool writable = false,
-  }) => runUnlockedSync((data) {
-    final ptr = data.toSodiumPointer<UnsignedChar>(
-      sodium,
-      memoryProtection: writable
-          ? MemoryProtection.readWrite
-          : MemoryProtection.readOnly,
-    );
-    try {
+  }) => runUnlockedSync(
+    (data) => sodiumScope(sodium, (scope) {
+      final ptr = scope.copyList<UnsignedChar>(
+        data,
+        memoryProtection: writable
+            ? MemoryProtection.readWrite
+            : MemoryProtection.readOnly,
+      );
+
       final result = callback(ptr);
       if (writable) {
         data.setRange(0, data.length, ptr.asListView<Uint8List>());
       }
       return result;
-    } finally {
-      ptr.dispose();
-    }
-  }, writable: writable);
+    }),
+    writable: writable,
+  );
 }
 
 /// @nodoc

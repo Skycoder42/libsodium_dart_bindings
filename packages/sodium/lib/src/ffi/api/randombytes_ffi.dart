@@ -7,8 +7,7 @@ import '../../api/helpers/validations.dart';
 import '../../api/randombytes.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 
 /// @nodoc
 @internal
@@ -29,41 +28,26 @@ class RandombytesFFI implements Randombytes {
   int uniform(int upperBound) => sodium.randombytes_uniform(upperBound);
 
   @override
-  Uint8List buf(int size) {
-    final ptr = SodiumPointer<UnsignedChar>.alloc(sodium, count: size);
-    try {
-      sodium.randombytes_buf(ptr.ptr.cast(), ptr.byteLength);
-      return ptr.asListView(owned: true);
-    } catch (_) {
-      ptr.dispose();
-      rethrow;
-    }
-  }
+  Uint8List buf(int size) => sodiumScope(sodium, (scope) {
+    final ptr = scope.alloc<UnsignedChar>(size);
+    sodium.randombytes_buf(ptr.ptr.cast(), ptr.byteLength);
+    return scope.takeBytes(ptr);
+  });
 
   @override
   Uint8List bufDeterministic(int size, Uint8List seed) {
     Validations.checkIsSame(seed.length, seedBytes, 'seed');
 
-    SodiumPointer<UnsignedChar>? seedPtr;
-    SodiumPointer<UnsignedChar>? resultPtr;
-    try {
-      seedPtr = seed.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      resultPtr = SodiumPointer.alloc(sodium, count: size);
+    return sodiumScope(sodium, (scope) {
+      final seedPtr = scope.copyList<UnsignedChar>(seed);
+      final resultPtr = scope.alloc<UnsignedChar>(size);
       sodium.randombytes_buf_deterministic(
         resultPtr.ptr.cast(),
         resultPtr.byteLength,
         seedPtr.ptr,
       );
-      return resultPtr.asListView(owned: true);
-    } catch (_) {
-      resultPtr?.dispose();
-      rethrow;
-    } finally {
-      seedPtr?.dispose();
-    }
+      return scope.takeBytes(resultPtr);
+    });
   }
 
   @override

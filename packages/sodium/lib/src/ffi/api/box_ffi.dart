@@ -9,9 +9,8 @@ import '../../api/key_pair.dart';
 import '../../api/secure_key.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 import 'secure_key_ffi.dart';
 
@@ -31,36 +30,25 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
   Uint8List easy({required Uint8List message, required Uint8List nonce}) {
     box.validateNonce(nonce);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    try {
-      dataPtr =
-          SodiumPointer.alloc(box.sodium, count: message.length + box.macBytes)
-            ..fill(List<int>.filled(box.macBytes, 0))
-            ..fill(message, offset: box.macBytes);
-      noncePtr = nonce.toSodiumPointer(
-        box.sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(box.sodium, (scope) {
+      final dataPtr = scope.alloc<UnsignedChar>(message.length + box.macBytes)
+        ..fill(List<int>.filled(box.macBytes, 0))
+        ..fill(message, offset: box.macBytes);
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
 
       final result = sharedKey.runUnlockedNative(
         (sharedKeyPtr) => box.sodium.crypto_box_easy_afternm(
-          dataPtr!.ptr,
+          dataPtr.ptr,
           dataPtr.viewAt(box.macBytes).ptr,
           message.length,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           sharedKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 
   @override
@@ -72,36 +60,29 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       ..validateEasyCipherText(cipherText)
       ..validateNonce(nonce);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    try {
-      dataPtr = cipherText.toSodiumPointer(box.sodium);
-      noncePtr = nonce.toSodiumPointer(
-        box.sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(box.sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        cipherText,
+        memoryProtection: .readWrite,
       );
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
 
       final result = sharedKey.runUnlockedNative(
         (sharedKeyPtr) => box.sodium.crypto_box_open_easy_afternm(
-          dataPtr!.viewAt(box.macBytes).ptr,
+          dataPtr.viewAt(box.macBytes).ptr,
           dataPtr.ptr,
           dataPtr.count,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           sharedKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
       return Uint8List.sublistView(
-        dataPtr.asListView<Uint8List>(owned: true),
+        scope.takeBytes<Uint8List>(dataPtr),
         box.macBytes,
       );
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-    }
+    });
   }
 
   @override
@@ -111,40 +92,31 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
   }) {
     box.validateNonce(nonce);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? macPtr;
-    try {
-      dataPtr = message.toSodiumPointer(box.sodium);
-      noncePtr = nonce.toSodiumPointer(
-        box.sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(box.sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        message,
+        memoryProtection: .readWrite,
       );
-      macPtr = SodiumPointer.alloc(box.sodium, count: box.macBytes);
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final macPtr = scope.alloc<UnsignedChar>(box.macBytes);
 
       final result = sharedKey.runUnlockedNative(
         (sharedKeyPtr) => box.sodium.crypto_box_detached_afternm(
-          dataPtr!.ptr,
-          macPtr!.ptr,
+          dataPtr.ptr,
+          macPtr.ptr,
           dataPtr.ptr,
           dataPtr.count,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           sharedKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: dataPtr.asListView(owned: true),
-        mac: macPtr.asListView(owned: true),
+        cipherText: scope.takeBytes(dataPtr),
+        mac: scope.takeBytes(macPtr),
       );
-    } catch (_) {
-      dataPtr?.dispose();
-      macPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-    }
+    });
   }
 
   @override
@@ -157,40 +129,28 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
       ..validateMac(mac)
       ..validateNonce(nonce);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? macPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    try {
-      dataPtr = cipherText.toSodiumPointer(box.sodium);
-      macPtr = mac.toSodiumPointer(
-        box.sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(box.sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        cipherText,
+        memoryProtection: .readWrite,
       );
-      noncePtr = nonce.toSodiumPointer(
-        box.sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final macPtr = scope.copyList<UnsignedChar>(mac);
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
 
       final result = sharedKey.runUnlockedNative(
         (sharedKeyPtr) => box.sodium.crypto_box_open_detached_afternm(
-          dataPtr!.ptr,
           dataPtr.ptr,
-          macPtr!.ptr,
+          dataPtr.ptr,
+          macPtr.ptr,
           dataPtr.count,
-          noncePtr!.ptr,
+          noncePtr.ptr,
           sharedKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      macPtr?.dispose();
-      noncePtr?.dispose();
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 
   @override
@@ -255,43 +215,28 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      dataPtr = SodiumPointer.alloc(sodium, count: message.length + macBytes)
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.alloc<UnsignedChar>(message.length + macBytes)
         ..fill(List<int>.filled(macBytes, 0))
         ..fill(message, offset: macBytes);
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
 
       final result = secretKey.runUnlockedNative(
         sodium,
         (secretKeyPtr) => sodium.crypto_box_easy(
-          dataPtr!.ptr,
+          dataPtr.ptr,
           dataPtr.viewAt(macBytes).ptr,
           message.length,
-          noncePtr!.ptr,
-          publicKeyPtr!.ptr,
+          noncePtr.ptr,
+          publicKeyPtr.ptr,
           secretKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-      publicKeyPtr?.dispose();
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 
   @override
@@ -306,44 +251,32 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      dataPtr = cipherText.toSodiumPointer(sodium);
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        cipherText,
+        memoryProtection: .readWrite,
       );
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
 
       final result = secretKey.runUnlockedNative(
         sodium,
         (secretKeyPtr) => sodium.crypto_box_open_easy(
-          dataPtr!.viewAt(macBytes).ptr,
+          dataPtr.viewAt(macBytes).ptr,
           dataPtr.ptr,
           dataPtr.count,
-          noncePtr!.ptr,
-          publicKeyPtr!.ptr,
+          noncePtr.ptr,
+          publicKeyPtr.ptr,
           secretKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
       return Uint8List.sublistView(
-        dataPtr.asListView<Uint8List>(owned: true),
+        scope.takeBytes<Uint8List>(dataPtr),
         macBytes,
       );
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-      publicKeyPtr?.dispose();
-    }
+    });
   }
 
   @override
@@ -357,48 +290,34 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    SodiumPointer<UnsignedChar>? macPtr;
-    try {
-      dataPtr = message.toSodiumPointer(sodium);
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        message,
+        memoryProtection: .readWrite,
       );
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      macPtr = SodiumPointer.alloc(sodium, count: macBytes);
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
+      final macPtr = scope.alloc<UnsignedChar>(macBytes);
 
       final result = secretKey.runUnlockedNative(
         sodium,
         (secretKeyPtr) => sodium.crypto_box_detached(
-          dataPtr!.ptr,
-          macPtr!.ptr,
+          dataPtr.ptr,
+          macPtr.ptr,
           dataPtr.ptr,
           dataPtr.count,
-          noncePtr!.ptr,
-          publicKeyPtr!.ptr,
+          noncePtr.ptr,
+          publicKeyPtr.ptr,
           secretKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
       return DetachedCipherResult(
-        cipherText: dataPtr.asListView(owned: true),
-        mac: macPtr.asListView(owned: true),
+        cipherText: scope.takeBytes(dataPtr),
+        mac: scope.takeBytes(macPtr),
       );
-    } catch (_) {
-      dataPtr?.dispose();
-      macPtr?.dispose();
-      rethrow;
-    } finally {
-      noncePtr?.dispose();
-      publicKeyPtr?.dispose();
-    }
+    });
   }
 
   @override
@@ -414,48 +333,31 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? macPtr;
-    SodiumPointer<UnsignedChar>? noncePtr;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      dataPtr = cipherText.toSodiumPointer(sodium);
-      macPtr = mac.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        cipherText,
+        memoryProtection: .readWrite,
       );
-      noncePtr = nonce.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final macPtr = scope.copyList<UnsignedChar>(mac);
+      final noncePtr = scope.copyList<UnsignedChar>(nonce);
+      final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
 
       final result = secretKey.runUnlockedNative(
         sodium,
         (secretKeyPtr) => sodium.crypto_box_open_detached(
-          dataPtr!.ptr,
           dataPtr.ptr,
-          macPtr!.ptr,
+          dataPtr.ptr,
+          macPtr.ptr,
           dataPtr.count,
-          noncePtr!.ptr,
-          publicKeyPtr!.ptr,
+          noncePtr.ptr,
+          publicKeyPtr.ptr,
           secretKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      macPtr?.dispose();
-      noncePtr?.dispose();
-      publicKeyPtr?.dispose();
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 
   @override
@@ -466,21 +368,16 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SecureKeyFFI? sharedKey;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
-      sharedKey = SecureKeyFFI.alloc(sodium, sodium.crypto_box_beforenmbytes());
+    return sodiumScope(sodium, (scope) {
+      final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
+      final sharedKey = scope.allocSecureKey(sodium.crypto_box_beforenmbytes());
 
       final result = sharedKey.runUnlockedNative(
         (sharedKeyPtr) => secretKey.runUnlockedNative(
           sodium,
           (secretKeyPtr) => sodium.crypto_box_beforenm(
             sharedKeyPtr.ptr,
-            publicKeyPtr!.ptr,
+            publicKeyPtr.ptr,
             secretKeyPtr.ptr,
           ),
         ),
@@ -488,29 +385,19 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return PrecalculatedBoxFFI(this, sharedKey);
-    } catch (e) {
-      sharedKey?.dispose();
-      rethrow;
-    } finally {
-      publicKeyPtr?.dispose();
-    }
+      return PrecalculatedBoxFFI(this, scope.takeSecureKey(sharedKey));
+    });
   }
 
   @override
   Uint8List seal({required Uint8List message, required Uint8List publicKey}) {
     validatePublicKey(publicKey);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      dataPtr = SodiumPointer.alloc(sodium, count: message.length + sealBytes)
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.alloc<UnsignedChar>(message.length + sealBytes)
         ..fill(List<int>.filled(sealBytes, 0))
         ..fill(message, offset: sealBytes);
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+      final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
 
       final result = sodium.crypto_box_seal(
         dataPtr.ptr,
@@ -520,13 +407,8 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
       );
       SodiumException.checkSucceededInt(result);
 
-      return dataPtr.asListView(owned: true);
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      publicKeyPtr?.dispose();
-    }
+      return scope.takeBytes(dataPtr);
+    });
   }
 
   @override
@@ -539,36 +421,29 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
     validatePublicKey(publicKey);
     validateSecretKey(secretKey);
 
-    SodiumPointer<UnsignedChar>? dataPtr;
-    SodiumPointer<UnsignedChar>? publicKeyPtr;
-    try {
-      dataPtr = cipherText.toSodiumPointer(sodium);
-      publicKeyPtr = publicKey.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
+    return sodiumScope(sodium, (scope) {
+      final dataPtr = scope.copyList<UnsignedChar>(
+        cipherText,
+        memoryProtection: .readWrite,
       );
+      final publicKeyPtr = scope.copyList<UnsignedChar>(publicKey);
 
       final result = secretKey.runUnlockedNative(
         sodium,
         (secretKeyPtr) => sodium.crypto_box_seal_open(
-          dataPtr!.viewAt(sealBytes).ptr,
+          dataPtr.viewAt(sealBytes).ptr,
           dataPtr.ptr,
           dataPtr.count,
-          publicKeyPtr!.ptr,
+          publicKeyPtr.ptr,
           secretKeyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
       return Uint8List.sublistView(
-        dataPtr.asListView<Uint8List>(owned: true),
+        scope.takeBytes<Uint8List>(dataPtr),
         sealBytes,
       );
-    } catch (_) {
-      dataPtr?.dispose();
-      rethrow;
-    } finally {
-      publicKeyPtr?.dispose();
-    }
+    });
   }
 }

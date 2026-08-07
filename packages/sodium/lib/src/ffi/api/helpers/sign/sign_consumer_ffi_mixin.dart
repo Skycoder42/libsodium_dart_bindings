@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import '../../../../api/sodium_exception.dart';
 import '../../../bindings/libsodium.ffi.wrapper.dart';
 import '../../../bindings/sodium_pointer.dart';
+import '../../../bindings/sodium_scope.dart';
 
 /// @nodoc
 @internal
@@ -50,21 +51,21 @@ mixin SignConsumerFFIMixin<T extends Object>
   void add(Uint8List data) {
     _ensureNotCompleted();
 
-    SodiumPointer<UnsignedChar>? messagePtr;
-    try {
-      messagePtr = data.toSodiumPointer(sodium, memoryProtection: .readOnly);
+    sodiumScope(sodium, (scope) {
+      final messagePtr = scope.copyList<UnsignedChar>(data);
 
       _state.memoryProtection = .readWrite;
-      final result = sodium.crypto_sign_update(
-        _state.ptr.cast(),
-        messagePtr.ptr,
-        messagePtr.count,
-      );
-      SodiumException.checkSucceededInt(result);
-    } finally {
-      _state.memoryProtection = .noAccess;
-      messagePtr?.dispose();
-    }
+      try {
+        final result = sodium.crypto_sign_update(
+          _state.ptr.cast(),
+          messagePtr.ptr,
+          messagePtr.count,
+        );
+        SodiumException.checkSucceededInt(result);
+      } finally {
+        _state.memoryProtection = .noAccess;
+      }
+    });
   }
 
   @override

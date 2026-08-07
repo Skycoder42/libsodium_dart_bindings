@@ -11,6 +11,7 @@ import '../../api/ip_address.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
 import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 
 /// @nodoc
 @internal
@@ -36,21 +37,18 @@ class IpAddressFFI with IpAddressEquality implements IpAddress {
       };
 
   /// @nodoc
-  factory IpAddressFFI.parse(LibSodiumFFI sodium, String address) {
-    SodiumPointer<UnsignedChar>? binPtr;
-    final strPtr = address.toSodiumPointer(sodium);
-    try {
-      binPtr = SodiumPointer.alloc(sodium, count: 16);
-      final result = sodium.sodium_ip2bin(binPtr.ptr, strPtr.ptr, strPtr.count);
-      SodiumException.checkSucceededInt(result);
-      return .fromPointer(sodium, binPtr);
-    } catch (_) {
-      binPtr?.dispose();
-      rethrow;
-    } finally {
-      strPtr.dispose();
-    }
-  }
+  factory IpAddressFFI.parse(LibSodiumFFI sodium, String address) =>
+      sodiumScope(sodium, (scope) {
+        final strPtr = scope.copyString(address);
+        final binPtr = scope.alloc<UnsignedChar>(16);
+        final result = sodium.sodium_ip2bin(
+          binPtr.ptr,
+          strPtr.ptr,
+          strPtr.count,
+        );
+        SodiumException.checkSucceededInt(result);
+        return .fromPointer(sodium, scope.takePointer(binPtr));
+      });
 
   /// @nodoc
   factory IpAddressFFI.fromRawBytes(LibSodiumFFI sodium, Uint8List bytes) {
@@ -73,22 +71,16 @@ class IpAddressFFI with IpAddressEquality implements IpAddress {
       Uint8List.fromList(rawBytes.asListView<Uint8List>()).asUnmodifiableView();
 
   @override
-  String get addressString {
-    final strPtr = SodiumPointer<Char>.alloc(
-      sodium,
-      count: _ipMaxLen,
-      zeroMemory: true,
-    );
-    try {
-      final result = sodium.sodium_bin2ip(strPtr.ptr, _ipMaxLen, rawBytes.ptr);
-      if (result == nullptr) {
-        throw SodiumException('Failed to convert IP address to string');
-      }
-      return strPtr.toDartString(zeroTerminated: true);
-    } finally {
-      strPtr.dispose();
+  String get addressString => sodiumScope(sodium, (scope) {
+    final strPtr = scope.alloc<Char>(_ipMaxLen, zeroMemory: true);
+
+    final result = sodium.sodium_bin2ip(strPtr.ptr, _ipMaxLen, rawBytes.ptr);
+    if (result == nullptr) {
+      throw SodiumException('Failed to convert IP address to string');
     }
-  }
+
+    return scope.takeString(strPtr);
+  });
 
   @override
   ia.InternetAddress get address =>

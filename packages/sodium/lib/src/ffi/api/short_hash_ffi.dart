@@ -7,9 +7,8 @@ import '../../api/secure_key.dart';
 import '../../api/short_hash.dart';
 import '../../api/sodium_exception.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
-import '../bindings/memory_protection.dart';
 import '../bindings/secure_key_native.dart';
-import '../bindings/sodium_pointer.dart';
+import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
 /// @nodoc
@@ -39,32 +38,22 @@ class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
   Uint8List call({required Uint8List message, required SecureKey key}) {
     validateKey(key);
 
-    SodiumPointer<UnsignedChar>? messagePtr;
-    SodiumPointer<UnsignedChar>? outPtr;
-    try {
-      outPtr = SodiumPointer.alloc(sodium, count: bytes);
-      messagePtr = message.toSodiumPointer(
-        sodium,
-        memoryProtection: MemoryProtection.readOnly,
-      );
+    return sodiumScope(sodium, (scope) {
+      final outPtr = scope.alloc<UnsignedChar>(bytes);
+      final messagePtr = scope.copyList<UnsignedChar>(message);
 
       final result = key.runUnlockedNative(
         sodium,
         (keyPtr) => sodium.crypto_shorthash(
-          outPtr!.ptr,
-          messagePtr!.ptr,
+          outPtr.ptr,
+          messagePtr.ptr,
           messagePtr.count,
           keyPtr.ptr,
         ),
       );
       SodiumException.checkSucceededInt(result);
 
-      return outPtr.asListView(owned: true);
-    } catch (_) {
-      outPtr?.dispose();
-      rethrow;
-    } finally {
-      messagePtr?.dispose();
-    }
+      return scope.takeBytes(outPtr);
+    });
   }
 }
