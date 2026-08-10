@@ -4,6 +4,7 @@
 @TestOn('dart-vm')
 library;
 
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
@@ -880,6 +881,17 @@ void main() {
             expect(ptr.sodium, mockSodium);
             expect(ptr.count, 2);
             expect(ptr.ptr, hasRawData<Char>(testData.sublist(0, 2)));
+          });
+
+          test('converts string from and to pointer with the given '
+              'encoding', () {
+            const string = 'ÄB';
+
+            final ptr = string.toSodiumPointer(mockSodium, encoding: latin1);
+
+            expect(ptr.count, 2);
+            expect(ptr.ptr, hasRawData<Char>(const [0xC4, 0x42]));
+            expect(ptr.toDartString(encoding: latin1), string);
           });
 
           test('copies string to fixed width pointer', () {

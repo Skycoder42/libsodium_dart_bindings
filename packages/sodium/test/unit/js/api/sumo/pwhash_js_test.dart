@@ -1,6 +1,10 @@
+// ignore_for_file: deprecated_member_use_from_same_package the deprecated call
+// method is still tested
+
 @TestOn('js')
 library;
 
+import 'dart:convert';
 import 'dart:js_interop';
 import 'dart:typed_data';
 
@@ -158,10 +162,10 @@ void main() {
       when(() => mockSodium.crypto_pwhash_STRBYTES).thenReturn(5);
     });
 
-    group('call', () {
+    group('callRaw', () {
       test('asserts if outlen is invalid', () {
         expect(
-          () => sut.call(
+          () => sut.callRaw(
             outLen: 20,
             password: Int8List(0),
             salt: Uint8List(5),
@@ -177,7 +181,7 @@ void main() {
 
       test('asserts if password is invalid', () {
         expect(
-          () => sut.call(
+          () => sut.callRaw(
             outLen: 0,
             password: Int8List(20),
             salt: Uint8List(5),
@@ -193,7 +197,7 @@ void main() {
 
       test('asserts if salt is invalid', () {
         expect(
-          () => sut.call(
+          () => sut.callRaw(
             outLen: 0,
             password: Int8List(0),
             salt: Uint8List(20),
@@ -208,7 +212,7 @@ void main() {
 
       test('asserts if opsLimit is invalid', () {
         expect(
-          () => sut.call(
+          () => sut.callRaw(
             outLen: 0,
             password: Int8List(0),
             salt: Uint8List(5),
@@ -224,7 +228,7 @@ void main() {
 
       test('asserts if memLimit is invalid', () {
         expect(
-          () => sut.call(
+          () => sut.callRaw(
             outLen: 0,
             password: Int8List(0),
             salt: Uint8List(5),
@@ -253,7 +257,7 @@ void main() {
 
         const password = [1, 2, 3];
         final salt = Uint8List.fromList(const [0, 2, 4, 6, 8]);
-        sut.call(
+        sut.callRaw(
           outLen: 5,
           password: Int8List.fromList(password),
           salt: salt,
@@ -288,7 +292,7 @@ void main() {
             any(),
           ),
         ).thenReturn(testData.toJS);
-        final res = sut.call(
+        final res = sut.callRaw(
           outLen: testData.length,
           password: Int8List.fromList(const [1, 2, 3]),
           salt: Uint8List.fromList(const [0, 2, 4, 6, 8]),
@@ -314,7 +318,7 @@ void main() {
         ).thenThrow(JSError());
 
         expect(
-          () => sut.call(
+          () => sut.callRaw(
             outLen: 5,
             password: Int8List.fromList(const [1, 2, 3]),
             salt: Uint8List.fromList(const [0, 2, 4, 6, 8]),
@@ -323,6 +327,130 @@ void main() {
             alg: CryptoPwhashAlgorithm.argon2i13,
           ),
           throwsA(isA<SodiumException>()),
+        );
+      });
+    });
+
+    group('callStr', () {
+      test('asserts if password is invalid', () {
+        expect(
+          () => sut.callStr(
+            outLen: 0,
+            password: 'x' * 20,
+            salt: Uint8List(5),
+            opsLimit: 0,
+            memLimit: 0,
+          ),
+          throwsA(isA<RangeError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_PASSWD_MIN);
+        verify(() => mockSodium.crypto_pwhash_PASSWD_MAX);
+      });
+
+      test('calls crypto_pwhash with utf8 encoded password by default', () {
+        when(() => mockSodium.crypto_pwhash_ALG_DEFAULT).thenReturn(2);
+        when(
+          () => mockSodium.crypto_pwhash(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List(0).toJS);
+
+        final salt = Uint8List.fromList(const [0, 2, 4, 6, 8]);
+        sut.callStr(
+          outLen: 5,
+          password: 'äB',
+          salt: salt,
+          opsLimit: 3,
+          memLimit: 7,
+        );
+
+        verify(
+          () => mockSodium.crypto_pwhash(
+            5,
+            Uint8List.fromList(const [0xC3, 0xA4, 0x42]).toJS,
+            salt.toJS,
+            3,
+            7,
+            2,
+          ),
+        );
+      });
+
+      test('calls crypto_pwhash with password in the given encoding', () {
+        when(() => mockSodium.crypto_pwhash_ALG_DEFAULT).thenReturn(2);
+        when(
+          () => mockSodium.crypto_pwhash(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List(0).toJS);
+
+        final salt = Uint8List.fromList(const [0, 2, 4, 6, 8]);
+        sut.callStr(
+          outLen: 5,
+          password: 'äB',
+          passwordEncoding: latin1,
+          salt: salt,
+          opsLimit: 3,
+          memLimit: 7,
+        );
+
+        verify(
+          () => mockSodium.crypto_pwhash(
+            5,
+            Uint8List.fromList(const [0xE4, 0x42]).toJS,
+            salt.toJS,
+            3,
+            7,
+            2,
+          ),
+        );
+      });
+    });
+
+    group('call', () {
+      test('invokes callRaw', () {
+        when(() => mockSodium.crypto_pwhash_ALG_DEFAULT).thenReturn(2);
+        when(
+          () => mockSodium.crypto_pwhash(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          ),
+        ).thenReturn(Uint8List(0).toJS);
+
+        const password = [1, 2, 3];
+        final salt = Uint8List.fromList(const [0, 2, 4, 6, 8]);
+        sut.call(
+          outLen: 5,
+          password: Int8List.fromList(password),
+          salt: salt,
+          opsLimit: 3,
+          memLimit: 7,
+        );
+
+        verify(
+          () => mockSodium.crypto_pwhash(
+            5,
+            Uint8List.fromList(password).toJS,
+            salt.toJS,
+            3,
+            7,
+            2,
+          ),
         );
       });
     });
@@ -374,6 +502,27 @@ void main() {
         );
       });
 
+      test('calls crypto_pwhash_str with password in the given encoding', () {
+        when(
+          () => mockSodium.crypto_pwhash_str(any(), any(), any()),
+        ).thenReturn('');
+
+        sut.str(
+          password: 'äB',
+          opsLimit: 5,
+          memLimit: 2,
+          passwordEncoding: latin1,
+        );
+
+        verify(
+          () => mockSodium.crypto_pwhash_str(
+            Uint8List.fromList(const [0xE4, 0x42]).toJS,
+            5,
+            2,
+          ),
+        );
+      });
+
       test('returns password hash ', () {
         const testHashStr = 'ABC';
         when(
@@ -413,6 +562,15 @@ void main() {
         verify(() => mockSodium.crypto_pwhash_STRBYTES);
       });
 
+      test('asserts if passwordHash is not ascii encoded', () {
+        expect(
+          () => sut.strVerify(passwordHash: 'äbc', password: ''),
+          throwsA(isA<ArgumentError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_STRBYTES);
+      });
+
       test('asserts if password is invalid', () {
         expect(
           () => sut.strVerify(passwordHash: 'x' * 5, password: 'x' * 20),
@@ -421,6 +579,23 @@ void main() {
 
         verify(() => mockSodium.crypto_pwhash_PASSWD_MIN);
         verify(() => mockSodium.crypto_pwhash_PASSWD_MAX);
+      });
+
+      test('calls crypto_pwhash_str_verify with the given encoding', () {
+        const passwordHash = 'xyz12';
+        final result = sut.strVerify(
+          passwordHash: passwordHash,
+          password: 'äB',
+          passwordEncoding: latin1,
+        );
+
+        expect(result, isTrue);
+        verify(
+          () => mockSodium.crypto_pwhash_str_verify(
+            passwordHash,
+            Uint8List.fromList(const [0xE4, 0x42]).toJS,
+          ),
+        );
       });
 
       test('calls crypto_pwhash_str_verify with correct arguments', () {
@@ -466,6 +641,16 @@ void main() {
             opsLimit: 0,
             memLimit: 0,
           ),
+          throwsA(isA<ArgumentError>()),
+        );
+
+        verify(() => mockSodium.crypto_pwhash_STRBYTES);
+      });
+
+      test('asserts if passwordHash is not ascii encoded', () {
+        expect(
+          () =>
+              sut.strNeedsRehash(passwordHash: 'äbc', opsLimit: 0, memLimit: 0),
           throwsA(isA<ArgumentError>()),
         );
 

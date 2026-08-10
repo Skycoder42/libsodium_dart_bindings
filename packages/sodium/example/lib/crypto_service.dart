@@ -114,9 +114,9 @@ class CryptoService {
     Uint8List salt,
   ) async {
     var sodium = await SodiumSumoInit.init();
-    return sodium.crypto.pwhash(
+    return sodium.crypto.pwhash.callStr(
       outLen: sodium.crypto.secretBox.keyBytes,
-      password: password.toCharArray(),
+      password: password,
       salt: salt,
       opsLimit: sodium.crypto.pwhash.opsLimitSensitive,
       memLimit: sodium.crypto.pwhash.memLimitSensitive,

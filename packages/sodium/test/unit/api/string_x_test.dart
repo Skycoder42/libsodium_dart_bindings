@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:sodium/src/api/string_x.dart';
@@ -42,6 +43,26 @@ void main() {
       final res = testStr.toCharArray(zeroTerminated: true, memoryWidth: 5);
       expect(res, const [0x41, 0x42, 0x00, 0x00, 0x00]);
     });
+
+    test('encodes multi byte characters as utf8 by default', () {
+      const testStr = 'ÄB';
+      final res = testStr.toCharArray();
+      expect(res.unsignedView(), const [0xC3, 0x84, 0x42]);
+    });
+
+    test('uses the given encoding', () {
+      const testStr = 'ÄB';
+      final res = testStr.toCharArray(encoding: latin1);
+      expect(res.unsignedView(), const [0xC4, 0x42]);
+    });
+
+    test('throws if the string cannot be encoded', () {
+      const testStr = 'ÄB';
+      expect(
+        () => testStr.toCharArray(encoding: ascii),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
   });
 
   group('toDartString', () {
@@ -61,6 +82,30 @@ void main() {
       final testBytes = Int8List.fromList(const [0x41, 0x42, 0x00, 0x43, 0x44]);
       final res = testBytes.toDartString(zeroTerminated: true);
       expect(res, 'AB');
+    });
+
+    test('decodes multi byte characters as utf8 by default', () {
+      final testBytes = Uint8List.fromList(const [
+        0xC3,
+        0x84,
+        0x42,
+      ]).signedView();
+      final res = testBytes.toDartString();
+      expect(res, 'ÄB');
+    });
+
+    test('uses the given encoding', () {
+      final testBytes = Uint8List.fromList(const [0xC4, 0x42]).signedView();
+      final res = testBytes.toDartString(encoding: latin1);
+      expect(res, 'ÄB');
+    });
+
+    test('throws if the bytes cannot be decoded', () {
+      final testBytes = Uint8List.fromList(const [0xC4, 0x42]).signedView();
+      expect(
+        () => testBytes.toDartString(encoding: ascii),
+        throwsA(isA<FormatException>()),
+      );
     });
   });
 

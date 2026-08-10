@@ -24,12 +24,6 @@ void main() {
       sut: (value) => sutMock.validateOutLen(value),
     );
 
-    testCheckIsSame(
-      'validatePasswordHash',
-      source: () => sutMock.strBytes,
-      sut: (value) => sutMock.validatePasswordHash(Int8List(value)),
-    );
-
     testData<(int, bool)>(
       'validatePasswordHashStr asserts if value is not in range',
       const [(3, false), (5, false), (1, false), (0, true), (6, true)],
@@ -42,6 +36,20 @@ void main() {
           fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
         );
         verify(() => sutMock.strBytes);
+      },
+    );
+
+    testData<(String, bool)>(
+      'validatePasswordHashStr asserts if value is not ascii encoded',
+      const [('abc', false), ('\x7F', false), ('äbc', true), ('ab€', true)],
+      (fixture) {
+        when(() => sutMock.strBytes).thenReturn(5);
+
+        final exceptionMatcher = throwsA(isA<ArgumentError>());
+        expect(
+          () => sutMock.validatePasswordHashStr(fixture.$1),
+          fixture.$2 ? exceptionMatcher : isNot(exceptionMatcher),
+        );
       },
     );
 

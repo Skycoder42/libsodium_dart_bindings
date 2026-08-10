@@ -54,6 +54,19 @@ abstract class Validations {
     checkAtLeast(value, 0, name);
   }
 
+  /// @nodoc
+  static void checkIsAscii(String value, String name) {
+    for (final codeUnit in value.codeUnits) {
+      if (codeUnit > 0x7F) {
+        throw ArgumentError.value(
+          value,
+          name,
+          'Must only contain ASCII characters, but was',
+        );
+      }
+    }
+  }
+
   static void checkIsUint64(BigInt value, String name) {
     if (value.isNegative || value.bitLength > 64) {
       throw RangeError.range(

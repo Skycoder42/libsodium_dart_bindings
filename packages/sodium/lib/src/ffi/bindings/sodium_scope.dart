@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:meta/meta.dart';
@@ -65,19 +66,22 @@ class SodiumScope {
   /// Covers kdf/aead contexts, passwords and encoded hashes. [memoryWidth] pads
   /// the buffer to a fixed size (e.g. a kdf context) and throws an
   /// [ArgumentError] if [str] does not fit; [zeroTerminated] stops the encoding
-  /// at the first NUL and drops the rest of [str]. Defaults to
+  /// at the first NUL and drops the rest of [str]; [encoding] selects the
+  /// encoding and defaults to [utf8]. Defaults to
   /// [MemoryProtection.readOnly]. Wraps [SodiumString.toSodiumPointer].
   SodiumPointer<Char> copyString(
     String str, {
     int? memoryWidth,
     bool zeroTerminated = false,
     MemoryProtection memoryProtection = .readOnly,
+    Encoding encoding = utf8,
   }) => _track(
     str.toSodiumPointer(
       _sodium,
       memoryWidth: memoryWidth,
       zeroTerminated: zeroTerminated,
       memoryProtection: memoryProtection,
+      encoding: encoding,
     ),
   );
 
@@ -139,13 +143,21 @@ class SodiumScope {
   ///
   /// Freeing at once (rather than deferring to scope exit) ensures secret hash
   /// strings are zeroed as soon as possible. [zeroTerminated] stops decoding at
-  /// the first NUL byte. Wraps [CharSodiumPtr.toDartString]. [pointer] must be
+  /// the first NUL byte; [encoding] selects the encoding and defaults to
+  /// [utf8]. Wraps [CharSodiumPtr.toDartString]. [pointer] must be
   /// a pointer this scope owns.
   ///
   /// If the decoding fails, [pointer] stays tracked so the scope still frees
   /// it.
-  String takeString(SodiumPointer<Char> pointer, {bool zeroTerminated = true}) {
-    final result = pointer.toDartString(zeroTerminated: zeroTerminated);
+  String takeString(
+    SodiumPointer<Char> pointer, {
+    bool zeroTerminated = true,
+    Encoding encoding = utf8,
+  }) {
+    final result = pointer.toDartString(
+      zeroTerminated: zeroTerminated,
+      encoding: encoding,
+    );
     _untrack(pointer);
     pointer.dispose();
     return result;

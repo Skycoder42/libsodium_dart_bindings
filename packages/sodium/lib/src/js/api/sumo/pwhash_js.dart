@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:js_interop';
 import 'dart:typed_data';
 
@@ -78,8 +79,44 @@ class PwhashJS with PwHashValidations implements Pwhash {
   @override
   int get strBytes => sodium.crypto_pwhash_STRBYTES;
 
+  @Deprecated('Use callStr or callRaw instead')
   @override
   SecureKey call({
+    required int outLen,
+    required Int8List password,
+    required Uint8List salt,
+    required int opsLimit,
+    required int memLimit,
+    CryptoPwhashAlgorithm alg = CryptoPwhashAlgorithm.defaultAlg,
+  }) => callRaw(
+    outLen: outLen,
+    password: password,
+    salt: salt,
+    opsLimit: opsLimit,
+    memLimit: memLimit,
+    alg: alg,
+  );
+
+  @override
+  SecureKey callStr({
+    required int outLen,
+    required String password,
+    Encoding passwordEncoding = utf8,
+    required Uint8List salt,
+    required int opsLimit,
+    required int memLimit,
+    CryptoPwhashAlgorithm alg = CryptoPwhashAlgorithm.defaultAlg,
+  }) => callRaw(
+    outLen: outLen,
+    password: password.toCharArray(encoding: passwordEncoding),
+    salt: salt,
+    opsLimit: opsLimit,
+    memLimit: memLimit,
+    alg: alg,
+  );
+
+  @override
+  SecureKey callRaw({
     required int outLen,
     required Int8List password,
     required Uint8List salt,
@@ -111,8 +148,9 @@ class PwhashJS with PwHashValidations implements Pwhash {
     required String password,
     required int opsLimit,
     required int memLimit,
+    Encoding passwordEncoding = utf8,
   }) {
-    final passwordChars = password.toCharArray();
+    final passwordChars = password.toCharArray(encoding: passwordEncoding);
     validatePassword(passwordChars);
     validateOpsLimit(opsLimit);
     validateMemLimit(memLimit);
@@ -128,8 +166,12 @@ class PwhashJS with PwHashValidations implements Pwhash {
   }
 
   @override
-  bool strVerify({required String passwordHash, required String password}) {
-    final passwordChars = password.toCharArray();
+  bool strVerify({
+    required String passwordHash,
+    required String password,
+    Encoding passwordEncoding = utf8,
+  }) {
+    final passwordChars = password.toCharArray(encoding: passwordEncoding);
     validatePasswordHashStr(passwordHash);
     validatePassword(passwordChars);
 

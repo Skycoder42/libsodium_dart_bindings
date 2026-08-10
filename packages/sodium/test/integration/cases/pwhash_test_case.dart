@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:typed_data';
+
+import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
 
@@ -42,21 +45,21 @@ class PwhashTestCase extends TestCase {
       expect(sut.strBytes, 128, reason: 'strBytes');
     });
 
-    group('call', () {
+    group('callRaw', () {
       testSumo('generates different hashes for different inputs', (sodium) {
         final sut = sodium.crypto.pwhash;
 
         const outLen = 32;
         final password = Int8List.fromList(List.generate(10, (index) => index));
 
-        final pwHash1 = sut(
+        final pwHash1 = sut.callRaw(
           outLen: outLen,
           password: password,
           salt: sodium.randombytes.buf(sut.saltBytes),
           memLimit: sut.memLimitMin,
           opsLimit: sut.opsLimitMin,
         );
-        final pwHash2 = sut(
+        final pwHash2 = sut.callRaw(
           outLen: outLen,
           password: password,
           salt: sodium.randombytes.buf(sut.saltBytes),
@@ -78,14 +81,14 @@ class PwhashTestCase extends TestCase {
         final password = Int8List.fromList(List.generate(10, (index) => index));
         final salt = sodium.randombytes.buf(sut.saltBytes);
 
-        final pwHash1 = sut(
+        final pwHash1 = sut.callRaw(
           outLen: outLen,
           password: password,
           salt: salt,
           memLimit: sut.memLimitMin,
           opsLimit: sut.opsLimitMin,
         );
-        final pwHash2 = sut(
+        final pwHash2 = sut.callRaw(
           outLen: outLen,
           password: password,
           salt: salt,
@@ -98,6 +101,68 @@ class PwhashTestCase extends TestCase {
         expect(pwHash1, hasLength(outLen));
         expect(pwHash2, hasLength(outLen));
         expect(pwHash1, pwHash2);
+      });
+    });
+
+    group('callStr', () {
+      testSumo('generates the same hash as callRaw for the encoded password', (
+        sodium,
+      ) {
+        final sut = sodium.crypto.pwhash;
+
+        const outLen = 32;
+        const password = 'päßwörd';
+        final salt = sodium.randombytes.buf(sut.saltBytes);
+
+        final pwHash1 = sut.callStr(
+          outLen: outLen,
+          password: password,
+          salt: salt,
+          memLimit: sut.memLimitMin,
+          opsLimit: sut.opsLimitMin,
+        );
+        final pwHash2 = sut.callRaw(
+          outLen: outLen,
+          password: password.toCharArray(),
+          salt: salt,
+          memLimit: sut.memLimitMin,
+          opsLimit: sut.opsLimitMin,
+        );
+        printOnFailure('pwHash1: $pwHash1');
+        printOnFailure('pwHash2: $pwHash2');
+
+        expect(pwHash1, hasLength(outLen));
+        expect(pwHash1, pwHash2);
+      });
+
+      testSumo('generates different hashes for different encodings', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
+        const outLen = 32;
+        const password = 'päßwörd';
+        final salt = sodium.randombytes.buf(sut.saltBytes);
+
+        final pwHash1 = sut.callStr(
+          outLen: outLen,
+          password: password,
+          salt: salt,
+          memLimit: sut.memLimitMin,
+          opsLimit: sut.opsLimitMin,
+        );
+        final pwHash2 = sut.callStr(
+          outLen: outLen,
+          password: password,
+          passwordEncoding: latin1,
+          salt: salt,
+          memLimit: sut.memLimitMin,
+          opsLimit: sut.opsLimitMin,
+        );
+        printOnFailure('pwHash1: $pwHash1');
+        printOnFailure('pwHash2: $pwHash2');
+
+        expect(pwHash1, hasLength(outLen));
+        expect(pwHash2, hasLength(outLen));
+        expect(pwHash1, isNot(pwHash2));
       });
     });
 
@@ -141,6 +206,50 @@ class PwhashTestCase extends TestCase {
         );
 
         expect(verified, isFalse);
+      });
+
+      testSumo('verify failes if password encoding is different', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
+        const password = 'päßwörd';
+        final pwHash = sut.str(
+          password: password,
+          memLimit: sut.memLimitMin,
+          opsLimit: sut.opsLimitMin,
+        );
+        printOnFailure('pwHash: $pwHash');
+
+        expect(sut.strVerify(passwordHash: pwHash, password: password), isTrue);
+        expect(
+          sut.strVerify(
+            passwordHash: pwHash,
+            password: password,
+            passwordEncoding: latin1,
+          ),
+          isFalse,
+        );
+      });
+
+      testSumo('str returns an ascii encoded password hash', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
+        final pwHash = sut.str(
+          password: 'päßwörd',
+          memLimit: sut.memLimitMin,
+          opsLimit: sut.opsLimitMin,
+        );
+        printOnFailure('pwHash: $pwHash');
+
+        expect(ascii.encode(pwHash), pwHash.codeUnits);
+      });
+
+      testSumo('strVerify rejects a non ascii password hash', (sodium) {
+        final sut = sodium.crypto.pwhash;
+
+        expect(
+          () => sut.strVerify(passwordHash: 'nö-hash', password: 'password1'),
+          throwsA(isA<ArgumentError>()),
+        );
       });
     });
 

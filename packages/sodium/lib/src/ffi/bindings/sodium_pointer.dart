@@ -1,6 +1,7 @@
 // ignore_for_file: type_literal_in_constant_pattern, switch_on_type for pointer
 // type matching
 
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
@@ -392,14 +393,18 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
 
 /// Extensions on specific sodium pointers for easy conversion to dart types
 extension CharSodiumPtr on SodiumPointer<Char> {
-  /// Converts the pointer to a dart string using the [utf8] encoding.
+  /// Converts the pointer to a dart string using [encoding], which defaults to
+  /// [utf8].
   ///
   /// This is simply a shortcut to [Int8ListX.toDartString], which is called on
   /// the data of the [ptr].
-  String toDartString({bool zeroTerminated = false}) => ptr
+  String toDartString({
+    bool zeroTerminated = false,
+    Encoding encoding = utf8,
+  }) => ptr
       .cast<Int8>()
       .asTypedList(count)
-      .toDartString(zeroTerminated: zeroTerminated);
+      .toDartString(zeroTerminated: zeroTerminated, encoding: encoding);
 }
 
 /// Extensions on String to add sodium pointer operations
@@ -413,11 +418,13 @@ extension SodiumString on String {
     int? memoryWidth,
     bool zeroTerminated = false,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
+    Encoding encoding = utf8,
   }) {
     late final SodiumPointer<Char> ptr;
     toCharArray(
       memoryWidth: memoryWidth,
       zeroTerminated: zeroTerminated,
+      encoding: encoding,
       allocator: (length) =>
           (ptr = SodiumPointer.alloc(sodium, count: length)).asListView(),
     );

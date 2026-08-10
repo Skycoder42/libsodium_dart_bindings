@@ -3,9 +3,10 @@ import 'dart:typed_data';
 
 /// Extensions on [String]
 extension StringX on String {
-  /// Converts this string to a UTF8 encoded byte array (a [Int8List]).
+  /// Converts this string to an encoded byte array (a [Int8List]).
   ///
-  /// Uses [utf8] for the encoding. If [memoryWidth] is specified, the resulting
+  /// Uses [encoding] for the encoding, which defaults to [utf8]. If
+  /// [memoryWidth] is specified, the resulting
   /// byte array will have exactly [memoryWidth] bytes. If this string fits
   /// exactly into this array, that will be the result. If it is shorter, the
   /// remaining bytes will be filled with 0. If it is bigger, an [ArgumentError]
@@ -22,12 +23,13 @@ extension StringX on String {
     int? memoryWidth,
     bool zeroTerminated = false,
     Int8List Function(int length)? allocator,
+    Encoding encoding = utf8,
   }) {
     final List<int> chars;
     if (zeroTerminated) {
-      chars = utf8.encode(this).takeWhile((value) => value != 0).toList();
+      chars = encoding.encode(this).takeWhile((value) => value != 0).toList();
     } else {
-      chars = utf8.encode(this);
+      chars = encoding.encode(this);
     }
 
     if (memoryWidth != null) {
@@ -53,17 +55,21 @@ extension StringX on String {
 
 /// Extensions on [Int8List]
 extension Int8ListX on Int8List {
-  /// Converts this UTF8 encoded byte array to a dart [String].
+  /// Converts this encoded byte array to a dart [String].
   ///
-  /// Uses [utf8] for the decoding. By default, the whole byte array is decoded
+  /// Uses [encoding] for the decoding, which defaults to [utf8]. By default,
+  /// the whole byte array is decoded
   /// and returned as string. If [zeroTerminated] is set to true, the decoder
   /// stops at the first 0 byte and only that part of the byte array is returned
   /// as a string.
-  String toDartString({bool zeroTerminated = false}) {
+  String toDartString({bool zeroTerminated = false, Encoding encoding = utf8}) {
+    // decoding must happen on the unsigned view, as decoders reject the
+    // negative byte values of an Int8List
+    final bytes = unsignedView();
     if (zeroTerminated) {
-      return utf8.decode(takeWhile((value) => value != 0).toList());
+      return encoding.decode(bytes.takeWhile((value) => value != 0).toList());
     } else {
-      return utf8.decode(this);
+      return encoding.decode(bytes);
     }
   }
 

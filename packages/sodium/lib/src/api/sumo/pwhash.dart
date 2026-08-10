@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -113,11 +114,42 @@ abstract class Pwhash {
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#constants
   int get strBytes;
 
+  /// @nodoc
+  @Deprecated('Use callStr or callRaw instead')
+  SecureKey call({
+    required int outLen,
+    required Int8List password,
+    required Uint8List salt,
+    required int opsLimit,
+    required int memLimit,
+    CryptoPwhashAlgorithm alg = CryptoPwhashAlgorithm.defaultAlg,
+  });
+
   /// Provides crypto_pwhash.
+  ///
+  /// Allows to pass a dart string as [password], which is converted to bytes
+  /// using [passwordEncoding], which defaults to [utf8].
   ///
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#key-derivation
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#guidelines-for-choosing-the-parameters
-  SecureKey call({
+  SecureKey callStr({
+    required int outLen,
+    required String password,
+    Encoding passwordEncoding = utf8,
+    required Uint8List salt,
+    required int opsLimit,
+    required int memLimit,
+    CryptoPwhashAlgorithm alg = CryptoPwhashAlgorithm.defaultAlg,
+  });
+
+  /// Provides crypto_pwhash.
+  ///
+  /// Allows to pass a raw char array which is hashed directly. Can be useful
+  /// if [callStr] cannot be used because data is not a valid encoded string.
+  ///
+  /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#key-derivation
+  /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#guidelines-for-choosing-the-parameters
+  SecureKey callRaw({
     required int outLen,
     required Int8List password,
     required Uint8List salt,
@@ -128,20 +160,35 @@ abstract class Pwhash {
 
   /// Provides crypto_pwhash_str.
   ///
+  /// The [password] is converted to bytes using [passwordEncoding], which
+  /// defaults to [utf8]. The returned password hash is always [ascii] encoded.
+  ///
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#password-storage
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#guidelines-for-choosing-the-parameters
   String str({
     required String password,
     required int opsLimit,
     required int memLimit,
+    Encoding passwordEncoding = utf8,
   });
 
   /// Provides crypto_pwhash_str_verify.
   ///
+  /// The [password] is converted to bytes using [passwordEncoding], which
+  /// defaults to [utf8]. The [passwordHash] must be [ascii] encoded, as
+  /// returned by [str] - an [ArgumentError] is thrown otherwise.
+  ///
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#password-storage
-  bool strVerify({required String passwordHash, required String password});
+  bool strVerify({
+    required String passwordHash,
+    required String password,
+    Encoding passwordEncoding = utf8,
+  });
 
   /// Provides crypto_pwhash_str_needs_rehash.
+  ///
+  /// The [passwordHash] must be [ascii] encoded, as returned by [str] - an
+  /// [ArgumentError] is thrown otherwise.
   ///
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#password-storage
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#guidelines-for-choosing-the-parameters
@@ -160,16 +207,10 @@ mixin PwHashValidations implements Pwhash {
       Validations.checkInRange(outLen, bytesMin, bytesMax, 'outLen');
 
   /// @nodoc
-  void validatePasswordHash(Int8List passwordHash) =>
-      Validations.checkIsSame(passwordHash.length, strBytes, 'passwordHash');
-
-  /// @nodoc
-  void validatePasswordHashStr(String passwordHash) => Validations.checkInRange(
-    passwordHash.length,
-    1,
-    strBytes,
-    'passwordHash',
-  );
+  void validatePasswordHashStr(String passwordHash) {
+    Validations.checkInRange(passwordHash.length, 1, strBytes, 'passwordHash');
+    Validations.checkIsAscii(passwordHash, 'passwordHash');
+  }
 
   /// @nodoc
   void validatePassword(Int8List password) => Validations.checkInRange(

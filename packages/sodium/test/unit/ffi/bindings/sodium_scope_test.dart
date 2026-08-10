@@ -4,6 +4,7 @@
 library;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
@@ -247,6 +248,15 @@ void main() {
 
         expect(ptr.count, 2);
         expect(ptr.ptr, hasRawData<Char>([97, 98]));
+      });
+    });
+
+    test('encodes with the given encoding', () {
+      sodiumScope(mockSodium, (scope) {
+        final ptr = scope.copyString('äb', encoding: latin1);
+
+        expect(ptr.count, 2);
+        expect(ptr.ptr, hasRawData<Char>([0xE4, 98]));
       });
     });
 
@@ -530,6 +540,18 @@ void main() {
         expect(result, fixture.$2);
       },
     );
+
+    test('decodes with the given encoding', () {
+      final result = sodiumScope(
+        mockSodium,
+        (scope) => scope.takeString(
+          scope.copyString('äb', encoding: latin1),
+          encoding: latin1,
+        ),
+      );
+
+      expect(result, 'äb');
+    });
 
     test('keeps the pointer tracked if decoding throws', () {
       late int addr;
