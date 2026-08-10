@@ -56,7 +56,6 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
   }
 
   @override
-  @pragma('vm:entry-point')
   Uint8List call({required Uint8List message, required SecureKey secretKey}) {
     validateSecretKey(secretKey);
 

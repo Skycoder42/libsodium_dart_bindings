@@ -43,7 +43,6 @@ class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
   }
 
   @override
-  @pragma('vm:entry-point')
   SecureKey call({required SecureKey n, required Uint8List p}) {
     validateSecretKey(n);
     validatePublicKey(p);

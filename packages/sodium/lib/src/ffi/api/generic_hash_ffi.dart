@@ -49,7 +49,6 @@ class GenericHashFFI
   );
 
   @override
-  @pragma('vm:entry-point')
   Uint8List call({required Uint8List message, int? outLen, SecureKey? key}) {
     if (outLen != null) {
       validateOutLen(outLen);
