@@ -84,7 +84,7 @@ else** (no prose before or after):
     "classified ss as SecureKey output",
     "used base class + variant subclasses"
   ],
-  "reviewQuestion": "Does the FFI implementation look correct? Check memory ownership in try/catch/finally, unlock nesting (outputs outermost), nullptr for dropped params, and .count args.",
+  "reviewQuestion": "Does the FFI implementation look correct? Check that every allocation goes through the sodiumScope and every result leaves it via take*, unlock nesting (output keys outermost), nullptr for dropped params, and .count args.",
   "blockingQuestions": []
 }
 ```

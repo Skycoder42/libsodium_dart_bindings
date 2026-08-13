@@ -134,10 +134,8 @@ The `abstract interface class` keyword alone is sufficient.
 5. The validation mixin immediately after the interface in the same file:
 
 ```dart
-/// @nodoc
 @internal
 mixin {ClassName}Validations implements {ClassName} {
-  /// @nodoc
   void validatePublicKey(Uint8List publicKey) =>
       Validations.checkIsSame(publicKey.length, publicKeyBytes, 'publicKey');
 
@@ -147,7 +145,9 @@ mixin {ClassName}Validations implements {ClassName} {
 ```
 
 Mixin rules:
-- `/// @nodoc` on the mixin class and on every method inside it.
+- **No doc comments** — `@internal` already hides the mixin and its members from
+  the generated docs, so neither the mixin nor its methods need a `/// @nodoc`
+  (older files still carry them; do not copy that).
 - One `validateX` method per `Uint8List` / `SecureKey` parameter that maps to
   a size constant.
   - Fixed-size inputs/keys → `Validations.checkIsSame(value.length, sizeGetter, 'name')`

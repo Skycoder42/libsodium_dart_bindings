@@ -66,10 +66,9 @@ class SodiumJS implements Sodium {
   late final Crypto crypto = CryptoJS(sodium);
 
   @override
-  IpAddress ipFromAddress(dynamic _) => throw UnsupportedError(
-    'ipFromAddress is only supported in the native implementation of Sodium. '
-    'Use ipFromString or ipFromBytes instead.',
-  );
+  IpAddress ipFromAddress(dynamic address) =>
+      // On the web, the platform native address type is simply a string.
+      IpAddressJS.fromString(sodium, address as String);
 
   @override
   IpAddress ipFromString(String address) =>

@@ -14,6 +14,7 @@ import '../../api/secret_box.dart';
 import '../../api/secret_stream.dart';
 import '../../api/short_hash.dart';
 import '../../api/sign.dart';
+import '../../api/xof.dart';
 import '../bindings/libsodium.ffi.wrapper.dart';
 import 'aead_aegis256_ffi.dart';
 import 'aead_chacha20poly1305_ffi.dart';
@@ -31,6 +32,10 @@ import 'secret_box_ffi.dart';
 import 'secret_stream_ffi.dart';
 import 'short_hash_ffi.dart';
 import 'sign_ffi.dart';
+import 'xof_shake128_ffi.dart';
+import 'xof_shake256_ffi.dart';
+import 'xof_turboshake128_ffi.dart';
+import 'xof_turboshake256_ffi.dart';
 
 /// @nodoc
 @internal
@@ -90,4 +95,16 @@ class CryptoFFI implements Crypto {
 
   @override
   late final Kx kx = KxFFI(sodium);
+
+  @override
+  late final Xof xofShake128 = XofShake128FFI(sodium);
+
+  @override
+  late final Xof xofShake256 = XofShake256FFI(sodium);
+
+  @override
+  late final Xof xofTurboshake128 = XofTurboshake128FFI(sodium);
+
+  @override
+  late final Xof xofTurboshake256 = XofTurboshake256FFI(sodium);
 }

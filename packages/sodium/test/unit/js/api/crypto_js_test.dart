@@ -19,6 +19,10 @@ import 'package:sodium/src/js/api/secret_box_js.dart';
 import 'package:sodium/src/js/api/secret_stream_js.dart';
 import 'package:sodium/src/js/api/short_hash_js.dart';
 import 'package:sodium/src/js/api/sign_js.dart';
+import 'package:sodium/src/js/api/xof_shake128_js.dart';
+import 'package:sodium/src/js/api/xof_shake256_js.dart';
+import 'package:sodium/src/js/api/xof_turboshake128_js.dart';
+import 'package:sodium/src/js/api/xof_turboshake256_js.dart';
 import 'package:test/test.dart';
 
 import '../sodium_js_mock.dart';
@@ -143,5 +147,33 @@ void main() {
 
   test('kx returns KxJS instance', () {
     expect(sut.kx, isA<KxJS>().having((p) => p.sodium, 'sodium', sut.sodium));
+  });
+
+  test('xofShake128 returns XofShake128JS instance', () {
+    expect(
+      sut.xofShake128,
+      isA<XofShake128JS>().having((p) => p.sodium, 'sodium', sut.sodium),
+    );
+  });
+
+  test('xofShake256 returns XofShake256JS instance', () {
+    expect(
+      sut.xofShake256,
+      isA<XofShake256JS>().having((p) => p.sodium, 'sodium', sut.sodium),
+    );
+  });
+
+  test('xofTurboshake128 returns XofTurboshake128JS instance', () {
+    expect(
+      sut.xofTurboshake128,
+      isA<XofTurboshake128JS>().having((p) => p.sodium, 'sodium', sut.sodium),
+    );
+  });
+
+  test('xofTurboshake256 returns XofTurboshake256JS instance', () {
+    expect(
+      sut.xofTurboshake256,
+      isA<XofTurboshake256JS>().having((p) => p.sodium, 'sodium', sut.sodium),
+    );
   });
 }

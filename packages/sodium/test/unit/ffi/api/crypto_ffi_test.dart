@@ -19,6 +19,10 @@ import 'package:sodium/src/ffi/api/secret_box_ffi.dart';
 import 'package:sodium/src/ffi/api/secret_stream_ffi.dart';
 import 'package:sodium/src/ffi/api/short_hash_ffi.dart';
 import 'package:sodium/src/ffi/api/sign_ffi.dart';
+import 'package:sodium/src/ffi/api/xof_shake128_ffi.dart';
+import 'package:sodium/src/ffi/api/xof_shake256_ffi.dart';
+import 'package:sodium/src/ffi/api/xof_turboshake128_ffi.dart';
+import 'package:sodium/src/ffi/api/xof_turboshake256_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:test/test.dart';
 
@@ -153,5 +157,33 @@ void main() {
 
   test('kx returns KxFFI instance', () {
     expect(sut.kx, isA<KxFFI>().having((p) => p.sodium, 'sodium', mockSodium));
+  });
+
+  test('xofShake128 returns XofShake128FFI instance', () {
+    expect(
+      sut.xofShake128,
+      isA<XofShake128FFI>().having((p) => p.sodium, 'sodium', mockSodium),
+    );
+  });
+
+  test('xofShake256 returns XofShake256FFI instance', () {
+    expect(
+      sut.xofShake256,
+      isA<XofShake256FFI>().having((p) => p.sodium, 'sodium', mockSodium),
+    );
+  });
+
+  test('xofTurboshake128 returns XofTurboshake128FFI instance', () {
+    expect(
+      sut.xofTurboshake128,
+      isA<XofTurboshake128FFI>().having((p) => p.sodium, 'sodium', mockSodium),
+    );
+  });
+
+  test('xofTurboshake256 returns XofTurboshake256FFI instance', () {
+    expect(
+      sut.xofTurboshake256,
+      isA<XofTurboshake256FFI>().having((p) => p.sodium, 'sodium', mockSodium),
+    );
   });
 }

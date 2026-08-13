@@ -37,10 +37,14 @@ method whose parameters and return type are **JS types** (`JSUint8Array`, an ext
 type from `sodium.js.dart`, etc.):
 
 ```dart
-/// @nodoc
 @protected
 JSUint8Array internalDec(JSUint8Array ciphertext, JSUint8Array privateKey);
 ```
+
+Write **no doc comments** in this file: `@internal` already keeps the class and
+everything in it out of the generated docs, so neither the class, its members,
+nor the `@protected` methods need a `/// @nodoc`. Older files in the repo still
+carry them — do not copy that.
 
 The base class implements all Dart-facing methods, handles `jsErrorWrap` and
 `runUnlockedSync`, and converts to/from Dart types. The concrete subclass only
@@ -157,6 +161,12 @@ KeyPair seedKeyPair(SecureKey seed) {
 There are three output patterns. For each operation, read the JS binding's **return
 type** from `sodium.js.dart` to decide which pattern applies.
 
+**Never assume the JS parameter order matches the C/FFI one — read the actual
+signature.** libsodium.js reorders and drops parameters, e.g.
+`crypto_xof_shake128(int out_length, JSUint8Array message)` puts the output length
+*first*, whereas the FFI signature takes the output pointer and its length last. Type
+the `@protected` hook after the JS signature, not the FFI one.
+
 ### Pattern A — Single `JSUint8Array` output → `Uint8List`
 
 The JS function returns `JSUint8Array`. Call `.toDart` inline at the end of the chain:
@@ -240,7 +250,117 @@ etc.), store the whole result first, then extract and convert each field:
 
 To find the field names: read the extension type definition at the top of `sodium.js.dart`.
 
-## Step 7 — Standard imports summary
+## Step 7 — Multi-part / consumer APIs
+
+The three patterns in Step 6 describe stateless one-shot operations. Multi-part APIs
+(`_init` / `_update` / `_final`, or an interface returning a `{ClassName}Consumer`)
+need their own file at
+`lib/src/js/api/helpers/{base}/{base}_consumer_js.dart`.
+
+**The state is a `JSNumber`.** libsodium.js allocates the state inside its emscripten
+heap and hands back the *address*, typed via a top-level alias in `sodium.js.dart`:
+
+```dart
+typedef XofShake128State = JSNumber;   // not an extension type — no static distinction
+```
+
+So the consumer is generic over `T extends JSNumber`, and the algorithm-specific
+functions are injected as constructor arguments typed by `@internal` typedefs — one
+per native call:
+
+```dart
+@internal
+typedef {Class}InitJsFn<T extends JSNumber> = T Function();
+
+@internal
+typedef {Class}UpdateJsFn<T extends JSNumber> =
+    void Function(T state, JSUint8Array messageChunk);
+
+@internal
+typedef {Class}FinalJsFn<T extends JSNumber> = JSUint8Array Function(T state);
+
+@internal
+class {Class}ConsumerJS<T extends JSNumber>
+    with {Class}ConsumerValidations
+    implements {Class}Consumer {
+  final {Class}UpdateJsFn<T> update;
+  final {Class}FinalJsFn<T> finalize;
+
+  late final T _state;
+
+  {Class}ConsumerJS({
+    required {Class}InitJsFn<T> init,
+    required this.update,
+    required this.finalize,
+  }) {
+    _state = jsErrorWrap(() => init());
+  }
+}
+```
+
+Because the state alias is not an extension type, the type parameter buys no static
+safety — it is documentation only. Carry it anyway for symmetry with the FFI
+implementation and with `KdfHkdfExtractConsumerJS<T>`.
+
+**If the API has several init variants** (e.g. `_init` and `_init_with_domain`),
+expose one `factory` per variant that funnels into a single private constructor
+which picks the right init function — do not make the caller pass a nullable
+discriminator.
+
+**The `StreamConsumer` idiom:**
+
+```dart
+@override
+void add(Uint8List data) {
+  _ensureNotCompleted();
+  jsErrorWrap(() => update(_state, data.toJS));
+}
+
+@override
+Future<void> addStream(Stream<Uint8List> stream) {
+  _ensureNotCompleted();
+  return stream.map(add).drain<void>();
+}
+```
+
+`close()` has two shapes — pick the one the Phase 2 interface implies:
+- **Completing consumer** (`close()` produces the result, e.g. a hash or a
+  `SecureKey`): hold a `Completer<R>`, complete it in `close()`, and use
+  `_completer.isCompleted` as the guard. Reference:
+  `helpers/kdf_hkdf/kdf_hkdf_extract_consumer_js.dart`.
+- **Non-completing consumer** (`close()` only ends the absorbing phase and the
+  result is pulled separately): use plain `bool` flags instead — a Completer
+  cannot model a consumer that stays usable after `close()`.
+
+**Disposal — the important asymmetry with FFI.** libsodium.js exposes **no** free or
+memzero for a `*_state_address`; the only related binding is
+`memzero(JSUint8Array)`. States are freed inside the generated `*_final` call. So:
+- If the API has a `_final`, the state is released when `close()` runs — nothing else
+  to do.
+- If the API has **no** `_final` (pull-style APIs such as xof's `squeeze`), there is
+  nothing `dispose()` can release. Implement it as a flag flip that invalidates the
+  consumer, so its observable behavior stays identical to the FFI version, and leave
+  a `//` comment stating that the heap allocation cannot be reclaimed from Dart.
+  Mention this in your `designDecisions` — it is a real platform limitation, not an
+  oversight.
+
+Mirror the FFI consumer's guard semantics and **reuse its exact `StateError`
+messages** so both platforms are indistinguishable to callers and to the Phase 9
+integration tests.
+
+> Reference: `packages/sodium/lib/src/js/api/helpers/generic_hash/generic_hash_consumer_js.dart`
+> (Completer-based, `_final` frees the state),
+> `packages/sodium/lib/src/js/api/helpers/kdf_hkdf/kdf_hkdf_extract_consumer_js.dart`
+> (generic over the state, functions injected) and
+> `packages/sodium/lib/src/js/api/helpers/xof/xof_consumer_js.dart`
+> (flag-based, no `_final`, nothing to free).
+
+Note that the consumer file usually needs **no** `// ignore_for_file:
+unnecessary_lambdas` header — it calls no sodium member directly, and the
+`unnecessary_ignore` rule flags the header as unneeded there. The same applies to
+an abstract base class that only delegates to `@protected` hooks.
+
+## Step 8 — Standard imports summary
 
 ```dart
 // ignore_for_file: unnecessary_lambdas to catch member access errors
@@ -265,8 +385,10 @@ Omit unused imports. Never import `dart:ffi` or anything from `ffi/`.
 Follow the phase-close protocol in `reference/conventions.md`. In your return
 JSON:
 - `designDecisions`: note which output pattern (A/B/C) was used for each
-  operation, any `hide` names added to the `sodium.js.dart` import, and whether a
-  base class was used.
+  operation, any `hide` names added to the `sodium.js.dart` import, whether a
+  base class was used, any place the JS parameter order differs from the FFI one,
+  and — for consumer APIs — the `close()`/`dispose()` mechanics and whether the
+  state can be freed at all.
 - `reviewQuestion`: *"Does the JS implementation look correct? Check especially:
   correct UPPERCASE vs lowercase for constants, correct `.toDart` / `SecureKeyJS`
   usage on outputs, and correct `hide` names on the `sodium.js.dart` import.

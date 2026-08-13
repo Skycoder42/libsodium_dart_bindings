@@ -28,6 +28,7 @@ import 'cases/short_hash_test_case.dart';
 import 'cases/sign_test_case.dart';
 import 'cases/sodium_init_test_case.dart';
 import 'cases/sodium_test_case.dart';
+import 'cases/xof_test_case.dart';
 import 'test_case.dart';
 
 typedef SetupAllFn = void Function(dynamic Function() body);
@@ -75,6 +76,7 @@ abstract class TestRunner {
     KemTestCase(this),
     KxTestCase(this),
     ScalarMultTestCase(this),
+    XofTestCase(this),
   ];
 
   FutureOr<Sodium> loadSodium();

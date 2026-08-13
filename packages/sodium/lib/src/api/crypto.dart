@@ -11,6 +11,7 @@ import 'secret_box.dart';
 import 'secret_stream.dart';
 import 'short_hash.dart';
 import 'sign.dart';
+import 'xof.dart';
 
 /// A meta class that provides access to all libsodium crypto APIs.
 abstract class Crypto {
@@ -106,4 +107,32 @@ abstract class Crypto {
   ///
   /// This provides all APIs that start with `crypto_kx`.
   Kx get kx;
+
+  /// An instance of [Xof].
+  ///
+  /// This provides all APIs that start with `crypto_xof_shake128`.
+  ///
+  /// See https://libsodium.gitbook.io/doc/hashing/xof
+  Xof get xofShake128;
+
+  /// An instance of [Xof].
+  ///
+  /// This provides all APIs that start with `crypto_xof_shake256`.
+  ///
+  /// See https://libsodium.gitbook.io/doc/hashing/xof
+  Xof get xofShake256;
+
+  /// An instance of [Xof].
+  ///
+  /// This provides all APIs that start with `crypto_xof_turboshake128`.
+  ///
+  /// See https://libsodium.gitbook.io/doc/hashing/xof
+  Xof get xofTurboshake128;
+
+  /// An instance of [Xof].
+  ///
+  /// This provides all APIs that start with `crypto_xof_turboshake256`.
+  ///
+  /// See https://libsodium.gitbook.io/doc/hashing/xof
+  Xof get xofTurboshake256;
 }

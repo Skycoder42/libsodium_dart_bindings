@@ -81,6 +81,7 @@ API based on libsodium version: *1.0.22*
  crypto_scalarmult            | ✔️   | ✔️  | ✔️   | https://libsodium.gitbook.io/doc/advanced/scalar_multiplication
  crypto_ipcrypt               | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption
  crypto_kem                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/public-key_cryptography/key_encapsulation
+ crypto_xof                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/hashing/xof
 
 **Note:** Memory Management in JS is limited to overwriting the memory with 0. All other Memory-APIs are only available
 in the VM.

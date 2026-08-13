@@ -221,10 +221,11 @@ test('returns {outputName}', () {
   expect(result.fieldB.extractBytes(), outputDataB);
 
   // Verify exactly the expected number of sodium_free calls (success path):
-  // Count one call per input pointer (disposed in `finally`).
-  // Output pointers transferred via asListView(owned: true) or returned as
-  // SecureKeyFFI are NOT freed in the success path (finalizer is mocked).
-  verify(() => mockSodium.sodium_free(any())).called(N_input_pointers);
+  // the `sodiumScope` frees everything the operation did NOT hand out via a
+  // `take*` call — i.e. one call per input pointer. Outputs taken via
+  // `takeBytes`/`takeSecureKey`/`takePointer` are NOT freed here (their
+  // finalizer is mocked). See the table in Step 6.
+  verify(() => mockSodium.sodium_free(any())).called(N_scope_freed_pointers);
 });
 ```
 
@@ -244,7 +245,8 @@ test('throws if {nativeFn} fails', () {
     throwsA(isA<SodiumException>()),
   );
 
-  // On failure ALL allocated pointers are freed (catch + finally paths):
+  // On failure the operation throws before reaching its `take*` calls, so the
+  // scope still owns — and frees — every allocation, inputs and outputs alike:
   verify(() => mockSodium.sodium_free(any()))
       .called(N_input_pointers + N_output_pointers);
 });
@@ -252,14 +254,30 @@ test('throws if {nativeFn} fails', () {
 
 ## Step 6 — Pointer count reference
 
-To get the `sodium_free` counts right, refer to the Phase 4 implementation:
+Phase 4 allocates everything through a `sodiumScope`. The rule is simply: **the scope
+frees every allocation it still owns when the body returns or throws**, and a `take*`
+call is what removes an allocation from the scope. So walk the Phase 4 implementation
+and count its `scope.alloc*`/`scope.copy*` calls, then subtract the ones that reach a
+`take*` on the path under test:
 
-| Pointer type | Success path | Failure path |
+| Allocation in Phase 4 | Success path | Failure path |
 |---|---|---|
-| Input (`toSodiumPointer`, disposed in `finally`) | freed | freed |
-| Output Uint8List (`SodiumPointer.alloc`, transferred via `asListView(owned: true)`) | **not freed** | freed |
-| Output SecureKey (`SecureKeyFFI.alloc`, returned directly) | **not freed** | freed |
+| Input (`scope.copyList` / `scope.copyString`) | freed at scope exit | freed at scope exit |
+| Output Uint8List (`scope.alloc`, handed out via `scope.takeBytes`) | **not freed** | freed at scope exit |
+| Output SecureKey (`scope.allocSecureKey`, handed out via `scope.takeSecureKey`) | **not freed** | freed at scope exit |
+| Long-lived pointer (`scope.alloc`, handed out via `scope.takePointer`) | **not freed** | freed at scope exit |
+| Output String (`scope.alloc<Char>`, handed out via `scope.takeString`) | freed **immediately** by `takeString` | freed at scope exit |
 | Optional input that was `null` | not allocated → 0 | not allocated → 0 |
+
+**Easy to miss:** a `SecureKey` *input* that is not a `SecureKeyNative` — which is every
+`SecureKeyFake` in these tests — makes `runUnlockedNative` copy the key into its own
+scoped pointer. That is one **extra** `sodium_free` on **both** paths, per such key
+argument.
+
+> Reference for the counts: `packages/sodium/test/unit/ffi/api/kx_ffi_test.dart`
+> (2 SecureKey outputs + 2 inputs + 1 faked input key → 3 on success, 5 on failure) and
+> `packages/sodium/test/unit/ffi/api/sumo/pwhash_ffi_test.dart` (`takeString` → 2 on
+> both paths).
 
 ## Step 7 — Run tests
 

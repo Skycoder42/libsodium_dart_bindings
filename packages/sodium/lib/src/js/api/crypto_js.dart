@@ -14,6 +14,7 @@ import '../../api/secret_box.dart';
 import '../../api/secret_stream.dart';
 import '../../api/short_hash.dart';
 import '../../api/sign.dart';
+import '../../api/xof.dart';
 import '../bindings/sodium.js.dart' hide KemEncResult, KeyPair, SecretBox;
 import 'aead_aegis256_js.dart';
 import 'aead_chacha20poly1305_js.dart';
@@ -31,6 +32,10 @@ import 'secret_box_js.dart';
 import 'secret_stream_js.dart';
 import 'short_hash_js.dart';
 import 'sign_js.dart';
+import 'xof_shake128_js.dart';
+import 'xof_shake256_js.dart';
+import 'xof_turboshake128_js.dart';
+import 'xof_turboshake256_js.dart';
 
 /// @nodoc
 @internal
@@ -90,4 +95,16 @@ class CryptoJS implements Crypto {
 
   @override
   late final Kx kx = KxJS(sodium);
+
+  @override
+  late final Xof xofShake128 = XofShake128JS(sodium);
+
+  @override
+  late final Xof xofShake256 = XofShake256JS(sodium);
+
+  @override
+  late final Xof xofTurboshake128 = XofTurboshake128JS(sodium);
+
+  @override
+  late final Xof xofTurboshake256 = XofTurboshake256JS(sodium);
 }
