@@ -133,5 +133,21 @@ base mixin LibSodiumJsExtraMethodsMixin<T extends Spec> on SpecGenerator<T> {
             ? null
             : Types.unimplementedError.newInstance(const []).thrown.code,
     );
+    yield Method(
+      (b) => b
+        ..name = 'free'
+        ..external = external
+        ..returns = typeMapping['void']
+        ..requiredParameters.add(
+          Parameter(
+            (b) => b
+              ..name = 'state_address'
+              ..type = typeMapping['state_address'],
+          ),
+        )
+        ..body = external
+            ? null
+            : Types.unimplementedError.newInstance(const []).thrown.code,
+    );
   }
 }

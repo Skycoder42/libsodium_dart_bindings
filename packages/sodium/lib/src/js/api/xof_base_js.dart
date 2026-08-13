@@ -50,6 +50,7 @@ abstract class XofBaseJS<T extends JSNumber>
     if (domain != null) {
       validateDomain(domain);
       return XofConsumerJS<T>.domain(
+        sodium: sodium,
         xofInit: internalInitWithDomain,
         xofUpdate: internalUpdate,
         xofSqueeze: internalSqueeze,
@@ -57,6 +58,7 @@ abstract class XofBaseJS<T extends JSNumber>
       );
     } else {
       return XofConsumerJS<T>(
+        sodium: sodium,
         xofInit: internalInit,
         xofUpdate: internalUpdate,
         xofSqueeze: internalSqueeze,

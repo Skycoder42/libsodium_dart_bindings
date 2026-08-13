@@ -33,6 +33,7 @@ class TypeMappingsLoader {
     'unsized_buf': TypeInfo('JSUint8Array'),
     'unsized_buf_optional': TypeInfo('JSUint8Array?'),
     'minsized_buf': TypeInfo('JSUint8Array'),
+    'state_address': TypeInfo('JSNumber'),
 
     // simple result mappings
     'randombytes_random_result': TypeInfo('int'),

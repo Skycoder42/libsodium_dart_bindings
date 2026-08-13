@@ -320,10 +320,16 @@ void main() {
       });
     });
 
-    test('disposeState does nothing', () {
+    test('disposeState frees the state address', () {
       sut.disposeState(22.toJS);
 
-      verifyZeroInteractions(mockSodium);
+      verify(() => mockSodium.free(22.toJS));
+    });
+
+    test('disposeState throws if free fails', () {
+      when(() => mockSodium.free(any())).thenThrow(JSError());
+
+      expect(() => sut.disposeState(22.toJS), throwsA(isA<SodiumException>()));
     });
   });
 

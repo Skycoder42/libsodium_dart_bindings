@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 import '../../../../api/xof.dart';
 import '../../../bindings/js_error.dart';
+import '../../../bindings/sodium.js.dart';
 
 @internal
 typedef XofInitJsFn<T extends JSNumber> = T Function();
@@ -25,6 +26,7 @@ typedef XofSqueezeJsFn<T extends JSNumber> =
 class XofConsumerJS<T extends JSNumber>
     with XofConsumerValidations
     implements XofConsumer {
+  final LibSodiumJS sodium;
   final XofUpdateJsFn<T> xofUpdate;
   final XofSqueezeJsFn<T> xofSqueeze;
 
@@ -34,21 +36,25 @@ class XofConsumerJS<T extends JSNumber>
   var _disposed = false;
 
   factory XofConsumerJS({
+    required LibSodiumJS sodium,
     required XofInitJsFn<T> xofInit,
     required XofUpdateJsFn<T> xofUpdate,
     required XofSqueezeJsFn<T> xofSqueeze,
   }) => XofConsumerJS._(
+    sodium: sodium,
     xofInit: xofInit,
     xofUpdate: xofUpdate,
     xofSqueeze: xofSqueeze,
   );
 
   factory XofConsumerJS.domain({
+    required LibSodiumJS sodium,
     required XofInitWithDomainJsFn<T> xofInit,
     required XofUpdateJsFn<T> xofUpdate,
     required XofSqueezeJsFn<T> xofSqueeze,
     required int domain,
   }) => XofConsumerJS._(
+    sodium: sodium,
     xofInitWithDomain: xofInit,
     xofUpdate: xofUpdate,
     xofSqueeze: xofSqueeze,
@@ -56,6 +62,7 @@ class XofConsumerJS<T extends JSNumber>
   );
 
   XofConsumerJS._({
+    required this.sodium,
     required this.xofUpdate,
     required this.xofSqueeze,
     XofInitJsFn<T>? xofInit,
@@ -101,16 +108,13 @@ class XofConsumerJS<T extends JSNumber>
 
   @override
   void dispose() {
-    // libsodium.js allocates the state internally and does not expose any API
-    // to free it again, so there are no resources to release here. Disposing
-    // only invalidates the consumer, which keeps the behavior identical to the
-    // FFI implementation.
     if (_disposed) {
       return;
     }
 
     _disposed = true;
     _closed = true;
+    jsErrorWrap(() => sodium.free(_state));
   }
 
   void _ensureNotDisposed() {

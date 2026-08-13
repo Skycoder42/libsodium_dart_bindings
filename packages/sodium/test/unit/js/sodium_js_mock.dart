@@ -1868,6 +1868,8 @@ abstract class _MockLibSodiumJS {
 
   JSUint8Array unpad(JSUint8Array buf, int blocksize) =>
       throw UnimplementedError();
+
+  void free(JSNumber state_address) => throw UnimplementedError();
 }
 
 @JSExport()

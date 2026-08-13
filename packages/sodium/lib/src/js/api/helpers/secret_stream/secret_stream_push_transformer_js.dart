@@ -64,7 +64,8 @@ class SecretStreamPushTransformerSinkJS
   }
 
   @override
-  void disposeState(SecretstreamXchacha20poly1305State cryptoState) {}
+  void disposeState(SecretstreamXchacha20poly1305State cryptoState) =>
+      jsErrorWrap(() => sodium.free(cryptoState));
 }
 
 /// @nodoc

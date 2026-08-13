@@ -32,6 +32,7 @@ void main() {
 
   XofConsumerJS<XofShake128State> createSut() =>
       XofConsumerJS<XofShake128State>(
+        sodium: mockSodium.asLibSodiumJS,
         xofInit: mockSodium.crypto_xof_shake128_init,
         xofUpdate: mockSodium.crypto_xof_shake128_update,
         xofSqueeze: mockSodium.crypto_xof_shake128_squeeze,
@@ -39,6 +40,7 @@ void main() {
 
   XofConsumerJS<XofShake128State> createDomainSut() =>
       XofConsumerJS<XofShake128State>.domain(
+        sodium: mockSodium.asLibSodiumJS,
         xofInit: mockSodium.crypto_xof_shake128_init_with_domain,
         xofUpdate: mockSodium.crypto_xof_shake128_update,
         xofSqueeze: mockSodium.crypto_xof_shake128_squeeze,
@@ -312,21 +314,24 @@ void main() {
     });
 
     group('dispose', () {
-      // NOTE: libsodium.js does not expose any API to free a state address and
-      // the xof APIs have no final step, so disposing cannot release anything -
-      // it only invalidates the consumer.
-      test('does not invoke any native function', () {
+      test('frees the xof state', () {
         sut.dispose();
 
-        verifyZeroInteractions(mockSodium);
+        verify(() => mockSodium.free(state.toJS));
       });
 
-      test('can be called multiple times', () {
+      test('can be called multiple times without freeing twice', () {
         sut
           ..dispose()
           ..dispose();
 
-        verifyZeroInteractions(mockSodium);
+        verify(() => mockSodium.free(state.toJS)).called(1);
+      });
+
+      test('throws if free fails', () {
+        when(() => mockSodium.free(any())).thenThrow(JSError());
+
+        expect(sut.dispose, throwsA(isA<SodiumException>()));
       });
 
       test('invalidates the consumer', () {
