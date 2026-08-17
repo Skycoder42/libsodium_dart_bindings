@@ -25,6 +25,7 @@ import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
 
 import '../../../secure_key_fake.dart';
+import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
 
 class MockSodiumFFI extends Mock implements LibSodiumFFI;
@@ -199,6 +200,522 @@ void main() {
       expect(() => sut.unpad(testData, 10), throwsA(isA<SodiumException>()));
 
       verify(() => mockSodium.sodium_free(any())).called(2);
+    });
+  });
+
+  group('memcmp', () {
+    final b1 = Uint8List.fromList(const [1, 2, 3, 4]);
+    final b2 = Uint8List.fromList(const [5, 6, 7, 8]);
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      when(() => mockSodium.sodium_memcmp(any(), any(), any())).thenReturn(0);
+    });
+
+    test('asserts if b2 has a different length', () {
+      expect(() => sut.memcmp(b1, Uint8List(3)), throwsA(isA<RangeError>()));
+
+      verifyNever(() => mockSodium.sodium_allocarray(any(), any()));
+      verifyNever(() => mockSodium.sodium_malloc(any()));
+    });
+
+    test('calls sodium_memcmp with correct arguments', () {
+      sut.memcmp(b1, b2);
+
+      verify(() => mockSodium.sodium_allocarray(b1.length, 1)).called(2);
+      verify(
+        () => mockSodium.sodium_memcmp(
+          any(that: hasRawData<Void>(b1)),
+          any(that: hasRawData<Void>(b2)),
+          b1.length,
+        ),
+      );
+    });
+
+    test('returns true if sodium_memcmp returns 0', () {
+      final res = sut.memcmp(b1, b2);
+
+      expect(res, isTrue);
+      verify(() => mockSodium.sodium_free(any())).called(2);
+    });
+
+    test('returns false if sodium_memcmp returns -1', () {
+      when(() => mockSodium.sodium_memcmp(any(), any(), any())).thenReturn(-1);
+
+      final res = sut.memcmp(b1, b2);
+
+      expect(res, isFalse);
+      verify(() => mockSodium.sodium_free(any())).called(2);
+    });
+
+    test('works with empty buffers', () {
+      final res = sut.memcmp(Uint8List(0), Uint8List(0));
+
+      expect(res, isTrue);
+      verify(() => mockSodium.sodium_memcmp(any(), any(), 0));
+    });
+  });
+
+  group('compare', () {
+    final b1 = Uint8List.fromList(const [1, 2, 3, 4]);
+    final b2 = Uint8List.fromList(const [5, 6, 7, 8]);
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      when(() => mockSodium.sodium_compare(any(), any(), any())).thenReturn(0);
+    });
+
+    test('asserts if b2 has a different length', () {
+      expect(() => sut.compare(b1, Uint8List(3)), throwsA(isA<RangeError>()));
+
+      verifyNever(() => mockSodium.sodium_allocarray(any(), any()));
+      verifyNever(() => mockSodium.sodium_malloc(any()));
+    });
+
+    test('calls sodium_compare with correct arguments', () {
+      sut.compare(b1, b2);
+
+      verify(() => mockSodium.sodium_allocarray(b1.length, 1)).called(2);
+      verify(
+        () => mockSodium.sodium_compare(
+          any(that: hasRawData<UnsignedChar>(b1)),
+          any(that: hasRawData<UnsignedChar>(b2)),
+          b1.length,
+        ),
+      );
+    });
+
+    testData<int>(
+      'returns the value reported by sodium_compare',
+      const [-1, 0, 1],
+      (fixture) {
+        when(() => mockSodium.sodium_compare(any(), any(), any()))
+            .thenReturn(fixture);
+
+        final res = sut.compare(b1, b2);
+
+        expect(res, fixture);
+        verify(() => mockSodium.sodium_free(any())).called(2);
+      },
+    );
+
+    test('works with empty buffers', () {
+      final res = sut.compare(Uint8List(0), Uint8List(0));
+
+      expect(res, 0);
+      verify(() => mockSodium.sodium_compare(any(), any(), 0));
+    });
+  });
+
+  group('isZero', () {
+    final testData = Uint8List.fromList(const [1, 2, 3, 4]);
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      when(() => mockSodium.sodium_is_zero(any(), any())).thenReturn(1);
+    });
+
+    test('calls sodium_is_zero with correct arguments', () {
+      sut.isZero(testData);
+
+      verify(() => mockSodium.sodium_allocarray(testData.length, 1)).called(1);
+      verify(
+        () => mockSodium.sodium_is_zero(
+          any(that: hasRawData<UnsignedChar>(testData)),
+          testData.length,
+        ),
+      );
+    });
+
+    test('returns true if sodium_is_zero returns 1', () {
+      final res = sut.isZero(testData);
+
+      expect(res, isTrue);
+      verify(() => mockSodium.sodium_free(any())).called(1);
+    });
+
+    test('returns false if sodium_is_zero returns 0', () {
+      when(() => mockSodium.sodium_is_zero(any(), any())).thenReturn(0);
+
+      final res = sut.isZero(testData);
+
+      expect(res, isFalse);
+      verify(() => mockSodium.sodium_free(any())).called(1);
+    });
+
+    test('works with an empty buffer', () {
+      final res = sut.isZero(Uint8List(0));
+
+      expect(res, isTrue);
+      verify(() => mockSodium.sodium_is_zero(any(), 0));
+    });
+  });
+
+  group('increment', () {
+    final testData = Uint8List.fromList(const [1, 2, 3, 4]);
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      when(() => mockSodium.sodium_increment(any(), any())).thenAnswer((_) {});
+    });
+
+    test('allocs a writable copy of the input and calls sodium_increment', () {
+      sut.increment(testData);
+
+      verify(() => mockSodium.sodium_allocarray(testData.length, 1)).called(1);
+      verifyNever(() => mockSodium.sodium_mprotect_readonly(any()));
+      verify(
+        () => mockSodium.sodium_increment(
+          any(that: hasRawData<UnsignedChar>(testData)),
+          testData.length,
+        ),
+      );
+    });
+
+    test('returns the incremented buffer without mutating the input', () {
+      const incremented = [2, 2, 3, 4];
+      when(() => mockSodium.sodium_increment(any(), any())).thenAnswer((i) {
+        fillPointer(
+          i.positionalArguments.first as Pointer<UnsignedChar>,
+          incremented,
+        );
+      });
+
+      final input = Uint8List.fromList(const [1, 2, 3, 4]);
+      final res = sut.increment(input);
+
+      expect(res, incremented);
+      expect(input, const [1, 2, 3, 4]);
+      expect(res, isNot(same(input)));
+      verifyNever(() => mockSodium.sodium_free(any()));
+    });
+
+    test('works with an empty buffer', () {
+      final res = sut.increment(Uint8List(0));
+
+      expect(res, isEmpty);
+      verify(() => mockSodium.sodium_increment(any(), 0));
+    });
+  });
+
+  group('add', () {
+    final a = Uint8List.fromList(const [1, 2, 3, 4]);
+    final b = Uint8List.fromList(const [5, 6, 7, 8]);
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      when(() => mockSodium.sodium_add(any(), any(), any())).thenAnswer((_) {});
+    });
+
+    test('asserts if b has a different length', () {
+      expect(() => sut.add(a, Uint8List(3)), throwsA(isA<RangeError>()));
+
+      verifyNever(() => mockSodium.sodium_allocarray(any(), any()));
+      verifyNever(() => mockSodium.sodium_malloc(any()));
+    });
+
+    test('calls sodium_add with correct arguments', () {
+      sut.add(a, b);
+
+      verify(() => mockSodium.sodium_allocarray(a.length, 1)).called(2);
+      verify(
+        () => mockSodium.sodium_add(
+          any(that: hasRawData<UnsignedChar>(a)),
+          any(that: hasRawData<UnsignedChar>(b)),
+          a.length,
+        ),
+      );
+    });
+
+    test('allocs a writable first and a read only second operand', () {
+      sut.add(a, b);
+
+      verifyNever(
+        () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(a))),
+      );
+      verify(
+        () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(b))),
+      ).called(1);
+    });
+
+    test('returns the sum without mutating the inputs', () {
+      const sum = [6, 8, 10, 12];
+      when(() => mockSodium.sodium_add(any(), any(), any())).thenAnswer((i) {
+        fillPointer(i.positionalArguments.first as Pointer<UnsignedChar>, sum);
+      });
+
+      final aInput = Uint8List.fromList(const [1, 2, 3, 4]);
+      final bInput = Uint8List.fromList(const [5, 6, 7, 8]);
+      final res = sut.add(aInput, bInput);
+
+      expect(res, sum);
+      expect(aInput, const [1, 2, 3, 4]);
+      expect(bInput, const [5, 6, 7, 8]);
+      expect(res, isNot(same(aInput)));
+      verify(() => mockSodium.sodium_free(any())).called(1);
+    });
+
+    test('works with empty buffers', () {
+      final res = sut.add(Uint8List(0), Uint8List(0));
+
+      expect(res, isEmpty);
+      verify(() => mockSodium.sodium_add(any(), any(), 0));
+    });
+  });
+
+  group('sub', () {
+    final a = Uint8List.fromList(const [5, 6, 7, 8]);
+    final b = Uint8List.fromList(const [1, 2, 3, 4]);
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      when(() => mockSodium.sodium_sub(any(), any(), any())).thenAnswer((_) {});
+    });
+
+    test('asserts if b has a different length', () {
+      expect(() => sut.sub(a, Uint8List(3)), throwsA(isA<RangeError>()));
+
+      verifyNever(() => mockSodium.sodium_allocarray(any(), any()));
+      verifyNever(() => mockSodium.sodium_malloc(any()));
+    });
+
+    test('calls sodium_sub with correct arguments', () {
+      sut.sub(a, b);
+
+      verify(() => mockSodium.sodium_allocarray(a.length, 1)).called(2);
+      verify(
+        () => mockSodium.sodium_sub(
+          any(that: hasRawData<UnsignedChar>(a)),
+          any(that: hasRawData<UnsignedChar>(b)),
+          a.length,
+        ),
+      );
+    });
+
+    test('allocs a writable first and a read only second operand', () {
+      sut.sub(a, b);
+
+      verifyNever(
+        () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(a))),
+      );
+      verify(
+        () => mockSodium.sodium_mprotect_readonly(any(that: hasRawData(b))),
+      ).called(1);
+    });
+
+    test('returns the difference without mutating the inputs', () {
+      const difference = [4, 4, 4, 4];
+      when(() => mockSodium.sodium_sub(any(), any(), any())).thenAnswer((i) {
+        fillPointer(
+          i.positionalArguments.first as Pointer<UnsignedChar>,
+          difference,
+        );
+      });
+
+      final aInput = Uint8List.fromList(const [5, 6, 7, 8]);
+      final bInput = Uint8List.fromList(const [1, 2, 3, 4]);
+      final res = sut.sub(aInput, bInput);
+
+      expect(res, difference);
+      expect(aInput, const [5, 6, 7, 8]);
+      expect(bInput, const [1, 2, 3, 4]);
+      expect(res, isNot(same(aInput)));
+      verify(() => mockSodium.sodium_free(any())).called(1);
+    });
+
+    test('works with empty buffers', () {
+      final res = sut.sub(Uint8List(0), Uint8List(0));
+
+      expect(res, isEmpty);
+      verify(() => mockSodium.sodium_sub(any(), any(), 0));
+    });
+  });
+
+  group('bin2hex', () {
+    final testData = Uint8List.fromList(const [0x01, 0xab, 0xff]);
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      mockAlloc(mockSodium, 0);
+      when(() => mockSodium.sodium_bin2hex(any(), any(), any(), any()))
+          .thenReturn(nullptr);
+    });
+
+    test('allocs a zeroed hex buffer of bin.length * 2 + 1 bytes', () {
+      sut.bin2hex(testData);
+
+      verify(() => mockSodium.sodium_allocarray(testData.length * 2 + 1, 1));
+      verify(
+        () => mockSodium.sodium_memzero(
+          any(that: isNot(nullptr)),
+          testData.length * 2 + 1,
+        ),
+      );
+    });
+
+    test('calls sodium_bin2hex with correct arguments', () {
+      sut.bin2hex(testData);
+
+      verify(
+        () => mockSodium.sodium_bin2hex(
+          any(that: isNot(nullptr)),
+          testData.length * 2 + 1,
+          any(that: hasRawData<UnsignedChar>(testData)),
+          testData.length,
+        ),
+      );
+    });
+
+    test('returns the zero terminated hex string as written by libsodium', () {
+      const hex = '01abff';
+      when(() => mockSodium.sodium_bin2hex(any(), any(), any(), any()))
+          .thenAnswer((i) {
+            fillPointer(
+              i.positionalArguments.first as Pointer<Char>,
+              hex.codeUnits,
+            );
+            return nullptr;
+          });
+
+      final res = sut.bin2hex(testData);
+
+      expect(res, hex);
+      verify(() => mockSodium.sodium_free(any())).called(2);
+    });
+
+    test('decodes the hex buffer as ascii, not as utf8', () {
+      // valid utf8 for 'Ä', but not valid ascii - sodium_bin2hex can never
+      // produce this, so decoding it must fail instead of silently succeeding
+      const nonAsciiHex = [0xC3, 0x84];
+      when(
+        () => mockSodium.sodium_bin2hex(any(), any(), any(), any()),
+      ).thenAnswer((i) {
+        fillPointer(i.positionalArguments.first as Pointer<Char>, nonAsciiHex);
+        return nullptr;
+      });
+
+      expect(() => sut.bin2hex(testData), throwsFormatException);
+
+      verify(() => mockSodium.sodium_free(any())).called(2);
+    });
+
+    test('returns an empty string for an empty input', () {
+      final res = sut.bin2hex(Uint8List(0));
+
+      expect(res, isEmpty);
+      verify(() => mockSodium.sodium_malloc(1));
+      verify(() => mockSodium.sodium_bin2hex(any(), 1, any(), 0));
+    });
+  });
+
+  group('hex2bin', () {
+    const hex = '0a1b2c';
+    const binData = [0x0a, 0x1b, 0x2c];
+
+    setUp(() {
+      mockAllocArray(mockSodium);
+      mockAlloc(mockSodium, binData.length);
+      when(
+        () => mockSodium.sodium_hex2bin(
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+        ),
+      ).thenReturn(0);
+    });
+
+    test('throws if hex is not ascii', () {
+      expect(() => sut.hex2bin('0ä1b'), throwsA(isA<ArgumentError>()));
+
+      verifyNever(() => mockSodium.sodium_allocarray(any(), any()));
+      verifyNever(() => mockSodium.sodium_malloc(any()));
+    });
+
+    test('calls sodium_hex2bin with correct arguments', () {
+      sut.hex2bin(hex);
+
+      verify(() => mockSodium.sodium_allocarray(hex.length, 1));
+      verify(() => mockSodium.sodium_allocarray(hex.length ~/ 2, 1));
+      verify(() => mockSodium.sodium_malloc(sizeOf<Uint64>()));
+      verify(
+        () => mockSodium.sodium_hex2bin(
+          any(that: isNot(nullptr)),
+          hex.length ~/ 2,
+          any(that: hasRawData<Char>(hex.codeUnits)),
+          hex.length,
+          any(that: hasAddress(0)),
+          any(that: isNot(nullptr)),
+          any(that: hasAddress(0)),
+        ),
+      );
+    });
+
+    test('returns the bin data truncated to the reported bin_len', () {
+      const reportedLength = 2;
+      mockAlloc(mockSodium, reportedLength);
+      when(
+        () => mockSodium.sodium_hex2bin(
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+        ),
+      ).thenAnswer((i) {
+        fillPointer(
+          i.positionalArguments.first as Pointer<UnsignedChar>,
+          binData,
+        );
+        return 0;
+      });
+
+      final res = sut.hex2bin(hex);
+
+      expect(res, binData.sublist(0, reportedLength));
+      verify(() => mockSodium.sodium_free(any())).called(2);
+    });
+
+    test('throws if sodium_hex2bin fails', () {
+      when(
+        () => mockSodium.sodium_hex2bin(
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+          any(),
+        ),
+      ).thenReturn(-1);
+
+      expect(() => sut.hex2bin(hex), throwsA(isA<SodiumException>()));
+
+      verify(() => mockSodium.sodium_free(any())).called(3);
+    });
+
+    test('returns an empty list for an empty hex string', () {
+      mockAlloc(mockSodium, 0);
+
+      final res = sut.hex2bin('');
+
+      expect(res, isEmpty);
+      verify(
+        () => mockSodium.sodium_hex2bin(
+          any(),
+          0,
+          any(),
+          0,
+          any(that: hasAddress(0)),
+          any(),
+          any(that: hasAddress(0)),
+        ),
+      );
     });
   });
 

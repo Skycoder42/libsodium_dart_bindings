@@ -149,5 +149,132 @@ base mixin LibSodiumJsExtraMethodsMixin<T extends Spec> on SpecGenerator<T> {
             ? null
             : Types.unimplementedError.newInstance(const []).thrown.code,
     );
+    yield Method(
+      (b) => b
+        ..name = 'memcmp'
+        ..external = external
+        ..returns = typeMapping['boolean']
+        ..requiredParameters.addAll([
+          Parameter(
+            (b) => b
+              ..name = 'b1'
+              ..type = typeMapping['buf'],
+          ),
+          Parameter(
+            (b) => b
+              ..name = 'b2'
+              ..type = typeMapping['buf'],
+          ),
+        ])
+        ..body = external
+            ? null
+            : Types.unimplementedError.newInstance(const []).thrown.code,
+    );
+    yield Method(
+      (b) => b
+        ..name = 'compare'
+        ..external = external
+        ..returns = typeMapping['uint']
+        ..requiredParameters.addAll([
+          Parameter(
+            (b) => b
+              ..name = 'b1'
+              ..type = typeMapping['buf'],
+          ),
+          Parameter(
+            (b) => b
+              ..name = 'b2'
+              ..type = typeMapping['buf'],
+          ),
+        ])
+        ..body = external
+            ? null
+            : Types.unimplementedError.newInstance(const []).thrown.code,
+    );
+    yield Method(
+      (b) => b
+        ..name = 'is_zero'
+        ..external = external
+        ..returns = typeMapping['boolean']
+        ..requiredParameters.add(
+          Parameter(
+            (b) => b
+              ..name = 'bytes'
+              ..type = typeMapping['buf'],
+          ),
+        )
+        ..body = external
+            ? null
+            : Types.unimplementedError.newInstance(const []).thrown.code,
+    );
+    yield Method(
+      (b) => b
+        ..name = 'increment'
+        ..external = external
+        ..returns = typeMapping['void']
+        ..requiredParameters.add(
+          Parameter(
+            (b) => b
+              ..name = 'bytes'
+              ..type = typeMapping['buf'],
+          ),
+        )
+        ..body = external
+            ? null
+            : Types.unimplementedError.newInstance(const []).thrown.code,
+    );
+    yield Method(
+      (b) => b
+        ..name = 'add'
+        ..external = external
+        ..returns = typeMapping['void']
+        ..requiredParameters.addAll([
+          Parameter(
+            (b) => b
+              ..name = 'a'
+              ..type = typeMapping['buf'],
+          ),
+          Parameter(
+            (b) => b
+              ..name = 'b'
+              ..type = typeMapping['buf'],
+          ),
+        ])
+        ..body = external
+            ? null
+            : Types.unimplementedError.newInstance(const []).thrown.code,
+    );
+    yield Method(
+      (b) => b
+        ..name = 'to_hex'
+        ..external = external
+        ..returns = typeMapping['string']
+        ..requiredParameters.add(
+          Parameter(
+            (b) => b
+              ..name = 'input'
+              ..type = typeMapping['buf'],
+          ),
+        )
+        ..body = external
+            ? null
+            : Types.unimplementedError.newInstance(const []).thrown.code,
+    );
+    yield Method(
+      (b) => b
+        ..name = 'from_hex'
+        ..external = external
+        ..returns = typeMapping['buf']
+        ..requiredParameters.add(
+          Parameter(
+            (b) => b
+              ..name = 'input'
+              ..type = typeMapping['string'],
+          ),
+        )
+        ..body = external
+            ? null
+            : Types.unimplementedError.newInstance(const []).thrown.code,
+    );
   }
 }

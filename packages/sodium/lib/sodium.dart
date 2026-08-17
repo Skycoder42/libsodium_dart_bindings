@@ -19,7 +19,7 @@ export 'src/api/secure_key.dart' hide SecureKeyEquality;
 export 'src/api/secure_key_extensions.dart';
 export 'src/api/short_hash.dart' hide ShortHashValidations;
 export 'src/api/sign.dart' hide SignValidations;
-export 'src/api/sodium.dart';
+export 'src/api/sodium.dart' hide SodiumValidations;
 export 'src/api/sodium_exception.dart';
 export 'src/api/sodium_version.dart';
 export 'src/api/string_x.dart';

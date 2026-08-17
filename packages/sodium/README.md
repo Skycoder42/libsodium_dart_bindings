@@ -59,6 +59,7 @@ API based on libsodium version: *1.0.22*
 
  libsodium API                | VM   | JS  | Sumo | Documentation
 ------------------------------|------|-----|------|---------------
+ helpers                      | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/helpers
  padding                      | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/padding
  memory                       | ✔️   | ❌  |      | https://libsodium.gitbook.io/doc/memory_management
  randombytes                  | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/generating_random_data
@@ -82,6 +83,10 @@ API based on libsodium version: *1.0.22*
  crypto_ipcrypt               | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption
  crypto_kem                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/public-key_cryptography/key_encapsulation
  crypto_xof                   | ✔️   | ✔️  |      | https://libsodium.gitbook.io/doc/hashing/xof
+
+**Note:** Of the helper APIs, base64 encoding/decoding is not included, as dart already provides that via
+`dart:convert`. `sodium_stackzero` is not available either, as it is an internal memory hygiene helper which would
+break the memory handling of dart.
 
 **Note:** Memory Management in JS is limited to overwriting the memory with 0. All other Memory-APIs are only available
 in the VM.

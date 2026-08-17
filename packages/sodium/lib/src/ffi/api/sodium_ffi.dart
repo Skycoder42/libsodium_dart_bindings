@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
@@ -49,7 +50,7 @@ typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> = TSodiumFFI Function(
 
 /// @nodoc
 @internal
-class SodiumFFI implements Sodium {
+class SodiumFFI with SodiumValidations implements Sodium {
   /// @nodoc
   final LibSodiumFFI sodium;
 
@@ -106,6 +107,109 @@ class SodiumFFI implements Sodium {
       length,
     );
   });
+
+  @override
+  bool memcmp(Uint8List b1, Uint8List b2) {
+    validateSameLength(b1, b2, 'b2');
+    return sodiumScope(sodium, (scope) {
+      final b1Ptr = scope.copyList<UnsignedChar>(b1);
+      final b2Ptr = scope.copyList<UnsignedChar>(b2);
+      final result = sodium.sodium_memcmp(
+        b1Ptr.ptr.cast(),
+        b2Ptr.ptr.cast(),
+        b1Ptr.count,
+      );
+      return result == 0;
+    });
+  }
+
+  @override
+  int compare(Uint8List b1, Uint8List b2) {
+    validateSameLength(b1, b2, 'b2');
+    return sodiumScope(sodium, (scope) {
+      final b1Ptr = scope.copyList<UnsignedChar>(b1);
+      final b2Ptr = scope.copyList<UnsignedChar>(b2);
+      return sodium.sodium_compare(b1Ptr.ptr, b2Ptr.ptr, b1Ptr.count);
+    });
+  }
+
+  @override
+  bool isZero(Uint8List n) => sodiumScope(sodium, (scope) {
+    final nPtr = scope.copyList<UnsignedChar>(n);
+    final result = sodium.sodium_is_zero(nPtr.ptr, nPtr.count);
+    return result == 1;
+  });
+
+  @override
+  Uint8List increment(Uint8List n) => sodiumScope(sodium, (scope) {
+    final nPtr = scope.copyList<UnsignedChar>(n, memoryProtection: .readWrite);
+    sodium.sodium_increment(nPtr.ptr, nPtr.count);
+    return scope.takeBytes<Uint8List>(nPtr);
+  });
+
+  @override
+  Uint8List add(Uint8List a, Uint8List b) {
+    validateSameLength(a, b, 'b');
+    return sodiumScope(sodium, (scope) {
+      final aPtr = scope.copyList<UnsignedChar>(
+        a,
+        memoryProtection: .readWrite,
+      );
+      final bPtr = scope.copyList<UnsignedChar>(b);
+      sodium.sodium_add(aPtr.ptr, bPtr.ptr, aPtr.count);
+      return scope.takeBytes<Uint8List>(aPtr);
+    });
+  }
+
+  @override
+  Uint8List sub(Uint8List a, Uint8List b) {
+    validateSameLength(a, b, 'b');
+    return sodiumScope(sodium, (scope) {
+      final aPtr = scope.copyList<UnsignedChar>(
+        a,
+        memoryProtection: .readWrite,
+      );
+      final bPtr = scope.copyList<UnsignedChar>(b);
+      sodium.sodium_sub(aPtr.ptr, bPtr.ptr, aPtr.count);
+      return scope.takeBytes<Uint8List>(aPtr);
+    });
+  }
+
+  @override
+  String bin2hex(Uint8List bin) => sodiumScope(sodium, (scope) {
+    final binPtr = scope.copyList<UnsignedChar>(bin);
+    final hexPtr = scope.alloc<Char>(bin.length * 2 + 1, zeroMemory: true);
+    sodium.sodium_bin2hex(hexPtr.ptr, hexPtr.count, binPtr.ptr, binPtr.count);
+    return scope.takeString(hexPtr, encoding: ascii);
+  });
+
+  @override
+  Uint8List hex2bin(String hex) {
+    validateHex(hex);
+    return sodiumScope(sodium, (scope) {
+      final hexPtr = scope.copyString(hex, encoding: ascii);
+      final binPtr = scope.alloc<UnsignedChar>(hexPtr.count ~/ 2);
+      final binLength = scope.alloc<Size>(1, zeroMemory: true);
+
+      final result = sodium.sodium_hex2bin(
+        binPtr.ptr,
+        binPtr.count,
+        hexPtr.ptr,
+        hexPtr.count,
+        nullptr,
+        binLength.ptr,
+        nullptr,
+      );
+      SodiumException.checkSucceededInt(result);
+
+      final length = binLength.ptr.value;
+      return Uint8List.sublistView(
+        scope.takeBytes<Uint8List>(binPtr),
+        0,
+        length,
+      );
+    });
+  }
 
   @override
   SecureKey secureAlloc(int length) => SecureKeyFFI.alloc(sodium, length);

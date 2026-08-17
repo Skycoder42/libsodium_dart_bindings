@@ -67,6 +67,59 @@ no redirect, no chaining. If the wrapper detects it is still sandboxed it aborts
 immediately (exit 3) with a message explaining which of the above went wrong;
 read that message and re-invoke it correctly.
 
+## Writing tests — parameterize with `testData`, never a loop over `test`
+
+When several test cases differ only by their data, use the repo's **`testData`**
+helper from `packages/sodium/test/test_data.dart`. **Never** hand-roll a
+`for` / `forEach` / `.map()` loop around `test(...)` to generate cases.
+
+```dart
+import '../../../test_data.dart'; // adjust depth to the test file's location
+
+testData<int>('returns the value reported by compare', const [-1, 0, 1], (
+  fixture,
+) {
+  when(() => mockSodium.compare(any(), any())).thenReturn(fixture);
+
+  expect(sut.compare(b1, b2), fixture);
+});
+```
+
+Its signature is
+`testData<T>(description, List<T> fixtures, body, {fixtureToString, ...})`.
+It wraps the cases in a `group(description)` and names each test
+`fixture.toString()` unless you pass `fixtureToString`.
+
+Guidelines:
+
+- **Fixture type.** Use a bare `T` (e.g. `int`, `String`) when the fixture *is*
+  the value under test — input and expectation coinciding is the honest typing.
+  Use a **typed record** when a case needs several parts, e.g.
+  `testData<(int, int, bool)>` or
+  `testData<(String, List<int>, List<int>, List<int>)>`.
+- **`fixtureToString`.** Required whenever the default `toString()` would dump an
+  unreadable record into the test name. The idiom is to make the record's first
+  field a human-readable description and pass
+  `fixtureToString: (fixture) => fixture.$1`. A bare scalar fixture needs no
+  `fixtureToString`.
+- **Keep the two platforms aligned.** The FFI and JS test files for the same API
+  should parameterize the *same* cases the *same* way. If you convert a group in
+  one, convert its counterpart in the other — divergence between
+  `test/unit/ffi/api/…` and `test/unit/js/api/…` is worse than either choice
+  taken consistently.
+- **Hand-written pairs are fine.** Two or three tests that were never
+  loop-generated (e.g. "returns true if the native call returns 0" / "returns
+  false if it returns -1") may stay as separate `test`s. Convert them only when
+  doing so keeps the platforms aligned.
+- **Watch for shadowing.** Some existing groups declare a local
+  `final testData = ...` holding fixture bytes, which shadows the imported helper
+  inside that group body. It is legal Dart, but do not introduce new instances —
+  name new locals something else (`testBytes`, `fixtureBytes`).
+
+Prior art to copy: `test/unit/api/sumo/pwhash_test.dart`,
+`test/unit/api/sodium_test.dart`, and the `compare` / `sub` groups in
+`test/unit/ffi/api/sodium_ffi_test.dart` and `test/unit/js/api/sodium_js_test.dart`.
+
 ## Formatting and linting
 
 All generated code must be properly formatted and lint-free before assembling

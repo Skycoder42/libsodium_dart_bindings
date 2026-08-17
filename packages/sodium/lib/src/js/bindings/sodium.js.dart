@@ -1280,4 +1280,11 @@ extension type LibSodiumJS._(JSObject _) implements JSObject {
   external JSUint8Array pad(JSUint8Array buf, int blocksize);
   external JSUint8Array unpad(JSUint8Array buf, int blocksize);
   external void free(JSNumber state_address);
+  external bool memcmp(JSUint8Array b1, JSUint8Array b2);
+  external int compare(JSUint8Array b1, JSUint8Array b2);
+  external bool is_zero(JSUint8Array bytes);
+  external void increment(JSUint8Array bytes);
+  external void add(JSUint8Array a, JSUint8Array b);
+  external String to_hex(JSUint8Array input);
+  external JSUint8Array from_hex(String input);
 }

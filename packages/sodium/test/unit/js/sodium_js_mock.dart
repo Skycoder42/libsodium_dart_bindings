@@ -1870,6 +1870,20 @@ abstract class _MockLibSodiumJS {
       throw UnimplementedError();
 
   void free(JSNumber state_address) => throw UnimplementedError();
+
+  bool memcmp(JSUint8Array b1, JSUint8Array b2) => throw UnimplementedError();
+
+  int compare(JSUint8Array b1, JSUint8Array b2) => throw UnimplementedError();
+
+  bool is_zero(JSUint8Array bytes) => throw UnimplementedError();
+
+  void increment(JSUint8Array bytes) => throw UnimplementedError();
+
+  void add(JSUint8Array a, JSUint8Array b) => throw UnimplementedError();
+
+  String to_hex(JSUint8Array input) => throw UnimplementedError();
+
+  JSUint8Array from_hex(String input) => throw UnimplementedError();
 }
 
 @JSExport()

@@ -25,7 +25,7 @@ import 'transferrable_secure_key_js.dart';
 
 /// @nodoc
 @internal
-class SodiumJS implements Sodium {
+class SodiumJS with SodiumValidations implements Sodium {
   /// @nodoc
   final LibSodiumJS sodium;
 
@@ -46,6 +46,65 @@ class SodiumJS implements Sodium {
   @override
   Uint8List unpad(Uint8List buf, int blocksize) =>
       jsErrorWrap(() => sodium.unpad(buf.toJS, blocksize).toDart);
+
+  @override
+  bool memcmp(Uint8List b1, Uint8List b2) {
+    validateSameLength(b1, b2, 'b2');
+    return jsErrorWrap(() => sodium.memcmp(b1.toJS, b2.toJS));
+  }
+
+  @override
+  int compare(Uint8List b1, Uint8List b2) {
+    validateSameLength(b1, b2, 'b2');
+    return jsErrorWrap(() => sodium.compare(b1.toJS, b2.toJS));
+  }
+
+  @override
+  bool isZero(Uint8List n) => jsErrorWrap(() => sodium.is_zero(n.toJS));
+
+  @override
+  Uint8List increment(Uint8List n) {
+    // libsodium.js increments in place - copy the data first, as the callers
+    // buffer must not be modified.
+    final result = Uint8List.fromList(n).toJS;
+    jsErrorWrap(() => sodium.increment(result));
+    return result.toDart;
+  }
+
+  @override
+  Uint8List add(Uint8List a, Uint8List b) {
+    validateSameLength(a, b, 'b');
+    // libsodium.js adds in place - copy the data first, as the callers buffer
+    // must not be modified.
+    final result = Uint8List.fromList(a).toJS;
+    jsErrorWrap(() => sodium.add(result, b.toJS));
+    return result.toDart;
+  }
+
+  @override
+  Uint8List sub(Uint8List a, Uint8List b) {
+    validateSameLength(a, b, 'b');
+    // libsodium.js has no equivalent of sodium_sub, so the little endian,
+    // branch free borrow loop of the C implementation is ported here. Neither
+    // the loop trip count nor the executed instructions depend on the data.
+    final result = Uint8List(a.length);
+    var carry = 0;
+    for (var i = 0; i < a.length; ++i) {
+      carry = a[i] - b[i] - carry;
+      result[i] = carry & 0xFF;
+      carry = (carry >> 8) & 1;
+    }
+    return result;
+  }
+
+  @override
+  String bin2hex(Uint8List bin) => jsErrorWrap(() => sodium.to_hex(bin.toJS));
+
+  @override
+  Uint8List hex2bin(String hex) {
+    validateHex(hex);
+    return jsErrorWrap(() => sodium.from_hex(hex).toDart);
+  }
 
   @override
   SecureKey secureAlloc(int length) => SecureKeyJS.alloc(sodium, length);
