@@ -21,7 +21,7 @@ import 'package:test/test.dart';
 
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -38,12 +38,11 @@ void main() {
   // Makes disposing the pointer at [address] fail with [error], while still
   // releasing the test memory behind it.
   void failFreeOf(int address, Exception error) {
-    when(
-      () => mockSodium.sodium_free(any(that: hasAddress(address))),
-    ).thenAnswer((i) {
-      calloc.free(i.positionalArguments.first as Pointer);
-      throw error;
-    });
+    when(() => mockSodium.sodium_free(any(that: hasAddress(address))))
+        .thenAnswer((i) {
+          calloc.free(i.positionalArguments.first as Pointer);
+          throw error;
+        });
   }
 
   group('sodiumScope', () {
@@ -198,9 +197,8 @@ void main() {
             .address;
       });
 
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(addr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(addr))))
+          .called(1);
     });
 
     test('can copy larger integer types', () {
@@ -290,9 +288,8 @@ void main() {
         addr = scope.copyString('abc').ptr.address;
       });
 
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(addr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(addr))))
+          .called(1);
     });
   });
 
@@ -371,9 +368,8 @@ void main() {
         addr = scope.alloc<UnsignedChar>(8).ptr.address;
       });
 
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(addr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(addr))))
+          .called(1);
     });
   });
 
@@ -426,9 +422,8 @@ void main() {
       });
 
       // Only the still-tracked input is freed; the handed-off buffer is not.
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(trackedAddr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(trackedAddr))))
+          .called(1);
       verifyNever(
         () => mockSodium.sodium_free(any(that: hasAddress(takenAddr))),
       );
@@ -454,9 +449,8 @@ void main() {
       );
 
       // Still tracked => the scope frees it on the way out.
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(addr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(addr))))
+          .called(1);
     });
 
     test('throws when handed a view of a tracked pointer', () {
@@ -473,9 +467,8 @@ void main() {
       );
 
       // the parent was never untracked and is still freed exactly once
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(addr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(addr))))
+          .called(1);
     });
 
     test('asserts when handed a pointer the scope does not own', () {
@@ -567,9 +560,8 @@ void main() {
       );
 
       // Still tracked => the scope frees it on the way out.
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(addr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(addr))))
+          .called(1);
     });
 
     test('asserts when handed a view of a tracked pointer', () {
@@ -585,9 +577,8 @@ void main() {
       );
 
       // the parent was never untracked and is still freed exactly once
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(addr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(addr))))
+          .called(1);
     });
   });
 
@@ -686,9 +677,8 @@ void main() {
         return scope.takePointer(toTake);
       });
 
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(trackedAddr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(trackedAddr))))
+          .called(1);
       verifyNever(
         () => mockSodium.sodium_free(any(that: hasAddress(takenAddr))),
       );
@@ -723,9 +713,8 @@ void main() {
       );
 
       // the parent was never untracked and is still freed exactly once
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(addr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(addr))))
+          .called(1);
     });
   });
 
@@ -750,9 +739,8 @@ void main() {
       expect(result.data, [1, 2, 3, 4]);
       expect(result.mac, [5, 6]);
 
-      verify(
-        () => mockSodium.sodium_free(any(that: hasAddress(nonceAddr))),
-      ).called(1);
+      verify(() => mockSodium.sodium_free(any(that: hasAddress(nonceAddr))))
+          .called(1);
       verifyNever(() => mockSodium.sodium_free(any()));
     });
 

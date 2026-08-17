@@ -20,7 +20,7 @@ import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -756,9 +756,8 @@ void main() {
         });
 
         test('calls crypto_box_beforenm with correct arguments', () {
-          when(
-            () => mockSodium.crypto_box_beforenm(any(), any(), any()),
-          ).thenReturn(0);
+          when(() => mockSodium.crypto_box_beforenm(any(), any(), any()))
+              .thenReturn(0);
 
           final publicKey = List.generate(5, (index) => 20 + index);
           final secretKey = List.generate(5, (index) => 30 + index);
@@ -789,12 +788,11 @@ void main() {
 
         test('returns precompiled box with shared key', () {
           final sharedKey = List.generate(15, (index) => 44 - index);
-          when(
-            () => mockSodium.crypto_box_beforenm(any(), any(), any()),
-          ).thenAnswer((i) {
-            fillPointer(i.positionalArguments.first as Pointer, sharedKey);
-            return 0;
-          });
+          when(() => mockSodium.crypto_box_beforenm(any(), any(), any()))
+              .thenAnswer((i) {
+                fillPointer(i.positionalArguments.first as Pointer, sharedKey);
+                return 0;
+              });
 
           final result = sut.precalculate(
             publicKey: Uint8List(5),
@@ -816,9 +814,8 @@ void main() {
         });
 
         test('throws error if crypto_box_beforenm fails', () {
-          when(
-            () => mockSodium.crypto_box_beforenm(any(), any(), any()),
-          ).thenReturn(1);
+          when(() => mockSodium.crypto_box_beforenm(any(), any(), any()))
+              .thenReturn(1);
 
           expect(
             () => sut.precalculate(
@@ -843,9 +840,8 @@ void main() {
         });
 
         test('calls crypto_box_seal with correct arguments', () {
-          when(
-            () => mockSodium.crypto_box_seal(any(), any(), any(), any()),
-          ).thenReturn(0);
+          when(() => mockSodium.crypto_box_seal(any(), any(), any(), any()))
+              .thenReturn(0);
 
           final message = List.generate(20, (index) => index * 2);
           final publicKey = List.generate(5, (index) => 20 + index);
@@ -871,15 +867,14 @@ void main() {
 
         test('returns sealed data', () {
           final cipher = List.generate(25, (index) => 100 - index);
-          when(
-            () => mockSodium.crypto_box_seal(any(), any(), any(), any()),
-          ).thenAnswer((i) {
-            fillPointer(
-              i.positionalArguments.first as Pointer<UnsignedChar>,
-              cipher,
-            );
-            return 0;
-          });
+          when(() => mockSodium.crypto_box_seal(any(), any(), any(), any()))
+              .thenAnswer((i) {
+                fillPointer(
+                  i.positionalArguments.first as Pointer<UnsignedChar>,
+                  cipher,
+                );
+                return 0;
+              });
 
           final result = sut.seal(
             message: Uint8List(20),
@@ -892,9 +887,8 @@ void main() {
         });
 
         test('throws exception on failure', () {
-          when(
-            () => mockSodium.crypto_box_seal(any(), any(), any(), any()),
-          ).thenReturn(1);
+          when(() => mockSodium.crypto_box_seal(any(), any(), any(), any()))
+              .thenReturn(1);
 
           expect(
             () => sut.seal(message: Uint8List(10), publicKey: Uint8List(5)),

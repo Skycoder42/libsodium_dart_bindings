@@ -16,7 +16,7 @@ class ScalarmultJS with ScalarmultValidations implements Scalarmult {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  ScalarmultJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_scalarmult_BYTES;

@@ -16,7 +16,7 @@ class RandombytesFFI implements Randombytes {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  RandombytesFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get seedBytes => sodium.randombytes_seedbytes();

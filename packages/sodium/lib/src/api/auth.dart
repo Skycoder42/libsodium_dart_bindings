@@ -11,7 +11,7 @@ import 'secure_key.dart';
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Auth {
-  const Auth._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_auth_BYTES.
   ///

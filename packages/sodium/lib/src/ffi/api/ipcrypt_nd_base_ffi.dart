@@ -20,7 +20,7 @@ abstract class IpcryptNdBaseFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  IpcryptNdBaseFFI(this.sodium);
+  new(this.sodium);
 
   /// @nodoc
   @protected

@@ -165,9 +165,8 @@ void main() {
       });
 
       test('calls crypto_kem_dec with correct arguments', () {
-        when(
-          () => mockSodium.crypto_kem_dec(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_kem_dec(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final ctData = List.generate(5, (i) => i);
         final skData = List.generate(5, (i) => i + 50);
@@ -188,9 +187,8 @@ void main() {
       test('returns shared secret', () {
         final ssData = List.generate(5, (i) => i + 30);
 
-        when(
-          () => mockSodium.crypto_kem_dec(any(), any()),
-        ).thenReturn(Uint8List.fromList(ssData).toJS);
+        when(() => mockSodium.crypto_kem_dec(any(), any()))
+            .thenReturn(Uint8List.fromList(ssData).toJS);
 
         final result = sut.dec(
           ciphertext: Uint8List(5),
@@ -201,9 +199,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_kem_dec(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_kem_dec(any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut.dec(

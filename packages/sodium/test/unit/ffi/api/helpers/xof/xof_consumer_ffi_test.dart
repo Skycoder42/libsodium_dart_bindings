@@ -16,7 +16,7 @@ import 'package:test/test.dart';
 
 import '../../../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   const stateBytes = 5;
@@ -57,9 +57,8 @@ void main() {
   group('constructor', () {
     test('initializes the xof state', () {
       late Pointer state;
-      when(
-        () => mockSodium.crypto_xof_shake128_init(any()),
-      ).thenCapture(0, (p) => state = p);
+      when(() => mockSodium.crypto_xof_shake128_init(any()))
+          .thenCapture(0, (p) => state = p);
 
       createSut();
 
@@ -78,9 +77,8 @@ void main() {
 
     test('initializes the xof state with the given domain', () {
       late Pointer state;
-      when(
-        () => mockSodium.crypto_xof_shake128_init_with_domain(any(), any()),
-      ).thenCapture(0, (p) => state = p);
+      when(() => mockSodium.crypto_xof_shake128_init_with_domain(any(), any()))
+          .thenCapture(0, (p) => state = p);
 
       createDomainSut();
 
@@ -108,9 +106,8 @@ void main() {
     });
 
     test('disposes the state if the domain initialization fails', () {
-      when(
-        () => mockSodium.crypto_xof_shake128_init_with_domain(any(), any()),
-      ).thenReturn(1);
+      when(() => mockSodium.crypto_xof_shake128_init_with_domain(any(), any()))
+          .thenReturn(1);
 
       expect(createDomainSut, throwsA(isA<SodiumException>()));
 
@@ -132,9 +129,8 @@ void main() {
     group('add', () {
       test('calls crypto_xof_shake128_update with the given data', () {
         late Pointer state;
-        when(
-          () => mockSodium.crypto_xof_shake128_update(any(), any(), any()),
-        ).thenCapture(0, (p) => state = p);
+        when(() => mockSodium.crypto_xof_shake128_update(any(), any(), any()))
+            .thenCapture(0, (p) => state = p);
 
         final message = List.generate(20, (index) => index * 3);
 
@@ -162,9 +158,8 @@ void main() {
       test(
         'throws and frees the message if crypto_xof_shake128_update fails',
         () {
-          when(
-            () => mockSodium.crypto_xof_shake128_update(any(), any(), any()),
-          ).thenReturn(1);
+          when(() => mockSodium.crypto_xof_shake128_update(any(), any(), any()))
+              .thenReturn(1);
 
           expect(() => sut.add(Uint8List(20)), throwsA(isA<SodiumException>()));
 
@@ -174,9 +169,8 @@ void main() {
 
       test('restores the memory protection of the state if update fails', () {
         late Pointer state;
-        when(
-          () => mockSodium.crypto_xof_shake128_update(any(), any(), any()),
-        ).thenCapture(0, (p) => state = p, returning: 1);
+        when(() => mockSodium.crypto_xof_shake128_update(any(), any(), any()))
+            .thenCapture(0, (p) => state = p, returning: 1);
 
         expect(() => sut.add(Uint8List(20)), throwsA(isA<SodiumException>()));
 
@@ -194,9 +188,8 @@ void main() {
       });
 
       test('throws a StateError if the consumer has been squeezed', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()))
+            .thenReturn(0);
 
         sut.squeeze(outLen);
 
@@ -213,9 +206,8 @@ void main() {
     group('addStream', () {
       test('calls crypto_xof_shake128_update for every stream event', () async {
         late Pointer state;
-        when(
-          () => mockSodium.crypto_xof_shake128_update(any(), any(), any()),
-        ).thenCapture(0, (p) => state = p);
+        when(() => mockSodium.crypto_xof_shake128_update(any(), any(), any()))
+            .thenCapture(0, (p) => state = p);
 
         final message1 = List.generate(20, (index) => index * 3);
         final message2 = List.generate(10, (index) => index + 7);
@@ -242,9 +234,8 @@ void main() {
       });
 
       test('throws exception and cancels addStream on error', () async {
-        when(
-          () => mockSodium.crypto_xof_shake128_update(any(), any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_xof_shake128_update(any(), any(), any()))
+            .thenReturn(1);
 
         final message = List.generate(20, (index) => index * 3);
 
@@ -266,9 +257,8 @@ void main() {
       });
 
       test('throws a StateError if the consumer has been squeezed', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()))
+            .thenReturn(0);
 
         sut.squeeze(outLen);
 
@@ -326,9 +316,8 @@ void main() {
 
       test('calls crypto_xof_shake128_squeeze with correct arguments', () {
         late Pointer state;
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()),
-        ).thenCapture(0, (p) => state = p);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()))
+            .thenCapture(0, (p) => state = p);
 
         sut.squeeze(outLen);
 
@@ -351,12 +340,11 @@ void main() {
       test('returns the squeezed output', () {
         final output = List.generate(outLen, (index) => 100 - index);
 
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()),
-        ).thenAnswer((i) {
-          fillPointer(i.positionalArguments[1] as Pointer, output);
-          return 0;
-        });
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(i.positionalArguments[1] as Pointer, output);
+              return 0;
+            });
 
         final result = sut.squeeze(outLen);
 
@@ -366,9 +354,8 @@ void main() {
       });
 
       test('throws if crypto_xof_shake128_squeeze fails', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()))
+            .thenReturn(1);
 
         expect(() => sut.squeeze(outLen), throwsA(isA<SodiumException>()));
 
@@ -376,9 +363,8 @@ void main() {
       });
 
       test('can be squeezed multiple times', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()))
+            .thenReturn(0);
 
         sut
           ..squeeze(outLen)
@@ -390,9 +376,8 @@ void main() {
       });
 
       test('can be squeezed after the consumer has been closed', () async {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any(), any()))
+            .thenReturn(0);
 
         await sut.close();
 
@@ -410,9 +395,8 @@ void main() {
       test('frees the state', () {
         sut.dispose();
 
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(1);
+        verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))))
+            .called(1);
       });
 
       test('can be called multiple times', () {

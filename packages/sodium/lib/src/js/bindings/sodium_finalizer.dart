@@ -13,7 +13,7 @@ class SodiumFinalizer {
   final Finalizer<JSUint8Array> _finalizer;
 
   /// @nodoc
-  SodiumFinalizer(LibSodiumJS sodium)
+  new(LibSodiumJS sodium)
     : _finalizer = Finalizer((v) => jsErrorWrap(() => sodium.memzero(v)));
 
   /// @nodoc

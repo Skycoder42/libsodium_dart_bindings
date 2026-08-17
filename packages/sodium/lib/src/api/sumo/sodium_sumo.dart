@@ -10,7 +10,7 @@ typedef SodiumSumoFactory = Future<SodiumSumo> Function();
 
 /// A meta class that provides access to all toplevel libsodium sumo API groups.
 abstract class SodiumSumo implements Sodium {
-  const SodiumSumo._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   @override
   CryptoSumo get crypto;

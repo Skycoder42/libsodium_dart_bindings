@@ -11,7 +11,7 @@ import 'secure_key.dart';
 /// in https://libsodium.gitbook.io/doc/hashing/short-input_hashing.
 /// Please refer to that documentation for more details about these APIs.
 abstract class ShortHash {
-  const ShortHash._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_shorthash_BYTES.
   ///

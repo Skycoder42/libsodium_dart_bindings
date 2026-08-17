@@ -14,7 +14,7 @@ class LibraryInfo {
   final List<Constant> constants;
   final List<Symbol> symbols;
 
-  const LibraryInfo({
+  const new({
     required this.typeMapping,
     required this.typeDefs,
     required this.structs,

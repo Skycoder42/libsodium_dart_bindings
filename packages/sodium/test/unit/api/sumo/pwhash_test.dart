@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../../../test_data.dart';
 import '../../../test_validator.dart';
 
-class MockPwhash extends Mock with PwHashValidations implements Pwhash {}
+class MockPwhash extends Mock with PwHashValidations implements Pwhash;
 
 void main() {
   group('PwHashValidations', () {

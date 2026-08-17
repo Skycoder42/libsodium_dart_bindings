@@ -32,7 +32,7 @@ enum CryptoPwhashAlgorithm {
 /// in https://libsodium.gitbook.io/doc/password_hashing/default_phf.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Pwhash {
-  const Pwhash._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_pwhash_BYTES_MIN.
   ///

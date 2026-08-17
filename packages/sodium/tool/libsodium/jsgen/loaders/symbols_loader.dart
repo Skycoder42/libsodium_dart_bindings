@@ -4,7 +4,7 @@ import 'file_loader.dart';
 class SymbolsLoader {
   final FileLoader _wrapperLoader;
 
-  SymbolsLoader(this._wrapperLoader);
+  new(this._wrapperLoader);
 
   Stream<Symbol> loadSymbols() => _wrapperLoader.loadFilesJson(
     'symbols',

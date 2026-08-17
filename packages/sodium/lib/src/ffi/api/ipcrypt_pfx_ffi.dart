@@ -20,7 +20,7 @@ class IpcryptPfxFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  IpcryptPfxFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get keyBytes => sodium.crypto_ipcrypt_pfx_keybytes();

@@ -18,7 +18,7 @@ import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -85,9 +85,8 @@ void main() {
       });
 
       test('calls crypto_ipcrypt_pfx_encrypt with correct arguments', () {
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any(), any()),
-        ).thenAnswer((_) {});
+        when(() => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any(), any()))
+            .thenAnswer((_) {});
 
         final ipData = List.generate(16, (i) => i);
         final ptr = SodiumPointer<UnsignedChar>.alloc(mockSodium, count: 16);
@@ -109,14 +108,13 @@ void main() {
       test('returns encrypt result', () {
         final outData = List.generate(16, (i) => i + 10);
 
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any(), any()),
-        ).thenAnswer((i) {
-          fillPointer(
-            i.positionalArguments[0] as Pointer<UnsignedChar>,
-            outData,
-          );
-        });
+        when(() => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(
+                i.positionalArguments[0] as Pointer<UnsignedChar>,
+                outData,
+              );
+            });
 
         final ptr = SodiumPointer<UnsignedChar>.alloc(mockSodium, count: 16);
         final input = IpAddressFFI.fromPointer(mockSodium, ptr);
@@ -156,9 +154,8 @@ void main() {
       });
 
       test('calls crypto_ipcrypt_pfx_decrypt with correct arguments', () {
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any(), any()),
-        ).thenAnswer((_) {});
+        when(() => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any(), any()))
+            .thenAnswer((_) {});
 
         final inputData = List.generate(16, (i) => i + 5);
         final keyData = List.generate(5, (i) => i + 50);
@@ -180,14 +177,13 @@ void main() {
       test('returns decrypt result', () {
         final ipData = List.generate(16, (i) => i + 20);
 
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any(), any()),
-        ).thenAnswer((i) {
-          fillPointer(
-            i.positionalArguments[0] as Pointer<UnsignedChar>,
-            ipData,
-          );
-        });
+        when(() => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(
+                i.positionalArguments[0] as Pointer<UnsignedChar>,
+                ipData,
+              );
+            });
 
         final result = sut.decrypt(
           cipherText: Uint8List(16),

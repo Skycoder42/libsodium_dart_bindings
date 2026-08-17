@@ -25,7 +25,7 @@ class SignatureConsumerFFI
   late final SecureKey secretKey;
 
   /// @nodoc
-  SignatureConsumerFFI({required this.sodium, required SecureKey secretKey}) {
+  new({required this.sodium, required SecureKey secretKey}) {
     this.secretKey = secretKey.copy();
     try {
       initState();

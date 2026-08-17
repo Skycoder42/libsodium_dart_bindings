@@ -13,7 +13,7 @@ class _ScopeEntry {
   final Object resource;
   final void Function() dispose;
 
-  _ScopeEntry(this.resource, this.dispose);
+  new(this.resource, this.dispose);
 }
 
 /// A lexical scope that owns libsodium allocations and disposes every one it
@@ -45,7 +45,7 @@ class SodiumScope {
   final LibSodiumFFI _sodium;
   final _entries = <_ScopeEntry>[];
 
-  SodiumScope._(this._sodium);
+  new _(this._sodium);
 
   // ---- copy: Dart input -> registered native pointer ----
 

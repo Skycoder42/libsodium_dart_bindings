@@ -14,16 +14,24 @@ import '../../../bindings/sodium_scope.dart';
 typedef XofInitFn<T extends NativeType> = int Function(Pointer<T> state);
 
 @internal
-typedef XofInitWithDomainFn<T extends NativeType> =
-    int Function(Pointer<T> state, int domain);
+typedef XofInitWithDomainFn<T extends NativeType> = int Function(
+  Pointer<T> state,
+  int domain,
+);
 
 @internal
-typedef XofUpdateFn<T extends NativeType> =
-    int Function(Pointer<T> state, Pointer<UnsignedChar> in$, int inLen);
+typedef XofUpdateFn<T extends NativeType> = int Function(
+  Pointer<T> state,
+  Pointer<UnsignedChar> in$,
+  int inLen,
+);
 
 @internal
-typedef XofSqueezeFn<T extends NativeType> =
-    int Function(Pointer<T> state, Pointer<UnsignedChar> out, int outLen);
+typedef XofSqueezeFn<T extends NativeType> = int Function(
+  Pointer<T> state,
+  Pointer<UnsignedChar> out,
+  int outLen,
+);
 
 @internal
 class XofConsumerFFI<T extends NativeType>
@@ -38,7 +46,7 @@ class XofConsumerFFI<T extends NativeType>
   var _closed = false;
   var _disposed = false;
 
-  factory XofConsumerFFI({
+  factory({
     required LibSodiumFFI sodium,
     required int stateBytes,
     required XofInitFn<T> xofInit,
@@ -52,7 +60,7 @@ class XofConsumerFFI<T extends NativeType>
     xofSqueeze: xofSqueeze,
   );
 
-  factory XofConsumerFFI.domain({
+  factory domain({
     required LibSodiumFFI sodium,
     required int stateBytes,
     required XofInitWithDomainFn<T> xofInit,
@@ -68,7 +76,7 @@ class XofConsumerFFI<T extends NativeType>
     domain: domain,
   );
 
-  XofConsumerFFI._({
+  new _({
     required this.sodium,
     required int stateBytes,
     required this.xofUpdate,

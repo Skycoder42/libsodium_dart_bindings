@@ -43,8 +43,9 @@ typedef SodiumFFIIsolateCallback<TResult, TSodium extends SodiumFFI> =
 
 /// @nodoc
 @internal
-typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> =
-    TSodiumFFI Function(LibSodiumFFI sodium);
+typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> = TSodiumFFI Function(
+  LibSodiumFFI sodium,
+);
 
 /// @nodoc
 @internal
@@ -53,7 +54,7 @@ class SodiumFFI implements Sodium {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SodiumFFI([this.sodium = const LibSodiumFFI()]);
+  new([this.sodium = const LibSodiumFFI()]);
 
   @override
   SodiumVersion get version => SodiumVersion(

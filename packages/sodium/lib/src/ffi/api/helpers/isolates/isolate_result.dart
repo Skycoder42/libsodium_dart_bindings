@@ -16,7 +16,7 @@ part 'isolate_result.freezed.dart';
 @internal
 sealed class IsolateResult<T> with _$IsolateResult<T> {
   /// @nodoc
-  const factory IsolateResult(T result) = _IsolateResult<T>;
+  const factory(T result) = _IsolateResult<T>;
 
   /// @nodoc
   @Assert(
@@ -24,8 +24,7 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
     'Cannot return subclasses of SecureKey from an isolate. '
         'Use SecureKey as return type instead.',
   )
-  const factory IsolateResult.key(TransferrableSecureKeyFFI key) =
-      _SecureKeyIsolateResult<T>;
+  const factory key(TransferrableSecureKeyFFI key) = _SecureKeyIsolateResult<T>;
 
   /// @nodoc
   @Assert(
@@ -33,7 +32,7 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
     'Cannot return subclasses of KeyPair from an isolate. '
         'Use KeyPair as return type instead.',
   )
-  const factory IsolateResult.keyPair(TransferrableKeyPairFFI keyPair) =
+  const factory keyPair(TransferrableKeyPairFFI keyPair) =
       _KeyPairIsolateResult<T>;
 
   @Assert(
@@ -41,10 +40,9 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
     'Cannot return subclasses of Uint8List from an isolate. '
         'Use Uint8List as return type instead.',
   )
-  const factory IsolateResult.bytes(TransferableTypedData data) =
-      _BytesIsolateResult<T>;
+  const factory bytes(TransferableTypedData data) = _BytesIsolateResult<T>;
 
-  const IsolateResult._();
+  const new _();
 
   /// @nodoc
   T extract(SodiumFFI sodium) => switch (this) {

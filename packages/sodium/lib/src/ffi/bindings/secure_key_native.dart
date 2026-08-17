@@ -15,13 +15,14 @@ typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<UnsignedChar> keyPtr);
 
 /// @nodoc
 @internal
-typedef SecureFFINullableCallbackFn<T> =
-    T Function(SodiumPointer<UnsignedChar>? keyPtr);
+typedef SecureFFINullableCallbackFn<T> = T Function(
+  SodiumPointer<UnsignedChar>? keyPtr,
+);
 
 /// @nodoc
 @internal
 abstract class SecureKeyNative implements SecureKey {
-  const SecureKeyNative._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// @nodoc
   T runUnlockedNative<T>(

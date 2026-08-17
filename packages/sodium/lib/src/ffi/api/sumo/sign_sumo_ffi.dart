@@ -14,7 +14,7 @@ import '../sign_ffi.dart';
 @internal
 class SignSumoFFI extends SignFFI with SignSumoValidations implements SignSumo {
   /// @nodoc
-  SignSumoFFI(super.sodium);
+  new(super.sodium);
 
   @override
   SecureKey skToSeed(SecureKey secretKey) {

@@ -5,7 +5,7 @@ import 'package:sodium/src/api/helpers/platform_types/internet_address_fallback.
 import '../test_case.dart';
 
 class IpcryptTestCase extends TestCase {
-  IpcryptTestCase(super._runner);
+  new(super._runner);
 
   @override
   String get name => 'ipcrypt';

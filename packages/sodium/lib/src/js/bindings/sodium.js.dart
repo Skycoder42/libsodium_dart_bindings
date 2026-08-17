@@ -20,17 +20,16 @@ typedef HashSha3256State = JSNumber;
 typedef HashSha3512State = JSNumber;
 typedef KdfHkdfSha256State = JSNumber;
 typedef KdfHkdfSha512State = JSNumber;
+
 extension type CryptoBox._(JSObject _) implements JSObject {
-  external CryptoBox({
-    required JSUint8Array ciphertext,
-    required JSUint8Array mac,
-  });
+  external new({required JSUint8Array ciphertext, required JSUint8Array mac});
 
   external JSUint8Array get ciphertext;
   external JSUint8Array get mac;
 }
+
 extension type CryptoKX._(JSObject _) implements JSObject {
-  external CryptoKX({
+  external new({
     required JSUint8Array sharedRx,
     required JSUint8Array sharedTx,
   });
@@ -38,8 +37,9 @@ extension type CryptoKX._(JSObject _) implements JSObject {
   external JSUint8Array get sharedRx;
   external JSUint8Array get sharedTx;
 }
+
 extension type KemEncResult._(JSObject _) implements JSObject {
-  external KemEncResult({
+  external new({
     required JSUint8Array ciphertext,
     required JSUint8Array sharedSecret,
   });
@@ -47,8 +47,9 @@ extension type KemEncResult._(JSObject _) implements JSObject {
   external JSUint8Array get ciphertext;
   external JSUint8Array get sharedSecret;
 }
+
 extension type KeyPair._(JSObject _) implements JSObject {
-  external KeyPair({
+  external new({
     required String? keyType,
     required JSUint8Array privateKey,
     required JSUint8Array publicKey,
@@ -58,27 +59,28 @@ extension type KeyPair._(JSObject _) implements JSObject {
   external JSUint8Array get privateKey;
   external JSUint8Array get publicKey;
 }
+
 extension type SecretBox._(JSObject _) implements JSObject {
-  external SecretBox({required JSUint8Array cipher, required JSUint8Array mac});
+  external new({required JSUint8Array cipher, required JSUint8Array mac});
 
   external JSUint8Array get cipher;
   external JSUint8Array get mac;
 }
+
 extension type SecretStreamInitPush._(JSObject _) implements JSObject {
-  external SecretStreamInitPush({
-    required JSNumber state,
-    required JSUint8Array header,
-  });
+  external new({required JSNumber state, required JSUint8Array header});
 
   external JSNumber get state;
   external JSUint8Array get header;
 }
+
 extension type SecretStreamPull._(JSObject _) implements JSObject {
-  external SecretStreamPull({required JSUint8Array message, required int tag});
+  external new({required JSUint8Array message, required int tag});
 
   external JSUint8Array get message;
   external int get tag;
 }
+
 extension type LibSodiumJS._(JSObject _) implements JSObject {
   external JSPromise get ready;
   external int get SODIUM_LIBRARY_VERSION_MAJOR;

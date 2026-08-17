@@ -10,10 +10,9 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockKdfHkdf extends Mock with KdfHkdfValidations implements KdfHkdf {}
+class MockKdfHkdf extends Mock with KdfHkdfValidations implements KdfHkdf;
 
-class MockKdfHkdfExtractConsumer extends Mock
-    implements KdfHkdfExtractConsumer {}
+class MockKdfHkdfExtractConsumer extends Mock implements KdfHkdfExtractConsumer;
 
 void main() {
   setUpAll(() {
@@ -47,9 +46,8 @@ void main() {
       final salt = Uint8List.fromList(List.generate(8, (index) => index));
       final masterKey = SecureKeyFake(List.generate(15, (index) => index));
 
-      when(
-        () => sutMock.createExtractConsumer(salt: any(named: 'salt')),
-      ).thenReturn(mockConsumer);
+      when(() => sutMock.createExtractConsumer(salt: any(named: 'salt')))
+          .thenReturn(mockConsumer);
       when(() => mockConsumer.addStream(any())).thenReturnAsync(null);
       when(() => mockConsumer.close()).thenReturnAsync(masterKey);
 

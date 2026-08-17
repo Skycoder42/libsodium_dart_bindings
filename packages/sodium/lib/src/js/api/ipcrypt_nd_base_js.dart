@@ -18,7 +18,7 @@ abstract class IpcryptNdBaseJS with IpcryptNdValidations implements IpcryptNd {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  IpcryptNdBaseJS(this.sodium);
+  new(this.sodium);
 
   /// @nodoc
   @protected

@@ -8,7 +8,7 @@ import 'kdf_hkdf_base_ffi.dart';
 
 @internal
 class KdfHkdfSha256FFI extends KdfHkdfBaseFFI<crypto_kdf_hkdf_sha256_state> {
-  KdfHkdfSha256FFI(super.sodium);
+  new(super.sodium);
 
   @override
   int get keyBytes => sodium.crypto_kdf_hkdf_sha256_keybytes();

@@ -21,7 +21,7 @@ class GenericHashFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  GenericHashFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_generichash_bytes();

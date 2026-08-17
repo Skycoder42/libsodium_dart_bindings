@@ -4,7 +4,7 @@ import 'file_loader.dart';
 class ConstantsLoader {
   final FileLoader _wrapperLoader;
 
-  ConstantsLoader(this._wrapperLoader);
+  new(this._wrapperLoader);
 
   Stream<Constant> loadConstants() async* {
     final constants = await _wrapperLoader.loadFileJson(

@@ -12,16 +12,24 @@ import '../../../bindings/sodium_pointer.dart';
 import '../../../bindings/sodium_scope.dart';
 
 @internal
-typedef HkdfExtractInitFn<T extends NativeType> =
-    int Function(Pointer<T> state, Pointer<UnsignedChar> salt, int saltLen);
+typedef HkdfExtractInitFn<T extends NativeType> = int Function(
+  Pointer<T> state,
+  Pointer<UnsignedChar> salt,
+  int saltLen,
+);
 
 @internal
-typedef HkdfExtractUpdateFn<T extends NativeType> =
-    int Function(Pointer<T> state, Pointer<UnsignedChar> ikm, int ikmLen);
+typedef HkdfExtractUpdateFn<T extends NativeType> = int Function(
+  Pointer<T> state,
+  Pointer<UnsignedChar> ikm,
+  int ikmLen,
+);
 
 @internal
-typedef HkdfExtractFinalFn<T extends NativeType> =
-    int Function(Pointer<T> state, Pointer<UnsignedChar> prk);
+typedef HkdfExtractFinalFn<T extends NativeType> = int Function(
+  Pointer<T> state,
+  Pointer<UnsignedChar> prk,
+);
 
 @internal
 class KdfHkdfExtractConsumerFFI<T extends NativeType>
@@ -38,7 +46,7 @@ class KdfHkdfExtractConsumerFFI<T extends NativeType>
   @override
   Future<SecureKey> get masterKey => _masterKeyCompleter.future;
 
-  KdfHkdfExtractConsumerFFI({
+  new({
     required this.sodium,
     required this.keyBytes,
     required int stateBytes,

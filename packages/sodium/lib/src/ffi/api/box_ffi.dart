@@ -24,7 +24,7 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
   final SecureKeyFFI sharedKey;
 
   /// @nodoc
-  PrecalculatedBoxFFI(this.box, this.sharedKey);
+  new(this.box, this.sharedKey);
 
   @override
   Uint8List easy({required Uint8List message, required Uint8List nonce}) {
@@ -164,7 +164,7 @@ class BoxFFI with BoxValidations, KeygenMixin implements Box {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  BoxFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get publicKeyBytes => sodium.crypto_box_publickeybytes();

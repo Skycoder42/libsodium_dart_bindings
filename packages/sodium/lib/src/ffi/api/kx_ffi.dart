@@ -19,7 +19,7 @@ class KxFFI with KxValidations, KeygenMixin implements Kx {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  KxFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get publicKeyBytes => sodium.crypto_kx_publickeybytes();

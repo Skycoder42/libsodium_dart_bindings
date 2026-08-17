@@ -85,11 +85,8 @@ void main() {
     });
 
     test('decodes multi byte characters as utf8 by default', () {
-      final testBytes = Uint8List.fromList(const [
-        0xC3,
-        0x84,
-        0x42,
-      ]).signedView();
+      final testBytes = Uint8List.fromList(const [0xC3, 0x84, 0x42])
+          .signedView();
       final res = testBytes.toDartString();
       expect(res, 'ÄB');
     });

@@ -9,7 +9,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/api/helpers/secret_stream/chunked_stream_transformer.dart';
 import 'package:test/test.dart';
 
-class MockEventSink extends Mock implements EventSink<Uint8List> {}
+class MockEventSink extends Mock implements EventSink<Uint8List>;
 
 void main() {
   group('$ChunkedEventSink', () {

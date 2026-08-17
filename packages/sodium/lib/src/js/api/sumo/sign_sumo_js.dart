@@ -13,7 +13,7 @@ import '../sign_js.dart';
 @internal
 class SignSumoJS extends SignJS with SignSumoValidations implements SignSumo {
   /// @nodoc
-  SignSumoJS(super.sodium);
+  new(super.sodium);
 
   @override
   SecureKey skToSeed(SecureKey secretKey) {

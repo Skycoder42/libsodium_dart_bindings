@@ -11,7 +11,7 @@ part 'key_pair.freezed.dart';
 @Freezed(copyWith: false)
 sealed class KeyPair with _$KeyPair {
   /// Default constructor.
-  factory KeyPair({
+  factory({
     /// The public key of the key pair.
     required Uint8List publicKey,
 
@@ -19,7 +19,7 @@ sealed class KeyPair with _$KeyPair {
     required SecureKey secretKey,
   }) = _KeyPair;
 
-  KeyPair._();
+  new _();
 
   /// Creates a copy of this key.
   KeyPair copy() => KeyPair(

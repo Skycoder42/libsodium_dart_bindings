@@ -8,7 +8,7 @@ import 'ipcrypt_nd_base_js.dart';
 @internal
 class IpcryptNdJS extends IpcryptNdBaseJS {
   /// @nodoc
-  IpcryptNdJS(super.sodium);
+  new(super.sodium);
 
   @override
   int get keyBytes => sodium.crypto_ipcrypt_ND_KEYBYTES;

@@ -3,7 +3,7 @@ import 'dart:async';
 class _ProxySink implements StreamConsumer<List<int>> {
   final List<int> _buffer;
 
-  const _ProxySink(this._buffer);
+  const new(this._buffer);
 
   @override
   Future<void> addStream(Stream<List<int>> stream) =>
@@ -16,7 +16,7 @@ class _ProxySink implements StreamConsumer<List<int>> {
 class FileHelper {
   final _buffers = <String, List<int>>{};
 
-  FileHelper._();
+  new _();
 
   static Future<FileHelper> instance() async => FileHelper._();
 

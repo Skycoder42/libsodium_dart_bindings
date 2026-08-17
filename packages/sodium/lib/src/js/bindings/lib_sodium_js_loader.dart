@@ -9,7 +9,7 @@ import 'sodium.js.dart';
 extension type _SodiumBrowserInit._(JSObject _) implements JSObject {
   external JSFunction get onload;
 
-  external _SodiumBrowserInit({JSFunction onload});
+  external new({JSFunction onload});
 }
 
 @JS('sodium')

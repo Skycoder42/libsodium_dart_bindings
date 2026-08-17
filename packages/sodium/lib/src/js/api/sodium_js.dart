@@ -30,7 +30,7 @@ class SodiumJS implements Sodium {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  SodiumJS(this.sodium);
+  new(this.sodium);
 
   @override
   SodiumVersion get version => SodiumVersion(

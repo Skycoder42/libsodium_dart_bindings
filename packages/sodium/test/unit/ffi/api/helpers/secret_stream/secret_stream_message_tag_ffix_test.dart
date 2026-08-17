@@ -12,7 +12,7 @@ import 'package:test/test.dart';
 
 import '../../../../../test_data.dart';
 
-class MockLibSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockLibSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockLibSodiumFFI();
@@ -54,18 +54,14 @@ void main() {
 
   group('fromValue', () {
     setUp(() {
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_tag_message(),
-      ).thenReturn(0);
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_tag_push(),
-      ).thenReturn(0);
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_tag_rekey(),
-      ).thenReturn(0);
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_tag_final(),
-      ).thenReturn(0);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_tag_message())
+          .thenReturn(0);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_tag_push())
+          .thenReturn(0);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_tag_rekey())
+          .thenReturn(0);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_tag_final())
+          .thenReturn(0);
     });
 
     testData<(SecretStreamMessageTag, int Function())>(

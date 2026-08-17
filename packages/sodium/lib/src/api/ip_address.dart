@@ -25,21 +25,20 @@ abstract class IpAddress {
   ///
   /// Convenience factory constructor that redirects to [Sodium.ipFromAddress]
   /// and calls it with [address] on [sodium].
-  factory IpAddress(Sodium sodium, ia.InternetAddress address) =>
+  factory(Sodium sodium, ia.InternetAddress address) =>
       sodium.ipFromAddress(address);
 
   /// Creates an [IpAddress] from the string representation [address].
   ///
   /// Convenience factory constructor that redirects to [Sodium.ipFromString]
   /// and calls it with [address] on [sodium].
-  factory IpAddress.parse(Sodium sodium, String address) =>
-      sodium.ipFromString(address);
+  factory parse(Sodium sodium, String address) => sodium.ipFromString(address);
 
   /// Creates an [IpAddress] from the 16-byte binary representation [bytes].
   ///
   /// Convenience factory constructor that redirects to [Sodium.ipFromBytes]
   /// and calls it with [bytes] on [sodium].
-  factory IpAddress.fromRawBytes(Sodium sodium, Uint8List bytes) =>
+  factory fromRawBytes(Sodium sodium, Uint8List bytes) =>
       sodium.ipFromBytes(bytes);
 
   /// The platform native representation of the IP address.

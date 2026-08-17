@@ -18,7 +18,7 @@ import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -105,9 +105,8 @@ void main() {
       });
 
       test('calls crypto_kem_enc with correct arguments', () {
-        when(
-          () => mockSodium.crypto_kem_enc(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_kem_enc(any(), any(), any()))
+            .thenReturn(0);
 
         final publicKey = List.generate(5, (i) => i);
         sut.enc(publicKey: Uint8List.fromList(publicKey));
@@ -125,19 +124,18 @@ void main() {
         final ctData = List.generate(5, (i) => i + 10);
         final ssData = List.generate(5, (i) => i + 20);
 
-        when(() => mockSodium.crypto_kem_enc(any(), any(), any())).thenAnswer((
-          i,
-        ) {
-          fillPointer(
-            i.positionalArguments[0] as Pointer<UnsignedChar>,
-            ctData,
-          );
-          fillPointer(
-            i.positionalArguments[1] as Pointer<UnsignedChar>,
-            ssData,
-          );
-          return 0;
-        });
+        when(() => mockSodium.crypto_kem_enc(any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(
+                i.positionalArguments[0] as Pointer<UnsignedChar>,
+                ctData,
+              );
+              fillPointer(
+                i.positionalArguments[1] as Pointer<UnsignedChar>,
+                ssData,
+              );
+              return 0;
+            });
 
         final result = sut.enc(publicKey: Uint8List(5));
 
@@ -149,9 +147,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_kem_enc(any(), any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_kem_enc(any(), any(), any()))
+            .thenReturn(1);
 
         expect(
           () => sut.enc(publicKey: Uint8List(5)),
@@ -189,9 +186,8 @@ void main() {
       });
 
       test('calls crypto_kem_dec with correct arguments', () {
-        when(
-          () => mockSodium.crypto_kem_dec(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_kem_dec(any(), any(), any()))
+            .thenReturn(0);
 
         final ctData = List.generate(5, (i) => i);
         final skData = List.generate(5, (i) => i + 50);
@@ -213,15 +209,14 @@ void main() {
       test('returns shared secret', () {
         final ssData = List.generate(5, (i) => i + 30);
 
-        when(() => mockSodium.crypto_kem_dec(any(), any(), any())).thenAnswer((
-          i,
-        ) {
-          fillPointer(
-            i.positionalArguments[0] as Pointer<UnsignedChar>,
-            ssData,
-          );
-          return 0;
-        });
+        when(() => mockSodium.crypto_kem_dec(any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(
+                i.positionalArguments[0] as Pointer<UnsignedChar>,
+                ssData,
+              );
+              return 0;
+            });
 
         final result = sut.dec(
           ciphertext: Uint8List(5),
@@ -235,9 +230,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_kem_dec(any(), any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_kem_dec(any(), any(), any()))
+            .thenReturn(1);
 
         expect(
           () => sut.dec(

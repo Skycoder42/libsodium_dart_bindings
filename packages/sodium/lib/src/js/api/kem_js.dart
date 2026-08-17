@@ -19,7 +19,7 @@ class KemJS with KemValidations implements Kem {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  KemJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get publicKeyBytes => sodium.crypto_kem_PUBLICKEYBYTES;

@@ -32,9 +32,8 @@ void main() {
 
   group('constructor', () {
     test('initializes hash state', () {
-      when(
-        () => mockSodium.crypto_generichash_init(any(), any()),
-      ).thenReturn(state.toJS);
+      when(() => mockSodium.crypto_generichash_init(any(), any()))
+          .thenReturn(state.toJS);
 
       GenericHashConsumerJS(sodium: mockSodium.asLibSodiumJS, outLen: outLen);
 
@@ -42,9 +41,8 @@ void main() {
     });
 
     test('initializes hash state with key', () {
-      when(
-        () => mockSodium.crypto_generichash_init(any(), any()),
-      ).thenReturn(state.toJS);
+      when(() => mockSodium.crypto_generichash_init(any(), any()))
+          .thenReturn(state.toJS);
 
       final key = List.generate(15, (index) => index + 5);
 
@@ -63,9 +61,8 @@ void main() {
     });
 
     test('throws SodiumException on error', () {
-      when(
-        () => mockSodium.crypto_generichash_init(any(), any()),
-      ).thenThrow(JSError());
+      when(() => mockSodium.crypto_generichash_init(any(), any()))
+          .thenThrow(JSError());
 
       expect(
         () => GenericHashConsumerJS(
@@ -81,9 +78,8 @@ void main() {
     late GenericHashConsumerJS sut;
 
     setUp(() {
-      when(
-        () => mockSodium.crypto_generichash_init(any(), any()),
-      ).thenReturn(state.toJS);
+      when(() => mockSodium.crypto_generichash_init(any(), any()))
+          .thenReturn(state.toJS);
 
       sut = GenericHashConsumerJS(
         sodium: mockSodium.asLibSodiumJS,
@@ -108,9 +104,8 @@ void main() {
       });
 
       test('throws StateError when adding data after completition', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_generichash_final(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
@@ -133,9 +128,8 @@ void main() {
       });
 
       test('throws exception and cancels addStream on error', () async {
-        when(
-          () => mockSodium.crypto_generichash_update(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_generichash_update(any(), any()))
+            .thenThrow(JSError());
 
         final message = List.generate(25, (index) => index * 3);
 
@@ -148,9 +142,8 @@ void main() {
       test(
         'throws StateError when adding a stream after completition',
         () async {
-          when(
-            () => mockSodium.crypto_generichash_final(any(), any()),
-          ).thenReturn(Uint8List(0).toJS);
+          when(() => mockSodium.crypto_generichash_final(any(), any()))
+              .thenReturn(Uint8List(0).toJS);
 
           await sut.close();
 
@@ -164,9 +157,8 @@ void main() {
 
     group('close', () {
       test('calls crypto_generichash_final with correct arguments', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_generichash_final(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
@@ -176,9 +168,8 @@ void main() {
       test('returns hash on success', () async {
         final hash = List.generate(outLen, (index) => index * 12);
 
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any()),
-        ).thenReturn(Uint8List.fromList(hash).toJS);
+        when(() => mockSodium.crypto_generichash_final(any(), any()))
+            .thenReturn(Uint8List.fromList(hash).toJS);
 
         final result = await sut.close();
 
@@ -186,17 +177,15 @@ void main() {
       });
 
       test('throws exception if hashing fails', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_generichash_final(any(), any()))
+            .thenThrow(JSError());
 
         await expectLater(() => sut.close(), throwsA(isA<SodiumException>()));
       });
 
       test('throws state error if close is called a second time', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_generichash_final(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
@@ -204,9 +193,8 @@ void main() {
       });
 
       test('returns same future as hash', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_generichash_final(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final hash = sut.hash;
         final closed = sut.close();

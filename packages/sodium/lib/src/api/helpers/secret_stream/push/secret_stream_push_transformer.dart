@@ -12,19 +12,18 @@ part 'secret_stream_push_transformer.freezed.dart';
 
 @freezed
 sealed class _SinkState<TState extends Object> with _$SinkState<TState> {
-  const factory _SinkState.uninitialized() = _Uninitialized<TState>;
+  const factory uninitialized() = _Uninitialized<TState>;
 
-  const factory _SinkState.initialized(
+  const factory initialized(
     EventSink<SecretStreamCipherMessage> outSink,
     TState cryptoState,
     Uint8List? pendingHeader,
   ) = _Initialized<TState>;
 
-  const factory _SinkState.finalized(
-    EventSink<SecretStreamCipherMessage> outSink,
-  ) = _Finalized<TState>;
+  const factory finalized(EventSink<SecretStreamCipherMessage> outSink) =
+      _Finalized<TState>;
 
-  const factory _SinkState.closed() = _Closed<TState>;
+  const factory closed() = _Closed<TState>;
 }
 
 /// @nodoc
@@ -187,7 +186,7 @@ abstract class SecretStreamPushTransformer<TState extends Object>
   final SecureKey key;
 
   /// @nodoc
-  const SecretStreamPushTransformer(this.key);
+  const new(this.key);
 
   /// @nodoc
   @protected

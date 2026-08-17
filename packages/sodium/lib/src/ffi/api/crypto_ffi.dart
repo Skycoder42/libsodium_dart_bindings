@@ -44,7 +44,7 @@ class CryptoFFI implements Crypto {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  CryptoFFI(this.sodium);
+  new(this.sodium);
 
   @override
   late final SecretBox secretBox = SecretBoxFFI(sodium);

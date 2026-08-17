@@ -8,7 +8,7 @@ class Symbol extends Constant {
   final List<Constant> outputs;
   final String? returnValue;
 
-  const Symbol({
+  const new({
     required super.name,
     required super.type,
     required this.inputs,
@@ -16,16 +16,14 @@ class Symbol extends Constant {
     this.returnValue,
   });
 
-  Symbol.fromJson(Map<String, dynamic> json)
+  new fromJson(Map<String, dynamic> json)
     : this(
         name: json['name'] as String,
         type: json['type'] as String,
-        inputs: Constant.fromJsonList(
-          json['inputs'] as List<dynamic>?,
-        ).toList(),
-        outputs: Constant.fromJsonList(
-          json['outputs'] as List<dynamic>?,
-        ).toList(),
+        inputs: Constant.fromJsonList(json['inputs'] as List<dynamic>?)
+            .toList(),
+        outputs: Constant.fromJsonList(json['outputs'] as List<dynamic>?)
+            .toList(),
         returnValue: json['return'] as String?,
       );
 }

@@ -6,7 +6,7 @@ import 'xof_base_ffi.dart';
 
 @internal
 class XofShake256FFI extends XofBaseFFI<crypto_xof_shake256_state> {
-  XofShake256FFI(super.sodium);
+  new(super.sodium);
 
   @override
   int get blockBytes => sodium.crypto_xof_shake256_blockbytes();

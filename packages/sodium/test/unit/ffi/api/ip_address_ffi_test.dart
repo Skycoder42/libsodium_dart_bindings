@@ -17,7 +17,7 @@ import 'package:test/test.dart';
 
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -69,15 +69,14 @@ void main() {
       test('returns IpAddressFFI with bytes written by sodium_ip2bin', () {
         final ipData = List.generate(16, (i) => i + 1);
 
-        when(() => mockSodium.sodium_ip2bin(any(), any(), any())).thenAnswer((
-          i,
-        ) {
-          fillPointer(
-            i.positionalArguments[0] as Pointer<UnsignedChar>,
-            ipData,
-          );
-          return 0;
-        });
+        when(() => mockSodium.sodium_ip2bin(any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(
+                i.positionalArguments[0] as Pointer<UnsignedChar>,
+                ipData,
+              );
+              return 0;
+            });
 
         final result = IpAddressFFI.parse(mockSodium, '192.168.0.1');
 
@@ -85,9 +84,8 @@ void main() {
       });
 
       test('throws SodiumException when sodium_ip2bin returns non-zero', () {
-        when(
-          () => mockSodium.sodium_ip2bin(any(), any(), any()),
-        ).thenReturn(-1);
+        when(() => mockSodium.sodium_ip2bin(any(), any(), any()))
+            .thenReturn(-1);
 
         expect(
           () => IpAddressFFI.parse(mockSodium, 'invalid'),
@@ -136,9 +134,8 @@ void main() {
 
     group('addressString', () {
       test('calls sodium_bin2ip with correct arguments', () {
-        when(
-          () => mockSodium.sodium_bin2ip(any(), any(), any()),
-        ).thenReturn(SodiumPointer<Char>.alloc(mockSodium, count: 2).ptr);
+        when(() => mockSodium.sodium_bin2ip(any(), any(), any()))
+            .thenReturn(SodiumPointer<Char>.alloc(mockSodium, count: 2).ptr);
 
         final ptr = SodiumPointer<UnsignedChar>.alloc(mockSodium, count: 16);
         final sut = IpAddressFFI.fromPointer(mockSodium, ptr);
@@ -157,13 +154,12 @@ void main() {
       test('returns string from sodium_bin2ip', () {
         const ipString = '192.168.0.1';
 
-        when(() => mockSodium.sodium_bin2ip(any(), any(), any())).thenAnswer((
-          i,
-        ) {
-          final strPtr = i.positionalArguments[0] as Pointer<Char>;
-          fillPointer(strPtr, utf8.encode(ipString));
-          return strPtr;
-        });
+        when(() => mockSodium.sodium_bin2ip(any(), any(), any()))
+            .thenAnswer((i) {
+              final strPtr = i.positionalArguments[0] as Pointer<Char>;
+              fillPointer(strPtr, utf8.encode(ipString));
+              return strPtr;
+            });
 
         final ptr = SodiumPointer<UnsignedChar>.alloc(mockSodium, count: 16);
         final sut = IpAddressFFI.fromPointer(mockSodium, ptr);
@@ -172,9 +168,8 @@ void main() {
       });
 
       test('throws SodiumException when sodium_bin2ip returns nullptr', () {
-        when(
-          () => mockSodium.sodium_bin2ip(any(), any(), any()),
-        ).thenReturn(nullptr);
+        when(() => mockSodium.sodium_bin2ip(any(), any(), any()))
+            .thenReturn(nullptr);
 
         final ptr = SodiumPointer<UnsignedChar>.alloc(mockSodium, count: 16);
         final sut = IpAddressFFI.fromPointer(mockSodium, ptr);
@@ -224,16 +219,15 @@ void main() {
       test('returns addressString', () {
         const ipString = '::1';
 
-        when(() => mockSodium.sodium_bin2ip(any(), any(), any())).thenAnswer((
-          i,
-        ) {
-          final strPtr = i.positionalArguments[0] as Pointer<Char>;
-          for (var j = 0; j < ipString.length; j++) {
-            (strPtr + j).value = ipString.codeUnitAt(j);
-          }
-          (strPtr + ipString.length).value = 0;
-          return strPtr;
-        });
+        when(() => mockSodium.sodium_bin2ip(any(), any(), any()))
+            .thenAnswer((i) {
+              final strPtr = i.positionalArguments[0] as Pointer<Char>;
+              for (var j = 0; j < ipString.length; j++) {
+                (strPtr + j).value = ipString.codeUnitAt(j);
+              }
+              (strPtr + ipString.length).value = 0;
+              return strPtr;
+            });
 
         final ptr = SodiumPointer<UnsignedChar>.alloc(mockSodium, count: 16);
 

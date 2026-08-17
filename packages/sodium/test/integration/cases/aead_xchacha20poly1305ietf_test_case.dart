@@ -5,7 +5,7 @@ import 'package:sodium/sodium.dart';
 import '../test_case.dart';
 
 class AeadXChaCha20Poly1305IETFTestCase extends TestCase {
-  AeadXChaCha20Poly1305IETFTestCase(super._runner);
+  new(super._runner);
 
   @override
   String get name => 'aead_xchacha20poly1305_ietf';

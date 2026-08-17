@@ -6,7 +6,7 @@ import 'xof_base_ffi.dart';
 
 @internal
 class XofTurboshake128FFI extends XofBaseFFI<crypto_xof_turboshake128_state> {
-  XofTurboshake128FFI(super.sodium);
+  new(super.sodium);
 
   @override
   int get blockBytes => sodium.crypto_xof_turboshake128_blockbytes();

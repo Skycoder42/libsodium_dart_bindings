@@ -28,9 +28,8 @@ void main() {
       test('calls sodium_ip2bin and returns IpAddressJS with result bytes', () {
         final ipData = List.generate(16, (i) => i + 1);
 
-        when(
-          () => mockSodium.sodium_ip2bin(any()),
-        ).thenReturn(Uint8List.fromList(ipData).toJS);
+        when(() => mockSodium.sodium_ip2bin(any()))
+            .thenReturn(Uint8List.fromList(ipData).toJS);
 
         final result = IpAddressJS.fromString(
           mockSodium.asLibSodiumJS,

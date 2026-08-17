@@ -7,15 +7,13 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockIpcrypt extends Mock with IpcryptValidations implements Ipcrypt {}
+class MockIpcrypt extends Mock with IpcryptValidations implements Ipcrypt;
 
-class MockIpcryptNd extends Mock
-    with IpcryptNdValidations
-    implements IpcryptNd {}
+class MockIpcryptNd extends Mock with IpcryptNdValidations implements IpcryptNd;
 
 class MockIpcryptPfx extends Mock
     with IpcryptPfxValidations
-    implements IpcryptPfx {}
+    implements IpcryptPfx;
 
 void main() {
   group('IpcryptValidations', () {

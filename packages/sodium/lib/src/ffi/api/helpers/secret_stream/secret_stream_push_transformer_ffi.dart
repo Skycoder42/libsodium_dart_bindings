@@ -21,7 +21,7 @@ class SecretStreamPushTransformerSinkFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SecretStreamPushTransformerSinkFFI(this.sodium);
+  new(this.sodium);
 
   @override
   @protected
@@ -126,7 +126,7 @@ class SecretStreamPushTransformerFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  const SecretStreamPushTransformerFFI(this.sodium, SecureKey key) : super(key);
+  const new(this.sodium, SecureKey key) : super(key);
 
   @override
   SecretStreamPushTransformerSink<SodiumPointer<UnsignedChar>> createSink() =>

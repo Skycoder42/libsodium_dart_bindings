@@ -11,23 +11,22 @@ part 'secret_stream_pull_transformer.freezed.dart';
 
 @freezed
 sealed class _SinkState<TState extends Object> with _$SinkState<TState> {
-  const factory _SinkState.uninitialized() = _Uninitialized<TState>;
+  const factory uninitialized() = _Uninitialized<TState>;
 
-  const factory _SinkState.preInit(
+  const factory preInit(
     EventSink<SecretStreamPlainMessage> outSink,
     SecureKey key,
   ) = _PreInit<TState>;
 
-  const factory _SinkState.postInit(
+  const factory postInit(
     EventSink<SecretStreamPlainMessage> outSink,
     TState cryptoState,
   ) = _PostInit<TState>;
 
-  const factory _SinkState.finalized(
-    EventSink<SecretStreamPlainMessage> outSink,
-  ) = _Finalized<TState>;
+  const factory finalized(EventSink<SecretStreamPlainMessage> outSink) =
+      _Finalized<TState>;
 
-  const factory _SinkState.closed() = _Closed<TState>;
+  const factory closed() = _Closed<TState>;
 }
 
 /// @nodoc
@@ -40,7 +39,7 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
   _SinkState<TState> _state = const _SinkState.uninitialized();
 
   /// @nodoc
-  SecretStreamPullTransformerSink(
+  new(
     // ignore: avoid_positional_boolean_parameters for single param
     this.requireFinalized,
   );
@@ -218,7 +217,7 @@ abstract class SecretStreamPullTransformer<TState extends Object>
   final bool requireFinalized;
 
   /// @nodoc
-  const SecretStreamPullTransformer(
+  const new(
     this.key,
     // ignore: avoid_positional_boolean_parameters for single param
     this.requireFinalized,

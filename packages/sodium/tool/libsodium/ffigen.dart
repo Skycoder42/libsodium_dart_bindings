@@ -18,9 +18,8 @@ void main() async {
   await _generateWrapper(bindingsUri);
 }
 
-final _pragmaInline = const cb.Reference(
-  'pragma',
-).call([cb.literalString('vm:prefer-inline')]);
+final _pragmaInline = const cb.Reference('pragma')
+    .call([cb.literalString('vm:prefer-inline')]);
 
 const _ffiNativeChecker = TypeChecker.typeNamed(Native, inSdk: true);
 bool _isFfiNativeAnnotation(ElementAnnotation annotation) {
@@ -87,9 +86,10 @@ bool _matchesLibsodium(Declaration declaration) {
 
 Future<void> _generateWrapper(Uri bindingsUri) async {
   final filePath = bindingsUri.toFilePath();
-  final result = await AnalysisContextCollection(
-    includedPaths: [filePath],
-  ).contextFor(filePath).currentSession.getResolvedLibrary(filePath);
+  final result = await AnalysisContextCollection(includedPaths: [filePath])
+      .contextFor(filePath)
+      .currentSession
+      .getResolvedLibrary(filePath);
   if (result is! ResolvedLibraryResult) {
     throw Exception('Could not resolve $filePath: $result');
   }
@@ -146,12 +146,13 @@ cb.Class _buildWrapperClass(LibraryElement library) => cb.Class(
           )
           ..body =
               cb.TypeReference(
-                (b) => b
-                  ..symbol = 'Native'
-                  ..url = 'dart:ffi',
-              ).property('addressOf').call([
-                cb.refer('sodium_free', library.uri.toString()),
-              ]).code,
+                    (b) => b
+                      ..symbol = 'Native'
+                      ..url = 'dart:ffi',
+                  )
+                  .property('addressOf')
+                  .call([cb.refer('sodium_free', library.uri.toString())])
+                  .code,
       ),
     )
     ..methods.addAll(library.topLevelFunctions.map(_buildWrapperMethod)),

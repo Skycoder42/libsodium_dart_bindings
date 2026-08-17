@@ -20,7 +20,7 @@ class KemFFI with KemValidations, KeygenMixin implements Kem {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  KemFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get publicKeyBytes => sodium.crypto_kem_publickeybytes();

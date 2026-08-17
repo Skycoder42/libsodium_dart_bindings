@@ -10,13 +10,12 @@ import '../bindings/sodium_scope.dart';
 import 'helpers/xof/xof_consumer_ffi.dart';
 
 @internal
-typedef XofFn =
-    int Function(
-      Pointer<UnsignedChar> out,
-      int outLen,
-      Pointer<UnsignedChar> in$,
-      int inLen,
-    );
+typedef XofFn = int Function(
+  Pointer<UnsignedChar> out,
+  int outLen,
+  Pointer<UnsignedChar> in$,
+  int inLen,
+);
 
 @internal
 abstract class XofBaseFFI<T extends NativeType>
@@ -24,7 +23,7 @@ abstract class XofBaseFFI<T extends NativeType>
     implements Xof {
   final LibSodiumFFI sodium;
 
-  XofBaseFFI(this.sodium);
+  new(this.sodium);
 
   @protected
   XofFn get internalXof;

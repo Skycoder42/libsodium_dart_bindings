@@ -19,14 +19,14 @@ class IpAddressJS with IpAddressEquality implements IpAddress {
   final JSUint8Array rawBytes;
 
   /// @nodoc
-  factory IpAddressJS.fromString(LibSodiumJS sodium, String address) =>
+  factory fromString(LibSodiumJS sodium, String address) =>
       IpAddressJS.fromJsBytes(
         sodium,
         jsErrorWrap(() => sodium.sodium_ip2bin(address)),
       );
 
   /// @nodoc
-  factory IpAddressJS.fromBytes(LibSodiumJS sodium, Uint8List bytes) {
+  factory fromBytes(LibSodiumJS sodium, Uint8List bytes) {
     if (bytes.length != 16) {
       throw RangeError.value(bytes.length, 'bytes', 'must be 16 bytes');
     }
@@ -34,7 +34,7 @@ class IpAddressJS with IpAddressEquality implements IpAddress {
   }
 
   /// @nodoc
-  IpAddressJS.fromJsBytes(this.sodium, this.rawBytes);
+  new fromJsBytes(this.sodium, this.rawBytes);
 
   @override
   Uint8List get bytes => rawBytes.toDart.asUnmodifiableView();

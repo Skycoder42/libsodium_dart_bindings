@@ -32,12 +32,10 @@ void main() {
     late SecretStreamPushTransformerSinkJS sut;
 
     setUp(() {
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES,
-      ).thenReturn(5);
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_ABYTES,
-      ).thenReturn(7);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES)
+          .thenReturn(5);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_ABYTES)
+          .thenReturn(7);
 
       sut = SecretStreamPushTransformerSinkJS(mockSodium.asLibSodiumJS);
     });
@@ -124,15 +122,13 @@ void main() {
 
     group('encryptMessage', () {
       setUp(() {
-        when(
-          () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_MESSAGE,
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_MESSAGE)
+            .thenReturn(0);
       });
 
       test('calls push with correct arguments', () {
-        when(
-          () => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH,
-        ).thenReturn(42);
+        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_TAG_PUSH)
+            .thenReturn(42);
         when(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_push(
             any(),

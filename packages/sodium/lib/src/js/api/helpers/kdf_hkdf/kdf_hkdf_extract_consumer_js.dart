@@ -12,18 +12,22 @@ import '../../secure_key_js.dart';
 
 /// @nodoc
 @internal
-typedef HkdfExtractInitJsFn<T extends JSNumber> =
-    T Function(JSUint8Array? salt);
+typedef HkdfExtractInitJsFn<T extends JSNumber> = T Function(
+  JSUint8Array? salt,
+);
 
 /// @nodoc
 @internal
-typedef HkdfExtractUpdateJsFn<T extends JSNumber> =
-    void Function(T state, JSUint8Array ikm);
+typedef HkdfExtractUpdateJsFn<T extends JSNumber> = void Function(
+  T state,
+  JSUint8Array ikm,
+);
 
 /// @nodoc
 @internal
-typedef HkdfExtractFinalJsFn<T extends JSNumber> =
-    JSUint8Array Function(T state);
+typedef HkdfExtractFinalJsFn<T extends JSNumber> = JSUint8Array Function(
+  T state,
+);
 
 /// @nodoc
 @internal
@@ -41,7 +45,7 @@ class KdfHkdfExtractConsumerJS<T extends JSNumber>
   @override
   Future<SecureKey> get masterKey => _masterKeyCompleter.future;
 
-  KdfHkdfExtractConsumerJS({
+  new({
     required this.sodium,
     required HkdfExtractInitJsFn<T> extractInit,
     required this.extractUpdate,

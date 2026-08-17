@@ -2,6 +2,13 @@ include: package:dart_test_tools/package.yaml
 
 analyzer:
   exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
     - "**.freezed.dart"
     - "example/web/**"
 

@@ -18,7 +18,7 @@ abstract class KdfHkdfBaseJS<T extends JSNumber>
     implements KdfHkdf {
   final LibSodiumJS sodium;
 
-  KdfHkdfBaseJS(this.sodium);
+  new(this.sodium);
 
   @override
   SecureKey keygen() =>

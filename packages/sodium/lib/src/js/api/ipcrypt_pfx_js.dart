@@ -20,7 +20,7 @@ class IpcryptPfxJS with IpcryptPfxValidations implements IpcryptPfx {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  IpcryptPfxJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get keyBytes => sodium.crypto_ipcrypt_PFX_KEYBYTES;

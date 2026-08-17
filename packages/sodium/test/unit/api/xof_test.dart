@@ -5,11 +5,11 @@ import 'package:test/test.dart';
 
 import '../../test_data.dart';
 
-class MockXof extends Mock with XofValidations implements Xof {}
+class MockXof extends Mock with XofValidations implements Xof;
 
 class MockXofConsumer extends Mock
     with XofConsumerValidations
-    implements XofConsumer {}
+    implements XofConsumer;
 
 @isTestGroup
 void testValidateOutLen(void Function(int value) sut) => testData<(int, bool)>(

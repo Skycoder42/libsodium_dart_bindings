@@ -6,7 +6,7 @@ import 'dart:typed_data';
 /// in https://libsodium.gitbook.io/doc/generating_random_data.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Randombytes {
-  const Randombytes._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides randombytes_SEEDBYTES.
   ///

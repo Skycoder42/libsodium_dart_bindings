@@ -17,7 +17,7 @@ final class LibSodiumJsGenerator extends SpecGenerator<ExtensionType>
   final Iterable<Constant> constants;
   final Iterable<Symbol> symbols;
 
-  const LibSodiumJsGenerator({
+  const new({
     required this.typeMapping,
     required this.constants,
     required this.symbols,

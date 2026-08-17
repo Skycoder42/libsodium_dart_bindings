@@ -38,7 +38,7 @@ class PwhashJS with PwHashValidations implements Pwhash {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  PwhashJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytesMin => sodium.crypto_pwhash_BYTES_MIN;

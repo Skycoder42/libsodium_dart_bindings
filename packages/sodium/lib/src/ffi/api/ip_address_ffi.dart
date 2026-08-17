@@ -25,33 +25,29 @@ class IpAddressFFI with IpAddressEquality implements IpAddress {
   final SodiumPointer<UnsignedChar> rawBytes;
 
   /// @nodoc
-  factory IpAddressFFI(LibSodiumFFI sodium, InternetAddress addr) =>
-      switch (addr.type) {
-        .IPv4 => .parse(sodium, addr.address),
-        .IPv6 => .fromRawBytes(sodium, addr.rawAddress),
-        _ => throw ArgumentError.value(
-          addr.type,
-          'addr',
-          'Unsupported InternetAddressType. Must be IPv4 or IPv6.',
-        ),
-      };
+  factory(LibSodiumFFI sodium, InternetAddress addr) => switch (addr.type) {
+    .IPv4 => .parse(sodium, addr.address),
+    .IPv6 => .fromRawBytes(sodium, addr.rawAddress),
+    _ => throw ArgumentError.value(
+      addr.type,
+      'addr',
+      'Unsupported InternetAddressType. Must be IPv4 or IPv6.',
+    ),
+  };
 
   /// @nodoc
-  factory IpAddressFFI.parse(LibSodiumFFI sodium, String address) =>
-      sodiumScope(sodium, (scope) {
-        final strPtr = scope.copyString(address);
-        final binPtr = scope.alloc<UnsignedChar>(16);
-        final result = sodium.sodium_ip2bin(
-          binPtr.ptr,
-          strPtr.ptr,
-          strPtr.count,
-        );
-        SodiumException.checkSucceededInt(result);
-        return .fromPointer(sodium, scope.takePointer(binPtr));
-      });
+  factory parse(LibSodiumFFI sodium, String address) => sodiumScope(sodium, (
+    scope,
+  ) {
+    final strPtr = scope.copyString(address);
+    final binPtr = scope.alloc<UnsignedChar>(16);
+    final result = sodium.sodium_ip2bin(binPtr.ptr, strPtr.ptr, strPtr.count);
+    SodiumException.checkSucceededInt(result);
+    return .fromPointer(sodium, scope.takePointer(binPtr));
+  });
 
   /// @nodoc
-  factory IpAddressFFI.fromRawBytes(LibSodiumFFI sodium, Uint8List bytes) {
+  factory fromRawBytes(LibSodiumFFI sodium, Uint8List bytes) {
     if (bytes.length != 16) {
       throw RangeError.value(bytes.length, 'bytes', 'must be 16 bytes');
     }
@@ -62,7 +58,7 @@ class IpAddressFFI with IpAddressEquality implements IpAddress {
   }
 
   /// @nodoc
-  IpAddressFFI.fromPointer(this.sodium, this.rawBytes) {
+  new fromPointer(this.sodium, this.rawBytes) {
     rawBytes.memoryProtection = .readOnly;
   }
 

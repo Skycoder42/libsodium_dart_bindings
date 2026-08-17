@@ -50,9 +50,8 @@ void main() {
 
   group('methods', () {
     setUp(() {
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_KEYBYTES,
-      ).thenReturn(5);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_KEYBYTES)
+          .thenReturn(5);
     });
 
     testKeygen(

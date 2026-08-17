@@ -6,6 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dart_test_tools/tools.dart' hide Archive;
 
 import 'package:sodium/src/hooks/common/extractor.dart';
+
 import 'download.dart';
 
 final _commentRegExp = RegExp(r'^(?:\/\*|\s*\*|\s*\*\/)(?:\s|$)');

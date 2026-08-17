@@ -11,7 +11,7 @@ import 'kdf_hkdf_base_js.dart';
 /// @nodoc
 @internal
 class KdfHkdfSha512JS extends KdfHkdfBaseJS<KdfHkdfSha512State> {
-  KdfHkdfSha512JS(super.sodium);
+  new(super.sodium);
 
   @override
   int get keyBytes => sodium.crypto_kdf_hkdf_sha512_KEYBYTES;

@@ -18,7 +18,7 @@ import 'package:test/test.dart';
 import '../../../test_constants_mapping.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   const stateBytes = 5;
@@ -60,15 +60,12 @@ void main() {
 
   group('methods', () {
     setUp(() {
-      when(
-        () => mockSodium.crypto_xof_turboshake128_blockbytes(),
-      ).thenReturn(5);
-      when(
-        () => mockSodium.crypto_xof_turboshake128_statebytes(),
-      ).thenReturn(stateBytes);
-      when(
-        () => mockSodium.crypto_xof_turboshake128_domain_standard(),
-      ).thenReturn(0x1F);
+      when(() => mockSodium.crypto_xof_turboshake128_blockbytes())
+          .thenReturn(5);
+      when(() => mockSodium.crypto_xof_turboshake128_statebytes())
+          .thenReturn(stateBytes);
+      when(() => mockSodium.crypto_xof_turboshake128_domain_standard())
+          .thenReturn(0x1F);
     });
 
     group('call', () {
@@ -151,9 +148,8 @@ void main() {
 
       test('creates a consumer that is initialized with '
           'crypto_xof_turboshake128_init', () {
-        when(
-          () => mockSodium.crypto_xof_turboshake128_init(any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_xof_turboshake128_init(any()))
+            .thenReturn(0);
 
         final result = sut.createConsumer();
 
@@ -206,9 +202,8 @@ void main() {
 
       test('creates a consumer that uses crypto_xof_turboshake128_update and '
           'crypto_xof_turboshake128_squeeze', () {
-        when(
-          () => mockSodium.crypto_xof_turboshake128_init(any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_xof_turboshake128_init(any()))
+            .thenReturn(0);
         when(
           () => mockSodium.crypto_xof_turboshake128_update(any(), any(), any()),
         ).thenReturn(0);

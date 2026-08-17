@@ -74,9 +74,8 @@ void main() {
       });
 
       test('calls crypto_xof_turboshake256 with correct arguments', () {
-        when(
-          () => mockSodium.crypto_xof_turboshake256(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_xof_turboshake256(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 3);
 
@@ -93,9 +92,8 @@ void main() {
       test('returns the generated output', () {
         final output = List.generate(outLen, (index) => 100 - index);
 
-        when(
-          () => mockSodium.crypto_xof_turboshake256(any(), any()),
-        ).thenReturn(Uint8List.fromList(output).toJS);
+        when(() => mockSodium.crypto_xof_turboshake256(any(), any()))
+            .thenReturn(Uint8List.fromList(output).toJS);
 
         final result = sut(message: Uint8List(20), outLen: outLen);
 
@@ -103,9 +101,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_xof_turboshake256(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_xof_turboshake256(any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut(message: Uint8List(20), outLen: outLen),
@@ -125,9 +122,8 @@ void main() {
 
       test('creates a consumer that is initialized with '
           'crypto_xof_turboshake256_init', () {
-        when(
-          () => mockSodium.crypto_xof_turboshake256_init(),
-        ).thenReturn(state.toJS);
+        when(() => mockSodium.crypto_xof_turboshake256_init())
+            .thenReturn(state.toJS);
 
         final result = sut.createConsumer();
 
@@ -143,9 +139,8 @@ void main() {
 
       test('creates a consumer that is initialized with '
           'crypto_xof_turboshake256_init_with_domain', () {
-        when(
-          () => mockSodium.crypto_xof_turboshake256_init_with_domain(any()),
-        ).thenReturn(state.toJS);
+        when(() => mockSodium.crypto_xof_turboshake256_init_with_domain(any()))
+            .thenReturn(state.toJS);
 
         const domain = 0x42;
 
@@ -163,14 +158,12 @@ void main() {
 
       test('creates a consumer that uses crypto_xof_turboshake256_update and '
           'crypto_xof_turboshake256_squeeze', () {
-        when(
-          () => mockSodium.crypto_xof_turboshake256_init(),
-        ).thenReturn(state.toJS);
+        when(() => mockSodium.crypto_xof_turboshake256_init())
+            .thenReturn(state.toJS);
 
         final output = List.generate(outLen, (index) => index * 2);
-        when(
-          () => mockSodium.crypto_xof_turboshake256_squeeze(any(), any()),
-        ).thenReturn(Uint8List.fromList(output).toJS);
+        when(() => mockSodium.crypto_xof_turboshake256_squeeze(any(), any()))
+            .thenReturn(Uint8List.fromList(output).toJS);
 
         final message = List.generate(20, (index) => index * 3);
 

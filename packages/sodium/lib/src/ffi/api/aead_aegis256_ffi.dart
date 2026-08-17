@@ -7,7 +7,7 @@ import 'aead_base_ffi.dart';
 @internal
 class AeadAegis256FFI extends AeadBaseFFI {
   /// @nodoc
-  AeadAegis256FFI(super.sodium);
+  new(super.sodium);
 
   @override
   int get keyBytes => sodium.crypto_aead_aegis256_keybytes();

@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract base class SpecGenerator<T extends Spec> implements Spec {
-  const SpecGenerator();
+  const new();
 
   @protected
   T build();

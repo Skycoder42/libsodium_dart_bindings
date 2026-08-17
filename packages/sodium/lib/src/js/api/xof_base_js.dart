@@ -14,7 +14,7 @@ abstract class XofBaseJS<T extends JSNumber>
     implements Xof {
   final LibSodiumJS sodium;
 
-  XofBaseJS(this.sodium);
+  new(this.sodium);
 
   @protected
   JSUint8Array internalXof(int outLen, JSUint8Array message);

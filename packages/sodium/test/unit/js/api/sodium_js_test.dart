@@ -22,10 +22,9 @@ import 'package:test/test.dart';
 import '../../../secure_key_fake.dart';
 import '../sodium_js_mock.dart';
 
-class FakeTransferrableSecureKey extends Fake
-    implements TransferrableSecureKey {}
+class FakeTransferrableSecureKey extends Fake implements TransferrableSecureKey;
 
-class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair {}
+class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair;
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -123,9 +122,8 @@ void main() {
 
   test('secureRandom creates random SecureKey instance', () {
     const length = 10;
-    when(
-      () => mockSodium.randombytes_buf(any()),
-    ).thenReturn(Uint8List(length).toJS);
+    when(() => mockSodium.randombytes_buf(any()))
+        .thenReturn(Uint8List(length).toJS);
 
     final res = sut.secureRandom(length);
 
@@ -158,9 +156,8 @@ void main() {
   group('ipFromAddress', () {
     test('returns IpAddressJS by converting the address string', () {
       final ipData = List.generate(16, (i) => i + 1);
-      when(
-        () => mockSodium.sodium_ip2bin(any()),
-      ).thenReturn(Uint8List.fromList(ipData).toJS);
+      when(() => mockSodium.sodium_ip2bin(any()))
+          .thenReturn(Uint8List.fromList(ipData).toJS);
 
       final result = sut.ipFromAddress('192.168.0.1');
 
@@ -173,9 +170,8 @@ void main() {
   group('ipFromString', () {
     test('returns IpAddressJS by converting the address string', () {
       final ipData = List.generate(16, (i) => i + 1);
-      when(
-        () => mockSodium.sodium_ip2bin(any()),
-      ).thenReturn(Uint8List.fromList(ipData).toJS);
+      when(() => mockSodium.sodium_ip2bin(any()))
+          .thenReturn(Uint8List.fromList(ipData).toJS);
 
       final result = sut.ipFromString('::1');
 

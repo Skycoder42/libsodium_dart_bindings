@@ -12,7 +12,7 @@ class ChunkedEventSink implements EventSink<List<int>> {
   Uint8List _buffer;
   int _bufferIndex;
 
-  ChunkedEventSink(this._sink, this._chunkSize, int? headerSize)
+  new(this._sink, this._chunkSize, int? headerSize)
     : _buffer = Uint8List(headerSize ?? _chunkSize),
       _bufferIndex = 0;
 
@@ -63,7 +63,7 @@ class ChunkedStreamTransformer
   final int chunkSize;
   final int? headerSize;
 
-  const ChunkedStreamTransformer(this.chunkSize, {this.headerSize});
+  const new(this.chunkSize, {this.headerSize});
 
   @override
   Stream<Uint8List> bind(Stream<List<int>> stream) => Stream.eventTransformed(

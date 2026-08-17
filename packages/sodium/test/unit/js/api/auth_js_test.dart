@@ -59,9 +59,8 @@ void main() {
       });
 
       test('calls crypto_auth with correct arguments', () {
-        when(
-          () => mockSodium.crypto_auth(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_auth(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final key = List.generate(5, (index) => index);
@@ -78,9 +77,8 @@ void main() {
 
       test('returns authentication tag', () {
         final tag = List.generate(5, (index) => 10 + index);
-        when(
-          () => mockSodium.crypto_auth(any(), any()),
-        ).thenReturn(Uint8List.fromList(tag).toJS);
+        when(() => mockSodium.crypto_auth(any(), any()))
+            .thenReturn(Uint8List.fromList(tag).toJS);
 
         final result = sut(message: Uint8List(10), key: SecureKeyFake.empty(5));
 
@@ -125,9 +123,8 @@ void main() {
       });
 
       test('calls crypto_auth_verify with correct arguments', () {
-        when(
-          () => mockSodium.crypto_auth_verify(any(), any(), any()),
-        ).thenReturn(true);
+        when(() => mockSodium.crypto_auth_verify(any(), any(), any()))
+            .thenReturn(true);
 
         final tag = List.generate(5, (index) => index + 15);
         final message = List.generate(20, (index) => index * 2);
@@ -149,9 +146,8 @@ void main() {
       });
 
       test('returns true if validate succeeds', () {
-        when(
-          () => mockSodium.crypto_auth_verify(any(), any(), any()),
-        ).thenReturn(true);
+        when(() => mockSodium.crypto_auth_verify(any(), any(), any()))
+            .thenReturn(true);
 
         final result = sut.verify(
           tag: Uint8List(5),
@@ -163,9 +159,8 @@ void main() {
       });
 
       test('returns false if validate fails', () {
-        when(
-          () => mockSodium.crypto_auth_verify(any(), any(), any()),
-        ).thenReturn(false);
+        when(() => mockSodium.crypto_auth_verify(any(), any(), any()))
+            .thenReturn(false);
 
         final result = sut.verify(
           tag: Uint8List(5),
@@ -177,9 +172,8 @@ void main() {
       });
 
       test('throws SodiumException on JSError', () {
-        when(
-          () => mockSodium.crypto_auth_verify(any(), any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_auth_verify(any(), any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut.verify(

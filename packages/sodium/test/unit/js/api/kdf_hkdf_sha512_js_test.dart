@@ -64,9 +64,8 @@ void main() {
 
     group('extract', () {
       test('calls crypto_kdf_hkdf_sha512_extract with correct arguments', () {
-        when(
-          () => mockSodium.crypto_kdf_hkdf_sha512_extract(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_kdf_hkdf_sha512_extract(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final salt = List.generate(8, (index) => index + 1);
         final ikm = List.generate(10, (index) => index * 2);
@@ -85,9 +84,8 @@ void main() {
       });
 
       test('passes null as salt when salt is null', () {
-        when(
-          () => mockSodium.crypto_kdf_hkdf_sha512_extract(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_kdf_hkdf_sha512_extract(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final ikm = List.generate(10, (index) => index * 2);
 
@@ -104,9 +102,8 @@ void main() {
       test('returns extracted master key', () {
         final prk = List.generate(5, (index) => 100 - index);
 
-        when(
-          () => mockSodium.crypto_kdf_hkdf_sha512_extract(any(), any()),
-        ).thenReturn(Uint8List.fromList(prk).toJS);
+        when(() => mockSodium.crypto_kdf_hkdf_sha512_extract(any(), any()))
+            .thenReturn(Uint8List.fromList(prk).toJS);
 
         final result = sut.extract(ikm: Uint8List(10));
 
@@ -114,9 +111,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_kdf_hkdf_sha512_extract(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_kdf_hkdf_sha512_extract(any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut.extract(ikm: Uint8List(10)),
@@ -211,9 +207,8 @@ void main() {
 
     group('createExtractConsumer', () {
       test('returns KdfHkdfExtractConsumerJS and wires extract_init', () {
-        when(
-          () => mockSodium.crypto_kdf_hkdf_sha512_extract_init(any()),
-        ).thenReturn(42.toJS);
+        when(() => mockSodium.crypto_kdf_hkdf_sha512_extract_init(any()))
+            .thenReturn(42.toJS);
 
         final result = sut.createExtractConsumer();
 
@@ -222,9 +217,8 @@ void main() {
       });
 
       test('wires extract_init with salt', () {
-        when(
-          () => mockSodium.crypto_kdf_hkdf_sha512_extract_init(any()),
-        ).thenReturn(42.toJS);
+        when(() => mockSodium.crypto_kdf_hkdf_sha512_extract_init(any()))
+            .thenReturn(42.toJS);
 
         final salt = List.generate(8, (index) => index + 1);
 
@@ -244,14 +238,12 @@ void main() {
     group('extractStream', () {
       test('extracts master key using the incremental sha512 apis', () async {
         const state = 42;
-        when(
-          () => mockSodium.crypto_kdf_hkdf_sha512_extract_init(any()),
-        ).thenReturn(state.toJS);
+        when(() => mockSodium.crypto_kdf_hkdf_sha512_extract_init(any()))
+            .thenReturn(state.toJS);
 
         final prk = List.generate(5, (index) => index + 50);
-        when(
-          () => mockSodium.crypto_kdf_hkdf_sha512_extract_final(any()),
-        ).thenReturn(Uint8List.fromList(prk).toJS);
+        when(() => mockSodium.crypto_kdf_hkdf_sha512_extract_final(any()))
+            .thenReturn(Uint8List.fromList(prk).toJS);
 
         final ikm = List.generate(10, (index) => index * 2);
 

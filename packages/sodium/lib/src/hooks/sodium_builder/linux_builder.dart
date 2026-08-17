@@ -5,7 +5,7 @@ import 'automake_builder.dart';
 
 @internal
 final class LinuxBuilder extends AutomakeBuilder {
-  LinuxBuilder(super.config, super.logger);
+  new(super.config, super.logger);
 
   @override
   Map<String, String> get environment {

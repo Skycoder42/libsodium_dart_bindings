@@ -18,7 +18,7 @@ import 'package:test/test.dart';
 import '../../../test_constants_mapping.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   const stateBytes = 5;
@@ -61,12 +61,10 @@ void main() {
   group('methods', () {
     setUp(() {
       when(() => mockSodium.crypto_xof_shake256_blockbytes()).thenReturn(5);
-      when(
-        () => mockSodium.crypto_xof_shake256_statebytes(),
-      ).thenReturn(stateBytes);
-      when(
-        () => mockSodium.crypto_xof_shake256_domain_standard(),
-      ).thenReturn(0x1F);
+      when(() => mockSodium.crypto_xof_shake256_statebytes())
+          .thenReturn(stateBytes);
+      when(() => mockSodium.crypto_xof_shake256_domain_standard())
+          .thenReturn(0x1F);
     });
 
     group('call', () {
@@ -82,9 +80,8 @@ void main() {
       });
 
       test('calls crypto_xof_shake256 with correct arguments', () {
-        when(
-          () => mockSodium.crypto_xof_shake256(any(), any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_xof_shake256(any(), any(), any(), any()))
+            .thenReturn(0);
 
         final message = List.generate(20, (index) => index * 3);
 
@@ -107,12 +104,11 @@ void main() {
       test('returns the generated output', () {
         final output = List.generate(outLen, (index) => 100 - index);
 
-        when(
-          () => mockSodium.crypto_xof_shake256(any(), any(), any(), any()),
-        ).thenAnswer((i) {
-          fillPointer(i.positionalArguments[0] as Pointer, output);
-          return 0;
-        });
+        when(() => mockSodium.crypto_xof_shake256(any(), any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(i.positionalArguments[0] as Pointer, output);
+              return 0;
+            });
 
         final result = sut(message: Uint8List(20), outLen: outLen);
 
@@ -122,9 +118,8 @@ void main() {
       });
 
       test('throws if crypto_xof_shake256 fails', () {
-        when(
-          () => mockSodium.crypto_xof_shake256(any(), any(), any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_xof_shake256(any(), any(), any(), any()))
+            .thenReturn(1);
 
         expect(
           () => sut(message: Uint8List(20), outLen: outLen),
@@ -192,17 +187,15 @@ void main() {
       test('creates a consumer that uses crypto_xof_shake256_update and '
           'crypto_xof_shake256_squeeze', () {
         when(() => mockSodium.crypto_xof_shake256_init(any())).thenReturn(0);
-        when(
-          () => mockSodium.crypto_xof_shake256_update(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_xof_shake256_update(any(), any(), any()))
+            .thenReturn(0);
 
         final output = List.generate(outLen, (index) => index * 2);
-        when(
-          () => mockSodium.crypto_xof_shake256_squeeze(any(), any(), any()),
-        ).thenAnswer((i) {
-          fillPointer(i.positionalArguments[1] as Pointer, output);
-          return 0;
-        });
+        when(() => mockSodium.crypto_xof_shake256_squeeze(any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(i.positionalArguments[1] as Pointer, output);
+              return 0;
+            });
 
         final message = List.generate(20, (index) => index * 3);
 

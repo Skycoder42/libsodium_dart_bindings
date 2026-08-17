@@ -21,7 +21,7 @@ import '../../../../test_constants_mapping.dart';
 import '../../../../test_data.dart';
 import '../../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -662,9 +662,8 @@ void main() {
       });
 
       test('calls crypto_pwhash_str_verify with the given encoding', () {
-        when(
-          () => mockSodium.crypto_pwhash_str_verify(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_pwhash_str_verify(any(), any(), any()))
+            .thenReturn(0);
 
         const password = 'äbc';
         const passwordHash = 'xy';
@@ -692,9 +691,8 @@ void main() {
       });
 
       test('calls crypto_pwhash_str_verify with correct arguments', () {
-        when(
-          () => mockSodium.crypto_pwhash_str_verify(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_pwhash_str_verify(any(), any(), any()))
+            .thenReturn(0);
 
         const password = 'abc123';
         const passwordHash = 'xy';
@@ -719,9 +717,8 @@ void main() {
       test(
         'returns false if crypto_pwhash_str_verify returns non zero result',
         () {
-          when(
-            () => mockSodium.crypto_pwhash_str_verify(any(), any(), any()),
-          ).thenReturn(1);
+          when(() => mockSodium.crypto_pwhash_str_verify(any(), any(), any()))
+              .thenReturn(1);
 
           final result = sut.strVerify(
             password: 'abc123',

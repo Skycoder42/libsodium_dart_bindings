@@ -18,7 +18,7 @@ abstract class KdfHkdfBaseFFI<T extends NativeType>
     implements KdfHkdf {
   final LibSodiumFFI sodium;
 
-  KdfHkdfBaseFFI(this.sodium);
+  new(this.sodium);
 
   @protected
   int get stateBytes;

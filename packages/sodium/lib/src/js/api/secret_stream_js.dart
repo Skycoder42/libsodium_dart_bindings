@@ -20,7 +20,7 @@ class SecretStreamJS
   final LibSodiumJS sodium;
 
   /// @nodoc
-  SecretStreamJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get aBytes => sodium.crypto_secretstream_xchacha20poly1305_ABYTES;

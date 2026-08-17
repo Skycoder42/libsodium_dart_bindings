@@ -15,7 +15,7 @@ import 'xof.dart';
 
 /// A meta class that provides access to all libsodium crypto APIs.
 abstract class Crypto {
-  const Crypto._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// An instance of [SecretBox].
   ///

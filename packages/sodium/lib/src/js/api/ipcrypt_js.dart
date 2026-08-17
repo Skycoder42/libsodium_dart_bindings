@@ -23,7 +23,7 @@ class IpcryptJS with IpcryptValidations implements Ipcrypt {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  IpcryptJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_ipcrypt_BYTES;

@@ -19,7 +19,7 @@ import 'secure_key.dart';
 /// in https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface.
 /// Please refer to that documentation for more details about these APIs.
 abstract class PrecalculatedBox {
-  const PrecalculatedBox._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_box_easy_afternm.
   ///
@@ -62,7 +62,7 @@ abstract class PrecalculatedBox {
 /// and https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Box {
-  const Box._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_box_PUBLICKEYBYTES.
   ///

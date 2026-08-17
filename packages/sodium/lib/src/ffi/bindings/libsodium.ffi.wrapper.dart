@@ -7,7 +7,7 @@ import 'dart:ffi' as _i1;
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart' as _i2;
 
 class LibSodiumFFI {
-  const LibSodiumFFI();
+  const new();
 
   _i1.Pointer<_i1.NativeFinalizerFunction>? get sodium_freePtr =>
       _i1.Native.addressOf(_i2.sodium_free);

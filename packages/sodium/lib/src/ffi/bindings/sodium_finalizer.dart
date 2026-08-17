@@ -12,8 +12,7 @@ class SodiumFinalizer {
   final NativeFinalizer _nativeFinalizer;
 
   /// @nodoc
-  SodiumFinalizer()
-    : _nativeFinalizer = NativeFinalizer(Native.addressOf(sodium_free));
+  new() : _nativeFinalizer = NativeFinalizer(Native.addressOf(sodium_free));
 
   /// @nodoc
   void attach(Finalizable value, Pointer<Void> token, int size) =>

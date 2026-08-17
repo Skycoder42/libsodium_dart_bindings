@@ -17,7 +17,7 @@ class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  ScalarmultFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_scalarmult_bytes();

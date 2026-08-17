@@ -7,7 +7,7 @@ class HookLogger {
   final String hook;
   final bool logDebug;
 
-  HookLogger(this.hook, {this.logDebug = false});
+  new(this.hook, {this.logDebug = false});
 
   void warning(String message) => _logTo(stderr, 'WARNING', message);
 

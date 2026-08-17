@@ -83,9 +83,8 @@ void main() {
       });
 
       test('calls crypto_ipcrypt_pfx_encrypt with correct arguments', () {
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final ipData = List.generate(16, (i) => i);
         final ipJS = Uint8List.fromList(ipData).toJS;
@@ -105,9 +104,8 @@ void main() {
       test('returns encrypt result', () {
         final outData = List.generate(16, (i) => i + 10);
 
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any()),
-        ).thenReturn(Uint8List.fromList(outData).toJS);
+        when(() => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any()))
+            .thenReturn(Uint8List.fromList(outData).toJS);
 
         final input = IpAddressJS.fromJsBytes(
           mockSodium.asLibSodiumJS,
@@ -120,9 +118,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_ipcrypt_pfx_encrypt(any(), any()))
+            .thenThrow(JSError());
 
         final input = IpAddressJS.fromJsBytes(
           mockSodium.asLibSodiumJS,
@@ -162,9 +159,8 @@ void main() {
       });
 
       test('calls crypto_ipcrypt_pfx_decrypt with correct arguments', () {
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final inputData = List.generate(16, (i) => i + 5);
         final keyData = List.generate(5, (i) => i + 50);
@@ -185,9 +181,8 @@ void main() {
       test('returns decrypt result', () {
         final ipData = List.generate(16, (i) => i + 20);
 
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any()),
-        ).thenReturn(Uint8List.fromList(ipData).toJS);
+        when(() => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any()))
+            .thenReturn(Uint8List.fromList(ipData).toJS);
 
         final result = sut.decrypt(
           cipherText: Uint8List(16),
@@ -198,9 +193,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_ipcrypt_pfx_decrypt(any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut.decrypt(

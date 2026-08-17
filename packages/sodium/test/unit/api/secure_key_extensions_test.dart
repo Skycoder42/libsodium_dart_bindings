@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_data.dart';
 
-class MockSodium extends Mock implements Sodium {}
+class MockSodium extends Mock implements Sodium;
 
 void main() {
   setUpAll(() {

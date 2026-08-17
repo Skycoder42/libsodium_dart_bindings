@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockKem extends Mock with KemValidations implements Kem {}
+class MockKem extends Mock with KemValidations implements Kem;
 
 void main() {
   group('KemValidations', () {

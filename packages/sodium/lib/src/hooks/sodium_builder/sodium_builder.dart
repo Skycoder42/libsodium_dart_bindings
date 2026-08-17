@@ -24,11 +24,11 @@ abstract base class SodiumBuilder {
   @protected
   final HookLogger logger;
 
-  SodiumBuilder(this.config, this.logger);
+  new(this.config, this.logger);
 
   bool get allowSpaceInPath;
 
-  factory SodiumBuilder.forConfig(CodeConfig config, HookLogger logger) =>
+  factory forConfig(CodeConfig config, HookLogger logger) =>
       switch (config.targetOS) {
         .android => AndroidBuilder(config, logger),
         .iOS => IosBuilder(config, logger),
@@ -104,9 +104,8 @@ abstract base class SodiumBuilder {
 
       if (exportHeadersTo != null) {
         logger.info('Exporting sodium headers install location');
-        await File.fromUri(
-          input.packageRoot.resolveUri(exportHeadersTo),
-        ).writeAsString(getIncludesPath(srcDir.uri, installDir).toString());
+        await File.fromUri(input.packageRoot.resolveUri(exportHeadersTo))
+            .writeAsString(getIncludesPath(srcDir.uri, installDir).toString());
       }
 
       return createCodeAsset(installDir);

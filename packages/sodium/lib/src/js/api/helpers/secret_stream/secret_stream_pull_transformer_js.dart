@@ -20,7 +20,7 @@ class SecretStreamPullTransformerSinkJS
   final LibSodiumJS sodium;
 
   /// @nodoc
-  SecretStreamPullTransformerSinkJS(
+  new(
     this.sodium,
     // ignore: avoid_positional_boolean_parameters for single param
     bool requireFinalized,
@@ -91,7 +91,7 @@ class SecretStreamPullTransformerJS
   final LibSodiumJS sodium;
 
   /// @nodoc
-  const SecretStreamPullTransformerJS(
+  const new(
     this.sodium,
     SecureKey key,
     // ignore: avoid_positional_boolean_parameters for single param

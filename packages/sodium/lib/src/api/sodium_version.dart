@@ -12,7 +12,7 @@ class SodiumVersion {
   final int minor;
 
   /// Default constructor
-  const SodiumVersion(this.major, this.minor, this._versionString);
+  const new(this.major, this.minor, this._versionString);
 
   /// Provides sodium_version_string.
   @override

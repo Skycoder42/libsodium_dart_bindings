@@ -9,7 +9,7 @@ import 'package:sodium/src/ffi/api/sumo/sign_sumo_ffi.dart';
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.wrapper.dart';
 import 'package:test/test.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();

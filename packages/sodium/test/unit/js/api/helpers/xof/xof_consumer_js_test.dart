@@ -60,9 +60,8 @@ void main() {
     });
 
     test('initializes the xof state with the given domain', () {
-      when(
-        () => mockSodium.crypto_xof_shake128_init_with_domain(any()),
-      ).thenReturn(state.toJS);
+      when(() => mockSodium.crypto_xof_shake128_init_with_domain(any()))
+          .thenReturn(state.toJS);
 
       // ignore: close_sinks for testing
       final sut = createDomainSut();
@@ -79,9 +78,8 @@ void main() {
     });
 
     test('throws SodiumException if the domain initialization fails', () {
-      when(
-        () => mockSodium.crypto_xof_shake128_init_with_domain(any()),
-      ).thenThrow(JSError());
+      when(() => mockSodium.crypto_xof_shake128_init_with_domain(any()))
+          .thenThrow(JSError());
 
       expect(createDomainSut, throwsA(isA<SodiumException>()));
     });
@@ -113,9 +111,8 @@ void main() {
       });
 
       test('throws if crypto_xof_shake128_update fails', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_update(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_xof_shake128_update(any(), any()))
+            .thenThrow(JSError());
 
         expect(() => sut.add(Uint8List(20)), throwsA(isA<SodiumException>()));
       });
@@ -129,9 +126,8 @@ void main() {
       });
 
       test('throws a StateError if the consumer has been squeezed', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         sut.squeeze(outLen);
 
@@ -172,9 +168,8 @@ void main() {
       });
 
       test('throws exception and cancels addStream on error', () async {
-        when(
-          () => mockSodium.crypto_xof_shake128_update(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_xof_shake128_update(any(), any()))
+            .thenThrow(JSError());
 
         final message = List.generate(20, (index) => index * 3);
 
@@ -194,9 +189,8 @@ void main() {
       });
 
       test('throws a StateError if the consumer has been squeezed', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         sut.squeeze(outLen);
 
@@ -251,9 +245,8 @@ void main() {
       });
 
       test('calls crypto_xof_shake128_squeeze with correct arguments', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         sut.squeeze(outLen);
 
@@ -265,9 +258,8 @@ void main() {
       test('returns the squeezed output', () {
         final output = List.generate(outLen, (index) => 100 - index);
 
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any()),
-        ).thenReturn(Uint8List.fromList(output).toJS);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any()))
+            .thenReturn(Uint8List.fromList(output).toJS);
 
         final result = sut.squeeze(outLen);
 
@@ -275,31 +267,27 @@ void main() {
       });
 
       test('throws if crypto_xof_shake128_squeeze fails', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any()))
+            .thenThrow(JSError());
 
         expect(() => sut.squeeze(outLen), throwsA(isA<SodiumException>()));
       });
 
       test('can be squeezed multiple times', () {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         sut
           ..squeeze(outLen)
           ..squeeze(outLen);
 
-        verify(
-          () => mockSodium.crypto_xof_shake128_squeeze(state.toJS, outLen),
-        ).called(2);
+        verify(() => mockSodium.crypto_xof_shake128_squeeze(state.toJS, outLen))
+            .called(2);
       });
 
       test('can be squeezed after the consumer has been closed', () async {
-        when(
-          () => mockSodium.crypto_xof_shake128_squeeze(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_xof_shake128_squeeze(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 

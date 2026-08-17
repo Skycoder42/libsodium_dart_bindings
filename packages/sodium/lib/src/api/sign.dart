@@ -13,7 +13,7 @@ import 'secure_key.dart';
 /// See [Sign.createConsumer] for more details.
 abstract class SignatureConsumer
     implements StreamConsumer<Uint8List>, Sink<Uint8List> {
-  const SignatureConsumer._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// A future that resolves to the signature of the data.
   ///
@@ -41,7 +41,7 @@ abstract class SignatureConsumer
 /// See [Sign.createVerifyConsumer] for more details.
 abstract class VerificationConsumer
     implements StreamConsumer<Uint8List>, Sink<Uint8List> {
-  const VerificationConsumer._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// A future that resolves to the signature validation of the data.
   ///
@@ -69,7 +69,7 @@ abstract class VerificationConsumer
 /// in https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Sign {
-  const Sign._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_sign_PUBLICKEYBYTES.
   ///

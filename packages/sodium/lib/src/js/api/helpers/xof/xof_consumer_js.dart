@@ -15,12 +15,16 @@ typedef XofInitJsFn<T extends JSNumber> = T Function();
 typedef XofInitWithDomainJsFn<T extends JSNumber> = T Function(int domain);
 
 @internal
-typedef XofUpdateJsFn<T extends JSNumber> =
-    void Function(T state, JSUint8Array messageChunk);
+typedef XofUpdateJsFn<T extends JSNumber> = void Function(
+  T state,
+  JSUint8Array messageChunk,
+);
 
 @internal
-typedef XofSqueezeJsFn<T extends JSNumber> =
-    JSUint8Array Function(T state, int outLen);
+typedef XofSqueezeJsFn<T extends JSNumber> = JSUint8Array Function(
+  T state,
+  int outLen,
+);
 
 @internal
 class XofConsumerJS<T extends JSNumber>
@@ -35,7 +39,7 @@ class XofConsumerJS<T extends JSNumber>
   var _closed = false;
   var _disposed = false;
 
-  factory XofConsumerJS({
+  factory({
     required LibSodiumJS sodium,
     required XofInitJsFn<T> xofInit,
     required XofUpdateJsFn<T> xofUpdate,
@@ -47,7 +51,7 @@ class XofConsumerJS<T extends JSNumber>
     xofSqueeze: xofSqueeze,
   );
 
-  factory XofConsumerJS.domain({
+  factory domain({
     required LibSodiumJS sodium,
     required XofInitWithDomainJsFn<T> xofInit,
     required XofUpdateJsFn<T> xofUpdate,
@@ -61,7 +65,7 @@ class XofConsumerJS<T extends JSNumber>
     domain: domain,
   );
 
-  XofConsumerJS._({
+  new _({
     required this.sodium,
     required this.xofUpdate,
     required this.xofSqueeze,

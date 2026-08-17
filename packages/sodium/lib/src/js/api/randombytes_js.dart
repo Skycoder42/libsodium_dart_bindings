@@ -17,7 +17,7 @@ class RandombytesJS implements Randombytes {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  RandombytesJS(this.sodium);
+  new(this.sodium);
 
   // Not exported in JS library
   @override

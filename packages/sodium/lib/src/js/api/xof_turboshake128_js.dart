@@ -10,7 +10,7 @@ import 'xof_base_js.dart';
 
 @internal
 class XofTurboshake128JS extends XofBaseJS<XofTurboshake128State> {
-  XofTurboshake128JS(super.sodium);
+  new(super.sodium);
 
   @override
   int get blockBytes => sodium.crypto_xof_turboshake128_BLOCKBYTES;

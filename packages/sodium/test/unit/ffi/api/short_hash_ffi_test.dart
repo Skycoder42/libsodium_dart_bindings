@@ -17,7 +17,7 @@ import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -69,9 +69,8 @@ void main() {
       });
 
       test('calls crypto_generichash with correct arguments', () {
-        when(
-          () => mockSodium.crypto_shorthash(any(), any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_shorthash(any(), any(), any(), any()))
+            .thenReturn(0);
 
         final key = List.generate(5, (index) => index * 10);
         final message = List.generate(20, (index) => index * 2);
@@ -95,12 +94,11 @@ void main() {
 
       test('returns calculated hash', () {
         final hash = List.generate(5, (index) => 10 + index);
-        when(
-          () => mockSodium.crypto_shorthash(any(), any(), any(), any()),
-        ).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer, hash);
-          return 0;
-        });
+        when(() => mockSodium.crypto_shorthash(any(), any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(i.positionalArguments.first as Pointer, hash);
+              return 0;
+            });
 
         final result = sut(message: Uint8List(10), key: SecureKeyFake.empty(5));
 
@@ -110,9 +108,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_shorthash(any(), any(), any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_shorthash(any(), any(), any(), any()))
+            .thenReturn(1);
 
         expect(
           () => sut(message: Uint8List(15), key: SecureKeyFake.empty(5)),

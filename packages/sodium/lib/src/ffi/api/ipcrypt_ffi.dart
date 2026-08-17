@@ -21,7 +21,7 @@ class IpcryptFFI with IpcryptValidations, KeygenMixin implements Ipcrypt {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  IpcryptFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_ipcrypt_bytes();

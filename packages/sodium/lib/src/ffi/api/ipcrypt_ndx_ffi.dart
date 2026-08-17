@@ -8,7 +8,7 @@ import 'ipcrypt_nd_base_ffi.dart';
 @internal
 class IpcryptNdxFFI extends IpcryptNdBaseFFI {
   /// @nodoc
-  IpcryptNdxFFI(super.sodium);
+  new(super.sodium);
 
   @override
   int get keyBytes => sodium.crypto_ipcrypt_ndx_keybytes();
