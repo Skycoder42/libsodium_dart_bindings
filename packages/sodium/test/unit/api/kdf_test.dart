@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockKdf extends Mock with KdfValidations implements Kdf {}
+class MockKdf extends Mock with KdfValidations implements Kdf;
 
 void main() {
   group('KdfValidations', () {

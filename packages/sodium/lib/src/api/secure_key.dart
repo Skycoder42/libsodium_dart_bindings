@@ -40,22 +40,20 @@ abstract class SecureKey {
   ///
   /// Convenience factory constructor that redirects to [Sodium.secureAlloc] and
   /// calls it with [length] on [sodium].
-  factory SecureKey(Sodium sodium, int length) => sodium.secureAlloc(length);
+  factory(Sodium sodium, int length) => sodium.secureAlloc(length);
 
   /// Allocates new memory for a [SecureKey] and copies the data from [data].
   ///
   /// Convenience factory constructor that redirects to [Sodium.secureCopy] and
   /// calls it with [data] on [sodium].
-  factory SecureKey.fromList(Sodium sodium, Uint8List data) =>
-      sodium.secureCopy(data);
+  factory fromList(Sodium sodium, Uint8List data) => sodium.secureCopy(data);
 
   /// Allocates new memory for a [SecureKey] and fills it with [length] bytes of
   /// random data.
   ///
   /// Convenience factory constructor that redirects to [Sodium.secureRandom]
   /// and calls it with [length] on [sodium].
-  factory SecureKey.random(Sodium sodium, int length) =>
-      sodium.secureRandom(length);
+  factory random(Sodium sodium, int length) => sodium.secureRandom(length);
 
   /// Returns the length of the key in bytes, without unlocking it.
   int get length;

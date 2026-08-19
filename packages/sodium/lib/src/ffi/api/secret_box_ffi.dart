@@ -20,7 +20,7 @@ class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SecretBoxFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get keyBytes => sodium.crypto_secretbox_keybytes();

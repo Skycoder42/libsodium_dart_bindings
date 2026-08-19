@@ -21,7 +21,7 @@ class SecretStreamPullTransformerSinkFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SecretStreamPullTransformerSinkFFI(
+  new(
     this.sodium,
     // ignore: avoid_positional_boolean_parameters for single param
     bool requireFinalized,
@@ -135,7 +135,7 @@ class SecretStreamPullTransformerFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  const SecretStreamPullTransformerFFI(
+  const new(
     this.sodium,
     SecureKey key,
     // ignore: avoid_positional_boolean_parameters for single param

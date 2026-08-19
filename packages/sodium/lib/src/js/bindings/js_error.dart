@@ -11,7 +11,7 @@ extension type JSError._(JSObject _) implements JSObject {
   external String get message;
 
   /// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/Error
-  external JSError([String? message]);
+  external new([String? message]);
 }
 
 /// Wraps any callback to convert [JSError]s to [SodiumException]s.

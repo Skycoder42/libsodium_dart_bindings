@@ -19,7 +19,7 @@ import '../../../../../secure_key_fake.dart';
 import '../../../../../test_constants_mapping.dart';
 import '../../../pointer_test_helpers.dart';
 
-class MockLibSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockLibSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockLibSodiumFFI();
@@ -41,15 +41,12 @@ void main() {
       mockAllocArray(mockSodium);
       mockAlloc(mockSodium, 0);
 
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_statebytes(),
-      ).thenReturn(5);
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_headerbytes(),
-      ).thenReturn(10);
-      when(
-        () => mockSodium.crypto_secretstream_xchacha20poly1305_abytes(),
-      ).thenReturn(3);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_statebytes())
+          .thenReturn(5);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_headerbytes())
+          .thenReturn(10);
+      when(() => mockSodium.crypto_secretstream_xchacha20poly1305_abytes())
+          .thenReturn(3);
 
       sut = SecretStreamPullTransformerSinkFFI(mockSodium, false);
     });
@@ -240,9 +237,8 @@ void main() {
       test('returns decrypted plain message', () {
         const tagValue = 77;
         final plainData = List.generate(13, (index) => index + 1);
-        when(
-          () => mockSodium.crypto_secretstream_xchacha20poly1305_tag_push(),
-        ).thenReturn(tagValue);
+        when(() => mockSodium.crypto_secretstream_xchacha20poly1305_tag_push())
+            .thenReturn(tagValue);
         when(
           () => mockSodium.crypto_secretstream_xchacha20poly1305_pull(
             any(),
@@ -273,9 +269,8 @@ void main() {
         expect(result.message, plainData);
         expect(result.additionalData, additionalData);
         expect(result.tag, SecretStreamMessageTag.push);
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(3);
+        verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))))
+            .called(3);
       });
 
       test('throws SodiumException if pull fails', () {
@@ -302,9 +297,8 @@ void main() {
           ),
           throwsA(isA<SodiumException>()),
         );
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(4);
+        verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))))
+            .called(4);
       });
     });
 

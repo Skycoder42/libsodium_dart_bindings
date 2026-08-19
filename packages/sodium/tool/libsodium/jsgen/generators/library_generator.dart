@@ -11,7 +11,7 @@ import 'typedef_generator.dart';
 final class LibraryGenerator extends SpecGenerator<Library> {
   final LibraryInfo libraryInfo;
 
-  const LibraryGenerator(this.libraryInfo);
+  const new(this.libraryInfo);
 
   @override
   Library build() => Library(

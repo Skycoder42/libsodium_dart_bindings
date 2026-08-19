@@ -65,9 +65,8 @@ void addStreamTests({
     });
 
     test('call crypto_sign_update with the given data', () {
-      when(
-        () => mockSodium.crypto_sign_update(any(), any(), any()),
-      ).thenReturn(0);
+      when(() => mockSodium.crypto_sign_update(any(), any(), any()))
+          .thenReturn(0);
 
       final message = List.generate(25, (index) => index * 3);
 
@@ -102,9 +101,8 @@ void addStreamTests({
     });
 
     test('call crypto_sign_update on stream events', () async {
-      when(
-        () => mockSodium.crypto_sign_update(any(), any(), any()),
-      ).thenReturn(0);
+      when(() => mockSodium.crypto_sign_update(any(), any(), any()))
+          .thenReturn(0);
 
       final message = List.generate(25, (index) => index * 3);
 
@@ -123,9 +121,8 @@ void addStreamTests({
     });
 
     test('throws exception and cancels addStream on error', () async {
-      when(
-        () => mockSodium.crypto_sign_update(any(), any(), any()),
-      ).thenReturn(1);
+      when(() => mockSodium.crypto_sign_update(any(), any(), any()))
+          .thenReturn(1);
 
       final message = List.generate(25, (index) => index * 3);
 

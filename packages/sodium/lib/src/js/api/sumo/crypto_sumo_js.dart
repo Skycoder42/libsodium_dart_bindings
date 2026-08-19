@@ -13,7 +13,7 @@ import 'sign_sumo_js.dart';
 @internal
 class CryptoSumoJS extends CryptoJS implements CryptoSumo {
   /// @nodoc
-  CryptoSumoJS(super.sodium);
+  new(super.sodium);
 
   @override
   // ignore: overridden_fields for api customization

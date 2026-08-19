@@ -17,7 +17,7 @@ import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -195,9 +195,8 @@ void main() {
         expect(result.rx, SecureKeyFake(rx));
         expect(result.tx, SecureKeyFake(tx));
 
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(3);
+        verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))))
+            .called(3);
       });
 
       test('throws exception on failure', () {
@@ -220,9 +219,8 @@ void main() {
           throwsA(isA<SodiumException>()),
         );
 
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(5);
+        verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))))
+            .called(5);
       });
     });
 
@@ -341,9 +339,8 @@ void main() {
         expect(result.rx, SecureKeyFake(rx));
         expect(result.tx, SecureKeyFake(tx));
 
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(3);
+        verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))))
+            .called(3);
       });
 
       test('throws exception on failure', () {
@@ -366,9 +363,8 @@ void main() {
           throwsA(isA<SodiumException>()),
         );
 
-        verify(
-          () => mockSodium.sodium_free(any(that: isNot(nullptr))),
-        ).called(5);
+        verify(() => mockSodium.sodium_free(any(that: isNot(nullptr))))
+            .called(5);
       });
     });
   });

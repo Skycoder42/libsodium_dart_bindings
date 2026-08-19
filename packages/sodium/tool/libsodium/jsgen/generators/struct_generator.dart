@@ -9,7 +9,7 @@ import 'spec_generator.dart';
 final class StructGenerator extends SpecGenerator<ExtensionType> {
   final Struct struct;
 
-  const StructGenerator(this.struct);
+  const new(this.struct);
 
   @override
   ExtensionType build() => ExtensionType(

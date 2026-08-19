@@ -12,19 +12,19 @@ import 'package:test/test.dart';
 import '../../../../../secure_key_fake.dart';
 
 class MockEventSink extends Mock
-    implements EventSink<SecretStreamCipherMessage> {}
+    implements EventSink<SecretStreamCipherMessage>;
 
 class MockSecretStreamPushTransformerSink extends Mock
-    implements SecretStreamPushTransformerSink<int> {}
+    implements SecretStreamPushTransformerSink<int>;
 
 class MockSecretStreamPushTransformer extends Mock
-    implements SecretStreamPushTransformer<int> {}
+    implements SecretStreamPushTransformer<int>;
 
 class SutSecretStreamPushTransformerSink
     extends SecretStreamPushTransformerSink<int> {
   final MockSecretStreamPushTransformerSink mock;
 
-  SutSecretStreamPushTransformerSink(this.mock);
+  new(this.mock);
 
   @override
   InitPushResult<int> initialize(SecureKey key) => mock.initialize(key);
@@ -45,7 +45,7 @@ class SutSecretStreamPushTransformerSink
 class SutSecretStreamPushTransformer extends SecretStreamPushTransformer<int> {
   final MockSecretStreamPushTransformer mock;
 
-  const SutSecretStreamPushTransformer(this.mock, SecureKey key) : super(key);
+  const new(this.mock, SecureKey key) : super(key);
 
   @override
   SecretStreamPushTransformerSink<int> createSink() => mock.createSink();
@@ -73,12 +73,10 @@ void main() {
       reset(mockSink);
       reset(mockSut);
 
-      when(
-        () => mockSut.initialize(any()),
-      ).thenReturn(InitPushResult(header: Uint8List(3), state: state));
-      when(
-        () => mockSut.encryptMessage(any(), any()),
-      ).thenReturn(SecretStreamCipherMessage(Uint8List(0)));
+      when(() => mockSut.initialize(any()))
+          .thenReturn(InitPushResult(header: Uint8List(3), state: state));
+      when(() => mockSut.encryptMessage(any(), any()))
+          .thenReturn(SecretStreamCipherMessage(Uint8List(0)));
 
       sut = SutSecretStreamPushTransformerSink(mockSut);
     });
@@ -254,9 +252,8 @@ void main() {
         });
 
         test('adds error in case of an exception', () {
-          when(
-            () => mockSut.encryptMessage(any(), any()),
-          ).thenThrow(Exception());
+          when(() => mockSut.encryptMessage(any(), any()))
+              .thenThrow(Exception());
 
           sut.add(SecretStreamPlainMessage(Uint8List(0)));
 

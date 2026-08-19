@@ -9,7 +9,7 @@ import 'sodium_exception.dart';
 /// normal variant of sodium.js is available.
 class SodiumSumoUnavailable extends SodiumException {
   /// Default constructor.
-  SodiumSumoUnavailable([super.originalMessage]);
+  new([super.originalMessage]);
 
   @override
   String toString() =>

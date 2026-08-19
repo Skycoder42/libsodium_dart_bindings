@@ -17,7 +17,7 @@ class SecretStreamFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SecretStreamFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get aBytes => sodium.crypto_secretstream_xchacha20poly1305_abytes();

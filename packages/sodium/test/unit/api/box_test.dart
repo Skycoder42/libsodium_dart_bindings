@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockBox extends Mock with BoxValidations implements Box {}
+class MockBox extends Mock with BoxValidations implements Box;
 
 void main() {
   group('BoxValidations', () {

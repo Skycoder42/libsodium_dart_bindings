@@ -12,7 +12,7 @@ import 'package:sodium/src/hooks/constants.dart';
 import 'package:sodium/src/hooks/sodium_builder/windows_builder.dart';
 import 'package:test/test.dart';
 
-class MockHookLogger extends Mock implements HookLogger {}
+class MockHookLogger extends Mock implements HookLogger;
 
 // CodeConfig is a final class, so it cannot be mocked. Building the input
 // creates its output directories, hence the temp dir.

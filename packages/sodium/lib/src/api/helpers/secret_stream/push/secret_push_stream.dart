@@ -15,7 +15,7 @@ class SecretPushStream extends SecretExStream<SecretStreamCipherMessage> {
   final Stream<SecretStreamCipherMessage> stream;
 
   /// @nodoc
-  SecretPushStream(this.sink, this.stream);
+  new(this.sink, this.stream);
 
   @override
   StreamSubscription<SecretStreamCipherMessage> listen(

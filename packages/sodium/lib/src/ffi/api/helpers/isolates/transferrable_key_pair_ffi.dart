@@ -16,8 +16,7 @@ sealed class TransferrableKeyPairFFI
     with _$TransferrableKeyPairFFI
     implements TransferrableKeyPair {
   /// @nodoc
-  factory TransferrableKeyPairFFI(KeyPair keyPair) =>
-      keyPair.secretKey is SecureKeyFFI
+  factory(KeyPair keyPair) => keyPair.secretKey is SecureKeyFFI
       ? TransferrableKeyPairFFI.ffi(
           publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
           secretKeyNativeHandle: (keyPair.secretKey as SecureKeyFFI)
@@ -32,18 +31,18 @@ sealed class TransferrableKeyPairFFI
         );
 
   /// @nodoc
-  const factory TransferrableKeyPairFFI.ffi({
+  const factory ffi({
     required TransferableTypedData publicKeyBytes,
     required SecureKeyFFINativeHandle secretKeyNativeHandle,
   }) = TransferrableKeyPairFFINative;
 
   /// @nodoc
-  const factory TransferrableKeyPairFFI.generic({
+  const factory generic({
     required TransferableTypedData publicKeyBytes,
     required TransferableTypedData secretKeyBytes,
   }) = TransferrableKeyPairFFIGeneric;
 
-  const TransferrableKeyPairFFI._();
+  const new _();
 
   /// @nodoc
   KeyPair toKeyPair(SodiumFFI sodium) => switch (this) {

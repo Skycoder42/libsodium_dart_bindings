@@ -56,9 +56,8 @@ void main() {
       });
 
       test('calls crypto_scalarmult_base with correct arguments', () {
-        when(
-          () => mockSodium.crypto_scalarmult_base(any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_scalarmult_base(any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final n = List.generate(10, (index) => index);
 
@@ -71,9 +70,8 @@ void main() {
 
       test('returns public key data', () {
         final q = List.generate(5, (index) => 100 - index);
-        when(
-          () => mockSodium.crypto_scalarmult_base(any()),
-        ).thenReturn(Uint8List.fromList(q).toJS);
+        when(() => mockSodium.crypto_scalarmult_base(any()))
+            .thenReturn(Uint8List.fromList(q).toJS);
 
         final result = sut.base(n: SecureKeyFake.empty(10));
 
@@ -81,9 +79,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_scalarmult_base(any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_scalarmult_base(any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut.base(n: SecureKeyFake.empty(10)),
@@ -115,9 +112,8 @@ void main() {
       });
 
       test('calls crypto_scalarmult with correct arguments', () {
-        when(
-          () => mockSodium.crypto_scalarmult(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_scalarmult(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final n = List.generate(10, (index) => index);
         final p = List.generate(5, (index) => index * 2);
@@ -134,9 +130,8 @@ void main() {
 
       test('returns shared key data', () {
         final q = List.generate(5, (index) => 100 - index);
-        when(
-          () => mockSodium.crypto_scalarmult(any(), any()),
-        ).thenReturn(Uint8List.fromList(q).toJS);
+        when(() => mockSodium.crypto_scalarmult(any(), any()))
+            .thenReturn(Uint8List.fromList(q).toJS);
 
         final result = sut(n: SecureKeyFake.empty(10), p: Uint8List(5));
 
@@ -144,9 +139,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_scalarmult(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_scalarmult(any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut(n: SecureKeyFake.empty(10), p: Uint8List(5)),

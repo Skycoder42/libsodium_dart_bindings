@@ -10,7 +10,7 @@ part 'detached_cipher_result.freezed.dart';
 @freezed
 sealed class DetachedCipherResult with _$DetachedCipherResult {
   /// Default constructor.
-  const factory DetachedCipherResult({
+  const factory({
     /// The encrypted data.
     required Uint8List cipherText,
 

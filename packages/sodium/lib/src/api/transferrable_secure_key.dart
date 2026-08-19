@@ -26,7 +26,7 @@ import 'sodium.dart';
 /// **Attention:** You must **ALWAYS** materialize a [TransferrableSecureKey],
 /// even if you do not intend to use it. Not doing so will leave a dangling
 /// reference to secure memory, which is dangerous and must be avoided.
-abstract interface class TransferrableSecureKey {}
+abstract interface class TransferrableSecureKey;
 
 /// A helper class that represents a boxed key pair that can be transferred
 /// via isolates.
@@ -52,4 +52,4 @@ abstract interface class TransferrableSecureKey {}
 /// **Attention:** You must **ALWAYS** materialize a [TransferrableSecureKey],
 /// even if you do not intend to use it. Not doing so will leave a dangling
 /// reference to secure memory, which is dangerous and must be avoided.
-abstract interface class TransferrableKeyPair {}
+abstract interface class TransferrableKeyPair;

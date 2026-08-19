@@ -18,7 +18,7 @@ import '../../../test_constants_mapping.dart';
 import '../keygen_test_helpers.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -57,15 +57,12 @@ void main() {
 
   group('methods', () {
     setUp(() {
-      when(
-        () => mockSodium.crypto_aead_chacha20poly1305_keybytes(),
-      ).thenReturn(5);
-      when(
-        () => mockSodium.crypto_aead_chacha20poly1305_npubbytes(),
-      ).thenReturn(5);
-      when(
-        () => mockSodium.crypto_aead_chacha20poly1305_abytes(),
-      ).thenReturn(5);
+      when(() => mockSodium.crypto_aead_chacha20poly1305_keybytes())
+          .thenReturn(5);
+      when(() => mockSodium.crypto_aead_chacha20poly1305_npubbytes())
+          .thenReturn(5);
+      when(() => mockSodium.crypto_aead_chacha20poly1305_abytes())
+          .thenReturn(5);
     });
 
     testKeygen(

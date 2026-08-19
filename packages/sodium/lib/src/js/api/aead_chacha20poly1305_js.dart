@@ -14,7 +14,7 @@ import 'secure_key_js.dart';
 @internal
 class AeadChaCha20Poly1305JS extends AeadBaseJS {
   /// @nodoc
-  AeadChaCha20Poly1305JS(super.sodium);
+  new(super.sodium);
 
   @override
   int get keyBytes => sodium.crypto_aead_chacha20poly1305_KEYBYTES;

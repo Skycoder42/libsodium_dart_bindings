@@ -7,7 +7,7 @@ import 'aead_base_ffi.dart';
 @internal
 class AeadXChaCha20Poly1305IETFFFI extends AeadBaseFFI {
   /// @nodoc
-  AeadXChaCha20Poly1305IETFFFI(super.sodium);
+  new(super.sodium);
 
   @override
   int get keyBytes => sodium.crypto_aead_xchacha20poly1305_ietf_keybytes();

@@ -9,9 +9,9 @@ class SecureKeyFake extends Fake with SecureKeyEquality implements SecureKey {
   // ignore: type_annotate_public_apis for test
   var disposed = false;
 
-  SecureKeyFake(List<int> data) : data = Uint8List.fromList(data);
+  new(List<int> data) : data = Uint8List.fromList(data);
 
-  SecureKeyFake.empty(int length) : data = Uint8List(length);
+  new empty(int length) : data = Uint8List(length);
 
   @override
   int get length => data.length;

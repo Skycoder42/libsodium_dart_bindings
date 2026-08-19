@@ -11,7 +11,7 @@ class SodiumAllocator implements Allocator {
   final LibSodiumFFI sodium;
 
   /// Default constructor
-  const SodiumAllocator(this.sodium);
+  const new(this.sodium);
 
   /// Provides sodium_malloc.
   ///

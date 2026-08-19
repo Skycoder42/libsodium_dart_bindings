@@ -12,9 +12,9 @@ import '../../test_validator.dart';
 
 class MockGenericHash extends Mock
     with GenericHashValidations
-    implements GenericHash {}
+    implements GenericHash;
 
-class MockGenericHashConsumer extends Mock implements GenericHashConsumer {}
+class MockGenericHashConsumer extends Mock implements GenericHashConsumer;
 
 void main() {
   setUpAll(() {

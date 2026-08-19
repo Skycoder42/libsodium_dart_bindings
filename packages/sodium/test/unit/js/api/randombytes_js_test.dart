@@ -77,9 +77,8 @@ void main() {
     test('calls randombytes_buf', () {
       const length = 42;
       final testData = List.generate(length, (index) => index);
-      when(
-        () => mockSodium.randombytes_buf(any()),
-      ).thenReturn(Uint8List.fromList(testData).toJS);
+      when(() => mockSodium.randombytes_buf(any()))
+          .thenReturn(Uint8List.fromList(testData).toJS);
 
       final res = sut.buf(length);
       expect(res, testData);
@@ -101,9 +100,8 @@ void main() {
 
       const length = 42;
       final testData = List.generate(length, (index) => index);
-      when(
-        () => mockSodium.randombytes_buf_deterministic(any(), any()),
-      ).thenReturn(Uint8List.fromList(testData).toJS);
+      when(() => mockSodium.randombytes_buf_deterministic(any(), any()))
+          .thenReturn(Uint8List.fromList(testData).toJS);
 
       final res = sut.bufDeterministic(length, seed);
       expect(res, testData);
@@ -118,9 +116,8 @@ void main() {
     });
 
     test('throws SodiumException on JSError', () {
-      when(
-        () => mockSodium.randombytes_buf_deterministic(any(), any()),
-      ).thenThrow(JSError());
+      when(() => mockSodium.randombytes_buf_deterministic(any(), any()))
+          .thenThrow(JSError());
 
       expect(
         () => sut.bufDeterministic(10, Uint8List(32)),

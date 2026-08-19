@@ -6,7 +6,7 @@ import 'file_loader.dart';
 class TypeMappingsLoader {
   final FileLoader _sourceLoader;
 
-  TypeMappingsLoader(this._sourceLoader);
+  new(this._sourceLoader);
 
   TypeMapping get typeMapping => const TypeMapping(_mappings);
 

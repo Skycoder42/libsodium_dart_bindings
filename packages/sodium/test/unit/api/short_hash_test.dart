@@ -5,9 +5,7 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockShortHash extends Mock
-    with ShortHashValidations
-    implements ShortHash {}
+class MockShortHash extends Mock with ShortHashValidations implements ShortHash;
 
 void main() {
   group('ShortHashValidations', () {

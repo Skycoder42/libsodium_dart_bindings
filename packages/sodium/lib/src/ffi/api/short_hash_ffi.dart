@@ -19,7 +19,7 @@ class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  ShortHashFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_shorthash_bytes();

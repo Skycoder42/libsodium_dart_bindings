@@ -12,7 +12,7 @@ final class ConstantsGenerator extends SpecGenerator<Method> {
   final TypeMapping typeMapping;
   final bool external;
 
-  const ConstantsGenerator({
+  const new({
     required this.constant,
     required this.typeMapping,
     this.external = true,

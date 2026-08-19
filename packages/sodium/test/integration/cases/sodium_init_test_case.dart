@@ -4,7 +4,7 @@ import '../test_runner.dart';
 class SodiumInitTestCase extends TestCase {
   final TestRunner runner;
 
-  SodiumInitTestCase(this.runner) : super(runner);
+  new(this.runner) : super(runner);
 
   @override
   String get name => 'init';

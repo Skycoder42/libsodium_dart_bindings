@@ -11,7 +11,7 @@ import 'package:posix/posix.dart' as posix;
 class FileNotExtractedException implements Exception {
   final String message;
 
-  FileNotExtractedException(this.message);
+  new(this.message);
 
   @override
   String toString() => 'FileNotExtractedException: $message';

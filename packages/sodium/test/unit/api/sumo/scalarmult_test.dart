@@ -9,7 +9,7 @@ import '../../../test_validator.dart';
 
 class MockScalarmult extends Mock
     with ScalarmultValidations
-    implements Scalarmult {}
+    implements Scalarmult;
 
 void main() {
   group('$ScalarmultValidations', () {

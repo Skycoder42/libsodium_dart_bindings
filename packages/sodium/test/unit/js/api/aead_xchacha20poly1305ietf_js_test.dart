@@ -53,15 +53,12 @@ void main() {
 
   group('methods', () {
     setUp(() {
-      when(
-        () => mockSodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES,
-      ).thenReturn(5);
-      when(
-        () => mockSodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES,
-      ).thenReturn(5);
-      when(
-        () => mockSodium.crypto_aead_xchacha20poly1305_ietf_ABYTES,
-      ).thenReturn(5);
+      when(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES)
+          .thenReturn(5);
+      when(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES)
+          .thenReturn(5);
+      when(() => mockSodium.crypto_aead_xchacha20poly1305_ietf_ABYTES)
+          .thenReturn(5);
     });
 
     testKeygen(

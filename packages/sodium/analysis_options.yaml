@@ -4,6 +4,13 @@ analyzer:
   exclude:
     - "**.freezed.dart"
     - "example/web/**"
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   rules:

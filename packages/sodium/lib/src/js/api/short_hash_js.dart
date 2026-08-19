@@ -18,7 +18,7 @@ class ShortHashJS with ShortHashValidations implements ShortHash {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  ShortHashJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_shorthash_BYTES;

@@ -18,7 +18,7 @@ class AuthJS with AuthValidations implements Auth {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  AuthJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_auth_BYTES;

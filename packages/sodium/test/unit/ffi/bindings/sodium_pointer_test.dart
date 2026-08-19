@@ -1,5 +1,5 @@
 // ignore_for_file: unnecessary_lambdas for mocking
-// ignore_for_file: type_literal_in_constant_pattern, switch_on_type for testing
+// ignore_for_file: switch_on_type for testing
 
 @TestOn('dart-vm')
 library;
@@ -19,9 +19,9 @@ import 'package:test/test.dart';
 import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
-class MockSodiumFinalizer extends Mock implements SodiumFinalizer {}
+class MockSodiumFinalizer extends Mock implements SodiumFinalizer;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -46,9 +46,8 @@ void main() {
 
     setUp(() {
       when(() => mockSodium.sodium_malloc(any())).thenReturn(fakePtr.cast());
-      when(
-        () => mockSodium.sodium_allocarray(any(), any()),
-      ).thenReturn(fakePtr.cast());
+      when(() => mockSodium.sodium_allocarray(any(), any()))
+          .thenReturn(fakePtr.cast());
     });
 
     test('raw initializes members and attaches finalizer', () {
@@ -268,9 +267,8 @@ void main() {
       });
 
       test('frees pointer if allocation fails', () {
-        when(
-          () => mockSodium.sodium_mprotect_noaccess(any()),
-        ).thenThrow(Exception('error'));
+        when(() => mockSodium.sodium_mprotect_noaccess(any()))
+            .thenThrow(Exception('error'));
 
         expect(
           () => SodiumPointer<Uint8>.alloc(
@@ -339,9 +337,8 @@ void main() {
       });
 
       test('frees pointer if allocation fails', () {
-        when(
-          () => mockSodium.sodium_mprotect_noaccess(any()),
-        ).thenThrow(Exception('error'));
+        when(() => mockSodium.sodium_mprotect_noaccess(any()))
+            .thenThrow(Exception('error'));
 
         expect(
           () => SodiumPointer<Uint8>.fromList(mockSodium, const <int>[

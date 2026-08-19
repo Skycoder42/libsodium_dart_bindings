@@ -10,24 +10,22 @@ import 'package:test/test.dart';
 
 import '../../../../../secure_key_fake.dart';
 
-class MockEventSink extends Mock
-    implements EventSink<SecretStreamPlainMessage> {}
+class MockEventSink extends Mock implements EventSink<SecretStreamPlainMessage>;
 
-class MockSecureKey extends Mock implements SecureKey {}
+class MockSecureKey extends Mock implements SecureKey;
 
 class MockSecretStreamPullTransformerSink extends Mock
-    implements SecretStreamPullTransformerSink<int> {}
+    implements SecretStreamPullTransformerSink<int>;
 
 class MockSecretStreamPullTransformer extends Mock
-    implements SecretStreamPullTransformer<int> {}
+    implements SecretStreamPullTransformer<int>;
 
 class SutSecretStreamPullTransformerSink
     extends SecretStreamPullTransformerSink<int> {
   final MockSecretStreamPullTransformerSink mock;
 
   // ignore: avoid_positional_boolean_parameters for single parameter
-  SutSecretStreamPullTransformerSink(this.mock, bool requireFinalized)
-    : super(requireFinalized);
+  new(this.mock, bool requireFinalized) : super(requireFinalized);
 
   @override
   int get headerBytes => mock.headerBytes;
@@ -52,7 +50,7 @@ class SutSecretStreamPullTransformerSink
 class SutSecretStreamPullTransformer extends SecretStreamPullTransformer<int> {
   final MockSecretStreamPullTransformer mock;
 
-  SutSecretStreamPullTransformer(
+  new(
     this.mock,
     SecureKey key,
     // ignore: avoid_positional_boolean_parameters for single parameter
@@ -90,9 +88,8 @@ void main() {
 
       when(() => mockSut.headerBytes).thenReturn(headerBytes);
       when(() => mockSut.initialize(any(), any())).thenReturn(state);
-      when(
-        () => mockSut.decryptMessage(any(), any()),
-      ).thenReturn(SecretStreamPlainMessage(Uint8List(0)));
+      when(() => mockSut.decryptMessage(any(), any()))
+          .thenReturn(SecretStreamPlainMessage(Uint8List(0)));
 
       sut = SutSecretStreamPullTransformerSink(mockSut, true);
     });
@@ -273,9 +270,8 @@ void main() {
         );
 
         test('adds error to stream on an error', () {
-          when(
-            () => mockSut.decryptMessage(any(), any()),
-          ).thenThrow(Exception());
+          when(() => mockSut.decryptMessage(any(), any()))
+              .thenThrow(Exception());
 
           sut.add(SecretStreamCipherMessage(Uint8List(0)));
 

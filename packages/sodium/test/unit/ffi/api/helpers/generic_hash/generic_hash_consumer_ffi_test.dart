@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 import '../../../../../secure_key_fake.dart';
 import '../../../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   const outLen = 42;
@@ -38,9 +38,8 @@ void main() {
 
   group('constructor', () {
     test('initializes hash state', () {
-      when(
-        () => mockSodium.crypto_generichash_init(any(), any(), any(), any()),
-      ).thenReturn(0);
+      when(() => mockSodium.crypto_generichash_init(any(), any(), any(), any()))
+          .thenReturn(0);
 
       GenericHashConsumerFFI(sodium: mockSodium, outLen: outLen);
 
@@ -58,9 +57,8 @@ void main() {
     });
 
     test('initializes hash state with key', () {
-      when(
-        () => mockSodium.crypto_generichash_init(any(), any(), any(), any()),
-      ).thenReturn(0);
+      when(() => mockSodium.crypto_generichash_init(any(), any(), any(), any()))
+          .thenReturn(0);
 
       final key = List.generate(15, (index) => index + 5);
 
@@ -85,9 +83,8 @@ void main() {
     });
 
     test('disposes sign state on error', () {
-      when(
-        () => mockSodium.crypto_generichash_init(any(), any(), any(), any()),
-      ).thenReturn(1);
+      when(() => mockSodium.crypto_generichash_init(any(), any(), any(), any()))
+          .thenReturn(1);
 
       expect(
         () => GenericHashConsumerFFI(sodium: mockSodium, outLen: outLen),
@@ -113,9 +110,8 @@ void main() {
     late GenericHashConsumerFFI sut;
 
     setUp(() {
-      when(
-        () => mockSodium.crypto_generichash_init(any(), any(), any(), any()),
-      ).thenReturn(0);
+      when(() => mockSodium.crypto_generichash_init(any(), any(), any(), any()))
+          .thenReturn(0);
 
       sut = GenericHashConsumerFFI(sodium: mockSodium, outLen: outLen);
 
@@ -124,9 +120,8 @@ void main() {
 
     group('add', () {
       test('calls crypto_generichash_update with the given data', () {
-        when(
-          () => mockSodium.crypto_generichash_update(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_generichash_update(any(), any(), any()))
+            .thenReturn(0);
 
         final message = List.generate(25, (index) => index * 3);
 
@@ -146,9 +141,8 @@ void main() {
       });
 
       test('throws StateError when adding data after completition', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_generichash_final(any(), any(), any()))
+            .thenReturn(0);
 
         await sut.close();
 
@@ -158,9 +152,8 @@ void main() {
 
     group('addStream', () {
       test('calls crypto_generichash_update on stream events', () async {
-        when(
-          () => mockSodium.crypto_generichash_update(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_generichash_update(any(), any(), any()))
+            .thenReturn(0);
 
         final message = List.generate(25, (index) => index * 3);
 
@@ -180,9 +173,8 @@ void main() {
       });
 
       test('throws exception and cancels addStream on error', () async {
-        when(
-          () => mockSodium.crypto_generichash_update(any(), any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_generichash_update(any(), any(), any()))
+            .thenReturn(1);
 
         final message = List.generate(25, (index) => index * 3);
 
@@ -197,9 +189,8 @@ void main() {
       test(
         'throws StateError when adding a stream after completition',
         () async {
-          when(
-            () => mockSodium.crypto_generichash_final(any(), any(), any()),
-          ).thenReturn(0);
+          when(() => mockSodium.crypto_generichash_final(any(), any(), any()))
+              .thenReturn(0);
 
           await sut.close();
 
@@ -213,9 +204,8 @@ void main() {
 
     group('close', () {
       test('calls crypto_generichash_final with correct arguments', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_generichash_final(any(), any(), any()))
+            .thenReturn(0);
 
         await sut.close();
 
@@ -233,12 +223,11 @@ void main() {
       test('returns hash on success', () async {
         final hash = List.generate(outLen, (index) => index * 12);
 
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any(), any()),
-        ).thenAnswer((i) {
-          fillPointer(i.positionalArguments[1] as Pointer, hash);
-          return 0;
-        });
+        when(() => mockSodium.crypto_generichash_final(any(), any(), any()))
+            .thenAnswer((i) {
+              fillPointer(i.positionalArguments[1] as Pointer, hash);
+              return 0;
+            });
 
         final result = await sut.close();
 
@@ -247,9 +236,8 @@ void main() {
       });
 
       test('throws exception if hashing fails', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_generichash_final(any(), any(), any()))
+            .thenReturn(1);
 
         await expectLater(() => sut.close(), throwsA(isA<SodiumException>()));
 
@@ -257,9 +245,8 @@ void main() {
       });
 
       test('throws state error if close is called a second time', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_generichash_final(any(), any(), any()))
+            .thenReturn(0);
 
         await sut.close();
 
@@ -267,9 +254,8 @@ void main() {
       });
 
       test('returns same future as hash', () async {
-        when(
-          () => mockSodium.crypto_generichash_final(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_generichash_final(any(), any(), any()))
+            .thenReturn(0);
 
         final hash = sut.hash;
         final closed = sut.close();

@@ -23,7 +23,7 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
   final SecureKeyJS sharedKey;
 
   /// @nodoc
-  PrecalculatedBoxJS(this.box, this.sharedKey);
+  new(this.box, this.sharedKey);
 
   @override
   Uint8List easy({required Uint8List message, required Uint8List nonce}) {
@@ -97,7 +97,7 @@ class BoxJS with BoxValidations implements Box {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  BoxJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get publicKeyBytes => sodium.crypto_box_PUBLICKEYBYTES;

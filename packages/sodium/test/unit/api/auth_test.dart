@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockAuth extends Mock with AuthValidations implements Auth {}
+class MockAuth extends Mock with AuthValidations implements Auth;
 
 void main() {
   group('AuthValidations', () {

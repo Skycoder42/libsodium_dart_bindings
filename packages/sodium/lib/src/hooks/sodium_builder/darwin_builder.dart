@@ -16,7 +16,7 @@ class DarwinConfig {
   final Uri sdk;
   final String versionParameter;
 
-  const DarwinConfig({
+  const new({
     required this.arch,
     this.build,
     required this.host,
@@ -39,7 +39,7 @@ class DarwinConfig {
 abstract base class DarwinBuilder extends AutomakeBuilder {
   late final DarwinConfig _platformConfig;
 
-  DarwinBuilder(super.config, super.logger);
+  new(super.config, super.logger);
 
   @override
   @nonVirtual

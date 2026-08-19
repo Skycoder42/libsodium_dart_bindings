@@ -5,7 +5,7 @@ import 'package:sodium/sodium.dart';
 import '../test_case.dart';
 
 class BoxTestCase extends TestCase {
-  BoxTestCase(super._runner);
+  new(super._runner);
 
   @override
   String get name => 'box';

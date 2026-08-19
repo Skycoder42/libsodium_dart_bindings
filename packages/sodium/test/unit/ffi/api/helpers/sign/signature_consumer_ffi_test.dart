@@ -17,9 +17,9 @@ import '../../../../../secure_key_fake.dart';
 import '../../../pointer_test_helpers.dart';
 import 'sign_consumer_ffi_mixin_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
-class MockSecureKey extends Mock implements SecureKey {}
+class MockSecureKey extends Mock implements SecureKey;
 
 void main() {
   final mockSodium = MockSodiumFFI();

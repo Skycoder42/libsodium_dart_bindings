@@ -5,7 +5,7 @@ import 'darwin_builder.dart';
 
 @internal
 final class IosBuilder extends DarwinBuilder {
-  IosBuilder(super.config, super.logger);
+  new(super.config, super.logger);
 
   @override
   DarwinConfig getPlatformConfig(Uri xcodeDir) {

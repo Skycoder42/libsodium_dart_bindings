@@ -26,11 +26,7 @@ class GenericHashConsumerJS implements GenericHashConsumer {
   Future<Uint8List> get hash => _hashCompleter.future;
 
   /// @nodoc
-  GenericHashConsumerJS({
-    required this.sodium,
-    required this.outLen,
-    SecureKey? key,
-  }) {
+  new({required this.sodium, required this.outLen, SecureKey? key}) {
     _state = jsErrorWrap(
       () => key.runMaybeUnlockedSync(
         (keyData) => sodium.crypto_generichash_init(keyData?.toJS, outLen),

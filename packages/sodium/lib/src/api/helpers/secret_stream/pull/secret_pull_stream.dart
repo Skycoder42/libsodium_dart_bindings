@@ -15,7 +15,7 @@ class SecretPullStream extends SecretExStream<SecretStreamPlainMessage> {
   final Stream<SecretStreamPlainMessage> stream;
 
   /// @nodoc
-  SecretPullStream(this.sink, this.stream);
+  new(this.sink, this.stream);
 
   @override
   StreamSubscription<SecretStreamPlainMessage> listen(

@@ -7,7 +7,7 @@ import '../../test_validator.dart';
 
 class MockSecretStream extends Mock
     with SecretStreamValidations
-    implements SecretStream {}
+    implements SecretStream;
 
 void main() {
   group('SecretBoxValidations', () {

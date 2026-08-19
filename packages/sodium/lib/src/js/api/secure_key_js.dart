@@ -29,16 +29,16 @@ class SecureKeyJS with SecureKeyEquality implements SecureKey {
   final JSUint8Array _raw;
 
   /// @nodoc
-  SecureKeyJS(this.sodium, this._raw) {
+  new(this.sodium, this._raw) {
     _getFinalizer(sodium).attach(this, _raw);
   }
 
   /// @nodoc
-  factory SecureKeyJS.alloc(LibSodiumJS sodium, int length) =>
+  factory alloc(LibSodiumJS sodium, int length) =>
       SecureKeyJS(sodium, Uint8List(length).toJS);
 
   /// @nodoc
-  factory SecureKeyJS.random(LibSodiumJS sodium, int length) =>
+  factory random(LibSodiumJS sodium, int length) =>
       SecureKeyJS(sodium, jsErrorWrap(() => sodium.randombytes_buf(length)));
 
   @override

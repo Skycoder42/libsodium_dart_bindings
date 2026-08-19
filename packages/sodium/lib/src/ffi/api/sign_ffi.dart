@@ -22,7 +22,7 @@ class SignFFI with SignValidations, KeygenMixin implements Sign {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SignFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get publicKeyBytes => sodium.crypto_sign_publickeybytes();

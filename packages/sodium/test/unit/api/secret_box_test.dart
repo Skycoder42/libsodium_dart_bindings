@@ -7,9 +7,7 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockSecretBox extends Mock
-    with SecretBoxValidations
-    implements SecretBox {}
+class MockSecretBox extends Mock with SecretBoxValidations implements SecretBox;
 
 void main() {
   group('SecretBoxValidations', () {

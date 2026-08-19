@@ -12,8 +12,9 @@ import '../bindings/sodium_pointer.dart';
 
 /// @nodoc
 @internal
-typedef SecureFFICallbackFn<T> =
-    T Function(SodiumPointer<UnsignedChar> pointer);
+typedef SecureFFICallbackFn<T> = T Function(
+  SodiumPointer<UnsignedChar> pointer,
+);
 
 /// @nodoc
 @internal
@@ -25,14 +26,14 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   final SodiumPointer<UnsignedChar> _raw;
 
   /// @nodoc
-  SecureKeyFFI(this._raw) {
+  new(this._raw) {
     _raw
       ..locked = true
       ..memoryProtection = MemoryProtection.noAccess;
   }
 
   /// @nodoc
-  factory SecureKeyFFI.alloc(LibSodiumFFI sodium, int length) => SecureKeyFFI(
+  factory alloc(LibSodiumFFI sodium, int length) => SecureKeyFFI(
     SodiumPointer<UnsignedChar>.alloc(
       sodium,
       count: length,
@@ -41,7 +42,7 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
   );
 
   /// @nodoc
-  factory SecureKeyFFI.random(LibSodiumFFI sodium, int length) {
+  factory random(LibSodiumFFI sodium, int length) {
     final raw = SodiumPointer<UnsignedChar>.alloc(sodium, count: length);
     try {
       sodium.randombytes_buf(raw.ptr.cast(), raw.byteLength);
@@ -54,16 +55,14 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
 
   /// @nodoc
   @internal
-  factory SecureKeyFFI.attach(
-    LibSodiumFFI sodium,
-    SecureKeyFFINativeHandle nativeHandle,
-  ) => SecureKeyFFI(
-    SodiumPointer.raw(
-      sodium,
-      Pointer.fromAddress(nativeHandle.$1),
-      nativeHandle.$2,
-    ),
-  );
+  factory attach(LibSodiumFFI sodium, SecureKeyFFINativeHandle nativeHandle) =>
+      SecureKeyFFI(
+        SodiumPointer.raw(
+          sodium,
+          Pointer.fromAddress(nativeHandle.$1),
+          nativeHandle.$2,
+        ),
+      );
 
   @override
   int get length => _raw.count;

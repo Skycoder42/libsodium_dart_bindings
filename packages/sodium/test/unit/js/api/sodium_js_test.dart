@@ -21,10 +21,9 @@ import 'package:test/test.dart';
 import '../../../secure_key_fake.dart';
 import '../sodium_js_mock.dart';
 
-class FakeTransferrableSecureKey extends Fake
-    implements TransferrableSecureKey {}
+class FakeTransferrableSecureKey extends Fake implements TransferrableSecureKey;
 
-class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair {}
+class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair;
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -122,9 +121,8 @@ void main() {
 
   test('secureRandom creates random SecureKey instance', () {
     const length = 10;
-    when(
-      () => mockSodium.randombytes_buf(any()),
-    ).thenReturn(Uint8List(length).toJS);
+    when(() => mockSodium.randombytes_buf(any()))
+        .thenReturn(Uint8List(length).toJS);
 
     final res = sut.secureRandom(length);
 

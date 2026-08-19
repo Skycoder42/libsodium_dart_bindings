@@ -16,7 +16,7 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  AeadBaseJS(this.sodium);
+  new(this.sodium);
 
   @override
   Uint8List encrypt({

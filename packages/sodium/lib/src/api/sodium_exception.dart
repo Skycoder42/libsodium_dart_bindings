@@ -10,7 +10,7 @@ class SodiumException implements Exception {
   final String? originalMessage;
 
   /// Default constructor.
-  SodiumException([this.originalMessage]);
+  new([this.originalMessage]);
 
   /// @nodoc
   @internal

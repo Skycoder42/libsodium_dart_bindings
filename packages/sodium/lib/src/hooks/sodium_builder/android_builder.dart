@@ -15,7 +15,7 @@ class AndroidArchConfig {
   final List<String> ldFlags;
   final Uri toolchainDir;
 
-  const AndroidArchConfig({
+  const new({
     required this.host,
     required this.cFlags,
     required this.ldFlags,
@@ -34,7 +34,7 @@ class AndroidArchConfig {
 final class AndroidBuilder extends AutomakeBuilder {
   late final AndroidArchConfig _archConfig;
 
-  AndroidBuilder(super.config, super.logger);
+  new(super.config, super.logger);
 
   @override
   Future<void> prepare() async {

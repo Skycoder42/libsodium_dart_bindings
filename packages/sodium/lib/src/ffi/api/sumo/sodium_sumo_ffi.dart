@@ -12,7 +12,7 @@ import 'crypto_sumo_ffi.dart';
 @internal
 class SodiumSumoFFI extends SodiumFFI implements SodiumSumo {
   /// @nodoc
-  SodiumSumoFFI([super.sodium]);
+  new([super.sodium]);
 
   @override
   // ignore: overridden_fields for api customization

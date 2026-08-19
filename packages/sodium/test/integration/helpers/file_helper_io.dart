@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 class FileHelper {
   final Directory _dir;
 
-  FileHelper._(this._dir);
+  new _(this._dir);
 
   static Future<FileHelper> instance() async {
     final dir = await Directory.systemTemp.createTemp();
