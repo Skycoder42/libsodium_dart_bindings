@@ -54,6 +54,7 @@ Future<void> main() async {
 Future<LibraryInfo> _loadLibraryInfo() async {
   final repoLoader = RepoLoader();
   final wrapperDir = await repoLoader.downloadRepo(
+    ref: HookConstants.libsodiumVersion.jsRef,
     HookConstants.libsodiumVersion.js,
   );
   final wrapperLoader = FileLoader(wrapperDir);

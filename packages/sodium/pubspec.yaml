@@ -11,13 +11,13 @@ executables:
   sodium-update-web: update_web
 
 dependencies:
-  archive: ^4.0.9
+  archive: ^4.1.0
   args: ^2.7.0
   code_assets: ^1.2.1
   crypto: ^3.0.7
   ffi: ^2.2.0
   freezed_annotation: ^3.1.0
-  hooks: ^2.1.0
+  hooks: ^2.2.0
   html: ^0.15.6
   meta: ^1.19.0
   path: ^1.9.1

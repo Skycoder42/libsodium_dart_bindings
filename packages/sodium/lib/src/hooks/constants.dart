@@ -2,20 +2,20 @@ import 'package:meta/meta.dart';
 
 @internal
 @immutable
-class LibsodiumVersion {
-  final String ffi;
-  final String js;
-
-  const new _({required this.ffi, required this.js});
-
-  Map<String, String> toJson() => {'ffi': ffi, 'js': js};
+class const LibsodiumVersion._({
+  required final String ffi,
+  required final String js,
+  final String jsRef = 'tags',
+}) {
+  Map<String, String?> toJson() => {'ffi': ffi, 'js': js, 'jsRef': jsRef};
 }
 
 @internal
 sealed class HookConstants {
   static const libsodiumVersion = LibsodiumVersion._(
     ffi: '1.0.22',
-    js: '0.8.3',
+    js: 'master',
+    jsRef: 'heads',
   );
 
   static const libsodiumSigningKey =
