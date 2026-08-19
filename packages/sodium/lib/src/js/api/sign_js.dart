@@ -21,7 +21,7 @@ class SignJS with SignValidations implements Sign {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  SignJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get publicKeyBytes => sodium.crypto_sign_PUBLICKEYBYTES;

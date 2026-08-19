@@ -12,7 +12,7 @@ import 'crypto_sumo_js.dart';
 @internal
 class SodiumSumoJS extends SodiumJS implements SodiumSumo {
   /// @nodoc
-  SodiumSumoJS(super.sodium);
+  new(super.sodium);
 
   @override
   // ignore: overridden_fields for api customization

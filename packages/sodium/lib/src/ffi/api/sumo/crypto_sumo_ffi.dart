@@ -13,7 +13,7 @@ import 'sign_sumo_ffi.dart';
 @internal
 class CryptoSumoFFI extends CryptoFFI implements CryptoSumo {
   /// @nodoc
-  CryptoSumoFFI(super.sodium);
+  new(super.sodium);
 
   @override
   // ignore: overridden_fields for api customization

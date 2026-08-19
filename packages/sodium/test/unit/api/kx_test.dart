@@ -10,9 +10,9 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockKx extends Mock with KxValidations implements Kx {}
+class MockKx extends Mock with KxValidations implements Kx;
 
-class MockSecureKey extends Mock implements SecureKey {}
+class MockSecureKey extends Mock implements SecureKey;
 
 void main() {
   group('SessionKeys', () {

@@ -18,7 +18,7 @@ class PwhashFFI with PwHashValidations implements Pwhash {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  PwhashFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytesMin => sodium.crypto_pwhash_bytes_min();

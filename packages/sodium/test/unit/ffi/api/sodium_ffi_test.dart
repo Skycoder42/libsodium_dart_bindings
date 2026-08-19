@@ -25,12 +25,11 @@ import 'package:test/test.dart';
 import '../../../secure_key_fake.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
-class FakeTransferrableSecureKey extends Fake
-    implements TransferrableSecureKey {}
+class FakeTransferrableSecureKey extends Fake implements TransferrableSecureKey;
 
-class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair {}
+class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -74,9 +73,8 @@ void main() {
     setUp(() {
       mockAllocArray(mockSodium);
       mockAlloc(mockSodium, 4);
-      when(
-        () => mockSodium.sodium_pad(any(), any(), any(), any(), any()),
-      ).thenReturn(0);
+      when(() => mockSodium.sodium_pad(any(), any(), any(), any(), any()))
+          .thenReturn(0);
     });
 
     test('allocs extended buffer with extra len', () {
@@ -125,9 +123,8 @@ void main() {
     });
 
     test('throws if sodium_pad fails', () {
-      when(
-        () => mockSodium.sodium_pad(any(), any(), any(), any(), any()),
-      ).thenReturn(1);
+      when(() => mockSodium.sodium_pad(any(), any(), any(), any(), any()))
+          .thenReturn(1);
 
       expect(() => sut.pad(testData, 10), throwsA(isA<SodiumException>()));
 
@@ -141,9 +138,8 @@ void main() {
     setUp(() {
       mockAllocArray(mockSodium);
       mockAlloc(mockSodium, 4);
-      when(
-        () => mockSodium.sodium_unpad(any(), any(), any(), any()),
-      ).thenReturn(0);
+      when(() => mockSodium.sodium_unpad(any(), any(), any(), any()))
+          .thenReturn(0);
     });
 
     test('allocs extended buffer with data len and read only', () {
@@ -195,9 +191,8 @@ void main() {
     });
 
     test('throws if sodium_unpad fails', () {
-      when(
-        () => mockSodium.sodium_unpad(any(), any(), any(), any()),
-      ).thenReturn(1);
+      when(() => mockSodium.sodium_unpad(any(), any(), any(), any()))
+          .thenReturn(1);
 
       expect(() => sut.unpad(testData, 10), throwsA(isA<SodiumException>()));
 

@@ -12,7 +12,7 @@ import 'secure_key.dart';
 /// See [GenericHash.createConsumer] for more details.
 abstract class GenericHashConsumer
     implements StreamConsumer<Uint8List>, Sink<Uint8List> {
-  const GenericHashConsumer._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// A future that resolves to the hash of the data.
   ///
@@ -39,7 +39,7 @@ abstract class GenericHashConsumer
 /// in https://libsodium.gitbook.io/doc/hashing/generic_hashing.
 /// Please refer to that documentation for more details about these APIs.
 abstract class GenericHash {
-  const GenericHash._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_generichash_BYTES.
   ///

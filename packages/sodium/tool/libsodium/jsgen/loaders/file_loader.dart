@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 class FileLoader {
   final Directory directory;
 
-  FileLoader(this.directory);
+  new(this.directory);
 
   static Directory get scriptDir => File.fromUri(Platform.script).parent;
 

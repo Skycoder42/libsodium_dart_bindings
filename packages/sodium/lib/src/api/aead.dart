@@ -16,7 +16,7 @@ import 'secure_key.dart';
 /// or https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Aead {
-  const Aead._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_aead_*chacha20poly1305*_KEYBYTES.
   ///

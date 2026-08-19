@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 /// @nodoc
 @internal
 abstract class Validations {
-  const Validations._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// @nodoc
   static void checkInRange(

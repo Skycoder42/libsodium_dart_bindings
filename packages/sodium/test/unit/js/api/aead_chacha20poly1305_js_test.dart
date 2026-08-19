@@ -53,12 +53,10 @@ void main() {
 
   group('methods', () {
     setUp(() {
-      when(
-        () => mockSodium.crypto_aead_chacha20poly1305_KEYBYTES,
-      ).thenReturn(5);
-      when(
-        () => mockSodium.crypto_aead_chacha20poly1305_NPUBBYTES,
-      ).thenReturn(5);
+      when(() => mockSodium.crypto_aead_chacha20poly1305_KEYBYTES)
+          .thenReturn(5);
+      when(() => mockSodium.crypto_aead_chacha20poly1305_NPUBBYTES)
+          .thenReturn(5);
       when(() => mockSodium.crypto_aead_chacha20poly1305_ABYTES).thenReturn(5);
     });
 

@@ -20,7 +20,7 @@ class GenericHashJS with GenericHashValidations implements GenericHash {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  GenericHashJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_generichash_BYTES;

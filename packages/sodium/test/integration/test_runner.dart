@@ -29,14 +29,15 @@ import 'test_case.dart';
 typedef SetupAllFn = void Function(dynamic Function() body);
 typedef SetupFn = void Function(dynamic Function(Sodium sodium) body);
 typedef GroupFn = void Function(String description, dynamic Function() body);
-typedef TestFn =
-    void Function(
-      String description,
-      dynamic Function(Sodium sodium) body, {
-      bool? skip,
-    });
-typedef TestSumoFn =
-    void Function(String description, dynamic Function(SodiumSumo sodium) body);
+typedef TestFn = void Function(
+  String description,
+  dynamic Function(Sodium sodium) body, {
+  bool? skip,
+});
+typedef TestSumoFn = void Function(
+  String description,
+  dynamic Function(SodiumSumo sodium) body,
+);
 
 abstract class TestRunner {
   late final Sodium _sodium;
@@ -47,7 +48,7 @@ abstract class TestRunner {
 
   Sodium get sodium => _sodium;
 
-  TestRunner();
+  new();
 
   Iterable<TestCase> createTestCases() => [
     SodiumTestCase(this),

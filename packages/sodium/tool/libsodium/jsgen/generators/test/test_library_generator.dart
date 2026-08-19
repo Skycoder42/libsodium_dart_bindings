@@ -9,7 +9,7 @@ import 'test_lib_sodium_js_generator.dart';
 final class TestLibraryGenerator extends SpecGenerator<Library> {
   final LibraryInfo libraryInfo;
 
-  const TestLibraryGenerator(this.libraryInfo);
+  const new(this.libraryInfo);
 
   @override
   Library build() => Library(

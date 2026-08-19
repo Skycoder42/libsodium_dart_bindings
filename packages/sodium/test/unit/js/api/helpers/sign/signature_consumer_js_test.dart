@@ -17,7 +17,7 @@ import '../../../../../secure_key_fake.dart';
 import '../../../sodium_js_mock.dart';
 import 'sign_consumer_js_mixin_test_helpers.dart';
 
-class MockSecureKey extends Mock implements SecureKey {}
+class MockSecureKey extends Mock implements SecureKey;
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -91,17 +91,15 @@ void main() {
       createSut: () => sut,
       state: stateAddress,
       setUpVerify: () {
-        when(
-          () => mockSodium.crypto_sign_final_create(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_sign_final_create(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
       },
     );
 
     group('close', () {
       test('calls crypto_sign_final_create with correct arguments', () async {
-        when(
-          () => mockSodium.crypto_sign_final_create(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_sign_final_create(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
@@ -116,9 +114,8 @@ void main() {
       test('returns signature on success', () async {
         final signature = List.generate(10, (index) => index * 10);
 
-        when(
-          () => mockSodium.crypto_sign_final_create(any(), any()),
-        ).thenReturn(Uint8List.fromList(signature).toJS);
+        when(() => mockSodium.crypto_sign_final_create(any(), any()))
+            .thenReturn(Uint8List.fromList(signature).toJS);
 
         final result = await sut.close();
 
@@ -126,17 +123,15 @@ void main() {
       });
 
       test('throws exception if signing fails', () async {
-        when(
-          () => mockSodium.crypto_sign_final_create(any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_sign_final_create(any(), any()))
+            .thenThrow(JSError());
 
         await expectLater(() => sut.close(), throwsA(isA<SodiumException>()));
       });
 
       test('throws state error if close is called a second time', () async {
-        when(
-          () => mockSodium.crypto_sign_final_create(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_sign_final_create(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         await sut.close();
 
@@ -144,9 +139,8 @@ void main() {
       });
 
       test('returns same future as signature', () async {
-        when(
-          () => mockSodium.crypto_sign_final_create(any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_sign_final_create(any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final signature = sut.signature;
 

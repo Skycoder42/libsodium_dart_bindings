@@ -31,7 +31,7 @@ class CryptoJS implements Crypto {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  CryptoJS(this.sodium);
+  new(this.sodium);
 
   @override
   late final SecretBox secretBox = SecretBoxJS(sodium);

@@ -16,24 +16,21 @@ sealed class TransferrableSecureKeyFFI
     with _$TransferrableSecureKeyFFI
     implements TransferrableSecureKey {
   /// @nodoc
-  factory TransferrableSecureKeyFFI(SecureKey secureKey) =>
-      secureKey is SecureKeyFFI
+  factory(SecureKey secureKey) => secureKey is SecureKeyFFI
       ? TransferrableSecureKeyFFI.ffi(secureKey.copy().detach())
       : TransferrableSecureKeyFFI.generic(
           TransferableTypedData.fromList([secureKey.extractBytes()]),
         );
 
   /// @nodoc
-  const factory TransferrableSecureKeyFFI.ffi(
-    SecureKeyFFINativeHandle nativeHandle,
-  ) = TransferrableSecureKeyFFINative;
+  const factory ffi(SecureKeyFFINativeHandle nativeHandle) =
+      TransferrableSecureKeyFFINative;
 
   /// @nodoc
-  const factory TransferrableSecureKeyFFI.generic(
-    TransferableTypedData keyBytes,
-  ) = TransferrableSecureKeyFFIGeneric;
+  const factory generic(TransferableTypedData keyBytes) =
+      TransferrableSecureKeyFFIGeneric;
 
-  const TransferrableSecureKeyFFI._();
+  const new _();
 
   /// @nodoc
   SecureKey toSecureKey(SodiumFFI sodium) => switch (this) {

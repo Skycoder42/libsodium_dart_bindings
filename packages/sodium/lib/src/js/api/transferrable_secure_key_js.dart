@@ -10,12 +10,12 @@ import '../../api/transferrable_secure_key.dart';
 class TransferrableSecureKeyJS implements TransferrableSecureKey {
   final SecureKey secureKey;
 
-  const TransferrableSecureKeyJS(this.secureKey);
+  const new(this.secureKey);
 }
 
 @internal
 class TransferrableKeyPairJS implements TransferrableKeyPair {
   final KeyPair keyPair;
 
-  const TransferrableKeyPairJS(this.keyPair);
+  const new(this.keyPair);
 }

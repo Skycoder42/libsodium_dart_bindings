@@ -16,7 +16,7 @@ import '../../../../secure_key_fake.dart';
 import '../../../../test_constants_mapping.dart';
 import '../../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -61,9 +61,8 @@ void main() {
       });
 
       test('calls crypto_scalarmult_base with correct arguments', () {
-        when(
-          () => mockSodium.crypto_scalarmult_base(any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_scalarmult_base(any(), any()))
+            .thenReturn(0);
 
         final n = List.generate(10, (index) => index);
 
@@ -95,9 +94,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_scalarmult_base(any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_scalarmult_base(any(), any()))
+            .thenReturn(1);
 
         expect(
           () => sut.base(n: SecureKeyFake.empty(10)),
@@ -131,9 +129,8 @@ void main() {
       });
 
       test('calls crypto_scalarmult with correct arguments', () {
-        when(
-          () => mockSodium.crypto_scalarmult(any(), any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_scalarmult(any(), any(), any()))
+            .thenReturn(0);
 
         final n = List.generate(10, (index) => index);
         final p = List.generate(5, (index) => index * 2);
@@ -168,9 +165,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_scalarmult(any(), any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_scalarmult(any(), any(), any()))
+            .thenReturn(1);
 
         expect(
           () => sut(n: SecureKeyFake.empty(10), p: Uint8List(5)),

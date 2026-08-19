@@ -19,7 +19,7 @@ class SecretBoxJS with SecretBoxValidations implements SecretBox {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  SecretBoxJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get keyBytes => sodium.crypto_secretbox_KEYBYTES;

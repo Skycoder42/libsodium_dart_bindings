@@ -18,7 +18,7 @@ class KdfJS with KdfValidations implements Kdf {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  KdfJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytesMin => sodium.crypto_kdf_BYTES_MIN;

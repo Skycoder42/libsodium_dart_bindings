@@ -6,7 +6,7 @@ class LibsodiumVersion {
   final String ffi;
   final String js;
 
-  const LibsodiumVersion._({required this.ffi, required this.js});
+  const new _({required this.ffi, required this.js});
 
   Map<String, String> toJson() => {'ffi': ffi, 'js': js};
 }

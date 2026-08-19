@@ -15,13 +15,13 @@ import 'package:test/test.dart';
 import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
 
-class MockLibSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockLibSodiumFFI extends Mock implements LibSodiumFFI;
 
-class MockSodiumPointer extends Mock implements SodiumPointer<UnsignedChar> {}
+class MockSodiumPointer extends Mock implements SodiumPointer<UnsignedChar>;
 
-class MockSecureKey extends Mock implements SecureKey {}
+class MockSecureKey extends Mock implements SecureKey;
 
-class MockSecureKeyNative extends Mock implements SecureKeyNative {}
+class MockSecureKeyNative extends Mock implements SecureKeyNative;
 
 void main() {
   final mockSodium = MockLibSodiumFFI();

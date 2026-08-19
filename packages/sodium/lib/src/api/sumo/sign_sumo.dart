@@ -12,7 +12,7 @@ import '../sign.dart';
 /// in https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures.
 /// Please refer to that documentation for more details about these APIs.
 abstract class SignSumo implements Sign {
-  const SignSumo._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_sign_ed25519_sk_to_seed.
   ///

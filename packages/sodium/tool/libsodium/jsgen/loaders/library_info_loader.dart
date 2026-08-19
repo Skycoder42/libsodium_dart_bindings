@@ -8,11 +8,7 @@ class LibraryInfoLoader {
   final ConstantsLoader _constantsLoader;
   final SymbolsLoader _symbolsLoader;
 
-  LibraryInfoLoader(
-    this._typeMappingsLoader,
-    this._constantsLoader,
-    this._symbolsLoader,
-  );
+  new(this._typeMappingsLoader, this._constantsLoader, this._symbolsLoader);
 
   Future<LibraryInfo> load() async => LibraryInfo(
     typeMapping: _typeMappingsLoader.typeMapping,

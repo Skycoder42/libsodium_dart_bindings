@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 import '../../../../secure_key_fake.dart';
 import '../../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -53,9 +53,8 @@ void main() {
       });
 
       test('calls crypto_sign_ed25519_sk_to_seed with correct arguments', () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_sign_ed25519_sk_to_seed(any(), any()))
+            .thenReturn(0);
 
         final secretKey = List.generate(5, (index) => 30 + index);
 
@@ -77,12 +76,11 @@ void main() {
 
       test('returns seed of the secret key', () {
         final seed = List.generate(5, (index) => 100 - index);
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(any(), any()),
-        ).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer, seed);
-          return 0;
-        });
+        when(() => mockSodium.crypto_sign_ed25519_sk_to_seed(any(), any()))
+            .thenAnswer((i) {
+              fillPointer(i.positionalArguments.first as Pointer, seed);
+              return 0;
+            });
 
         final result = sut.skToSeed(SecureKeyFake.empty(5));
 
@@ -92,9 +90,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_seed(any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_sign_ed25519_sk_to_seed(any(), any()))
+            .thenReturn(1);
 
         expect(
           () => sut.skToSeed(SecureKeyFake.empty(5)),
@@ -116,9 +113,8 @@ void main() {
       });
 
       test('calls crypto_sign_ed25519_sk_to_pk with correct arguments', () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(any(), any()),
-        ).thenReturn(0);
+        when(() => mockSodium.crypto_sign_ed25519_sk_to_pk(any(), any()))
+            .thenReturn(0);
 
         final secretKey = List.generate(5, (index) => 30 + index);
 
@@ -138,12 +134,11 @@ void main() {
 
       test('returns the public key of the secret key', () {
         final publicKey = List.generate(5, (index) => 100 - index);
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(any(), any()),
-        ).thenAnswer((i) {
-          fillPointer(i.positionalArguments.first as Pointer, publicKey);
-          return 0;
-        });
+        when(() => mockSodium.crypto_sign_ed25519_sk_to_pk(any(), any()))
+            .thenAnswer((i) {
+              fillPointer(i.positionalArguments.first as Pointer, publicKey);
+              return 0;
+            });
 
         final result = sut.skToPk(SecureKeyFake.empty(5));
 
@@ -153,9 +148,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_sign_ed25519_sk_to_pk(any(), any()),
-        ).thenReturn(1);
+        when(() => mockSodium.crypto_sign_ed25519_sk_to_pk(any(), any()))
+            .thenReturn(1);
 
         expect(
           () => sut.skToPk(SecureKeyFake.empty(5)),
@@ -168,9 +162,8 @@ void main() {
 
     group('pkToCurve25519', () {
       setUp(() {
-        when(
-          () => mockSodium.crypto_scalarmult_curve25519_bytes(),
-        ).thenReturn(11);
+        when(() => mockSodium.crypto_scalarmult_curve25519_bytes())
+            .thenReturn(11);
       });
 
       test('asserts if publicKey is invalid', () {
@@ -239,9 +232,8 @@ void main() {
 
     group('skToCurve25519', () {
       setUp(() {
-        when(
-          () => mockSodium.crypto_scalarmult_curve25519_bytes(),
-        ).thenReturn(11);
+        when(() => mockSodium.crypto_scalarmult_curve25519_bytes())
+            .thenReturn(11);
       });
 
       test('asserts if secretKey is invalid', () {

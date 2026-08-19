@@ -10,7 +10,7 @@ import 'package:test/test.dart';
 import 'test_runner.dart';
 
 class VmTestRunner extends SumoTestRunner {
-  VmTestRunner();
+  new();
 
   @override
   bool get is32Bit => sizeOf<IntPtr>() == 4;

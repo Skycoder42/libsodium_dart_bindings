@@ -12,7 +12,7 @@ import 'secure_key.dart';
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox.
 /// Please refer to that documentation for more details about these APIs.
 abstract class SecretBox {
-  const SecretBox._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_secretbox_KEYBYTES.
   ///

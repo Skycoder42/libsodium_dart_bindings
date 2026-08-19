@@ -11,8 +11,6 @@ part 'init_push_result.freezed.dart';
 sealed class InitPushResult<TState extends Object>
     with _$InitPushResult<TState> {
   /// @nodoc
-  const factory InitPushResult({
-    required Uint8List header,
-    required TState state,
-  }) = _InitPushResult<TState>;
+  const factory({required Uint8List header, required TState state}) =
+      _InitPushResult<TState>;
 }

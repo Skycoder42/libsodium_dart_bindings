@@ -19,7 +19,7 @@ class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  KdfFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytesMin => sodium.crypto_kdf_bytes_min();

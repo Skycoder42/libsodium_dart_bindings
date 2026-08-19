@@ -12,7 +12,7 @@ final class SymbolsGenerator extends SpecGenerator<Method> {
   final TypeMapping typeMapping;
   final bool external;
 
-  const SymbolsGenerator({
+  const new({
     required this.symbol,
     required this.typeMapping,
     this.external = true,

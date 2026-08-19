@@ -1,7 +1,7 @@
 import '../test_case.dart';
 
 class KdfTestCase extends TestCase {
-  KdfTestCase(super._runner);
+  new(super._runner);
 
   @override
   String get name => 'kdf';

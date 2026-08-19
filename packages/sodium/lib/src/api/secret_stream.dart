@@ -41,7 +41,7 @@ enum SecretStreamMessageTag {
 /// was created.
 class StreamClosedEarlyException implements Exception {
   /// Default constructor
-  StreamClosedEarlyException();
+  new();
 
   // coverage:ignore-start
   @override
@@ -63,7 +63,7 @@ class InvalidHeaderException implements Exception {
   final int actualBytes;
 
   /// Default constructor
-  InvalidHeaderException(this.expectedBytes, this.actualBytes);
+  new(this.expectedBytes, this.actualBytes);
 
   // coverage:ignore-start
   @override
@@ -77,7 +77,7 @@ class InvalidHeaderException implements Exception {
 @freezed
 sealed class SecretStreamPlainMessage with _$SecretStreamPlainMessage {
   /// Default constructor
-  const factory SecretStreamPlainMessage(
+  const factory(
     /// The message that should be encrypted.
     Uint8List message, {
 
@@ -98,7 +98,7 @@ sealed class SecretStreamPlainMessage with _$SecretStreamPlainMessage {
 @freezed
 sealed class SecretStreamCipherMessage with _$SecretStreamCipherMessage {
   /// Default constructor
-  const factory SecretStreamCipherMessage(
+  const factory(
     /// The message that should be decrypted.
     Uint8List message, {
 
@@ -128,7 +128,7 @@ abstract class SecretExStream<T> extends Stream<T> {
 /// See [SecretExStream]
 abstract class SecretExStreamTransformer<TIn, TOut>
     implements StreamTransformer<TIn, TOut> {
-  const SecretExStreamTransformer._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   @override
   SecretExStream<TOut> bind(Stream<TIn> stream);
@@ -140,7 +140,7 @@ abstract class SecretExStreamTransformer<TIn, TOut>
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream.
 /// Please refer to that documentation for more details about these APIs.
 abstract class SecretStream {
-  const SecretStream._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_secretstream_xchacha20poly1305_ABYTES.
   ///

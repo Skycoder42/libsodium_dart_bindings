@@ -92,9 +92,8 @@ void main() {
       });
 
       test('calls crypto_secretbox_easy with correct arguments', () {
-        when(
-          () => mockSodium.crypto_secretbox_easy(any(), any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_secretbox_easy(any(), any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final message = Uint8List.fromList(
           List.generate(20, (index) => index * 2),
@@ -119,9 +118,8 @@ void main() {
         final cipher = Uint8List.fromList(
           List.generate(25, (index) => 100 - index),
         );
-        when(
-          () => mockSodium.crypto_secretbox_easy(any(), any(), any()),
-        ).thenReturn(cipher.toJS);
+        when(() => mockSodium.crypto_secretbox_easy(any(), any(), any()))
+            .thenReturn(cipher.toJS);
 
         final result = sut.easy(
           message: Uint8List(20),
@@ -133,9 +131,8 @@ void main() {
       });
 
       test('throws SodiumException on JSError', () {
-        when(
-          () => mockSodium.crypto_secretbox_easy(any(), any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_secretbox_easy(any(), any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut.easy(
@@ -189,9 +186,8 @@ void main() {
       });
 
       test('calls crypto_secretbox_easy with correct arguments', () {
-        when(
-          () => mockSodium.crypto_secretbox_open_easy(any(), any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_secretbox_open_easy(any(), any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final cipherText = Uint8List.fromList(
           List.generate(20, (index) => index * 2),
@@ -220,9 +216,8 @@ void main() {
         final message = Uint8List.fromList(
           List.generate(8, (index) => index * 5),
         );
-        when(
-          () => mockSodium.crypto_secretbox_open_easy(any(), any(), any()),
-        ).thenReturn(message.toJS);
+        when(() => mockSodium.crypto_secretbox_open_easy(any(), any(), any()))
+            .thenReturn(message.toJS);
 
         final result = sut.openEasy(
           cipherText: Uint8List(13),
@@ -234,9 +229,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_secretbox_open_easy(any(), any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_secretbox_open_easy(any(), any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut.openEasy(
@@ -277,11 +271,10 @@ void main() {
       });
 
       test('calls crypto_secretbox_detached with correct arguments', () {
-        when(
-          () => mockSodium.crypto_secretbox_detached(any(), any(), any()),
-        ).thenReturn(
-          SecretBox(cipher: Uint8List(0).toJS, mac: Uint8List(0).toJS),
-        );
+        when(() => mockSodium.crypto_secretbox_detached(any(), any(), any()))
+            .thenReturn(
+              SecretBox(cipher: Uint8List(0).toJS, mac: Uint8List(0).toJS),
+            );
 
         final message = Uint8List.fromList(
           List.generate(20, (index) => index * 2),
@@ -311,9 +304,8 @@ void main() {
           List.generate(10, (index) => index),
         );
         final mac = Uint8List.fromList(List.generate(5, (index) => index * 3));
-        when(
-          () => mockSodium.crypto_secretbox_detached(any(), any(), any()),
-        ).thenReturn(SecretBox(cipher: cipherText.toJS, mac: mac.toJS));
+        when(() => mockSodium.crypto_secretbox_detached(any(), any(), any()))
+            .thenReturn(SecretBox(cipher: cipherText.toJS, mac: mac.toJS));
 
         final result = sut.detached(
           message: Uint8List(10),
@@ -331,9 +323,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_secretbox_detached(any(), any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_secretbox_detached(any(), any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => sut.detached(

@@ -10,7 +10,7 @@ import 'type_info.dart';
 class TypeMapping {
   final Map<String, TypeInfo> _mappings;
 
-  const TypeMapping(this._mappings);
+  const new(this._mappings);
 
   TypeReference operator [](String type) {
     final mappedType = _mappings[type];

@@ -19,7 +19,7 @@ class KxJS with KxValidations implements Kx {
   final LibSodiumJS sodium;
 
   /// @nodoc
-  KxJS(this.sodium);
+  new(this.sodium);
 
   @override
   int get publicKeyBytes => sodium.crypto_kx_PUBLICKEYBYTES;

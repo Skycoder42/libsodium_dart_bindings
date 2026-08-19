@@ -12,7 +12,7 @@ import 'sodium_builder.dart';
 
 @internal
 abstract base class AutomakeBuilder extends SodiumBuilder {
-  AutomakeBuilder(super.config, super.logger);
+  new(super.config, super.logger);
 
   @override
   bool get allowSpaceInPath => false;

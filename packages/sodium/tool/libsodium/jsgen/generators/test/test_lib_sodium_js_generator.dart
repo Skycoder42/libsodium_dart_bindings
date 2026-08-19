@@ -21,7 +21,7 @@ final class TestLibSodiumJsGenerator extends SpecGenerator<Class>
   @override
   bool get external => false;
 
-  const TestLibSodiumJsGenerator({
+  const new({
     required this.typeMapping,
     required this.constants,
     required this.symbols,

@@ -28,11 +28,7 @@ class GenericHashConsumerFFI implements GenericHashConsumer {
   Future<Uint8List> get hash => _hashCompleter.future;
 
   /// @nodoc
-  GenericHashConsumerFFI({
-    required this.sodium,
-    required this.outLen,
-    SecureKey? key,
-  }) {
+  new({required this.sodium, required this.outLen, SecureKey? key}) {
     _state = SodiumPointer.alloc(
       sodium,
       count: sodium.crypto_generichash_statebytes(),

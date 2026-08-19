@@ -19,7 +19,7 @@ class AuthFFI with AuthValidations, KeygenMixin implements Auth {
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  AuthFFI(this.sodium);
+  new(this.sodium);
 
   @override
   int get bytes => sodium.crypto_auth_bytes();

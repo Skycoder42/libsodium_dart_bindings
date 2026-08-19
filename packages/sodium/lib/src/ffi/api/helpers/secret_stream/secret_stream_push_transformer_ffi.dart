@@ -11,7 +11,6 @@ import '../../../bindings/libsodium.ffi.wrapper.dart';
 import '../../../bindings/memory_protection.dart';
 import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
-import 'secret_stream_message_tag_ffix.dart';
 
 /// @nodoc
 @internal
@@ -21,7 +20,7 @@ class SecretStreamPushTransformerSinkFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  SecretStreamPushTransformerSinkFFI(this.sodium);
+  new(this.sodium);
 
   @override
   @protected
@@ -132,7 +131,7 @@ class SecretStreamPushTransformerFFI
   final LibSodiumFFI sodium;
 
   /// @nodoc
-  const SecretStreamPushTransformerFFI(this.sodium, SecureKey key) : super(key);
+  const new(this.sodium, SecureKey key) : super(key);
 
   @override
   SecretStreamPushTransformerSink<SodiumPointer<UnsignedChar>> createSink() =>

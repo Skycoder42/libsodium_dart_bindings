@@ -27,7 +27,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
 
   late final DeveloperCommandPrompt _commandPrompt;
 
-  WindowsBuilder(super.config, super.logger);
+  new(super.config, super.logger);
 
   @override
   bool get allowSpaceInPath => true;
@@ -303,9 +303,9 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
 class _VsWhereResult {
   final String installationPath;
 
-  const _VsWhereResult({required this.installationPath});
+  const new({required this.installationPath});
 
-  factory _VsWhereResult.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     if (json case {'installationPath': final String installationPath}) {
       return _VsWhereResult(installationPath: installationPath);
     } else {

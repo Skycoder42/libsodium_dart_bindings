@@ -123,9 +123,8 @@ void main() {
         });
 
         test('calls crypto_box_easy with correct arguments', () {
-          when(
-            () => mockSodium.crypto_box_easy(any(), any(), any(), any()),
-          ).thenReturn(Uint8List(0).toJS);
+          when(() => mockSodium.crypto_box_easy(any(), any(), any(), any()))
+              .thenReturn(Uint8List(0).toJS);
 
           final message = List.generate(20, (index) => index * 2);
           final nonce = List.generate(5, (index) => 10 + index);
@@ -151,9 +150,8 @@ void main() {
 
         test('returns encrypted data', () {
           final cipher = List.generate(25, (index) => 100 - index);
-          when(
-            () => mockSodium.crypto_box_easy(any(), any(), any(), any()),
-          ).thenReturn(Uint8List.fromList(cipher).toJS);
+          when(() => mockSodium.crypto_box_easy(any(), any(), any(), any()))
+              .thenReturn(Uint8List.fromList(cipher).toJS);
 
           final result = sut.easy(
             message: Uint8List(20),
@@ -166,9 +164,8 @@ void main() {
         });
 
         test('throws exception on failure', () {
-          when(
-            () => mockSodium.crypto_box_easy(any(), any(), any(), any()),
-          ).thenThrow(JSError());
+          when(() => mockSodium.crypto_box_easy(any(), any(), any(), any()))
+              .thenThrow(JSError());
 
           expect(
             () => sut.easy(
@@ -374,14 +371,13 @@ void main() {
         test('returns encrypted data and mac', () {
           final cipherText = List.generate(10, (index) => index);
           final mac = List.generate(5, (index) => index * 3);
-          when(
-            () => mockSodium.crypto_box_detached(any(), any(), any(), any()),
-          ).thenReturn(
-            CryptoBox(
-              ciphertext: Uint8List.fromList(cipherText).toJS,
-              mac: Uint8List.fromList(mac).toJS,
-            ),
-          );
+          when(() => mockSodium.crypto_box_detached(any(), any(), any(), any()))
+              .thenReturn(
+                CryptoBox(
+                  ciphertext: Uint8List.fromList(cipherText).toJS,
+                  mac: Uint8List.fromList(mac).toJS,
+                ),
+              );
 
           final result = sut.detached(
             message: Uint8List(10),
@@ -400,9 +396,8 @@ void main() {
         });
 
         test('throws exception on failure', () {
-          when(
-            () => mockSodium.crypto_box_detached(any(), any(), any(), any()),
-          ).thenThrow(JSError());
+          when(() => mockSodium.crypto_box_detached(any(), any(), any(), any()))
+              .thenThrow(JSError());
 
           expect(
             () => sut.detached(
@@ -586,9 +581,8 @@ void main() {
         });
 
         test('calls crypto_box_beforenm with correct arguments', () {
-          when(
-            () => mockSodium.crypto_box_beforenm(any(), any()),
-          ).thenReturn(Uint8List(0).toJS);
+          when(() => mockSodium.crypto_box_beforenm(any(), any()))
+              .thenReturn(Uint8List(0).toJS);
 
           final publicKey = List.generate(5, (index) => 20 + index);
           final secretKey = List.generate(5, (index) => 30 + index);
@@ -608,9 +602,8 @@ void main() {
 
         test('returns precompiled box with shared key', () {
           final sharedKey = List.generate(15, (index) => 44 - index);
-          when(
-            () => mockSodium.crypto_box_beforenm(any(), any()),
-          ).thenReturn(Uint8List.fromList(sharedKey).toJS);
+          when(() => mockSodium.crypto_box_beforenm(any(), any()))
+              .thenReturn(Uint8List.fromList(sharedKey).toJS);
 
           final result = sut.precalculate(
             publicKey: Uint8List(5),
@@ -630,9 +623,8 @@ void main() {
         });
 
         test('throws error if crypto_box_beforenm fails', () {
-          when(
-            () => mockSodium.crypto_box_beforenm(any(), any()),
-          ).thenThrow(JSError());
+          when(() => mockSodium.crypto_box_beforenm(any(), any()))
+              .thenThrow(JSError());
 
           expect(
             () => sut.precalculate(
@@ -655,9 +647,8 @@ void main() {
         });
 
         test('calls crypto_box_seal with correct arguments', () {
-          when(
-            () => mockSodium.crypto_box_seal(any(), any()),
-          ).thenReturn(Uint8List(0).toJS);
+          when(() => mockSodium.crypto_box_seal(any(), any()))
+              .thenReturn(Uint8List(0).toJS);
 
           final message = List.generate(20, (index) => index * 2);
           final publicKey = List.generate(5, (index) => 20 + index);
@@ -677,9 +668,8 @@ void main() {
 
         test('returns encrypted data', () {
           final cipher = List.generate(25, (index) => 100 - index);
-          when(
-            () => mockSodium.crypto_box_seal(any(), any()),
-          ).thenReturn(Uint8List.fromList(cipher).toJS);
+          when(() => mockSodium.crypto_box_seal(any(), any()))
+              .thenReturn(Uint8List.fromList(cipher).toJS);
 
           final result = sut.seal(
             message: Uint8List(20),
@@ -690,9 +680,8 @@ void main() {
         });
 
         test('throws exception on failure', () {
-          when(
-            () => mockSodium.crypto_box_seal(any(), any()),
-          ).thenThrow(JSError());
+          when(() => mockSodium.crypto_box_seal(any(), any()))
+              .thenThrow(JSError());
 
           expect(
             () => sut.seal(message: Uint8List(10), publicKey: Uint8List(5)),
@@ -742,9 +731,8 @@ void main() {
         });
 
         test('calls crypto_box_seal_open with correct arguments', () {
-          when(
-            () => mockSodium.crypto_box_seal_open(any(), any(), any()),
-          ).thenReturn(Uint8List(0).toJS);
+          when(() => mockSodium.crypto_box_seal_open(any(), any(), any()))
+              .thenReturn(Uint8List(0).toJS);
 
           final cipherText = List.generate(20, (index) => index * 2);
           final publicKey = List.generate(5, (index) => 20 + index);
@@ -767,9 +755,8 @@ void main() {
 
         test('returns decrypted data', () {
           final message = List.generate(8, (index) => index * 5);
-          when(
-            () => mockSodium.crypto_box_seal_open(any(), any(), any()),
-          ).thenReturn(Uint8List.fromList(message).toJS);
+          when(() => mockSodium.crypto_box_seal_open(any(), any(), any()))
+              .thenReturn(Uint8List.fromList(message).toJS);
 
           final result = sut.sealOpen(
             cipherText: Uint8List(13),
@@ -781,9 +768,8 @@ void main() {
         });
 
         test('throws exception on failure', () {
-          when(
-            () => mockSodium.crypto_box_seal_open(any(), any(), any()),
-          ).thenThrow(JSError());
+          when(() => mockSodium.crypto_box_seal_open(any(), any(), any()))
+              .thenThrow(JSError());
 
           expect(
             () => sut.sealOpen(
@@ -824,9 +810,8 @@ void main() {
       });
 
       test('calls crypto_box_easy_afternm with correct arguments', () {
-        when(
-          () => mockSodium.crypto_box_easy_afternm(any(), any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_box_easy_afternm(any(), any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -847,9 +832,8 @@ void main() {
 
       test('returns encrypted data', () {
         final cipher = List.generate(25, (index) => 100 - index);
-        when(
-          () => mockSodium.crypto_box_easy_afternm(any(), any(), any()),
-        ).thenReturn(Uint8List.fromList(cipher).toJS);
+        when(() => mockSodium.crypto_box_easy_afternm(any(), any(), any()))
+            .thenReturn(Uint8List.fromList(cipher).toJS);
 
         final result = preSut.easy(message: Uint8List(20), nonce: Uint8List(5));
 
@@ -857,9 +841,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_box_easy_afternm(any(), any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_box_easy_afternm(any(), any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => preSut.easy(message: Uint8List(10), nonce: Uint8List(5)),
@@ -889,9 +872,8 @@ void main() {
       });
 
       test('calls crypto_box_open_easy_afternm with correct arguments', () {
-        when(
-          () => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final cipherText = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -912,9 +894,8 @@ void main() {
 
       test('returns decrypted data', () {
         final message = List.generate(8, (index) => index * 5);
-        when(
-          () => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()),
-        ).thenReturn(Uint8List.fromList(message).toJS);
+        when(() => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()))
+            .thenReturn(Uint8List.fromList(message).toJS);
 
         final result = preSut.openEasy(
           cipherText: Uint8List(13),
@@ -925,9 +906,8 @@ void main() {
       });
 
       test('throws exception on failure', () {
-        when(
-          () => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()),
-        ).thenThrow(JSError());
+        when(() => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()))
+            .thenThrow(JSError());
 
         expect(
           () => preSut.openEasy(cipherText: Uint8List(10), nonce: Uint8List(5)),
@@ -938,9 +918,8 @@ void main() {
 
     group('detached', () {
       test('calls easy with parameters', () {
-        when(
-          () => mockSodium.crypto_box_easy_afternm(any(), any(), any()),
-        ).thenReturn(Uint8List(10).toJS);
+        when(() => mockSodium.crypto_box_easy_afternm(any(), any(), any()))
+            .thenReturn(Uint8List(10).toJS);
 
         final message = List.generate(20, (index) => index * 2);
         final nonce = List.generate(5, (index) => 10 + index);
@@ -961,9 +940,8 @@ void main() {
 
       test('splits easy result into cipherText and mac', () {
         final cipher = List.generate(25, (index) => 100 - index);
-        when(
-          () => mockSodium.crypto_box_easy_afternm(any(), any(), any()),
-        ).thenReturn(Uint8List.fromList(cipher).toJS);
+        when(() => mockSodium.crypto_box_easy_afternm(any(), any(), any()))
+            .thenReturn(Uint8List.fromList(cipher).toJS);
 
         final result = preSut.detached(
           message: Uint8List(20),
@@ -977,9 +955,8 @@ void main() {
 
     group('openDetached', () {
       test('calls openEasy with combined parameters', () {
-        when(
-          () => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()),
-        ).thenReturn(Uint8List(0).toJS);
+        when(() => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()))
+            .thenReturn(Uint8List(0).toJS);
 
         final cipherText = List.generate(15, (index) => index * 2);
         final mac = List.generate(5, (index) => 20 - index);
@@ -1002,9 +979,8 @@ void main() {
 
       test('returns decrypted data', () {
         final message = List.generate(8, (index) => index * 5);
-        when(
-          () => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()),
-        ).thenReturn(Uint8List.fromList(message).toJS);
+        when(() => mockSodium.crypto_box_open_easy_afternm(any(), any(), any()))
+            .thenReturn(Uint8List.fromList(message).toJS);
 
         final result = preSut.openDetached(
           cipherText: Uint8List(13),

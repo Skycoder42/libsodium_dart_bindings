@@ -11,11 +11,11 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockSign extends Mock with SignValidations implements Sign {}
+class MockSign extends Mock with SignValidations implements Sign;
 
-class MockSignatureConsumer extends Mock implements SignatureConsumer {}
+class MockSignatureConsumer extends Mock implements SignatureConsumer;
 
-class MockVerificationConsumer extends Mock implements VerificationConsumer {}
+class MockVerificationConsumer extends Mock implements VerificationConsumer;
 
 void main() {
   setUpAll(() {
@@ -70,9 +70,8 @@ void main() {
         List.generate(5, (index) => 100 + index),
       );
 
-      when(
-        () => sutMock.createConsumer(secretKey: any(named: 'secretKey')),
-      ).thenReturn(mockConsumer);
+      when(() => sutMock.createConsumer(secretKey: any(named: 'secretKey')))
+          .thenReturn(mockConsumer);
       when(() => mockConsumer.addStream(any())).thenReturnAsync(null);
       when(() => mockConsumer.close()).thenReturnAsync(signature);
 

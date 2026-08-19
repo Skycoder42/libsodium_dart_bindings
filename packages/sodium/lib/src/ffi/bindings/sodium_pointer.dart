@@ -1,10 +1,11 @@
-// ignore_for_file: type_literal_in_constant_pattern, switch_on_type for pointer
+// ignore_for_file: switch_on_type for pointer
 // type matching
 
 import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
+
 import '../../api/sodium_exception.dart';
 import '../../api/string_x.dart';
 
@@ -52,7 +53,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
 
   /// Constructs the pointer from the lib[sodium] API, the raw [ptr] and the
   /// element [count].
-  SodiumPointer.raw(this.sodium, this.ptr, this.count)
+  new raw(this.sodium, this.ptr, this.count)
     : _viewParent = null,
       _locked = true,
       _memoryProtection = MemoryProtection.readWrite {
@@ -77,7 +78,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
   /// memory.
   ///
   /// See https://libsodium.gitbook.io/doc/memory_management#guarded-heap-allocations
-  factory SodiumPointer.alloc(
+  factory alloc(
     LibSodiumFFI sodium, {
     int count = 1,
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
@@ -114,7 +115,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
 
   /// @nodoc
   @visibleForTesting
-  factory SodiumPointer.fromList(
+  factory fromList(
     LibSodiumFFI sodium,
     List<num> list, {
     MemoryProtection memoryProtection = MemoryProtection.readWrite,
@@ -137,7 +138,7 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
     }
   }
 
-  SodiumPointer._view(
+  new _view(
     SodiumPointer<T> viewParent,
     this.sodium,
     this.ptr,
@@ -288,68 +289,58 @@ class SodiumPointer<T extends NativeType> implements Finalizable {
       case _Signage.signed:
         if (elementSize <= sizeOf<Int8>()) {
           return ptr.cast<Int8>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         } else if (elementSize <= sizeOf<Int16>()) {
           return ptr.cast<Int16>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         } else if (elementSize <= sizeOf<Int32>()) {
           return ptr.cast<Int32>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         } else if (elementSize <= sizeOf<Int64>()) {
           return ptr.cast<Int64>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         }
       case _Signage.unsigned:
         if (elementSize <= sizeOf<Uint8>()) {
           return ptr.cast<Uint8>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         } else if (elementSize <= sizeOf<Uint16>()) {
           return ptr.cast<Uint16>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         } else if (elementSize <= sizeOf<Uint32>()) {
           return ptr.cast<Uint32>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         } else if (elementSize <= sizeOf<Uint64>()) {
           return ptr.cast<Uint64>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         }
       case _Signage.float:
         if (elementSize <= sizeOf<Float>()) {
           return ptr.cast<Float>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         } else if (elementSize <= sizeOf<Double>()) {
           return ptr.cast<Double>().asTypedList(
-                count,
-                finalizer: owned ? sodium.sodium_freePtr : null,
-              )
-              as TList;
+            count,
+            finalizer: owned ? sodium.sodium_freePtr : null,
+          ) as TList;
         }
     }
 

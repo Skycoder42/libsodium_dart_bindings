@@ -14,7 +14,7 @@ import 'package:test/test.dart';
 import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockSodiumFFI extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockSodiumFFI();
@@ -83,9 +83,8 @@ void main() {
       'result result of native operation',
       const [(0, true), (1, false), (10, false), (-1, false)],
       (fixture) {
-        when(
-          () => mockSodium.sodium_mlock(any(), any()),
-        ).thenReturn(fixture.$1);
+        when(() => mockSodium.sodium_mlock(any(), any()))
+            .thenReturn(fixture.$1);
 
         final res = sut.lock(nullptr, 0);
 
@@ -110,9 +109,8 @@ void main() {
       'result result of native operation',
       const [(0, true), (1, false), (10, false), (-1, false)],
       (fixture) {
-        when(
-          () => mockSodium.sodium_munlock(any(), any()),
-        ).thenReturn(fixture.$1);
+        when(() => mockSodium.sodium_munlock(any(), any()))
+            .thenReturn(fixture.$1);
 
         final res = sut.unlock(nullptr, 0);
 
@@ -137,9 +135,8 @@ void main() {
         'result result of native operation',
         const [(0, true), (1, false), (10, false), (-1, false)],
         (fixture) {
-          when(
-            () => mockSodium.sodium_mprotect_noaccess(any()),
-          ).thenReturn(fixture.$1);
+          when(() => mockSodium.sodium_mprotect_noaccess(any()))
+              .thenReturn(fixture.$1);
 
           final res = sut.memoryProtect(nullptr, MemoryProtection.noAccess);
 
@@ -163,9 +160,8 @@ void main() {
         'result result of native operation',
         const [(0, true), (1, false), (10, false), (-1, false)],
         (fixture) {
-          when(
-            () => mockSodium.sodium_mprotect_readonly(any()),
-          ).thenReturn(fixture.$1);
+          when(() => mockSodium.sodium_mprotect_readonly(any()))
+              .thenReturn(fixture.$1);
 
           final res = sut.memoryProtect(nullptr, MemoryProtection.readOnly);
 
@@ -189,9 +185,8 @@ void main() {
         'result result of native operation',
         const [(0, true), (1, false), (10, false), (-1, false)],
         (fixture) {
-          when(
-            () => mockSodium.sodium_mprotect_readwrite(any()),
-          ).thenReturn(fixture.$1);
+          when(() => mockSodium.sodium_mprotect_readwrite(any()))
+              .thenReturn(fixture.$1);
 
           final res = sut.memoryProtect(nullptr, MemoryProtection.readWrite);
 

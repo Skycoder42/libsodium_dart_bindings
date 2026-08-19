@@ -13,9 +13,9 @@ import 'package:sodium/src/ffi/api/helpers/isolates/transferrable_secure_key_ffi
 import 'package:sodium/src/ffi/api/sodium_ffi.dart';
 import 'package:test/test.dart';
 
-class MockSodiumFFI extends Mock implements SodiumFFI {}
+class MockSodiumFFI extends Mock implements SodiumFFI;
 
-class FakeSecureKey extends Fake implements SecureKey {}
+class FakeSecureKey extends Fake implements SecureKey;
 
 void main() {
   setUpAll(() {

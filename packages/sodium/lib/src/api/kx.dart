@@ -16,11 +16,11 @@ part 'kx.freezed.dart';
 /// See https://libsodium.gitbook.io/doc/key_exchange.
 @freezed
 sealed class SessionKeys with _$SessionKeys {
-  const SessionKeys._();
+  const new _();
 
   /// Default Constructor
   // ignore: sort_unnamed_constructors_first
-  const factory SessionKeys({
+  const factory({
     /// Session key to be used to decrypt received data
     required SecureKey rx,
 
@@ -43,7 +43,7 @@ sealed class SessionKeys with _$SessionKeys {
 /// in https://libsodium.gitbook.io/doc/key_exchange.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Kx {
-  const Kx._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_kx_PUBLICKEYBYTES.
   ///

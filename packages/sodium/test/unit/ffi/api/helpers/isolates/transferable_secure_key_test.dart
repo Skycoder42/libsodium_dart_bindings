@@ -19,23 +19,23 @@ import 'package:test/test.dart';
 
 import '../../../pointer_test_helpers.dart';
 
-class MockLibSodiumFFI extends Mock implements LibSodiumFFI {}
+class MockLibSodiumFFI extends Mock implements LibSodiumFFI;
 
-class MockSodiumFinalizer extends Mock implements SodiumFinalizer {}
+class MockSodiumFinalizer extends Mock implements SodiumFinalizer;
 
-class MockSodiumFFI extends Mock implements SodiumFFI {}
+class MockSodiumFFI extends Mock implements SodiumFFI;
 
 class FakeSecureKey extends Fake implements SecureKey {
   final Uint8List bytes;
 
-  FakeSecureKey(this.bytes);
+  new(this.bytes);
 
   @override
   Uint8List extractBytes() => bytes;
 }
 
 // ignore: avoid_implementing_value_types for mocking
-class MockSecureKeyFFI extends Mock implements SecureKeyFFI {}
+class MockSecureKeyFFI extends Mock implements SecureKeyFFI;
 
 void main() {
   setUpAll(() {
@@ -93,15 +93,12 @@ void main() {
     });
 
     test('can reconstruct an ffi key', () {
-      when(
-        () => mockLibSodiumFFI.sodium_mprotect_noaccess(any()),
-      ).thenReturn(0);
+      when(() => mockLibSodiumFFI.sodium_mprotect_noaccess(any()))
+          .thenReturn(0);
 
-      final result =
-          const TransferrableSecureKeyFFI.ffi(
-                testNativeHandle,
-              ).toSecureKey(mockSodiumFFI)
-              as SecureKeyFFI;
+      final result = const TransferrableSecureKeyFFI.ffi(
+        testNativeHandle,
+      ).toSecureKey(mockSodiumFFI) as SecureKeyFFI;
 
       verifyInOrder([
         () => mockSodiumFinalizer.attach(

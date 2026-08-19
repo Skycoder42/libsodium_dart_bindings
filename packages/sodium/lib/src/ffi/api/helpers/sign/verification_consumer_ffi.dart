@@ -25,7 +25,7 @@ class VerificationConsumerFFI
   final Uint8List publicKey;
 
   /// @nodoc
-  VerificationConsumerFFI({
+  new({
     required this.sodium,
     required this.signature,
     required this.publicKey,

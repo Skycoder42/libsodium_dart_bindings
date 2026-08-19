@@ -9,12 +9,12 @@ import 'package:sodium/src/api/secret_stream.dart';
 import 'package:test/test.dart';
 
 class MockSecretStreamPushTransformerSink extends Mock
-    implements SecretStreamPushTransformerSink {}
+    implements SecretStreamPushTransformerSink;
 
-class MockStream extends Mock implements Stream<SecretStreamCipherMessage> {}
+class MockStream extends Mock implements Stream<SecretStreamCipherMessage>;
 
 class FakeStreamSubscription extends Fake
-    implements StreamSubscription<SecretStreamCipherMessage> {}
+    implements StreamSubscription<SecretStreamCipherMessage>;
 
 void main() {
   final mockSink = MockSecretStreamPushTransformerSink();

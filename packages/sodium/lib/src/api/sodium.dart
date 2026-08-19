@@ -14,12 +14,14 @@ import 'transferrable_secure_key.dart';
 ///
 /// The callback receives the [secureKeys] and [keyPairs] that have been
 /// transferred to it via the [Sodium.runIsolated] method.
-typedef SodiumIsolateCallback<T> =
-    FutureOr<T> Function(List<SecureKey> secureKeys, List<KeyPair> keyPairs);
+typedef SodiumIsolateCallback<T> = FutureOr<T> Function(
+  List<SecureKey> secureKeys,
+  List<KeyPair> keyPairs,
+);
 
 /// A meta class that provides access to all toplevel libsodium API groups.
 abstract class Sodium {
-  const Sodium._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Returns the version of the underlying libsodium implementation.
   SodiumVersion get version;

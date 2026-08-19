@@ -11,7 +11,7 @@ import '../secure_key.dart';
 /// in https://libsodium.gitbook.io/doc/advanced/scalar_multiplication.
 /// Please refer to that documentation for more details about these APIs.
 abstract class Scalarmult {
-  const Scalarmult._(); // coverage:ignore-line
+  const new _(); // coverage:ignore-line
 
   /// Provides crypto_scalarmult_BYTES.
   ///

@@ -23,7 +23,7 @@ class VerificationConsumerJS
   final Uint8List publicKey;
 
   /// @nodoc
-  VerificationConsumerJS({
+  new({
     required this.sodium,
     required this.signature,
     required this.publicKey,

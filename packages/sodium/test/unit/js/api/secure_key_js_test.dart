@@ -14,7 +14,7 @@ import 'package:test/test.dart';
 
 import '../sodium_js_mock.dart';
 
-class MockSodiumFinalizer extends Mock implements SodiumFinalizer {}
+class MockSodiumFinalizer extends Mock implements SodiumFinalizer;
 
 void main() {
   final mockSodium = MockLibSodiumJS();
@@ -55,9 +55,8 @@ void main() {
       test('fills buffer with random data', () {
         const length = 10;
 
-        when(
-          () => mockSodium.randombytes_buf(any()),
-        ).thenReturn(Uint8List(length).toJS);
+        when(() => mockSodium.randombytes_buf(any()))
+            .thenReturn(Uint8List(length).toJS);
 
         SecureKeyJS.random(mockSodiumJS, length);
 

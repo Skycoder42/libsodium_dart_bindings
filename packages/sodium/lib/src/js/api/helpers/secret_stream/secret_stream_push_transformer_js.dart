@@ -8,7 +8,6 @@ import '../../../../api/secret_stream.dart';
 import '../../../../api/secure_key.dart';
 import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
-import 'secret_stream_message_tag_jsx.dart';
 
 /// @nodoc
 @internal
@@ -19,7 +18,7 @@ class SecretStreamPushTransformerSinkJS
   final LibSodiumJS sodium;
 
   /// @nodoc
-  SecretStreamPushTransformerSinkJS(this.sodium);
+  new(this.sodium);
 
   @override
   InitPushResult<SecretstreamXchacha20poly1305State> initialize(SecureKey key) {
@@ -75,7 +74,7 @@ class SecretStreamPushTransformerJS
   final LibSodiumJS sodium;
 
   /// @nodoc
-  const SecretStreamPushTransformerJS(this.sodium, SecureKey key) : super(key);
+  const new(this.sodium, SecureKey key) : super(key);
 
   @override
   SecretStreamPushTransformerSink<SecretstreamXchacha20poly1305State>
