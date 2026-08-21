@@ -344,26 +344,31 @@ class IpcryptTestCase extends TestCase {
         expect(restored, original);
       });
 
-      test('maps an IPv4 address to an equivalent IPv6 address', (sodium) {
-        final ipAddress = sodium.ipFromAddress(
-          ia.internetAddressFromString('127.0.0.1'),
-        );
+      test(
+        'maps an IPv4 address to an equivalent IPv6 address',
+        // ignore: do_not_use_environment kIsWeb equivalent
+        skip: const bool.fromEnvironment('dart.library.js_interop'),
+        (sodium) {
+          final ipAddress = sodium.ipFromAddress(
+            ia.internetAddressFromString('127.0.0.1'),
+          );
 
-        printOnFailure('address: ${ipAddress.address}');
-        printOnFailure('bytes: ${ipAddress.bytes}');
+          printOnFailure('address: ${ipAddress.address}');
+          printOnFailure('bytes: ${ipAddress.bytes}');
 
-        // The platform-native address is a valid IPv4-mapped IPv6 address.
-        expect(
-          ipAddress.address,
-          ia.internetAddressFromString('::ffff:127.0.0.1'),
-        );
+          // The platform-native address is a valid IPv4-mapped IPv6 address.
+          expect(
+            ipAddress.address,
+            ia.internetAddressFromString('::ffff:127.0.0.1'),
+          );
 
-        // ...that is equivalent to the original IPv4 address: it collapses
-        // back to the IPv4 string form and is byte-identical to parsing the
-        // IPv4-mapped IPv6 representation directly.
-        expect(ipAddress.addressString, '127.0.0.1');
-        expect(ipAddress, sodium.ipFromString('::ffff:127.0.0.1'));
-      }, testOn: 'vm');
+          // ...that is equivalent to the original IPv4 address: it collapses
+          // back to the IPv4 string form and is byte-identical to parsing the
+          // IPv4-mapped IPv6 representation directly.
+          expect(ipAddress.addressString, '127.0.0.1');
+          expect(ipAddress, sodium.ipFromString('::ffff:127.0.0.1'));
+        },
+      );
     });
   }
 }
