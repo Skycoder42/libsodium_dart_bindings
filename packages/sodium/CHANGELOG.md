@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-08-24
+### Added
+- New algorithm bindings have been added:
+  - `crypto_aead_aegis256` (https://libsodium.gitbook.io/doc/secret-key\_cryptography/aead/aegis-256)
+  - `crypto_kdf_hkdf` (https://libsodium.gitbook.io/doc/key\_derivation/hkdf)
+  - `crypto_ipcrypt` (https://libsodium.gitbook.io/doc/secret-key\_cryptography/ip\_address\_encryption)
+  - `crypto_kem` (https://libsodium.gitbook.io/doc/public-key\_cryptography/key\_encapsulation)
+  - `crypto_xof` (https://libsodium.gitbook.io/doc/hashing/xof)
+  - Bindings for the sodium helpers (https://libsodium.gitbook.io/doc/helpers)
+- Add `encoding` parameters to `crypto_pwhash` and the from/to string conversion helpers
+
+### Changed
+- Updated embedded libsodium version to 1.0.22
+- Updated embedded sodium.js version to 0.8.4
+  - currently using master at a79e5ddbbcfd130e27dcbbda1b5ba072c7a9787d for hkdf support
+- Updated min sdk version to ^3.12.0
+- Updated dependencies
+
+### Deprecated
+- `crypto.pwhash.call` has been deprecated in favor of `crypto.pwhash.callStr` and `crypto.pwhash.callRaw`
+  - The new methods allow to either use an `Int8List` as before or a `String` with a customizable encoding
+
 ## [4.0.4] - 2026-08-04
 ### Changed
 - Updated dependencies, including ffigen with updated generations
@@ -352,6 +374,7 @@ changed, only the name of the getter. (#61)
 ### Added
 - Initial stable release
 
+[4.1.0]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.4...sodium-v4.1.0
 [4.0.4]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.3...sodium-v4.0.4
 [4.0.3]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.2+1...sodium-v4.0.3
 [4.0.2+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.0.2...sodium-v4.0.2+1
