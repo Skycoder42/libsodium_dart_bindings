@@ -4,6 +4,7 @@ import 'package:args/args.dart';
 import 'package:html/parser.dart' show parse;
 
 import 'package:sodium/src/hooks/constants.dart';
+import 'package:sodium/src/js/update_web/js_library_loader.dart';
 
 const _sumoArg = 'sumo';
 const _editIndexArg = 'edit-index';
@@ -83,37 +84,21 @@ Future<int> _runUpdateWeb(
 }
 
 Future<bool> _copySodiumJs(Directory targetDir, bool isSumo) async {
-  stdout.writeln('> Fetching sodium.js repository');
-  final tmpDir = await Directory.systemTemp.createTemp();
   try {
-    if (!await _runGit([
-      'clone',
-      '-b',
-      HookConstants.libsodiumVersion.js,
-      '--depth',
-      '1',
-      'https://github.com/jedisct1/libsodium.js.git',
-      '.',
-    ], tmpDir)) {
-      return false;
-    }
+    final distRef = isSumo ? HookConstants.jsSumoDist : HookConstants.jsDist;
+    final targetFile = File.fromUri(targetDir.uri.resolve('sodium.js'));
+    stdout.writeln(
+      '> Downloading ${distRef.path} '
+      'version ${HookConstants.libsodiumVersion.js} '
+      '(${HookConstants.libsodiumVersion.jsRef}) to ${targetFile.path}',
+    );
 
-    stdout.writeln('> Copying sodium.js to ${targetDir.path}');
-    final sodiumJsFile = File.fromUri(
-      tmpDir.uri.resolve(
-        'dist/${isSumo ? 'browsers-sumo' : 'browsers'}/sodium.js',
-      ),
-    );
-    if (!sodiumJsFile.existsSync()) {
-      stderr.writeln('Broken git repository - unable to find sodium.js');
-      return false;
-    }
-    await sodiumJsFile.copy(
-      File.fromUri(targetDir.uri.resolve('sodium.js')).path,
-    );
+    const repoLoader = JsLibraryLoader();
+    await repoLoader.downloadTo(distRef, targetFile);
     return true;
-  } finally {
-    await tmpDir.delete(recursive: true);
+  } on Exception catch (e) {
+    stderr.writeln('> Failed to download sodium.js: $e');
+    return false;
   }
 }
 
@@ -156,23 +141,4 @@ Future<void> _writeScriptElement(Directory targetDir) async {
   } else {
     stdout.writeln('> sodium.js script already exists. Skipping update');
   }
-}
-
-Future<bool> _runGit(List<String> arguments, Directory workingDir) async {
-  stdout.writeln('> Running git ${arguments.join(' ')}');
-  final proc = await Process.start(
-    'git',
-    arguments,
-    workingDirectory: workingDir.path,
-    mode: ProcessStartMode.inheritStdio,
-  );
-
-  final gitExitCode = await proc.exitCode;
-  if (gitExitCode != 0) {
-    stdout.writeln('> Git failed with exit code $gitExitCode');
-    exitCode = gitExitCode;
-    return false;
-  }
-
-  return true;
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:path/path.dart';
 
 class FileLoader {
@@ -10,10 +11,11 @@ class FileLoader {
 
   static Directory get scriptDir => File.fromUri(Platform.script).parent;
 
-  Future<String> loadFile(String subPath) {
-    final file = File(join(directory.path, subPath));
-    return file.readAsString();
-  }
+  Future<String> loadFile(String subPath) =>
+      _resolveFile(subPath).readAsString();
+
+  Future<Digest> calculateHash(String path) async =>
+      await _resolveFile(path).openRead().transform(sha512).single;
 
   Future<TData> loadFileJson<TData, TJson>(
     String subPath,
@@ -48,4 +50,6 @@ class FileLoader {
       yield fromJson(jsonData as TJson);
     }
   }
+
+  File _resolveFile(String subPath) => File(join(directory.path, subPath));
 }

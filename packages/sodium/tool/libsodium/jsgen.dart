@@ -49,15 +49,15 @@ Future<void> main() async {
       ),
     ),
   );
+
+  await _printHashes(libraryInfo);
 }
 
 Future<LibraryInfo> _loadLibraryInfo() async {
   final repoLoader = RepoLoader();
-  final wrapperDir = await repoLoader.downloadRepo(
-    ref: HookConstants.libsodiumVersion.jsRef,
-    HookConstants.libsodiumVersion.js,
-  );
-  final wrapperLoader = FileLoader(wrapperDir);
+  final repoDir = await repoLoader.downloadRepo(HookConstants.libsodiumVersion);
+  final wrapperLoader = FileLoader(repoDir.subDir('wrapper'));
+  final distLoader = FileLoader(repoDir.subDir('dist'));
 
   final sourceDir = Directory(join(FileLoader.scriptDir.path, 'jsgen'));
   final sourceLoader = FileLoader(sourceDir);
@@ -69,6 +69,7 @@ Future<LibraryInfo> _loadLibraryInfo() async {
     typeMappings,
     constantsLoader,
     symbolsLoader,
+    distLoader,
   );
 
   return await libraryInfoLoader.load();
@@ -90,4 +91,11 @@ Future<void> _generate(Spec codeSpec, File outFile) async {
   await Github.exec('dart', ['format', outFile.path]);
   await Github.exec('dart', ['fix', '--apply', outFile.path]);
   await Github.exec('dart', ['format', outFile.path]);
+}
+
+Future<void> _printHashes(LibraryInfo info) async {
+  Github.logInfo(
+    'Calculated hashsum for standard: ${info.distHashes.standard}',
+  );
+  Github.logInfo('Calculated hashsum for sumo: ${info.distHashes.sumo}');
 }
