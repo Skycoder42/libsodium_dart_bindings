@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:code_assets/code_assets.dart';
 import 'package:meta/meta.dart';
 
 import 'automake_builder.dart';
@@ -95,6 +96,9 @@ abstract base class DarwinBuilder extends AutomakeBuilder {
   @override
   Iterable<String> get configureArgs sync* {
     final DarwinConfig(:build, :host, :sdk) = _platformConfig;
+    if (config.targetArchitecture != Architecture.current) {
+      yield 'cross_compiling=yes';
+    }
     yield* super.configureArgs;
     if (build != null) {
       yield '--build=$build';
