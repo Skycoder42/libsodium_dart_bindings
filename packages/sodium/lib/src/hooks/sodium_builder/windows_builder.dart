@@ -285,6 +285,11 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
             'Microsoft.VisualStudio.Workload.VCTools',
             '-format',
             'json',
+            // Force UTF-8 output. Without this vswhere prints localized fields
+            // (displayName, description) in the console's OEM code page, which
+            // makes the strict utf8.decoder below throw a FormatException on
+            // non-English Windows. See #220.
+            '-utf8',
           ])
           .transform(utf8.decoder)
           .transform(json.decoder)
