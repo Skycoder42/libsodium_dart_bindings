@@ -20,23 +20,19 @@ import 'package:test/test.dart';
 
 import '../../../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements SodiumFFI;
+class MockSodiumFFI() extends Mock implements SodiumFFI;
 
-class MockLibSodiumFFI extends Mock implements LibSodiumFFI;
+class MockLibSodiumFFI() extends Mock implements LibSodiumFFI;
 
-class MockSodiumFinalizer extends Mock implements SodiumFinalizer;
+class MockSodiumFinalizer() extends Mock implements SodiumFinalizer;
 
-class FakeSecureKey extends Fake implements SecureKey {
-  final Uint8List bytes;
-
-  new(this.bytes);
-
+class FakeSecureKey(final Uint8List bytes) extends Fake implements SecureKey {
   @override
   Uint8List extractBytes() => bytes;
 }
 
 // ignore: avoid_implementing_value_types for mocking
-class MockSecureKeyFFI extends Mock implements SecureKeyFFI;
+class MockSecureKeyFFI() extends Mock implements SecureKeyFFI;
 
 void main() {
   setUpAll(() {

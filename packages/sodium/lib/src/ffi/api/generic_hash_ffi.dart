@@ -12,17 +12,11 @@ import '../bindings/sodium_scope.dart';
 import 'helpers/generic_hash/generic_hash_consumer_ffi.dart';
 import 'helpers/keygen_mixin.dart';
 
-/// @nodoc
 @internal
-class GenericHashFFI
+// ignore: public_member_api_docs false positive
+class GenericHashFFI(final LibSodiumFFI sodium)
     with GenericHashValidations, KeygenMixin
     implements GenericHash {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
   @override
   int get bytes => sodium.crypto_generichash_bytes();
 

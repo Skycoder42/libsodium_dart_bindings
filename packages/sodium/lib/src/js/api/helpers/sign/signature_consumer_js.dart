@@ -10,19 +10,14 @@ import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 import 'sign_consumer_js_mixin.dart';
 
-/// @nodoc
 @internal
-class SignatureConsumerJS
-    with SignConsumerJSMixin<Uint8List>
-    implements SignatureConsumer {
-  @override
-  final LibSodiumJS sodium;
-
-  /// @nodoc
+class SignatureConsumerJS({
+  @override required final LibSodiumJS sodium,
+  required SecureKey secretKey,
+}) with SignConsumerJSMixin<Uint8List> implements SignatureConsumer {
   late final SecureKey secretKey;
 
-  /// @nodoc
-  new({required this.sodium, required SecureKey secretKey}) {
+  this {
     this.secretKey = secretKey.copy();
     try {
       initState();

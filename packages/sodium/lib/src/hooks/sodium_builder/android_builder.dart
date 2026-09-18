@@ -9,19 +9,13 @@ import 'automake_builder.dart';
 
 @immutable
 @internal
-class AndroidArchConfig {
-  final String host;
-  final List<String> cFlags;
-  final List<String> ldFlags;
-  final Uri toolchainDir;
-
-  const new({
-    required this.host,
-    required this.cFlags,
-    required this.ldFlags,
-    required this.toolchainDir,
-  });
-
+// ignore: public_member_api_docs false positive
+class const AndroidArchConfig({
+  required final String host,
+  required final List<String> cFlags,
+  required final List<String> ldFlags,
+  required final Uri toolchainDir,
+}) {
   Iterable<Object?> get _hashValues sync* {
     yield host;
     yield* cFlags;
@@ -31,10 +25,9 @@ class AndroidArchConfig {
 }
 
 @internal
-final class AndroidBuilder extends AutomakeBuilder {
+// ignore: public_member_api_docs false positive
+final class AndroidBuilder(super.config, super.logger) extends AutomakeBuilder {
   late final AndroidArchConfig _archConfig;
-
-  new(super.config, super.logger);
 
   @override
   Future<void> prepare() async {

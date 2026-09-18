@@ -23,9 +23,11 @@ import '../../../secure_key_fake.dart';
 import '../../../test_data.dart';
 import '../sodium_js_mock.dart';
 
-class FakeTransferrableSecureKey extends Fake implements TransferrableSecureKey;
+class FakeTransferrableSecureKey()
+    extends Fake
+    implements TransferrableSecureKey;
 
-class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair;
+class FakeTransferrableKeyPair() extends Fake implements TransferrableKeyPair;
 
 void main() {
   final mockSodium = MockLibSodiumJS();

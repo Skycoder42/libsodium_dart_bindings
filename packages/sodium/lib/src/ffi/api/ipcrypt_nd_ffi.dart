@@ -4,12 +4,9 @@ import 'package:meta/meta.dart';
 
 import 'ipcrypt_nd_base_ffi.dart';
 
-/// @nodoc
 @internal
-class IpcryptNdFFI extends IpcryptNdBaseFFI {
-  /// @nodoc
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class IpcryptNdFFI(super.sodium) extends IpcryptNdBaseFFI {
   @override
   int get keyBytes => sodium.crypto_ipcrypt_nd_keybytes();
 

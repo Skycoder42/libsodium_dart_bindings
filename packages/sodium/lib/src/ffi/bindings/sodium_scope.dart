@@ -9,12 +9,7 @@ import 'libsodium.ffi.wrapper.dart';
 import 'memory_protection.dart';
 import 'sodium_pointer.dart';
 
-class _ScopeEntry {
-  final Object resource;
-  final void Function() dispose;
-
-  new(this.resource, this.dispose);
-}
+class _ScopeEntry(final Object resource, final void Function() dispose);
 
 /// A lexical scope that owns libsodium allocations and disposes every one it
 /// still owns, in reverse (LIFO) order, when the body returns **or** throws.
@@ -41,11 +36,8 @@ class _ScopeEntry {
 ///
 /// Instances are created by and only valid for the duration of a [sodiumScope]
 /// call.
-class SodiumScope {
-  final LibSodiumFFI _sodium;
+class SodiumScope._(final LibSodiumFFI _sodium) {
   final _entries = <_ScopeEntry>[];
-
-  new _(this._sodium);
 
   // ---- copy: Dart input -> registered native pointer ----
 

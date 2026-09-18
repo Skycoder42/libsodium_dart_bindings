@@ -8,15 +8,11 @@ import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
-/// @nodoc
 @internal
-class KdfFFI with KdfValidations, KeygenMixin implements Kdf {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class KdfFFI(final LibSodiumFFI sodium)
+    with KdfValidations, KeygenMixin
+    implements Kdf {
   @override
   int get bytesMin => sodium.crypto_kdf_bytes_min();
 

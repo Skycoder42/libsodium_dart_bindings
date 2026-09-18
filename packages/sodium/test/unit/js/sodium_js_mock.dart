@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sodium/src/js/bindings/sodium.js.dart';
 
 @JSExport()
-abstract class _MockLibSodiumJS {
+abstract class _MockLibSodiumJS() {
   int get SODIUM_LIBRARY_VERSION_MAJOR => throw UnimplementedError();
 
   int get SODIUM_LIBRARY_VERSION_MINOR => throw UnimplementedError();
@@ -1887,7 +1887,7 @@ abstract class _MockLibSodiumJS {
 }
 
 @JSExport()
-class MockLibSodiumJS extends Mock implements _MockLibSodiumJS {
+class MockLibSodiumJS() extends Mock implements _MockLibSodiumJS {
   LibSodiumJS get asLibSodiumJS =>
       createJSInteropWrapper<MockLibSodiumJS>(this) as LibSodiumJS;
 }

@@ -4,11 +4,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart';
 
-class FileLoader {
-  final Directory directory;
-
-  new(this.directory);
-
+class FileLoader(final Directory directory) {
   static Directory get scriptDir => File.fromUri(Platform.script).parent;
 
   Future<String> loadFile(String subPath) =>

@@ -15,7 +15,7 @@ import 'bindings/sodium.js.dart';
 /// is the variant with the full API, including internals and rarely used APIs.
 ///
 /// See https://libsodium.gitbook.io/doc/advanced for some of the advanced APIs
-sealed class SodiumSumoInit {
+sealed class SodiumSumoInit._() {
   /// Creates a new [SodiumSumo] instance for the bundled libsodium.
   ///
   /// This method will wait for sodium.js to load and then return the

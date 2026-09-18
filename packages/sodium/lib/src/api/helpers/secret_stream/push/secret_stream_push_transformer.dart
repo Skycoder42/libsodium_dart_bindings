@@ -26,28 +26,24 @@ sealed class _SinkState<TState extends Object> with _$SinkState<TState> {
   const factory closed() = _Closed<TState>;
 }
 
-/// @nodoc
 @internal
-abstract class SecretStreamPushTransformerSink<TState extends Object>
+// ignore: public_member_api_docs false positive
+abstract class SecretStreamPushTransformerSink<TState extends Object>()
     implements EventSink<SecretStreamPlainMessage> {
   _SinkState<TState> _state = const _SinkState.uninitialized();
 
-  /// @nodoc
   @protected
   @visibleForTesting
   void rekey(TState cryptoState);
 
-  /// @nodoc
   @protected
   @visibleForTesting
   void disposeState(TState cryptoState);
 
-  /// @nodoc
   @protected
   @visibleForTesting
   InitPushResult<TState> initialize(SecureKey key);
 
-  /// @nodoc
   @protected
   @visibleForTesting
   SecretStreamCipherMessage encryptMessage(
@@ -55,7 +51,6 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
     SecretStreamPlainMessage event,
   );
 
-  /// @nodoc
   @nonVirtual
   void init(EventSink<SecretStreamCipherMessage> outSink, SecureKey key) =>
       switch (_state) {
@@ -63,7 +58,6 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
         _ => _throwInitialized(),
       };
 
-  /// @nodoc
   @nonVirtual
   void triggerRekey() => switch (_state) {
     _Initialized(:final cryptoState) => rekey(cryptoState),
@@ -174,21 +168,15 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>
   );
 }
 
-/// @nodoc
 @internal
-abstract class SecretStreamPushTransformer<TState extends Object>
-    implements
-        SecretExStreamTransformer<
-          SecretStreamPlainMessage,
-          SecretStreamCipherMessage
-        > {
-  /// @nodoc
-  final SecureKey key;
-
-  /// @nodoc
-  const new(this.key);
-
-  /// @nodoc
+// ignore: public_member_api_docs false positive
+abstract class const SecretStreamPushTransformer<TState extends Object>(
+  final SecureKey key,
+) implements
+    SecretExStreamTransformer<
+      SecretStreamPlainMessage,
+      SecretStreamCipherMessage
+    > {
   @protected
   @visibleForTesting
   SecretStreamPushTransformerSink<TState> createSink();

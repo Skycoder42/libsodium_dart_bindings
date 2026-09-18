@@ -12,15 +12,11 @@ import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
-/// @nodoc
 @internal
-class KxFFI with KxValidations, KeygenMixin implements Kx {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class KxFFI(final LibSodiumFFI sodium)
+    with KxValidations, KeygenMixin
+    implements Kx {
   @override
   int get publicKeyBytes => sodium.crypto_kx_publickeybytes();
 

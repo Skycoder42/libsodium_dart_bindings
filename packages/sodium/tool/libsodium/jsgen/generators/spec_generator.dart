@@ -2,9 +2,7 @@ import 'package:code_builder/code_builder.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-abstract base class SpecGenerator<T extends Spec> implements Spec {
-  const new();
-
+abstract base class const SpecGenerator<T extends Spec>() implements Spec {
   @protected
   T build();
 

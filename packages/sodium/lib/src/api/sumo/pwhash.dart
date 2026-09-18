@@ -9,7 +9,7 @@ import '../secure_key.dart';
 /// Enum type for the different hashing algorithms that can be used.
 ///
 /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#constants
-enum CryptoPwhashAlgorithm {
+enum CryptoPwhashAlgorithm() {
   /// Provides crypto_pwhash_ALG_DEFAULT.
   ///
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#constants
@@ -31,9 +31,7 @@ enum CryptoPwhashAlgorithm {
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/password_hashing/default_phf.
 /// Please refer to that documentation for more details about these APIs.
-abstract class Pwhash {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const Pwhash._() {
   /// Provides crypto_pwhash_BYTES_MIN.
   ///
   /// See https://libsodium.gitbook.io/doc/password_hashing/default_phf#constants
@@ -199,20 +197,16 @@ abstract class Pwhash {
   });
 }
 
-/// @nodoc
 @internal
 mixin PwHashValidations implements Pwhash {
-  /// @nodoc
   void validateOutLen(int outLen) =>
       Validations.checkInRange(outLen, bytesMin, bytesMax, 'outLen');
 
-  /// @nodoc
   void validatePasswordHashStr(String passwordHash) {
     Validations.checkInRange(passwordHash.length, 1, strBytes, 'passwordHash');
     Validations.checkIsAscii(passwordHash, 'passwordHash');
   }
 
-  /// @nodoc
   void validatePassword(Int8List password) => Validations.checkInRange(
     password.length,
     passwdMin,
@@ -220,15 +214,12 @@ mixin PwHashValidations implements Pwhash {
     'password',
   );
 
-  /// @nodoc
   void validateSalt(Uint8List salt) =>
       Validations.checkIsSame(salt.length, saltBytes, 'salt');
 
-  /// @nodoc
   void validateOpsLimit(int opsLimit) =>
       Validations.checkInRange(opsLimit, opsLimitMin, opsLimitMax, 'opsLimit');
 
-  /// @nodoc
   void validateMemLimit(int memLimit) =>
       Validations.checkInRange(memLimit, memLimitMin, memLimitMax, 'memLimit');
 }

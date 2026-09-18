@@ -9,9 +9,7 @@ import 'crypto_sumo.dart';
 typedef SodiumSumoFactory = Future<SodiumSumo> Function();
 
 /// A meta class that provides access to all toplevel libsodium sumo API groups.
-abstract class SodiumSumo implements Sodium {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const SodiumSumo._() implements Sodium {
   @override
   CryptoSumo get crypto;
 }

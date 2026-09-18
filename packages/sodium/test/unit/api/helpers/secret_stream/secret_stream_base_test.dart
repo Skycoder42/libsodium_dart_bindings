@@ -11,17 +11,21 @@ import 'package:test/test.dart';
 
 import '../../../../secure_key_fake.dart';
 
-class SecretStreamMock extends Mock
+class SecretStreamMock()
+    extends Mock
     with SecretStreamBase
     implements SecretStream;
 
-class MockSecretExStreamTransformer<TIn, TOut> extends Mock
+class MockSecretExStreamTransformer<TIn, TOut>()
+    extends Mock
     implements SecretExStreamTransformer<TIn, TOut>;
 
-class SecretStreamPushTransformerSinkFake extends Fake
+class SecretStreamPushTransformerSinkFake()
+    extends Fake
     implements SecretStreamPushTransformerSink;
 
-class SecretStreamPullTransformerSinkFake extends Fake
+class SecretStreamPullTransformerSinkFake()
+    extends Fake
     implements SecretStreamPullTransformerSink;
 
 void main() {

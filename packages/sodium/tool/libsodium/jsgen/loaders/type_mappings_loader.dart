@@ -3,11 +3,7 @@ import '../json/type_info.dart';
 import '../json/type_mapping.dart';
 import 'file_loader.dart';
 
-class TypeMappingsLoader {
-  final FileLoader _sourceLoader;
-
-  new(this._sourceLoader);
-
+class TypeMappingsLoader(final FileLoader _sourceLoader) {
   TypeMapping get typeMapping => const TypeMapping(_mappings);
 
   Iterable<DartTypeDef> get dartTypeDefs =>

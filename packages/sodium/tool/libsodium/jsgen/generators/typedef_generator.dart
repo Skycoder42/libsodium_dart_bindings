@@ -5,12 +5,10 @@ import '../types.dart';
 import 'spec_generator.dart';
 
 @immutable
-final class TypedefGenerator extends SpecGenerator<TypeDef> {
-  final String name;
-  final String type;
-
-  const new({required this.name, required this.type});
-
+final class const TypedefGenerator({
+  required final String name,
+  required final String type,
+}) extends SpecGenerator<TypeDef> {
   @override
   TypeDef build() => TypeDef(
     (b) => b

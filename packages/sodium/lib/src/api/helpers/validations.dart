@@ -1,11 +1,7 @@
 import 'package:meta/meta.dart';
 
-/// @nodoc
 @internal
-abstract class Validations {
-  const new _(); // coverage:ignore-line
-
-  /// @nodoc
+abstract class const Validations._() {
   static void checkInRange(
     int value,
     int minValue,
@@ -13,7 +9,6 @@ abstract class Validations {
     String name,
   ) => RangeError.checkValueInInterval(value, minValue, maxValue, name);
 
-  /// @nodoc
   static void checkIsSame(int value, int expected, String name) {
     if (value != expected) {
       throw RangeError.value(
@@ -24,7 +19,6 @@ abstract class Validations {
     }
   }
 
-  /// @nodoc
   static void checkIsAny(int value, List<int> expected, String name) {
     if (!expected.contains(value)) {
       throw RangeError.value(
@@ -35,7 +29,6 @@ abstract class Validations {
     }
   }
 
-  /// @nodoc
   static void checkAtLeast(int value, int minValue, String name) {
     if (value < minValue) {
       throw RangeError.value(
@@ -46,7 +39,6 @@ abstract class Validations {
     }
   }
 
-  /// @nodoc
   static void checkAtMost(int value, int maxValue, String name) {
     if (value > maxValue) {
       throw RangeError.value(value, name, 'Must be at most $maxValue, but was');
@@ -54,7 +46,6 @@ abstract class Validations {
     checkAtLeast(value, 0, name);
   }
 
-  /// @nodoc
   static void checkIsAscii(String value, String name) {
     for (final codeUnit in value.codeUnits) {
       if (codeUnit > 0x7F) {

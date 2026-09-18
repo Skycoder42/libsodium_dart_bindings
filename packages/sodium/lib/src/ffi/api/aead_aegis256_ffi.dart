@@ -3,12 +3,9 @@ import 'package:meta/meta.dart';
 import '../../api/secure_key.dart';
 import 'aead_base_ffi.dart';
 
-/// @nodoc
 @internal
-class AeadAegis256FFI extends AeadBaseFFI {
-  /// @nodoc
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class AeadAegis256FFI(super.sodium) extends AeadBaseFFI {
   @override
   int get keyBytes => sodium.crypto_aead_aegis256_keybytes();
 

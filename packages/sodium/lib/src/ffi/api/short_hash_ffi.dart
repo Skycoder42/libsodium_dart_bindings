@@ -11,15 +11,11 @@ import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
-/// @nodoc
 @internal
-class ShortHashFFI with ShortHashValidations, KeygenMixin implements ShortHash {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class ShortHashFFI(final LibSodiumFFI sodium)
+    with ShortHashValidations, KeygenMixin
+    implements ShortHash {
   @override
   int get bytes => sodium.crypto_shorthash_bytes();
 

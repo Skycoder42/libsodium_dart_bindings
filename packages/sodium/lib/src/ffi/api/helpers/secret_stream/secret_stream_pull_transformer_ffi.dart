@@ -13,20 +13,13 @@ import '../../../bindings/sodium_pointer.dart';
 import '../../../bindings/sodium_scope.dart';
 import 'secret_stream_message_tag_ffix.dart';
 
-/// @nodoc
 @internal
-class SecretStreamPullTransformerSinkFFI
-    extends SecretStreamPullTransformerSink<SodiumPointer<UnsignedChar>> {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(
-    this.sodium,
-    // ignore: avoid_positional_boolean_parameters for single param
-    bool requireFinalized,
-  ) : super(requireFinalized);
-
+// ignore: public_member_api_docs false positive
+class SecretStreamPullTransformerSinkFFI(
+  final LibSodiumFFI sodium,
+  // ignore: avoid_positional_boolean_parameters for single param
+  super.requireFinalized,
+) extends SecretStreamPullTransformerSink<SodiumPointer<UnsignedChar>> {
   @override
   int get headerBytes =>
       sodium.crypto_secretstream_xchacha20poly1305_headerbytes();
@@ -114,21 +107,14 @@ class SecretStreamPullTransformerSinkFFI
       cryptoState.dispose();
 }
 
-/// @nodoc
 @internal
-class SecretStreamPullTransformerFFI
-    extends SecretStreamPullTransformer<SodiumPointer<UnsignedChar>> {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  const new(
-    this.sodium,
-    SecureKey key,
-    // ignore: avoid_positional_boolean_parameters for single param
-    bool requireFinalized,
-  ) : super(key, requireFinalized);
-
+// ignore: public_member_api_docs false positive
+class const SecretStreamPullTransformerFFI(
+  final LibSodiumFFI sodium,
+  super.key,
+  // ignore: avoid_positional_boolean_parameters for single param
+  super.requireFinalized,
+) extends SecretStreamPullTransformer<SodiumPointer<UnsignedChar>> {
   @override
   SecretStreamPullTransformerSink<SodiumPointer<UnsignedChar>> createSink(
     bool requireFinalized,

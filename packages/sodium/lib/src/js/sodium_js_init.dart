@@ -8,7 +8,7 @@ import 'bindings/lib_sodium_js_loader.dart';
 import 'bindings/sodium.js.dart';
 
 /// Static class to obtain a [Sodium] instance.
-sealed class SodiumInit {
+sealed class SodiumInit._() {
   // coverage:ignore-start
   /// Creates a new [Sodium] instance for the bundled libsodium.
   ///

@@ -1,11 +1,7 @@
 import '../json/symbol.dart';
 import 'file_loader.dart';
 
-class SymbolsLoader {
-  final FileLoader _wrapperLoader;
-
-  new(this._wrapperLoader);
-
+class SymbolsLoader(final FileLoader _wrapperLoader) {
   Stream<Symbol> loadSymbols() => _wrapperLoader.loadFilesJson(
     'symbols',
     (file) => file.path.endsWith('.json'),

@@ -11,7 +11,7 @@ import 'bindings/libsodium.ffi.wrapper.dart';
 /// is the variant with the full API, including internals and rarely used APIs.
 ///
 /// See https://libsodium.gitbook.io/doc/advanced for some of the advanced APIs
-sealed class SodiumSumoInit {
+sealed class SodiumSumoInit._() {
   // coverage:ignore-start
   /// Creates a new [SodiumSumo] instance for the bundled libsodium.
   static SodiumSumo init() => initFromFFI(const LibSodiumFFI());

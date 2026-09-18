@@ -10,23 +10,25 @@ import 'package:test/test.dart';
 
 import '../../../../../secure_key_fake.dart';
 
-class MockEventSink extends Mock implements EventSink<SecretStreamPlainMessage>;
+class MockEventSink()
+    extends Mock
+    implements EventSink<SecretStreamPlainMessage>;
 
-class MockSecureKey extends Mock implements SecureKey;
+class MockSecureKey() extends Mock implements SecureKey;
 
-class MockSecretStreamPullTransformerSink extends Mock
+class MockSecretStreamPullTransformerSink()
+    extends Mock
     implements SecretStreamPullTransformerSink<int>;
 
-class MockSecretStreamPullTransformer extends Mock
+class MockSecretStreamPullTransformer()
+    extends Mock
     implements SecretStreamPullTransformer<int>;
 
-class SutSecretStreamPullTransformerSink
-    extends SecretStreamPullTransformerSink<int> {
-  final MockSecretStreamPullTransformerSink mock;
-
+class SutSecretStreamPullTransformerSink(
+  final MockSecretStreamPullTransformerSink mock,
   // ignore: avoid_positional_boolean_parameters for single parameter
-  new(this.mock, bool requireFinalized) : super(requireFinalized);
-
+  super.requireFinalized,
+) extends SecretStreamPullTransformerSink<int> {
   @override
   int get headerBytes => mock.headerBytes;
 
@@ -47,16 +49,12 @@ class SutSecretStreamPullTransformerSink
   void disposeState(int cryptoState) => mock.disposeState(cryptoState);
 }
 
-class SutSecretStreamPullTransformer extends SecretStreamPullTransformer<int> {
-  final MockSecretStreamPullTransformer mock;
-
-  new(
-    this.mock,
-    SecureKey key,
-    // ignore: avoid_positional_boolean_parameters for single parameter
-    bool requireFinalized,
-  ) : super(key, requireFinalized);
-
+class SutSecretStreamPullTransformer(
+  final MockSecretStreamPullTransformer mock,
+  super.key,
+  // ignore: avoid_positional_boolean_parameters for single parameter
+  super.requireFinalized,
+) extends SecretStreamPullTransformer<int> {
   @override
   SecretStreamPullTransformerSink<int> createSink(bool requireFinalized) =>
       mock.createSink(requireFinalized);

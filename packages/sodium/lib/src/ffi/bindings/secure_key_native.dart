@@ -9,32 +9,24 @@ import 'memory_protection.dart';
 import 'sodium_pointer.dart';
 import 'sodium_scope.dart';
 
-/// @nodoc
 @internal
 typedef SecureFFICallbackFn<T> = T Function(SodiumPointer<UnsignedChar> keyPtr);
 
-/// @nodoc
 @internal
 typedef SecureFFINullableCallbackFn<T> = T Function(
   SodiumPointer<UnsignedChar>? keyPtr,
 );
 
-/// @nodoc
 @internal
-abstract class SecureKeyNative implements SecureKey {
-  const new _(); // coverage:ignore-line
-
-  /// @nodoc
+abstract class const SecureKeyNative._() implements SecureKey {
   T runUnlockedNative<T>(
     SecureFFICallbackFn<T> callback, {
     bool writable = false,
   });
 }
 
-/// @nodoc
 @internal
 extension SecureKeySafeCastX on SecureKey {
-  /// @nodoc
   T runUnlockedNative<T>(
     LibSodiumFFI sodium,
     SecureFFICallbackFn<T> callback, {
@@ -73,10 +65,8 @@ extension SecureKeySafeCastX on SecureKey {
   );
 }
 
-/// @nodoc
 @internal
 extension SecureKeyNullableSafeCastX on SecureKey? {
-  /// @nodoc
   T runMaybeUnlockedNative<T>(
     LibSodiumFFI sodium,
     SecureFFINullableCallbackFn<T> callback,

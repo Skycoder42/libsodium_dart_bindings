@@ -3,18 +3,15 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
-/// @nodoc
 @internal
-class ChunkedEventSink implements EventSink<List<int>> {
-  final EventSink<Uint8List> _sink;
-  final int _chunkSize;
-
-  Uint8List _buffer;
-  int _bufferIndex;
-
-  new(this._sink, this._chunkSize, int? headerSize)
-    : _buffer = Uint8List(headerSize ?? _chunkSize),
-      _bufferIndex = 0;
+// ignore: public_member_api_docs false positive
+class ChunkedEventSink(
+  final EventSink<Uint8List> _sink,
+  final int _chunkSize,
+  int? headerSize,
+) implements EventSink<List<int>> {
+  var _buffer = Uint8List(headerSize ?? _chunkSize);
+  var _bufferIndex = 0;
 
   @override
   void add(List<int> bytes) {
@@ -56,15 +53,12 @@ class ChunkedEventSink implements EventSink<List<int>> {
   }
 }
 
-/// @nodoc
 @internal
-class ChunkedStreamTransformer
-    extends StreamTransformerBase<List<int>, Uint8List> {
-  final int chunkSize;
-  final int? headerSize;
-
-  const new(this.chunkSize, {this.headerSize});
-
+// ignore: public_member_api_docs false positive
+class const ChunkedStreamTransformer(
+  final int chunkSize, {
+  final int? headerSize,
+}) extends StreamTransformerBase<List<int>, Uint8List> {
   @override
   Stream<Uint8List> bind(Stream<List<int>> stream) => Stream.eventTransformed(
     stream,

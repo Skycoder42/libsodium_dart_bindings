@@ -7,9 +7,9 @@ import 'sodium_exception.dart';
 ///
 /// This can happen when trying to load [SodiumSumo] on the web, but only the
 /// normal variant of sodium.js is available.
-class SodiumSumoUnavailable extends SodiumException {
+class SodiumSumoUnavailable([super.originalMessage]) extends SodiumException {
   /// Default constructor.
-  new([super.originalMessage]);
+  this;
 
   @override
   String toString() =>

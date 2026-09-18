@@ -33,7 +33,6 @@ import 'ip_address_ffi.dart';
 import 'randombytes_ffi.dart';
 import 'secure_key_ffi.dart';
 
-/// @nodoc
 @internal
 typedef SodiumFFIIsolateCallback<TResult, TSodium extends SodiumFFI> =
     FutureOr<TResult> Function(
@@ -42,21 +41,16 @@ typedef SodiumFFIIsolateCallback<TResult, TSodium extends SodiumFFI> =
       List<KeyPair> keyPairs,
     );
 
-/// @nodoc
 @internal
 typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> = TSodiumFFI Function(
   LibSodiumFFI sodium,
 );
 
-/// @nodoc
 @internal
-class SodiumFFI with SodiumValidations implements Sodium {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new([this.sodium = const LibSodiumFFI()]);
-
+// ignore: public_member_api_docs false positive
+class SodiumFFI([final LibSodiumFFI sodium = const LibSodiumFFI()])
+    with SodiumValidations
+    implements Sodium {
   @override
   SodiumVersion get version => SodiumVersion(
     sodium.sodium_library_version_major(),

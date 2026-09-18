@@ -21,7 +21,7 @@ import 'helpers/validations.dart';
 ///
 /// See https://libsodium.gitbook.io/doc/hashing/xof#multi-part-api
 /// and https://libsodium.gitbook.io/doc/hashing/xof#multi-part-api-1
-abstract interface class XofConsumer
+abstract interface class XofConsumer._()
     implements StreamConsumer<Uint8List>, Sink<Uint8List> {
   /// Closes the absorbing phase of the consumer.
   ///
@@ -66,7 +66,7 @@ abstract interface class XofConsumer
 /// sizes differ. In the documentation of the members, `XXX` is a placeholder
 /// for the variant, i.e. `shake128`, `shake256`, `turboshake128` or
 /// `turboshake256`.
-abstract interface class Xof {
+abstract interface class Xof._() {
   /// Provides crypto_xof_XXX_BLOCKBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/hashing/xof#constants

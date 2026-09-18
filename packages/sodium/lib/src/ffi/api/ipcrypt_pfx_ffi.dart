@@ -11,17 +11,11 @@ import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 import 'ip_address_ffi.dart';
 
-/// @nodoc
 @internal
-class IpcryptPfxFFI
+// ignore: public_member_api_docs false positive
+class IpcryptPfxFFI(final LibSodiumFFI sodium)
     with IpcryptPfxValidations, KeygenMixin
     implements IpcryptPfx {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
   @override
   int get keyBytes => sodium.crypto_ipcrypt_pfx_keybytes();
 

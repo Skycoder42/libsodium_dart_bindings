@@ -11,20 +11,14 @@ import '../bindings/sodium.js.dart';
 import 'ip_address_js.dart';
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-abstract class IpcryptNdBaseJS with IpcryptNdValidations implements IpcryptNd {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
-  /// @nodoc
+// ignore: public_member_api_docs false positive
+abstract class IpcryptNdBaseJS(final LibSodiumJS sodium)
+    with IpcryptNdValidations
+    implements IpcryptNd {
   @protected
   JSUint8Array internalKeygen();
 
-  /// @nodoc
   @protected
   JSUint8Array internalEncrypt(
     JSUint8Array input,
@@ -32,7 +26,6 @@ abstract class IpcryptNdBaseJS with IpcryptNdValidations implements IpcryptNd {
     JSUint8Array key,
   );
 
-  /// @nodoc
   @protected
   JSUint8Array internalDecrypt(JSUint8Array input, JSUint8Array key);
 

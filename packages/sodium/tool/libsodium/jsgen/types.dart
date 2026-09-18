@@ -1,8 +1,6 @@
 import 'package:code_builder/code_builder.dart';
 
-sealed class Types {
-  new _();
-
+sealed class Types._() {
   static TypeReference named(String symbol, [String? url]) => TypeReference(
     (b) => b
       ..symbol = symbol

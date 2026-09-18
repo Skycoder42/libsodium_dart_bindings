@@ -11,9 +11,7 @@ import '../sign.dart';
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures.
 /// Please refer to that documentation for more details about these APIs.
-abstract class SignSumo implements Sign {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const SignSumo._() implements Sign {
   /// Provides crypto_sign_ed25519_sk_to_seed.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures#extracting-the-seed-and-the-public-key-from-the-secret-key
@@ -35,10 +33,8 @@ abstract class SignSumo implements Sign {
   SecureKey skToCurve25519(SecureKey secretKey);
 }
 
-/// @nodoc
 @internal
 mixin SignSumoValidations on SignValidations implements Sign {
-  /// @nodoc
   void validateSecretKeyOrSeed(SecureKey secretKeyOrSeed) =>
       Validations.checkIsAny(secretKeyOrSeed.length, [
         secretKeyBytes,

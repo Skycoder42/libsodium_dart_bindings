@@ -10,15 +10,9 @@ import '../../api/randombytes.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 
-/// @nodoc
 @internal
-class RandombytesJS implements Randombytes {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class RandombytesJS(final LibSodiumJS sodium) implements Randombytes {
   // Not exported in JS library
   @override
   int get seedBytes => 32;

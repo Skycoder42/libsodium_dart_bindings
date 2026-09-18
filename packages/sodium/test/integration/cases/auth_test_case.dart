@@ -2,9 +2,7 @@ import 'dart:typed_data';
 
 import '../test_case.dart';
 
-class AuthTestCase extends TestCase {
-  new(super._runner);
-
+class AuthTestCase(super.runner) extends TestCase {
   @override
   String get name => 'auth';
 

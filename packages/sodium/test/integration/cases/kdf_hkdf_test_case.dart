@@ -3,9 +3,7 @@ import 'dart:typed_data';
 
 import '../test_case.dart';
 
-class KdfHkdfTestCase extends TestCase {
-  new(super._runner);
-
+class KdfHkdfTestCase(super.runner) extends TestCase {
   @override
   String get name => 'kdf_hkdf';
 

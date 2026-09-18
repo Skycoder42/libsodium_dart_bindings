@@ -119,6 +119,8 @@ cb.Library _buildWrapperLibrary(LibraryElement library) => cb.Library(
     ..ignoreForFile.add('prefer_relative_imports')
     ..ignoreForFile.add('public_member_api_docs')
     ..ignoreForFile.add('non_constant_identifier_names')
+    ..ignoreForFile.add('unnecessary_type_name_in_constructor')
+    ..ignoreForFile.add('use_primary_constructors')
     ..body.add(_buildWrapperClass(library)),
 );
 

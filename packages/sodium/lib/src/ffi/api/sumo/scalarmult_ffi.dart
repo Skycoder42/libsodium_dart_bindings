@@ -10,15 +10,11 @@ import '../../bindings/libsodium.ffi.wrapper.dart';
 import '../../bindings/secure_key_native.dart';
 import '../../bindings/sodium_scope.dart';
 
-/// @nodoc
 @internal
-class ScalarmultFFI with ScalarmultValidations implements Scalarmult {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class ScalarmultFFI(final LibSodiumFFI sodium)
+    with ScalarmultValidations
+    implements Scalarmult {
   @override
   int get bytes => sodium.crypto_scalarmult_bytes();
 

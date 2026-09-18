@@ -13,13 +13,10 @@ import 'helpers/kdf_hkdf/kdf_hkdf_extract_consumer_js.dart';
 import 'secure_key_js.dart';
 
 @internal
-abstract class KdfHkdfBaseJS<T extends JSNumber>
+// ignore: public_member_api_docs false positive
+abstract class KdfHkdfBaseJS<T extends JSNumber>(final LibSodiumJS sodium)
     with KdfHkdfValidations
     implements KdfHkdf {
-  final LibSodiumJS sodium;
-
-  new(this.sodium);
-
   @override
   SecureKey keygen() =>
       SecureKeyJS(sodium, jsErrorWrap(() => internalKeygen()));

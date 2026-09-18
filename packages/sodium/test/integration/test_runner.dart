@@ -45,7 +45,7 @@ typedef TestSumoFn = void Function(
   dynamic Function(SodiumSumo sodium) body,
 );
 
-abstract class TestRunner {
+abstract class TestRunner() {
   late final Sodium _sodium;
 
   bool get isSumoTest => false;
@@ -53,8 +53,6 @@ abstract class TestRunner {
   bool get is32Bit => false;
 
   Sodium get sodium => _sodium;
-
-  new();
 
   Iterable<TestCase> createTestCases() => [
     SodiumTestCase(this),
@@ -129,7 +127,7 @@ abstract class TestRunner {
   ) => Isolate.run(() => callback(message));
 }
 
-abstract class SumoTestRunner extends TestRunner {
+abstract class SumoTestRunner() extends TestRunner {
   @override
   bool get isSumoTest => true;
 

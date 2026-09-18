@@ -28,17 +28,13 @@ extension CrypoPwhashAlgorithmJS on CryptoPwhashAlgorithm {
   }
 }
 
-/// @nodoc
 @internal
-class PwhashJS with PwHashValidations implements Pwhash {
+// ignore: public_member_api_docs false positive
+class PwhashJS(final LibSodiumJS sodium)
+    with PwHashValidations
+    implements Pwhash {
   @visibleForTesting
   static const memLimitMaxFallback = 4398046510080;
-
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
 
   @override
   int get bytesMin => sodium.crypto_pwhash_BYTES_MIN;

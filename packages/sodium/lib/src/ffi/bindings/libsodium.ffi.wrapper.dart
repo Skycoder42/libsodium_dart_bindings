@@ -1,13 +1,15 @@
-// ignore_for_file: document_ignores, non_constant_identifier_names
-// ignore_for_file: prefer_relative_imports, public_member_api_docs
-
+// ignore_for_file: document_ignores
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
+// ignore_for_file: public_member_api_docs, unnecessary_type_name_in_constructor
+// ignore_for_file: use_primary_constructors
+
 import 'dart:ffi' as _i1;
 
 import 'package:sodium/src/ffi/bindings/libsodium.ffi.dart' as _i2;
 
 class LibSodiumFFI {
-  const new();
+  const LibSodiumFFI();
 
   _i1.Pointer<_i1.NativeFinalizerFunction>? get sodium_freePtr =>
       _i1.Native.addressOf(_i2.sodium_free);

@@ -17,7 +17,7 @@ typedef KemEncResult = ({Uint8List ciphertext, SecureKey sharedSecret});
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/public-key_cryptography/key_encapsulation
 /// Please refer to that documentation for more details about these APIs.
-abstract interface class Kem {
+abstract interface class Kem._() {
   /// Provides crypto_kem_PUBLICKEYBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/key_encapsulation#constants
@@ -69,22 +69,17 @@ abstract interface class Kem {
   SecureKey dec({required Uint8List ciphertext, required SecureKey secretKey});
 }
 
-/// @nodoc
 @internal
 mixin KemValidations implements Kem {
-  /// @nodoc
   void validatePublicKey(Uint8List publicKey) =>
       Validations.checkIsSame(publicKey.length, publicKeyBytes, 'publicKey');
 
-  /// @nodoc
   void validateSecretKey(SecureKey secretKey) =>
       Validations.checkIsSame(secretKey.length, secretKeyBytes, 'secretKey');
 
-  /// @nodoc
   void validateCiphertext(Uint8List ciphertext) =>
       Validations.checkIsSame(ciphertext.length, ciphertextBytes, 'ciphertext');
 
-  /// @nodoc
   void validateSeed(SecureKey seed) =>
       Validations.checkIsSame(seed.length, seedBytes, 'seed');
 }

@@ -9,30 +9,23 @@ import '../../sodium_ffi.dart';
 
 part 'transferrable_secure_key_ffi.freezed.dart';
 
-/// @nodoc
 @freezed
 @internal
-sealed class TransferrableSecureKeyFFI
+sealed class const TransferrableSecureKeyFFI._()
     with _$TransferrableSecureKeyFFI
     implements TransferrableSecureKey {
-  /// @nodoc
   factory(SecureKey secureKey) => secureKey is SecureKeyFFI
       ? TransferrableSecureKeyFFI.ffi(secureKey.copy().detach())
       : TransferrableSecureKeyFFI.generic(
           TransferableTypedData.fromList([secureKey.extractBytes()]),
         );
 
-  /// @nodoc
   const factory ffi(SecureKeyFFINativeHandle nativeHandle) =
       TransferrableSecureKeyFFINative;
 
-  /// @nodoc
   const factory generic(TransferableTypedData keyBytes) =
       TransferrableSecureKeyFFIGeneric;
 
-  const new _();
-
-  /// @nodoc
   SecureKey toSecureKey(SodiumFFI sodium) => switch (this) {
     TransferrableSecureKeyFFINative(:final nativeHandle) => SecureKeyFFI.attach(
       sodium.sodium,

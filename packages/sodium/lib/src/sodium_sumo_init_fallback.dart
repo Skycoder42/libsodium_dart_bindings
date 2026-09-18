@@ -8,7 +8,7 @@ import 'api/sumo/sodium_sumo.dart';
 /// is the variant with the full API, including internals and rarely used APIs.
 ///
 /// See https://libsodium.gitbook.io/doc/advanced for some of the advanced APIs
-sealed class SodiumSumoInit {
+sealed class SodiumSumoInit._() {
   /// Creates a new [SodiumSumo] instance for the bundled libsodium.
   static FutureOr<SodiumSumo> init() => throw UnsupportedError(
     'The current platform does support neither dart:ffi nor dart:js',

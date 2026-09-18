@@ -12,7 +12,7 @@ import 'package:test/test.dart';
 
 import '../../../../../test_data.dart';
 
-class MockLibSodiumFFI extends Mock implements LibSodiumFFI;
+class MockLibSodiumFFI() extends Mock implements LibSodiumFFI;
 
 void main() {
   final mockSodium = MockLibSodiumFFI();

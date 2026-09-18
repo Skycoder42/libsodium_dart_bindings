@@ -11,29 +11,24 @@ import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_pointer.dart';
 import '../bindings/sodium_scope.dart';
 
-/// @nodoc
 @internal
 typedef SecureFFICallbackFn<T> = T Function(
   SodiumPointer<UnsignedChar> pointer,
 );
 
-/// @nodoc
 @internal
 typedef SecureKeyFFINativeHandle = (int address, int count);
 
-/// @nodoc
 @internal
-class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
-  final SodiumPointer<UnsignedChar> _raw;
-
-  /// @nodoc
-  new(this._raw) {
+class SecureKeyFFI(final SodiumPointer<UnsignedChar> _raw)
+    with SecureKeyEquality
+    implements SecureKeyNative {
+  this {
     _raw
       ..locked = true
       ..memoryProtection = MemoryProtection.noAccess;
   }
 
-  /// @nodoc
   factory alloc(LibSodiumFFI sodium, int length) => SecureKeyFFI(
     SodiumPointer<UnsignedChar>.alloc(
       sodium,
@@ -42,7 +37,6 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     ),
   );
 
-  /// @nodoc
   factory random(LibSodiumFFI sodium, int length) =>
       sodiumScope(sodium, (scope) {
         final raw = scope.alloc<UnsignedChar>(length);
@@ -50,7 +44,6 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
         return SecureKeyFFI(scope.takePointer(raw));
       });
 
-  /// @nodoc
   @internal
   factory attach(LibSodiumFFI sodium, SecureKeyFFINativeHandle nativeHandle) =>
       SecureKeyFFI(
@@ -120,7 +113,6 @@ class SecureKeyFFI with SecureKeyEquality implements SecureKeyNative {
     _raw.dispose();
   }
 
-  /// @nodoc
   @internal
   @useResult
   SecureKeyFFINativeHandle detach() => (_raw.detach().address, _raw.count);

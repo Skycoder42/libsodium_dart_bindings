@@ -15,11 +15,8 @@ part 'kx.freezed.dart';
 ///
 /// See https://libsodium.gitbook.io/doc/key_exchange.
 @freezed
-sealed class SessionKeys with _$SessionKeys {
-  const new _();
-
+sealed class const SessionKeys._() with _$SessionKeys {
   /// Default Constructor
-  // ignore: sort_unnamed_constructors_first
   const factory({
     /// Session key to be used to decrypt received data
     required SecureKey rx,
@@ -42,9 +39,7 @@ sealed class SessionKeys with _$SessionKeys {
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/key_exchange.
 /// Please refer to that documentation for more details about these APIs.
-abstract class Kx {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const Kx._() {
   /// Provides crypto_kx_PUBLICKEYBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/key_exchange#constants
@@ -94,10 +89,8 @@ abstract class Kx {
   });
 }
 
-/// @nodoc
 @internal
 mixin KxValidations implements Kx {
-  /// @nodoc
   void validatePublicKey(Uint8List publicKey, String namePrefix) =>
       Validations.checkIsSame(
         publicKey.length,
@@ -105,7 +98,6 @@ mixin KxValidations implements Kx {
         '${namePrefix}PublicKey',
       );
 
-  /// @nodoc
   void validateSecretKey(SecureKey secretKey, String namePrefix) =>
       Validations.checkIsSame(
         secretKey.length,
@@ -113,7 +105,6 @@ mixin KxValidations implements Kx {
         '${namePrefix}SecretKey',
       );
 
-  /// @nodoc
   void validateSeed(SecureKey seed) =>
       Validations.checkIsSame(seed.length, seedBytes, 'seed');
 }

@@ -8,12 +8,9 @@ import '../../../api/sumo/sodium_sumo.dart';
 import '../sodium_js.dart';
 import 'crypto_sumo_js.dart';
 
-/// @nodoc
 @internal
-class SodiumSumoJS extends SodiumJS implements SodiumSumo {
-  /// @nodoc
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class SodiumSumoJS(super.sodium) extends SodiumJS implements SodiumSumo {
   @override
   // ignore: overridden_fields for api customization
   late final CryptoSumo crypto = CryptoSumoJS(sodium);

@@ -6,7 +6,7 @@ import 'api/sodium_ffi.dart';
 import 'bindings/libsodium.ffi.wrapper.dart';
 
 /// Static class to obtain a [Sodium] instance.
-sealed class SodiumInit {
+sealed class SodiumInit._() {
   // coverage:ignore-start
   /// Creates a new [Sodium] instance for the bundled libsodium.
   static Sodium init() => initFromFFI(const LibSodiumFFI());

@@ -2,17 +2,16 @@ import 'package:meta/meta.dart';
 
 /// A Version number class that provides the libsodium implementation version.
 @immutable
-class SodiumVersion {
-  final String _versionString;
-
+class const SodiumVersion(
   /// Provides sodium_library_version_major.
-  final int major;
+  final int major,
 
   /// Provides sodium_library_version_minor.
-  final int minor;
-
+  final int minor,
+  final String _versionString,
+) {
   /// Default constructor
-  const new(this.major, this.minor, this._versionString);
+  this;
 
   /// Provides sodium_version_string.
   @override

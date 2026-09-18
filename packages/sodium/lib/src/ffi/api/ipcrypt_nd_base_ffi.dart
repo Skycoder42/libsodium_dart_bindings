@@ -11,22 +11,14 @@ import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 import 'ip_address_ffi.dart';
 
-/// @nodoc
 @internal
-abstract class IpcryptNdBaseFFI
+// ignore: public_member_api_docs false positive
+abstract class IpcryptNdBaseFFI(final LibSodiumFFI sodium)
     with IpcryptNdValidations, KeygenMixin
     implements IpcryptNd {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
-  /// @nodoc
   @protected
   void Function(Pointer<UnsignedChar> k) get internalKeygen;
 
-  /// @nodoc
   @protected
   void Function(
     Pointer<UnsignedChar> out,
@@ -36,7 +28,6 @@ abstract class IpcryptNdBaseFFI
   )
   get internalEncrypt;
 
-  /// @nodoc
   @protected
   void Function(
     Pointer<UnsignedChar> out,

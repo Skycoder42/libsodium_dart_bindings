@@ -6,11 +6,8 @@ import '../types.dart';
 import 'spec_generator.dart';
 
 @immutable
-final class StructGenerator extends SpecGenerator<ExtensionType> {
-  final Struct struct;
-
-  const new(this.struct);
-
+final class const StructGenerator(final Struct struct)
+    extends SpecGenerator<ExtensionType> {
   @override
   ExtensionType build() => ExtensionType(
     (b) => b

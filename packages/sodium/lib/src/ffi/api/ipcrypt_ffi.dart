@@ -14,15 +14,11 @@ import 'ipcrypt_nd_ffi.dart';
 import 'ipcrypt_ndx_ffi.dart';
 import 'ipcrypt_pfx_ffi.dart';
 
-/// @nodoc
 @internal
-class IpcryptFFI with IpcryptValidations, KeygenMixin implements Ipcrypt {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class IpcryptFFI(final LibSodiumFFI sodium)
+    with IpcryptValidations, KeygenMixin
+    implements Ipcrypt {
   @override
   int get bytes => sodium.crypto_ipcrypt_bytes();
 

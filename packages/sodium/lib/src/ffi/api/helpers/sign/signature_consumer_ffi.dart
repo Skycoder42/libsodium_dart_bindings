@@ -13,19 +13,14 @@ import '../../../bindings/sodium_pointer.dart';
 import '../../../bindings/sodium_scope.dart';
 import 'sign_consumer_ffi_mixin.dart';
 
-/// @nodoc
 @internal
-class SignatureConsumerFFI
-    with SignConsumerFFIMixin<Uint8List>
-    implements SignatureConsumer {
-  @override
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
+class SignatureConsumerFFI({
+  @override required final LibSodiumFFI sodium,
+  required SecureKey secretKey,
+}) with SignConsumerFFIMixin<Uint8List> implements SignatureConsumer {
   late final SecureKey secretKey;
 
-  /// @nodoc
-  new({required this.sodium, required SecureKey secretKey}) {
+  this {
     this.secretKey = secretKey.copy();
     try {
       initState();

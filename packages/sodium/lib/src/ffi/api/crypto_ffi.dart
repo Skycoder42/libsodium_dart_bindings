@@ -37,15 +37,9 @@ import 'xof_shake256_ffi.dart';
 import 'xof_turboshake128_ffi.dart';
 import 'xof_turboshake256_ffi.dart';
 
-/// @nodoc
 @internal
-class CryptoFFI implements Crypto {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class CryptoFFI(final LibSodiumFFI sodium) implements Crypto {
   @override
   late final SecretBox secretBox = SecretBoxFFI(sodium);
 

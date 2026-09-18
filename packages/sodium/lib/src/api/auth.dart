@@ -10,9 +10,7 @@ import 'secure_key.dart';
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication.
 /// Please refer to that documentation for more details about these APIs.
-abstract class Auth {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const Auth._() {
   /// Provides crypto_auth_BYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secret-key_authentication#constants
@@ -43,14 +41,11 @@ abstract class Auth {
   });
 }
 
-/// @nodoc
 @internal
 mixin AuthValidations implements Auth {
-  /// @nodoc
   void validateTag(Uint8List tag) =>
       Validations.checkIsSame(tag.length, bytes, 'tag');
 
-  /// @nodoc
   void validateKey(SecureKey key) =>
       Validations.checkIsSame(key.length, keyBytes, 'key');
 }

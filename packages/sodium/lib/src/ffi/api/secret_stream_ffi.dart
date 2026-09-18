@@ -8,17 +8,11 @@ import 'helpers/keygen_mixin.dart';
 import 'helpers/secret_stream/secret_stream_pull_transformer_ffi.dart';
 import 'helpers/secret_stream/secret_stream_push_transformer_ffi.dart';
 
-/// @nodoc
 @internal
-class SecretStreamFFI
+// ignore: public_member_api_docs false positive
+class SecretStreamFFI(final LibSodiumFFI sodium)
     with SecretStreamBase, SecretStreamValidations, KeygenMixin
     implements SecretStream {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
   @override
   int get aBytes => sodium.crypto_secretstream_xchacha20poly1305_abytes();
 

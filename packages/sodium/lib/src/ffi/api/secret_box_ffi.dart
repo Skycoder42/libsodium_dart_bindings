@@ -12,15 +12,11 @@ import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
-/// @nodoc
 @internal
-class SecretBoxFFI with SecretBoxValidations, KeygenMixin implements SecretBox {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class SecretBoxFFI(final LibSodiumFFI sodium)
+    with SecretBoxValidations, KeygenMixin
+    implements SecretBox {
   @override
   int get keyBytes => sodium.crypto_secretbox_keybytes();
 

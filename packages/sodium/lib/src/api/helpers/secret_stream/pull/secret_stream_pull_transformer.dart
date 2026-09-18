@@ -29,42 +29,30 @@ sealed class _SinkState<TState extends Object> with _$SinkState<TState> {
   const factory closed() = _Closed<TState>;
 }
 
-/// @nodoc
 @internal
-abstract class SecretStreamPullTransformerSink<TState extends Object>
-    implements EventSink<SecretStreamCipherMessage> {
-  /// @nodoc
-  final bool requireFinalized;
-
+// ignore: public_member_api_docs false positive
+abstract class SecretStreamPullTransformerSink<TState extends Object>(
+  // ignore: avoid_positional_boolean_parameters for single param
+  final bool requireFinalized,
+) implements EventSink<SecretStreamCipherMessage> {
   _SinkState<TState> _state = const _SinkState.uninitialized();
 
-  /// @nodoc
-  new(
-    // ignore: avoid_positional_boolean_parameters for single param
-    this.requireFinalized,
-  );
-
-  /// @nodoc
   @protected
   @visibleForTesting
   int get headerBytes;
 
-  /// @nodoc
   @protected
   @visibleForTesting
   void rekey(TState cryptoState);
 
-  /// @nodoc
   @protected
   @visibleForTesting
   void disposeState(TState cryptoState);
 
-  /// @nodoc
   @protected
   @visibleForTesting
   TState initialize(SecureKey key, Uint8List header);
 
-  /// @nodoc
   @protected
   @visibleForTesting
   SecretStreamPlainMessage decryptMessage(
@@ -72,7 +60,6 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
     SecretStreamCipherMessage event,
   );
 
-  /// @nodoc
   @nonVirtual
   void init(EventSink<SecretStreamPlainMessage> sink, SecureKey key) =>
       switch (_state) {
@@ -80,7 +67,6 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
         _ => _throwInitialized(),
       };
 
-  /// @nodoc
   @nonVirtual
   void triggerRekey() => switch (_state) {
     _PostInit(:final cryptoState) => rekey(cryptoState),
@@ -202,28 +188,17 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>
   );
 }
 
-/// @nodoc
 @internal
-abstract class SecretStreamPullTransformer<TState extends Object>
-    implements
-        SecretExStreamTransformer<
-          SecretStreamCipherMessage,
-          SecretStreamPlainMessage
-        > {
-  /// @nodoc
-  final SecureKey key;
-
-  /// @nodoc
-  final bool requireFinalized;
-
-  /// @nodoc
-  const new(
-    this.key,
-    // ignore: avoid_positional_boolean_parameters for single param
-    this.requireFinalized,
-  );
-
-  /// @nodoc
+// ignore: public_member_api_docs false positive
+abstract class const SecretStreamPullTransformer<TState extends Object>(
+  final SecureKey key,
+  // ignore: avoid_positional_boolean_parameters for single param
+  final bool requireFinalized,
+) implements
+    SecretExStreamTransformer<
+      SecretStreamCipherMessage,
+      SecretStreamPlainMessage
+    > {
   @protected
   @visibleForTesting
   // ignore: avoid_positional_boolean_parameters for single param

@@ -8,12 +8,14 @@ import 'package:sodium/src/api/helpers/secret_stream/pull/secret_stream_pull_tra
 import 'package:sodium/src/api/secret_stream.dart';
 import 'package:test/test.dart';
 
-class MockSecretStreamPullTransformerSink extends Mock
+class MockSecretStreamPullTransformerSink()
+    extends Mock
     implements SecretStreamPullTransformerSink;
 
-class MockStream extends Mock implements Stream<SecretStreamPlainMessage>;
+class MockStream() extends Mock implements Stream<SecretStreamPlainMessage>;
 
-class FakeStreamSubscription extends Fake
+class FakeStreamSubscription()
+    extends Fake
     implements StreamSubscription<SecretStreamPlainMessage>;
 
 void main() {

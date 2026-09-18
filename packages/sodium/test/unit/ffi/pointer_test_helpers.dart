@@ -7,9 +7,9 @@ import 'package:sodium/src/ffi/bindings/sodium_finalizer.dart';
 import 'package:sodium/src/ffi/bindings/sodium_pointer.dart';
 import 'package:test/test.dart';
 
-class MockSodiumFinalizer extends Mock implements SodiumFinalizer;
+class MockSodiumFinalizer() extends Mock implements SodiumFinalizer;
 
-class FakeFinalizable extends Fake implements Finalizable;
+class FakeFinalizable() extends Fake implements Finalizable;
 
 void registerPointers() {
   registerFallbackValue(nullptr);
@@ -68,13 +68,11 @@ extension ListToPtrX on List<int> {
   }
 }
 
-class HasRawDataMatcher<T extends NativeType> extends Matcher {
+class HasRawDataMatcher<T extends NativeType>(
+  final List<num> data,
+  final int? sizeHint,
+) extends Matcher {
   static const _stateKey = 'HasRawDataMatcher_state_key';
-
-  final List<num> data;
-  final int? sizeHint;
-
-  new(this.data, this.sizeHint);
 
   @override
   Description describe(Description description) =>

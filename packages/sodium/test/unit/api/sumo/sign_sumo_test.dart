@@ -6,9 +6,10 @@ import 'package:test/test.dart';
 import '../../../secure_key_fake.dart';
 import '../../../test_validator.dart';
 
-class MockSign extends Mock with SignValidations implements Sign;
+class MockSign() extends Mock with SignValidations implements Sign;
 
-class MockSignSumo extends MockSign
+class MockSignSumo()
+    extends MockSign
     with SignSumoValidations
     implements SignSumo;
 

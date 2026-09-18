@@ -6,7 +6,6 @@ import '../../secret_stream.dart';
 import '../../secure_key.dart';
 import 'chunked_stream_transformer.dart';
 
-/// @nodoc
 @internal
 mixin SecretStreamBase implements SecretStream {
   @override

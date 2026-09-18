@@ -27,13 +27,14 @@ typedef XofSqueezeJsFn<T extends JSNumber> = JSUint8Array Function(
 );
 
 @internal
-class XofConsumerJS<T extends JSNumber>
-    with XofConsumerValidations
-    implements XofConsumer {
-  final LibSodiumJS sodium;
-  final XofUpdateJsFn<T> xofUpdate;
-  final XofSqueezeJsFn<T> xofSqueeze;
-
+class XofConsumerJS<T extends JSNumber>._({
+  required final LibSodiumJS sodium,
+  required final XofUpdateJsFn<T> xofUpdate,
+  required final XofSqueezeJsFn<T> xofSqueeze,
+  XofInitJsFn<T>? xofInit,
+  XofInitWithDomainJsFn<T>? xofInitWithDomain,
+  int? domain,
+}) with XofConsumerValidations implements XofConsumer {
   late final T _state;
 
   var _closed = false;
@@ -65,14 +66,7 @@ class XofConsumerJS<T extends JSNumber>
     domain: domain,
   );
 
-  new _({
-    required this.sodium,
-    required this.xofUpdate,
-    required this.xofSqueeze,
-    XofInitJsFn<T>? xofInit,
-    XofInitWithDomainJsFn<T>? xofInitWithDomain,
-    int? domain,
-  }) {
+  this {
     _state = jsErrorWrap(
       () => domain != null ? xofInitWithDomain!(domain) : xofInit!(),
     );

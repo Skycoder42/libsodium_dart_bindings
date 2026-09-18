@@ -11,21 +11,13 @@ import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
-/// @nodoc
 @internal
-class SecretStreamPullTransformerSinkJS
-    extends
-        SecretStreamPullTransformerSink<SecretstreamXchacha20poly1305State> {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(
-    this.sodium,
-    // ignore: avoid_positional_boolean_parameters for single param
-    bool requireFinalized,
-  ) : super(requireFinalized);
-
+// ignore: public_member_api_docs false positive
+class SecretStreamPullTransformerSinkJS(
+  final LibSodiumJS sodium,
+  // ignore: avoid_positional_boolean_parameters for single param
+  super.requireFinalized,
+) extends SecretStreamPullTransformerSink<SecretstreamXchacha20poly1305State> {
   @override
   int get headerBytes =>
       sodium.crypto_secretstream_xchacha20poly1305_HEADERBYTES;
@@ -83,21 +75,14 @@ class SecretStreamPullTransformerSinkJS
       jsErrorWrap(() => sodium.free(cryptoState));
 }
 
-/// @nodoc
 @internal
-class SecretStreamPullTransformerJS
-    extends SecretStreamPullTransformer<SecretstreamXchacha20poly1305State> {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  const new(
-    this.sodium,
-    SecureKey key,
-    // ignore: avoid_positional_boolean_parameters for single param
-    bool requireFinalized,
-  ) : super(key, requireFinalized);
-
+// ignore: public_member_api_docs false positive
+class const SecretStreamPullTransformerJS(
+  final LibSodiumJS sodium,
+  super.key,
+  // ignore: avoid_positional_boolean_parameters for single param
+  super.requireFinalized,
+) extends SecretStreamPullTransformer<SecretstreamXchacha20poly1305State> {
   @override
   SecretStreamPullTransformerSink<SecretstreamXchacha20poly1305State>
   createSink(bool requireFinalized) =>

@@ -4,9 +4,8 @@ import 'package:meta/meta.dart';
 import 'darwin_builder.dart';
 
 @internal
-final class IosBuilder extends DarwinBuilder {
-  new(super.config, super.logger);
-
+// ignore: public_member_api_docs false positive
+final class IosBuilder(super.config, super.logger) extends DarwinBuilder {
   @override
   DarwinConfig getPlatformConfig(Uri xcodeDir) {
     assert(config.targetOS == .iOS, 'Expected target OS to be iOS.');

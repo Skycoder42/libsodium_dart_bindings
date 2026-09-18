@@ -11,14 +11,11 @@ import 'transferrable_secure_key_ffi.dart';
 
 part 'isolate_result.freezed.dart';
 
-/// @nodoc
 @freezed
 @internal
-sealed class IsolateResult<T> with _$IsolateResult<T> {
-  /// @nodoc
+sealed class const IsolateResult<T>._() with _$IsolateResult<T> {
   const factory(T result) = _IsolateResult<T>;
 
-  /// @nodoc
   @Assert(
     'T == SecureKey',
     'Cannot return subclasses of SecureKey from an isolate. '
@@ -26,7 +23,6 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
   )
   const factory key(TransferrableSecureKeyFFI key) = _SecureKeyIsolateResult<T>;
 
-  /// @nodoc
   @Assert(
     'T == KeyPair',
     'Cannot return subclasses of KeyPair from an isolate. '
@@ -42,9 +38,6 @@ sealed class IsolateResult<T> with _$IsolateResult<T> {
   )
   const factory bytes(TransferableTypedData data) = _BytesIsolateResult<T>;
 
-  const new _();
-
-  /// @nodoc
   T extract(SodiumFFI sodium) => switch (this) {
     _IsolateResult(:final result) => result,
     _SecureKeyIsolateResult(:final key) => key.toSecureKey(sodium) as T,

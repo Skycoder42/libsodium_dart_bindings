@@ -10,17 +10,11 @@ import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
-/// @nodoc
 @internal
-class SecretStreamPushTransformerSinkJS
+// ignore: public_member_api_docs false positive
+class SecretStreamPushTransformerSinkJS(final LibSodiumJS sodium)
     extends
         SecretStreamPushTransformerSink<SecretstreamXchacha20poly1305State> {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
   @override
   InitPushResult<SecretstreamXchacha20poly1305State> initialize(SecureKey key) {
     final initResult = jsErrorWrap(
@@ -68,16 +62,10 @@ class SecretStreamPushTransformerSinkJS
       jsErrorWrap(() => sodium.free(cryptoState));
 }
 
-/// @nodoc
 @internal
-class SecretStreamPushTransformerJS
+// ignore: public_member_api_docs false positive
+class const SecretStreamPushTransformerJS(final LibSodiumJS sodium, super.key)
     extends SecretStreamPushTransformer<SecretstreamXchacha20poly1305State> {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  const new(this.sodium, SecureKey key) : super(key);
-
   @override
   SecretStreamPushTransformerSink<SecretstreamXchacha20poly1305State>
   createSink() => SecretStreamPushTransformerSinkJS(sodium);

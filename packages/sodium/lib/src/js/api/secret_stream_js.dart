@@ -11,17 +11,11 @@ import 'helpers/secret_stream/secret_stream_pull_transformer_js.dart';
 import 'helpers/secret_stream/secret_stream_push_transformer_js.dart';
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-class SecretStreamJS
+// ignore: public_member_api_docs false positive
+class SecretStreamJS(final LibSodiumJS sodium)
     with SecretStreamBase, SecretStreamValidations
     implements SecretStream {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
   @override
   int get aBytes => sodium.crypto_secretstream_xchacha20poly1305_ABYTES;
 

@@ -9,25 +9,20 @@ import '../../../bindings/libsodium.ffi.wrapper.dart';
 import '../../../bindings/sodium_pointer.dart';
 import '../../../bindings/sodium_scope.dart';
 
-/// @nodoc
 @internal
 mixin SignConsumerFFIMixin<T extends Object>
     implements StreamConsumer<Uint8List>, Sink<Uint8List> {
-  /// @nodoc
   LibSodiumFFI get sodium;
 
   final _signatureCompleter = Completer<T>();
   late final SodiumPointer<UnsignedChar> _state;
 
-  /// @nodoc
   @protected
   Future<T> get result => _signatureCompleter.future;
 
-  /// @nodoc
   @protected
   T finalize(SodiumPointer<UnsignedChar> state);
 
-  /// @nodoc
   @protected
   void initState() {
     _state = SodiumPointer.alloc(

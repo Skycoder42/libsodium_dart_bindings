@@ -3,11 +3,7 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 
-class FileHelper {
-  final Directory _dir;
-
-  new _(this._dir);
-
+class FileHelper._(final Directory _dir) {
   static Future<FileHelper> instance() async {
     final dir = await Directory.systemTemp.createTemp();
     addTearDown(() => dir.delete(recursive: true));

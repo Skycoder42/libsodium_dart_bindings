@@ -9,15 +9,11 @@ import '../../api/secure_key.dart';
 import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 
-/// @nodoc
 @internal
-abstract class AeadBaseJS with AeadValidations implements Aead {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+abstract class AeadBaseJS(final LibSodiumJS sodium)
+    with AeadValidations
+    implements Aead {
   @override
   Uint8List encrypt({
     required Uint8List message,
@@ -119,7 +115,6 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
     );
   }
 
-  /// @nodoc
   @protected
   JSUint8Array internalEncrypt(
     JSUint8Array message,
@@ -129,7 +124,6 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
     JSUint8Array key,
   );
 
-  /// @nodoc
   @protected
   JSUint8Array internalDecrypt(
     JSUint8Array? secretNonce,
@@ -139,7 +133,6 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
     JSUint8Array key,
   );
 
-  /// @nodoc
   @protected
   CryptoBox internalEncryptDetached(
     JSUint8Array message,
@@ -149,7 +142,6 @@ abstract class AeadBaseJS with AeadValidations implements Aead {
     JSUint8Array key,
   );
 
-  /// @nodoc
   @protected
   JSUint8Array internalDecryptDetached(
     JSUint8Array? secretNonce,

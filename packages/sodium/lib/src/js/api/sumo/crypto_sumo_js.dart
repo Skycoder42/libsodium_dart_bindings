@@ -9,12 +9,9 @@ import 'pwhash_js.dart';
 import 'scalarmult_js.dart';
 import 'sign_sumo_js.dart';
 
-/// @nodoc
 @internal
-class CryptoSumoJS extends CryptoJS implements CryptoSumo {
-  /// @nodoc
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class CryptoSumoJS(super.sodium) extends CryptoJS implements CryptoSumo {
   @override
   // ignore: overridden_fields for api customization
   late final SignSumo sign = SignSumoJS(sodium);

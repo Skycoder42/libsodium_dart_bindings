@@ -11,21 +11,13 @@ import '../spec_generator.dart';
 import '../symbols_generator.dart';
 
 @immutable
-final class TestLibSodiumJsGenerator extends SpecGenerator<Class>
-    with LibSodiumJsExtraMethodsMixin {
-  @override
-  final TypeMapping typeMapping;
-  final Iterable<Constant> constants;
-  final Iterable<Symbol> symbols;
-
+final class const TestLibSodiumJsGenerator({
+  @override required final TypeMapping typeMapping,
+  required final Iterable<Constant> constants,
+  required final Iterable<Symbol> symbols,
+}) extends SpecGenerator<Class> with LibSodiumJsExtraMethodsMixin {
   @override
   bool get external => false;
-
-  const new({
-    required this.typeMapping,
-    required this.constants,
-    required this.symbols,
-  });
 
   @override
   R accept<R>(SpecVisitor<R> visitor, [R? context]) {

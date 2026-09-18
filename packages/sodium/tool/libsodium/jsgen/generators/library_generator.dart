@@ -8,11 +8,8 @@ import 'struct_generator.dart';
 import 'typedef_generator.dart';
 
 @immutable
-final class LibraryGenerator extends SpecGenerator<Library> {
-  final LibraryInfo libraryInfo;
-
-  const new(this.libraryInfo);
-
+final class const LibraryGenerator(final LibraryInfo libraryInfo)
+    extends SpecGenerator<Library> {
   @override
   Library build() => Library(
     (b) => b

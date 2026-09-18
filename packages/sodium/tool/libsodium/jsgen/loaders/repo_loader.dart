@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dart_test_tools/tools.dart';
 import 'package:sodium/src/hooks/constants.dart';
 
-class RepoLoader {
+class RepoLoader() {
   Future<Directory> downloadRepo(LibsodiumVersion version) async {
     final downloadUri = Uri.https(
       'github.com',

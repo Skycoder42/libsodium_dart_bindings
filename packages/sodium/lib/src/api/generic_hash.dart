@@ -10,10 +10,8 @@ import 'secure_key.dart';
 /// data.
 ///
 /// See [GenericHash.createConsumer] for more details.
-abstract class GenericHashConsumer
+abstract interface class const GenericHashConsumer._()
     implements StreamConsumer<Uint8List>, Sink<Uint8List> {
-  const new _(); // coverage:ignore-line
-
   /// A future that resolves to the hash of the data.
   ///
   /// This is the same future as returned by [close]. It will be resolved as
@@ -38,9 +36,7 @@ abstract class GenericHashConsumer
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/hashing/generic_hashing.
 /// Please refer to that documentation for more details about these APIs.
-abstract class GenericHash {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const GenericHash._() {
   /// Provides crypto_generichash_BYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/hashing/generic_hashing#constants
@@ -115,14 +111,11 @@ abstract class GenericHash {
   });
 }
 
-/// @nodoc
 @internal
 mixin GenericHashValidations implements GenericHash {
-  /// @nodoc
   void validateOutLen(int outLen) =>
       Validations.checkInRange(outLen, bytesMin, bytesMax, 'outLen');
 
-  /// @nodoc
   void validateKey(SecureKey key) =>
       Validations.checkInRange(key.length, keyBytesMin, keyBytesMax, 'key');
 

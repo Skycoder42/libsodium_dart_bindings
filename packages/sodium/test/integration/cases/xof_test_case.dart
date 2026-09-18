@@ -2,9 +2,7 @@ import 'dart:typed_data';
 
 import '../test_case.dart';
 
-class XofTestCase extends TestCase {
-  new(super._runner);
-
+class XofTestCase(super.runner) extends TestCase {
   @override
   String get name => 'xof';
 

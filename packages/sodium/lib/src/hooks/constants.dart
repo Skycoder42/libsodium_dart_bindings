@@ -7,17 +7,19 @@ class const JsDistRef({required final String path, required final String hash});
 
 @internal
 @immutable
-class LibsodiumVersion {
-  final String ffi;
-  final String js;
+class const LibsodiumVersion._({
+  required final String ffi,
+  required final String js,
+  String? jsRef,
+}) {
   final String jsRef;
 
-  const new _({required this.ffi, required this.js, String? jsRef})
-    : jsRef = jsRef ?? 'refs/tags/$js';
+  // ignore: initialize_in_field_declaration false positive
+  this : jsRef = jsRef ?? 'refs/tags/$js';
 }
 
 @internal
-sealed class HookConstants {
+sealed class HookConstants._() {
   static const libsodiumVersion = LibsodiumVersion._(
     ffi: '1.0.22',
     js: '0.8.4',

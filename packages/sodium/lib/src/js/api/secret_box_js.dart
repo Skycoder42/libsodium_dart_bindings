@@ -12,15 +12,11 @@ import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart' hide SecretBox;
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-class SecretBoxJS with SecretBoxValidations implements SecretBox {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class SecretBoxJS(final LibSodiumJS sodium)
+    with SecretBoxValidations
+    implements SecretBox {
   @override
   int get keyBytes => sodium.crypto_secretbox_KEYBYTES;
 

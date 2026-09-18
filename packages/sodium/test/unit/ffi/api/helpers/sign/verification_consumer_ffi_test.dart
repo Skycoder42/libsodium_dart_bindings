@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 import '../../../pointer_test_helpers.dart';
 import 'sign_consumer_ffi_mixin_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI;
+class MockSodiumFFI() extends Mock implements LibSodiumFFI;
 
 void main() {
   final publicKey = Uint8List.fromList(List.generate(5, (index) => index));

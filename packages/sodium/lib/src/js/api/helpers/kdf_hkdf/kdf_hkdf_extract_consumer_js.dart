@@ -10,34 +10,30 @@ import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 import '../../secure_key_js.dart';
 
-/// @nodoc
 @internal
 typedef HkdfExtractInitJsFn<T extends JSNumber> = T Function(
   JSUint8Array? salt,
 );
 
-/// @nodoc
 @internal
 typedef HkdfExtractUpdateJsFn<T extends JSNumber> = void Function(
   T state,
   JSUint8Array ikm,
 );
 
-/// @nodoc
 @internal
 typedef HkdfExtractFinalJsFn<T extends JSNumber> = JSUint8Array Function(
   T state,
 );
 
-/// @nodoc
 @internal
-class KdfHkdfExtractConsumerJS<T extends JSNumber>
-    implements KdfHkdfExtractConsumer {
-  final LibSodiumJS sodium;
-
-  final HkdfExtractUpdateJsFn<T> extractUpdate;
-  final HkdfExtractFinalJsFn<T> extractFinal;
-
+class KdfHkdfExtractConsumerJS<T extends JSNumber>({
+  required final LibSodiumJS sodium,
+  required HkdfExtractInitJsFn<T> extractInit,
+  required final HkdfExtractUpdateJsFn<T> extractUpdate,
+  required final HkdfExtractFinalJsFn<T> extractFinal,
+  Uint8List? salt,
+}) implements KdfHkdfExtractConsumer {
   final _masterKeyCompleter = Completer<SecureKey>();
 
   late final T _state;
@@ -45,13 +41,7 @@ class KdfHkdfExtractConsumerJS<T extends JSNumber>
   @override
   Future<SecureKey> get masterKey => _masterKeyCompleter.future;
 
-  new({
-    required this.sodium,
-    required HkdfExtractInitJsFn<T> extractInit,
-    required this.extractUpdate,
-    required this.extractFinal,
-    Uint8List? salt,
-  }) {
+  this {
     _state = jsErrorWrap(() => extractInit(salt?.toJS));
   }
 

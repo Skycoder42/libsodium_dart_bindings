@@ -10,9 +10,7 @@ import 'secure_key.dart';
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/hashing/short-input_hashing.
 /// Please refer to that documentation for more details about these APIs.
-abstract class ShortHash {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const ShortHash._() {
   /// Provides crypto_shorthash_BYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/hashing/short-input_hashing#constants
@@ -34,10 +32,8 @@ abstract class ShortHash {
   Uint8List call({required Uint8List message, required SecureKey key});
 }
 
-/// @nodoc
 @internal
 mixin ShortHashValidations implements ShortHash {
-  /// @nodoc
   void validateKey(SecureKey key) =>
       Validations.checkIsSame(key.length, keyBytes, 'key');
 }
