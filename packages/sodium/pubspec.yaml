@@ -13,7 +13,7 @@ executables:
 dependencies:
   archive: ^4.3.0
   args: ^2.7.0
-  code_assets: ^1.2.1
+  code_assets: ^2.1.0
   convert: ^3.1.2
   crypto: ^3.0.7
   ffi: ^2.2.0
@@ -34,7 +34,7 @@ dev_dependencies:
   dart_pre_commit: ^6.1.4
   dart_style: ^3.1.13
   dart_test_tools: ^7.3.3
-  ffigen: ^21.0.0
+  ffigen: ^22.0.0
   freezed: ^4.0.1
   glob: ^2.2.0
   mocktail: ^1.0.5
