@@ -182,16 +182,12 @@ abstract base class SodiumBuilder(
       runInShell: runInShell,
     );
 
-    // allowMalformed: these streams are only forwarded to the logger. On a
-    // non-English Windows the toolchain (cl.exe, VsDevCmd) emits localized
-    // text in the console's OEM code page, and a strict decoder throws a
-    // FormatException on the first non-ASCII byte, aborting the build. #220.
     process.stderr
-        .transform(const Utf8Decoder(allowMalformed: true))
+        .transform(systemEncoding.decoder)
         .transform(const LineSplitter())
         .listen(logger.warning);
     process.stdout
-        .transform(const Utf8Decoder(allowMalformed: true))
+        .transform(systemEncoding.decoder)
         .transform(const LineSplitter())
         .listen(logger.debug);
 
@@ -224,9 +220,8 @@ abstract base class SodiumBuilder(
       runInShell: runInShell,
     );
 
-    // allowMalformed: forwarded to the logger only. See the note in exec().
     process.stderr
-        .transform(const Utf8Decoder(allowMalformed: true))
+        .transform(systemEncoding.decoder)
         .transform(const LineSplitter())
         .listen(logger.warning);
 
