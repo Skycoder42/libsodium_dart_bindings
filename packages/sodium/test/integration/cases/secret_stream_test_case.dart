@@ -8,9 +8,7 @@ import '../helpers/file_helper_web.dart'
     if (dart.library.io) '../helpers/file_helper_io.dart';
 import '../test_case.dart';
 
-class SecretStreamTestCase extends TestCase {
-  new(super._runner);
-
+class SecretStreamTestCase(super.runner) extends TestCase {
   @override
   String get name => 'secretstream';
 

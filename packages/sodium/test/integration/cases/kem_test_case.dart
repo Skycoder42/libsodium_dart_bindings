@@ -1,8 +1,6 @@
 import '../test_case.dart';
 
-class KemTestCase extends TestCase {
-  new(super._runner);
-
+class KemTestCase(super.runner) extends TestCase {
   @override
   String get name => 'kem';
 

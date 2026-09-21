@@ -3,19 +3,13 @@ import 'package:meta/meta.dart';
 import 'constant.dart';
 
 @immutable
-class Symbol extends Constant {
-  final List<Constant> inputs;
-  final List<Constant> outputs;
-  final String? returnValue;
-
-  const new({
-    required super.name,
-    required super.type,
-    required this.inputs,
-    required this.outputs,
-    this.returnValue,
-  });
-
+class const Symbol({
+  required super.name,
+  required super.type,
+  required final List<Constant> inputs,
+  required final List<Constant> outputs,
+  final String? returnValue,
+}) extends Constant {
   new fromJson(Map<String, dynamic> json)
     : this(
         name: json['name'] as String,

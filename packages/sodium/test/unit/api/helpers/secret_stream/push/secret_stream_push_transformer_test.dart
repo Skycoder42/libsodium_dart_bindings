@@ -11,21 +11,21 @@ import 'package:test/test.dart';
 
 import '../../../../../secure_key_fake.dart';
 
-class MockEventSink extends Mock
+class MockEventSink()
+    extends Mock
     implements EventSink<SecretStreamCipherMessage>;
 
-class MockSecretStreamPushTransformerSink extends Mock
+class MockSecretStreamPushTransformerSink()
+    extends Mock
     implements SecretStreamPushTransformerSink<int>;
 
-class MockSecretStreamPushTransformer extends Mock
+class MockSecretStreamPushTransformer()
+    extends Mock
     implements SecretStreamPushTransformer<int>;
 
-class SutSecretStreamPushTransformerSink
-    extends SecretStreamPushTransformerSink<int> {
-  final MockSecretStreamPushTransformerSink mock;
-
-  new(this.mock);
-
+class SutSecretStreamPushTransformerSink(
+  final MockSecretStreamPushTransformerSink mock,
+) extends SecretStreamPushTransformerSink<int> {
   @override
   InitPushResult<int> initialize(SecureKey key) => mock.initialize(key);
 
@@ -42,11 +42,10 @@ class SutSecretStreamPushTransformerSink
   void disposeState(int cryptoState) => mock.disposeState(cryptoState);
 }
 
-class SutSecretStreamPushTransformer extends SecretStreamPushTransformer<int> {
-  final MockSecretStreamPushTransformer mock;
-
-  const new(this.mock, SecureKey key) : super(key);
-
+class const SutSecretStreamPushTransformer(
+  final MockSecretStreamPushTransformer mock,
+  super.key,
+) extends SecretStreamPushTransformer<int> {
   @override
   SecretStreamPushTransformerSink<int> createSink() => mock.createSink();
 }

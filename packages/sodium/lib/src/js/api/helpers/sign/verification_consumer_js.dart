@@ -8,26 +8,13 @@ import '../../../bindings/js_error.dart';
 import '../../../bindings/sodium.js.dart';
 import 'sign_consumer_js_mixin.dart';
 
-/// @nodoc
 @internal
-class VerificationConsumerJS
-    with SignConsumerJSMixin<bool>
-    implements VerificationConsumer {
-  @override
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  final Uint8List signature;
-
-  /// @nodoc
-  final Uint8List publicKey;
-
-  /// @nodoc
-  new({
-    required this.sodium,
-    required this.signature,
-    required this.publicKey,
-  }) {
+class VerificationConsumerJS({
+  @override required final LibSodiumJS sodium,
+  required final Uint8List signature,
+  required final Uint8List publicKey,
+}) with SignConsumerJSMixin<bool> implements VerificationConsumer {
+  this {
     initState();
   }
 

@@ -14,7 +14,7 @@ import 'package:test/test.dart';
 
 import '../sodium_js_mock.dart';
 
-class MockSodiumFinalizer extends Mock implements SodiumFinalizer;
+class MockSodiumFinalizer() extends Mock implements SodiumFinalizer;
 
 void main() {
   final mockSodium = MockLibSodiumJS();

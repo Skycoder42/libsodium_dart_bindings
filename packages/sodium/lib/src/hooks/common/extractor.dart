@@ -8,17 +8,14 @@ import 'package:path/path.dart' as path;
 import 'package:posix/posix.dart' as posix;
 
 @internal
-class FileNotExtractedException implements Exception {
-  final String message;
-
-  new(this.message);
-
+// ignore: public_member_api_docs false positive
+class FileNotExtractedException(final String message) implements Exception {
   @override
   String toString() => 'FileNotExtractedException: $message';
 }
 
 @internal
-sealed class Extractor {
+sealed class Extractor._() {
   static Archive extractArchive(Uri archiveUri) {
     final tarGzInStream = InputFileStream(archiveUri.toFilePath());
     try {

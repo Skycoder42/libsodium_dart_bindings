@@ -5,9 +5,7 @@ import 'dart:typed_data';
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/generating_random_data.
 /// Please refer to that documentation for more details about these APIs.
-abstract class Randombytes {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const Randombytes._() {
   /// Provides randombytes_SEEDBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/generating_random_data#usage

@@ -8,11 +8,9 @@ import '../bindings/sodium.js.dart';
 import 'helpers/kdf_hkdf/kdf_hkdf_extract_consumer_js.dart';
 import 'kdf_hkdf_base_js.dart';
 
-/// @nodoc
 @internal
-class KdfHkdfSha512JS extends KdfHkdfBaseJS<KdfHkdfSha512State> {
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class KdfHkdfSha512JS(super.sodium) extends KdfHkdfBaseJS<KdfHkdfSha512State> {
   @override
   int get keyBytes => sodium.crypto_kdf_hkdf_sha512_KEYBYTES;
 

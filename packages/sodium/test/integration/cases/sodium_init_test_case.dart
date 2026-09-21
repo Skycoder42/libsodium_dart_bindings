@@ -1,11 +1,6 @@
 import '../test_case.dart';
-import '../test_runner.dart';
 
-class SodiumInitTestCase extends TestCase {
-  final TestRunner runner;
-
-  new(this.runner) : super(runner);
-
+class SodiumInitTestCase(super.runner) extends TestCase {
   @override
   String get name => 'init';
 
@@ -21,8 +16,9 @@ class SodiumInitTestCase extends TestCase {
         final sodium = await runner.loadSodium();
 
         // Ensure this new reference to sodium actually works
-        // ignore: unused_result
-        sodium.secureRandom(1);
+        final key = sodium.secureRandom(1);
+        expect(key.length, 1);
+        key.dispose();
       }
     });
   }

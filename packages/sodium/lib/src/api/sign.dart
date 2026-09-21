@@ -11,10 +11,8 @@ import 'secure_key.dart';
 /// stream of data.
 ///
 /// See [Sign.createConsumer] for more details.
-abstract class SignatureConsumer
+abstract interface class const SignatureConsumer._()
     implements StreamConsumer<Uint8List>, Sink<Uint8List> {
-  const new _(); // coverage:ignore-line
-
   /// A future that resolves to the signature of the data.
   ///
   /// This is the same future as returned by [close]. It will be resolved as
@@ -39,10 +37,8 @@ abstract class SignatureConsumer
 /// of data.
 ///
 /// See [Sign.createVerifyConsumer] for more details.
-abstract class VerificationConsumer
+abstract interface class const VerificationConsumer._()
     implements StreamConsumer<Uint8List>, Sink<Uint8List> {
-  const new _(); // coverage:ignore-line
-
   /// A future that resolves to the signature validation of the data.
   ///
   /// This is the same future as returned by [close]. It will be resolved as
@@ -68,9 +64,7 @@ abstract class VerificationConsumer
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures.
 /// Please refer to that documentation for more details about these APIs.
-abstract class Sign {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const Sign._() {
   /// Provides crypto_sign_PUBLICKEYBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures#constants
@@ -195,26 +189,20 @@ abstract class Sign {
   });
 }
 
-/// @nodoc
 @internal
 mixin SignValidations implements Sign {
-  /// @nodoc
   void validatePublicKey(Uint8List publicKey) =>
       Validations.checkIsSame(publicKey.length, publicKeyBytes, 'publicKey');
 
-  /// @nodoc
   void validateSecretKey(SecureKey secretKey) =>
       Validations.checkIsSame(secretKey.length, secretKeyBytes, 'secretKey');
 
-  /// @nodoc
   void validateSignature(Uint8List signature) =>
       Validations.checkIsSame(signature.length, bytes, 'signature');
 
-  /// @nodoc
   void validateSignedMessage(Uint8List signedMessage) =>
       Validations.checkAtLeast(signedMessage.length, bytes, 'signature');
 
-  /// @nodoc
   void validateSeed(SecureKey seed) =>
       Validations.checkIsSame(seed.length, seedBytes, 'seed');
 

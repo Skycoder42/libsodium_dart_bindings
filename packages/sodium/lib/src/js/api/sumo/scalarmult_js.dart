@@ -9,15 +9,11 @@ import '../../bindings/js_error.dart';
 import '../../bindings/sodium.js.dart';
 import '../secure_key_js.dart';
 
-/// @nodoc
 @internal
-class ScalarmultJS with ScalarmultValidations implements Scalarmult {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class ScalarmultJS(final LibSodiumJS sodium)
+    with ScalarmultValidations
+    implements Scalarmult {
   @override
   int get bytes => sodium.crypto_scalarmult_BYTES;
 

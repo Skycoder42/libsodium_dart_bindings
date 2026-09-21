@@ -28,11 +28,13 @@ import '../../../secure_key_fake.dart';
 import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI;
+class MockSodiumFFI() extends Mock implements LibSodiumFFI;
 
-class FakeTransferrableSecureKey extends Fake implements TransferrableSecureKey;
+class FakeTransferrableSecureKey()
+    extends Fake
+    implements TransferrableSecureKey;
 
-class FakeTransferrableKeyPair extends Fake implements TransferrableKeyPair;
+class FakeTransferrableKeyPair() extends Fake implements TransferrableKeyPair;
 
 void main() {
   final mockSodium = MockSodiumFFI();

@@ -13,15 +13,11 @@ import '../bindings/sodium.js.dart';
 import 'ip_address_js.dart';
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-class IpcryptPfxJS with IpcryptPfxValidations implements IpcryptPfx {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class IpcryptPfxJS(final LibSodiumJS sodium)
+    with IpcryptPfxValidations
+    implements IpcryptPfx {
   @override
   int get keyBytes => sodium.crypto_ipcrypt_PFX_KEYBYTES;
 

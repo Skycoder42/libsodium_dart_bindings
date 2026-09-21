@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 import '../../../../../secure_key_fake.dart';
 import '../../../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI;
+class MockSodiumFFI() extends Mock implements LibSodiumFFI;
 
 void main() {
   const outLen = 42;

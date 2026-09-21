@@ -15,7 +15,7 @@ import 'sodium.js.fake.dart'
     as sodium_js;
 import 'test_runner.dart';
 
-class JsTestRunner extends TestRunner with JsLoaderMixin {
+class JsTestRunner() extends TestRunner with JsLoaderMixin {
   @override
   String get sodiumJsSrc => sodium_js.sodiumJsSrc;
 

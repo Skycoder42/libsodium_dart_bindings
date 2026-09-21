@@ -35,7 +35,7 @@ typedef SecureCallbackFn<T> = T Function(Uint8List data);
 /// convenience.
 ///
 /// See https://libsodium.gitbook.io/doc/memory_management
-abstract class SecureKey {
+abstract interface class SecureKey {
   /// Allocates a new [SecureKey] of [length] bytes.
   ///
   /// Convenience factory constructor that redirects to [Sodium.secureAlloc] and
@@ -111,7 +111,6 @@ abstract class SecureKey {
   void dispose();
 }
 
-/// @nodoc
 @internal
 mixin SecureKeyEquality implements SecureKey {
   @override

@@ -10,12 +10,12 @@ import '../../bindings/secure_key_native.dart';
 import '../../bindings/sodium_scope.dart';
 import '../sign_ffi.dart';
 
-/// @nodoc
 @internal
-class SignSumoFFI extends SignFFI with SignSumoValidations implements SignSumo {
-  /// @nodoc
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class SignSumoFFI(super.sodium)
+    extends SignFFI
+    with SignSumoValidations
+    implements SignSumo {
   @override
   SecureKey skToSeed(SecureKey secretKey) {
     validateSecretKey(secretKey);

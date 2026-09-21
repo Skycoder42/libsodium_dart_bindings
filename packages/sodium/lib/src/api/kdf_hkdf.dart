@@ -10,7 +10,7 @@ import 'secure_key.dart';
 /// stream of input keying material.
 ///
 /// See [KdfHkdf.createExtractConsumer] for more details.
-abstract interface class KdfHkdfExtractConsumer
+abstract interface class KdfHkdfExtractConsumer._()
     implements StreamConsumer<Uint8List>, Sink<Uint8List> {
   /// A future that resolves to the extracted master key.
   ///
@@ -42,7 +42,10 @@ abstract interface class KdfHkdfExtractConsumer
 /// This interface represents a single HKDF variant (either HKDF-SHA-256 or
 /// HKDF-SHA-512). The operations are identical for both variants; only the
 /// underlying hash function and the reported constant sizes differ.
-abstract interface class KdfHkdf {
+abstract interface class KdfHkdf() {
+  /// @nodoc
+  this;
+
   /// Provides crypto_kdf_hkdf_shaXXX_KEYBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/key_derivation/hkdf#constants
@@ -118,14 +121,11 @@ abstract interface class KdfHkdf {
   });
 }
 
-/// @nodoc
 @internal
 mixin KdfHkdfValidations implements KdfHkdf {
-  /// @nodoc
   void validateMasterKey(SecureKey masterKey) =>
       Validations.checkIsSame(masterKey.length, keyBytes, 'masterKey');
 
-  /// @nodoc
   void validateOutLen(int outLen) =>
       Validations.checkInRange(outLen, bytesMin, bytesMax, 'outLen');
 

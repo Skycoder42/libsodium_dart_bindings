@@ -13,18 +13,17 @@ import '../bindings/libsodium.ffi.wrapper.dart';
 import '../bindings/sodium_pointer.dart';
 import '../bindings/sodium_scope.dart';
 
-/// @nodoc
 @internal
-class IpAddressFFI with IpAddressEquality implements IpAddress {
+class IpAddressFFI.fromPointer(
+  final LibSodiumFFI sodium,
+  final SodiumPointer<UnsignedChar> rawBytes,
+) with IpAddressEquality implements IpAddress {
   static const _ipMaxLen = 46;
 
-  /// @nodoc
-  final LibSodiumFFI sodium;
+  this {
+    rawBytes.memoryProtection = .readOnly;
+  }
 
-  @internal
-  final SodiumPointer<UnsignedChar> rawBytes;
-
-  /// @nodoc
   factory(LibSodiumFFI sodium, InternetAddress addr) => switch (addr.type) {
     .IPv4 => .parse(sodium, addr.address),
     .IPv6 => .fromRawBytes(sodium, addr.rawAddress),
@@ -35,7 +34,6 @@ class IpAddressFFI with IpAddressEquality implements IpAddress {
     ),
   };
 
-  /// @nodoc
   factory parse(LibSodiumFFI sodium, String address) => sodiumScope(sodium, (
     scope,
   ) {
@@ -46,7 +44,6 @@ class IpAddressFFI with IpAddressEquality implements IpAddress {
     return .fromPointer(sodium, scope.takePointer(binPtr));
   });
 
-  /// @nodoc
   factory fromRawBytes(LibSodiumFFI sodium, Uint8List bytes) {
     if (bytes.length != 16) {
       throw RangeError.value(bytes.length, 'bytes', 'must be 16 bytes');
@@ -55,11 +52,6 @@ class IpAddressFFI with IpAddressEquality implements IpAddress {
       sodium,
       bytes.toSodiumPointer(sodium, memoryProtection: .readOnly),
     );
-  }
-
-  /// @nodoc
-  new fromPointer(this.sodium, this.rawBytes) {
-    rawBytes.memoryProtection = .readOnly;
   }
 
   @override

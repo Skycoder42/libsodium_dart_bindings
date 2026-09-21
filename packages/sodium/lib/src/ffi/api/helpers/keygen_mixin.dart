@@ -9,10 +9,8 @@ import '../../bindings/libsodium.ffi.wrapper.dart';
 import '../../bindings/secure_key_native.dart';
 import '../../bindings/sodium_scope.dart';
 
-/// @nodoc
 @internal
 mixin KeygenMixin {
-  /// @nodoc
   @protected
   SecureKey keygenImpl({
     required LibSodiumFFI sodium,
@@ -27,7 +25,6 @@ mixin KeygenMixin {
     return scope.takeSecureKey(key);
   });
 
-  /// @nodoc
   @protected
   KeyPair keyPairImpl({
     required LibSodiumFFI sodium,
@@ -51,7 +48,6 @@ mixin KeygenMixin {
     );
   });
 
-  /// @nodoc
   @protected
   KeyPair seedKeyPairImpl({
     required LibSodiumFFI sodium,

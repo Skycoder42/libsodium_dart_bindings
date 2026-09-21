@@ -18,13 +18,10 @@ typedef XofFn = int Function(
 );
 
 @internal
-abstract class XofBaseFFI<T extends NativeType>
+// ignore: public_member_api_docs false positive
+abstract class XofBaseFFI<T extends NativeType>(final LibSodiumFFI sodium)
     with XofValidations
     implements Xof {
-  final LibSodiumFFI sodium;
-
-  new(this.sodium);
-
   @protected
   XofFn get internalXof;
 

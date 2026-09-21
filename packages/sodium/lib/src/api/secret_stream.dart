@@ -11,7 +11,7 @@ part 'secret_stream.freezed.dart';
 /// Enum type for the different tags that can be passed to sent messages.
 ///
 /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#constants
-enum SecretStreamMessageTag {
+enum SecretStreamMessageTag() {
   /// Provides crypto_secretstream_xchacha20poly1305_TAG_MESSAGE.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#constants
@@ -39,9 +39,9 @@ enum SecretStreamMessageTag {
 /// [SecretStreamMessageTag.finalPush] has been decrypted, this exception gets
 /// thrown, unless `requireFinalized` has been set to false when the stream
 /// was created.
-class StreamClosedEarlyException implements Exception {
+class StreamClosedEarlyException() implements Exception {
   /// Default constructor
-  new();
+  this;
 
   // coverage:ignore-start
   @override
@@ -55,15 +55,15 @@ class StreamClosedEarlyException implements Exception {
 ///
 /// If the first message that is decrypted by a decryption (pull) stream does
 /// not have the correct amout of bytes, this exception will be thrown.
-class InvalidHeaderException implements Exception {
+class InvalidHeaderException(
   /// The number of bytes the header should have had
-  final int expectedBytes;
+  final int expectedBytes,
 
   /// The number of bytes the header actually had
-  final int actualBytes;
-
+  final int actualBytes,
+) implements Exception {
   /// Default constructor
-  new(this.expectedBytes, this.actualBytes);
+  this;
 
   // coverage:ignore-start
   @override
@@ -113,7 +113,10 @@ sealed class SecretStreamCipherMessage with _$SecretStreamCipherMessage {
 ///
 /// You can trigger an explicit rekey of a pull/push stream with this stream.
 /// Use [rekey] to do so.
-abstract class SecretExStream<T> extends Stream<T> {
+abstract class SecretExStream<T>() extends Stream<T> {
+  /// @nodoc
+  this;
+
   /// Triggers a rekey of the underlying stream en/decryption.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#rekeying
@@ -126,10 +129,8 @@ abstract class SecretExStream<T> extends Stream<T> {
 /// be used to rekey the push/pull stream
 ///
 /// See [SecretExStream]
-abstract class SecretExStreamTransformer<TIn, TOut>
+abstract interface class const SecretExStreamTransformer<TIn, TOut>._()
     implements StreamTransformer<TIn, TOut> {
-  const new _(); // coverage:ignore-line
-
   @override
   SecretExStream<TOut> bind(Stream<TIn> stream);
 }
@@ -139,9 +140,7 @@ abstract class SecretExStreamTransformer<TIn, TOut>
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream.
 /// Please refer to that documentation for more details about these APIs.
-abstract class SecretStream {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const SecretStream._() {
   /// Provides crypto_secretstream_xchacha20poly1305_ABYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretstream#constants
@@ -316,10 +315,8 @@ abstract class SecretStream {
   createPullEx(SecureKey key, {bool requireFinalized = true});
 }
 
-/// @nodoc
 @internal
 mixin SecretStreamValidations implements SecretStream {
-  /// @nodoc
   void validateKey(SecureKey key) =>
       Validations.checkIsSame(key.length, keyBytes, 'key');
 }

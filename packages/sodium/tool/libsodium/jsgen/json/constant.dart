@@ -1,12 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class Constant {
-  final String name;
-  final String type;
-
-  const new({required this.name, required this.type});
-
+class const Constant({required final String name, required final String type}) {
   new fromJson(Map<String, dynamic> json)
     : this(name: json['name'] as String, type: json['type'] as String);
 

@@ -12,23 +12,19 @@ import '../../../bindings/secure_key_native.dart';
 import '../../../bindings/sodium_pointer.dart';
 import '../../../bindings/sodium_scope.dart';
 
-/// @nodoc
 @internal
-class GenericHashConsumerFFI implements GenericHashConsumer {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  final int outLen;
-
+class GenericHashConsumerFFI({
+  required final LibSodiumFFI sodium,
+  required final int outLen,
+  SecureKey? key,
+}) implements GenericHashConsumer {
   final _hashCompleter = Completer<Uint8List>();
   late final SodiumPointer<Uint8> _state;
 
   @override
   Future<Uint8List> get hash => _hashCompleter.future;
 
-  /// @nodoc
-  new({required this.sodium, required this.outLen, SecureKey? key}) {
+  this {
     _state = SodiumPointer.alloc(
       sodium,
       count: sodium.crypto_generichash_statebytes(),

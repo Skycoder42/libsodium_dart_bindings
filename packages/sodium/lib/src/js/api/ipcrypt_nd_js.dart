@@ -4,12 +4,9 @@ import 'package:meta/meta.dart';
 
 import 'ipcrypt_nd_base_js.dart';
 
-/// @nodoc
 @internal
-class IpcryptNdJS extends IpcryptNdBaseJS {
-  /// @nodoc
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class IpcryptNdJS(super.sodium) extends IpcryptNdBaseJS {
   @override
   int get keyBytes => sodium.crypto_ipcrypt_ND_KEYBYTES;
 

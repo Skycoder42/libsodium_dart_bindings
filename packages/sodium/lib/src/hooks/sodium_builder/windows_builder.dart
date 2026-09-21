@@ -9,7 +9,8 @@ import 'package:path/path.dart' as path;
 import 'sodium_builder.dart';
 
 @internal
-final class WindowsBuilder extends SodiumBuilder {
+// ignore: public_member_api_docs false positive
+final class WindowsBuilder(super.config, super.logger) extends SodiumBuilder {
   static const _targetOutputFileName = 'target.txt';
   static const _vsVersionDetectionScript = '''
 IF "%VSCMD_VER%"=="" (
@@ -26,8 +27,6 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
 ''';
 
   late final DeveloperCommandPrompt _commandPrompt;
-
-  new(super.config, super.logger);
 
   @override
   bool get allowSpaceInPath => true;
@@ -305,11 +304,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
 }
 
 @immutable
-class _VsWhereResult {
-  final String installationPath;
-
-  const new({required this.installationPath});
-
+class const _VsWhereResult({required final String installationPath}) {
   factory fromJson(Map<String, dynamic> json) {
     if (json case {'installationPath': final String installationPath}) {
       return _VsWhereResult(installationPath: installationPath);

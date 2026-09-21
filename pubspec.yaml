@@ -11,4 +11,4 @@ workspace:
 
 dev_dependencies:
   dart_pre_commit: ^6.1.4
-  dart_test_tools: ^7.3.0
+  dart_test_tools: ^7.3.3

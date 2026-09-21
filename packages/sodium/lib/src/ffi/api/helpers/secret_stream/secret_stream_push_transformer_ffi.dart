@@ -13,16 +13,10 @@ import '../../../bindings/sodium_pointer.dart';
 import '../../../bindings/sodium_scope.dart';
 import 'secret_stream_message_tag_ffix.dart';
 
-/// @nodoc
 @internal
-class SecretStreamPushTransformerSinkFFI
+// ignore: public_member_api_docs false positive
+class SecretStreamPushTransformerSinkFFI(final LibSodiumFFI sodium)
     extends SecretStreamPushTransformerSink<SodiumPointer<UnsignedChar>> {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
   @override
   @protected
   @visibleForTesting
@@ -118,16 +112,10 @@ class SecretStreamPushTransformerSinkFFI
       cryptoState.dispose();
 }
 
-/// @nodoc
 @internal
-class SecretStreamPushTransformerFFI
+// ignore: public_member_api_docs false positive
+class const SecretStreamPushTransformerFFI(final LibSodiumFFI sodium, super.key)
     extends SecretStreamPushTransformer<SodiumPointer<UnsignedChar>> {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  const new(this.sodium, SecureKey key) : super(key);
-
   @override
   SecretStreamPushTransformerSink<SodiumPointer<UnsignedChar>> createSink() =>
       SecretStreamPushTransformerSinkFFI(sodium);

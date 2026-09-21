@@ -463,7 +463,11 @@ extension TypedNumberListX on List<num> {
   }
 }
 
-enum _Signage { signed, unsigned, float }
+enum _Signage() {
+  signed,
+  unsigned,
+  float,
+}
 
 extension _StaticallyTypedSizeOf<T extends NativeType> on Pointer<T> {
   static int staticSizeOf<T>() {

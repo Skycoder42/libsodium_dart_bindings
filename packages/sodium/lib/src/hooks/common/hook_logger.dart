@@ -3,12 +3,8 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 
 @internal
-class HookLogger {
-  final String hook;
-  final bool logDebug;
-
-  new(this.hook, {this.logDebug = false});
-
+// ignore: public_member_api_docs false positive
+class HookLogger(final String hook, {final bool logDebug = false}) {
   void warning(String message) => _logTo(stderr, 'WARNING', message);
 
   void info(String message) => _logTo(stdout, 'INFO', message);

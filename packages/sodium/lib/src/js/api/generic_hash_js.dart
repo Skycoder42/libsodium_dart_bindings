@@ -13,15 +13,11 @@ import '../bindings/sodium.js.dart';
 import 'helpers/generic_hash/generic_hash_consumer_js.dart';
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-class GenericHashJS with GenericHashValidations implements GenericHash {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class GenericHashJS(final LibSodiumJS sodium)
+    with GenericHashValidations
+    implements GenericHash {
   @override
   int get bytes => sodium.crypto_generichash_BYTES;
 

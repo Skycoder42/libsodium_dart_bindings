@@ -5,9 +5,9 @@ import 'helpers/xof/xof_consumer_ffi.dart';
 import 'xof_base_ffi.dart';
 
 @internal
-class XofShake256FFI extends XofBaseFFI<crypto_xof_shake256_state> {
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class XofShake256FFI(super.sodium)
+    extends XofBaseFFI<crypto_xof_shake256_state> {
   @override
   int get blockBytes => sodium.crypto_xof_shake256_blockbytes();
 

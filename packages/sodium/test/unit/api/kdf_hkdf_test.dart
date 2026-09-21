@@ -10,9 +10,11 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockKdfHkdf extends Mock with KdfHkdfValidations implements KdfHkdf;
+class MockKdfHkdf() extends Mock with KdfHkdfValidations implements KdfHkdf;
 
-class MockKdfHkdfExtractConsumer extends Mock implements KdfHkdfExtractConsumer;
+class MockKdfHkdfExtractConsumer()
+    extends Mock
+    implements KdfHkdfExtractConsumer;
 
 void main() {
   setUpAll(() {

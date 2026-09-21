@@ -17,7 +17,7 @@ import '../../../../../secure_key_fake.dart';
 import '../../../sodium_js_mock.dart';
 import 'sign_consumer_js_mixin_test_helpers.dart';
 
-class MockSecureKey extends Mock implements SecureKey;
+class MockSecureKey() extends Mock implements SecureKey;
 
 void main() {
   final mockSodium = MockLibSodiumJS();

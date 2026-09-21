@@ -20,9 +20,9 @@ import 'package:test/test.dart';
 import '../../../test_data.dart';
 import '../pointer_test_helpers.dart';
 
-class MockSodiumFFI extends Mock implements LibSodiumFFI;
+class MockSodiumFFI() extends Mock implements LibSodiumFFI;
 
-class MockSodiumFinalizer extends Mock implements SodiumFinalizer;
+class MockSodiumFinalizer() extends Mock implements SodiumFinalizer;
 
 void main() {
   final mockSodium = MockSodiumFFI();

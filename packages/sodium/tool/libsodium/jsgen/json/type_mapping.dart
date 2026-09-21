@@ -7,11 +7,7 @@ import '../types.dart';
 import 'type_info.dart';
 
 @immutable
-class TypeMapping {
-  final Map<String, TypeInfo> _mappings;
-
-  const new(this._mappings);
-
+class const TypeMapping(final Map<String, TypeInfo> _mappings) {
   TypeReference operator [](String type) {
     final mappedType = _mappings[type];
     if (mappedType == null) {

@@ -9,12 +9,12 @@ import '../../bindings/js_error.dart';
 import '../secure_key_js.dart';
 import '../sign_js.dart';
 
-/// @nodoc
 @internal
-class SignSumoJS extends SignJS with SignSumoValidations implements SignSumo {
-  /// @nodoc
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class SignSumoJS(super.sodium)
+    extends SignJS
+    with SignSumoValidations
+    implements SignSumo {
   @override
   SecureKey skToSeed(SecureKey secretKey) {
     validateSecretKey(secretKey);

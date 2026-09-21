@@ -34,13 +34,15 @@ typedef XofSqueezeFn<T extends NativeType> = int Function(
 );
 
 @internal
-class XofConsumerFFI<T extends NativeType>
-    with XofConsumerValidations
-    implements XofConsumer {
-  final LibSodiumFFI sodium;
-  final XofUpdateFn<T> xofUpdate;
-  final XofSqueezeFn<T> xofSqueeze;
-
+class XofConsumerFFI<T extends NativeType>._({
+  required final LibSodiumFFI sodium,
+  required int stateBytes,
+  required final XofUpdateFn<T> xofUpdate,
+  required final XofSqueezeFn<T> xofSqueeze,
+  XofInitFn<T>? xofInit,
+  XofInitWithDomainFn<T>? xofInitWithDomain,
+  int? domain,
+}) with XofConsumerValidations implements XofConsumer {
   late final SodiumPointer<UnsignedChar> _state;
 
   var _closed = false;
@@ -76,15 +78,7 @@ class XofConsumerFFI<T extends NativeType>
     domain: domain,
   );
 
-  new _({
-    required this.sodium,
-    required int stateBytes,
-    required this.xofUpdate,
-    required this.xofSqueeze,
-    XofInitFn<T>? xofInit,
-    XofInitWithDomainFn<T>? xofInitWithDomain,
-    int? domain,
-  }) {
+  this {
     _state = SodiumPointer.alloc(sodium, count: stateBytes, zeroMemory: true);
 
     try {

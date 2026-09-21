@@ -13,18 +13,10 @@ import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart' hide KeyPair;
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-class PrecalculatedBoxJS implements PrecalculatedBox {
-  /// @nodoc
-  final BoxJS box;
-
-  /// @nodoc
-  final SecureKeyJS sharedKey;
-
-  /// @nodoc
-  new(this.box, this.sharedKey);
-
+// ignore: public_member_api_docs false positive
+class PrecalculatedBoxJS(final BoxJS box, final SecureKeyJS sharedKey)
+    implements PrecalculatedBox {
   @override
   Uint8List easy({required Uint8List message, required Uint8List nonce}) {
     box.validateNonce(nonce);
@@ -90,15 +82,9 @@ class PrecalculatedBoxJS implements PrecalculatedBox {
   void dispose() => sharedKey.dispose();
 }
 
-/// @nodoc
 @internal
-class BoxJS with BoxValidations implements Box {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class BoxJS(final LibSodiumJS sodium) with BoxValidations implements Box {
   @override
   int get publicKeyBytes => sodium.crypto_box_PUBLICKEYBYTES;
 

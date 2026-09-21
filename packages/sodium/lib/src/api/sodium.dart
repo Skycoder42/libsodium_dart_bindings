@@ -29,9 +29,7 @@ typedef SodiumIsolateCallback<T> = FutureOr<T> Function(
 );
 
 /// A meta class that provides access to all toplevel libsodium API groups.
-abstract class Sodium {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const Sodium._() {
   /// Returns the version of the underlying libsodium implementation.
   SodiumVersion get version;
 

@@ -11,15 +11,11 @@ import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
-/// @nodoc
 @internal
-class AuthFFI with AuthValidations, KeygenMixin implements Auth {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class AuthFFI(final LibSodiumFFI sodium)
+    with AuthValidations, KeygenMixin
+    implements Auth {
   @override
   int get bytes => sodium.crypto_auth_bytes();
 

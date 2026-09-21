@@ -9,23 +9,15 @@ import 'automake_builder.dart';
 
 @internal
 @immutable
-class DarwinConfig {
-  final String arch;
-  final String? build;
-  final String host;
-  final Uri platform;
-  final Uri sdk;
-  final String versionParameter;
-
-  const new({
-    required this.arch,
-    this.build,
-    required this.host,
-    required this.platform,
-    required this.sdk,
-    required this.versionParameter,
-  });
-
+// ignore: public_member_api_docs false positive
+class const DarwinConfig({
+  required final String arch,
+  final String? build,
+  required final String host,
+  required final Uri platform,
+  required final Uri sdk,
+  required final String versionParameter,
+}) {
   Iterable<Object?> get _hashValues sync* {
     yield arch;
     yield build;
@@ -37,10 +29,10 @@ class DarwinConfig {
 }
 
 @internal
-abstract base class DarwinBuilder extends AutomakeBuilder {
+// ignore: public_member_api_docs false positive
+abstract base class DarwinBuilder(super.config, super.logger)
+    extends AutomakeBuilder {
   late final DarwinConfig _platformConfig;
-
-  new(super.config, super.logger);
 
   @override
   @nonVirtual

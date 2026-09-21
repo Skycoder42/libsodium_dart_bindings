@@ -32,13 +32,15 @@ typedef HkdfExtractFinalFn<T extends NativeType> = int Function(
 );
 
 @internal
-class KdfHkdfExtractConsumerFFI<T extends NativeType>
-    implements KdfHkdfExtractConsumer {
-  final LibSodiumFFI sodium;
-  final int keyBytes;
-  final HkdfExtractUpdateFn<T> extractUpdate;
-  final HkdfExtractFinalFn<T> extractFinal;
-
+class KdfHkdfExtractConsumerFFI<T extends NativeType>({
+  required final LibSodiumFFI sodium,
+  required final int keyBytes,
+  required int stateBytes,
+  required HkdfExtractInitFn<T> extractInit,
+  required final HkdfExtractUpdateFn<T> extractUpdate,
+  required final HkdfExtractFinalFn<T> extractFinal,
+  Uint8List? salt,
+}) implements KdfHkdfExtractConsumer {
   final _masterKeyCompleter = Completer<SecureKey>();
 
   late final SodiumPointer<UnsignedChar> _state;
@@ -46,15 +48,7 @@ class KdfHkdfExtractConsumerFFI<T extends NativeType>
   @override
   Future<SecureKey> get masterKey => _masterKeyCompleter.future;
 
-  new({
-    required this.sodium,
-    required this.keyBytes,
-    required int stateBytes,
-    required HkdfExtractInitFn<T> extractInit,
-    required this.extractUpdate,
-    required this.extractFinal,
-    Uint8List? salt,
-  }) {
+  this {
     _state = SodiumPointer.alloc(sodium, count: stateBytes, zeroMemory: true);
 
     sodiumScope(sodium, (scope) {

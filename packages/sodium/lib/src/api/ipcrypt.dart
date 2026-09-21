@@ -11,7 +11,7 @@ import 'secure_key.dart';
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption
 /// Please refer to that documentation for more details about these APIs.
-abstract interface class Ipcrypt {
+abstract interface class Ipcrypt._() {
   /// Provides crypto_ipcrypt_BYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption#constants
@@ -47,14 +47,11 @@ abstract interface class Ipcrypt {
   IpAddress decrypt({required Uint8List cipherText, required SecureKey key});
 }
 
-/// @nodoc
 @internal
 mixin IpcryptValidations implements Ipcrypt {
-  /// @nodoc
   void validateInput(Uint8List input) =>
       Validations.checkIsSame(input.length, bytes, 'input');
 
-  /// @nodoc
   void validateKey(SecureKey key) =>
       Validations.checkIsSame(key.length, keyBytes, 'key');
 }
@@ -65,7 +62,10 @@ mixin IpcryptValidations implements Ipcrypt {
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption
 /// Please refer to that documentation for more details about these APIs.
-abstract interface class IpcryptNd {
+abstract interface class IpcryptNd() {
+  /// @nodoc
+  this;
+
   /// Provides crypto_ipcrypt_nd_KEYBYTES / crypto_ipcrypt_ndx_KEYBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption#constants
@@ -120,22 +120,17 @@ abstract interface class IpcryptNd {
   IpAddress decrypt({required Uint8List cipherText, required SecureKey key});
 }
 
-/// @nodoc
 @internal
 mixin IpcryptNdValidations implements IpcryptNd {
-  /// @nodoc
   void validateInput(Uint8List input) =>
       Validations.checkIsSame(input.length, inputBytes, 'input');
 
-  /// @nodoc
   void validateTweak(Uint8List tweak) =>
       Validations.checkIsSame(tweak.length, tweakBytes, 'tweak');
 
-  /// @nodoc
   void validateKey(SecureKey key) =>
       Validations.checkIsSame(key.length, keyBytes, 'key');
 
-  /// @nodoc
   void validateCipherText(Uint8List cipherText) =>
       Validations.checkIsSame(cipherText.length, outputBytes, 'cipherText');
 }
@@ -146,7 +141,10 @@ mixin IpcryptNdValidations implements IpcryptNd {
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption
 /// Please refer to that documentation for more details about these APIs.
-abstract interface class IpcryptPfx {
+abstract interface class IpcryptPfx() {
+  /// @nodoc
+  this;
+
   /// Provides crypto_ipcrypt_pfx_KEYBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/ip_address_encryption#constants
@@ -173,14 +171,11 @@ abstract interface class IpcryptPfx {
   IpAddress decrypt({required Uint8List cipherText, required SecureKey key});
 }
 
-/// @nodoc
 @internal
 mixin IpcryptPfxValidations implements IpcryptPfx {
-  /// @nodoc
   void validateInput(Uint8List input) =>
       Validations.checkIsSame(input.length, bytes, 'input');
 
-  /// @nodoc
   void validateKey(SecureKey key) =>
       Validations.checkIsSame(key.length, keyBytes, 'key');
 }

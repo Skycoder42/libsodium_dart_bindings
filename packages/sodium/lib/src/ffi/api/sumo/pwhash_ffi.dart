@@ -11,15 +11,11 @@ import '../../bindings/libsodium.ffi.wrapper.dart';
 import '../../bindings/sodium_pointer.dart';
 import '../../bindings/sodium_scope.dart';
 
-/// @nodoc
 @internal
-class PwhashFFI with PwHashValidations implements Pwhash {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class PwhashFFI(final LibSodiumFFI sodium)
+    with PwHashValidations
+    implements Pwhash {
   @override
   int get bytesMin => sodium.crypto_pwhash_bytes_min();
   @override

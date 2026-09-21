@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 import '../../test_data.dart';
 
-class MockSodium extends Mock with SodiumValidations implements Sodium;
+class MockSodium() extends Mock with SodiumValidations implements Sodium;
 
 void main() {
   group('SodiumValidations', () {

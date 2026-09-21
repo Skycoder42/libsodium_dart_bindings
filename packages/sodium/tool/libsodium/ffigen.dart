@@ -43,12 +43,12 @@ Future<Uri> _ffigen() async {
 
   final packageRoot = Platform.script.resolve('../../');
   final outUri = packageRoot.resolve('lib/src/ffi/bindings/libsodium.ffi.dart');
-  FfiGenerator(
+  await FfiGenerator(
     output: Output(
-      dartFile: outUri,
+      dart: DartOutput(path: outUri),
       style: const NativeExternalBindings(assetId: 'package:sodium/libsodium'),
     ),
-    headers: Headers(
+    input: Input(
       entryPoints: [locationUri.resolve('sodium.h')],
       compilerOptions: [
         if (Platform.isLinux) '-I/usr/lib/clang/22/include/',
@@ -56,13 +56,18 @@ Future<Uri> _ffigen() async {
       ],
       ignoreSourceErrors: true,
     ),
-    macros: const Macros(include: _matchesLibsodium),
-    globals: const Globals(include: _matchesLibsodium),
-    enums: const Enums(include: _matchesLibsodium),
-    structs: const Structs(include: _matchesLibsodium),
-    unions: const Unions(include: _matchesLibsodium),
-    functions: const Functions(include: _matchesLibsodium),
-    typedefs: const Typedefs(include: _matchesLibsodium),
+    visitors: [
+      Visitor(
+        macroConstant: (n) => n.isIncluded = _matchesLibsodium(n),
+        global: (n) => n.isIncluded = _matchesLibsodium(n),
+        enumClass: (n) => n.isIncluded = _matchesLibsodium(n),
+        struct: (n) => n.isIncluded = _matchesLibsodium(n),
+        union: (n) => n.isIncluded = _matchesLibsodium(n),
+        func: (n) => n.isIncluded = _matchesLibsodium(n),
+        typealias: (n) =>
+            n.isIncluded = _matchesLibsodium(n) ? .ifUsed : .never,
+      ),
+    ],
   ).generate();
 
   // add missing ignore
@@ -77,8 +82,8 @@ Future<Uri> _ffigen() async {
   return outUri;
 }
 
-bool _matchesLibsodium(Declaration declaration) {
-  final lowerName = declaration.originalName.toLowerCase();
+bool _matchesLibsodium(NamedNode node) {
+  final lowerName = node.originalName.toLowerCase();
   return lowerName.startsWith('sodium') ||
       lowerName.startsWith('crypto') ||
       lowerName.startsWith('randombytes');
@@ -119,6 +124,8 @@ cb.Library _buildWrapperLibrary(LibraryElement library) => cb.Library(
     ..ignoreForFile.add('prefer_relative_imports')
     ..ignoreForFile.add('public_member_api_docs')
     ..ignoreForFile.add('non_constant_identifier_names')
+    ..ignoreForFile.add('unnecessary_type_name_in_constructor')
+    ..ignoreForFile.add('use_primary_constructors')
     ..body.add(_buildWrapperClass(library)),
 );
 

@@ -11,15 +11,11 @@ import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-class ShortHashJS with ShortHashValidations implements ShortHash {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class ShortHashJS(final LibSodiumJS sodium)
+    with ShortHashValidations
+    implements ShortHash {
   @override
   int get bytes => sodium.crypto_shorthash_BYTES;
 

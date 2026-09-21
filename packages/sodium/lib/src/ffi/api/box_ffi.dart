@@ -14,18 +14,10 @@ import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 import 'secure_key_ffi.dart';
 
-/// @nodoc
 @internal
-class PrecalculatedBoxFFI implements PrecalculatedBox {
-  /// @nodoc
-  final BoxFFI box;
-
-  /// @nodoc
-  final SecureKeyFFI sharedKey;
-
-  /// @nodoc
-  new(this.box, this.sharedKey);
-
+// ignore: public_member_api_docs false positive
+class PrecalculatedBoxFFI(final BoxFFI box, final SecureKeyFFI sharedKey)
+    implements PrecalculatedBox {
   @override
   Uint8List easy({required Uint8List message, required Uint8List nonce}) {
     box.validateNonce(nonce);
@@ -157,15 +149,11 @@ class PrecalculatedBoxFFI implements PrecalculatedBox {
   void dispose() => sharedKey.dispose();
 }
 
-/// @nodoc
 @internal
-class BoxFFI with BoxValidations, KeygenMixin implements Box {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class BoxFFI(final LibSodiumFFI sodium)
+    with BoxValidations, KeygenMixin
+    implements Box {
   @override
   int get publicKeyBytes => sodium.crypto_box_publickeybytes();
 

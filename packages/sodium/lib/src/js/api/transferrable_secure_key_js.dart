@@ -7,15 +7,11 @@ import '../../api/secure_key.dart';
 import '../../api/transferrable_secure_key.dart';
 
 @internal
-class TransferrableSecureKeyJS implements TransferrableSecureKey {
-  final SecureKey secureKey;
-
-  const new(this.secureKey);
-}
+// ignore: public_member_api_docs false positive
+class const TransferrableSecureKeyJS(final SecureKey secureKey)
+    implements TransferrableSecureKey;
 
 @internal
-class TransferrableKeyPairJS implements TransferrableKeyPair {
-  final KeyPair keyPair;
-
-  const new(this.keyPair);
-}
+// ignore: public_member_api_docs false positive
+class const TransferrableKeyPairJS(final KeyPair keyPair)
+    implements TransferrableKeyPair;

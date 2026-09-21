@@ -10,11 +10,12 @@ import 'package:test/test.dart';
 import '../../secure_key_fake.dart';
 import '../../test_validator.dart';
 
-class MockGenericHash extends Mock
+class MockGenericHash()
+    extends Mock
     with GenericHashValidations
     implements GenericHash;
 
-class MockGenericHashConsumer extends Mock implements GenericHashConsumer;
+class MockGenericHashConsumer() extends Mock implements GenericHashConsumer;
 
 void main() {
   setUpAll(() {

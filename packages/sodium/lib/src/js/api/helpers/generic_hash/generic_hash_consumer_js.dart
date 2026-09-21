@@ -10,23 +10,19 @@ import '../../../bindings/js_error.dart';
 import '../../../bindings/secure_key_nullable_x.dart';
 import '../../../bindings/sodium.js.dart';
 
-/// @nodoc
 @internal
-class GenericHashConsumerJS implements GenericHashConsumer {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  final int outLen;
-
+class GenericHashConsumerJS({
+  required final LibSodiumJS sodium,
+  required final int outLen,
+  SecureKey? key,
+}) implements GenericHashConsumer {
   final _hashCompleter = Completer<Uint8List>();
   late final GenerichashState _state;
 
   @override
   Future<Uint8List> get hash => _hashCompleter.future;
 
-  /// @nodoc
-  new({required this.sodium, required this.outLen, SecureKey? key}) {
+  this {
     _state = jsErrorWrap(
       () => key.runMaybeUnlockedSync(
         (keyData) => sodium.crypto_generichash_init(keyData?.toJS, outLen),

@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "installations": {
+    "claude": {
+      "package:dart_test_tools": {
+        "skills": [
+          {
+            "name": "dart-test-tools-cli-help",
+            "installedAt": "2026-09-16T05:48:59.409468Z",
+            "isInstalled": false,
+            "path": "skills/dart-test-tools-cli-help"
+          },
+          {
+            "name": "dart-test-tools-auto-update",
+            "installedAt": "2026-09-16T05:48:59.417025Z",
+            "contentHash": "/mv885OlIdvxxUvwoRQsBw==",
+            "path": "skills/dart-test-tools-auto-update"
+          }
+        ]
+      }
+    }
+  },
+  "suggestedRepos": [
+    "https://github.com/dart-lang/skills.git",
+    "https://github.com/flutter/agent-plugins.git"
+  ]
+}

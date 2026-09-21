@@ -16,15 +16,11 @@ import 'ipcrypt_ndx_js.dart';
 import 'ipcrypt_pfx_js.dart';
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-class IpcryptJS with IpcryptValidations implements Ipcrypt {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class IpcryptJS(final LibSodiumJS sodium)
+    with IpcryptValidations
+    implements Ipcrypt {
   @override
   int get bytes => sodium.crypto_ipcrypt_BYTES;
 

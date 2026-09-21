@@ -1,16 +1,16 @@
 import 'package:meta/meta.dart';
 
 /// Exception that is thrown if a low-level libsodium operation fails.
-class SodiumException implements Exception {
+class SodiumException([
   /// The original error message, if one existed.
   ///
   /// This is always null for the dart vm, but might contain more details when
   /// using JS. You should not rely on this to provide anything meaningful, it
   /// simply exists for completeness.
-  final String? originalMessage;
-
+  final String? originalMessage,
+]) implements Exception {
   /// Default constructor.
-  new([this.originalMessage]);
+  this;
 
   /// @nodoc
   @internal

@@ -9,12 +9,9 @@ import 'pwhash_ffi.dart';
 import 'scalarmult_ffi.dart';
 import 'sign_sumo_ffi.dart';
 
-/// @nodoc
 @internal
-class CryptoSumoFFI extends CryptoFFI implements CryptoSumo {
-  /// @nodoc
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class CryptoSumoFFI(super.sodium) extends CryptoFFI implements CryptoSumo {
   @override
   // ignore: overridden_fields for api customization
   late final SignSumo sign = SignSumoFFI(sodium);

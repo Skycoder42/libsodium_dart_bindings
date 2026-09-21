@@ -10,26 +10,13 @@ import '../../../bindings/sodium_pointer.dart';
 import '../../../bindings/sodium_scope.dart';
 import 'sign_consumer_ffi_mixin.dart';
 
-/// @nodoc
 @internal
-class VerificationConsumerFFI
-    with SignConsumerFFIMixin<bool>
-    implements VerificationConsumer {
-  @override
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  final Uint8List signature;
-
-  /// @nodoc
-  final Uint8List publicKey;
-
-  /// @nodoc
-  new({
-    required this.sodium,
-    required this.signature,
-    required this.publicKey,
-  }) {
+class VerificationConsumerFFI({
+  @override required final LibSodiumFFI sodium,
+  required final Uint8List signature,
+  required final Uint8List publicKey,
+}) with SignConsumerFFIMixin<bool> implements VerificationConsumer {
+  this {
     initState();
   }
 

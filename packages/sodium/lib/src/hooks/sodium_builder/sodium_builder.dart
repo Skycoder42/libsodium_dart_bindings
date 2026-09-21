@@ -18,14 +18,11 @@ import 'macos_builder.dart';
 import 'windows_builder.dart';
 
 @internal
-abstract base class SodiumBuilder {
-  @protected
-  final CodeConfig config;
-  @protected
-  final HookLogger logger;
-
-  new(this.config, this.logger);
-
+// ignore: public_member_api_docs false positive
+abstract base class SodiumBuilder(
+  @protected final CodeConfig config,
+  @protected final HookLogger logger,
+) {
   bool get allowSpaceInPath;
 
   factory forConfig(CodeConfig config, HookLogger logger) =>

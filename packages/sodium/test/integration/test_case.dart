@@ -6,25 +6,21 @@ import 'test_runner.dart';
 
 export 'package:test/test.dart' hide group, setUp, test;
 
-abstract class TestCase {
-  final TestRunner _runner;
-
-  new(this._runner);
-
+abstract class TestCase(final TestRunner runner) {
   @protected
-  SetupFn get setUp => _runner.setUp;
+  SetupFn get setUp => runner.setUp;
 
   @isTest
   @protected
-  TestFn get test => _runner.test;
+  TestFn get test => runner.test;
 
   @isTest
   @protected
-  TestSumoFn get testSumo => _runner.testSumo;
+  TestSumoFn get testSumo => runner.testSumo;
 
   @isTestGroup
   @protected
-  GroupFn get group => _runner.group;
+  GroupFn get group => runner.group;
 
   String get name;
 
@@ -33,5 +29,5 @@ abstract class TestCase {
   Future<T> ioCompute<T, M>(
     FutureOr<T> Function(M message) callback,
     M message,
-  ) => _runner.ioCompute(callback, message);
+  ) => runner.ioCompute(callback, message);
 }

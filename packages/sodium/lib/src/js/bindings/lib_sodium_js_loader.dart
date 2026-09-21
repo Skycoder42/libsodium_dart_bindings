@@ -20,7 +20,7 @@ external set _sodium(_SodiumBrowserInit? value);
 
 /// A helper class that interacts with sodium.js to get the loaded sodium
 /// instance.
-sealed class LibSodiumJSLoader {
+sealed class LibSodiumJSLoader._() {
   /// Obtain the raw [LibSodiumJS] instance from the browser.
   ///
   /// This method uses the standard browser loading mechanisms for libsodium.js

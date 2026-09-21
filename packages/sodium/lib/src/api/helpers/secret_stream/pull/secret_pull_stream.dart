@@ -5,18 +5,13 @@ import 'package:meta/meta.dart';
 import '../../../secret_stream.dart';
 import 'secret_stream_pull_transformer.dart';
 
-/// @nodoc
 @internal
-class SecretPullStream extends SecretExStream<SecretStreamPlainMessage> {
-  /// @nodoc
-  final SecretStreamPullTransformerSink sink;
+// ignore: public_member_api_docs false positive
+class SecretPullStream(
+  final SecretStreamPullTransformerSink sink,
 
-  /// @nodoc
-  final Stream<SecretStreamPlainMessage> stream;
-
-  /// @nodoc
-  new(this.sink, this.stream);
-
+  final Stream<SecretStreamPlainMessage> stream,
+) extends SecretExStream<SecretStreamPlainMessage> {
   @override
   StreamSubscription<SecretStreamPlainMessage> listen(
     void Function(SecretStreamPlainMessage event)? onData, {

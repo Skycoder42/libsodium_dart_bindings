@@ -9,35 +9,28 @@ import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import '../bindings/sodium_finalizer.dart';
 
-/// @nodoc
 @internal
-class SecureKeyJS with SecureKeyEquality implements SecureKey {
+class SecureKeyJS(final LibSodiumJS sodium, final JSUint8Array _raw)
+    with SecureKeyEquality
+    implements SecureKey {
   static final _sodiumFinalizerCache = Expando<SodiumFinalizer>();
 
   static SodiumFinalizer _getFinalizer(LibSodiumJS sodium) =>
       _sodiumFinalizerCache[sodium] ??= SodiumFinalizer(sodium);
 
-  /// @nodoc
   @visibleForTesting
   static void debugOverwriteFinalizer(
     LibSodiumJS sodium,
     SodiumFinalizer finalizer,
   ) => _sodiumFinalizerCache[sodium] = finalizer;
 
-  /// @nodoc
-  final LibSodiumJS sodium;
-  final JSUint8Array _raw;
-
-  /// @nodoc
-  new(this.sodium, this._raw) {
+  this {
     _getFinalizer(sodium).attach(this, _raw);
   }
 
-  /// @nodoc
   factory alloc(LibSodiumJS sodium, int length) =>
       SecureKeyJS(sodium, Uint8List(length).toJS);
 
-  /// @nodoc
   factory random(LibSodiumJS sodium, int length) =>
       SecureKeyJS(sodium, jsErrorWrap(() => sodium.randombytes_buf(length)));
 

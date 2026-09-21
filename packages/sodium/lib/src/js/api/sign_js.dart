@@ -14,15 +14,9 @@ import 'helpers/sign/signature_consumer_js.dart';
 import 'helpers/sign/verification_consumer_js.dart';
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-class SignJS with SignValidations implements Sign {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class SignJS(final LibSodiumJS sodium) with SignValidations implements Sign {
   @override
   int get publicKeyBytes => sodium.crypto_sign_PUBLICKEYBYTES;
 

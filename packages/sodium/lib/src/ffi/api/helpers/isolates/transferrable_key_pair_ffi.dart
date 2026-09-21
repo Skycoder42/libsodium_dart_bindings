@@ -9,13 +9,11 @@ import '../../sodium_ffi.dart';
 
 part 'transferrable_key_pair_ffi.freezed.dart';
 
-/// @nodoc
 @freezed
 @internal
-sealed class TransferrableKeyPairFFI
+sealed class const TransferrableKeyPairFFI._()
     with _$TransferrableKeyPairFFI
     implements TransferrableKeyPair {
-  /// @nodoc
   factory(KeyPair keyPair) => keyPair.secretKey is SecureKeyFFI
       ? TransferrableKeyPairFFI.ffi(
           publicKeyBytes: TransferableTypedData.fromList([keyPair.publicKey]),
@@ -30,21 +28,16 @@ sealed class TransferrableKeyPairFFI
           ]),
         );
 
-  /// @nodoc
   const factory ffi({
     required TransferableTypedData publicKeyBytes,
     required SecureKeyFFINativeHandle secretKeyNativeHandle,
   }) = TransferrableKeyPairFFINative;
 
-  /// @nodoc
   const factory generic({
     required TransferableTypedData publicKeyBytes,
     required TransferableTypedData secretKeyBytes,
   }) = TransferrableKeyPairFFIGeneric;
 
-  const new _();
-
-  /// @nodoc
   KeyPair toKeyPair(SodiumFFI sodium) => switch (this) {
     TransferrableKeyPairFFINative(
       :final publicKeyBytes,

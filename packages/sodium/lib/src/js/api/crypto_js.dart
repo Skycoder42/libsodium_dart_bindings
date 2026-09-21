@@ -37,15 +37,9 @@ import 'xof_shake256_js.dart';
 import 'xof_turboshake128_js.dart';
 import 'xof_turboshake256_js.dart';
 
-/// @nodoc
 @internal
-class CryptoJS implements Crypto {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class CryptoJS(final LibSodiumJS sodium) implements Crypto {
   @override
   late final SecretBox secretBox = SecretBoxJS(sodium);
 

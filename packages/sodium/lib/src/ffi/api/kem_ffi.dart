@@ -13,15 +13,11 @@ import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
-/// @nodoc
 @internal
-class KemFFI with KemValidations, KeygenMixin implements Kem {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class KemFFI(final LibSodiumFFI sodium)
+    with KemValidations, KeygenMixin
+    implements Kem {
   @override
   int get publicKeyBytes => sodium.crypto_kem_publickeybytes();
 

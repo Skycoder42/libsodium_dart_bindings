@@ -10,9 +10,7 @@ import 'secure_key.dart';
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/key_derivation.
 /// Please refer to that documentation for more details about these APIs.
-abstract class Kdf {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const Kdf._() {
   /// Provides crypto_kdf_BYTES_MIN.
   ///
   /// See https://libsodium.gitbook.io/doc/key_derivation#key-derivation-with-libsodium-greater-than-1-0-12

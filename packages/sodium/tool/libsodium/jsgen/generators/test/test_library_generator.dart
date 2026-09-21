@@ -6,11 +6,8 @@ import '../spec_generator.dart';
 import 'test_lib_sodium_js_generator.dart';
 
 @immutable
-final class TestLibraryGenerator extends SpecGenerator<Library> {
-  final LibraryInfo libraryInfo;
-
-  const new(this.libraryInfo);
-
+final class const TestLibraryGenerator(final LibraryInfo libraryInfo)
+    extends SpecGenerator<Library> {
   @override
   Library build() => Library(
     (b) => b

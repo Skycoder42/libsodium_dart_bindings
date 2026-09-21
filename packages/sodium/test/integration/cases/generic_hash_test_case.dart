@@ -2,9 +2,7 @@ import 'dart:typed_data';
 
 import '../test_case.dart';
 
-class GenericHashTestCase extends TestCase {
-  new(super._runner);
-
+class GenericHashTestCase(super.runner) extends TestCase {
   @override
   String get name => 'generichash';
 

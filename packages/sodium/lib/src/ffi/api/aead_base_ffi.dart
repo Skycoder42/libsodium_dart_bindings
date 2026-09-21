@@ -12,7 +12,6 @@ import '../bindings/secure_key_native.dart';
 import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
-/// @nodoc
 @internal
 typedef InternalEncrypt = int Function(
   Pointer<UnsignedChar> c,
@@ -26,7 +25,6 @@ typedef InternalEncrypt = int Function(
   Pointer<UnsignedChar> k,
 );
 
-/// @nodoc
 @internal
 typedef InternalDecrypt = int Function(
   Pointer<UnsignedChar> m,
@@ -40,7 +38,6 @@ typedef InternalDecrypt = int Function(
   Pointer<UnsignedChar> k,
 );
 
-/// @nodoc
 @internal
 typedef InternalEncryptDetached = int Function(
   Pointer<UnsignedChar> c,
@@ -55,7 +52,6 @@ typedef InternalEncryptDetached = int Function(
   Pointer<UnsignedChar> k,
 );
 
-/// @nodoc
 @internal
 typedef InternalDecryptDetached = int Function(
   Pointer<UnsignedChar> m,
@@ -69,28 +65,20 @@ typedef InternalDecryptDetached = int Function(
   Pointer<UnsignedChar> k,
 );
 
-/// @nodoc
 @internal
-abstract class AeadBaseFFI with AeadValidations, KeygenMixin implements Aead {
-  /// @nodoc
-  final LibSodiumFFI sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
-  /// @nodoc
+// ignore: public_member_api_docs false positive
+abstract class AeadBaseFFI(final LibSodiumFFI sodium)
+    with AeadValidations, KeygenMixin
+    implements Aead {
   @protected
   InternalEncrypt get internalEncrypt;
 
-  /// @nodoc
   @protected
   InternalDecrypt get internalDecrypt;
 
-  /// @nodoc
   @protected
   InternalEncryptDetached get internalEncryptDetached;
 
-  /// @nodoc
   @protected
   InternalDecryptDetached get internalDecryptDetached;
 

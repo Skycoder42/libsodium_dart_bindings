@@ -11,9 +11,7 @@ import 'secure_key.dart';
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox.
 /// Please refer to that documentation for more details about these APIs.
-abstract class SecretBox {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const SecretBox._() {
   /// Provides crypto_secretbox_KEYBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#constants.
@@ -72,22 +70,17 @@ abstract class SecretBox {
   });
 }
 
-/// @nodoc
 @internal
 mixin SecretBoxValidations implements SecretBox {
-  /// @nodoc
   void validateNonce(Uint8List nonce) =>
       Validations.checkIsSame(nonce.length, nonceBytes, 'nonce');
 
-  /// @nodoc
   void validateKey(SecureKey key) =>
       Validations.checkIsSame(key.length, keyBytes, 'key');
 
-  /// @nodoc
   void validateMac(Uint8List mac) =>
       Validations.checkIsSame(mac.length, macBytes, 'mac');
 
-  /// @nodoc
   void validateEasyCipherText(Uint8List cipherText) =>
       Validations.checkAtLeast(cipherText.length, macBytes, 'cipherText');
 }

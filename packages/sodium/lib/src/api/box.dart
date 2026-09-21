@@ -18,9 +18,7 @@ import 'secure_key.dart';
 /// This class provides the dart interface for the crypto operations documented
 /// in https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface.
 /// Please refer to that documentation for more details about these APIs.
-abstract class PrecalculatedBox {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const PrecalculatedBox._() {
   /// Provides crypto_box_easy_afternm.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#precalculation-interface
@@ -61,9 +59,7 @@ abstract class PrecalculatedBox {
 /// in https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption
 /// and https://libsodium.gitbook.io/doc/public-key_cryptography/sealed_boxes.
 /// Please refer to that documentation for more details about these APIs.
-abstract class Box {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const Box._() {
   /// Provides crypto_box_PUBLICKEYBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/public-key_cryptography/authenticated_encryption#constants
@@ -171,34 +167,26 @@ abstract class Box {
   });
 }
 
-/// @nodoc
 @internal
 mixin BoxValidations implements Box {
-  /// @nodoc
   void validatePublicKey(Uint8List publicKey) =>
       Validations.checkIsSame(publicKey.length, publicKeyBytes, 'publicKey');
 
-  /// @nodoc
   void validateSecretKey(SecureKey secretKey) =>
       Validations.checkIsSame(secretKey.length, secretKeyBytes, 'secretKey');
 
-  /// @nodoc
   void validateMac(Uint8List mac) =>
       Validations.checkIsSame(mac.length, macBytes, 'mac');
 
-  /// @nodoc
   void validateNonce(Uint8List nonce) =>
       Validations.checkIsSame(nonce.length, nonceBytes, 'nonce');
 
-  /// @nodoc
   void validateSeed(SecureKey seed) =>
       Validations.checkIsSame(seed.length, seedBytes, 'seed');
 
-  /// @nodoc
   void validateEasyCipherText(Uint8List cipherText) =>
       Validations.checkAtLeast(cipherText.length, macBytes, 'cipherText');
 
-  /// @nodoc
   void validateSealCipherText(Uint8List cipherText) =>
       Validations.checkAtLeast(cipherText.length, sealBytes, 'cipherText');
 }

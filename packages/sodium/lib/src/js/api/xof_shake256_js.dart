@@ -9,9 +9,8 @@ import 'helpers/xof/xof_consumer_js.dart';
 import 'xof_base_js.dart';
 
 @internal
-class XofShake256JS extends XofBaseJS<XofShake256State> {
-  new(super.sodium);
-
+// ignore: public_member_api_docs false positive
+class XofShake256JS(super.sodium) extends XofBaseJS<XofShake256State> {
   @override
   int get blockBytes => sodium.crypto_xof_shake256_BLOCKBYTES;
 

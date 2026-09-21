@@ -11,15 +11,9 @@ import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 import 'secure_key_js.dart';
 
-/// @nodoc
 @internal
-class AuthJS with AuthValidations implements Auth {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class AuthJS(final LibSodiumJS sodium) with AuthValidations implements Auth {
   @override
   int get bytes => sodium.crypto_auth_BYTES;
 

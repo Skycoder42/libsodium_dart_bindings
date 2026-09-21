@@ -15,7 +15,7 @@ import 'sodium_sumo.js.fake.dart'
     as sodium_sumo_js;
 import 'test_runner.dart';
 
-class JsSumoTestRunner extends SumoTestRunner with JsLoaderMixin {
+class JsSumoTestRunner() extends SumoTestRunner with JsLoaderMixin {
   @override
   String get sodiumJsSrc => sodium_sumo_js.sodiumJsSrc;
 

@@ -4,9 +4,7 @@ import 'package:sodium/sodium.dart';
 
 import '../test_case.dart';
 
-class AeadAegis256TestCase extends TestCase {
-  new(super._runner);
-
+class AeadAegis256TestCase(super.runner) extends TestCase {
   @override
   String get name => 'aead_aegis256';
 

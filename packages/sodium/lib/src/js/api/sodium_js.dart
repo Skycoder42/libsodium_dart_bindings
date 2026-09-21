@@ -23,15 +23,11 @@ import 'randombytes_js.dart';
 import 'secure_key_js.dart';
 import 'transferrable_secure_key_js.dart';
 
-/// @nodoc
 @internal
-class SodiumJS with SodiumValidations implements Sodium {
-  /// @nodoc
-  final LibSodiumJS sodium;
-
-  /// @nodoc
-  new(this.sodium);
-
+// ignore: public_member_api_docs false positive
+class SodiumJS(final LibSodiumJS sodium)
+    with SodiumValidations
+    implements Sodium {
   @override
   SodiumVersion get version => SodiumVersion(
     sodium.SODIUM_LIBRARY_VERSION_MAJOR,

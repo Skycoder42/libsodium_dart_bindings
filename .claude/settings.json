@@ -21,6 +21,12 @@
     "enableWeakerNetworkIsolation": true,
     "excludedCommands": [
       "bash packages/sodium/tool/chrome_test.sh *"
-    ]
+    ],
+    "filesystem": {
+      "allowWrite": [
+        "~/.config/flutter/tool_state",
+        "~/.pub-cache"
+      ]
+    }
   }
 }

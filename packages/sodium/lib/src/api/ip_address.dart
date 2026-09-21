@@ -20,7 +20,7 @@ import 'sodium.dart';
 ///
 /// To create an instance, use [IpAddress.fromString] or [IpAddress.fromBytes],
 /// both of which delegate to the platform-specific implementation via [Sodium].
-abstract class IpAddress {
+abstract interface class IpAddress {
   /// Creates an [IpAddress] from the platform native [address].
   ///
   /// Convenience factory constructor that redirects to [Sodium.ipFromAddress]
@@ -62,7 +62,6 @@ abstract class IpAddress {
   Uint8List get bytes;
 }
 
-/// @nodoc
 @internal
 mixin IpAddressEquality implements IpAddress {
   @override

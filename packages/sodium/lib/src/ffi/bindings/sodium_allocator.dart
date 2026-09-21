@@ -6,12 +6,12 @@ import 'memory_protection.dart';
 /// An [Allocator] using the libsodium memory functionality.
 ///
 /// See https://libsodium.gitbook.io/doc/memory_management
-class SodiumAllocator implements Allocator {
+class const SodiumAllocator(
   /// The [LibSodiumFFI] instance used by this allocator.
-  final LibSodiumFFI sodium;
-
+  final LibSodiumFFI sodium,
+) implements Allocator {
   /// Default constructor
-  const new(this.sodium);
+  this;
 
   /// Provides sodium_malloc.
   ///

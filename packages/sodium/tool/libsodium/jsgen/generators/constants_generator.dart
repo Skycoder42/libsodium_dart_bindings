@@ -7,17 +7,11 @@ import '../types.dart';
 import 'spec_generator.dart';
 
 @immutable
-final class ConstantsGenerator extends SpecGenerator<Method> {
-  final Constant constant;
-  final TypeMapping typeMapping;
-  final bool external;
-
-  const new({
-    required this.constant,
-    required this.typeMapping,
-    this.external = true,
-  });
-
+final class const ConstantsGenerator({
+  required final Constant constant,
+  required final TypeMapping typeMapping,
+  final bool external = true,
+}) extends SpecGenerator<Method> {
   @override
   Method build() => Method(
     (b) => b

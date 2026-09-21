@@ -15,9 +15,7 @@ import 'secure_key.dart';
 /// in https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/original_chacha20-poly1305_construction
 /// or https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction.
 /// Please refer to that documentation for more details about these APIs.
-abstract class Aead {
-  const new _(); // coverage:ignore-line
-
+abstract interface class const Aead._() {
   /// Provides crypto_aead_*chacha20poly1305*_KEYBYTES.
   ///
   /// See https://libsodium.gitbook.io/doc/secret-key_cryptography/aead/chacha20-poly1305/xchacha20-poly1305_construction#constants
@@ -88,22 +86,17 @@ abstract class Aead {
   });
 }
 
-/// @nodoc
 @internal
 mixin AeadValidations implements Aead {
-  /// @nodoc
   void validateNonce(Uint8List nonce) =>
       Validations.checkIsSame(nonce.length, nonceBytes, 'nonce');
 
-  /// @nodoc
   void validateKey(SecureKey key) =>
       Validations.checkIsSame(key.length, keyBytes, 'key');
 
-  /// @nodoc
   void validateMac(Uint8List mac) =>
       Validations.checkIsSame(mac.length, aBytes, 'mac');
 
-  /// @nodoc
   void validateEasyCipherText(Uint8List cipherText) =>
       Validations.checkAtLeast(cipherText.length, aBytes, 'cipherText');
 }
