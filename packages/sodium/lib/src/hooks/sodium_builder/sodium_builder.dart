@@ -183,11 +183,11 @@ abstract base class SodiumBuilder(
     );
 
     process.stderr
-        .transform(utf8.decoder)
+        .transform(systemEncoding.decoder)
         .transform(const LineSplitter())
         .listen(logger.warning);
     process.stdout
-        .transform(utf8.decoder)
+        .transform(systemEncoding.decoder)
         .transform(const LineSplitter())
         .listen(logger.debug);
 
@@ -221,7 +221,7 @@ abstract base class SodiumBuilder(
     );
 
     process.stderr
-        .transform(utf8.decoder)
+        .transform(systemEncoding.decoder)
         .transform(const LineSplitter())
         .listen(logger.warning);
 

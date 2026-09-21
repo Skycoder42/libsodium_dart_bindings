@@ -284,6 +284,7 @@ IF "%__SODIUM_VS_VERSION_MAJOR%"=="15" SET "__SODIUM_VS_NAME=vs2017"
             'Microsoft.VisualStudio.Workload.VCTools',
             '-format',
             'json',
+            '-utf8',
           ])
           .transform(utf8.decoder)
           .transform(json.decoder)
