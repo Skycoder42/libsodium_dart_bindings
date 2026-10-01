@@ -57,18 +57,35 @@ abstract base class AutomakeBuilder(super.config, super.logger)
   @protected
   @mustCallSuper
   Map<String, String> get environment {
+    // On a macOS build host, libtool's max-command-length probe in libsodium's
+    // configure runs `/usr/sbin/sysctl -n kern.argmax` by absolute path. Inside
+    // a sandbox (macOS Seatbelt, e.g. an AI coding agent's or a CI sandbox) that
+    // sysctl is denied, the value comes back empty, `expr` fails and libtool
+    // splits every link, which breaks the darwin link with
+    // "ld: -pie can only be used when linking a main executable".
+    // configure accepts a preset `lt_cv_sys_max_cmd_len` as a cached answer and
+    // skips the probe. The value must exceed the link command's length (a small
+    // one breaks the build the same way); 786432 is libtool's own darwin formula
+    // (kern.argmax / 4 * 3) for the default kern.argmax of 1048576, i.e. what an
+    // unsandboxed configure computes. Gated on the build HOST, not the target:
+    // the probe is keyed on `$build_os`, and every other host keeps its
+    // environment unchanged.
+    final libtoolPreset = Platform.isMacOS
+        ? const {'lt_cv_sys_max_cmd_len': '786432'}
+        : const <String, String>{};
     if (config.cCompiler case final cc?) {
       logger
         ..debug('Detected custom compiler: ${cc.compiler}')
         ..debug('Detected custom archiver: ${cc.archiver}')
         ..debug('Detected custom linker: ${cc.linker}');
       return {
+        ...libtoolPreset,
         'CC': cc.compiler.toBashSafePath(),
         'AR': cc.archiver.toBashSafePath(),
         'LD': cc.linker.toBashSafePath(),
       };
     } else {
-      return const {};
+      return libtoolPreset;
     }
   }
 
