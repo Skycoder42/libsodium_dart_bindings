@@ -57,18 +57,29 @@ abstract base class AutomakeBuilder(super.config, super.logger)
   @protected
   @mustCallSuper
   Map<String, String> get environment {
+    // On a macOS build host, libtool's max-command-length probe in libsodium's
+    // configure runs `/usr/sbin/sysctl -n kern.argmax` by absolute path. Inside
+    // a sandbox that is denied.
+    // configure accepts a preset `lt_cv_sys_max_cmd_len` as a cached answer and
+    // skips the probe. The value must exceed the link command's length; 786432
+    // is libtool's own darwin formula (kern.argmax / 4 * 3) for the default
+    // kern.argmax of 1048576.
+    final libtoolPreset = OS.current == OS.macOS
+        ? const {'lt_cv_sys_max_cmd_len': '786432'}
+        : const <String, String>{};
     if (config.cCompiler case final cc?) {
       logger
         ..debug('Detected custom compiler: ${cc.compiler}')
         ..debug('Detected custom archiver: ${cc.archiver}')
         ..debug('Detected custom linker: ${cc.linker}');
       return {
+        ...libtoolPreset,
         'CC': cc.compiler.toBashSafePath(),
         'AR': cc.archiver.toBashSafePath(),
         'LD': cc.linker.toBashSafePath(),
       };
     } else {
-      return const {};
+      return libtoolPreset;
     }
   }
 
