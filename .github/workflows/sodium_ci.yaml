@@ -1,12 +1,9 @@
-name: "[sodium] CI"
+name: "CI"
 
 on:
   workflow_dispatch:
   push:
-    paths:
-      - "packages/sodium/**"
-      - ".github/workflows/sodium_ci.yaml"
-      - ".github/workflows/sodium_cd.yaml"
+  pull_request:
 
 jobs:
   ci:
@@ -139,3 +136,19 @@ jobs:
       workingDirectory: packages/sodium
       tagPrefix: sodium-v
       publishWorkflow: sodium_cd.yaml
+
+  renovate:
+    name: Renovate
+    needs:
+      - ci
+      - android_build_tests
+      - flutter_tests
+      - cd
+    if: ${{ !cancelled() }}
+    uses: Skycoder42/dart_test_tools/.github/workflows/renovate-finish.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    with:
+      needs: ${{ toJSON(needs) }}

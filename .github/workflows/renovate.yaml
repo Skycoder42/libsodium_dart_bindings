@@ -1,0 +1,19 @@
+name: Automatic dependency updates
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 1 * * 2"
+  issues:
+    types:
+      - edited
+
+jobs:
+  renovate:
+    name: Renovate
+    uses: Skycoder42/dart_test_tools/.github/workflows/renovate.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      statuses: write

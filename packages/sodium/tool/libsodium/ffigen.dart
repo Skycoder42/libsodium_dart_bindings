@@ -38,8 +38,26 @@ Future<Uri> _ffigen() async {
       'generate the location.',
     );
   }
-
   final locationUri = Uri.parse(await headersLocationFile.readAsString());
+
+  String? clangResourceDir;
+  try {
+    final clangResult = await Process.run('clang', const [
+      '-print-resource-dir',
+    ]);
+    if (clangResult.exitCode == 0) {
+      clangResourceDir = (clangResult.stdout as String).trim();
+    } else {
+      throw ProcessException(
+        'clang',
+        const ['-print-resource-dir'],
+        clangResult.stderr as String,
+        clangResult.exitCode,
+      );
+    }
+  } catch (e) {
+    stderr.writeln('Warning: Could not determine clang resource dir: $e');
+  }
 
   final packageRoot = Platform.script.resolve('../../');
   final outUri = packageRoot.resolve('lib/src/ffi/bindings/libsodium.ffi.dart');
@@ -51,6 +69,7 @@ Future<Uri> _ffigen() async {
     input: Input(
       entryPoints: [locationUri.resolve('sodium.h')],
       compilerOptions: [
+        if (clangResourceDir != null) '-I$clangResourceDir/include/',
         if (Platform.isLinux) '-I/usr/lib/clang/22/include/',
         if (Platform.isMacOS) '-I$macSdkPath/usr/include/',
       ],

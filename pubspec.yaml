@@ -11,3 +11,12 @@ workspace:
 
 dev_dependencies:
   dart_test_tools: ^8.1.2
+
+renovate:
+  pre_build_command: |
+    set -eou pipefail
+    cd packages/sodium
+    export NIX_SKIP_SODIUM_BUILD_HOOKS=0
+    export NIX_EXPORT_SODIUM_HEADERS=1
+    dart run tool/libsodium/ffigen.dart
+    dart run tool/libsodium/jsgen.dart

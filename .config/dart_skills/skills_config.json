@@ -5,16 +5,10 @@
       "package:dart_test_tools": {
         "skills": [
           {
-            "name": "dart-test-tools-cli-help",
-            "installedAt": "2026-09-16T05:48:59.409468Z",
-            "isInstalled": false,
-            "path": "skills/dart-test-tools-cli-help"
-          },
-          {
-            "name": "dart-test-tools-auto-update",
+            "name": "dart-test-tools-renovate-fix",
             "installedAt": "2026-09-16T05:48:59.417025Z",
             "contentHash": "/mv885OlIdvxxUvwoRQsBw==",
-            "path": "skills/dart-test-tools-auto-update"
+            "path": "skills/dart-test-tools-renovate-fix"
           }
         ]
       }
