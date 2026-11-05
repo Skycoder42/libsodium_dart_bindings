@@ -23,5 +23,6 @@ renovate:
   pre_build_command: |
     set -e
     cd packages/sodium
+    dart run tool/libsodium/download.dart
     dart run tool/libsodium/ffigen.dart
     dart run tool/libsodium/jsgen.dart
