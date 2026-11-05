@@ -11,21 +11,16 @@ emit literal curly braces in generated code.
 
 ## Running unit tests
 
-There is no dart MCP test-runner tool, so tests run via the Bash tool. **Every**
-`dart test` invocation MUST set `NIX_SKIP_SODIUM_BUILD_HOOKS=1` — the native
-assets are prebuilt, and without this variable the build hooks re-run and fail
-under the sandbox.
-
 The two platforms are invoked **very differently** — read both rows carefully:
 
 | Platform | How to run |
 |---|---|
-| **Dart VM** | From `packages/sodium/`: `NIX_SKIP_SODIUM_BUILD_HOOKS=1 dart test <relative-path>` |
+| **Dart VM** | From `packages/sodium/`: `dart test <relative-path>` |
 | **Chrome (JS)** | Via the wrapper — see "Chrome / browser tests" below. **Never** `dart test -p chrome …` directly. |
 
 VM example for a file at `test/unit/api/kem_test.dart`:
 ```
-NIX_SKIP_SODIUM_BUILD_HOOKS=1 dart test test/unit/api/kem_test.dart
+dart test test/unit/api/kem_test.dart
 ```
 
 When a phase requires running tests, run the platform(s) that phase specifies and
@@ -57,8 +52,7 @@ Paths may be given relative to `packages/sodium` or to the repo root (a leading
 **The invocation is fragile — matching uses Claude Code's command-prefix parser,
 so the sandbox exclusion SILENTLY breaks (dropping you back into the sandbox,
 where Chrome fails with `Operation not permitted`) if you:**
-- add **any prefix** — `timeout 300 bash …`, `cd packages/sodium && bash …`,
-  `NIX_… bash …`;
+- add **any prefix** — `timeout 300 bash …`, `cd packages/sodium && bash …`
 - **chain, pipe, or redirect** — `bash … | tail`, `bash … > log 2>&1`, `… ; bash …`.
 
 Passing the test path as an **argument is fine** (the trailing `*` allows it) —

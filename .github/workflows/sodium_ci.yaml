@@ -11,11 +11,6 @@ jobs:
     uses: Skycoder42/dart_test_tools/.github/workflows/dart.yml@main
     with:
       workingDirectory: packages/sodium
-      env: >-
-        {
-          "NIX_SKIP_SODIUM_BUILD_HOOKS": "1",
-          "NIX_HOOKS_ENABLE_DEBUG_LOGGING": "1"
-        }
       needsFlutterSdk: true
       buildRunner: true
       unitTestPaths: -P unit
@@ -45,9 +40,6 @@ jobs:
           - windows-latest
           - macos-latest
     runs-on: ${{ matrix.runs-on }}
-    env:
-      NIX_SKIP_SODIUM_BUILD_HOOKS: 1
-      NIX_HOOKS_ENABLE_DEBUG_LOGGING: 1
     steps:
       - name: Install JDK Version 21
         uses: actions/setup-java@v6
@@ -99,11 +91,6 @@ jobs:
     with:
       enabledPlatforms: "[]"
       workingDirectory: packages/sodium/example
-      env: >-
-        {
-          "NIX_SKIP_SODIUM_BUILD_HOOKS": "1",
-          "NIX_HOOKS_ENABLE_DEBUG_LOGGING": "1"
-        }
       buildDependencies: sodium
       integrationTestPaths: integration_test/app_test.dart
       integrationTestSetup: >-

@@ -3,14 +3,7 @@ import 'dart:io';
 import 'package:dart_test_tools/tools.dart';
 import 'package:sodium/src/hooks/constants.dart';
 
-Future<void> main() => Github.runZoned(() async {
-  await downloadLibsodium();
-  await Github.env.setOutput(
-    HookConstants.skipBuildHooksEnvVarName,
-    '0',
-    asEnv: true,
-  );
-});
+Future<void> main() => Github.runZoned(downloadLibsodium);
 
 Future<Uri> downloadLibsodium() async {
   await Github.logGroupAsync(

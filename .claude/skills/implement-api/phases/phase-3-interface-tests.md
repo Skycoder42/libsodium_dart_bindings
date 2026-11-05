@@ -87,7 +87,7 @@ the invocations differ per platform:
 
 - **Dart VM** — from `packages/sodium/`:
   ```
-  NIX_SKIP_SODIUM_BUILD_HOOKS=1 dart test test/unit/api/{base}_test.dart
+  dart test test/unit/api/{base}_test.dart
   ```
 - **Chrome** — do **not** use `dart test -p chrome`. From the repo root, run the
   wrapper with the test path as an argument (no prefix, no pipe, no chaining):

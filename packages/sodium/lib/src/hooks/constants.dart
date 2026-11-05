@@ -53,14 +53,4 @@ sealed class HookConstants._() {
   static final libsodiumHeadersLocation = Uri.file(
     '3rdparty/libsodium-${libsodiumVersion.ffi}-stable.includes',
   );
-
-  // Special environment variables that are picked up by the build hook
-  // Must be prefixed by "NIX_" as otherwise it would be stripped.
-  // See https://dart.dev/tools/hooks#environment-variables
-
-  static const skipBuildHooksEnvVarName = 'NIX_SKIP_SODIUM_BUILD_HOOKS';
-
-  static const exportHeadersEnvVarName = 'NIX_EXPORT_SODIUM_HEADERS';
-
-  static const debugLogEnvVarName = 'NIX_HOOKS_ENABLE_DEBUG_LOGGING';
 }

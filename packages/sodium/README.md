@@ -113,7 +113,15 @@ manually is when cross compiling for *android* on *windows*. See
 [Cross-Compiling for Android on Windows](#cross-compiling-for-android-on-windows) for more details on how to set up your
 system for that case correctly.
 
-### Deploying with build hooks
+#### Build configuration parameters
+Currently, the following parameters can be set in your **Workspace root** `pubspec.yaml` file to configure how libsodium
+will behave. See https://dart.dev/tools/hooks#hook-configuration for more details:
+
+ Name    | Default | Description
+---------|---------|-------------
+ verbose | `false` | If set to `true`, the build hooks will report verbose diagnostics. This can be useful to pin down machine specific problems.
+
+#### Deploying with build hooks
 One important thing to note is that not all dart commands honor build hooks. If you are working with flutter, it will
 automatically work, but if you are developing a pure dart application, you might need to change some commands:
 - `dart <file>.dart` must instead be `dart run <file>.dart`

@@ -21,8 +21,6 @@ jobs:
       contents: write
       pull-requests: write
       actions: write
-    env:
-      NIX_SKIP_SODIUM_BUILD_HOOKS: 1
     steps:
       - name: Install Flutter-SDK (stable)
         uses: subosito/flutter-action@v2

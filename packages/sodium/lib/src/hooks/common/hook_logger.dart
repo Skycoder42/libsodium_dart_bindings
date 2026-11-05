@@ -5,6 +5,8 @@ import 'package:meta/meta.dart';
 @internal
 // ignore: public_member_api_docs false positive
 class HookLogger(final String hook, {final bool logDebug = false}) {
+  var _didWriteFirst = false;
+
   void warning(String message) => _logTo(stderr, 'WARNING', message);
 
   void info(String message) => _logTo(stdout, 'INFO', message);
@@ -16,5 +18,13 @@ class HookLogger(final String hook, {final bool logDebug = false}) {
   }
 
   void _logTo(IOSink sink, String level, String message) =>
-      (logDebug ? stderr : sink).writeln('[$hook] $level: $message');
+      _logImplementation(logDebug ? stderr : sink, level, message);
+
+  void _logImplementation(IOSink sink, String level, String message) {
+    if (!_didWriteFirst) {
+      sink.writeln();
+    }
+    sink.writeln('[$hook] $level: $message');
+    _didWriteFirst = true;
+  }
 }

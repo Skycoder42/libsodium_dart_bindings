@@ -34,7 +34,7 @@ Future<Uri> _ffigen() async {
   if (!headersLocationFile.existsSync()) {
     throw Exception(
       'Libsodium headers location file missing at ${headersLocationFile.uri}. '
-      'You must set ${HookConstants.exportHeadersEnvVarName} to 1 to '
+      'You must set hooks.user_defines.sodium.export_headers to true to '
       'generate the location.',
     );
   }

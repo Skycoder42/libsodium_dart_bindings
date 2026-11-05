@@ -2,9 +2,5 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
       "github>Skycoder42/dart_test_tools//renovate/library"
-    ],
-    "env": {
-      "NIX_SKIP_SODIUM_BUILD_HOOKS": "1",
-      "NIX_HOOKS_ENABLE_DEBUG_LOGGING": "1"
-    }
+    ]
   }

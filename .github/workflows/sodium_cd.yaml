@@ -19,10 +19,5 @@ jobs:
       version: ${{ inputs.version }}
       flutter: true
       workingDirectory: packages/sodium
-      env: >-
-        {
-          "NIX_SKIP_SODIUM_BUILD_HOOKS": "1",
-          "NIX_HOOKS_ENABLE_DEBUG_LOGGING": "1"
-        }
       buildRunner: true
       prePublish: dart run tool/libsodium/download.dart

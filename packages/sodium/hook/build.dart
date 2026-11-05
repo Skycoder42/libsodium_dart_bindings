@@ -7,18 +7,13 @@ import 'package:sodium/src/hooks/constants.dart';
 import 'package:sodium/src/hooks/sodium_builder/sodium_builder.dart';
 
 void main(List<String> args) async => await build(args, (input, output) async {
-  final logger = HookLogger(
-    'sodium',
-    logDebug: _isSet(HookConstants.debugLogEnvVarName),
+  final skipMissingBinaries = input.userDefines.getBool(
+    'skip_missing_binaries',
   );
+  final exportHeaders = input.userDefines.getBool('export_headers');
+  final verbose = input.userDefines.getBool('verbose');
 
-  if (_isSet(HookConstants.skipBuildHooksEnvVarName)) {
-    logger.warning(
-      'Skipping sodium build hooks because environment variable '
-      '${HookConstants.skipBuildHooksEnvVarName} is set.',
-    );
-    return;
-  }
+  final logger = HookLogger('sodium', logDebug: verbose);
 
   if (!input.config.buildCodeAssets) {
     logger.info(
@@ -31,11 +26,21 @@ void main(List<String> args) async => await build(args, (input, output) async {
   final sourceArchive = input.packageRoot.resolveUri(
     HookConstants.libsodiumArchive,
   );
+
+  output.dependencies.add(sourceArchive);
   if (!File.fromUri(sourceArchive).existsSync()) {
-    throw Exception(
-      'libsodium source archive does not exist! This should not be possible. '
-      'Please report this to the package maintainers.',
-    );
+    if (skipMissingBinaries) {
+      logger.warning(
+        'Skipping sodium build hooks because libsodium source archive does '
+        'not exist. Without building libsodium, the package will not work.',
+      );
+      return;
+    } else {
+      throw Exception(
+        'libsodium source archive does not exist! This should not be possible. '
+        'Please report this to the package maintainers.',
+      );
+    }
   }
 
   final config = input.config.code;
@@ -43,7 +48,7 @@ void main(List<String> args) async => await build(args, (input, output) async {
   final asset = await builder.build(
     input: input,
     sourceArchive: sourceArchive,
-    exportHeadersTo: _isSet(HookConstants.exportHeadersEnvVarName)
+    exportHeadersTo: exportHeaders
         ? HookConstants.libsodiumHeadersLocation
         : null,
   );
@@ -51,4 +56,13 @@ void main(List<String> args) async => await build(args, (input, output) async {
   output.assets.code.add(asset);
 });
 
-bool _isSet(String envVar) => Platform.environment[envVar] == '1';
+extension on HookInputUserDefines {
+  bool getBool(String key, {bool defaultValue = false}) => switch (this[key]) {
+    null => defaultValue,
+    final bool value => value,
+    Object(:final runtimeType) => throw Exception(
+      '"hooks.user_defines.sodium.$key" has an invalid type. '
+      'Expected bool, got $runtimeType.',
+    ),
+  };
+}

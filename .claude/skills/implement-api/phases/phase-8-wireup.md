@@ -141,7 +141,7 @@ the new feature to catch any regressions). See `reference/conventions.md` →
 
 - **VM** — from `packages/sodium/`:
   ```
-  NIX_SKIP_SODIUM_BUILD_HOOKS=1 dart test test/unit/ffi/api/crypto_ffi_test.dart
+  dart test test/unit/ffi/api/crypto_ffi_test.dart
   ```
 - **Chrome** — from the repo root, run the wrapper with the test path as an
   argument (plain standalone command — no prefix, no pipe, no chaining; see the
