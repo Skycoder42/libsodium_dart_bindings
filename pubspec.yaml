@@ -12,16 +12,16 @@ workspace:
 dev_dependencies:
   dart_test_tools: ^8.1.2
 
-renovate:
-  pre_build_command: |
-    set -eou pipefail
-    cd packages/sodium
-    dart run tool/libsodium/ffigen.dart
-    dart run tool/libsodium/jsgen.dart
-
 hooks:
   user_defines:
     sodium:
       skip_missing_binaries: true
       export_headers: true
       verbose: true
+
+renovate:
+  pre_build_command: |
+    set -e
+    cd packages/sodium
+    dart run tool/libsodium/ffigen.dart
+    dart run tool/libsodium/jsgen.dart
