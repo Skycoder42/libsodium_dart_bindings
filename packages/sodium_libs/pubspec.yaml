@@ -12,8 +12,7 @@ dependencies:
   sodium: ^4.1.2
 
 dev_dependencies:
-  dart_pre_commit: ^6.1.5
-  dart_test_tools: ^7.3.3
+  dart_test_tools: ^8.1.2
 
 cider:
   link_template:
