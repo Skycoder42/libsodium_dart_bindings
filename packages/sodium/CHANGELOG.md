@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.1.3] - 2026-11-05
 ### Changed
 - Replace the environment based (`NIX_*`) build hooks overwrites with proper [User Defines](https://dart.dev/tools/hooks#hook-configuration)
+- Updated dependencies
 
 ## [4.1.2+1] - 2026-10-27
 ### Changed
@@ -408,7 +409,7 @@ changed, only the name of the getter. (#61)
 ### Added
 - Initial stable release
 
-[Unreleased]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.1.2+1...sodium-vHEAD
+[4.1.3]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.1.2+1...sodium-v4.1.3
 [4.1.2+1]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.1.2...sodium-v4.1.2+1
 [4.1.2]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.1.1+3...sodium-v4.1.2
 [4.1.1+3]: https://github.com/Skycoder42/libsodium_dart_bindings/compare/sodium-v4.1.1+2...sodium-v4.1.1+3
