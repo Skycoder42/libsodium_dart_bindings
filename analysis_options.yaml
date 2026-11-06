@@ -1,5 +1,5 @@
 plugins:
-  dart_test_tools: ^7.3.3
+  dart_test_tools: ^8.1.2
 analyzer:
   exclude:
     - build/**
