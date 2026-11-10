@@ -2907,7 +2907,7 @@ external int crypto_kdf_blake2b_contextbytes();
   ffi.Int Function(
     ffi.Pointer<ffi.UnsignedChar>,
     ffi.Size,
-    ffi.Uint64,
+    ffi.Int,
     ffi.Pointer<ffi.Char>,
     ffi.Pointer<ffi.UnsignedChar>,
   )
@@ -2936,7 +2936,7 @@ external int crypto_kdf_contextbytes();
   ffi.Int Function(
     ffi.Pointer<ffi.UnsignedChar>,
     ffi.Size,
-    ffi.Uint64,
+    ffi.Int,
     ffi.Pointer<ffi.Char>,
     ffi.Pointer<ffi.UnsignedChar>,
   )
@@ -3919,26 +3919,26 @@ external int crypto_pwhash_scryptsalsa208sha256_bytes_min();
 
 @ffi.Native<
   ffi.Int Function(
-    ffi.Pointer<ffi.Uint8>,
+    ffi.Pointer<ffi.Int>,
     ffi.Size,
-    ffi.Pointer<ffi.Uint8>,
+    ffi.Pointer<ffi.Int>,
     ffi.Size,
-    ffi.Uint64,
-    ffi.Uint32,
-    ffi.Uint32,
-    ffi.Pointer<ffi.Uint8>,
+    ffi.Int,
+    ffi.Int,
+    ffi.Int,
+    ffi.Pointer<ffi.Int>,
     ffi.Size,
   )
 >()
 external int crypto_pwhash_scryptsalsa208sha256_ll(
-  ffi.Pointer<ffi.Uint8> passwd,
+  ffi.Pointer<ffi.Int> passwd,
   int passwdlen,
-  ffi.Pointer<ffi.Uint8> salt,
+  ffi.Pointer<ffi.Int> salt,
   int saltlen,
   int N,
   int r,
   int p,
-  ffi.Pointer<ffi.Uint8> buf,
+  ffi.Pointer<ffi.Int> buf,
   int buflen,
 );
 
@@ -5084,7 +5084,7 @@ external int crypto_stream_chacha20_ietf_xor(
     ffi.Pointer<ffi.UnsignedChar>,
     ffi.UnsignedLongLong,
     ffi.Pointer<ffi.UnsignedChar>,
-    ffi.Uint32,
+    ffi.Int,
     ffi.Pointer<ffi.UnsignedChar>,
   )
 >()
@@ -5132,7 +5132,7 @@ external int crypto_stream_chacha20_xor(
     ffi.Pointer<ffi.UnsignedChar>,
     ffi.UnsignedLongLong,
     ffi.Pointer<ffi.UnsignedChar>,
-    ffi.Uint64,
+    ffi.Int,
     ffi.Pointer<ffi.UnsignedChar>,
   )
 >()
@@ -5304,7 +5304,7 @@ external int crypto_stream_salsa20_xor(
     ffi.Pointer<ffi.UnsignedChar>,
     ffi.UnsignedLongLong,
     ffi.Pointer<ffi.UnsignedChar>,
-    ffi.Uint64,
+    ffi.Int,
     ffi.Pointer<ffi.UnsignedChar>,
   )
 >()
@@ -5367,7 +5367,7 @@ external int crypto_stream_xchacha20_xor(
     ffi.Pointer<ffi.UnsignedChar>,
     ffi.UnsignedLongLong,
     ffi.Pointer<ffi.UnsignedChar>,
-    ffi.Uint64,
+    ffi.Int,
     ffi.Pointer<ffi.UnsignedChar>,
   )
 >()
@@ -5447,7 +5447,7 @@ external int crypto_stream_xsalsa20_xor(
     ffi.Pointer<ffi.UnsignedChar>,
     ffi.UnsignedLongLong,
     ffi.Pointer<ffi.UnsignedChar>,
-    ffi.Uint64,
+    ffi.Int,
     ffi.Pointer<ffi.UnsignedChar>,
   )
 >()
@@ -5781,7 +5781,7 @@ external ffi.Pointer<ffi.Char> randombytes_implementation_name();
 @ffi.Native<randombytes_implementation>()
 external randombytes_implementation randombytes_internal_implementation;
 
-@ffi.Native<ffi.Uint32 Function()>()
+@ffi.Native<ffi.Int Function()>()
 external int randombytes_random();
 
 @ffi.Native<ffi.Size Function()>()
@@ -5798,7 +5798,7 @@ external void randombytes_stir();
 @ffi.Native<randombytes_implementation>()
 external randombytes_implementation randombytes_sysrandom_implementation;
 
-@ffi.Native<ffi.Uint32 Function(ffi.Uint32)>()
+@ffi.Native<ffi.Int Function(ffi.Int)>()
 external int randombytes_uniform(int upper_bound);
 
 @ffi.Native<
@@ -6087,15 +6087,11 @@ const int SODIUM_LIBRARY_VERSION_MAJOR = 26;
 
 const int SODIUM_LIBRARY_VERSION_MINOR = 4;
 
-const int SODIUM_SIZE_MAX = -1;
-
 const String SODIUM_VERSION_STRING = '1.0.22';
 
 const int crypto_aead_aegis128l_ABYTES = 32;
 
 const int crypto_aead_aegis128l_KEYBYTES = 16;
-
-const int crypto_aead_aegis128l_MESSAGEBYTES_MAX = 2305843009213693951;
 
 const int crypto_aead_aegis128l_NPUBBYTES = 16;
 
@@ -6105,8 +6101,6 @@ const int crypto_aead_aegis256_ABYTES = 32;
 
 const int crypto_aead_aegis256_KEYBYTES = 32;
 
-const int crypto_aead_aegis256_MESSAGEBYTES_MAX = 2305843009213693951;
-
 const int crypto_aead_aegis256_NPUBBYTES = 32;
 
 const int crypto_aead_aegis256_NSECBYTES = 0;
@@ -6114,8 +6108,6 @@ const int crypto_aead_aegis256_NSECBYTES = 0;
 const int crypto_aead_aes256gcm_ABYTES = 16;
 
 const int crypto_aead_aes256gcm_KEYBYTES = 32;
-
-const int crypto_aead_aes256gcm_MESSAGEBYTES_MAX = 68719476704;
 
 const int crypto_aead_aes256gcm_NPUBBYTES = 12;
 
@@ -6134,15 +6126,11 @@ const int crypto_aead_chacha20poly1305_IETF_ABYTES = 16;
 
 const int crypto_aead_chacha20poly1305_IETF_KEYBYTES = 32;
 
-const int crypto_aead_chacha20poly1305_IETF_MESSAGEBYTES_MAX = 274877906880;
-
 const int crypto_aead_chacha20poly1305_IETF_NPUBBYTES = 12;
 
 const int crypto_aead_chacha20poly1305_IETF_NSECBYTES = 0;
 
 const int crypto_aead_chacha20poly1305_KEYBYTES = 32;
-
-const int crypto_aead_chacha20poly1305_MESSAGEBYTES_MAX = -17;
 
 const int crypto_aead_chacha20poly1305_NPUBBYTES = 8;
 
@@ -6152,8 +6140,6 @@ const int crypto_aead_chacha20poly1305_ietf_ABYTES = 16;
 
 const int crypto_aead_chacha20poly1305_ietf_KEYBYTES = 32;
 
-const int crypto_aead_chacha20poly1305_ietf_MESSAGEBYTES_MAX = 274877906880;
-
 const int crypto_aead_chacha20poly1305_ietf_NPUBBYTES = 12;
 
 const int crypto_aead_chacha20poly1305_ietf_NSECBYTES = 0;
@@ -6162,8 +6148,6 @@ const int crypto_aead_xchacha20poly1305_IETF_ABYTES = 16;
 
 const int crypto_aead_xchacha20poly1305_IETF_KEYBYTES = 32;
 
-const int crypto_aead_xchacha20poly1305_IETF_MESSAGEBYTES_MAX = -17;
-
 const int crypto_aead_xchacha20poly1305_IETF_NPUBBYTES = 24;
 
 const int crypto_aead_xchacha20poly1305_IETF_NSECBYTES = 0;
@@ -6171,8 +6155,6 @@ const int crypto_aead_xchacha20poly1305_IETF_NSECBYTES = 0;
 const int crypto_aead_xchacha20poly1305_ietf_ABYTES = 16;
 
 const int crypto_aead_xchacha20poly1305_ietf_KEYBYTES = 32;
-
-const int crypto_aead_xchacha20poly1305_ietf_MESSAGEBYTES_MAX = -17;
 
 const int crypto_aead_xchacha20poly1305_ietf_NPUBBYTES = 24;
 
@@ -6216,8 +6198,6 @@ const int crypto_box_BOXZEROBYTES = 16;
 
 const int crypto_box_MACBYTES = 16;
 
-const int crypto_box_MESSAGEBYTES_MAX = -17;
-
 const int crypto_box_NONCEBYTES = 24;
 
 const String crypto_box_PRIMITIVE = 'curve25519xsalsa20poly1305';
@@ -6236,8 +6216,6 @@ const int crypto_box_curve25519xchacha20poly1305_BEFORENMBYTES = 32;
 
 const int crypto_box_curve25519xchacha20poly1305_MACBYTES = 16;
 
-const int crypto_box_curve25519xchacha20poly1305_MESSAGEBYTES_MAX = -17;
-
 const int crypto_box_curve25519xchacha20poly1305_NONCEBYTES = 24;
 
 const int crypto_box_curve25519xchacha20poly1305_PUBLICKEYBYTES = 32;
@@ -6253,8 +6231,6 @@ const int crypto_box_curve25519xsalsa20poly1305_BEFORENMBYTES = 32;
 const int crypto_box_curve25519xsalsa20poly1305_BOXZEROBYTES = 16;
 
 const int crypto_box_curve25519xsalsa20poly1305_MACBYTES = 16;
-
-const int crypto_box_curve25519xsalsa20poly1305_MESSAGEBYTES_MAX = -17;
 
 const int crypto_box_curve25519xsalsa20poly1305_NONCEBYTES = 24;
 
@@ -6374,13 +6350,13 @@ const int crypto_hash_sha256_BYTES = 32;
 
 final class crypto_hash_sha256_state extends ffi.Struct {
   @ffi.Array.multi([8])
-  external ffi.Array<ffi.Uint32> state;
+  external ffi.Array<ffi.Int> state;
 
-  @ffi.Uint64()
+  @ffi.Int()
   external int count;
 
   @ffi.Array.multi([64])
-  external ffi.Array<ffi.Uint8> buf;
+  external ffi.Array<ffi.Int> buf;
 }
 
 const int crypto_hash_sha3256_BYTES = 32;
@@ -6401,13 +6377,13 @@ const int crypto_hash_sha512_BYTES = 64;
 
 final class crypto_hash_sha512_state extends ffi.Struct {
   @ffi.Array.multi([8])
-  external ffi.Array<ffi.Uint64> state;
+  external ffi.Array<ffi.Int> state;
 
   @ffi.Array.multi([2])
-  external ffi.Array<ffi.Uint64> count;
+  external ffi.Array<ffi.Int> count;
 
   @ffi.Array.multi([128])
-  external ffi.Array<ffi.Uint8> buf;
+  external ffi.Array<ffi.Int> buf;
 }
 
 const int crypto_ipcrypt_BYTES = 16;
@@ -6537,13 +6513,9 @@ const int crypto_pwhash_ALG_ARGON2ID13 = 2;
 
 const int crypto_pwhash_ALG_DEFAULT = 2;
 
-const int crypto_pwhash_BYTES_MAX = 4294967295;
-
 const int crypto_pwhash_BYTES_MIN = 16;
 
 const int crypto_pwhash_MEMLIMIT_INTERACTIVE = 67108864;
-
-const int crypto_pwhash_MEMLIMIT_MAX = 4398046510080;
 
 const int crypto_pwhash_MEMLIMIT_MIN = 8192;
 
@@ -6575,13 +6547,9 @@ const String crypto_pwhash_STRPREFIX = '\$argon2id\$';
 
 const int crypto_pwhash_argon2i_ALG_ARGON2I13 = 1;
 
-const int crypto_pwhash_argon2i_BYTES_MAX = 4294967295;
-
 const int crypto_pwhash_argon2i_BYTES_MIN = 16;
 
 const int crypto_pwhash_argon2i_MEMLIMIT_INTERACTIVE = 33554432;
-
-const int crypto_pwhash_argon2i_MEMLIMIT_MAX = 4398046510080;
 
 const int crypto_pwhash_argon2i_MEMLIMIT_MIN = 8192;
 
@@ -6611,13 +6579,9 @@ const String crypto_pwhash_argon2i_STRPREFIX = '\$argon2i\$';
 
 const int crypto_pwhash_argon2id_ALG_ARGON2ID13 = 2;
 
-const int crypto_pwhash_argon2id_BYTES_MAX = 4294967295;
-
 const int crypto_pwhash_argon2id_BYTES_MIN = 16;
 
 const int crypto_pwhash_argon2id_MEMLIMIT_INTERACTIVE = 67108864;
-
-const int crypto_pwhash_argon2id_MEMLIMIT_MAX = 4398046510080;
 
 const int crypto_pwhash_argon2id_MEMLIMIT_MIN = 8192;
 
@@ -6645,13 +6609,9 @@ const int crypto_pwhash_argon2id_STRBYTES = 128;
 
 const String crypto_pwhash_argon2id_STRPREFIX = '\$argon2id\$';
 
-const int crypto_pwhash_scryptsalsa208sha256_BYTES_MAX = 137438953440;
-
 const int crypto_pwhash_scryptsalsa208sha256_BYTES_MIN = 16;
 
 const int crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_INTERACTIVE = 16777216;
-
-const int crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MAX = 68719476736;
 
 const int crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_MIN = 16777216;
 
@@ -6664,8 +6624,6 @@ const int crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MAX = 4294967295;
 const int crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_MIN = 32768;
 
 const int crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_SENSITIVE = 33554432;
-
-const int crypto_pwhash_scryptsalsa208sha256_PASSWD_MAX = -1;
 
 const int crypto_pwhash_scryptsalsa208sha256_PASSWD_MIN = 0;
 
@@ -6699,8 +6657,6 @@ const int crypto_secretbox_KEYBYTES = 32;
 
 const int crypto_secretbox_MACBYTES = 16;
 
-const int crypto_secretbox_MESSAGEBYTES_MAX = -17;
-
 const int crypto_secretbox_NONCEBYTES = 24;
 
 const String crypto_secretbox_PRIMITIVE = 'xsalsa20poly1305';
@@ -6711,8 +6667,6 @@ const int crypto_secretbox_xchacha20poly1305_KEYBYTES = 32;
 
 const int crypto_secretbox_xchacha20poly1305_MACBYTES = 16;
 
-const int crypto_secretbox_xchacha20poly1305_MESSAGEBYTES_MAX = -17;
-
 const int crypto_secretbox_xchacha20poly1305_NONCEBYTES = 24;
 
 const int crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES = 16;
@@ -6720,8 +6674,6 @@ const int crypto_secretbox_xsalsa20poly1305_BOXZEROBYTES = 16;
 const int crypto_secretbox_xsalsa20poly1305_KEYBYTES = 32;
 
 const int crypto_secretbox_xsalsa20poly1305_MACBYTES = 16;
-
-const int crypto_secretbox_xsalsa20poly1305_MESSAGEBYTES_MAX = -17;
 
 const int crypto_secretbox_xsalsa20poly1305_NONCEBYTES = 24;
 
@@ -6732,8 +6684,6 @@ const int crypto_secretstream_xchacha20poly1305_ABYTES = 17;
 const int crypto_secretstream_xchacha20poly1305_HEADERBYTES = 24;
 
 const int crypto_secretstream_xchacha20poly1305_KEYBYTES = 32;
-
-const int crypto_secretstream_xchacha20poly1305_MESSAGEBYTES_MAX = 274877906816;
 
 const int crypto_secretstream_xchacha20poly1305_TAG_FINAL = 3;
 
@@ -6770,8 +6720,6 @@ const int crypto_shorthash_siphashx24_KEYBYTES = 16;
 
 const int crypto_sign_BYTES = 64;
 
-const int crypto_sign_MESSAGEBYTES_MAX = -65;
-
 const String crypto_sign_PRIMITIVE = 'ed25519';
 
 const int crypto_sign_PUBLICKEYBYTES = 32;
@@ -6781,8 +6729,6 @@ const int crypto_sign_SECRETKEYBYTES = 64;
 const int crypto_sign_SEEDBYTES = 32;
 
 const int crypto_sign_ed25519_BYTES = 64;
-
-const int crypto_sign_ed25519_MESSAGEBYTES_MAX = -65;
 
 const int crypto_sign_ed25519_PUBLICKEYBYTES = 32;
 
@@ -6798,57 +6744,39 @@ typedef crypto_sign_state = crypto_sign_ed25519ph_state;
 
 const int crypto_stream_KEYBYTES = 32;
 
-const int crypto_stream_MESSAGEBYTES_MAX = -1;
-
 const int crypto_stream_NONCEBYTES = 24;
 
 const String crypto_stream_PRIMITIVE = 'xsalsa20';
 
 const int crypto_stream_chacha20_IETF_KEYBYTES = 32;
 
-const int crypto_stream_chacha20_IETF_MESSAGEBYTES_MAX = 274877906944;
-
 const int crypto_stream_chacha20_IETF_NONCEBYTES = 12;
 
 const int crypto_stream_chacha20_KEYBYTES = 32;
-
-const int crypto_stream_chacha20_MESSAGEBYTES_MAX = -1;
 
 const int crypto_stream_chacha20_NONCEBYTES = 8;
 
 const int crypto_stream_chacha20_ietf_KEYBYTES = 32;
 
-const int crypto_stream_chacha20_ietf_MESSAGEBYTES_MAX = 274877906944;
-
 const int crypto_stream_chacha20_ietf_NONCEBYTES = 12;
 
 const int crypto_stream_salsa2012_KEYBYTES = 32;
-
-const int crypto_stream_salsa2012_MESSAGEBYTES_MAX = -1;
 
 const int crypto_stream_salsa2012_NONCEBYTES = 8;
 
 const int crypto_stream_salsa208_KEYBYTES = 32;
 
-const int crypto_stream_salsa208_MESSAGEBYTES_MAX = -1;
-
 const int crypto_stream_salsa208_NONCEBYTES = 8;
 
 const int crypto_stream_salsa20_KEYBYTES = 32;
-
-const int crypto_stream_salsa20_MESSAGEBYTES_MAX = -1;
 
 const int crypto_stream_salsa20_NONCEBYTES = 8;
 
 const int crypto_stream_xchacha20_KEYBYTES = 32;
 
-const int crypto_stream_xchacha20_MESSAGEBYTES_MAX = -1;
-
 const int crypto_stream_xchacha20_NONCEBYTES = 24;
 
 const int crypto_stream_xsalsa20_KEYBYTES = 32;
-
-const int crypto_stream_xsalsa20_MESSAGEBYTES_MAX = -1;
 
 const int crypto_stream_xsalsa20_NONCEBYTES = 24;
 
@@ -6902,22 +6830,18 @@ final class crypto_xof_turboshake256_state extends ffi.Struct {
   external ffi.Array<ffi.UnsignedChar> opaque;
 }
 
-const int randombytes_BYTES_MAX = 4294967295;
-
 const int randombytes_SEEDBYTES = 32;
 
 final class randombytes_implementation extends ffi.Struct {
   external ffi.Pointer<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>
   implementation_name;
 
-  external ffi.Pointer<ffi.NativeFunction<ffi.Uint32 Function()>> random;
+  external ffi.NativeFunction<
+    ffi.NativeFunction<ffi.Int Function()> Function(ffi.Pointer<ffi.Int> random)
+  >
+  uint32_t;
 
   external ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>> stir;
-
-  external ffi.Pointer<
-    ffi.NativeFunction<ffi.Uint32 Function(ffi.Uint32 upper_bound)>
-  >
-  uniform;
 
   external ffi.Pointer<
     ffi.NativeFunction<
@@ -6932,12 +6856,13 @@ final class randombytes_implementation extends ffi.Struct {
     ffi.Allocator $allocator, {
     required ffi.Pointer<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>
     implementation_name,
-    required ffi.Pointer<ffi.NativeFunction<ffi.Uint32 Function()>> random,
-    required ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>> stir,
-    required ffi.Pointer<
-      ffi.NativeFunction<ffi.Uint32 Function(ffi.Uint32 upper_bound)>
+    required ffi.NativeFunction<
+      ffi.NativeFunction<ffi.Int Function()> Function(
+        ffi.Pointer<ffi.Int> random,
+      )
     >
-    uniform,
+    uint32_t,
+    required ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>> stir,
     required ffi.Pointer<
       ffi.NativeFunction<
         ffi.Void Function(ffi.Pointer<ffi.Void> buf, ffi.Size size)
@@ -6947,9 +6872,8 @@ final class randombytes_implementation extends ffi.Struct {
     required ffi.Pointer<ffi.NativeFunction<ffi.Int Function()>> close,
   }) => $allocator<randombytes_implementation>()
     ..ref.implementation_name = implementation_name
-    ..ref.random = random
+    ..ref.uint32_t = uint32_t
     ..ref.stir = stir
-    ..ref.uniform = uniform
     ..ref.buf = buf
     ..ref.close = close;
 }

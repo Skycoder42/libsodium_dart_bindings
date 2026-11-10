@@ -10,7 +10,7 @@ workspace:
   - packages/sodium_libs
 
 dev_dependencies:
-  dart_test_tools: ^8.1.2
+  dart_test_tools: ^8.2.0
 
 hooks:
   user_defines:
