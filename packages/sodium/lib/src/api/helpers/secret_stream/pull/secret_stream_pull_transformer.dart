@@ -30,9 +30,7 @@ sealed class _SinkState<TState extends Object> with _$SinkState<TState> {
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class SecretStreamPullTransformerSink<TState extends Object>(
-  // ignore: avoid_positional_boolean_parameters for single param
   final bool requireFinalized,
 ) implements EventSink<SecretStreamCipherMessage> {
   _SinkState<TState> _state = const _SinkState.uninitialized();
@@ -189,10 +187,8 @@ abstract class SecretStreamPullTransformerSink<TState extends Object>(
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class const SecretStreamPullTransformer<TState extends Object>(
   final SecureKey key,
-  // ignore: avoid_positional_boolean_parameters for single param
   final bool requireFinalized,
 ) implements
     SecretExStreamTransformer<
@@ -201,7 +197,6 @@ abstract class const SecretStreamPullTransformer<TState extends Object>(
     > {
   @protected
   @visibleForTesting
-  // ignore: avoid_positional_boolean_parameters for single param
   SecretStreamPullTransformerSink<TState> createSink(bool requireFinalized);
 
   @override

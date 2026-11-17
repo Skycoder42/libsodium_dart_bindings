@@ -3,8 +3,8 @@ description: Demonstrates how to use the sodium package.
 publish_to: none
 
 environment:
-  sdk: ^3.13.0
-  flutter: ">=3.47.0"
+  sdk: ^3.14.0
+  flutter: ">=3.50.0"
 resolution: workspace
 
 dependencies:
@@ -13,6 +13,7 @@ dependencies:
   sodium:
     path: ../
 
+  material_ui: any
 dev_dependencies:
   flutter_driver:
     sdk: flutter
@@ -21,7 +22,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  test: ^1.31.1
+  test: ^1.32.0
 
 flutter:
   uses-material-design: true

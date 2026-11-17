@@ -66,7 +66,6 @@ typedef InternalDecryptDetached = int Function(
 );
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class AeadBaseFFI(final LibSodiumFFI sodium)
     with AeadValidations, KeygenMixin
     implements Aead {

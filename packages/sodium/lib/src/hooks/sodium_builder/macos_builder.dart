@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'darwin_builder.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 final class MacosBuilder(super.config, super.logger) extends DarwinBuilder {
   @override
   DarwinConfig getPlatformConfig(Uri xcodeDir) {

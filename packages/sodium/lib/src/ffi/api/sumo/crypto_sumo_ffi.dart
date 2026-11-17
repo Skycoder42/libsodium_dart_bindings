@@ -10,7 +10,6 @@ import 'scalarmult_ffi.dart';
 import 'sign_sumo_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class CryptoSumoFFI(super.sodium) extends CryptoFFI implements CryptoSumo {
   @override
   // ignore: overridden_fields for api customization

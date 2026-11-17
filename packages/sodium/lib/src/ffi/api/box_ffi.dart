@@ -15,7 +15,6 @@ import 'helpers/keygen_mixin.dart';
 import 'secure_key_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class PrecalculatedBoxFFI(final BoxFFI box, final SecureKeyFFI sharedKey)
     implements PrecalculatedBox {
   @override
@@ -150,7 +149,6 @@ class PrecalculatedBoxFFI(final BoxFFI box, final SecureKeyFFI sharedKey)
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 class BoxFFI(final LibSodiumFFI sodium)
     with BoxValidations, KeygenMixin
     implements Box {

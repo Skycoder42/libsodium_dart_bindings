@@ -12,7 +12,6 @@ import '../../bindings/sodium_pointer.dart';
 import '../../bindings/sodium_scope.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class PwhashFFI(final LibSodiumFFI sodium)
     with PwHashValidations
     implements Pwhash {

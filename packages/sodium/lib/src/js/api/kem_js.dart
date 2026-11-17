@@ -13,7 +13,6 @@ import '../bindings/sodium.js.dart' hide KemEncResult, KeyPair;
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class KemJS(final LibSodiumJS sodium) with KemValidations implements Kem {
   @override
   int get publicKeyBytes => sodium.crypto_kem_PUBLICKEYBYTES;

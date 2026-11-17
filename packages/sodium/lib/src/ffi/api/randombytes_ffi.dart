@@ -10,7 +10,6 @@ import '../bindings/libsodium.ffi.wrapper.dart';
 import '../bindings/sodium_scope.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class RandombytesFFI(final LibSodiumFFI sodium) implements Randombytes {
   @override
   int get seedBytes => sodium.randombytes_seedbytes();

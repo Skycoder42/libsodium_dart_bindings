@@ -14,10 +14,8 @@ import '../../../bindings/sodium_scope.dart';
 import 'secret_stream_message_tag_ffix.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SecretStreamPullTransformerSinkFFI(
   final LibSodiumFFI sodium,
-  // ignore: avoid_positional_boolean_parameters for single param
   super.requireFinalized,
 ) extends SecretStreamPullTransformerSink<SodiumPointer<UnsignedChar>> {
   @override
@@ -108,11 +106,9 @@ class SecretStreamPullTransformerSinkFFI(
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 class const SecretStreamPullTransformerFFI(
   final LibSodiumFFI sodium,
   super.key,
-  // ignore: avoid_positional_boolean_parameters for single param
   super.requireFinalized,
 ) extends SecretStreamPullTransformer<SodiumPointer<UnsignedChar>> {
   @override

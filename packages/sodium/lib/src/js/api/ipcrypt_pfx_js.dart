@@ -14,7 +14,6 @@ import 'ip_address_js.dart';
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class IpcryptPfxJS(final LibSodiumJS sodium)
     with IpcryptPfxValidations
     implements IpcryptPfx {

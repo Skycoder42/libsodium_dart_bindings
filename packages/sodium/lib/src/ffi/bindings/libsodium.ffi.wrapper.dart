@@ -3088,14 +3088,14 @@ class LibSodiumFFI {
 
   @pragma('vm:prefer-inline')
   int crypto_pwhash_scryptsalsa208sha256_ll(
-    _i1.Pointer<_i1.Uint8> passwd,
+    _i1.Pointer<_i1.Int> passwd,
     int passwdlen,
-    _i1.Pointer<_i1.Uint8> salt,
+    _i1.Pointer<_i1.Int> salt,
     int saltlen,
     int N,
     int r,
     int p,
-    _i1.Pointer<_i1.Uint8> buf,
+    _i1.Pointer<_i1.Int> buf,
     int buflen,
   ) => _i2.crypto_pwhash_scryptsalsa208sha256_ll(
     passwd,

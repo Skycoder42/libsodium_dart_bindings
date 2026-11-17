@@ -10,7 +10,6 @@ import 'scalarmult_js.dart';
 import 'sign_sumo_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class CryptoSumoJS(super.sodium) extends CryptoJS implements CryptoSumo {
   @override
   // ignore: overridden_fields for api customization

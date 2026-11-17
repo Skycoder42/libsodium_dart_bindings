@@ -12,7 +12,6 @@ import 'ip_address_js.dart';
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class IpcryptNdBaseJS(final LibSodiumJS sodium)
     with IpcryptNdValidations
     implements IpcryptNd {

@@ -38,7 +38,6 @@ import 'xof_turboshake128_ffi.dart';
 import 'xof_turboshake256_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class CryptoFFI(final LibSodiumFFI sodium) implements Crypto {
   @override
   late final SecretBox secretBox = SecretBoxFFI(sodium);

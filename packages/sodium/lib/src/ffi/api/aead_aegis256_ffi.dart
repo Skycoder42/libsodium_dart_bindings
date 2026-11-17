@@ -4,7 +4,6 @@ import '../../api/secure_key.dart';
 import 'aead_base_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class AeadAegis256FFI(super.sodium) extends AeadBaseFFI {
   @override
   int get keyBytes => sodium.crypto_aead_aegis256_keybytes();

@@ -10,7 +10,6 @@ import '../../bindings/sodium.js.dart';
 import '../secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class ScalarmultJS(final LibSodiumJS sodium)
     with ScalarmultValidations
     implements Scalarmult {

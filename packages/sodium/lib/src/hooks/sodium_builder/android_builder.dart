@@ -9,7 +9,6 @@ import 'automake_builder.dart';
 
 @immutable
 @internal
-// ignore: public_member_api_docs false positive
 class const AndroidArchConfig({
   required final String host,
   required final List<String> cFlags,
@@ -25,7 +24,6 @@ class const AndroidArchConfig({
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 final class AndroidBuilder(super.config, super.logger) extends AutomakeBuilder {
   late final AndroidArchConfig _archConfig;
 

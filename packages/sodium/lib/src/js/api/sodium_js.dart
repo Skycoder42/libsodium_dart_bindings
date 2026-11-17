@@ -24,7 +24,6 @@ import 'secure_key_js.dart';
 import 'transferrable_secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SodiumJS(final LibSodiumJS sodium)
     with SodiumValidations
     implements Sodium {

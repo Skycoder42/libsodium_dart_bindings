@@ -12,7 +12,6 @@ import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class AuthFFI(final LibSodiumFFI sodium)
     with AuthValidations, KeygenMixin
     implements Auth {

@@ -13,7 +13,6 @@ import 'helpers/kdf_hkdf/kdf_hkdf_extract_consumer_ffi.dart';
 import 'helpers/keygen_mixin.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class KdfHkdfBaseFFI<T extends NativeType>(final LibSodiumFFI sodium)
     with KdfHkdfValidations, KeygenMixin
     implements KdfHkdf {

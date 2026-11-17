@@ -12,7 +12,6 @@ import '../bindings/sodium.js.dart';
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class KdfJS(final LibSodiumJS sodium) with KdfValidations implements Kdf {
   @override
   int get bytesMin => sodium.crypto_kdf_BYTES_MIN;

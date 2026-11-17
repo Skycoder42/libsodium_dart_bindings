@@ -10,7 +10,6 @@ import '../secure_key_js.dart';
 import '../sign_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SignSumoJS(super.sodium)
     extends SignJS
     with SignSumoValidations

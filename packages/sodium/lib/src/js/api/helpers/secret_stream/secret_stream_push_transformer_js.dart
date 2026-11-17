@@ -11,7 +11,6 @@ import '../../../bindings/sodium.js.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SecretStreamPushTransformerSinkJS(final LibSodiumJS sodium)
     extends
         SecretStreamPushTransformerSink<SecretstreamXchacha20poly1305State> {
@@ -63,7 +62,6 @@ class SecretStreamPushTransformerSinkJS(final LibSodiumJS sodium)
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 class const SecretStreamPushTransformerJS(final LibSodiumJS sodium, super.key)
     extends SecretStreamPushTransformer<SecretstreamXchacha20poly1305State> {
   @override

@@ -29,7 +29,6 @@ extension CrypoPwhashAlgorithmJS on CryptoPwhashAlgorithm {
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 class PwhashJS(final LibSodiumJS sodium)
     with PwHashValidations
     implements Pwhash {
