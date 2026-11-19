@@ -10,10 +10,10 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
+  material_ui: ^1.11.1
   sodium:
     path: ../
 
-  material_ui: any
 dev_dependencies:
   flutter_driver:
     sdk: flutter
