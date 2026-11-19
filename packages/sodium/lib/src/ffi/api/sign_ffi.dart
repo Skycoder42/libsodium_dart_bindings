@@ -15,7 +15,6 @@ import 'helpers/sign/signature_consumer_ffi.dart';
 import 'helpers/sign/verification_consumer_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SignFFI(final LibSodiumFFI sodium)
     with SignValidations, KeygenMixin
     implements Sign {

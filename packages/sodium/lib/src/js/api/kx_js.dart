@@ -13,7 +13,6 @@ import '../bindings/sodium.js.dart' hide KeyPair;
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class KxJS(final LibSodiumJS sodium) with KxValidations implements Kx {
   @override
   int get publicKeyBytes => sodium.crypto_kx_PUBLICKEYBYTES;

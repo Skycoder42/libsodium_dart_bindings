@@ -11,7 +11,6 @@ import '../../bindings/sodium_scope.dart';
 import '../sign_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SignSumoFFI(super.sodium)
     extends SignFFI
     with SignSumoValidations

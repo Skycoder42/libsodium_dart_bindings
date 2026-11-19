@@ -7,7 +7,6 @@ import 'package:meta/meta.dart';
 import 'libsodium.ffi.dart' show sodium_free;
 
 @internal
-// ignore: public_member_api_docs false positive
 class SodiumFinalizer() {
   final _nativeFinalizer = NativeFinalizer(Native.addressOf(sodium_free));
 

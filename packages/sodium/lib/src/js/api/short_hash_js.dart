@@ -12,7 +12,6 @@ import '../bindings/sodium.js.dart';
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class ShortHashJS(final LibSodiumJS sodium)
     with ShortHashValidations
     implements ShortHash {

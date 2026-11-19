@@ -10,7 +10,6 @@ import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class AeadBaseJS(final LibSodiumJS sodium)
     with AeadValidations
     implements Aead {

@@ -9,7 +9,6 @@ import 'helpers/secret_stream/secret_stream_pull_transformer_ffi.dart';
 import 'helpers/secret_stream/secret_stream_push_transformer_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SecretStreamFFI(final LibSodiumFFI sodium)
     with SecretStreamBase, SecretStreamValidations, KeygenMixin
     implements SecretStream {

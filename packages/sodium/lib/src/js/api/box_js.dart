@@ -14,7 +14,6 @@ import '../bindings/sodium.js.dart' hide KeyPair;
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class PrecalculatedBoxJS(final BoxJS box, final SecureKeyJS sharedKey)
     implements PrecalculatedBox {
   @override
@@ -83,7 +82,6 @@ class PrecalculatedBoxJS(final BoxJS box, final SecureKeyJS sharedKey)
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 class BoxJS(final LibSodiumJS sodium) with BoxValidations implements Box {
   @override
   int get publicKeyBytes => sodium.crypto_box_PUBLICKEYBYTES;

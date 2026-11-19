@@ -9,7 +9,6 @@ import '../bindings/js_error.dart';
 import '../bindings/sodium.js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class IpAddressJS.fromJsBytes(
   final LibSodiumJS sodium,
   final JSUint8Array rawBytes,

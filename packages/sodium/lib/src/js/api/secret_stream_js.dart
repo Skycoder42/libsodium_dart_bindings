@@ -12,7 +12,6 @@ import 'helpers/secret_stream/secret_stream_push_transformer_js.dart';
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SecretStreamJS(final LibSodiumJS sodium)
     with SecretStreamBase, SecretStreamValidations
     implements SecretStream {

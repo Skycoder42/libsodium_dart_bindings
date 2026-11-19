@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class ChunkedEventSink(
   final EventSink<Uint8List> _sink,
   final int _chunkSize,
@@ -54,7 +53,6 @@ class ChunkedEventSink(
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 class const ChunkedStreamTransformer(
   final int chunkSize, {
   final int? headerSize,

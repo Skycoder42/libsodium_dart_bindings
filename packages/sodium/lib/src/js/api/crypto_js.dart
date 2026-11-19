@@ -38,7 +38,6 @@ import 'xof_turboshake128_js.dart';
 import 'xof_turboshake256_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class CryptoJS(final LibSodiumJS sodium) implements Crypto {
   @override
   late final SecretBox secretBox = SecretBoxJS(sodium);

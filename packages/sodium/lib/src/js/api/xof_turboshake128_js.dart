@@ -9,7 +9,6 @@ import 'helpers/xof/xof_consumer_js.dart';
 import 'xof_base_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class XofTurboshake128JS(super.sodium)
     extends XofBaseJS<XofTurboshake128State> {
   @override

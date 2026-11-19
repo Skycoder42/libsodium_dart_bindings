@@ -14,7 +14,6 @@ import '../bindings/sodium_scope.dart';
 import 'helpers/keygen_mixin.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class KemFFI(final LibSodiumFFI sodium)
     with KemValidations, KeygenMixin
     implements Kem {

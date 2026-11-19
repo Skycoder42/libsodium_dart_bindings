@@ -11,7 +11,6 @@ import '../common/extensions.dart';
 import 'sodium_builder.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract base class AutomakeBuilder(super.config, super.logger)
     extends SodiumBuilder {
   @override

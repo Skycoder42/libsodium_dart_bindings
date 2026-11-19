@@ -12,7 +12,6 @@ import 'helpers/keygen_mixin.dart';
 import 'ip_address_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class IpcryptPfxFFI(final LibSodiumFFI sodium)
     with IpcryptPfxValidations, KeygenMixin
     implements IpcryptPfx {

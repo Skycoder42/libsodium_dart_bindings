@@ -47,7 +47,6 @@ typedef SodiumFFIFactory<TSodiumFFI extends SodiumFFI> = TSodiumFFI Function(
 );
 
 @internal
-// ignore: public_member_api_docs false positive
 class SodiumFFI([final LibSodiumFFI sodium = const LibSodiumFFI()])
     with SodiumValidations
     implements Sodium {

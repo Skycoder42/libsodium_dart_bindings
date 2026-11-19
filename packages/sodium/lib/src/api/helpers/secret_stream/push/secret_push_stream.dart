@@ -6,7 +6,6 @@ import '../../../secret_stream.dart';
 import 'secret_stream_push_transformer.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SecretPushStream(
   final SecretStreamPushTransformerSink sink,
 
