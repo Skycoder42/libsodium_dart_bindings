@@ -9,7 +9,6 @@ import 'automake_builder.dart';
 
 @internal
 @immutable
-// ignore: public_member_api_docs false positive
 class const DarwinConfig({
   required final String arch,
   final String? build,
@@ -29,7 +28,6 @@ class const DarwinConfig({
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract base class DarwinBuilder(super.config, super.logger)
     extends AutomakeBuilder {
   late final DarwinConfig _platformConfig;
@@ -118,4 +116,9 @@ extension on Uri {
       return replace(path: '$path/');
     }
   }
+}
+
+@internal
+extension AppleVersionX on AppleVersion {
+  String get asStr => '$major.$minor.$patch';
 }

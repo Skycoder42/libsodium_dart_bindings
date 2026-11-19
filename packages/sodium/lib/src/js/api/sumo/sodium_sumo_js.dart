@@ -9,7 +9,6 @@ import '../sodium_js.dart';
 import 'crypto_sumo_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SodiumSumoJS(super.sodium) extends SodiumJS implements SodiumSumo {
   @override
   // ignore: overridden_fields for api customization

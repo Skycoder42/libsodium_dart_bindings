@@ -13,7 +13,6 @@ import 'helpers/generic_hash/generic_hash_consumer_ffi.dart';
 import 'helpers/keygen_mixin.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class GenericHashFFI(final LibSodiumFFI sodium)
     with GenericHashValidations, KeygenMixin
     implements GenericHash {

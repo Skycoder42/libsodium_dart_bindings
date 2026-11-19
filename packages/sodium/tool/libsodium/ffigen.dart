@@ -40,24 +40,11 @@ Future<Uri> _ffigen() async {
   }
   final locationUri = Uri.parse(await headersLocationFile.readAsString());
 
-  String? clangResourceDir;
-  try {
-    final clangResult = await Process.run('clang', const [
-      '-print-resource-dir',
-    ]);
-    if (clangResult.exitCode == 0) {
-      clangResourceDir = (clangResult.stdout as String).trim();
-    } else {
-      throw ProcessException(
-        'clang',
-        const ['-print-resource-dir'],
-        clangResult.stderr as String,
-        clangResult.exitCode,
-      );
-    }
-  } catch (e) {
-    stderr.writeln('Warning: Could not determine clang resource dir: $e');
-  }
+  final toolchain = await _ClangToolchain.find();
+  stdout
+    ..writeln('Using clang: ${toolchain.clang}')
+    ..writeln('Using libclang: ${toolchain.libClang.toFilePath()}')
+    ..writeln('Using resource dir: ${toolchain.resourceDir}');
 
   final packageRoot = Platform.script.resolve('../../');
   final outUri = packageRoot.resolve('lib/src/ffi/bindings/libsodium.ffi.dart');
@@ -69,11 +56,9 @@ Future<Uri> _ffigen() async {
     input: Input(
       entryPoints: [locationUri.resolve('sodium.h')],
       compilerOptions: [
-        if (clangResourceDir != null) '-I$clangResourceDir/include/',
-        if (Platform.isLinux) '-I/usr/lib/clang/22/include/',
+        '-resource-dir=${toolchain.resourceDir}',
         if (Platform.isMacOS) '-I$macSdkPath/usr/include/',
       ],
-      ignoreSourceErrors: true,
     ),
     visitors: [
       Visitor(
@@ -87,7 +72,7 @@ Future<Uri> _ffigen() async {
             n.isIncluded = _matchesLibsodium(n) ? .ifUsed : .never,
       ),
     ],
-  ).generate();
+  ).generate(libclangDylib: toolchain.libClang);
 
   // add missing ignore
   final generatedFile = File.fromUri(outUri);
@@ -99,6 +84,64 @@ Future<Uri> _ffigen() async {
   generatedFile.writeAsStringSync(updatedContent);
 
   return outUri;
+}
+
+/// A single LLVM installation, so that libclang and the builtin headers it
+/// is parsed with always come from the same clang version.
+final class _ClangToolchain(
+  final String clang,
+  final Uri libClang,
+  final String resourceDir,
+) {
+  static Future<_ClangToolchain> find() async {
+    final clang = await _findClang();
+    final resourceDir = await _run(clang, const ['-print-resource-dir']);
+    final libClang = _findLibClang(clang);
+    return _ClangToolchain(clang, libClang, resourceDir);
+  }
+
+  static Future<String> _findClang() async {
+    final clang = Platform.isMacOS
+        ? await _run('xcrun', const ['--find', 'clang'])
+        : 'clang';
+    // resolve to the real binary, e.g. /usr/bin/clang -> /usr/lib/llvm-N/...
+    final resolved = await _run(clang, const ['-print-prog-name=clang']);
+    final file = File(resolved);
+    return file.existsSync() ? await file.resolveSymbolicLinks() : resolved;
+  }
+
+  static Uri _findLibClang(String clang) {
+    final binDir = File(clang).parent;
+    final libClang = switch (Platform.operatingSystem) {
+      'linux' => File('${binDir.parent.path}/lib/libclang.so'),
+      'macos' => File('${binDir.parent.path}/lib/libclang.dylib'),
+      'windows' => File('${binDir.path}\\libclang.dll'),
+      _ => throw UnsupportedError(
+        'Unsupported platform: ${Platform.operatingSystem}',
+      ),
+    };
+    if (!libClang.existsSync()) {
+      throw Exception(
+        'Could not find libclang next to $clang at ${libClang.path}. '
+        'Make sure the libclang development package matching that clang '
+        'version is installed.',
+      );
+    }
+    return libClang.absolute.uri;
+  }
+
+  static Future<String> _run(String executable, List<String> arguments) async {
+    final result = await Process.run(executable, arguments);
+    if (result.exitCode != 0) {
+      throw ProcessException(
+        executable,
+        arguments,
+        result.stderr as String,
+        result.exitCode,
+      );
+    }
+    return (result.stdout as String).trim();
+  }
 }
 
 bool _matchesLibsodium(NamedNode node) {

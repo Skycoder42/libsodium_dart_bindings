@@ -8,7 +8,6 @@ import 'js_error.dart';
 import 'sodium.js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SodiumFinalizer(LibSodiumJS sodium) {
   final _finalizer = Finalizer<JSUint8Array>(
     (v) => jsErrorWrap(() => sodium.memzero(v)),

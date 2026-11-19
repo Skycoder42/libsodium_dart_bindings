@@ -9,7 +9,6 @@ import '../bindings/sodium.js.dart';
 import 'helpers/xof/xof_consumer_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class XofBaseJS<T extends JSNumber>(final LibSodiumJS sodium)
     with XofValidations
     implements Xof {

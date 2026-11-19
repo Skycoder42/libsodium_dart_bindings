@@ -13,7 +13,6 @@ import 'helpers/kdf_hkdf/kdf_hkdf_extract_consumer_js.dart';
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class KdfHkdfBaseJS<T extends JSNumber>(final LibSodiumJS sodium)
     with KdfHkdfValidations
     implements KdfHkdf {

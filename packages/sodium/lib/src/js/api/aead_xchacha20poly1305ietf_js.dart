@@ -11,7 +11,6 @@ import 'aead_base_js.dart';
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class AeadXChaCha20Poly1305IEFTJS(super.sodium) extends AeadBaseJS {
   @override
   int get keyBytes => sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES;

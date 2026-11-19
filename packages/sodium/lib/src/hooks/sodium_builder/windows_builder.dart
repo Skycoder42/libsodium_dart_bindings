@@ -9,7 +9,6 @@ import 'package:path/path.dart' as path;
 import 'sodium_builder.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 final class WindowsBuilder(super.config, super.logger) extends SodiumBuilder {
   static const _targetOutputFileName = 'target.txt';
   static const _vsVersionDetectionScript = '''

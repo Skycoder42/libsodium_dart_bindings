@@ -13,7 +13,6 @@ import '../bindings/sodium.js.dart' hide SecretBox;
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SecretBoxJS(final LibSodiumJS sodium)
     with SecretBoxValidations
     implements SecretBox {

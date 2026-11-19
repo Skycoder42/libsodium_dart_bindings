@@ -26,7 +26,6 @@ class MockSecretStreamPullTransformer()
 
 class SutSecretStreamPullTransformerSink(
   final MockSecretStreamPullTransformerSink mock,
-  // ignore: avoid_positional_boolean_parameters for single parameter
   super.requireFinalized,
 ) extends SecretStreamPullTransformerSink<int> {
   @override
@@ -52,7 +51,6 @@ class SutSecretStreamPullTransformerSink(
 class SutSecretStreamPullTransformer(
   final MockSecretStreamPullTransformer mock,
   super.key,
-  // ignore: avoid_positional_boolean_parameters for single parameter
   super.requireFinalized,
 ) extends SecretStreamPullTransformer<int> {
   @override

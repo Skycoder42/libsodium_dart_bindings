@@ -9,7 +9,6 @@ import 'package:meta/meta.dart';
 import '../../hooks/constants.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class InvalidSha512SumException({
   required final Digest expected,
   required final Digest actual,
@@ -21,7 +20,6 @@ class InvalidSha512SumException({
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 class const JsLibraryLoader() {
   Future<void> downloadTo(JsDistRef distRef, File out) async {
     final fileSink = out.openWrite();

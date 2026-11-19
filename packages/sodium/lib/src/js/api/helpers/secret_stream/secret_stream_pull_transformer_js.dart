@@ -12,10 +12,8 @@ import '../../../bindings/sodium.js.dart';
 import 'secret_stream_message_tag_jsx.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SecretStreamPullTransformerSinkJS(
   final LibSodiumJS sodium,
-  // ignore: avoid_positional_boolean_parameters for single param
   super.requireFinalized,
 ) extends SecretStreamPullTransformerSink<SecretstreamXchacha20poly1305State> {
   @override
@@ -76,11 +74,9 @@ class SecretStreamPullTransformerSinkJS(
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 class const SecretStreamPullTransformerJS(
   final LibSodiumJS sodium,
   super.key,
-  // ignore: avoid_positional_boolean_parameters for single param
   super.requireFinalized,
 ) extends SecretStreamPullTransformer<SecretstreamXchacha20poly1305State> {
   @override

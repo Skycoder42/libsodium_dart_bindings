@@ -14,7 +14,6 @@ import '../../../bindings/sodium_scope.dart';
 import 'secret_stream_message_tag_ffix.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SecretStreamPushTransformerSinkFFI(final LibSodiumFFI sodium)
     extends SecretStreamPushTransformerSink<SodiumPointer<UnsignedChar>> {
   @override
@@ -113,7 +112,6 @@ class SecretStreamPushTransformerSinkFFI(final LibSodiumFFI sodium)
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 class const SecretStreamPushTransformerFFI(final LibSodiumFFI sodium, super.key)
     extends SecretStreamPushTransformer<SodiumPointer<UnsignedChar>> {
   @override

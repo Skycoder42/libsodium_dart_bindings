@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'automake_builder.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 final class LinuxBuilder(super.config, super.logger) extends AutomakeBuilder {
   @override
   Map<String, String> get environment {

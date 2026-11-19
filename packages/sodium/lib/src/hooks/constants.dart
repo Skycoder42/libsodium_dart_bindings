@@ -2,7 +2,6 @@ import 'package:meta/meta.dart';
 
 @internal
 @immutable
-// ignore: public_member_api_docs false positive
 class const JsDistRef({required final String path, required final String hash});
 
 @internal

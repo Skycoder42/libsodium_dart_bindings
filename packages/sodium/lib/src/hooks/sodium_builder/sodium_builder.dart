@@ -18,7 +18,6 @@ import 'macos_builder.dart';
 import 'windows_builder.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract base class SodiumBuilder(
   @protected final CodeConfig config,
   @protected final HookLogger logger,

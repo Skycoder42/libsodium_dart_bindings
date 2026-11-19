@@ -27,7 +27,6 @@ sealed class _SinkState<TState extends Object> with _$SinkState<TState> {
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class SecretStreamPushTransformerSink<TState extends Object>()
     implements EventSink<SecretStreamPlainMessage> {
   _SinkState<TState> _state = const _SinkState.uninitialized();
@@ -169,7 +168,6 @@ abstract class SecretStreamPushTransformerSink<TState extends Object>()
 }
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class const SecretStreamPushTransformer<TState extends Object>(
   final SecureKey key,
 ) implements

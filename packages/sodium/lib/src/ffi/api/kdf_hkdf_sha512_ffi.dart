@@ -7,7 +7,6 @@ import 'helpers/kdf_hkdf/kdf_hkdf_extract_consumer_ffi.dart';
 import 'kdf_hkdf_base_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class KdfHkdfSha512FFI(super.sodium)
     extends KdfHkdfBaseFFI<crypto_kdf_hkdf_sha512_state> {
   @override

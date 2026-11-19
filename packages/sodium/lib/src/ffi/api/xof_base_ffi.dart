@@ -18,7 +18,6 @@ typedef XofFn = int Function(
 );
 
 @internal
-// ignore: public_member_api_docs false positive
 abstract class XofBaseFFI<T extends NativeType>(final LibSodiumFFI sodium)
     with XofValidations
     implements Xof {

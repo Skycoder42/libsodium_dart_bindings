@@ -11,7 +11,6 @@ import 'aead_base_js.dart';
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class AeadAegis256JS(super.sodium) extends AeadBaseJS {
   @override
   int get keyBytes => sodium.crypto_aead_aegis256_KEYBYTES;

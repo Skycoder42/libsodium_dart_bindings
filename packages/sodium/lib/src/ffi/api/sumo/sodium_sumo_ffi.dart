@@ -9,7 +9,6 @@ import '../sodium_ffi.dart';
 import 'crypto_sumo_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class SodiumSumoFFI([super.sodium]) extends SodiumFFI implements SodiumSumo {
   @override
   // ignore: overridden_fields for api customization

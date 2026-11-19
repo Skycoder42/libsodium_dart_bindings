@@ -8,7 +8,6 @@ import 'package:path/path.dart' as path;
 import 'package:posix/posix.dart' as posix;
 
 @internal
-// ignore: public_member_api_docs false positive
 class FileNotExtractedException(final String message) implements Exception {
   @override
   String toString() => 'FileNotExtractedException: $message';

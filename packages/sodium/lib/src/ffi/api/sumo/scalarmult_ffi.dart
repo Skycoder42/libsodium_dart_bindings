@@ -11,7 +11,6 @@ import '../../bindings/secure_key_native.dart';
 import '../../bindings/sodium_scope.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class ScalarmultFFI(final LibSodiumFFI sodium)
     with ScalarmultValidations
     implements Scalarmult {

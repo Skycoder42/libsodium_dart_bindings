@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class HookLogger(final String hook, {final bool logDebug = false}) {
   var _didWriteFirst = false;
 

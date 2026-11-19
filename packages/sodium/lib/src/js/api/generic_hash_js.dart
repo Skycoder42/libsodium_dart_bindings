@@ -14,7 +14,6 @@ import 'helpers/generic_hash/generic_hash_consumer_js.dart';
 import 'secure_key_js.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class GenericHashJS(final LibSodiumJS sodium)
     with GenericHashValidations
     implements GenericHash {

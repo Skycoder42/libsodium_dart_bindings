@@ -15,7 +15,6 @@ import 'ipcrypt_ndx_ffi.dart';
 import 'ipcrypt_pfx_ffi.dart';
 
 @internal
-// ignore: public_member_api_docs false positive
 class IpcryptFFI(final LibSodiumFFI sodium)
     with IpcryptValidations, KeygenMixin
     implements Ipcrypt {
