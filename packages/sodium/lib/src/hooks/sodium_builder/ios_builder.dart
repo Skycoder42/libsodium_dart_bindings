@@ -20,7 +20,7 @@ final class IosBuilder(super.config, super.logger) extends DarwinBuilder {
       sdk: platform.resolve('SDKs/$sdkName.sdk/'),
       versionParameter: _mapIosVersionParam(
         config.iOS.targetSdk,
-        config.iOS.targetVersion,
+        config.iOS.deploymentVersion,
       ),
     );
   }
@@ -43,9 +43,9 @@ final class IosBuilder(super.config, super.logger) extends DarwinBuilder {
     _ => throw UnsupportedError('Unsupported iOS SDK: $sdk'),
   };
 
-  String _mapIosVersionParam(IOSSdk sdk, int version) => switch (sdk) {
-    .iPhoneOS => '-mios-version-min=$version',
-    .iPhoneSimulator => '-mios-simulator-version-min=$version',
+  String _mapIosVersionParam(IOSSdk sdk, AppleVersion version) => switch (sdk) {
+    .iPhoneOS => '-mios-version-min=${version.asStr}',
+    .iPhoneSimulator => '-mios-simulator-version-min=${version.asStr}',
     _ => throw UnsupportedError('Unsupported iOS SDK: $sdk'),
   };
 }

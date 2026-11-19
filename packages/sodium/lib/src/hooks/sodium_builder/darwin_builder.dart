@@ -117,3 +117,8 @@ extension on Uri {
     }
   }
 }
+
+@internal
+extension AppleVersionX on AppleVersion {
+  String get asStr => '$major.$minor.$patch';
+}

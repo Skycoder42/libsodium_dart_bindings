@@ -15,7 +15,8 @@ final class MacosBuilder(super.config, super.logger) extends DarwinBuilder {
       host: _mapHost(config.targetArchitecture),
       platform: platform,
       sdk: platform.resolve('SDKs/MacOSX.sdk/'),
-      versionParameter: '-mmacosx-version-min=${config.macOS.targetVersion}',
+      versionParameter:
+          '-mmacosx-version-min=${config.macOS.deploymentVersion.asStr}',
     );
   }
 
