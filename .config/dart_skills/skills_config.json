@@ -2,12 +2,266 @@
   "version": 2,
   "installations": {
     "claude": {
+      "https://github.com/dart-lang/skills.git": {
+        "skills": [
+          {
+            "name": "dart-use-pattern-matching",
+            "installedAt": "2026-11-19T21:17:16.674010Z",
+            "contentHash": "jWum81ZOqdzlKi3j4YThXw==",
+            "path": "skills/dart-use-pattern-matching"
+          },
+          {
+            "name": "dart-write-documentation",
+            "installedAt": "2026-11-19T21:17:16.677802Z",
+            "contentHash": "89JhaCZ41rhfqHTdJ4zr0g==",
+            "path": "skills/dart-write-documentation"
+          },
+          {
+            "name": "dart-collect-coverage",
+            "installedAt": "2026-11-19T21:17:16.686674Z",
+            "contentHash": "QR7wBfNWCtWxnIjzgs4Otw==",
+            "path": "skills/dart-collect-coverage"
+          },
+          {
+            "name": "dart-generate-test-mocks",
+            "installedAt": "2026-11-19T21:17:16.689853Z",
+            "contentHash": "Rcuvyi6gSTPgZkF8OLAr2Q==",
+            "path": "skills/dart-generate-test-mocks"
+          },
+          {
+            "name": "dart-fix-runtime-errors",
+            "installedAt": "2026-11-19T21:17:16.693420Z",
+            "contentHash": "mvtrbfhquEVC5sbrsSvYrw==",
+            "path": "skills/dart-fix-runtime-errors"
+          },
+          {
+            "name": "dart-build-cli-app",
+            "installedAt": "2026-11-19T21:17:16.704614Z",
+            "contentHash": "FoxxlCre6T3s/aqWBYkHTA==",
+            "path": "skills/dart-build-cli-app"
+          },
+          {
+            "name": "dart-use-doc-examples",
+            "installedAt": "2026-11-19T21:17:16.707992Z",
+            "contentHash": "GKqZl9iqxQher9lIWs2qww==",
+            "path": "skills/dart-use-doc-examples"
+          },
+          {
+            "name": "dart-setup-ffi-assets",
+            "installedAt": "2026-11-19T21:17:16.713241Z",
+            "contentHash": "Zke8iqjBrPSF/Dp2Urpwew==",
+            "path": "skills/dart-setup-ffi-assets"
+          },
+          {
+            "name": "dart-migrate-to-checks-package",
+            "installedAt": "2026-11-19T21:17:16.715840Z",
+            "contentHash": "oWRj6u21TIH243/wmkvCgw==",
+            "path": "skills/dart-migrate-to-checks-package"
+          },
+          {
+            "name": "dart-use-primary-constructors",
+            "installedAt": "2026-11-19T21:17:16.718431Z",
+            "contentHash": "4t8jDo3C3dApbSb23cQW6Q==",
+            "path": "skills/dart-use-primary-constructors"
+          },
+          {
+            "name": "dart-resolve-package-conflicts",
+            "installedAt": "2026-11-19T21:17:16.721132Z",
+            "contentHash": "zmYeU23aVEM+T8FymHG8RA==",
+            "path": "skills/dart-resolve-package-conflicts"
+          },
+          {
+            "name": "dart-use-path-package",
+            "installedAt": "2026-11-19T21:17:16.728641Z",
+            "contentHash": "0HufBy64Ej0aGOHFmXpp9A==",
+            "path": "skills/dart-use-path-package"
+          },
+          {
+            "name": "dart-add-unit-test",
+            "installedAt": "2026-11-19T21:17:16.731322Z",
+            "contentHash": "Aplmmm6QJPTsjefJdNBNRQ==",
+            "path": "skills/dart-add-unit-test"
+          },
+          {
+            "name": "dart-use-ffigen",
+            "installedAt": "2026-11-19T21:17:16.735204Z",
+            "contentHash": "UQ6YAj7dOM32H3ocwGTPuw==",
+            "path": "skills/dart-use-ffigen"
+          },
+          {
+            "name": "dart-run-static-analysis",
+            "installedAt": "2026-11-19T21:17:16.738757Z",
+            "contentHash": "hZzbzqH54GTiEpT2e9VdTA==",
+            "path": "skills/dart-run-static-analysis"
+          }
+        ]
+      },
+      "https://github.com/flutter/agent-plugins.git": {
+        "skills": [
+          {
+            "name": "dart-collect-coverage",
+            "installedAt": "2026-11-19T21:17:16.745785Z",
+            "contentHash": "QR7wBfNWCtWxnIjzgs4Otw==",
+            "path": "skills/dart-collect-coverage"
+          },
+          {
+            "name": "dart-add-unit-test",
+            "installedAt": "2026-11-19T21:17:16.748376Z",
+            "contentHash": "Aplmmm6QJPTsjefJdNBNRQ==",
+            "path": "skills/dart-add-unit-test"
+          },
+          {
+            "name": "flutter-setup-declarative-routing",
+            "installedAt": "2026-11-19T21:17:16.750273Z",
+            "contentHash": "+Fm0u5dFIrN+/kgXuwQeBg==",
+            "path": "skills/flutter-setup-declarative-routing"
+          },
+          {
+            "name": "dart-use-primary-constructors",
+            "installedAt": "2026-11-19T21:17:16.752507Z",
+            "contentHash": "4t8jDo3C3dApbSb23cQW6Q==",
+            "path": "skills/dart-use-primary-constructors"
+          },
+          {
+            "name": "dart-run-static-analysis",
+            "installedAt": "2026-11-19T21:17:16.755279Z",
+            "contentHash": "hZzbzqH54GTiEpT2e9VdTA==",
+            "path": "skills/dart-run-static-analysis"
+          },
+          {
+            "name": "flutter-setup-localization",
+            "installedAt": "2026-11-19T21:17:16.757327Z",
+            "contentHash": "+LKo3jhdNipkZGii5afy/w==",
+            "path": "skills/flutter-setup-localization"
+          },
+          {
+            "name": "flutter-build-responsive-layout",
+            "installedAt": "2026-11-19T21:17:16.759326Z",
+            "contentHash": "e3epqgedJkJ4XDKAleE0Kw==",
+            "path": "skills/flutter-build-responsive-layout"
+          },
+          {
+            "name": "flutter-add-widget-preview",
+            "installedAt": "2026-11-19T21:17:16.761252Z",
+            "contentHash": "JS9hraW29dnJzxI+/Ya65w==",
+            "path": "skills/flutter-add-widget-preview"
+          },
+          {
+            "name": "dart-use-pattern-matching",
+            "installedAt": "2026-11-19T21:17:16.767772Z",
+            "contentHash": "qUD0RVjXhVvDL04Kro4X9A==",
+            "path": "skills/dart-use-pattern-matching"
+          },
+          {
+            "name": "dart-use-ffigen",
+            "installedAt": "2026-11-19T21:17:16.771696Z",
+            "contentHash": "UQ6YAj7dOM32H3ocwGTPuw==",
+            "path": "skills/dart-use-ffigen"
+          },
+          {
+            "name": "dart-fix-runtime-errors",
+            "installedAt": "2026-11-19T21:17:16.777458Z",
+            "contentHash": "mvtrbfhquEVC5sbrsSvYrw==",
+            "path": "skills/dart-fix-runtime-errors"
+          },
+          {
+            "name": "dart-write-documentation",
+            "installedAt": "2026-11-19T21:17:16.782270Z",
+            "contentHash": "89JhaCZ41rhfqHTdJ4zr0g==",
+            "path": "skills/dart-write-documentation"
+          },
+          {
+            "name": "flutter-fix-layout-issues",
+            "installedAt": "2026-11-19T21:17:16.784632Z",
+            "contentHash": "CPijqMyXWLK8mqA39n9dsA==",
+            "path": "skills/flutter-fix-layout-issues"
+          },
+          {
+            "name": "flutter-use-http-package",
+            "installedAt": "2026-11-19T21:17:16.789129Z",
+            "contentHash": "98liZvHi4vyZVXEwVN+DNA==",
+            "path": "skills/flutter-use-http-package"
+          },
+          {
+            "name": "flutter-implement-json-serialization",
+            "installedAt": "2026-11-19T21:17:16.792509Z",
+            "contentHash": "xfMsRj3v0CTq19jeYY7Uhg==",
+            "path": "skills/flutter-implement-json-serialization"
+          },
+          {
+            "name": "dart-build-cli-app",
+            "installedAt": "2026-11-19T21:17:16.801276Z",
+            "contentHash": "FoxxlCre6T3s/aqWBYkHTA==",
+            "path": "skills/dart-build-cli-app"
+          },
+          {
+            "name": "dart-setup-ffi-assets",
+            "installedAt": "2026-11-19T21:17:16.805464Z",
+            "contentHash": "Zke8iqjBrPSF/Dp2Urpwew==",
+            "path": "skills/dart-setup-ffi-assets"
+          },
+          {
+            "name": "dart-use-doc-examples",
+            "installedAt": "2026-11-19T21:17:16.808094Z",
+            "contentHash": "5zNVdv4NmIJAaRQtnZRJOw==",
+            "path": "skills/dart-use-doc-examples"
+          },
+          {
+            "name": "flutter-add-widget-test",
+            "installedAt": "2026-11-19T21:17:16.810670Z",
+            "contentHash": "ufR+gTOMWD3hrmcO//YXxg==",
+            "path": "skills/flutter-add-widget-test"
+          },
+          {
+            "name": "flutter-add-integration-test",
+            "installedAt": "2026-11-19T21:17:16.815653Z",
+            "contentHash": "VjbVjmpaHlF9WWS72Ee3iw==",
+            "path": "skills/flutter-add-integration-test"
+          },
+          {
+            "name": "dart-migrate-to-checks-package",
+            "installedAt": "2026-11-19T21:17:16.818119Z",
+            "contentHash": "DVd+CqcsMzEV9Sv/mIg9uA==",
+            "path": "skills/dart-migrate-to-checks-package"
+          },
+          {
+            "name": "dart-generate-test-mocks",
+            "installedAt": "2026-11-19T21:17:16.822522Z",
+            "contentHash": "Rcuvyi6gSTPgZkF8OLAr2Q==",
+            "path": "skills/dart-generate-test-mocks"
+          },
+          {
+            "name": "flutter-apply-architecture-best-practices",
+            "installedAt": "2026-11-19T21:17:16.824830Z",
+            "contentHash": "vqmpXCp17NOOkuuGrOmO1w==",
+            "path": "skills/flutter-apply-architecture-best-practices"
+          },
+          {
+            "name": "dart-resolve-package-conflicts",
+            "installedAt": "2026-11-19T21:17:16.828234Z",
+            "contentHash": "zmYeU23aVEM+T8FymHG8RA==",
+            "path": "skills/dart-resolve-package-conflicts"
+          },
+          {
+            "name": "dart-use-path-package",
+            "installedAt": "2026-11-19T21:17:16.837141Z",
+            "contentHash": "giIdR5YpG31pEUdOhmOKZg==",
+            "path": "skills/dart-use-path-package"
+          }
+        ]
+      },
       "package:dart_test_tools": {
         "skills": [
           {
+            "name": "dart-test-tools-native-update",
+            "installedAt": "2026-11-19T21:17:16.662727Z",
+            "contentHash": "X4sp5QvW4v5WJYtnsb3xxw==",
+            "path": "skills/dart-test-tools-native-update"
+          },
+          {
             "name": "dart-test-tools-renovate-fix",
-            "installedAt": "2026-09-16T05:48:59.417025Z",
-            "contentHash": "/mv885OlIdvxxUvwoRQsBw==",
+            "installedAt": "2026-11-19T21:17:16.666811Z",
+            "contentHash": "VGaoRW1UVZz7dntXgBX1Cw==",
             "path": "skills/dart-test-tools-renovate-fix"
           }
         ]
