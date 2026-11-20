@@ -41,6 +41,11 @@ dev_dependencies:
   test: ^1.32.0
   web: ^1.1.2
 
+hooks:
+  user_defines:
+    sodium:
+      skip_missing_binaries: true
+
 cider:
   link_template:
     tag: https://github.com/Skycoder42/libsodium_dart_bindings/releases/tag/sodium-v%tag%
