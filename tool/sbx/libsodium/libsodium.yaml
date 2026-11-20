@@ -8,7 +8,8 @@ description: >-
   Prepares the sodium package of the libsodium_dart_bindings workspace when the
   sandbox is created: installs minisign and a C toolchain with apt, then runs
   packages/sodium/tool/libsodium/init.sh to download and verify the libsodium
-  sources and the libsodium.js test binaries.
+  sources and the libsodium.js test binaries. Also disables the Claude Code Bash
+  sandbox through a managed settings drop-in.
   Declaration-only: it adds no layer and needs a Debian-based workload.
 licenses:
   - BSD-3-Clause
@@ -61,6 +62,20 @@ capabilities:
             apt-get update -qq
             apt-get install -y -qq --no-install-recommends minisign build-essential
             rm -rf /var/lib/apt/lists/*
+
+        - description: Disable the Claude Code Bash sandbox
+          user: "0"
+          command: |
+            set -eu
+            mkdir -p /etc/claude-code/managed-settings.d
+            cat > /etc/claude-code/managed-settings.d/50-sbx-no-sandbox.json <<'EOF'
+            {
+              "sandbox": {
+                "enabled": false
+              }
+            }
+            EOF
+            chmod 0644 /etc/claude-code/managed-settings.d/50-sbx-no-sandbox.json
 
         - description: Download the libsodium sources and prepare the integration tests
           user: agent
