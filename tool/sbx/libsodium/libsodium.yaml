@@ -1,0 +1,94 @@
+# syntax=docker/sandbox-kit:3
+# yaml-language-server: $schema=https://raw.githubusercontent.com/docker/sandbox-kit-spec/main/schema/kit.schema.json
+schemaVersion: "3"
+kind: mixin
+displayName: libsodium sources
+author: Skycoder42
+description: >-
+  Prepares the sodium package of the libsodium_dart_bindings workspace when the
+  sandbox is created: installs minisign and a C toolchain with apt, then runs
+  packages/sodium/tool/libsodium/init.sh to download and verify the libsodium
+  sources and the libsodium.js test binaries.
+  Declaration-only: it adds no layer and needs a Debian-based workload.
+licenses:
+  - BSD-3-Clause
+
+version: "1.0.0"
+provides:
+  - libsodium@1.0.0
+
+requires:
+  - flutter
+
+capabilities:
+  - type: com.docker.sandbox/network-policy@2
+    config:
+      install:
+        allow:
+          # apt (minisign)
+          - deb.debian.org
+          - dhi.io
+          # pub get, triggered by `dart run`. The flutter kit only allows it at
+          # runtime, and the install phase does not inherit runtime entries.
+          - pub.dev
+          # libsodium source archive (tool/libsodium/download.dart)
+          - &libsodium-src
+            hosts: [download.libsodium.org]
+            methods: [GET, HEAD]
+            paths: [/libsodium/releases/**]
+          # libsodium.js test binaries (tool/integration/setup_web.dart)
+          - &libsodium-js
+            hosts: [raw.githubusercontent.com]
+            methods: [GET, HEAD]
+            paths: [/jedisct1/libsodium.js/**]
+      runtime:
+        allow:
+          # so the agent can re-run init.sh or its download steps
+          - *libsodium-src
+          - *libsodium-js
+
+  - type: com.docker.sandbox/lifecycle@1
+    config:
+      install:
+        - description: Install minisign and the libsodium build toolchain
+          user: "0"
+          command: |
+            if ! command -v apt-get > /dev/null 2>&1; then
+              echo "libsodium: this kit needs a Debian-based workload with apt-get" >&2
+              exit 1
+            fi
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update -qq
+            apt-get install -y -qq --no-install-recommends minisign build-essential
+            rm -rf /var/lib/apt/lists/*
+
+        - description: Download the libsodium sources and prepare the integration tests
+          user: agent
+          env: [WORKSPACE_DIR]
+          command: |
+            set -eu
+            if [ -z "${WORKSPACE_DIR:-}" ] || [ ! -d "$WORKSPACE_DIR/packages/sodium" ]; then
+              echo "libsodium: no libsodium_dart_bindings workspace at '${WORKSPACE_DIR:-}'" >&2
+              exit 1
+            fi
+            cd "$WORKSPACE_DIR/packages/sodium"
+            ./tool/libsodium/init.sh
+
+  # Accept one context version through runtime policy, or skip both.
+  - type: com.docker.sandbox/agent-context@1
+    optional: true
+    config: &agent-context
+      content: |
+        ## libsodium sources
+
+        `packages/sodium/tool/libsodium/init.sh` already ran when this sandbox was
+        created: the verified libsodium sources are in `packages/sodium/3rdparty` and
+        the libsodium.js test binaries in
+        `packages/sodium/test/integration/binaries/js`. To download them again, run
+        `./tool/libsodium/init.sh` from `packages/sodium` (or only
+        `dart run tool/libsodium/download.dart` /
+        `dart run tool/integration/setup_web.dart`).
+
+  - type: com.docker.sandbox/agent-context@2
+    optional: true
+    config: *agent-context

@@ -1,0 +1,25 @@
+schemaVersion: "1"
+name: sodium
+
+agent: claude
+kits:
+  - sbx/claude:latest
+  - docker.io/skycoder42/sbx-kit-flutter:latest
+  - ./tool/sbx/libsodium
+
+workspace:
+  path: .
+  clone: true
+
+sandboxOptions:
+  pullPolicy: always
+  memory: "8g"
+  cpus: 4
+
+bindings:
+  anthropic:
+    oauth:
+      domains:
+        - platform.claude.com
+        - api.anthropic.com
+        - mcp-proxy.anthropic.com
