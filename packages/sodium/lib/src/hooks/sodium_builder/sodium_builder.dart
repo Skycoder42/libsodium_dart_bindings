@@ -9,6 +9,7 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 
 import '../common/extractor.dart';
+import '../common/file_mover.dart';
 import '../common/hook_logger.dart';
 import '../constants.dart';
 import 'android_builder.dart';
@@ -23,6 +24,8 @@ abstract base class SodiumBuilder(
   @protected final HookLogger logger,
 ) {
   static const _relocatedInstallMarker = 'install.location';
+
+  late final _fileMover = FileMover(logger);
 
   bool get allowSpaceInPath;
 
@@ -155,11 +158,16 @@ abstract base class SodiumBuilder(
       await destDir.create();
       final fileName = path.basename(installDir.toFilePath());
       relativeInstallDir = installDirName + Uri(path: fileName).toString();
-      await File.fromUri(installDir)
-          .rename(configUri.resolve(relativeInstallDir).toFilePath());
+      await _fileMover.moveFile(
+        File.fromUri(installDir),
+        configUri.resolve(relativeInstallDir).toFilePath(),
+      );
     } else {
       relativeInstallDir = installDirName;
-      await Directory.fromUri(installDir).rename(destDir.path);
+      await _fileMover.moveDirectory(
+        Directory.fromUri(installDir),
+        destDir.path,
+      );
     }
 
     // Written last, so it only exists once the install is complete.
