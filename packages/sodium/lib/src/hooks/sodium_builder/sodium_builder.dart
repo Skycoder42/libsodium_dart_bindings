@@ -22,6 +22,8 @@ abstract base class SodiumBuilder(
   @protected final CodeConfig config,
   @protected final HookLogger logger,
 ) {
+  static const _relocatedInstallMarker = 'install.location';
+
   bool get allowSpaceInPath;
 
   factory forConfig(CodeConfig config, HookLogger logger) =>
@@ -70,9 +72,17 @@ abstract base class SodiumBuilder(
       var srcDir = Directory.fromUri(srcDirUri);
       if (srcDir.existsSync()) {
         logger.debug('Source directory already exists, skipping extraction.');
+      } else if (await _findRelocatedInstall(configUri)
+          case final installDir?) {
+        logger.info(
+          'Found existing build at $installDir, skipping extraction and build.',
+        );
+        return await _completeBuild(input, srcDir, installDir, exportHeadersTo);
       } else {
         tempDir = await _safeExtractToDisk(sourceArchive, configUri);
-        srcDir = tempDir ?? srcDir;
+        if (tempDir != null) {
+          srcDir = Directory.fromUri(tempDir.uri.resolve('libsodium-stable/'));
+        }
       }
 
       logger.info('Starting build process...');
@@ -80,31 +90,10 @@ abstract base class SodiumBuilder(
       logger.debug('Successfully built libsodium to: $installDir');
 
       if (tempDir != null) {
-        logger.info('Moving installed files to config dir');
-        await Directory.fromUri(configUri).create(recursive: true);
-        final newPath = configUri.resolve('install/');
-        if (FileSystemEntity.isFileSync(installDir.toFilePath())) {
-          // Windows returns the built DLL path directly rather than an
-          // install tree, so copy the single artifact into `install/`.
-          final destDir = Directory.fromUri(newPath);
-          await destDir.create(recursive: true);
-          final fileName = path.basename(installDir.toFilePath());
-          final destFile = File.fromUri(destDir.uri.resolve(fileName));
-          await File.fromUri(installDir).rename(destFile.path);
-          installDir = destFile.uri;
-        } else {
-          await Directory.fromUri(installDir).rename(newPath.toFilePath());
-          installDir = newPath;
-        }
+        installDir = await _relocateInstall(installDir, configUri);
       }
 
-      if (exportHeadersTo != null) {
-        logger.info('Exporting sodium headers install location');
-        await File.fromUri(input.packageRoot.resolveUri(exportHeadersTo))
-            .writeAsString(getIncludesPath(srcDir.uri, installDir).toString());
-      }
-
-      return createCodeAsset(installDir);
+      return await _completeBuild(input, srcDir, installDir, exportHeadersTo);
     } catch (e) {
       final configDir = Directory.fromUri(configUri);
       if (configDir.existsSync()) {
@@ -115,6 +104,69 @@ abstract base class SodiumBuilder(
     } finally {
       await tempDir?.delete(recursive: true);
     }
+  }
+
+  Future<CodeAsset> _completeBuild(
+    BuildInput input,
+    Directory srcDir,
+    Uri installDir,
+    Uri? exportHeadersTo,
+  ) async {
+    if (exportHeadersTo != null) {
+      logger.info('Exporting sodium headers install location');
+      await File.fromUri(input.packageRoot.resolveUri(exportHeadersTo))
+          .writeAsString(getIncludesPath(srcDir.uri, installDir).toString());
+    }
+
+    return createCodeAsset(installDir);
+  }
+
+  Future<Uri?> _findRelocatedInstall(Uri configUri) async {
+    final marker = File.fromUri(configUri.resolve(_relocatedInstallMarker));
+    if (!marker.existsSync()) {
+      return null;
+    }
+
+    final installDirStr = await marker.readAsString();
+    final installDir = configUri.resolve(installDirStr.trim());
+    final type = FileSystemEntity.typeSync(installDir.toFilePath());
+    if (type == .notFound) {
+      logger.debug('Recorded install location $installDir does not exist.');
+      return null;
+    }
+
+    return installDir;
+  }
+
+  Future<Uri> _relocateInstall(Uri installDir, Uri configUri) async {
+    logger.info('Moving installed files to config dir');
+    const installDirName = 'install/';
+    final destDir = Directory.fromUri(configUri.resolve(installDirName));
+    if (destDir.existsSync()) {
+      logger.debug('Removing previous install directory: ${destDir.path}');
+      await destDir.delete(recursive: true);
+    }
+    await destDir.parent.create(recursive: true);
+
+    final String relativeInstallDir;
+    if (FileSystemEntity.isFileSync(installDir.toFilePath())) {
+      // Windows returns the built DLL path directly rather than an
+      // install tree, so move the single artifact into `install/`.
+      await destDir.create();
+      final fileName = path.basename(installDir.toFilePath());
+      relativeInstallDir = installDirName + Uri(path: fileName).toString();
+      await File.fromUri(installDir)
+          .rename(configUri.resolve(relativeInstallDir).toFilePath());
+    } else {
+      relativeInstallDir = installDirName;
+      await Directory.fromUri(installDir).rename(destDir.path);
+    }
+
+    // Written last, so it only exists once the install is complete.
+    await File.fromUri(configUri.resolve(_relocatedInstallMarker))
+        .writeAsString(relativeInstallDir);
+
+    return configUri.resolve(relativeInstallDir);
   }
 
   @visibleForOverriding
@@ -286,7 +338,7 @@ abstract base class SodiumBuilder(
         maxAbsolutePathLength: maxSourcePathLength,
       );
       logger.debug('Source files extracted successfully to ${tempDir.path}!');
-      return Directory.fromUri(tempDir.uri.resolve('libsodium-stable/'));
+      return tempDir;
     }
   }
 
