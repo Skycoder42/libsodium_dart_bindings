@@ -150,6 +150,7 @@ abstract base class AutomakeBuilder(super.config, super.logger)
           // on windows. Leaving out "$(SHELL)" still works, as a SHELL is
           // set by automake.
           r"LIBTOOL='$(top_builddir)/libtool'",
+          ..._windowsTempArgs,
         ].join(' '),
       ];
       buildCommand = windowsBash.toFilePath();
@@ -161,6 +162,14 @@ abstract base class AutomakeBuilder(super.config, super.logger)
       workingDirectory: sourceDir,
       environment: env,
     );
+  }
+
+  // Git's bash starts MSYS2's make without TMP, TEMP and USERPROFILE, so NDK
+  // clang has no folder for the temp file each .S source needs. A variable
+  // given on make's command line still reaches every recipe.
+  Iterable<String> get _windowsTempArgs sync* {
+    final tmp = Directory.systemTemp.path.replaceAll(r'\', '/');
+    yield "TMP='$tmp'";
   }
 
   Future<Uri> _findWindowsBash() async {
