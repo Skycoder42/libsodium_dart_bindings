@@ -169,6 +169,8 @@ abstract base class AutomakeBuilder(super.config, super.logger)
   // given on make's command line still reaches every recipe.
   Iterable<String> get _windowsTempArgs sync* {
     final tmp = Directory.systemTemp.path.replaceAll(r'\', '/');
+    // A "'" in an argument can get lost between Git's bash and MSYS2's make.
+    if (tmp.contains("'")) return;
     yield "TMP='${tmp.replaceAll(r'$', r'$$')}'";
   }
 
