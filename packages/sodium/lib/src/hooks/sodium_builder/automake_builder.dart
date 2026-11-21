@@ -169,7 +169,7 @@ abstract base class AutomakeBuilder(super.config, super.logger)
   // given on make's command line still reaches every recipe.
   Iterable<String> get _windowsTempArgs sync* {
     final tmp = Directory.systemTemp.path.replaceAll(r'\', '/');
-    yield "TMP='$tmp'";
+    yield "TMP='${tmp.replaceAll(r'$', r'$$')}'";
   }
 
   Future<Uri> _findWindowsBash() async {
