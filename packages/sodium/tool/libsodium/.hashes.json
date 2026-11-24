@@ -4,5 +4,5 @@
   "libsodium-stable/dist-build/android-build.sh": "b3f5d76730b4d091e969a725bda6b32f0f794422acc4e9ab6a60b0231b5fc4f374e9f43c1c3c742d233e0bed69473f0a107774b5d6af14bd36c74b3946075bb0",
   "libsodium-stable/dist-build/android-x86.sh": "525ead2bd92289ab015925133a1e5f5f7b91cc1c14c88fe12ddff6d5ce0c63406fa3da303f0292e3699baf5a7b652d8e86a58d804c00d1b80c4c193434923089",
   "libsodium-stable/dist-build/android-x86_64.sh": "37d957d42880171c3e09a5a65cd74eff97f43f201f6c3956493a68340207c94a8484bc6b506cfe67299bbe8df49364cb1a9190894687326a1939691217399bed",
-  "libsodium-stable/dist-build/apple-xcframework.sh": "75205ee9d0e6870cddf70fc3a69d0c3fe0b59a13a91db8f9eb2628b70b2960803e18d10b3184dc96969625201fa0ece50a363b3911b459fdac199e6e4aed12af"
+  "libsodium-stable/dist-build/apple-xcframework.sh": "50f06d65f7670bd166757195020188e4a20ae0dd3fc04e719c40802eb3a71a17cdd65fafcbe4fa90675dfd1dc9a6010c49bdbd51692e20b2a954ddd56dd236b2"
 }
