@@ -113,7 +113,7 @@ final class _ClangToolchain(
   static Uri _findLibClang(String clang) {
     final binDir = File(clang).parent;
     final libClang = switch (Platform.operatingSystem) {
-      'linux' => File('${binDir.parent.path}/lib/libclang.so'),
+      'linux' => _findLinuxLibClang(Directory('${binDir.parent.path}/lib')),
       'macos' => File('${binDir.parent.path}/lib/libclang.dylib'),
       'windows' => File('${binDir.path}\\libclang.dll'),
       _ => throw UnsupportedError(
@@ -123,11 +123,28 @@ final class _ClangToolchain(
     if (!libClang.existsSync()) {
       throw Exception(
         'Could not find libclang next to $clang at ${libClang.path}. '
-        'Make sure the libclang development package matching that clang '
+        'Make sure the libclang package matching that clang '
         'version is installed.',
       );
     }
     return libClang.absolute.uri;
+  }
+
+  static File _findLinuxLibClang(Directory libDir) {
+    final unversioned = File('${libDir.path}/libclang.so');
+    if (unversioned.existsSync() || !libDir.existsSync()) {
+      return unversioned;
+    }
+
+    final versionedPattern = RegExp(r'^libclang(-\d+)?\.so(\.\d+)+$');
+    final candidates =
+        libDir
+            .listSync()
+            .whereType<File>()
+            .where((f) => versionedPattern.hasMatch(f.uri.pathSegments.last))
+            .toList()
+          ..sort((a, b) => a.path.length.compareTo(b.path.length));
+    return candidates.firstOrNull ?? unversioned;
   }
 
   static Future<String> _run(String executable, List<String> arguments) async {
