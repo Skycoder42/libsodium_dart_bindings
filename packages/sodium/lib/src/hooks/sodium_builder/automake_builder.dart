@@ -26,14 +26,16 @@ abstract base class AutomakeBuilder(super.config, super.logger)
     final installDir = sourceDir.uri.resolve('install/');
 
     Uri? windowsBash;
+    var drivePrefix = '/';
     if (OS.current == .windows) {
       logger.debug('Detecting bash...');
       windowsBash = await _findWindowsBash();
+      drivePrefix = await _findDrivePrefix(windowsBash);
     }
 
     logger.debug('Configuring...');
     final env = environment;
-    await _configure(sourceDir, installDir, env, windowsBash);
+    await _configure(sourceDir, installDir, env, windowsBash, drivePrefix);
 
     logger.debug('Building...');
     await _make(sourceDir, env, windowsBash);
@@ -102,11 +104,12 @@ abstract base class AutomakeBuilder(super.config, super.logger)
     Uri installDirUri,
     Map<String, String> env,
     Uri? windowsBash,
+    String drivePrefix,
   ) async {
     var buildCommand = './configure';
     var buildArguments = [
       ...configureArgs,
-      '--prefix=${installDirUri.toBashSafePath()}',
+      '--prefix=${installDirUri.toBashSafePath(drivePrefix: drivePrefix)}',
     ];
 
     if (windowsBash != null) {
@@ -211,5 +214,18 @@ abstract base class AutomakeBuilder(super.config, super.logger)
       '(preferred), MSYS2, or Cygwin. Found only unsupported bash launchers '
       'such as WSL or Windows App aliases.',
     );
+  }
+
+  // Git's bash and MSYS2 print "/c/" here, Cygwin prints "/cygdrive/c/".
+  // Falls back to "/" if cygpath is missing or prints something else.
+  Future<String> _findDrivePrefix(Uri windowsBash) async {
+    final cDrive = await execStream(windowsBash.toFilePath(), const [
+      '-c',
+      r"/usr/bin/cygpath -u 'C:\' 2>/dev/null",
+    ], expectExitCode: null).transform(utf8.decoder).join();
+    final prefix = cDrive.trim();
+    if (!prefix.startsWith('/') || !prefix.endsWith('/c/')) return '/';
+    logger.debug('Detected drive prefix: $prefix');
+    return prefix.substring(0, prefix.length - 'c/'.length);
   }
 }
